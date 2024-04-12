@@ -1,62 +1,79 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
-import 'package:guildcable/components/sidebar/sidebar.dart';
-import 'package:guildcable/network/discord.dart';
-import 'package:guildcable/style.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:discord_api/discord_api.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+
+const clientId = '1228043349550956644';
+const clientSecret = 'InfdjO7ME9nVPBaTeotKe9CmUePx6d1m';
+const redirectUri = 'https://www.google.com/';
 
 void main() {
-  print(discordClient.);
-  runApp(const GuildCable());
+  runApp(LoginPage());
 }
 
-class GuildCable extends StatelessWidget {
-  const GuildCable({super.key});
+class LoginPage extends StatelessWidget {
+  final _discordClient = DiscordClient(
+    clientId: clientId,
+    clientSecret: clientSecret,
+    redirectUri: redirectUri,
+    discordHttpClient:
+        DiscordDioProvider(clientId: clientId, clientSecret: clientSecret),
+  );
+
+  var controller = InAppWebView();
+  var scopes = [
+    DiscordApiScope.identify,
+    DiscordApiScope.email,
+    DiscordApiScope.guilds
+  ];
+
+  LoginPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final url = _discordClient.authorizeUri(scopes);
     return MaterialApp(
-      title: 'GuildCable',
+      title: 'Discord API Demo',
       theme: ThemeData(
-          useMaterial3: true,
-          scaffoldBackgroundColor: backgroundColor,
-          primaryColor: primaryColor,
-          colorScheme:
-              ColorScheme.fromSwatch().copyWith(secondary: secondaryColor),
-          textTheme: TextTheme(
-            headlineMedium: GoogleFonts.roboto(
-              fontSize: 48,
-              fontWeight: FontWeight.w500,
-              color: Colors.white,
-            ),
-            bodyMedium: GoogleFonts.roboto(
-              fontSize: 14,
-              color: Colors.white,
-            ),
-          )),
-      home: const MainPage(),
+        primarySwatch: Colors.blue,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+      ),
+      home: WebViewWidget(url: url.toString()),
     );
   }
 }
 
-class MainPage extends StatefulWidget {
-  const MainPage({super.key});
+class WebViewWidget extends StatefulWidget {
+  final String url;
+
+  WebViewWidget({required this.url});
 
   @override
-  State<MainPage> createState() => _MainPageState();
+  _WebViewWidgetState createState() => _WebViewWidgetState();
 }
 
-class _MainPageState extends State<MainPage> {
+class _WebViewWidgetState extends State<WebViewWidget> {
+  late InAppWebViewController _webViewController;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          toolbarHeight: 0,
-          backgroundColor: backgroundColor,
-        ),
-        body: const Row(
-          children: [
-            Sidebar(),
-          ],
-        ));
+      body: InAppWebView(
+        initialUrlRequest: URLRequest(url: WebUri(widget.url)),
+        onWebViewCreated: (controller) {
+          _webViewController = controller;
+        },
+        onLoadStop: (controller, url) async {
+          if (url.toString().startsWith(redirectUri)) {
+            final uri = Uri.parse(url.toString());
+            final code = uri.queryParameters['code'];
+            _webViewController
+            // final token = await _discordClient.getToken(code!);
+            // print(token);
+          }
+        },
+      ),
+    );
   }
 }
