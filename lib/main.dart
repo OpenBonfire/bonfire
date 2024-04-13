@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:bonfire/views/home.dart';
 import 'package:flutter/material.dart';
 import 'package:discord_api/discord_api.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
@@ -8,10 +9,10 @@ import 'package:bonfire/views/login.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 void main() {
-  runApp(ProviderScope(child: Home()));
+  runApp(ProviderScope(child: Bonfire()));
 }
 
-class Home extends ConsumerWidget {
+class Bonfire extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final profile = ref.watch(discordAuthProvider);
@@ -23,7 +24,7 @@ class Home extends ConsumerWidget {
           backgroundColor: const Color(0xFF282b30),
         ),
         body: Center(
-          child: (profile != null) ? const Placeholder() : LoginPage()
+          child: (profile != null) ? const Home() : LoginPage()
         ),
       ),
     );

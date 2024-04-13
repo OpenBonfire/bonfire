@@ -15,7 +15,16 @@ void main() {
   runApp(LoginPage());
 }
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
+  var scopes = <DiscordApiScope>[];
+
+  LoginPage({Key? key}) : super(key: key);
+
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
   final _discordClient = DiscordClient(
     clientId: clientId,
     clientSecret: clientSecret,
@@ -25,17 +34,18 @@ class LoginPage extends StatelessWidget {
   );
 
   var controller = InAppWebView();
-  var scopes = [
-    DiscordApiScope.identify,
-    DiscordApiScope.email,
-    DiscordApiScope.guilds
-  ];
 
-  LoginPage({Key? key}) : super(key: key);
+  @override
+  void initState() {
+    super.initState();
+    print("SCOPE INFO");
+    print(DiscordApiScope.values.length);
+    print(DiscordApiScope.values[6]);
+  }
 
   @override
   Widget build(BuildContext context) {
-    final url = _discordClient.authorizeUri(scopes);
+    final url = _discordClient.authorizeUri(DiscordApiScope.values.getRange(0, 5).toList());
     return WebViewWidget(url: url.toString(), discordClient: _discordClient);
   }
 }
