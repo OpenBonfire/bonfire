@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:guildcable/components/sidebar/icon.dart';
-import 'package:guildcable/style.dart';
+import 'package:bonfire/components/sidebar/icon.dart';
+import 'package:bonfire/style.dart';
 
 class Sidebar extends StatefulWidget {
   const Sidebar({super.key});
