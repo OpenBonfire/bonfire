@@ -1,6 +1,6 @@
 import 'package:bonfire/network/auth.dart';
 import 'package:bonfire/themes/dark.dart';
-import 'package:bonfire/views/home.dart';
+import 'package:bonfire/views/home/home.dart';
 import 'package:bonfire/views/auth/login.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

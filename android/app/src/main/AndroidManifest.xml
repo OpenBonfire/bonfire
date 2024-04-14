@@ -2,7 +2,7 @@
     package="com.example.yourpackage">
     <uses-permission android:name="android.permission.INTERNET"/>
     <application
-        android:label="guildcable"
+        android:label="Bonfire"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
 

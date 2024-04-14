@@ -24,36 +24,21 @@ class _SidebarState extends ConsumerState<Sidebar> {
 Future<List<Widget>> _generateCards(List<UserGuild> guilds) async {
   List<Widget> cards = [];
 
-  // Create a list of futures for fetching icon images
   List<Future<Image>> iconFutures = [];
   for (var guild in guilds) {
     iconFutures.add(_fetchIconImage(guild.icon));
   }
-
-  // Wait for all icon images to be fetched
+  
   List<Image> icons = await Future.wait(iconFutures);
 
-  // Create cards with fetched icon images
   for (int i = 0; i < guilds.length; i++) {
     var icon = icons[i];
     cards.add(Padding(
       padding: const EdgeInsets.only(bottom: 8),
       child: Center(
-        child: Container(
+        child: SizedBox(
           width: 50,
           height: 50,
-          // decoration: BoxDecoration(
-          //   color: foregroundBright,
-          //   borderRadius: BorderRadius.circular(10),
-          //   boxShadow: [
-          //     BoxShadow(
-          //       color: Colors.black.withOpacity(0.1),
-          //       spreadRadius: 1,
-          //       blurRadius: 5,
-          //       offset: const Offset(0, 2),
-          //     ),
-          //   ],
-          // ),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(100),
             child: icon),
