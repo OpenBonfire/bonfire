@@ -1,14 +1,13 @@
-import 'package:discord_api/discord_api.dart';
-import 'package:riverpod/riverpod.dart';
+// import 'package:riverpod/riverpod.dart';
 
-final discordAuthProvider = StateNotifierProvider<DiscordAuthNotifier, DiscordClient?>(
-  (ref) => DiscordAuthNotifier(),
-);
+// final discordAuthProvider = StateNotifierProvider<DiscordAuthNotifier, DiscordClient?>(
+//   (ref) => DiscordAuthNotifier(),
+// );
 
-class DiscordAuthNotifier extends StateNotifier<DiscordClient?> {
-  DiscordAuthNotifier() : super(null);
+// class DiscordAuthNotifier extends StateNotifier<DiscordClient?> {
+//   DiscordAuthNotifier() : super(null);
 
-  void setObj(DiscordClient? obj) {
-    state = obj;
-  }
-}
+//   void setObj(DiscordClient? obj) {
+//     state = obj;
+//   }
+// }

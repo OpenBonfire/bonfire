@@ -1,11 +1,10 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:bonfire/providers/discord/auth.dart';
 import 'package:flutter/material.dart';
-import 'package:discord_api/discord_api.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:bonfire/network/discord.dart';
 
 const clientId = '1228043349550956644';
 const clientSecret = 'InfdjO7ME9nVPBaTeotKe9CmUePx6d1m';
@@ -16,8 +15,6 @@ void main() {
 }
 
 class LoginPage extends StatefulWidget {
-  var scopes = <DiscordApiScope>[];
-
   LoginPage({Key? key}) : super(key: key);
 
   @override
@@ -25,36 +22,23 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final _discordClient = DiscordClient(
-    clientId: clientId,
-    clientSecret: clientSecret,
-    redirectUri: redirectUri,
-    discordHttpClient:
-        DiscordDioProvider(clientId: clientId, clientSecret: clientSecret),
-  );
-
   var controller = InAppWebView();
 
   @override
   void initState() {
     super.initState();
-    print("SCOPE INFO");
-    print(DiscordApiScope.values.length);
-    print(DiscordApiScope.values[6]);
   }
 
   @override
   Widget build(BuildContext context) {
-    final url = _discordClient.authorizeUri(DiscordApiScope.values.getRange(0, 5).toList());
-    return WebViewWidget(url: url.toString(), discordClient: _discordClient);
+    return const WebViewWidget(url: "https://discord.com/login");
   }
 }
 
 class WebViewWidget extends ConsumerStatefulWidget {
-  const WebViewWidget({super.key, required this.url, required this.discordClient});
+  const WebViewWidget({super.key, required this.url});
 
   final String url;
-  final DiscordClient discordClient;
 
   @override
   WebViewWidgetState createState() => WebViewWidgetState();
@@ -62,10 +46,60 @@ class WebViewWidget extends ConsumerStatefulWidget {
 
 class WebViewWidgetState extends ConsumerState<WebViewWidget> {
   late InAppWebViewController _webViewController;
+  late Timer _timer;
 
   @override
   void initState() {
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel(); // Cancel the timer when the widget is disposed
+    super.dispose();
+  }
+
+  getToken() {
+    const grabTokenScript = """
+      let token = null;
+      window.webpackChunkdiscord_app.push([
+        [Math.random()],
+        {},
+        req => {
+          if (!req.c) return;
+          for (const m of Object.keys(req.c)
+            .map(x => req.c[x].exports)
+            .filter(x => x)) {
+            if (m.default && m.default.getToken !== undefined) {
+              console.log(m.default.getToken());
+              token = m.default.getToken();
+            }
+            if (m.getToken !== undefined) {
+              console.log(m.getToken());
+              token = m.getToken();
+            }
+          }
+        },
+      ]);
+      console.log('%cWorked!', 'font-size: 50px');
+      console.log(`%cYou now have your token in the clipboard!`, 'font-size: 16px');
+      token;
+    """;
+    _webViewController.evaluateJavascript(source: grabTokenScript).then((value) {
+      if (value != null && value != "") {
+        print("Token: $value");
+        // context.read(discordAuthProvider.notifier).setObj(value);
+        _timer.cancel(); // Cancel the timer when the token is found
+        // Navigator.pop(context); // Close the WebView when the token is found
+      }
+    });
+  }
+
+  startTimer() {
+    // Start a timer to call getToken every second
+    _timer = Timer.periodic(const Duration(milliseconds: 50), (timer) {
+      getToken();
+    });
   }
 
   @override
@@ -77,16 +111,10 @@ class WebViewWidgetState extends ConsumerState<WebViewWidget> {
           _webViewController = controller;
         },
         onLoadStop: (controller, url) async {
-          if (url.toString().startsWith(redirectUri)) {
-            final uri = Uri.parse(url.toString());
-            final code = uri.queryParameters['code'];
-            discordClient.getAccessToken(code!).then((_) {
-              ref.read(discordAuthProvider.notifier).setObj(discordClient);
-            });
-          }
+          print("Loaded stopped, starting login listener");
+          startTimer(); // Start the timer when the WebView finishes loading
         },
       ),
     );
   }
 }
-

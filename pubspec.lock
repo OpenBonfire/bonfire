@@ -225,22 +225,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.3.6"
-  dio:
-    dependency: transitive
-    description:
-      name: dio
-      sha256: "7d328c4d898a61efc3cd93655a0955858e29a0aa647f0f9e02d59b3bb275e2e8"
-      url: "https://pub.dev"
-    source: hosted
-    version: "4.0.6"
-  discord_api:
-    dependency: "direct main"
-    description:
-      name: discord_api
-      sha256: c62452b701a141a22dd16f1dcc87b561c960c94e9083752f25ea9fa86a66ebd7
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.1.1"
   eterl:
     dependency: transitive
     description:
