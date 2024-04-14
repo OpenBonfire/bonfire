@@ -1,16 +1,22 @@
+import 'dart:ffi';
 import 'dart:io';
 
 import 'package:bonfire/components/sidebar/sidebar.dart';
+import 'package:bonfire/globals.dart';
 import 'package:bonfire/network/auth.dart';
 import 'package:bonfire/style.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:nyxx/nyxx.dart';
 
 class Home extends StatelessWidget {
   const Home({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final client = ModalRoute.of(context)!.settings.arguments as NyxxGateway;
+    globalClient = client;
+
     return MaterialApp(
       title: 'GuildCable',
       theme: ThemeData(
@@ -55,10 +61,13 @@ class _MainPageState extends State<MainPage> {
           toolbarHeight: 0,
           backgroundColor: backgroundColor,
         ),
-        body: const Row(
-          children: [
-            Sidebar(),
-          ],
+        body: SizedBox(
+          width: MediaQuery.of(context).size.width,
+          child: Row(
+            children: [
+              Sidebar(),
+            ],
+          ),
         ));
   }
 }

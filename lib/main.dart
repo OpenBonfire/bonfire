@@ -1,12 +1,15 @@
+import 'package:bonfire/network/auth.dart';
 import 'package:bonfire/themes/dark.dart';
 import 'package:bonfire/views/home.dart';
 import 'package:bonfire/views/auth/login.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:nyxx/nyxx.dart';
 import 'dart:io';
 
 void main() async {
+  await GetStorage.init();
   runApp(const ProviderScope(child: NavigatorWidget()));
 }
 

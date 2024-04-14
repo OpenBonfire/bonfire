@@ -1,8 +1,23 @@
 import 'dart:convert';
+import 'package:bonfire/providers/discord/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:nyxx/nyxx.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:get_storage/get_storage.dart';
+
+checkPersistentToken(BuildContext ctx) {
+  print("checking for token!");
+  final box = GetStorage();
+  var token = box.read('token');
+  if (token != null) {
+    print("Token found in storage! We can proceed with routing.");
+    Nyxx.connectGateway(token!, GatewayIntents.allUnprivileged).then((client) {
+      Navigator.of(ctx)
+          .pushNamedAndRemoveUntil("/home", (r) => false, arguments: client);
+    });
+  }
+}
 
 class AuthUser {
   final String login;
@@ -11,9 +26,16 @@ class AuthUser {
 
   String? ticket;
   String? token;
+  BuildContext ctx;
+  NyxxGateway? client;
   bool clientCreated = false;
 
-  AuthUser({required this.login, required this.password, required this.ref});
+  AuthUser({
+    required this.login,
+    required this.password,
+    required this.ref,
+    required this.ctx,
+  });
 
   var superProps = {
     'os': 'Windows',
@@ -108,25 +130,27 @@ class AuthUser {
       token = jsonDecode(value.body)["token"];
       if (token != null) {
         print("Got token! We can proceed with routing.");
+
         _createAndNotifyClient();
       } else {
         print(
-            "No token was recieved; something went wrong. Check the response body. ");
+            "No token was recieved; something went wrong. Check the response body.");
         print(value.body);
       }
     });
     return resp;
   }
 
-  _createAndNotifyClient() async {
-    // if (clientCreated) return;
-    // clientCreated = true;
-    // final client =
-    //     await Nyxx.connectGateway(token!, GatewayIntents.allUnprivileged);
-    // final botUser = await client.users.fetchCurrentUser();
-    // client.onReady.listen((event) {
-    //   print("Connected to Discord as ${botUser.username}!}");
-    //   this.ref.read(discordAuthProvider.notifier).setObj(client);
-    // });
+  _createAndNotifyClient() {
+    if (clientCreated) return;
+    clientCreated = true;
+
+    final box = GetStorage();
+    box.write('token', token);
+
+    Nyxx.connectGateway(token!, GatewayIntents.allUnprivileged).then((client) {
+      Navigator.of(ctx)
+          .pushNamedAndRemoveUntil("/home", (r) => false, arguments: client);
+    });
   }
 }

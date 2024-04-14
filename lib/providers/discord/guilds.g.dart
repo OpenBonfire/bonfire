@@ -1,12 +1,12 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'auth.dart';
+part of 'guilds.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$authenticateHash() => r'1244a811e85a70308ea4769db764a8d9f1c1872f';
+String _$guildsHash() => r'f4b801988a296de7f84ff4898465ed933a950783';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -29,30 +29,30 @@ class _SystemHash {
   }
 }
 
-/// See also [authenticate].
-@ProviderFor(authenticate)
-const authenticateProvider = AuthenticateFamily();
+/// See also [guilds].
+@ProviderFor(guilds)
+const guildsProvider = GuildsFamily();
 
-/// See also [authenticate].
-class AuthenticateFamily extends Family<AsyncValue<int>> {
-  /// See also [authenticate].
-  const AuthenticateFamily();
+/// See also [guilds].
+class GuildsFamily extends Family<AsyncValue<List<UserGuild>>> {
+  /// See also [guilds].
+  const GuildsFamily();
 
-  /// See also [authenticate].
-  AuthenticateProvider call(
-    String token,
+  /// See also [guilds].
+  GuildsProvider call(
+    NyxxGateway client,
   ) {
-    return AuthenticateProvider(
-      token,
+    return GuildsProvider(
+      client,
     );
   }
 
   @override
-  AuthenticateProvider getProviderOverride(
-    covariant AuthenticateProvider provider,
+  GuildsProvider getProviderOverride(
+    covariant GuildsProvider provider,
   ) {
     return call(
-      provider.token,
+      provider.client,
     );
   }
 
@@ -68,91 +68,90 @@ class AuthenticateFamily extends Family<AsyncValue<int>> {
       _allTransitiveDependencies;
 
   @override
-  String? get name => r'authenticateProvider';
+  String? get name => r'guildsProvider';
 }
 
-/// See also [authenticate].
-class AuthenticateProvider extends AutoDisposeFutureProvider<int> {
-  /// See also [authenticate].
-  AuthenticateProvider(
-    String token,
+/// See also [guilds].
+class GuildsProvider extends AutoDisposeFutureProvider<List<UserGuild>> {
+  /// See also [guilds].
+  GuildsProvider(
+    NyxxGateway client,
   ) : this._internal(
-          (ref) => authenticate(
-            ref as AuthenticateRef,
-            token,
+          (ref) => guilds(
+            ref as GuildsRef,
+            client,
           ),
-          from: authenticateProvider,
-          name: r'authenticateProvider',
+          from: guildsProvider,
+          name: r'guildsProvider',
           debugGetCreateSourceHash:
               const bool.fromEnvironment('dart.vm.product')
                   ? null
-                  : _$authenticateHash,
-          dependencies: AuthenticateFamily._dependencies,
-          allTransitiveDependencies:
-              AuthenticateFamily._allTransitiveDependencies,
-          token: token,
+                  : _$guildsHash,
+          dependencies: GuildsFamily._dependencies,
+          allTransitiveDependencies: GuildsFamily._allTransitiveDependencies,
+          client: client,
         );
 
-  AuthenticateProvider._internal(
+  GuildsProvider._internal(
     super._createNotifier, {
     required super.name,
     required super.dependencies,
     required super.allTransitiveDependencies,
     required super.debugGetCreateSourceHash,
     required super.from,
-    required this.token,
+    required this.client,
   }) : super.internal();
 
-  final String token;
+  final NyxxGateway client;
 
   @override
   Override overrideWith(
-    FutureOr<int> Function(AuthenticateRef provider) create,
+    FutureOr<List<UserGuild>> Function(GuildsRef provider) create,
   ) {
     return ProviderOverride(
       origin: this,
-      override: AuthenticateProvider._internal(
-        (ref) => create(ref as AuthenticateRef),
+      override: GuildsProvider._internal(
+        (ref) => create(ref as GuildsRef),
         from: from,
         name: null,
         dependencies: null,
         allTransitiveDependencies: null,
         debugGetCreateSourceHash: null,
-        token: token,
+        client: client,
       ),
     );
   }
 
   @override
-  AutoDisposeFutureProviderElement<int> createElement() {
-    return _AuthenticateProviderElement(this);
+  AutoDisposeFutureProviderElement<List<UserGuild>> createElement() {
+    return _GuildsProviderElement(this);
   }
 
   @override
   bool operator ==(Object other) {
-    return other is AuthenticateProvider && other.token == token;
+    return other is GuildsProvider && other.client == client;
   }
 
   @override
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, token.hashCode);
+    hash = _SystemHash.combine(hash, client.hashCode);
 
     return _SystemHash.finish(hash);
   }
 }
 
-mixin AuthenticateRef on AutoDisposeFutureProviderRef<int> {
-  /// The parameter `token` of this provider.
-  String get token;
+mixin GuildsRef on AutoDisposeFutureProviderRef<List<UserGuild>> {
+  /// The parameter `client` of this provider.
+  NyxxGateway get client;
 }
 
-class _AuthenticateProviderElement extends AutoDisposeFutureProviderElement<int>
-    with AuthenticateRef {
-  _AuthenticateProviderElement(super.provider);
+class _GuildsProviderElement
+    extends AutoDisposeFutureProviderElement<List<UserGuild>> with GuildsRef {
+  _GuildsProviderElement(super.provider);
 
   @override
-  String get token => (origin as AuthenticateProvider).token;
+  NyxxGateway get client => (origin as GuildsProvider).client;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

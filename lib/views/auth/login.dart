@@ -13,10 +13,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:bonfire/colors.dart' as colors;
 import 'package:google_fonts/google_fonts.dart';
 
-void main() {
-  runApp(LoginPage());
-}
-
 class LoginPage extends ConsumerStatefulWidget {
   String login = '';
   String password = '';
@@ -51,7 +47,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
             Align(
                 alignment: Alignment.bottomLeft,
                 child: Text(
-                  "$title ${widget.errored ? " - ": ""} ${widget.lastErrorMessage}",
+                  "$title ${widget.errored ? " - " : ""} ${widget.lastErrorMessage}",
                   style: widget.errored ? erroredSubtitleStyle : subtitleStyle,
                   textAlign: TextAlign.left,
                 )),
@@ -61,13 +57,14 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                 border: Border.all(color: foregroundBright),
                 borderRadius: BorderRadius.circular(10),
               ),
-
               child: Padding(
                 padding: const EdgeInsets.only(
                     left: 12, right: 12, top: 2, bottom: 2),
                 child: TextField(
                   obscureText: obscureText,
-                  autofillHints: type == TextBoxType.login ? [AutofillHints.username, AutofillHints.email]: [AutofillHints.password],
+                  autofillHints: type == TextBoxType.login
+                      ? [AutofillHints.username, AutofillHints.email]
+                      : [AutofillHints.password],
                   style: subtitleStyle,
                   cursorColor: colors.title,
                   decoration: const InputDecoration(
@@ -75,10 +72,10 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                   ),
                   onChanged: (value) {
                     if (widget.errored) {
-                        setState(() {
-                          widget.lastErrorMessage = '';
-                          widget.errored = false;
-                        });
+                      setState(() {
+                        widget.lastErrorMessage = '';
+                        widget.errored = false;
+                      });
                     }
                     if (type == TextBoxType.login) {
                       widget.login = value;
@@ -112,8 +109,11 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                   ),
                 ),
                 onPressed: () {
-                  final authUser =
-                      AuthUser(login: widget.login, password: widget.password, ref: ref);
+                  final authUser = AuthUser(
+                      login: widget.login,
+                      password: widget.password,
+                      ref: ref,
+                      ctx: context);
                   authUser.post().then((response) {
                     final parsed = jsonDecode(response.body);
 
@@ -121,7 +121,9 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                       if (parsed["mfa"]) {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => MultiFactorView(authUser: authUser)),
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  MultiFactorView(authUser: authUser)),
                         );
                       }
                     } else {
@@ -135,7 +137,8 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                       } else {
                         var message = parsed["message"];
                         setState(() {
-                          widget.lastErrorMessage = message ?? "An error occurred";
+                          widget.lastErrorMessage =
+                              message ?? "An error occurred";
                           widget.errored = true;
                         });
                       }
@@ -154,6 +157,8 @@ class _LoginPageState extends ConsumerState<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    checkPersistentToken(context);
+
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 0,

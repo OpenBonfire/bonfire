@@ -25,6 +25,7 @@ dependencies:
   flutter_riverpod: ^2.5.1
   flutter_js: ^0.8.0
   riverpod_annotation: ^2.3.5
+  get_storage: ^2.1.1
 
 dev_dependencies:
   flutter_test:

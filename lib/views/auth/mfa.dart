@@ -83,11 +83,8 @@ class _MultiFactorViewState extends ConsumerState<MultiFactorView> {
                     widget.authUser.token = jsonDecode(value.body)['token'];
                     setState(() {
                       widget.tempDebugReturn = value.body;
-                      final AsyncValue<nyxx.NyxxGateway> asyncValue = ref.watch(
-                        authenticateProvider("token")
-                        );
-                      Navigator.pushNamedAndRemoveUntil(
-                          context, "/home", (r) => false);
+                      // Navigator.pushNamedAndRemoveUntil(
+                      //     context, "/home", (r) => false, arguments: widget.authUser);
                     });
                   });
                 },
