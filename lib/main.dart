@@ -1,32 +1,18 @@
-import 'dart:async';
+import 'package:nyxx/nyxx.dart';
+// import dart platform system thing
+import 'dart:io';
 
-import 'package:bonfire/views/home.dart';
-import 'package:flutter/material.dart';
-import 'package:discord_api/discord_api.dart';
-import 'package:flutter_inappwebview/flutter_inappwebview.dart';
-import 'package:bonfire/providers/discord/auth.dart';
-import 'package:bonfire/views/login.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+void main() async {
+  final client = await Nyxx.connectGateway(Platform.environment['TEST_TOKEN']!, GatewayIntents.allUnprivileged);
 
-void main() {
-  runApp(ProviderScope(child: Bonfire()));
-}
+  final botUser = await client.users.fetchCurrentUser();
 
-class Bonfire extends ConsumerWidget {
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final profile = ref.watch(discordAuthProvider);
-
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          toolbarHeight: 0,
-          backgroundColor: const Color(0xFF282b30),
-        ),
-        body: Center(
-          child: (profile != null) ? const Home() : LoginPage()
-        ),
-      ),
-    );
-  }
+  client.onMessageCreate.listen((event) async {
+    if (event.mentions.contains(botUser)) {
+      await event.message.channel.sendMessage(MessageBuilder(
+        content: 'You mentioned me!',
+        replyId: event.message.id,
+      ));
+    }
+  });
 }
