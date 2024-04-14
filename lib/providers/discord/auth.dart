@@ -1,13 +1,14 @@
-// import 'package:riverpod/riverpod.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:nyxx/nyxx.dart';
+import 'package:http/http.dart' as http;
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-// final discordAuthProvider = StateNotifierProvider<DiscordAuthNotifier, DiscordClient?>(
-//   (ref) => DiscordAuthNotifier(),
-// );
+part 'auth.g.dart';
 
-// class DiscordAuthNotifier extends StateNotifier<DiscordClient?> {
-//   DiscordAuthNotifier() : super(null);
+@riverpod
+Future<NyxxGateway> authenticate(AuthenticateRef ref, String token) async {
+  print("auth code running! hopefully this only happens when logging in.");
+  final client = Nyxx.connectGateway(token, GatewayIntents.allUnprivileged);
 
-//   void setObj(DiscordClient? obj) {
-//     state = obj;
-//   }
-// }
+  return client;
+}

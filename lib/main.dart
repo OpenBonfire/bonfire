@@ -10,6 +10,7 @@ void main() async {
   runApp(const ProviderScope(child: NavigatorWidget()));
 }
 
+
 class NavigatorWidget extends StatefulWidget {
   const NavigatorWidget({super.key});
 

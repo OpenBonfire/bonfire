@@ -2,12 +2,15 @@ import 'dart:convert';
 
 import 'package:bonfire/colors.dart';
 import 'package:bonfire/network/auth.dart';
+import 'package:bonfire/providers/discord/auth.dart';
 import 'package:bonfire/styles/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:bonfire/colors.dart' as colors;
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:nyxx/nyxx.dart' as nyxx;
 
-class MultiFactorView extends StatefulWidget {
+class MultiFactorView extends ConsumerStatefulWidget {
   AuthUser authUser;
   MultiFactorView({super.key, required this.authUser});
 
@@ -15,10 +18,10 @@ class MultiFactorView extends StatefulWidget {
   String tempDebugReturn = '';
 
   @override
-  State<MultiFactorView> createState() => _MultiFactorViewState();
+  ConsumerState<MultiFactorView> createState() => _MultiFactorViewState();
 }
 
-class _MultiFactorViewState extends State<MultiFactorView> {
+class _MultiFactorViewState extends ConsumerState<MultiFactorView> {
   Widget _mfaVerify() {
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
@@ -34,10 +37,10 @@ class _MultiFactorViewState extends State<MultiFactorView> {
           // width: 400,
           // height: 60,
           child: Padding(
-            padding:
-                const EdgeInsets.only(left: 12, right: 12),
+            padding: const EdgeInsets.only(left: 12, right: 12),
             child: Center(
               child: TextField(
+                autofillHints: const [AutofillHints.oneTimeCode],
                 textAlign: TextAlign.center,
                 style: GoogleFonts.jetBrainsMono(
                   fontSize: 24,
@@ -59,7 +62,7 @@ class _MultiFactorViewState extends State<MultiFactorView> {
     );
   }
 
-    Widget _loginButton() {
+  Widget _loginButton() {
     return Padding(
         padding: const EdgeInsets.only(top: 20),
         child: SizedBox(
@@ -77,14 +80,14 @@ class _MultiFactorViewState extends State<MultiFactorView> {
                 ),
                 onPressed: () {
                   widget.authUser.postMFA(widget.mfaCode).then((value) {
-                    print("mfa response back");
-                    print(value.statusCode);
-                    print(value.body);
                     widget.authUser.token = jsonDecode(value.body)['token'];
-                    print("set token to ${widget.authUser.token}");
-                    print(widget.authUser.token);
                     setState(() {
                       widget.tempDebugReturn = value.body;
+                      final AsyncValue<nyxx.NyxxGateway> asyncValue = ref.watch(
+                        authenticateProvider("token")
+                        );
+                      Navigator.pushNamedAndRemoveUntil(
+                          context, "/home", (r) => false);
                     });
                   });
                 },

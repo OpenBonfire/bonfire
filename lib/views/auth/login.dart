@@ -4,7 +4,6 @@ import 'dart:io';
 
 import 'package:bonfire/colors.dart';
 import 'package:bonfire/network/auth.dart';
-import 'package:bonfire/providers/discord/auth.dart';
 import 'package:bonfire/styles/styles.dart';
 import 'package:bonfire/views/auth/mfa.dart';
 import 'package:bonfire/views/auth/selector.dart';
@@ -18,7 +17,7 @@ void main() {
   runApp(LoginPage());
 }
 
-class LoginPage extends StatefulWidget {
+class LoginPage extends ConsumerStatefulWidget {
   String login = '';
   String password = '';
   bool errored = false;
@@ -27,7 +26,7 @@ class LoginPage extends StatefulWidget {
   LoginPage({Key? key}) : super(key: key);
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  ConsumerState<LoginPage> createState() => _LoginPageState();
 }
 
 enum TextBoxType {
@@ -35,7 +34,7 @@ enum TextBoxType {
   password,
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _LoginPageState extends ConsumerState<LoginPage> {
   @override
   void initState() {
     super.initState();
@@ -68,6 +67,7 @@ class _LoginPageState extends State<LoginPage> {
                     left: 12, right: 12, top: 2, bottom: 2),
                 child: TextField(
                   obscureText: obscureText,
+                  autofillHints: type == TextBoxType.login ? [AutofillHints.username, AutofillHints.email]: [AutofillHints.password],
                   style: subtitleStyle,
                   cursorColor: colors.title,
                   decoration: const InputDecoration(
@@ -95,7 +95,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _loginButton() {
+  Widget _loginButton(WidgetRef ref) {
     return Padding(
         padding: const EdgeInsets.only(top: 20),
         child: SizedBox(
@@ -113,7 +113,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 onPressed: () {
                   final authUser =
-                      AuthUser(login: widget.login, password: widget.password);
+                      AuthUser(login: widget.login, password: widget.password, ref: ref);
                   authUser.post().then((response) {
                     final parsed = jsonDecode(response.body);
 
@@ -169,7 +169,7 @@ class _LoginPageState extends State<LoginPage> {
         const SizedBox(height: 30),
         _loginBox("USERNAME / EMAIL", TextBoxType.login),
         _loginBox("PASSWORD", TextBoxType.password, true),
-        _loginButton()
+        _loginButton(ref)
       ]),
     );
   }
