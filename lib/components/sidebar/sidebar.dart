@@ -22,12 +22,6 @@ class _SidebarState extends ConsumerState<Sidebar> {
   }
 
 Future<List<Widget>> _generateCards(List<UserGuild> guilds) async {
-  print("Generating cards from guilds!");
-  print(guilds[0].name);
-  print(guilds);
-  print("ICON url: ");
-  print(guilds[0].icon?.fetch());
-
   List<Widget> cards = [];
 
   // Create a list of futures for fetching icon images
@@ -41,28 +35,28 @@ Future<List<Widget>> _generateCards(List<UserGuild> guilds) async {
 
   // Create cards with fetched icon images
   for (int i = 0; i < guilds.length; i++) {
-    var guild = guilds[i];
     var icon = icons[i];
-    print("adding card");
     cards.add(Padding(
       padding: const EdgeInsets.only(bottom: 8),
       child: Center(
         child: Container(
           width: 60,
           height: 60,
-          decoration: BoxDecoration(
-            color: foregroundBright,
-            borderRadius: BorderRadius.circular(10),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.1),
-                spreadRadius: 1,
-                blurRadius: 5,
-                offset: const Offset(0, 2),
-              ),
-            ],
-          ),
-          child: icon,
+          // decoration: BoxDecoration(
+          //   color: foregroundBright,
+          //   borderRadius: BorderRadius.circular(10),
+          //   boxShadow: [
+          //     BoxShadow(
+          //       color: Colors.black.withOpacity(0.1),
+          //       spreadRadius: 1,
+          //       blurRadius: 5,
+          //       offset: const Offset(0, 2),
+          //     ),
+          //   ],
+          // ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(100),
+            child: icon),
         ),
       ),
     ));
