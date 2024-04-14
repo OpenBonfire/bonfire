@@ -40,8 +40,8 @@ Future<List<Widget>> _generateCards(List<UserGuild> guilds) async {
       padding: const EdgeInsets.only(bottom: 8),
       child: Center(
         child: Container(
-          width: 60,
-          height: 60,
+          width: 50,
+          height: 50,
           // decoration: BoxDecoration(
           //   color: foregroundBright,
           //   borderRadius: BorderRadius.circular(10),
