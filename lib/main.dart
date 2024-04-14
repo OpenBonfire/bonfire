@@ -1,5 +1,4 @@
 import 'package:nyxx/nyxx.dart';
-// import dart platform system thing
 import 'dart:io';
 
 void main() async {
