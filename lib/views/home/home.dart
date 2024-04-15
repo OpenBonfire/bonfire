@@ -20,8 +20,6 @@ class Home extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("got args from model context: ");
-    print(client);
     globalClient = client;
 
     return MainPage();
@@ -51,7 +49,7 @@ class _MainPageState extends State<MainPage> {
         child: Row(
           children: [
             Sidebar(),
-            const Expanded(child: ChannelList())
+            Expanded(child: ChannelList())
           ],
         ),
       ),

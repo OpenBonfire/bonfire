@@ -153,5 +153,292 @@ class _GuildsProviderElement
   @override
   NyxxGateway get client => (origin as GuildsProvider).client;
 }
+
+String _$guildHash() => r'd2c91ad110081612c027228e56a33de46f376b42';
+
+/// See also [guild].
+@ProviderFor(guild)
+const guildProvider = GuildFamily();
+
+/// See also [guild].
+class GuildFamily extends Family<AsyncValue<Guild>> {
+  /// See also [guild].
+  const GuildFamily();
+
+  /// See also [guild].
+  GuildProvider call(
+    NyxxGateway client,
+    Snowflake id,
+  ) {
+    return GuildProvider(
+      client,
+      id,
+    );
+  }
+
+  @override
+  GuildProvider getProviderOverride(
+    covariant GuildProvider provider,
+  ) {
+    return call(
+      provider.client,
+      provider.id,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'guildProvider';
+}
+
+/// See also [guild].
+class GuildProvider extends AutoDisposeFutureProvider<Guild> {
+  /// See also [guild].
+  GuildProvider(
+    NyxxGateway client,
+    Snowflake id,
+  ) : this._internal(
+          (ref) => guild(
+            ref as GuildRef,
+            client,
+            id,
+          ),
+          from: guildProvider,
+          name: r'guildProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$guildHash,
+          dependencies: GuildFamily._dependencies,
+          allTransitiveDependencies: GuildFamily._allTransitiveDependencies,
+          client: client,
+          id: id,
+        );
+
+  GuildProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.client,
+    required this.id,
+  }) : super.internal();
+
+  final NyxxGateway client;
+  final Snowflake id;
+
+  @override
+  Override overrideWith(
+    FutureOr<Guild> Function(GuildRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: GuildProvider._internal(
+        (ref) => create(ref as GuildRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        client: client,
+        id: id,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<Guild> createElement() {
+    return _GuildProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is GuildProvider && other.client == client && other.id == id;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, client.hashCode);
+    hash = _SystemHash.combine(hash, id.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin GuildRef on AutoDisposeFutureProviderRef<Guild> {
+  /// The parameter `client` of this provider.
+  NyxxGateway get client;
+
+  /// The parameter `id` of this provider.
+  Snowflake get id;
+}
+
+class _GuildProviderElement extends AutoDisposeFutureProviderElement<Guild>
+    with GuildRef {
+  _GuildProviderElement(super.provider);
+
+  @override
+  NyxxGateway get client => (origin as GuildProvider).client;
+  @override
+  Snowflake get id => (origin as GuildProvider).id;
+}
+
+String _$channelsHash() => r'8c0190b11ac902949358f14e5b9878eadc69aa30';
+
+/// See also [channels].
+@ProviderFor(channels)
+const channelsProvider = ChannelsFamily();
+
+/// See also [channels].
+class ChannelsFamily extends Family<AsyncValue<List<GuildChannel>>> {
+  /// See also [channels].
+  const ChannelsFamily();
+
+  /// See also [channels].
+  ChannelsProvider call(
+    NyxxGateway client,
+    Guild guild,
+  ) {
+    return ChannelsProvider(
+      client,
+      guild,
+    );
+  }
+
+  @override
+  ChannelsProvider getProviderOverride(
+    covariant ChannelsProvider provider,
+  ) {
+    return call(
+      provider.client,
+      provider.guild,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'channelsProvider';
+}
+
+/// See also [channels].
+class ChannelsProvider extends AutoDisposeFutureProvider<List<GuildChannel>> {
+  /// See also [channels].
+  ChannelsProvider(
+    NyxxGateway client,
+    Guild guild,
+  ) : this._internal(
+          (ref) => channels(
+            ref as ChannelsRef,
+            client,
+            guild,
+          ),
+          from: channelsProvider,
+          name: r'channelsProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$channelsHash,
+          dependencies: ChannelsFamily._dependencies,
+          allTransitiveDependencies: ChannelsFamily._allTransitiveDependencies,
+          client: client,
+          guild: guild,
+        );
+
+  ChannelsProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.client,
+    required this.guild,
+  }) : super.internal();
+
+  final NyxxGateway client;
+  final Guild guild;
+
+  @override
+  Override overrideWith(
+    FutureOr<List<GuildChannel>> Function(ChannelsRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: ChannelsProvider._internal(
+        (ref) => create(ref as ChannelsRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        client: client,
+        guild: guild,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<List<GuildChannel>> createElement() {
+    return _ChannelsProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is ChannelsProvider &&
+        other.client == client &&
+        other.guild == guild;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, client.hashCode);
+    hash = _SystemHash.combine(hash, guild.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin ChannelsRef on AutoDisposeFutureProviderRef<List<GuildChannel>> {
+  /// The parameter `client` of this provider.
+  NyxxGateway get client;
+
+  /// The parameter `guild` of this provider.
+  Guild get guild;
+}
+
+class _ChannelsProviderElement
+    extends AutoDisposeFutureProviderElement<List<GuildChannel>>
+    with ChannelsRef {
+  _ChannelsProviderElement(super.provider);
+
+  @override
+  NyxxGateway get client => (origin as ChannelsProvider).client;
+  @override
+  Guild get guild => (origin as ChannelsProvider).guild;
+}
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

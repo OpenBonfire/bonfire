@@ -1,11 +1,20 @@
 import 'package:bonfire/colors.dart';
+import 'package:bonfire/globals.dart';
+import 'package:bonfire/providers/discord/guilds.dart';
 import 'package:bonfire/style.dart';
+import 'package:bonfire/views/home/signal/channel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:nyxx/nyxx.dart' as nyxx;
 
 class ChannelList extends ConsumerStatefulWidget {
-  const ChannelList({Key? key}) : super(key: key);
+  nyxx.UserGuild? guild;
+  String serverName = "Loading";
+  String memberCount = "0";
+  List<nyxx.GuildChannel> channels = [];
+
+  ChannelList({Key? key}) : super(key: key);
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _ChannelListState();
@@ -66,8 +75,37 @@ class _ChannelListState extends ConsumerState<ChannelList> {
     );
   }
 
+
+  @override
+  void initState() {
+    super.initState();
+    guildSignal.subscribe((guild) {
+      if (guild != null) {
+        setState(() {
+          widget.guild = guild;
+        });
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    if (widget.guild != null) {
+      var detailedGuild = ref.watch(guildProvider(globalClient!, widget.guild!.id)).valueOrNull;
+
+      if (detailedGuild != null) {
+        widget.serverName = detailedGuild.name;
+        widget.memberCount = detailedGuild.approximateMemberCount.toString();
+
+        var channelList = ref.watch(channelsProvider(globalClient!, detailedGuild)).valueOrNull;
+        
+        if (channelList != null) {
+          print(channelList.length);
+          widget.channels = channelList;
+        }
+      }
+    }
+
     return Container(
       decoration: const BoxDecoration(color: backgroundColor),
       width: double.infinity,
@@ -92,7 +130,7 @@ class _ChannelListState extends ConsumerState<ChannelList> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Guild Name',
+                          (widget.guild != null) ? widget.guild!.name : "Loading",
                           style: GoogleFonts.roboto(
                             fontSize: 18,
                             color: Colors.white,
@@ -102,7 +140,7 @@ class _ChannelListState extends ConsumerState<ChannelList> {
                         Align(
                           alignment: Alignment.centerLeft,
                           child: Text(
-                            '180 members',
+                            widget.memberCount + " members",
                             textAlign: TextAlign.left,
                             style: GoogleFonts.roboto(
                               fontSize: 12,
@@ -123,9 +161,9 @@ class _ChannelListState extends ConsumerState<ChannelList> {
               ),
               Expanded(
                 child: ListView.builder(
-                  itemCount: 10,
+                  itemCount: widget.channels.length,
                   itemBuilder: (context, index) {
-                    return _channelButton("# general");
+                    return _channelButton(widget.channels[index].name);
                   },
                 ),
               ),

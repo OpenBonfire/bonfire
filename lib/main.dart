@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:nyxx/nyxx.dart';
-import 'dart:io';
 
 void main() async {
   await GetStorage.init();
@@ -29,7 +28,7 @@ class _NavigatorWidgetState extends State<NavigatorWidget> {
         if (settings.name == '/login') {
           return MaterialPageRoute(builder: (context) => LoginPage());
         } else if (settings.name == '/home') {
-          // Extract arguments if available
+
           final NyxxGateway client = settings.arguments as NyxxGateway;
           return MaterialPageRoute(builder: (context) => Home(client: client));
         }

@@ -1,6 +1,7 @@
 import 'package:bonfire/colors.dart';
 import 'package:bonfire/globals.dart';
 import 'package:bonfire/providers/discord/guilds.dart';
+import 'package:bonfire/views/home/signal/channel.dart';
 import 'package:flutter/material.dart';
 import 'package:bonfire/components/sidebar/icon.dart';
 import 'package:bonfire/style.dart';
@@ -31,7 +32,9 @@ class _SidebarState extends ConsumerState<Sidebar> {
           width: 50,
           height: 50,
           child: TextButton(
-            onPressed: () {},
+            onPressed: () {
+              guildSignal.set(guild);
+            },
             style: TextButton.styleFrom(
               padding: EdgeInsets.zero, // Set padding to zero
               minimumSize: const Size(0, 0), // Ensure minimum size is zero
