@@ -1,26 +1,28 @@
+import 'package:bonfire/colors.dart';
+import 'package:bonfire/style.dart';
 import 'package:bonfire/views/home/signal/channel.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:nyxx/nyxx.dart';
 
 class Messages extends StatefulWidget {
-  Messages({super.key});
+  Messages({Key? key});
 
   GuildChannel? channel;
-  List<Message> messages = [];
 
   @override
   State<Messages> createState() => _MessagesState();
 }
 
 class _MessagesState extends State<Messages> {
+  List<Message> messages = [];
+
   @override
   void initState() {
     super.initState();
+    // Move your subscription logic here
     channelSignal.subscribe((channel) {
       if (channel != null) {
-        print('Channel: ${channel.name}');
-        print(channel.type);
         setState(() {
           widget.channel = channel;
         });
@@ -28,7 +30,7 @@ class _MessagesState extends State<Messages> {
           var _channel = channel as GuildTextChannel;
           _channel.messages.fetchMany(limit: 100).then((value) {
             setState(() {
-              widget.messages = value;
+              messages = value;
             });
           });
         }
@@ -36,65 +38,110 @@ class _MessagesState extends State<Messages> {
     });
   }
 
-  Widget _buildMessage(Message message) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: SizedBox(
-        // width: 100,
-        // height: 50,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                // child: Text(message.author.username),
-                width: 50,
-                height: 50,
-                decoration: BoxDecoration(
-                  color: const Color(0XffC9C9C9),
-                  borderRadius: BorderRadius.circular(100),
-                ),
-              ),
-            ),
-            Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 6, top: 12),
-                  child: Text(message.author.username,
-                      style: GoogleFonts.inriaSans(
-                        color: Colors.white,
-                      )),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 6, top: 2),
-                  child: Text(message.content,
-                  softWrap: true,
-                      style: GoogleFonts.inriaSans(
-                        color: Colors.white,
-                      )),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        _textScrollView(),
+        const MessageBar(),
+      ],
     );
   }
 
   Widget _textScrollView() {
-    return ListView.builder(
-      itemCount: widget.messages.length,
-      reverse: true,
-      itemBuilder: (context, index) {
-        return _buildMessage(widget.messages[index]);
-      },
+    return Expanded(
+      child: Container(
+        // color: Colors.white,
+        child: SingleChildScrollView(
+          reverse: true,
+          child: Column(
+            children: messages
+                .map((message) => MessageBox(message: message))
+                .toList(),
+          ),
+        ),
+      ),
     );
   }
+}
+
+class MessageBar extends StatelessWidget {
+  const MessageBar({Key? key});
 
   @override
   Widget build(BuildContext context) {
-    return _textScrollView();
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      height: 60,
+      decoration: const BoxDecoration(
+        color: foreground,
+        border:
+            Border.symmetric(horizontal: BorderSide(color: foregroundBright)),
+      ),
+      child: TextField(
+        style: GoogleFonts.inriaSans(color: Colors.white),
+        decoration: InputDecoration(
+          hintText: 'Message',
+          hintStyle: GoogleFonts.inriaSans(color: Colors.white),
+          border: InputBorder.none,
+          contentPadding: const EdgeInsets.all(16),
+        ),
+      ),
+    );
+  }
+}
+
+class MessageBox extends StatelessWidget {
+  final Message message;
+
+  const MessageBox({Key? key, required this.message});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              width: 50,
+              height: 50,
+              decoration: BoxDecoration(
+                color: const Color(0XffC9C9C9),
+                borderRadius: BorderRadius.circular(100),
+              ),
+            ),
+          ),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 6, top: 12),
+                child: Text(
+                  message.author.username,
+                  textAlign: TextAlign.left,
+                  style: GoogleFonts.inriaSans(color: Colors.white),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 6, top: 2),
+                child: SizedBox(
+                  width: MediaQuery.of(context).size.width - 94,
+                  child: Text(
+                    message.content,
+                    softWrap: true,
+                    style: GoogleFonts.inriaSans(color: Colors.white),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
   }
 }

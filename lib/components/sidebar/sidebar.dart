@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:bonfire/colors.dart';
 import 'package:bonfire/globals.dart';
 import 'package:bonfire/providers/discord/guilds.dart';
@@ -9,10 +11,14 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nyxx/nyxx.dart';
 import 'package:signals/signals.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+
+import 'dart:io';
+import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 
 class Sidebar extends ConsumerStatefulWidget {
-  ValueChanged<UserGuild>? onGuildSelected;
-
   Sidebar({Key? key}) : super(key: key);
 
   @override
@@ -28,30 +34,47 @@ class _SidebarState extends ConsumerState<Sidebar> {
   Future<List<Widget>> _generateCards(List<UserGuild> guilds) async {
     List<Widget> cards = [];
 
-    List<Future<Image>> iconFutures = [];
+    List<Future<ImageProvider>> iconFutures = [];
     for (var guild in guilds) {
-      iconFutures.add(_fetchIconImage(guild.icon));
+      iconFutures.add(fetchIconImage(guild.icon));
     }
 
-    List<Image> icons = await Future.wait(iconFutures);
+    List<ImageProvider> icons = await Future.wait(iconFutures);
 
     for (int i = 0; i < guilds.length; i++) {
-      Image icon = icons[i];
+      ImageProvider icon = icons[i];
       UserGuild guild = guilds[i];
-      cards.add(IconButton(guild: guild, icon: icon));
+      cards.add(IconButton(guild: guild, icon: Image(image: icon)));
     }
 
     return cards;
   }
 
-  Future<Image> _fetchIconImage(CdnAsset? icon) async {
+  Future<ImageProvider> fetchIconImage(CdnAsset? icon) async {
     if (icon != null) {
+      FileInfo? fromCache =
+          await DefaultCacheManager().getFileFromCache(icon.hash);
+
+      if (fromCache != null) {
+        return MemoryImage(fromCache.file.readAsBytesSync());
+      }
+
       var bytes = await icon.fetch();
-      return Image.memory(bytes);
+      String cacheKey = icon.hash;
+      File fileData = await _saveToCache(bytes, cacheKey);
+      return MemoryImage(fileData.readAsBytesSync());
     }
-    // If icon is null, return an empty image
-    return Image.asset(
-        'assets/placeholder.png'); // Adjust the placeholder image path as per your project
+
+    return const AssetImage('assets/placeholder.png');
+  }
+
+  Future<File> _saveToCache(List<int> bytes, String cacheKey) async {
+    final directory = await getTemporaryDirectory();
+    final path = '${directory.path}/$cacheKey';
+
+    await File(path).writeAsBytes(bytes);
+
+    return File(path);
   }
 
   @override
