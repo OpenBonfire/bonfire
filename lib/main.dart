@@ -36,11 +36,3 @@ class _NavigatorWidgetState extends State<NavigatorWidget> {
     );
   }
 }
-
-/*
-routes: {
-        '/login': (context) => LoginPage(),
-        '/home': (context) => const Home(),
-      },
-      initialRoute: "/login",
-*/
