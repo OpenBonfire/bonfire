@@ -13,7 +13,6 @@ void main() async {
   runApp(const ProviderScope(child: NavigatorWidget()));
 }
 
-
 class NavigatorWidget extends StatefulWidget {
   const NavigatorWidget({super.key});
 
@@ -26,10 +25,24 @@ class _NavigatorWidgetState extends State<NavigatorWidget> {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: darkTheme,
-      routes: {
-        '/': (context) => LoginPage(),
-        '/home': (context) => const Home(),
+      onGenerateRoute: (settings) {
+        if (settings.name == '/login') {
+          return MaterialPageRoute(builder: (context) => LoginPage());
+        } else if (settings.name == '/home') {
+          // Extract arguments if available
+          final NyxxGateway client = settings.arguments as NyxxGateway;
+          return MaterialPageRoute(builder: (context) => Home(client: client));
+        }
       },
+      initialRoute: "/login",
     );
   }
 }
+
+/*
+routes: {
+        '/login': (context) => LoginPage(),
+        '/home': (context) => const Home(),
+      },
+      initialRoute: "/login",
+*/

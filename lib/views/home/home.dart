@@ -12,22 +12,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:nyxx/nyxx.dart';
-import 'package:flutter_inner_drawer/inner_drawer.dart';
+import 'package:signals/signals.dart';
 
 class Home extends StatelessWidget {
-  const Home({super.key});
+  NyxxGateway client;
+  Home({super.key, required this.client});
 
   @override
   Widget build(BuildContext context) {
-    final client = ModalRoute.of(context)!.settings.arguments as NyxxGateway;
+    print("got args from model context: ");
+    print(client);
     globalClient = client;
 
-    return const MainPage();
+    return MainPage();
   }
 }
 
-class MainPage extends StatefulWidget {
-  const MainPage({super.key});
+class MainPage extends StatefulWidget {  
+  MainPage({super.key});
+
 
   @override
   State<MainPage> createState() => _MainPageState();

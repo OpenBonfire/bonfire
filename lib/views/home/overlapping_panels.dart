@@ -3,6 +3,7 @@ library overlapping_panels;
 // https://github.com/blackmann/overlapping_panels
 
 import 'package:flutter/material.dart';
+
 import 'dart:core';
 
 const double bleedWidth = 20;
@@ -66,7 +67,7 @@ class OverlappingPanelsState extends State<OverlappingPanels>
         .width;
 
     final animationController = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 100));
+        vsync: this, duration: const Duration(milliseconds: 200));
 
     animationController.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
@@ -119,7 +120,7 @@ class OverlappingPanelsState extends State<OverlappingPanels>
     final goal = _calculateGoal(mediaWidth, multiplier);
 
     final animationController = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 100));
+        vsync: this, duration: const Duration(milliseconds: 200));
 
     animationController.addStatusListener((status) {
       if (status == AnimationStatus.completed) {

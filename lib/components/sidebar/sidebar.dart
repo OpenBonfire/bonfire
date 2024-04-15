@@ -9,6 +9,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nyxx/nyxx.dart';
 
 class Sidebar extends ConsumerStatefulWidget {
+  ValueChanged<UserGuild>? onGuildSelected;
+  
   Sidebar({Key? key}) : super(key: key);
 
   @override
@@ -21,44 +23,55 @@ class _SidebarState extends ConsumerState<Sidebar> {
     super.initState();
   }
 
-Future<List<Widget>> _generateCards(List<UserGuild> guilds) async {
-  List<Widget> cards = [];
-
-  List<Future<Image>> iconFutures = [];
-  for (var guild in guilds) {
-    iconFutures.add(_fetchIconImage(guild.icon));
-  }
-  
-  List<Image> icons = await Future.wait(iconFutures);
-
-  for (int i = 0; i < guilds.length; i++) {
-    var icon = icons[i];
-    cards.add(Padding(
+  Widget _iconButton(UserGuild guild, Image icon) {
+    return Padding(
       padding: const EdgeInsets.only(bottom: 8),
       child: Center(
         child: SizedBox(
           width: 50,
           height: 50,
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(100),
-            child: icon),
+          child: TextButton(
+            onPressed: () {},
+            style: TextButton.styleFrom(
+              padding: EdgeInsets.zero, // Set padding to zero
+              minimumSize: const Size(0, 0), // Ensure minimum size is zero
+            ),
+            child: ClipRRect(
+                borderRadius: BorderRadius.circular(100), child: icon),
+          ),
         ),
       ),
-    ));
+    );
   }
 
-  return cards;
-}
+  Future<List<Widget>> _generateCards(List<UserGuild> guilds) async {
+    List<Widget> cards = [];
 
-Future<Image> _fetchIconImage(CdnAsset? icon) async {
-  if (icon != null) {
-    var bytes = await icon.fetch();
-    return Image.memory(bytes);
+    List<Future<Image>> iconFutures = [];
+    for (var guild in guilds) {
+      iconFutures.add(_fetchIconImage(guild.icon));
+    }
+
+    List<Image> icons = await Future.wait(iconFutures);
+
+    for (int i = 0; i < guilds.length; i++) {
+      Image icon = icons[i];
+      UserGuild guild = guilds[i];
+      cards.add(_iconButton(guild, icon));
+    }
+
+    return cards;
   }
-  // If icon is null, return an empty image
-  return Image.asset('assets/placeholder.png'); // Adjust the placeholder image path as per your project
-}
 
+  Future<Image> _fetchIconImage(CdnAsset? icon) async {
+    if (icon != null) {
+      var bytes = await icon.fetch();
+      return Image.memory(bytes);
+    }
+    // If icon is null, return an empty image
+    return Image.asset(
+        'assets/placeholder.png'); // Adjust the placeholder image path as per your project
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -68,8 +81,7 @@ Future<Image> _fetchIconImage(CdnAsset? icon) async {
     return Container(
       width: 75,
       height: double.infinity,
-      decoration:
-          const BoxDecoration(color: backgroundColor),
+      decoration: const BoxDecoration(color: backgroundColor),
       child: FutureBuilder<List<Widget>>(
         future: guilds.when(
           loading: () => Future.value([]),
