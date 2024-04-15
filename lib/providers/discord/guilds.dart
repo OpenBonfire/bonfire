@@ -1,4 +1,5 @@
 import 'package:bonfire/globals.dart';
+import 'package:bonfire/views/home/messages/messages.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nyxx/nyxx.dart';
 import 'package:http/http.dart' as http;
@@ -21,3 +22,9 @@ Future<List<GuildChannel>> channels(
     ChannelsRef ref, NyxxGateway client, Guild guild) async {
   return await guild.fetchChannels();
 }
+
+// @Riverpod(keepAlive: false)
+// Future<List<Message>> messages(
+//     MessagesRef ref, NyxxGateway client, GuildChannel channel) async {
+//   return client.channels.cache[channel.id]!.fetch(limit: 50)
+// }

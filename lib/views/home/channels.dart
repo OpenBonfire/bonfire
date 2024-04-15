@@ -23,7 +23,7 @@ class ChannelList extends ConsumerStatefulWidget {
 }
 
 class _ChannelListState extends ConsumerState<ChannelList> {
-  Widget _channelButton(String name) {
+  Widget _channelButton(nyxx.GuildChannel channel) {
     return Align(
       alignment: Alignment.centerLeft,
       child: Padding(
@@ -59,11 +59,13 @@ class _ChannelListState extends ConsumerState<ChannelList> {
                 },
               ),
             ),
-            onPressed: () {},
+            onPressed: () {
+              channelSignal.set(channel);
+            },
             child: Container(
               height: 25,
               child: Text(
-                name,
+                channel.name,
                 textAlign: TextAlign.left,
                 style: GoogleFonts.inriaSans(
                   color: const Color.fromARGB(189, 255, 255, 255),
@@ -179,7 +181,7 @@ class _ChannelListState extends ConsumerState<ChannelList> {
                   itemCount: widget.channels.length,
                   itemBuilder: (context, index) {
                     widget.channels[index];
-                    return _channelButton(widget.channels[index].name);
+                    return _channelButton(widget.channels[index]);
                   },
                 ),
               ),
