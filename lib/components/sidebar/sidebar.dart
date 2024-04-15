@@ -69,7 +69,7 @@ Future<Image> _fetchIconImage(CdnAsset? icon) async {
       width: 75,
       height: double.infinity,
       decoration:
-          BoxDecoration(color: Theme.of(context).scaffoldBackgroundColor),
+          const BoxDecoration(color: backgroundColor),
       child: FutureBuilder<List<Widget>>(
         future: guilds.when(
           loading: () => Future.value([]),

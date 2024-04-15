@@ -1,10 +1,12 @@
 import 'dart:ffi';
 import 'dart:io';
 
+import 'package:bonfire/colors.dart';
 import 'package:bonfire/components/sidebar/sidebar.dart';
 import 'package:bonfire/globals.dart';
 import 'package:bonfire/network/auth.dart';
 import 'package:bonfire/style.dart';
+import 'package:bonfire/views/home/channels.dart';
 import 'package:bonfire/views/home/overlapping_panels.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -46,17 +48,22 @@ class _MainPageState extends State<MainPage> {
         child: Row(
           children: [
             Sidebar(),
-            Expanded(child: Container(
-              decoration: BoxDecoration(color: backgroundColor),
-            ))
+            const Expanded(child: ChannelList())
           ],
         ),
       ),
       main: Container(
         width: double.infinity,
         height: double.infinity,
-        color: Colors.white
-      )
+        decoration: BoxDecoration(color: foreground,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            spreadRadius: 5,
+            blurRadius: 7,
+            offset: const Offset(0, 3),
+          )
+        ]))
     ));
   }
 }

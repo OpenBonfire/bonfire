@@ -168,7 +168,6 @@ class OverlappingPanelsState extends State<OverlappingPanels>
       GestureDetector(
         behavior: HitTestBehavior.translucent,
         onHorizontalDragUpdate: (details) {
-          // if ((details.delta.dx).abs() > 5)
           onTranslate(details.delta.dx);
         },
         onHorizontalDragEnd: (details) {
