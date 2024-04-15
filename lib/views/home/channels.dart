@@ -13,6 +13,8 @@ class ChannelList extends ConsumerStatefulWidget {
   String serverName = "Loading";
   String memberCount = "0";
   List<nyxx.GuildChannel> channels = [];
+  // channel cache map that contains snowflake as the key, channels at the value
+  Map<String, nyxx.GuildChannel> channelCache = {};
 
   ChannelList({Key? key}) : super(key: key);
 
@@ -35,7 +37,8 @@ class _ChannelListState extends ConsumerState<ChannelList> {
           child: OutlinedButton(
             style: ButtonStyle(
               alignment: Alignment.centerLeft,
-              backgroundColor: MaterialStateProperty.all<Color>(Colors.transparent),
+              backgroundColor:
+                  MaterialStateProperty.all<Color>(Colors.transparent),
               side: MaterialStateProperty.all<BorderSide>(
                 const BorderSide(
                   width: 0.5,
@@ -75,7 +78,6 @@ class _ChannelListState extends ConsumerState<ChannelList> {
     );
   }
 
-
   @override
   void initState() {
     super.initState();
@@ -91,14 +93,17 @@ class _ChannelListState extends ConsumerState<ChannelList> {
   @override
   Widget build(BuildContext context) {
     if (widget.guild != null) {
-      var detailedGuild = ref.watch(guildProvider(globalClient!, widget.guild!.id)).valueOrNull;
+      var detailedGuild =
+          ref.watch(guildProvider(globalClient!, widget.guild!.id)).valueOrNull;
 
       if (detailedGuild != null) {
         widget.serverName = detailedGuild.name;
         widget.memberCount = detailedGuild.approximateMemberCount.toString();
 
-        var channelList = ref.watch(channelsProvider(globalClient!, detailedGuild)).valueOrNull;
-        
+        var channelList = ref
+            .watch(channelsProvider(globalClient!, detailedGuild))
+            .valueOrNull;
+
         if (channelList != null) {
           print(channelList.length);
           widget.channels = channelList;
@@ -130,7 +135,9 @@ class _ChannelListState extends ConsumerState<ChannelList> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          (widget.guild != null) ? widget.guild!.name : "Loading",
+                          (widget.guild != null)
+                              ? widget.guild!.name
+                              : "Loading",
                           style: GoogleFonts.roboto(
                             fontSize: 18,
                             color: Colors.white,
