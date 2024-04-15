@@ -140,7 +140,7 @@ class _ChannelListState extends ConsumerState<ChannelList> {
                         Align(
                           alignment: Alignment.centerLeft,
                           child: Text(
-                            widget.memberCount + " members",
+                            "${widget.memberCount} members",
                             textAlign: TextAlign.left,
                             style: GoogleFonts.roboto(
                               fontSize: 12,
@@ -163,6 +163,7 @@ class _ChannelListState extends ConsumerState<ChannelList> {
                 child: ListView.builder(
                   itemCount: widget.channels.length,
                   itemBuilder: (context, index) {
+                    widget.channels[index];
                     return _channelButton(widget.channels[index].name);
                   },
                 ),
