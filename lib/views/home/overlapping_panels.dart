@@ -53,6 +53,7 @@ class OverlappingPanelsState extends State<OverlappingPanels>
     with TickerProviderStateMixin {
   AnimationController? controller;
   double translate = 0;
+  int lastDelta = 0;
 
   double _calculateGoal(double width, int multiplier) {
     return (multiplier * width) + (-multiplier * widget.restWidth);
@@ -77,8 +78,7 @@ class OverlappingPanelsState extends State<OverlappingPanels>
         animationController.dispose();
       }
     });
-
-    if (translate.abs() >= mediaWidth / 2) {
+    if (lastDelta > 0) {
       final multiplier = (translate > 0 ? 1 : -1);
       final goal = _calculateGoal(mediaWidth, multiplier);
       final Tween<double> tween = Tween(begin: translate, end: goal);
@@ -149,7 +149,6 @@ class OverlappingPanelsState extends State<OverlappingPanels>
       }
     });
   }
-
   @override
   Widget build(BuildContext context) {
     return Stack(children: [
@@ -168,6 +167,7 @@ class OverlappingPanelsState extends State<OverlappingPanels>
       GestureDetector(
         behavior: HitTestBehavior.translucent,
         onHorizontalDragUpdate: (details) {
+          lastDelta = details.delta.dx.toInt();
           onTranslate(details.delta.dx);
         },
         onHorizontalDragEnd: (details) {
