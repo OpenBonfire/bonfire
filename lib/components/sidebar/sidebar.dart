@@ -102,6 +102,10 @@ class _IconButtonState extends State<IconButton> {
     guildSignal.subscribe((UserGuild? updatedGuild) {
       if (guild != null) {
         setState(() {
+          if (updatedGuild == null) {
+            widget.selected = false;
+            return;
+          }
           if (updatedGuild!.id == widget.guild.id) {
             widget.selected = true;
           } else {

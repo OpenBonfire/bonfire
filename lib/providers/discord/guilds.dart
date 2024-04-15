@@ -6,17 +6,17 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'guilds.g.dart';
 
-@Riverpod(keepAlive: true)
+@Riverpod(keepAlive: false)
 Future<List<UserGuild>> guilds(GuildsRef ref, NyxxGateway client) async {
   return await client.listGuilds();
 }
 
-@Riverpod(keepAlive: true)
+@Riverpod(keepAlive: false)
 Future<Guild> guild(GuildRef ref, NyxxGateway client, Snowflake id) async {
   return await client.guilds.fetch(id, withCounts: true);
 }
 
-@Riverpod(keepAlive: true)
+@Riverpod(keepAlive: false)
 Future<List<GuildChannel>> channels(
     ChannelsRef ref, NyxxGateway client, Guild guild) async {
   return await guild.fetchChannels();

@@ -28,7 +28,6 @@ class _NavigatorWidgetState extends State<NavigatorWidget> {
         if (settings.name == '/login') {
           return MaterialPageRoute(builder: (context) => LoginPage());
         } else if (settings.name == '/home') {
-
           final NyxxGateway client = settings.arguments as NyxxGateway;
           return MaterialPageRoute(builder: (context) => Home(client: client));
         }

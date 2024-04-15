@@ -14,7 +14,7 @@ class ChannelList extends ConsumerStatefulWidget {
   String memberCount = "0";
   List<nyxx.GuildChannel> channels = [];
   // channel cache map that contains snowflake as the key, channels at the value
-  Map<String, nyxx.GuildChannel> channelCache = {};
+  Map<String, List<nyxx.GuildChannel>> channelCache = {};
 
   ChannelList({Key? key}) : super(key: key);
 
@@ -107,8 +107,16 @@ class _ChannelListState extends ConsumerState<ChannelList> {
         if (channelList != null) {
           print(channelList.length);
           widget.channels = channelList;
+          widget.channelCache[widget.guild!.id.value.toString()] = channelList;
         }
       }
+    }
+
+    if (widget.guild != null) {
+      ;
+      widget.channels =
+          widget.channelCache[widget.guild!.id.value.toString()] ??
+              widget.channels;
     }
 
     return Container(
