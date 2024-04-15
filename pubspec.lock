@@ -241,6 +241,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.6.3"
+  dart_markdown:
+    dependency: transitive
+    description:
+      name: dart_markdown
+      sha256: b9b7e13733dd418bc83e6f4e68d79caebab6cd3a8b301e91d1bfd6ef5ef8e993
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.1.7"
   dart_style:
     dependency: transitive
     description:
@@ -382,6 +390,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.2"
+  flutter_markdown:
+    dependency: "direct main"
+    description:
+      name: flutter_markdown
+      sha256: "04c4722cc36ec5af38acc38ece70d22d3c2123c61305d555750a091517bbe504"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.6.23"
   flutter_riverpod:
     dependency: "direct main"
     description:
@@ -568,6 +584,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.0"
+  markdown:
+    dependency: transitive
+    description:
+      name: markdown
+      sha256: ef2a1298144e3f985cc736b22e0ccdaf188b5b3970648f2d9dc13efd1d9df051
+      url: "https://pub.dev"
+    source: hosted
+    version: "7.2.2"
+  markdown_viewer:
+    dependency: "direct main"
+    description:
+      name: markdown_viewer
+      sha256: e819ea779eaeca933bb38228e02888ad72409aba922efb2e65abb2f8b046dc8e
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.6.2"
   matcher:
     dependency: transitive
     description:

@@ -1,9 +1,13 @@
+import 'dart:typed_data';
+
 import 'package:bonfire/colors.dart';
 import 'package:bonfire/style.dart';
 import 'package:bonfire/views/home/signal/channel.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:nyxx/nyxx.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:markdown_viewer/markdown_viewer.dart';
 
 class Messages extends StatefulWidget {
   Messages({Key? key});
@@ -30,7 +34,7 @@ class _MessagesState extends State<Messages> {
           var _channel = channel as GuildTextChannel;
           _channel.messages.fetchMany(limit: 100).then((value) {
             setState(() {
-              messages = value;
+              messages = value.reversed.toList();
             });
           });
         }
@@ -106,13 +110,17 @@ class MessageBox extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Container(
-              width: 50,
-              height: 50,
-              decoration: BoxDecoration(
-                color: const Color(0XffC9C9C9),
-                borderRadius: BorderRadius.circular(100),
-              ),
+            child: FutureBuilder<Uint8List>(
+              future: message.author.avatar!.fetch(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.done) {
+                  return CircleAvatar(
+                    backgroundImage: Image.memory(snapshot.data!).image,
+                  );
+                } else {
+                  return const CircleAvatar();
+                }
+              },
             ),
           ),
           Column(
@@ -120,21 +128,27 @@ class MessageBox extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: const EdgeInsets.only(left: 6, top: 12),
+                padding: const EdgeInsets.only(left: 6, top: 8),
                 child: Text(
                   message.author.username,
                   textAlign: TextAlign.left,
-                  style: GoogleFonts.inriaSans(color: Colors.white),
+                  // style: GoogleFonts.inriaSans(color: Colors.white),
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(left: 6, top: 2),
+                padding: const EdgeInsets.only(left: 6, top: 0),
                 child: SizedBox(
-                  width: MediaQuery.of(context).size.width - 94,
-                  child: Text(
+                  width: MediaQuery.of(context).size.width - 90,
+                  child: MarkdownViewer(
                     message.content,
-                    softWrap: true,
-                    style: GoogleFonts.inriaSans(color: Colors.white),
+                    enableTaskList: true,
+                    enableSuperscript: false,
+                    enableSubscript: false,
+                    enableFootnote: false,
+                    enableImageSize: false,
+                    enableKbd: false,
+                    syntaxExtensions: const [],
+                    elementBuilders: const [],
                   ),
                 ),
               ),
