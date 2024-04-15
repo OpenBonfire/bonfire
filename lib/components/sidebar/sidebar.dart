@@ -8,10 +8,11 @@ import 'package:bonfire/style.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nyxx/nyxx.dart';
+import 'package:signals/signals.dart';
 
 class Sidebar extends ConsumerStatefulWidget {
   ValueChanged<UserGuild>? onGuildSelected;
-  
+
   Sidebar({Key? key}) : super(key: key);
 
   @override
@@ -22,29 +23,6 @@ class _SidebarState extends ConsumerState<Sidebar> {
   @override
   void initState() {
     super.initState();
-  }
-
-  Widget _iconButton(UserGuild guild, Image icon) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 8),
-      child: Center(
-        child: SizedBox(
-          width: 50,
-          height: 50,
-          child: TextButton(
-            onPressed: () {
-              guildSignal.set(guild);
-            },
-            style: TextButton.styleFrom(
-              padding: EdgeInsets.zero, // Set padding to zero
-              minimumSize: const Size(0, 0), // Ensure minimum size is zero
-            ),
-            child: ClipRRect(
-                borderRadius: BorderRadius.circular(100), child: icon),
-          ),
-        ),
-      ),
-    );
   }
 
   Future<List<Widget>> _generateCards(List<UserGuild> guilds) async {
@@ -60,7 +38,7 @@ class _SidebarState extends ConsumerState<Sidebar> {
     for (int i = 0; i < guilds.length; i++) {
       Image icon = icons[i];
       UserGuild guild = guilds[i];
-      cards.add(_iconButton(guild, icon));
+      cards.add(IconButton(guild: guild, icon: icon));
     }
 
     return cards;
@@ -100,6 +78,77 @@ class _SidebarState extends ConsumerState<Sidebar> {
             return ListView(children: snapshot.data ?? []);
           }
         },
+      ),
+    );
+  }
+}
+
+class IconButton extends StatefulWidget {
+  UserGuild guild;
+  Image icon;
+
+  IconButton({super.key, required this.guild, required this.icon});
+
+  bool selected = false;
+
+  @override
+  State<IconButton> createState() => _IconButtonState();
+}
+
+class _IconButtonState extends State<IconButton> {
+  @override
+  void initState() {
+    super.initState();
+    guildSignal.subscribe((UserGuild? updatedGuild) {
+      if (guild != null) {
+        setState(() {
+          if (updatedGuild!.id == widget.guild.id) {
+            widget.selected = true;
+          } else {
+            widget.selected = false;
+          }
+        });
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: Stack(
+        children: [
+          if (widget.selected)
+            Positioned(
+              left: 0,
+              child: Container(
+                width: 4,
+                height: 50,
+                decoration: BoxDecoration(
+                  color: title,
+                  borderRadius: BorderRadius.circular(100),
+                ),
+              ),
+            ),
+          Center(
+            child: SizedBox(
+              width: 50,
+              height: 50,
+              child: TextButton(
+                onPressed: () {
+                  guildSignal.set(widget.guild);
+                },
+                style: TextButton.styleFrom(
+                  padding: EdgeInsets.zero, // Set padding to zero
+                  minimumSize: const Size(0, 0), // Ensure minimum size is zero
+                ),
+                child: ClipRRect(
+                    borderRadius: BorderRadius.circular(100),
+                    child: widget.icon),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
