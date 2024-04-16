@@ -3,6 +3,8 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import 'package:flutter_keyboard_size/flutter_keyboard_size.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:nyxx/nyxx.dart' as nyxx;
 import 'package:markdown_viewer/markdown_viewer.dart';
@@ -12,6 +14,7 @@ import 'package:bonfire/network/message.dart';
 import 'package:bonfire/style.dart';
 import 'package:bonfire/styles/styles.dart';
 import 'package:bonfire/views/home/signal/channel.dart';
+import 'package:flutter_keyboard_size/flutter_keyboard_size.dart';
 
 class Messages extends StatefulWidget {
   Messages({Key? key});
@@ -69,34 +72,103 @@ class _MessagesState extends State<Messages> {
 }
 
 class MessageListView extends StatefulWidget {
-  List<nyxx.Message> messages;
-  MessageListView({super.key, required this.messages});
+  final List<nyxx.Message> messages;
+
+  MessageListView({Key? key, required this.messages});
 
   @override
   State<MessageListView> createState() => _MessageListViewState();
 }
 
 class _MessageListViewState extends State<MessageListView>
-    with AutomaticKeepAliveClientMixin {
+    with AutomaticKeepAliveClientMixin, WidgetsBindingObserver {
+  late ScrollController _scrollController;
+
+  bool currentKeyboardState = false;
+  int maxKeyboardSize = 200;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController = ScrollController();
+
+    WidgetsBinding.instance.addObserver(this);
+    KeyboardVisibilityController().onChange.listen((newState) {
+      if (currentKeyboardState != newState) {
+        setState(() {
+          currentKeyboardState = newState;
+        });
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeMetrics() {
+    if (MediaQuery.of(context).viewInsets.bottom > maxKeyboardSize) {
+      setState(() {
+        maxKeyboardSize = MediaQuery.of(context).viewInsets.bottom.toInt();
+      });
+    }
+  }
+
   @override
   bool get wantKeepAlive => true;
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    print("building");
-    return Expanded(
-      child: ListView.builder(
-        reverse: true,
-        itemCount: widget.messages.length,
-        itemBuilder: (context, index) {
-          return MessageBox(
-            key: ValueKey(widget
-                .messages[index].id), // Use ValueKey for unique identification
-            message: widget.messages[index],
-          );
-        },
+    return AnimatedContainer(
+      // I really want to have an animated container, but it's just to laggy when resizing
+      duration: const Duration(milliseconds: 0),
+      height: currentKeyboardState ? (MediaQuery.of(context).size.height - maxKeyboardSize - 60) : MediaQuery.of(context).size.height - 60,
+      child: AnimatedMessagesList(
+        messages: widget.messages,
+        scrollController: _scrollController,
       ),
+    );
+  }
+}
+
+class AnimatedMessagesList extends StatefulWidget {
+  final List<nyxx.Message> messages;
+  final ScrollController scrollController;
+
+  AnimatedMessagesList(
+      {Key? key, required this.messages, required this.scrollController})
+      : super(key: key ?? UniqueKey());
+
+  @override
+  _AnimatedMessagesListState createState() => _AnimatedMessagesListState();
+}
+
+class _AnimatedMessagesListState extends State<AnimatedMessagesList> {
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedList(
+      key: widget.key,
+      controller: widget.scrollController,
+      reverse: true,
+      initialItemCount: widget.messages.length,
+      itemBuilder: (context, index, animation) {
+        return SlideTransition(
+          position: animation.drive(
+            Tween<Offset>(
+              begin: const Offset(0, 5),
+              end: Offset.zero,
+            ),
+          ),
+          child: MessageBox(
+            key: ValueKey(widget.messages[index].id),
+            message: widget.messages[index],
+          ),
+        );
+      },
     );
   }
 }
@@ -148,12 +220,12 @@ class MessageBox extends StatefulWidget {
   State<MessageBox> createState() => _MessageBoxState();
 }
 
+HashMap<int, Widget> messageWidgets = HashMap<int, Widget>();
+
 class _MessageBoxState extends State<MessageBox>
     with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
-
-  HashMap<int, Widget> messageWidgets = HashMap<int, Widget>();
 
   Future<ImageProvider> fetchPfpImage(nyxx.CdnAsset? icon) async {
     if (icon != null) {
@@ -200,7 +272,9 @@ class _MessageBoxState extends State<MessageBox>
           },
         ),
       ),
-      onPressed: () {},
+      onPressed: () {
+        print(messageWidgets.entries.length);
+      },
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 8),
         child: Row(
@@ -209,33 +283,33 @@ class _MessageBoxState extends State<MessageBox>
           children: [
             Padding(
               padding: const EdgeInsets.only(right: 8),
-              child: (messageWidgets[widget.message.id.value] == null) ? FutureBuilder<ImageProvider<Object>>(
-                future: fetchPfpImage(widget.message.author.avatar),
-                builder: (context, snapshot) {
-                  print(messageWidgets.length);
-                  if (snapshot.connectionState == ConnectionState.done) {
-                    var box = SizedBox(
-                      child: CircleAvatar(
-                        key: ValueKey(
-                            widget.message.id.value),
-                        minRadius: 22,
-                        maxRadius: 22,
-                        backgroundImage: snapshot.data,
-                        backgroundColor: Colors.transparent,
-                      ),
-                    );
-                    messageWidgets[widget.message.id.value] = box;
-                    return box;
-                  } else {
-                    return const CircleAvatar(
-                      minRadius: 22,
-                      maxRadius: 22,
-                      backgroundColor: Colors.transparent,
-                    );
-                  }
-                },
-              ): messageWidgets[widget.message.id.value]
-              ,
+              child: (messageWidgets[widget.message.id.value] == null)
+                  ? FutureBuilder<ImageProvider<Object>>(
+                      future: fetchPfpImage(widget.message.author.avatar),
+                      builder: (context, snapshot) {
+                        // print(messageWidgets.entries.length);
+                        if (snapshot.connectionState == ConnectionState.done) {
+                          var box = SizedBox(
+                            child: CircleAvatar(
+                              key: ValueKey(widget.message.id.value),
+                              minRadius: 22,
+                              maxRadius: 22,
+                              backgroundImage: snapshot.data,
+                              backgroundColor: Colors.transparent,
+                            ),
+                          );
+                          messageWidgets[widget.message.id.value] = box;
+                          return box;
+                        } else {
+                          return const CircleAvatar(
+                            minRadius: 22,
+                            maxRadius: 22,
+                            backgroundColor: Colors.transparent,
+                          );
+                        }
+                      },
+                    )
+                  : messageWidgets[widget.message.id.value],
             ),
             Column(
               mainAxisAlignment: MainAxisAlignment.start,
