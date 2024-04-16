@@ -1,11 +1,6 @@
-import 'dart:ffi';
-import 'dart:io';
-
 import 'package:bonfire/colors.dart';
 import 'package:bonfire/components/sidebar/sidebar.dart';
 import 'package:bonfire/globals.dart';
-import 'package:bonfire/network/auth.dart';
-import 'package:bonfire/style.dart';
 import 'package:bonfire/views/home/channels.dart';
 import 'package:bonfire/views/home/messages/messages.dart';
 import 'package:bonfire/views/home/overlapping_panels.dart';

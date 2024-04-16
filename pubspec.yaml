@@ -23,7 +23,6 @@ dependencies:
   url_launcher: ^6.2.6
   flutter_inappwebview: ^6.0.0
   flutter_riverpod: ^2.5.1
-  flutter_js: ^0.8.0
   riverpod_annotation: ^2.3.5
   get_storage: ^2.1.1
   flutter_slider_drawer: ^2.1.3

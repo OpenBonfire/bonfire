@@ -27,7 +27,7 @@ class _ChannelListState extends ConsumerState<ChannelList>
   String serverName = "Loading";
   String memberCount = "0";
   List<nyxx.GuildChannel> channels = [];
-  Map<String, List<nyxx.GuildChannel>> channelCache = {};
+  Map<String, int> channelCache = {};
 
   final DefaultCacheManager cacheManager = DefaultCacheManager();
 
@@ -37,7 +37,6 @@ class _ChannelListState extends ConsumerState<ChannelList>
     Map<String, int> channelData = {};
     for (var channel in fetchedChannels) {
       channelData[channel.name] = channel.id.value;
-      ;
     }
 
     await cacheManager.putFile(
@@ -86,6 +85,10 @@ class _ChannelListState extends ConsumerState<ChannelList>
           if (snapshot.hasData) {
             channels = snapshot.data as List<nyxx.GuildChannel>;
           }
+        }
+
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          _fetchChannelsFromCache().then((value) {});
         }
 
         return Container(
@@ -145,7 +148,9 @@ class _ChannelListState extends ConsumerState<ChannelList>
                   ),
                   Expanded(
                     child: ListView.builder(
-                      itemCount: channels.length,
+                      itemCount: (channels.isEmpty)
+                          ? channelCache.length
+                          : channels.length,
                       itemBuilder: (context, index) {
                         return _channelButton(channels[index]);
                       },
@@ -159,6 +164,13 @@ class _ChannelListState extends ConsumerState<ChannelList>
       },
     );
   }
+
+  /*
+  todo: allow `channel` to work with either a guild channnel or the cache
+
+  You should probably make it a class anyways since you need to change it's
+  state (like sidebar button)
+  */
 
   Widget _channelButton(nyxx.GuildChannel channel) {
     return Align(
