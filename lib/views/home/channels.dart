@@ -1,16 +1,35 @@
-import 'dart:collection';
 import 'dart:convert';
 
 import 'package:bonfire/colors.dart';
 import 'package:bonfire/globals.dart';
-import 'package:bonfire/providers/discord/guilds.dart';
 import 'package:bonfire/style.dart';
 import 'package:bonfire/views/home/signal/channel.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart'; // Import Flutter Cache Manager
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:nyxx/nyxx.dart' as nyxx;
+
+class CachedChannel {
+  final int id;
+  final String name;
+
+  CachedChannel({required this.id, required this.name});
+
+  factory CachedChannel.fromJson(Map<String, dynamic> json) {
+    return CachedChannel(
+      id: json['id'] as int,
+      name: json['name'] as String,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name,
+    };
+  }
+}
 
 class ChannelList extends ConsumerStatefulWidget {
   const ChannelList({Key? key}) : super(key: key);
@@ -27,44 +46,45 @@ class _ChannelListState extends ConsumerState<ChannelList>
   nyxx.UserGuild? guild;
   String serverName = "Loading";
   String memberCount = "0";
-  List<nyxx.GuildChannel> channels = [];
-  Map<String, int> channelCache = {};
+  List<CachedChannel> channels = [];
+  Map<int, List<CachedChannel>> channelCache =
+      {};
 
   final DefaultCacheManager cacheManager = DefaultCacheManager();
 
-  Future<List<nyxx.GuildChannel>> _fetchChannels() async {
-    List<nyxx.GuildChannel> fetchedChannels = await guild!.fetchChannels();
+  Future<List<CachedChannel>> _fetchChannels() async {
+    int? guildId = guild?.id.value;
+    if (guildId == null) return [];
 
-    Map<String, int> channelData = {};
-    for (var channel in fetchedChannels) {
-      channelData[channel.name] = channel.id.value;
+    FileInfo? cachedFileInfo =
+        await cacheManager.getFileFromCache("channel_list_$guildId");
+    List<CachedChannel>? cachedChannels;
+    if (cachedFileInfo != null &&
+        !cachedFileInfo.validTill.isBefore(DateTime.now())) {
+
+      String jsonString = await cachedFileInfo.file.readAsString();
+      List<dynamic> cachedData = json.decode(jsonString);
+      cachedChannels =
+          cachedData.map((data) => CachedChannel.fromJson(data)).toList();
     }
 
+    List<nyxx.GuildChannel> fetchedChannels = await guild!.fetchChannels();
+    List<CachedChannel> freshChannels = fetchedChannels
+        .map((channel) =>
+            CachedChannel(id: channel.id.value, name: channel.name))
+        .toList();
+
+    List<Map<String, dynamic>> channelDataList =
+        freshChannels.map((freshChannel) => freshChannel.toJson()).toList();
+    String jsonString = json.encode(channelDataList);
     await cacheManager.putFile(
-      "file://${guild!.id}channels",
-      utf8.encode(json.encode(channelData)),
-    );
+        "channel_list_$guildId", utf8.encode(jsonString));
 
-    return fetchedChannels;
-  }
-
-  Future<Map<String, int>> _fetchChannelsFromCache() async {
-    if (guild == null) return {};
-
-    FileInfo? file =
-        await cacheManager.getFileFromCache("file://${guild!.id}channels");
-
-    if (file == null) return {};
-
-    var channelData = json.decode(utf8.decode(file!.file.readAsBytesSync()))
-        as Map<String, dynamic>;
-
-    Map<String, int> typedChannelCache = {};
-    channelData.forEach((key, value) {
-      typedChannelCache[key] = value as int;
-    });
-
-    return typedChannelCache;
+    if (cachedChannels != null) {
+      return cachedChannels;
+    } else {
+      return freshChannels;
+    }
   }
 
   @override
@@ -83,9 +103,35 @@ class _ChannelListState extends ConsumerState<ChannelList>
     });
   }
 
-  Widget _buildChannelList(Object channels) {
-    print("-- runtime info -- ");
-    print(channels.runtimeType);
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
+
+    return FutureBuilder<List<CachedChannel>>(
+      future: _fetchChannels(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          if (channels.isNotEmpty) {
+            return _buildChannelList(channels);
+          } else {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+        } else if (snapshot.hasError) {
+          return Center(
+            child: Text('Error: ${snapshot.error}'),
+          );
+        } else {
+          channels =
+              snapshot.data ?? [];
+          return _buildChannelList(channels);
+        }
+      },
+    );
+  }
+
+  Widget _buildChannelList(List<CachedChannel> channels) {
     return Container(
       decoration: const BoxDecoration(color: backgroundColor),
       width: double.infinity,
@@ -140,27 +186,12 @@ class _ChannelListState extends ConsumerState<ChannelList>
                 ),
               ),
               Expanded(
-                child: (channels.runtimeType ==
-                        UnmodifiableListView<nyxx.GuildChannel>)
-                    ? ListView.builder(
-                        itemCount: (channels as List<nyxx.GuildChannel>).length,
-                        itemBuilder: (context, index) {
-                          return ChannelButton(channel: channels[index]);
-                        },
-                      )
-                    : ListView.builder(
-                        itemCount: channelCache.length,
-                        itemBuilder: (context, index) {
-                          print("BUILDING FROM MAP!");
-                          print(channelCache.keys.elementAt(index));
-                          return ChannelButton(
-                            cachedChannelName:
-                                channelCache.keys.elementAt(index),
-                            cachedChannelId:
-                                channelCache.values.elementAt(index),
-                          );
-                        },
-                      ),
+                child: ListView.builder(
+                  itemCount: channels.length,
+                  itemBuilder: (context, index) {
+                    return _channelButton(channels[index]);
+                  },
+                ),
               ),
             ],
           ),
@@ -169,74 +200,7 @@ class _ChannelListState extends ConsumerState<ChannelList>
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    super.build(context);
-    print("builded channel list");
-
-    if (guild == null) {
-      return _buildChannelList([]);
-    }
-
-    AsyncValue<List<nyxx.GuildChannel>> channels =
-        ref.watch(channelsProvider(globalClient!, guild!));
-
-    return FutureBuilder(
-      future: channels.when(
-        loading: () => _fetchChannelsFromCache(),
-        error: (error, st) => Future.error('Error: $error'),
-        data: (channels) => _fetchChannels(),
-      ),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          // print("Waiting for cache...asd");
-          return FutureBuilder(
-              future: _fetchChannelsFromCache(),
-              builder: (context, snapshot2) {
-                if (snapshot2.connectionState == ConnectionState.waiting) {
-                  return _buildChannelList([]);
-                } else if (snapshot2.hasError) {
-                  return Center(child: Text('Error: ${snapshot2.error}'));
-                } else {
-                  print("Cache returned, going to build list");
-                  return _buildChannelList(snapshot2.data as Map<String, int>);
-                }
-              });
-        } else if (snapshot.hasError) {
-          return Center(child: Text('Error: ${snapshot.error}'));
-        } else {
-          if (snapshot.data.runtimeType !=
-              UnmodifiableListView<nyxx.GuildChannel>) {
-            return _buildChannelList(snapshot.data as Map<String, int>);
-          }
-          // print("Fetch from network returned!");
-          return _buildChannelList(snapshot.data as List<nyxx.GuildChannel>);
-        }
-      },
-    );
-  }
-}
-
-class ChannelButton extends StatefulWidget {
-  final nyxx.GuildChannel? channel;
-  final String? cachedChannelName;
-  final int? cachedChannelId;
-
-  const ChannelButton(
-      {super.key, this.channel, this.cachedChannelName, this.cachedChannelId});
-
-  @override
-  State<ChannelButton> createState() => _ChannelButtonState();
-}
-
-class _ChannelButtonState extends State<ChannelButton> {
-  @override
-  Widget build(BuildContext context) {
-    if (widget.channel == null) {
-      print("Rebuilding from cache");
-    } else {
-      // print("Rebuilding from network");
-    }
+  Widget _channelButton(CachedChannel channel) {
     return Align(
       alignment: Alignment.centerLeft,
       child: Padding(
@@ -274,19 +238,11 @@ class _ChannelButtonState extends State<ChannelButton> {
               ),
             ),
             onPressed: () {
-              if (widget.channel != null) {
-                channelSignal.set(widget.channel);
-              } else {
-                print("Tried to change page before channel was loaded.");
-              }
-              // channelSignal.set(channel);
             },
-            child: SizedBox(
+            child: Container(
               height: 25,
               child: Text(
-                (widget.channel != null)
-                    ? widget.channel!.name
-                    : widget.cachedChannelName!,
+                channel.name,
                 textAlign: TextAlign.left,
                 style: GoogleFonts.inriaSans(
                   color: const Color.fromARGB(189, 255, 255, 255),

@@ -6,7 +6,7 @@ part of 'guilds.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$guildsHash() => r'608841d6d2607c52c8f9cd51a804575133c018b7';
+String _$guildsHash() => r'f4b801988a296de7f84ff4898465ed933a950783';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -154,7 +154,7 @@ class _GuildsProviderElement
   NyxxGateway get client => (origin as GuildsProvider).client;
 }
 
-String _$guildHash() => r'6593a6995dce9f3d116d96ca4aea2d43c7f0a4b6';
+String _$guildHash() => r'd2c91ad110081612c027228e56a33de46f376b42';
 
 /// See also [guild].
 @ProviderFor(guild)
@@ -296,7 +296,7 @@ class _GuildProviderElement extends AutoDisposeFutureProviderElement<Guild>
   Snowflake get id => (origin as GuildProvider).id;
 }
 
-String _$channelsHash() => r'6dad3b93458ac5fdb6d49f7922594a16d057da1c';
+String _$channelsHash() => r'09d6b9c67957adf301cc4d294f05e2ad2d204489';
 
 /// See also [channels].
 @ProviderFor(channels)
