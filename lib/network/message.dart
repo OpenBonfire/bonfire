@@ -17,7 +17,7 @@ class MessageService {
 
   void initSubscription() {
     globalClient!.onMessageCreate.listen((event) async {
-    _eventController.add(event);
+      _eventController.add(event);
     });
   }
 

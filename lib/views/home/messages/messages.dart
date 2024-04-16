@@ -123,7 +123,9 @@ class _MessageListViewState extends State<MessageListView>
     return AnimatedContainer(
       // I really want to have an animated container, but it's just to laggy when resizing
       duration: const Duration(milliseconds: 0),
-      height: currentKeyboardState ? (MediaQuery.of(context).size.height - maxKeyboardSize - 60) : MediaQuery.of(context).size.height - 60,
+      height: currentKeyboardState
+          ? (MediaQuery.of(context).size.height - maxKeyboardSize - 60)
+          : MediaQuery.of(context).size.height - 60,
       child: AnimatedMessagesList(
         messages: widget.messages,
         scrollController: _scrollController,
@@ -284,7 +286,6 @@ class _MessageBoxState extends State<MessageBox>
                   ? FutureBuilder<ImageProvider<Object>>(
                       future: fetchPfpImage(widget.message.author.avatar),
                       builder: (context, snapshot) {
-                        // print(messageWidgets.entries.length);
                         if (snapshot.connectionState == ConnectionState.done) {
                           var box = SizedBox(
                             child: CircleAvatar(
@@ -319,7 +320,7 @@ class _MessageBoxState extends State<MessageBox>
                     textAlign: TextAlign.left,
                     style: GoogleFonts.inriaSans(
                       color: const Color.fromARGB(189, 255, 255, 255),
-                      fontSize: 17,
+                      fontSize: 18,
                       fontWeight: FontWeight.w500,
                     ),
                   ),

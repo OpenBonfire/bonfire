@@ -1,14 +1,15 @@
+import 'dart:convert';
+
 import 'package:bonfire/colors.dart';
 import 'package:bonfire/globals.dart';
 import 'package:bonfire/providers/discord/guilds.dart';
 import 'package:bonfire/style.dart';
 import 'package:bonfire/views/home/signal/channel.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart'; // Import Flutter Cache Manager
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:nyxx/nyxx.dart' as nyxx;
-
-
 
 class ChannelList extends ConsumerStatefulWidget {
   const ChannelList({Key? key}) : super(key: key);
@@ -28,6 +29,36 @@ class _ChannelListState extends ConsumerState<ChannelList>
   List<nyxx.GuildChannel> channels = [];
   Map<String, List<nyxx.GuildChannel>> channelCache = {};
 
+  final DefaultCacheManager cacheManager = DefaultCacheManager();
+
+  Future<List<nyxx.GuildChannel>> _fetchChannels() async {
+    List<nyxx.GuildChannel> fetchedChannels = await guild!.fetchChannels();
+
+    Map<String, int> channelData = {};
+    for (var channel in fetchedChannels) {
+      channelData[channel.name] = channel.id.value;
+      ;
+    }
+
+    await cacheManager.putFile(
+      "${guild!.id}channels",
+      utf8.encode(json.encode(channelData)),
+    );
+
+    return fetchedChannels;
+  }
+
+  Future<Map<String, int>> _fetchChannelsFromCache() async {
+    Map<String, int> channelData =
+        json.decode((await cacheManager.getSingleFile(
+      "${guild!.id}channels",
+    ))
+            .readAsBytesSync()
+            .toString());
+
+    return channelData;
+  }
+
   @override
   void initState() {
     super.initState();
@@ -39,110 +70,93 @@ class _ChannelListState extends ConsumerState<ChannelList>
       }
     });
 
-    // asyncListen();
-
     channelSignal.subscribe((channel) {
       globalChannel = channel;
     });
   }
 
-  asyncListen() async {
-    while (true) {
-      await Future.delayed(const Duration(seconds: 1));
-      print(channels);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    super.build(context); // Ensure to call super.build
+    super.build(context);
 
-    if (guild != null) {
-      var detailedGuild =
-          ref.watch(guildProvider(globalClient!, guild!.id)).valueOrNull;
-
-      if (detailedGuild != null) {
-        serverName = detailedGuild.name;
-        memberCount = detailedGuild.approximateMemberCount.toString();
-
-        var channelList = ref
-            .watch(channelsProvider(globalClient!, detailedGuild))
-            .valueOrNull;
-
-        if (channelList != null) {
-          channels = channelList;
-          channelCache[guild!.id.value.toString()] = channelList;
+    return FutureBuilder(
+      future: _fetchChannels(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          if (snapshot.hasData) {
+            channels = snapshot.data as List<nyxx.GuildChannel>;
+          }
         }
-      }
-    }
 
-    channels = channelCache[guild?.id.value.toString()] ?? [];
-
-    return Container(
-      decoration: const BoxDecoration(color: backgroundColor),
-      width: double.infinity,
-      height: double.infinity,
-      child: Padding(
-        padding: EdgeInsets.only(top: MediaQuery.of(context).viewPadding.top),
-        child: Container(
-          decoration: const BoxDecoration(
-            color: foreground,
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(20),
-            ),
-          ),
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 20, left: 20, right: 20),
-                child: Row(
-                  children: [
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
+        return Container(
+          decoration: const BoxDecoration(color: backgroundColor),
+          width: double.infinity,
+          height: double.infinity,
+          child: Padding(
+            padding:
+                EdgeInsets.only(top: MediaQuery.of(context).viewPadding.top),
+            child: Container(
+              decoration: const BoxDecoration(
+                color: foreground,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(20),
+                ),
+              ),
+              child: Column(
+                children: [
+                  Padding(
+                    padding:
+                        const EdgeInsets.only(top: 20, left: 20, right: 20),
+                    child: Row(
                       children: [
-                        Text(
-                          guild != null ? guild!.name : "Loading",
-                          style: GoogleFonts.roboto(
-                            fontSize: 18,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            "$memberCount members",
-                            textAlign: TextAlign.left,
-                            style: GoogleFonts.roboto(
-                              fontSize: 12,
-                              color: Colors.white.withOpacity(0.5),
-                              fontWeight: FontWeight.bold,
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              guild != null ? guild!.name : "Loading",
+                              style: GoogleFonts.roboto(
+                                fontSize: 18,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
-                          ),
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                "$memberCount members",
+                                textAlign: TextAlign.left,
+                                style: GoogleFonts.roboto(
+                                  fontSize: 12,
+                                  color: Colors.white.withOpacity(0.5),
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const Spacer(),
+                        IconButton(
+                          icon: const Icon(Icons.add, color: Colors.white),
+                          onPressed: () {},
                         ),
                       ],
                     ),
-                    const Spacer(),
-                    IconButton(
-                      icon: const Icon(Icons.add, color: Colors.white),
-                      onPressed: () {},
+                  ),
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: channels.length,
+                      itemBuilder: (context, index) {
+                        return _channelButton(channels[index]);
+                      },
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-              Expanded(
-                child: ListView.builder(
-                  itemCount: channels.length,
-                  itemBuilder: (context, index) {
-                    return _channelButton(channels[index]);
-                  },
-                ),
-              ),
-            ],
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 
@@ -177,9 +191,9 @@ class _ChannelListState extends ConsumerState<ChannelList>
               overlayColor: MaterialStateProperty.resolveWith<Color>(
                 (Set<MaterialState> states) {
                   if (states.contains(MaterialState.pressed)) {
-                    return primaryColor; // Change this to the desired splash color
+                    return primaryColor;
                   }
-                  return Colors.transparent; // No splash color by default
+                  return Colors.transparent;
                 },
               ),
             ),
