@@ -47,8 +47,7 @@ class _ChannelListState extends ConsumerState<ChannelList>
   String serverName = "Loading";
   String memberCount = "0";
   List<CachedChannel> channels = [];
-  Map<int, List<CachedChannel>> channelCache =
-      {};
+  Map<int, List<CachedChannel>> channelCache = {};
 
   final DefaultCacheManager cacheManager = DefaultCacheManager();
 
@@ -59,31 +58,46 @@ class _ChannelListState extends ConsumerState<ChannelList>
     FileInfo? cachedFileInfo =
         await cacheManager.getFileFromCache("channel_list_$guildId");
     List<CachedChannel>? cachedChannels;
+
+    // Load cached data if available
     if (cachedFileInfo != null &&
         !cachedFileInfo.validTill.isBefore(DateTime.now())) {
-
       String jsonString = await cachedFileInfo.file.readAsString();
       List<dynamic> cachedData = json.decode(jsonString);
       cachedChannels =
           cachedData.map((data) => CachedChannel.fromJson(data)).toList();
     }
 
+    // Fetch fresh data from the server
     List<nyxx.GuildChannel> fetchedChannels = await guild!.fetchChannels();
     List<CachedChannel> freshChannels = fetchedChannels
         .map((channel) =>
             CachedChannel(id: channel.id.value, name: channel.name))
         .toList();
 
+    // Update cache with fresh data
     List<Map<String, dynamic>> channelDataList =
         freshChannels.map((freshChannel) => freshChannel.toJson()).toList();
     String jsonString = json.encode(channelDataList);
     await cacheManager.putFile(
         "channel_list_$guildId", utf8.encode(jsonString));
 
-    if (cachedChannels != null) {
-      return cachedChannels;
-    } else {
+    // If fresh data is available, update the widget
+    if (freshChannels.isNotEmpty) {
+      setState(() {
+        channels = freshChannels;
+      });
+      print("sending fresh");
       return freshChannels;
+    }
+    // If no fresh data, return cached data
+    else if (cachedChannels != null) {
+      print("sending cached");
+      return cachedChannels;
+    }
+    // If no data available, return empty list
+    else {
+      return [];
     }
   }
 
@@ -123,8 +137,7 @@ class _ChannelListState extends ConsumerState<ChannelList>
             child: Text('Error: ${snapshot.error}'),
           );
         } else {
-          channels =
-              snapshot.data ?? [];
+          channels = snapshot.data ?? [];
           return _buildChannelList(channels);
         }
       },
@@ -237,8 +250,7 @@ class _ChannelListState extends ConsumerState<ChannelList>
                 },
               ),
             ),
-            onPressed: () {
-            },
+            onPressed: () {},
             child: Container(
               height: 25,
               child: Text(
