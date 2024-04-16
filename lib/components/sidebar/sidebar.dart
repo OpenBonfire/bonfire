@@ -61,22 +61,12 @@ class _SidebarState extends ConsumerState<Sidebar> {
 
       var bytes = await icon.fetch();
       String cacheKey = icon.hash;
-      File fileData = await _saveToCache(bytes, cacheKey);
-      return MemoryImage(fileData.readAsBytesSync());
+      await DefaultCacheManager().putFile(cacheKey, bytes);
+      return MemoryImage(bytes);
     }
 
     return const AssetImage('assets/placeholder.png');
   }
-
-  Future<File> _saveToCache(List<int> bytes, String cacheKey) async {
-    final directory = await getTemporaryDirectory();
-    final path = '${directory.path}/$cacheKey';
-
-    await File(path).writeAsBytes(bytes);
-
-    return File(path);
-  }
-
   @override
   Widget build(BuildContext context) {
     AsyncValue<List<UserGuild>> guilds =
@@ -129,7 +119,7 @@ class _IconButtonState extends State<IconButton> {
             widget.selected = false;
             return;
           }
-          if (updatedGuild!.id == widget.guild.id) {
+          if (updatedGuild.id == widget.guild.id) {
             widget.selected = true;
           } else {
             widget.selected = false;

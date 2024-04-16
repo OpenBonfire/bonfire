@@ -1,40 +1,55 @@
+import 'dart:collection';
 import 'dart:typed_data';
 
-import 'package:bonfire/colors.dart';
-import 'package:bonfire/style.dart';
-import 'package:bonfire/views/home/signal/channel.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:nyxx/nyxx.dart';
-import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:nyxx/nyxx.dart' as nyxx;
 import 'package:markdown_viewer/markdown_viewer.dart';
+import 'package:bonfire/colors.dart';
+import 'package:bonfire/globals.dart';
+import 'package:bonfire/network/message.dart';
+import 'package:bonfire/style.dart';
+import 'package:bonfire/styles/styles.dart';
+import 'package:bonfire/views/home/signal/channel.dart';
 
 class Messages extends StatefulWidget {
   Messages({Key? key});
 
-  GuildChannel? channel;
+  nyxx.GuildChannel? channel;
 
   @override
   State<Messages> createState() => _MessagesState();
 }
 
 class _MessagesState extends State<Messages> {
-  List<Message> messages = [];
+  List<nyxx.Message> messages = [];
 
   @override
   void initState() {
     super.initState();
-    // Move your subscription logic here
+    MessageService().initSubscription();
+    MessageService().eventStream.listen((event) {
+      if (globalChannel == null) {
+        return;
+      }
+      if (event.message.channel.id.value == globalChannel!.id.value) {
+        setState(() {
+          messages.insert(0, event.message);
+        });
+      }
+    });
+
     channelSignal.subscribe((channel) {
       if (channel != null) {
         setState(() {
           widget.channel = channel;
         });
-        if (channel.type == ChannelType.guildText) {
-          var _channel = channel as GuildTextChannel;
+        if (channel.type == nyxx.ChannelType.guildText) {
+          var _channel = channel as nyxx.GuildTextChannel;
           _channel.messages.fetchMany(limit: 100).then((value) {
             setState(() {
-              messages = value.reversed.toList();
+              messages = value.toList();
             });
           });
         }
@@ -46,31 +61,49 @@ class _MessagesState extends State<Messages> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        _textScrollView(),
-        const MessageBar(),
+        MessageListView(messages: messages),
+        MessageBar(),
       ],
     );
   }
+}
 
-  Widget _textScrollView() {
+class MessageListView extends StatefulWidget {
+  List<nyxx.Message> messages;
+  MessageListView({super.key, required this.messages});
+
+  @override
+  State<MessageListView> createState() => _MessageListViewState();
+}
+
+class _MessageListViewState extends State<MessageListView>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
+    print("building");
     return Expanded(
-      child: Container(
-        // color: Colors.white,
-        child: SingleChildScrollView(
-          reverse: true,
-          child: Column(
-            children: messages
-                .map((message) => MessageBox(message: message))
-                .toList(),
-          ),
-        ),
+      child: ListView.builder(
+        reverse: true,
+        itemCount: widget.messages.length,
+        itemBuilder: (context, index) {
+          return MessageBox(
+            key: ValueKey(widget
+                .messages[index].id), // Use ValueKey for unique identification
+            message: widget.messages[index],
+          );
+        },
       ),
     );
   }
 }
 
 class MessageBar extends StatelessWidget {
-  const MessageBar({Key? key});
+  MessageBar({Key? key});
+  final fieldText = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -83,6 +116,7 @@ class MessageBar extends StatelessWidget {
             Border.symmetric(horizontal: BorderSide(color: foregroundBright)),
       ),
       child: TextField(
+        controller: fieldText,
         style: GoogleFonts.inriaSans(color: Colors.white),
         decoration: InputDecoration(
           hintText: 'Message',
@@ -90,71 +124,157 @@ class MessageBar extends StatelessWidget {
           border: InputBorder.none,
           contentPadding: const EdgeInsets.all(16),
         ),
+        onSubmitted: (value) {
+          if (value.isNotEmpty) {
+            if (channelSignal.value != null) {
+              var channel = channelSignal.value as nyxx.GuildTextChannel;
+              channel.sendMessage(nyxx.MessageBuilder(content: value));
+              fieldText.clear();
+            }
+          }
+        },
+        onEditingComplete: () {},
       ),
     );
   }
 }
 
-class MessageBox extends StatelessWidget {
-  final Message message;
+class MessageBox extends StatefulWidget {
+  final nyxx.Message message;
 
-  const MessageBox({Key? key, required this.message});
+  MessageBox({Key? key, required this.message}) : super(key: key);
+
+  @override
+  State<MessageBox> createState() => _MessageBoxState();
+}
+
+class _MessageBoxState extends State<MessageBox>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
+  HashMap<int, Widget> messageWidgets = HashMap<int, Widget>();
+
+  Future<ImageProvider> fetchPfpImage(nyxx.CdnAsset? icon) async {
+    if (icon != null) {
+      FileInfo? fromCache =
+          await DefaultCacheManager().getFileFromCache(icon.hash);
+
+      if (fromCache != null) {
+        return MemoryImage(fromCache.file.readAsBytesSync());
+      }
+
+      var bytes = await icon.fetch();
+      String cacheKey = icon.hash;
+      await DefaultCacheManager().putFile(cacheKey, bytes);
+      return MemoryImage(bytes);
+    }
+
+    return const AssetImage('assets/placeholder.png');
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: FutureBuilder<Uint8List>(
-              future: message.author.avatar!.fetch(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.done) {
-                  return CircleAvatar(
-                    backgroundImage: Image.memory(snapshot.data!).image,
-                  );
-                } else {
-                  return const CircleAvatar();
-                }
-              },
-            ),
+    super.build(context);
+    return OutlinedButton(
+      style: ButtonStyle(
+        alignment: Alignment.centerLeft,
+        backgroundColor: MaterialStateProperty.all<Color>(Colors.transparent),
+        side: MaterialStateProperty.all<BorderSide>(
+          const BorderSide(
+            width: 0,
+            color: Color.fromARGB(0, 77, 77, 77),
           ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 6, top: 8),
-                child: Text(
-                  message.author.username,
-                  textAlign: TextAlign.left,
-                  // style: GoogleFonts.inriaSans(color: Colors.white),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 6, top: 0),
-                child: SizedBox(
-                  width: MediaQuery.of(context).size.width - 90,
-                  child: MarkdownViewer(
-                    message.content,
-                    enableTaskList: true,
-                    enableSuperscript: false,
-                    enableSubscript: false,
-                    enableFootnote: false,
-                    enableImageSize: false,
-                    enableKbd: false,
-                    syntaxExtensions: const [],
-                    elementBuilders: const [],
+        ),
+        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(0),
+          ),
+        ),
+        overlayColor: MaterialStateProperty.resolveWith<Color>(
+          (Set<MaterialState> states) {
+            if (states.contains(MaterialState.pressed)) {
+              return primaryColor;
+            }
+            return Colors.transparent;
+          },
+        ),
+      ),
+      onPressed: () {},
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(right: 8),
+              child: (messageWidgets[widget.message.id.value] == null) ? FutureBuilder<ImageProvider<Object>>(
+                future: fetchPfpImage(widget.message.author.avatar),
+                builder: (context, snapshot) {
+                  print(messageWidgets.length);
+                  if (snapshot.connectionState == ConnectionState.done) {
+                    var box = SizedBox(
+                      child: CircleAvatar(
+                        key: ValueKey(
+                            widget.message.id.value),
+                        minRadius: 22,
+                        maxRadius: 22,
+                        backgroundImage: snapshot.data,
+                        backgroundColor: Colors.transparent,
+                      ),
+                    );
+                    messageWidgets[widget.message.id.value] = box;
+                    return box;
+                  } else {
+                    return const CircleAvatar(
+                      minRadius: 22,
+                      maxRadius: 22,
+                      backgroundColor: Colors.transparent,
+                    );
+                  }
+                },
+              ): messageWidgets[widget.message.id.value]
+              ,
+            ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 6, top: 0),
+                  child: Text(
+                    widget.message.author.username,
+                    textAlign: TextAlign.left,
+                    style: GoogleFonts.inriaSans(
+                      color: const Color.fromARGB(189, 255, 255, 255),
+                      fontSize: 17,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
                 ),
-              ),
-            ],
-          ),
-        ],
+                Padding(
+                  padding: const EdgeInsets.only(left: 6, top: 0),
+                  child: SizedBox(
+                    width: MediaQuery.of(context).size.width - 126,
+                    child: MarkdownViewer(
+                      widget.message.content,
+                      enableTaskList: true,
+                      enableSuperscript: false,
+                      enableSubscript: false,
+                      enableFootnote: false,
+                      enableImageSize: false,
+                      enableKbd: false,
+                      syntaxExtensions: const [],
+                      elementBuilders: const [],
+                      styleSheet: MarkdownStyle(paragraph: inputBoxStyle),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -10,6 +10,7 @@ import 'package:bonfire/views/home/channels.dart';
 import 'package:bonfire/views/home/messages/messages.dart';
 import 'package:bonfire/views/home/overlapping_panels.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:nyxx/nyxx.dart';
@@ -43,6 +44,10 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // appBar: AppBar(
+      //   systemOverlayStyle: SystemUiOverlayStyle.light.copyWith(systemNavigationBarColor: foreground),
+      // ),
+        // resizeToAvoidBottomInset: false,
         body: OverlappingPanels(
             left: SizedBox(
               width: MediaQuery.of(context).size.width,

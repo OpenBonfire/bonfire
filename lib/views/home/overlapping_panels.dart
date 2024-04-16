@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 
 import 'dart:core';
 
+import 'package:flutter/services.dart';
+
 const double bleedWidth = 20;
 
 /// Display sections
@@ -71,6 +73,7 @@ class OverlappingPanelsState extends State<OverlappingPanels>
 
     animationController.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
+        SystemChannels.textInput.invokeMethod('TextInput.hide');
         if (widget.onSideChange != null) {
           widget.onSideChange!(translate == 0
               ? RevealSide.main
@@ -84,7 +87,7 @@ class OverlappingPanelsState extends State<OverlappingPanels>
       final goal = _calculateGoal(mediaWidth, multiplier);
       final Tween<double> tween = Tween(begin: translate, end: goal);
 
-      final animation = tween.animate(animationController);
+      final animation = tween.animate(CurvedAnimation(parent: animationController, curve: Curves.easeInSine));
 
       animation.addListener(() {
         setState(() {
