@@ -1,9 +1,7 @@
 import 'dart:collection';
-import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
-import 'package:flutter_keyboard_size/flutter_keyboard_size.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:nyxx/nyxx.dart' as nyxx;
@@ -14,7 +12,6 @@ import 'package:bonfire/network/message.dart';
 import 'package:bonfire/style.dart';
 import 'package:bonfire/styles/styles.dart';
 import 'package:bonfire/views/home/signal/channel.dart';
-import 'package:flutter_keyboard_size/flutter_keyboard_size.dart';
 
 class Messages extends StatefulWidget {
   Messages({Key? key});

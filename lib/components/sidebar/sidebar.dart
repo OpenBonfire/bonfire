@@ -1,3 +1,4 @@
+import 'dart:collection';
 import 'dart:io';
 
 import 'package:bonfire/colors.dart';
@@ -5,17 +6,9 @@ import 'package:bonfire/globals.dart';
 import 'package:bonfire/providers/discord/guilds.dart';
 import 'package:bonfire/views/home/signal/channel.dart';
 import 'package:flutter/material.dart';
-import 'package:bonfire/components/sidebar/icon.dart';
 import 'package:bonfire/style.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nyxx/nyxx.dart';
-import 'package:signals/signals.dart';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
-
-import 'dart:io';
-import 'package:flutter/material.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 
 class Sidebar extends ConsumerStatefulWidget {
@@ -25,7 +18,15 @@ class Sidebar extends ConsumerStatefulWidget {
   ConsumerState<Sidebar> createState() => _SidebarState();
 }
 
-class _SidebarState extends ConsumerState<Sidebar> {
+class _SidebarState extends ConsumerState<Sidebar>
+    with AutomaticKeepAliveClientMixin {
+
+  HashMap<int, Widget> sidebarItems = HashMap<int, Widget>();
+  List<Widget> lastCards = [];
+
+  @override
+  bool get wantKeepAlive => true;
+
   @override
   void initState() {
     super.initState();
@@ -33,6 +34,24 @@ class _SidebarState extends ConsumerState<Sidebar> {
 
   Future<List<Widget>> _generateCards(List<UserGuild> guilds) async {
     List<Widget> cards = [];
+
+    Future<ImageProvider> fetchIconImage(CdnAsset? icon) async {
+      if (icon != null) {
+        FileInfo? fromCache =
+            await DefaultCacheManager().getFileFromCache(icon.hash);
+
+        if (fromCache != null) {
+          return MemoryImage(fromCache.file.readAsBytesSync());
+        }
+
+        var bytes = await icon.fetch();
+        String cacheKey = icon.hash;
+        await DefaultCacheManager().putFile(cacheKey, bytes);
+        return MemoryImage(bytes);
+      }
+
+      return const AssetImage('assets/placeholder.png');
+    }
 
     List<Future<ImageProvider>> iconFutures = [];
     for (var guild in guilds) {
@@ -44,31 +63,24 @@ class _SidebarState extends ConsumerState<Sidebar> {
     for (int i = 0; i < guilds.length; i++) {
       ImageProvider icon = icons[i];
       UserGuild guild = guilds[i];
-      cards.add(IconButton(guild: guild, icon: Image(image: icon)));
-    }
 
+      final buttonKey = guild.id.value.toString();
+      var btn = sidebarItems[guild.id.value];
+
+      if (btn == null) {
+        btn = IconButton(key: Key(buttonKey), guild: guild, icon: Image(image: icon));
+        sidebarItems[guild.id.value] = btn;
+      }
+
+      cards.add(btn);
+    }
+    lastCards = cards;
     return cards;
   }
 
-  Future<ImageProvider> fetchIconImage(CdnAsset? icon) async {
-    if (icon != null) {
-      FileInfo? fromCache =
-          await DefaultCacheManager().getFileFromCache(icon.hash);
-
-      if (fromCache != null) {
-        return MemoryImage(fromCache.file.readAsBytesSync());
-      }
-
-      var bytes = await icon.fetch();
-      String cacheKey = icon.hash;
-      await DefaultCacheManager().putFile(cacheKey, bytes);
-      return MemoryImage(bytes);
-    }
-
-    return const AssetImage('assets/placeholder.png');
-  }
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     AsyncValue<List<UserGuild>> guilds =
         ref.watch(guildsProvider(globalClient!));
 
@@ -84,7 +96,7 @@ class _SidebarState extends ConsumerState<Sidebar> {
         ),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
+            return ListView(children: snapshot.data ?? lastCards);
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else {
@@ -97,10 +109,11 @@ class _SidebarState extends ConsumerState<Sidebar> {
 }
 
 class IconButton extends StatefulWidget {
-  UserGuild guild;
-  Image icon;
+  final UserGuild guild;
+  final Image icon;
 
-  IconButton({super.key, required this.guild, required this.icon});
+  IconButton({Key? key, required this.guild, required this.icon})
+      : super(key: key);
 
   bool selected = false;
 
