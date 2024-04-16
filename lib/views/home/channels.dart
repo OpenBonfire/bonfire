@@ -1,3 +1,4 @@
+import 'dart:collection';
 import 'dart:convert';
 
 import 'package:bonfire/colors.dart';
@@ -40,7 +41,7 @@ class _ChannelListState extends ConsumerState<ChannelList>
     }
 
     await cacheManager.putFile(
-      "${guild!.id}channels",
+      "file://${guild!.id}channels",
       utf8.encode(json.encode(channelData)),
     );
 
@@ -48,14 +49,22 @@ class _ChannelListState extends ConsumerState<ChannelList>
   }
 
   Future<Map<String, int>> _fetchChannelsFromCache() async {
-    Map<String, int> channelData =
-        json.decode((await cacheManager.getSingleFile(
-      "${guild!.id}channels",
-    ))
-            .readAsBytesSync()
-            .toString());
+    if (guild == null) return {};
 
-    return channelData;
+    FileInfo? file =
+        await cacheManager.getFileFromCache("file://${guild!.id}channels");
+
+    if (file == null) return {};
+
+    var channelData = json.decode(utf8.decode(file!.file.readAsBytesSync()))
+        as Map<String, dynamic>;
+
+    Map<String, int> typedChannelCache = {};
+    channelData.forEach((key, value) {
+      typedChannelCache[key] = value as int;
+    });
+
+    return typedChannelCache;
   }
 
   @override
@@ -74,105 +83,160 @@ class _ChannelListState extends ConsumerState<ChannelList>
     });
   }
 
-  @override
-  Widget build(BuildContext context) {
-    super.build(context);
-
-    return FutureBuilder(
-      future: _fetchChannels(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          if (snapshot.hasData) {
-            channels = snapshot.data as List<nyxx.GuildChannel>;
-          }
-        }
-
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          _fetchChannelsFromCache().then((value) {});
-        }
-
-        return Container(
-          decoration: const BoxDecoration(color: backgroundColor),
-          width: double.infinity,
-          height: double.infinity,
-          child: Padding(
-            padding:
-                EdgeInsets.only(top: MediaQuery.of(context).viewPadding.top),
-            child: Container(
-              decoration: const BoxDecoration(
-                color: foreground,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(20),
-                ),
-              ),
-              child: Column(
-                children: [
-                  Padding(
-                    padding:
-                        const EdgeInsets.only(top: 20, left: 20, right: 20),
-                    child: Row(
+  Widget _buildChannelList(Object channels) {
+    print("-- runtime info -- ");
+    print(channels.runtimeType);
+    return Container(
+      decoration: const BoxDecoration(color: backgroundColor),
+      width: double.infinity,
+      height: double.infinity,
+      child: Padding(
+        padding: EdgeInsets.only(top: MediaQuery.of(context).viewPadding.top),
+        child: Container(
+          decoration: const BoxDecoration(
+            color: foreground,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(20),
+            ),
+          ),
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 20, left: 20, right: 20),
+                child: Row(
+                  children: [
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              guild != null ? guild!.name : "Loading",
-                              style: GoogleFonts.roboto(
-                                fontSize: 18,
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            Align(
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                "$memberCount members",
-                                textAlign: TextAlign.left,
-                                style: GoogleFonts.roboto(
-                                  fontSize: 12,
-                                  color: Colors.white.withOpacity(0.5),
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ],
+                        Text(
+                          guild != null ? guild!.name : "Loading",
+                          style: GoogleFonts.roboto(
+                            fontSize: 18,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                        const Spacer(),
-                        IconButton(
-                          icon: const Icon(Icons.add, color: Colors.white),
-                          onPressed: () {},
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            "$memberCount members",
+                            textAlign: TextAlign.left,
+                            style: GoogleFonts.roboto(
+                              fontSize: 12,
+                              color: Colors.white.withOpacity(0.5),
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                         ),
                       ],
                     ),
-                  ),
-                  Expanded(
-                    child: ListView.builder(
-                      itemCount: (channels.isEmpty)
-                          ? channelCache.length
-                          : channels.length,
-                      itemBuilder: (context, index) {
-                        return _channelButton(channels[index]);
-                      },
+                    const Spacer(),
+                    IconButton(
+                      icon: const Icon(Icons.add, color: Colors.white),
+                      onPressed: () {},
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
+              Expanded(
+                child: (channels.runtimeType ==
+                        UnmodifiableListView<nyxx.GuildChannel>)
+                    ? ListView.builder(
+                        itemCount: (channels as List<nyxx.GuildChannel>).length,
+                        itemBuilder: (context, index) {
+                          return ChannelButton(channel: channels[index]);
+                        },
+                      )
+                    : ListView.builder(
+                        itemCount: channelCache.length,
+                        itemBuilder: (context, index) {
+                          print("BUILDING FROM MAP!");
+                          print(channelCache.keys.elementAt(index));
+                          return ChannelButton(
+                            cachedChannelName:
+                                channelCache.keys.elementAt(index),
+                            cachedChannelId:
+                                channelCache.values.elementAt(index),
+                          );
+                        },
+                      ),
+              ),
+            ],
           ),
-        );
-      },
+        ),
+      ),
     );
   }
 
-  /*
-  todo: allow `channel` to work with either a guild channnel or the cache
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
+    print("builded channel list");
 
-  You should probably make it a class anyways since you need to change it's
-  state (like sidebar button)
-  */
+    if (guild == null) {
+      return _buildChannelList([]);
+    }
 
-  Widget _channelButton(nyxx.GuildChannel channel) {
+    AsyncValue<List<nyxx.GuildChannel>> channels =
+        ref.watch(channelsProvider(globalClient!, guild!));
+
+    return FutureBuilder(
+      future: channels.when(
+        loading: () => _fetchChannelsFromCache(),
+        error: (error, st) => Future.error('Error: $error'),
+        data: (channels) => _fetchChannels(),
+      ),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          // print("Waiting for cache...asd");
+          return FutureBuilder(
+              future: _fetchChannelsFromCache(),
+              builder: (context, snapshot2) {
+                if (snapshot2.connectionState == ConnectionState.waiting) {
+                  return _buildChannelList([]);
+                } else if (snapshot2.hasError) {
+                  return Center(child: Text('Error: ${snapshot2.error}'));
+                } else {
+                  print("Cache returned, going to build list");
+                  return _buildChannelList(snapshot2.data as Map<String, int>);
+                }
+              });
+        } else if (snapshot.hasError) {
+          return Center(child: Text('Error: ${snapshot.error}'));
+        } else {
+          if (snapshot.data.runtimeType !=
+              UnmodifiableListView<nyxx.GuildChannel>) {
+            return _buildChannelList(snapshot.data as Map<String, int>);
+          }
+          // print("Fetch from network returned!");
+          return _buildChannelList(snapshot.data as List<nyxx.GuildChannel>);
+        }
+      },
+    );
+  }
+}
+
+class ChannelButton extends StatefulWidget {
+  final nyxx.GuildChannel? channel;
+  final String? cachedChannelName;
+  final int? cachedChannelId;
+
+  const ChannelButton(
+      {super.key, this.channel, this.cachedChannelName, this.cachedChannelId});
+
+  @override
+  State<ChannelButton> createState() => _ChannelButtonState();
+}
+
+class _ChannelButtonState extends State<ChannelButton> {
+  @override
+  Widget build(BuildContext context) {
+    if (widget.channel == null) {
+      print("Rebuilding from cache");
+    } else {
+      // print("Rebuilding from network");
+    }
     return Align(
       alignment: Alignment.centerLeft,
       child: Padding(
@@ -210,12 +274,19 @@ class _ChannelListState extends ConsumerState<ChannelList>
               ),
             ),
             onPressed: () {
-              channelSignal.set(channel);
+              if (widget.channel != null) {
+                channelSignal.set(widget.channel);
+              } else {
+                print("Tried to change page before channel was loaded.");
+              }
+              // channelSignal.set(channel);
             },
-            child: Container(
+            child: SizedBox(
               height: 25,
               child: Text(
-                channel.name,
+                (widget.channel != null)
+                    ? widget.channel!.name
+                    : widget.cachedChannelName!,
                 textAlign: TextAlign.left,
                 style: GoogleFonts.inriaSans(
                   color: const Color.fromARGB(189, 255, 255, 255),

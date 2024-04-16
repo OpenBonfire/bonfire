@@ -19,7 +19,7 @@ Future<Guild> guild(GuildRef ref, NyxxGateway client, Snowflake id) async {
 
 @Riverpod(keepAlive: false)
 Future<List<GuildChannel>> channels(
-    ChannelsRef ref, NyxxGateway client, Guild guild) async {
+    ChannelsRef ref, NyxxGateway client, UserGuild guild) async {
   return await guild.fetchChannels();
 }
 

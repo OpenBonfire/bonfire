@@ -296,7 +296,7 @@ class _GuildProviderElement extends AutoDisposeFutureProviderElement<Guild>
   Snowflake get id => (origin as GuildProvider).id;
 }
 
-String _$channelsHash() => r'214f3e59242233a59218e00a3774939819fa9214';
+String _$channelsHash() => r'6dad3b93458ac5fdb6d49f7922594a16d057da1c';
 
 /// See also [channels].
 @ProviderFor(channels)
@@ -310,7 +310,7 @@ class ChannelsFamily extends Family<AsyncValue<List<GuildChannel>>> {
   /// See also [channels].
   ChannelsProvider call(
     NyxxGateway client,
-    Guild guild,
+    UserGuild guild,
   ) {
     return ChannelsProvider(
       client,
@@ -348,7 +348,7 @@ class ChannelsProvider extends AutoDisposeFutureProvider<List<GuildChannel>> {
   /// See also [channels].
   ChannelsProvider(
     NyxxGateway client,
-    Guild guild,
+    UserGuild guild,
   ) : this._internal(
           (ref) => channels(
             ref as ChannelsRef,
@@ -379,7 +379,7 @@ class ChannelsProvider extends AutoDisposeFutureProvider<List<GuildChannel>> {
   }) : super.internal();
 
   final NyxxGateway client;
-  final Guild guild;
+  final UserGuild guild;
 
   @override
   Override overrideWith(
@@ -427,7 +427,7 @@ mixin ChannelsRef on AutoDisposeFutureProviderRef<List<GuildChannel>> {
   NyxxGateway get client;
 
   /// The parameter `guild` of this provider.
-  Guild get guild;
+  UserGuild get guild;
 }
 
 class _ChannelsProviderElement
@@ -438,7 +438,7 @@ class _ChannelsProviderElement
   @override
   NyxxGateway get client => (origin as ChannelsProvider).client;
   @override
-  Guild get guild => (origin as ChannelsProvider).guild;
+  UserGuild get guild => (origin as ChannelsProvider).guild;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

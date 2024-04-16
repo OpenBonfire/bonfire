@@ -27,11 +27,6 @@ class _SidebarState extends ConsumerState<Sidebar>
   @override
   bool get wantKeepAlive => true;
 
-  @override
-  void initState() {
-    super.initState();
-  }
-
   Future<List<Widget>> _generateCards(List<UserGuild> guilds) async {
     List<Widget> cards = [];
 
@@ -126,7 +121,6 @@ class _IconButtonState extends State<IconButton> {
   void initState() {
     super.initState();
     guildSignal.subscribe((UserGuild? updatedGuild) {
-      if (guild != null) {
         setState(() {
           if (updatedGuild == null) {
             widget.selected = false;
@@ -138,7 +132,6 @@ class _IconButtonState extends State<IconButton> {
             widget.selected = false;
           }
         });
-      }
     });
   }
 
