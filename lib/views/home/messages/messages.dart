@@ -1,4 +1,5 @@
 import 'dart:collection';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
@@ -336,7 +337,10 @@ class _MessageBoxState extends State<MessageBox>
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(
-                  width: MediaQuery.of(context).size.width - 150,
+                  width: MediaQuery.of(context).size.width -
+                      ((Platform.isAndroid | Platform.isIOS) ? 150 : 475),
+                  // width: 300,
+
                   child: Row(
                     children: [
                       Padding(
@@ -360,7 +364,14 @@ class _MessageBoxState extends State<MessageBox>
                                 ConnectionState.done) {
                               return Text(
                                 (snapshot.data! as nyxx.Member).nick ??
-                                    (((snapshot.data! as nyxx.Member).user!.globalName != null) ? ((snapshot.data! as nyxx.Member).user!.globalName!): 'Unknown'),
+                                    (((snapshot.data! as nyxx.Member)
+                                                .user!
+                                                .globalName !=
+                                            null)
+                                        ? ((snapshot.data! as nyxx.Member)
+                                            .user!
+                                            .globalName!)
+                                        : 'Unknown'),
                                 textAlign: TextAlign.left,
                                 softWrap: true,
                                 style: const TextStyle(
@@ -389,6 +400,7 @@ class _MessageBoxState extends State<MessageBox>
                           dateTimeFormat(widget.message.timestamp.toLocal()),
                           textAlign: TextAlign.left,
                           softWrap: true,
+                          overflow: TextOverflow.fade,
                           style: const TextStyle(
                             color: Color.fromARGB(189, 255, 255, 255),
                             fontSize: 12,
@@ -401,7 +413,9 @@ class _MessageBoxState extends State<MessageBox>
                 Padding(
                   padding: const EdgeInsets.only(left: 6, top: 0),
                   child: SizedBox(
-                    width: MediaQuery.of(context).size.width - 110,
+                    width: 300,
+                    // width: MediaQuery.of(context).size.width -
+                    //     ((Platform.isAndroid | Platform.isIOS) ? 120 : 500),
                     child: MarkdownViewer(
                       widget.message.content,
                       enableTaskList: true,
