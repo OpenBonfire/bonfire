@@ -11,6 +11,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:nyxx/nyxx.dart';
 import 'package:signals/signals.dart';
 import 'package:flutter_keyboard_size/flutter_keyboard_size.dart';
+import 'dart:io' show Platform;
 
 class Home extends StatelessWidget {
   NyxxGateway client;
@@ -40,28 +41,38 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return KeyboardSizeProvider(
-      child: Scaffold(
-          resizeToAvoidBottomInset: false,
-          body: OverlappingPanels(
-              left: SizedBox(
-                width: MediaQuery.of(context).size.width,
-                child: Row(
-                  children: [Sidebar(), const Expanded(child: ChannelList())],
-                ),
-              ),
-              main: Container(
-                width: double.infinity,
-                height: double.infinity,
-                decoration: BoxDecoration(color: foreground, boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
-                    spreadRadius: 5,
-                    blurRadius: 7,
-                    offset: const Offset(0, 3),
-                  )
-                ]),
-                child: Messages(),
-              ))),
-    );
+        child: Scaffold(
+            resizeToAvoidBottomInset: false,
+            body: (Platform.isAndroid | Platform.isIOS)
+                ? OverlappingPanels(
+                    left: SizedBox(
+                      width: MediaQuery.of(context).size.width,
+                      child: Row(
+                        children: [
+                          Sidebar(),
+                          const Expanded(child: ChannelList())
+                        ],
+                      ),
+                    ),
+                    main: Container(
+                      width: double.infinity,
+                      height: double.infinity,
+                      decoration: BoxDecoration(color: foreground, boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.1),
+                          spreadRadius: 5,
+                          blurRadius: 7,
+                          offset: const Offset(0, 3),
+                        )
+                      ]),
+                      child: Messages(),
+                    ))
+                : Row(
+                    children: [
+                      Sidebar(),
+                      const SizedBox(width: 300, child: ChannelList()),
+                      Expanded(child: Messages())
+                    ],
+                  )));
   }
 }
