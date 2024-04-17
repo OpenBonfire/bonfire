@@ -188,12 +188,12 @@ class MessageBar extends StatelessWidget {
       ),
       child: TextField(
         controller: fieldText,
-        style: GoogleFonts.inriaSans(color: Colors.white),
-        decoration: InputDecoration(
+        style: const TextStyle(color: Colors.white),
+        decoration: const InputDecoration(
           hintText: 'Message',
-          hintStyle: GoogleFonts.inriaSans(color: Colors.white),
+          hintStyle: TextStyle(color: Colors.white),
           border: InputBorder.none,
-          contentPadding: const EdgeInsets.all(16),
+          contentPadding: EdgeInsets.all(16),
         ),
         onSubmitted: (value) {
           if (value.isNotEmpty) {
@@ -318,10 +318,9 @@ class _MessageBoxState extends State<MessageBox>
                   child: Text(
                     widget.message.author.username,
                     textAlign: TextAlign.left,
-                    style: GoogleFonts.inriaSans(
-                      color: const Color.fromARGB(189, 255, 255, 255),
-                      fontSize: 18,
-                      fontWeight: FontWeight.w500,
+                    style: const TextStyle(
+                      color: Color.fromARGB(189, 255, 255, 255),
+                      fontSize: 16,
                     ),
                   ),
                 ),

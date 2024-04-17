@@ -22,6 +22,6 @@ final erroredSubtitleStyle = GoogleFonts.inriaSans(
 
 final inputBoxStyle = GoogleFonts.inriaSans(
   fontSize: 16,
-  fontWeight: FontWeight.normal,
+  fontWeight: FontWeight.w500,
   color: colors.title,
 );

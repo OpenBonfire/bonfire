@@ -1,5 +1,4 @@
 import 'dart:collection';
-import 'dart:io';
 
 import 'package:bonfire/colors.dart';
 import 'package:bonfire/globals.dart';
@@ -162,8 +161,8 @@ class _IconButtonState extends State<IconButton> {
                   guildSignal.set(widget.guild);
                 },
                 style: TextButton.styleFrom(
-                  padding: EdgeInsets.zero, // Set padding to zero
-                  minimumSize: const Size(0, 0), // Ensure minimum size is zero
+                  padding: EdgeInsets.zero,
+                  minimumSize: const Size(0, 0),
                 ),
                 child: ClipRRect(
                     borderRadius: BorderRadius.circular(100),

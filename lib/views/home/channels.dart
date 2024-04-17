@@ -21,23 +21,46 @@ class ChannelList extends ConsumerStatefulWidget {
 class _ChannelListState extends ConsumerState<ChannelList>
     with AutomaticKeepAliveClientMixin {
   @override
-  bool get wantKeepAlive => true;
+  bool get wantKeepAlive => false;
 
   nyxx.UserGuild? guild;
   String serverName = "Loading";
   String memberCount = "0";
   List<nyxx.GuildChannel> channels = [];
+  Map<nyxx.GuildCategory, List<nyxx.GuildChannel>> categories = {};
   Map<String, List<nyxx.GuildChannel>> channelCache = {};
 
   final DefaultCacheManager cacheManager = DefaultCacheManager();
 
+  _updateMemberCount() async {
+    ref.read(guildProvider(globalClient!, guild!.id)).maybeWhen(orElse: () {
+      print("Guild not found");
+    }, data: (guild) {
+      print(this.guild!.approximateMemberCount);
+    });
+  }
+
   Future<List<nyxx.GuildChannel>> _fetchChannels() async {
     List<nyxx.GuildChannel> fetchedChannels = await guild!.fetchChannels();
 
-    Map<String, int> channelData = {};
+    List<nyxx.GuildChannel> channels = [];
     for (var channel in fetchedChannels) {
+      if (channel.type != nyxx.ChannelType.guildCategory) {
+        channels.add(channel);
+      } else {
+        if (categories[channel as nyxx.GuildCategory] == null) {
+          categories[channel] = [];
+        }
+
+        categories[channel]!.addAll(
+          fetchedChannels.where((c) => c.parentId == channel.id),
+        );
+      }
+    }
+
+    Map<String, int> channelData = {};
+    for (var channel in channels) {
       channelData[channel.name] = channel.id.value;
-      ;
     }
 
     await cacheManager.putFile(
@@ -45,7 +68,7 @@ class _ChannelListState extends ConsumerState<ChannelList>
       utf8.encode(json.encode(channelData)),
     );
 
-    return fetchedChannels;
+    return channels;
   }
 
   Future<Map<String, int>> _fetchChannelsFromCache() async {
@@ -66,6 +89,7 @@ class _ChannelListState extends ConsumerState<ChannelList>
       if (guild != null) {
         setState(() {
           this.guild = guild;
+          categories = {};
         });
       }
     });
@@ -87,7 +111,6 @@ class _ChannelListState extends ConsumerState<ChannelList>
             channels = snapshot.data as List<nyxx.GuildChannel>;
           }
         }
-
         return Container(
           decoration: const BoxDecoration(color: backgroundColor),
           width: double.infinity,
@@ -145,9 +168,12 @@ class _ChannelListState extends ConsumerState<ChannelList>
                   ),
                   Expanded(
                     child: ListView.builder(
-                      itemCount: channels.length,
+                      itemCount: categories.length,
                       itemBuilder: (context, index) {
-                        return _channelButton(channels[index]);
+                        return Category(
+                          category: categories.keys.elementAt(index),
+                          children: categories.values.elementAt(index),
+                        );
                       },
                     ),
                   ),
@@ -159,28 +185,110 @@ class _ChannelListState extends ConsumerState<ChannelList>
       },
     );
   }
+}
 
-  Widget _channelButton(nyxx.GuildChannel channel) {
+class Category extends StatefulWidget {
+  final nyxx.GuildCategory category;
+  final List<nyxx.GuildChannel> children;
+
+  const Category({super.key, required this.category, required this.children});
+
+  @override
+  State<Category> createState() => _CategoryState();
+}
+
+class _CategoryState extends State<Category> {
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8, top: 12),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(left: 12),
+            child: SizedBox(
+              height: 25,
+              child: Text(widget.category.name,
+                  style: GoogleFonts.inriaSans(
+                    color: const Color.fromARGB(189, 255, 255, 255),
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                  )),
+            ),
+          ),
+          SizedBox(
+            child: Column(
+              children: widget.children
+                  .map((channel) => ChannelButton(channel: channel))
+                  .toList(),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class ChannelButton extends StatefulWidget {
+  final nyxx.GuildChannel channel;
+  const ChannelButton({super.key, required this.channel});
+
+  @override
+  State<ChannelButton> createState() => ChannelButtonState();
+}
+
+class ChannelButtonState extends State<ChannelButton> {
+  bool selected = false;
+  Widget prefix = const Text("X");
+
+  @override
+  void initState() {
+    super.initState();
+    channelSignal.subscribe((channel) {
+      if (channel != null) {
+        setState(() {
+          if (channel.id.value == widget.channel.id.value) {
+            selected = true;
+          } else {
+            selected = false;
+          }
+        });
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Align(
       alignment: Alignment.centerLeft,
       child: Padding(
-        padding: const EdgeInsets.only(left: 10, right: 30, top: 2),
+        padding: const EdgeInsets.only(left: 5, right: 30, top: 0),
         child: Container(
           width: double.infinity,
           decoration: BoxDecoration(
             color: foreground,
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(5),
           ),
           child: OutlinedButton(
             style: ButtonStyle(
+              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+              padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+                const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+              ),
+              elevation: MaterialStateProperty.all<double>(0),
+              
               alignment: Alignment.centerLeft,
               backgroundColor: MaterialStateProperty.all<Color>(
-                Colors.transparent,
+                selected? const Color.fromARGB(45, 0, 0, 0): Colors.transparent,
               ),
               side: MaterialStateProperty.all<BorderSide>(
-                const BorderSide(
+                BorderSide(
                   width: 0.5,
-                  color: Color.fromARGB(255, 77, 77, 77),
+                  color: selected
+                      ? const Color.fromARGB(255, 77, 77, 77)
+                      : Color.fromARGB(0, 77, 77, 77)
                 ),
               ),
               shape: MaterialStateProperty.all<RoundedRectangleBorder>(
@@ -197,18 +305,26 @@ class _ChannelListState extends ConsumerState<ChannelList>
                 },
               ),
             ),
+
             onPressed: () {
-              channelSignal.set(channel);
+              setState(() {
+                selected = true;
+              });
+              channelSignal.set(widget.channel);
             },
-            child: Container(
-              height: 25,
-              child: Text(
-                channel.name,
-                textAlign: TextAlign.left,
-                style: GoogleFonts.inriaSans(
-                  color: const Color.fromARGB(189, 255, 255, 255),
-                  fontSize: 17,
-                  fontWeight: FontWeight.w500,
+
+            child: SizedBox(
+              height: 20,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 2),
+                child: Text(
+                  "# ${widget.channel.name}",
+                  textAlign: TextAlign.left,
+                  style: GoogleFonts.inriaSans(
+                    color: const Color.fromARGB(189, 255, 255, 255),
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
               ),
             ),

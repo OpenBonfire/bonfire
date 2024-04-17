@@ -8,7 +8,6 @@ import 'package:bonfire/styles/styles.dart';
 import 'package:bonfire/views/auth/mfa.dart';
 import 'package:bonfire/views/auth/selector.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:bonfire/colors.dart' as colors;
 import 'package:google_fonts/google_fonts.dart';

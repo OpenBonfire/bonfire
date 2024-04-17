@@ -7,8 +7,14 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:nyxx/nyxx.dart';
+import 'package:bonfire/colors.dart';
 
 void main() async {
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+    systemNavigationBarColor: Colors.transparent,
+    systemNavigationBarIconBrightness: Brightness.dark,
+    statusBarColor: Colors.transparent,
+  ));
   await GetStorage.init();
   runApp(const ProviderScope(child: NavigatorWidget()));
 }
@@ -23,15 +29,22 @@ class NavigatorWidget extends StatefulWidget {
 class _NavigatorWidgetState extends State<NavigatorWidget> {
   @override
   Widget build(BuildContext context) {
-    // bruh
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-      systemNavigationBarColor: Colors.transparent,
-      systemNavigationBarDividerColor: Colors.transparent,
-      statusBarColor: Colors.transparent,
-      systemStatusBarContrastEnforced: false,
+      systemNavigationBarColor:
+          foreground, // This makes navigation bar transparent
+      systemNavigationBarIconBrightness:
+          Brightness.dark, // You can set the icons' color to dark
+      statusBarColor:
+          Colors.transparent, // This makes the status bar transparent
     ));
     return MaterialApp(
       theme: darkTheme,
+      home: _buildInitialRouteWidget(),
+    );
+  }
+
+  Widget _buildInitialRouteWidget() {
+    return Navigator(
       onGenerateRoute: (settings) {
         if (settings.name == '/login') {
           return MaterialPageRoute(builder: (context) => LoginPage());
