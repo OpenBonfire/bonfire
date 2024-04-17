@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:relative_time/relative_time.dart';
 import 'package:nyxx/nyxx.dart' as nyxx;
 import 'package:markdown_viewer/markdown_viewer.dart';
 import 'package:bonfire/colors.dart';
@@ -12,6 +13,8 @@ import 'package:bonfire/network/message.dart';
 import 'package:bonfire/style.dart';
 import 'package:bonfire/styles/styles.dart';
 import 'package:bonfire/views/home/signal/channel.dart';
+
+var locale = 'en';
 
 class Messages extends StatefulWidget {
   Messages({Key? key});
@@ -121,7 +124,6 @@ class _MessageListViewState extends State<MessageListView>
   Widget build(BuildContext context) {
     super.build(context);
     return AnimatedContainer(
-      // I really want to have an animated container, but it's just to laggy when resizing
       duration: const Duration(milliseconds: 0),
       height: currentKeyboardState
           ? (MediaQuery.of(context).size.height - maxKeyboardSize - 60)
@@ -244,6 +246,26 @@ class _MessageBoxState extends State<MessageBox>
     return const AssetImage('assets/placeholder.png');
   }
 
+  String dateTimeFormat(DateTime time) {
+    String section1;
+    String section2;
+
+    if (time.day == DateTime.now().day) {
+      section1 = 'Today';
+    } else if (time.day == DateTime.now().day - 1) {
+      section1 = 'Yesterday';
+    } else {
+      section1 = '${time.day}/${time.month}/${time.year}';
+    }
+
+    var twelveHour = time.hour > 12 ? time.hour - 12 : time.hour;
+    var section3 = time.hour > 12 ? 'PM' : 'AM';
+
+    section2 = ' at $twelveHour:${time.minute} $section3';
+
+    return section1 + section2;
+  }
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -272,7 +294,7 @@ class _MessageBoxState extends State<MessageBox>
         ),
       ),
       onPressed: () {
-        print(messageWidgets.entries.length);
+        print(guildSignal.value!);
       },
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 8),
@@ -313,21 +335,73 @@ class _MessageBoxState extends State<MessageBox>
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 6, top: 0),
-                  child: Text(
-                    widget.message.author.username,
-                    textAlign: TextAlign.left,
-                    style: const TextStyle(
-                      color: Color.fromARGB(189, 255, 255, 255),
-                      fontSize: 16,
-                    ),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width - 150,
+                  child: Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(left: 6, top: 0),
+                        child: FutureBuilder(
+                          future: guildSignal.value!.members
+                              .get(widget.message.author.id),
+                          builder: (context, snapshot) {
+                            if (snapshot.data == null) {
+                              return Text(
+                                widget.message.author.username,
+                                textAlign: TextAlign.left,
+                                style: const TextStyle(
+                                  color: Color.fromARGB(255, 255, 255, 255),
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              );
+                            }
+                            if (snapshot.connectionState ==
+                                ConnectionState.done) {
+                              return Text(
+                                (snapshot.data! as nyxx.Member).nick ??
+                                    (((snapshot.data! as nyxx.Member).user!.globalName != null) ? ((snapshot.data! as nyxx.Member).user!.globalName!): 'Unknown'),
+                                textAlign: TextAlign.left,
+                                softWrap: true,
+                                style: const TextStyle(
+                                  color: Color.fromARGB(255, 255, 255, 255),
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              );
+                            } else {
+                              return const Text(
+                                'Loading...',
+                                textAlign: TextAlign.left,
+                                style: TextStyle(
+                                  color: Color.fromARGB(255, 255, 255, 255),
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              );
+                            }
+                          },
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 6, top: 0),
+                        child: Text(
+                          dateTimeFormat(widget.message.timestamp.toLocal()),
+                          textAlign: TextAlign.left,
+                          softWrap: true,
+                          style: const TextStyle(
+                            color: Color.fromARGB(189, 255, 255, 255),
+                            fontSize: 12,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 6, top: 0),
                   child: SizedBox(
-                    width: MediaQuery.of(context).size.width - 126,
+                    width: MediaQuery.of(context).size.width - 110,
                     child: MarkdownViewer(
                       widget.message.content,
                       enableTaskList: true,
