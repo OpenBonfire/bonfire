@@ -43,9 +43,9 @@ class TokenAuthUser extends LoginAuthenticator {
   TokenAuthUser({required this.token});
 }
 
-class LoginAuthUser extends LoginAuthenticator {
+class CredentialsAuthUser extends LoginAuthenticator {
   final String username;
   final String password;
 
-  LoginAuthUser({required this.username, required this.password});
+  CredentialsAuthUser({required this.username, required this.password});
 }

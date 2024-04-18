@@ -9,8 +9,11 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'auth.g.dart';
 
-@riverpod
-Future<AuthResponse> auth(AuthRef ref, LoginAuthenticator authenticator) async {
+Future<AuthResponse> authWithToken(AuthRef ref, TokenAuthUser authenticator) async {
+  return AuthUser(token: authenticator.token, client: await Nyxx.connectGateway(authenticator.token, GatewayIntents.all));
+}
+
+Future<AuthResponse> authWithCredentials(AuthRef ref, LoginAuthenticator authenticator) async {
   Map<String, Object?> body = {
     'gift_code_sku_id': null,
     'login': username,
@@ -45,4 +48,8 @@ Future<AuthResponse> auth(AuthRef ref, LoginAuthenticator authenticator) async {
   }
 
   return authResponse;
+}
+
+@riverpod
+Future<AuthResponse> auth(AuthRef ref, LoginAuthenticator authenticator) async {
 }
