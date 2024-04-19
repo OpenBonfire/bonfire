@@ -9,11 +9,18 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'auth.g.dart';
 
-Future<AuthResponse> authWithToken(AuthRef ref, TokenAuthUser authenticator) async {
-  return AuthUser(token: authenticator.token, client: await Nyxx.connectGateway(authenticator.token, GatewayIntents.all));
+Future<AuthUser> authWithToken(AuthRef ref, TokenUserAuth authenticator) async {
+  print("token authentication");
+  var user = AuthUser(token: authenticator.token, client: await Nyxx.connectGateway(authenticator.token, GatewayIntents.all));
+  print("registed nyxx!");
+  print(user);
+  return user;
 }
 
-Future<AuthResponse> authWithCredentials(AuthRef ref, LoginAuthenticator authenticator) async {
+Future<AuthResponse> authWithCredentials(AuthRef ref, CredentialsUserAuth authenticator) async {
+  final username = authenticator.username;
+  final password = authenticator.password;
+
   Map<String, Object?> body = {
     'gift_code_sku_id': null,
     'login': username,
@@ -28,15 +35,13 @@ Future<AuthResponse> authWithCredentials(AuthRef ref, LoginAuthenticator authent
     body: jsonEncode(body),
   );
 
-  // var client = await Nyxx.connectGateway("", GatewayIntents.all);
-
   final json = jsonDecode(response.body) as Map<String, dynamic>;
   var authResponse;
 
   if (json.containsKey('user_id') && json.containsKey('mfa')) {
     var success = AuthSuccess.fromJson(json);
     NyxxGateway client =
-        await Nyxx.connectGateway(success.token, GatewayIntents.all);
+        await Nyxx.connectGateway(success.token!, GatewayIntents.all);
 
     authResponse = AuthUser(token: json['token'], client: client);
   } else if (json.containsKey('captcha_key') &&
@@ -51,5 +56,17 @@ Future<AuthResponse> authWithCredentials(AuthRef ref, LoginAuthenticator authent
 }
 
 @riverpod
-Future<AuthResponse> auth(AuthRef ref, LoginAuthenticator authenticator) async {
+Future<TestAuth> auth(AuthRef ref, LoginAuthenticator authenticator) async {
+  return TestAuth(test: "asd");
+  // if (authenticator is TokenUserAuth) {
+  //   var tokenResp = AuthUser(token: authenticator.token, client: await Nyxx.connectGateway(authenticator.token, GatewayIntents.all)); // await authWithToken(ref, authenticator);
+  //   var authed = CompletedAuth(authUser: tokenResp);
+  //   print("returning auth, should be done...");
+  //   return authed;
+  // }
+  //  else if (authenticator is CredentialsUserAuth) {
+  //   return await authWithCredentials(ref, authenticator);
+  // } else {
+  //   throw Exception('Unknown authenticator');
+  // }
 }

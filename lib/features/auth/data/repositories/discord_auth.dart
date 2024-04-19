@@ -21,31 +21,3 @@ class PartialAuthUser extends AuthResponse {
 
   PartialAuthUser({this.token, this.ticket});
 }
-
-class CaptchaResponse extends AuthResponse {
-  final List<dynamic> captchaKey;
-  final String captchaSitekey;
-  final String captchaService;
-
-  CaptchaResponse({
-    required this.captchaKey,
-    required this.captchaSitekey,
-    required this.captchaService,
-  });
-}
-
-@sealed
-abstract class LoginAuthenticator {}
-
-class TokenAuthUser extends LoginAuthenticator {
-  final String token;
-
-  TokenAuthUser({required this.token});
-}
-
-class CredentialsAuthUser extends LoginAuthenticator {
-  final String username;
-  final String password;
-
-  CredentialsAuthUser({required this.username, required this.password});
-}

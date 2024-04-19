@@ -6,7 +6,7 @@ part of 'auth.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$authHash() => r'f1f1b3498cdd37c9182254b974ee5cd7fb1ebeac';
+String _$authHash() => r'cf9d2a202222e30323b1debbccdaf9b7862d4758';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -34,7 +34,7 @@ class _SystemHash {
 const authProvider = AuthFamily();
 
 /// See also [auth].
-class AuthFamily extends Family<AsyncValue<AuthResponse>> {
+class AuthFamily extends Family<AsyncValue<TestAuth>> {
   /// See also [auth].
   const AuthFamily();
 
@@ -72,7 +72,7 @@ class AuthFamily extends Family<AsyncValue<AuthResponse>> {
 }
 
 /// See also [auth].
-class AuthProvider extends AutoDisposeFutureProvider<AuthResponse> {
+class AuthProvider extends AutoDisposeFutureProvider<TestAuth> {
   /// See also [auth].
   AuthProvider(
     LoginAuthenticator authenticator,
@@ -104,7 +104,7 @@ class AuthProvider extends AutoDisposeFutureProvider<AuthResponse> {
 
   @override
   Override overrideWith(
-    FutureOr<AuthResponse> Function(AuthRef provider) create,
+    FutureOr<TestAuth> Function(AuthRef provider) create,
   ) {
     return ProviderOverride(
       origin: this,
@@ -121,7 +121,7 @@ class AuthProvider extends AutoDisposeFutureProvider<AuthResponse> {
   }
 
   @override
-  AutoDisposeFutureProviderElement<AuthResponse> createElement() {
+  AutoDisposeFutureProviderElement<TestAuth> createElement() {
     return _AuthProviderElement(this);
   }
 
@@ -139,13 +139,13 @@ class AuthProvider extends AutoDisposeFutureProvider<AuthResponse> {
   }
 }
 
-mixin AuthRef on AutoDisposeFutureProviderRef<AuthResponse> {
+mixin AuthRef on AutoDisposeFutureProviderRef<TestAuth> {
   /// The parameter `authenticator` of this provider.
   LoginAuthenticator get authenticator;
 }
 
-class _AuthProviderElement
-    extends AutoDisposeFutureProviderElement<AuthResponse> with AuthRef {
+class _AuthProviderElement extends AutoDisposeFutureProviderElement<TestAuth>
+    with AuthRef {
   _AuthProviderElement(super.provider);
 
   @override

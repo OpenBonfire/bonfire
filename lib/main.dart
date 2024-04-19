@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:bonfire/features/auth/data/repositories/auth.dart';
+import 'package:bonfire/features/auth/data/repositories/discord_auth.dart';
 import 'package:bonfire/features/auth/models/auth.dart';
 import 'package:bonfire/shared/repositories/firebridge/auth.dart';
 import 'package:flutter/material.dart';
@@ -47,16 +50,45 @@ class AuthWidgetTest extends ConsumerStatefulWidget {
 class _AuthWidgetTestState extends ConsumerState<AuthWidgetTest> {
   @override
   Widget build(BuildContext context) {
-    var bruh = ref.watch(authProvider("bob", "password"));
-    print(bruh.valueOrNull is AuthSuccess);
+    final AsyncValue<TestAuth> bruh =
+     ref.watch(authProvider(TokenUserAuth(token: Platform.environment['TEST_TOKEN']!)));
+
+    var text = bruh.when(
+      data: (data) {
+        print("GOT DATA!");
+        print(data);
+        return data.test;
+      },
+      loading: () {
+        print("loading");
+        return "loading";
+      },
+      error: (error, stack) {
+        print("errored");
+        print(error);
+        return "error";
+      },
+    );
 
     return Scaffold(
       body: Center(
         child: ElevatedButton(
             onPressed: () async {
-              print(bruh);
+              bruh.when(
+                data: (data) {
+                  print("GOT DATA!");
+                  print(data);
+                },
+                loading: () {
+                  print("loading");
+                },
+                error: (error, stack) {
+                  print("errored");
+                  print(error);
+                },
+              );
             },
-            child: const Text("asd")),
+            child: Text(text)),
       ),
     );
   }
