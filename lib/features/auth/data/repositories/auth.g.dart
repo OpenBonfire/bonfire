@@ -6,7 +6,7 @@ part of 'auth.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$authHash() => r'cf9d2a202222e30323b1debbccdaf9b7862d4758';
+String _$authHash() => r'f5b5e13f67e95a58d06f4e4269009a6d4f0b6313';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -40,7 +40,7 @@ class AuthFamily extends Family<AsyncValue<TestAuth>> {
 
   /// See also [auth].
   AuthProvider call(
-    LoginAuthenticator authenticator,
+    Text authenticator,
   ) {
     return AuthProvider(
       authenticator,
@@ -75,7 +75,7 @@ class AuthFamily extends Family<AsyncValue<TestAuth>> {
 class AuthProvider extends AutoDisposeFutureProvider<TestAuth> {
   /// See also [auth].
   AuthProvider(
-    LoginAuthenticator authenticator,
+    Text authenticator,
   ) : this._internal(
           (ref) => auth(
             ref as AuthRef,
@@ -100,7 +100,7 @@ class AuthProvider extends AutoDisposeFutureProvider<TestAuth> {
     required this.authenticator,
   }) : super.internal();
 
-  final LoginAuthenticator authenticator;
+  final Text authenticator;
 
   @override
   Override overrideWith(
@@ -141,7 +141,7 @@ class AuthProvider extends AutoDisposeFutureProvider<TestAuth> {
 
 mixin AuthRef on AutoDisposeFutureProviderRef<TestAuth> {
   /// The parameter `authenticator` of this provider.
-  LoginAuthenticator get authenticator;
+  Text get authenticator;
 }
 
 class _AuthProviderElement extends AutoDisposeFutureProviderElement<TestAuth>
@@ -149,8 +149,7 @@ class _AuthProviderElement extends AutoDisposeFutureProviderElement<TestAuth>
   _AuthProviderElement(super.provider);
 
   @override
-  LoginAuthenticator get authenticator =>
-      (origin as AuthProvider).authenticator;
+  Text get authenticator => (origin as AuthProvider).authenticator;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

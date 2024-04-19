@@ -17,27 +17,7 @@ void main() async {
   ));
 
   await GetStorage.init();
-  runApp(const ProviderScope(child: NavigatorWidget()));
-}
-
-class NavigatorWidget extends StatefulWidget {
-  const NavigatorWidget({super.key});
-
-  @override
-  State<NavigatorWidget> createState() => _NavigatorWidgetState();
-}
-
-class _NavigatorWidgetState extends State<NavigatorWidget> {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: _buildInitialRouteWidget(),
-    );
-  }
-
-  Widget _buildInitialRouteWidget() {
-    return const AuthWidgetTest();
-  }
+  runApp(const ProviderScope(child: MaterialApp(home: AuthWidgetTest())));
 }
 
 class AuthWidgetTest extends ConsumerStatefulWidget {
@@ -50,8 +30,7 @@ class AuthWidgetTest extends ConsumerStatefulWidget {
 class _AuthWidgetTestState extends ConsumerState<AuthWidgetTest> {
   @override
   Widget build(BuildContext context) {
-    final AsyncValue<TestAuth> bruh =
-     ref.watch(authProvider(TokenUserAuth(token: Platform.environment['TEST_TOKEN']!)));
+    final AsyncValue<TestAuth> bruh = ref.watch(authProvider(Text("balls")));
 
     var text = bruh.when(
       data: (data) {
@@ -72,23 +51,7 @@ class _AuthWidgetTestState extends ConsumerState<AuthWidgetTest> {
 
     return Scaffold(
       body: Center(
-        child: ElevatedButton(
-            onPressed: () async {
-              bruh.when(
-                data: (data) {
-                  print("GOT DATA!");
-                  print(data);
-                },
-                loading: () {
-                  print("loading");
-                },
-                error: (error, stack) {
-                  print("errored");
-                  print(error);
-                },
-              );
-            },
-            child: Text(text)),
+        child: ElevatedButton(onPressed: () async {}, child: Text(text)),
       ),
     );
   }
