@@ -27,9 +27,9 @@ class AuthSuccess extends AuthResponse with _$AuthSuccess {
 @freezed
 class CaptchaResponse extends AuthResponse with _$CaptchaResponse {
   factory CaptchaResponse({
-    required List<dynamic> captchaKey,
-    required String captchaSitekey,
-    required String captchaService,
+    required List<dynamic> captcha_key,
+    required String captcha_sitekey,
+    required String captcha_service,
   }) = _CaptchaResponse;
 
   factory CaptchaResponse.fromJson(Map<String, dynamic> json) =>

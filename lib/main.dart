@@ -30,28 +30,36 @@ class AuthWidgetTest extends ConsumerStatefulWidget {
 class _AuthWidgetTestState extends ConsumerState<AuthWidgetTest> {
   @override
   Widget build(BuildContext context) {
-    final AsyncValue<TestAuth> bruh = ref.watch(authProvider(Text("balls")));
+    // final AsyncValue<TestAuth> bruh = ref.watch(authProvider);
 
-    var text = bruh.when(
-      data: (data) {
-        print("GOT DATA!");
-        print(data);
-        return data.test;
-      },
-      loading: () {
-        print("loading");
-        return "loading";
-      },
-      error: (error, stack) {
-        print("errored");
-        print(error);
-        return "error";
-      },
-    );
+    // var text = bruh.when(
+    //   data: (data) {
+    //     print("GOT DATA!");
+    //     print(data);
+    //     return data.test;
+    //   },
+    //   loading: () {
+    //     print("loading");
+    //     return "loading";
+    //   },
+    //   error: (error, stack) {
+    //     print("errored");
+    //     print(error);
+    //     return "error";
+    //   },
+    // );
 
     return Scaffold(
       body: Center(
-        child: ElevatedButton(onPressed: () async {}, child: Text(text)),
+        child: ElevatedButton(
+            onPressed: () async {
+              var resp = await ref
+                  .read(authProvider.notifier)
+                  .loginWithCredentials("username", "password");
+
+              print(resp);
+            },
+            child: Text("asd")),
       ),
     );
   }

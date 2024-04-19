@@ -301,9 +301,9 @@ CaptchaResponse _$CaptchaResponseFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$CaptchaResponse {
-  List<dynamic> get captchaKey => throw _privateConstructorUsedError;
-  String get captchaSitekey => throw _privateConstructorUsedError;
-  String get captchaService => throw _privateConstructorUsedError;
+  List<dynamic> get captcha_key => throw _privateConstructorUsedError;
+  String get captcha_sitekey => throw _privateConstructorUsedError;
+  String get captcha_service => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -318,7 +318,9 @@ abstract class $CaptchaResponseCopyWith<$Res> {
       _$CaptchaResponseCopyWithImpl<$Res, CaptchaResponse>;
   @useResult
   $Res call(
-      {List<dynamic> captchaKey, String captchaSitekey, String captchaService});
+      {List<dynamic> captcha_key,
+      String captcha_sitekey,
+      String captcha_service});
 }
 
 /// @nodoc
@@ -334,22 +336,22 @@ class _$CaptchaResponseCopyWithImpl<$Res, $Val extends CaptchaResponse>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? captchaKey = null,
-    Object? captchaSitekey = null,
-    Object? captchaService = null,
+    Object? captcha_key = null,
+    Object? captcha_sitekey = null,
+    Object? captcha_service = null,
   }) {
     return _then(_value.copyWith(
-      captchaKey: null == captchaKey
-          ? _value.captchaKey
-          : captchaKey // ignore: cast_nullable_to_non_nullable
+      captcha_key: null == captcha_key
+          ? _value.captcha_key
+          : captcha_key // ignore: cast_nullable_to_non_nullable
               as List<dynamic>,
-      captchaSitekey: null == captchaSitekey
-          ? _value.captchaSitekey
-          : captchaSitekey // ignore: cast_nullable_to_non_nullable
+      captcha_sitekey: null == captcha_sitekey
+          ? _value.captcha_sitekey
+          : captcha_sitekey // ignore: cast_nullable_to_non_nullable
               as String,
-      captchaService: null == captchaService
-          ? _value.captchaService
-          : captchaService // ignore: cast_nullable_to_non_nullable
+      captcha_service: null == captcha_service
+          ? _value.captcha_service
+          : captcha_service // ignore: cast_nullable_to_non_nullable
               as String,
     ) as $Val);
   }
@@ -364,7 +366,9 @@ abstract class _$$CaptchaResponseImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {List<dynamic> captchaKey, String captchaSitekey, String captchaService});
+      {List<dynamic> captcha_key,
+      String captcha_sitekey,
+      String captcha_service});
 }
 
 /// @nodoc
@@ -378,22 +382,22 @@ class __$$CaptchaResponseImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? captchaKey = null,
-    Object? captchaSitekey = null,
-    Object? captchaService = null,
+    Object? captcha_key = null,
+    Object? captcha_sitekey = null,
+    Object? captcha_service = null,
   }) {
     return _then(_$CaptchaResponseImpl(
-      captchaKey: null == captchaKey
-          ? _value._captchaKey
-          : captchaKey // ignore: cast_nullable_to_non_nullable
+      captcha_key: null == captcha_key
+          ? _value._captcha_key
+          : captcha_key // ignore: cast_nullable_to_non_nullable
               as List<dynamic>,
-      captchaSitekey: null == captchaSitekey
-          ? _value.captchaSitekey
-          : captchaSitekey // ignore: cast_nullable_to_non_nullable
+      captcha_sitekey: null == captcha_sitekey
+          ? _value.captcha_sitekey
+          : captcha_sitekey // ignore: cast_nullable_to_non_nullable
               as String,
-      captchaService: null == captchaService
-          ? _value.captchaService
-          : captchaService // ignore: cast_nullable_to_non_nullable
+      captcha_service: null == captcha_service
+          ? _value.captcha_service
+          : captcha_service // ignore: cast_nullable_to_non_nullable
               as String,
     ));
   }
@@ -403,30 +407,30 @@ class __$$CaptchaResponseImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$CaptchaResponseImpl implements _CaptchaResponse {
   _$CaptchaResponseImpl(
-      {required final List<dynamic> captchaKey,
-      required this.captchaSitekey,
-      required this.captchaService})
-      : _captchaKey = captchaKey;
+      {required final List<dynamic> captcha_key,
+      required this.captcha_sitekey,
+      required this.captcha_service})
+      : _captcha_key = captcha_key;
 
   factory _$CaptchaResponseImpl.fromJson(Map<String, dynamic> json) =>
       _$$CaptchaResponseImplFromJson(json);
 
-  final List<dynamic> _captchaKey;
+  final List<dynamic> _captcha_key;
   @override
-  List<dynamic> get captchaKey {
-    if (_captchaKey is EqualUnmodifiableListView) return _captchaKey;
+  List<dynamic> get captcha_key {
+    if (_captcha_key is EqualUnmodifiableListView) return _captcha_key;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_captchaKey);
+    return EqualUnmodifiableListView(_captcha_key);
   }
 
   @override
-  final String captchaSitekey;
+  final String captcha_sitekey;
   @override
-  final String captchaService;
+  final String captcha_service;
 
   @override
   String toString() {
-    return 'CaptchaResponse(captchaKey: $captchaKey, captchaSitekey: $captchaSitekey, captchaService: $captchaService)';
+    return 'CaptchaResponse(captcha_key: $captcha_key, captcha_sitekey: $captcha_sitekey, captcha_service: $captcha_service)';
   }
 
   @override
@@ -435,20 +439,20 @@ class _$CaptchaResponseImpl implements _CaptchaResponse {
         (other.runtimeType == runtimeType &&
             other is _$CaptchaResponseImpl &&
             const DeepCollectionEquality()
-                .equals(other._captchaKey, _captchaKey) &&
-            (identical(other.captchaSitekey, captchaSitekey) ||
-                other.captchaSitekey == captchaSitekey) &&
-            (identical(other.captchaService, captchaService) ||
-                other.captchaService == captchaService));
+                .equals(other._captcha_key, _captcha_key) &&
+            (identical(other.captcha_sitekey, captcha_sitekey) ||
+                other.captcha_sitekey == captcha_sitekey) &&
+            (identical(other.captcha_service, captcha_service) ||
+                other.captcha_service == captcha_service));
   }
 
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      const DeepCollectionEquality().hash(_captchaKey),
-      captchaSitekey,
-      captchaService);
+      const DeepCollectionEquality().hash(_captcha_key),
+      captcha_sitekey,
+      captcha_service);
 
   @JsonKey(ignore: true)
   @override
@@ -467,19 +471,19 @@ class _$CaptchaResponseImpl implements _CaptchaResponse {
 
 abstract class _CaptchaResponse implements CaptchaResponse {
   factory _CaptchaResponse(
-      {required final List<dynamic> captchaKey,
-      required final String captchaSitekey,
-      required final String captchaService}) = _$CaptchaResponseImpl;
+      {required final List<dynamic> captcha_key,
+      required final String captcha_sitekey,
+      required final String captcha_service}) = _$CaptchaResponseImpl;
 
   factory _CaptchaResponse.fromJson(Map<String, dynamic> json) =
       _$CaptchaResponseImpl.fromJson;
 
   @override
-  List<dynamic> get captchaKey;
+  List<dynamic> get captcha_key;
   @override
-  String get captchaSitekey;
+  String get captcha_sitekey;
   @override
-  String get captchaService;
+  String get captcha_service;
   @override
   @JsonKey(ignore: true)
   _$$CaptchaResponseImplCopyWith<_$CaptchaResponseImpl> get copyWith =>

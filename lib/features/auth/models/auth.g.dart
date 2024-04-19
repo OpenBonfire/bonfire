@@ -33,15 +33,15 @@ Map<String, dynamic> _$$AuthSuccessImplToJson(_$AuthSuccessImpl instance) =>
 _$CaptchaResponseImpl _$$CaptchaResponseImplFromJson(
         Map<String, dynamic> json) =>
     _$CaptchaResponseImpl(
-      captchaKey: json['captchaKey'] as List<dynamic>,
-      captchaSitekey: json['captchaSitekey'] as String,
-      captchaService: json['captchaService'] as String,
+      captcha_key: json['captcha_key'] as List<dynamic>,
+      captcha_sitekey: json['captcha_sitekey'] as String,
+      captcha_service: json['captcha_service'] as String,
     );
 
 Map<String, dynamic> _$$CaptchaResponseImplToJson(
         _$CaptchaResponseImpl instance) =>
     <String, dynamic>{
-      'captchaKey': instance.captchaKey,
-      'captchaSitekey': instance.captchaSitekey,
-      'captchaService': instance.captchaService,
+      'captcha_key': instance.captcha_key,
+      'captcha_sitekey': instance.captcha_sitekey,
+      'captcha_service': instance.captcha_service,
     };
