@@ -96,17 +96,6 @@ class _LoginState extends ConsumerState<CredentialsScreen> {
     var topPadding = MediaQuery.of(context).viewPadding.top;
     var bottomPadding = MediaQuery.of(context).viewPadding.bottom;
 
-    var auth = ref.watch(authProvider);
-    if (auth is MFARequired) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        context.go('/mfa');
-      });
-    } else if (auth is AuthSuccess) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        context.go('/home');
-      });
-    }
-
     return Scaffold(
         body: Stack(
       children: [

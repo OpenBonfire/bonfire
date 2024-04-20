@@ -637,23 +637,15 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.0"
-  nyxx:
+  nyxx_self:
     dependency: "direct main"
     description:
       path: "."
       ref: dev
-      resolved-ref: fe402fa4b2ebb2ae4c76bbb2b6d7e436589ce6a9
-      url: "https://github.com/Bonfire-Development/firebridge"
+      resolved-ref: "0719df21b023f6649362532bd8cec85f9d91a6d1"
+      url: "https://github.com/V3ntus/nyxx-self"
     source: git
     version: "6.2.1"
-  oauth2:
-    dependency: transitive
-    description:
-      name: oauth2
-      sha256: c4013ef62be37744efdc0861878fd9e9285f34db1f9e331cc34100d7674feb42
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.0.2"
   octo_image:
     dependency: transitive
     description:

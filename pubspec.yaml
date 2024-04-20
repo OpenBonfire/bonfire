@@ -11,9 +11,9 @@ dependencies:
   flutter:
     sdk: flutter
 
-  nyxx:
+  nyxx_self:
     git:
-      url: https://github.com/Bonfire-Development/firebridge
+      url: https://github.com/V3ntus/nyxx-self
       ref: dev
 
   google_fonts: ^6.2.1

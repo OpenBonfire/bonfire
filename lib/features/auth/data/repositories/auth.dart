@@ -4,8 +4,9 @@ import 'package:bonfire/features/auth/data/headers.dart';
 import 'package:bonfire/features/auth/data/repositories/discord_auth.dart';
 import 'package:bonfire/features/auth/models/auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
-import 'package:nyxx/nyxx.dart';
+import 'package:nyxx_self/nyxx.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'auth.g.dart';
@@ -20,8 +21,7 @@ class Auth extends _$Auth {
     return authResponse;
   }
 
-  Future<AuthResponse> loginWithCredentials(
-      String username, String password) async {
+  loginWithCredentials(String username, String password) async {
     Map<String, Object?> body = {
       'gift_code_sku_id': null,
       'login': username,
@@ -42,34 +42,40 @@ class Auth extends _$Auth {
     if (json.containsKey('user_id')) {
       if (json.containsKey("ticket")) {
         authResponse = MFARequired.fromJson(json);
+        state = authResponse;
       } else {
+        print("GETTING AUTH FROM TOKEN!");
         final authObj = AuthSuccess.fromJson(json);
-        NyxxGateway client =
-            await Nyxx.connectGateway(authObj.token, GatewayIntents.all);
-
-        authResponse = AuthUser(token: json['token'], client: client);
+        return await loginWithToken(authObj.token);
       }
     } else if (json.containsKey('captcha_key') &&
         json.containsKey('captcha_sitekey') &&
         json.containsKey('captcha_service')) {
       authResponse = CaptchaResponse.fromJson(json);
+      state = authResponse;
     } else {
       throw Exception('Unknown response');
     }
-    authResponse = authResponse;
-    state = authResponse;
-    return authResponse;
   }
 
-  Future<bool> loginWithToken(String token) async {
-    return true;
+  loginWithToken(String token) async {
+    print("Logging in with token...");
+    var newClient =
+        await Nyxx.connectGateway(token, GatewayIntents.allUnprivileged);
+    client = newClient;
+    print(client);
+    client!.onReady.listen((event) {
+      GetStorage().write('token', token);
+      authResponse = AuthUser(token: token, client: client!);
+      state = authResponse!;
+    });
   }
 
   Future<bool> submitCaptcha(String captchaKey, String captchaToken) async {
     return true;
   }
 
-  Future<AuthResponse> submitMfa(String mfaToken) async {
+  submitMfa(String mfaToken) async {
     var body = {
       'code': int.parse(mfaToken),
       'gift_code_sku_id': null,
@@ -84,8 +90,8 @@ class Auth extends _$Auth {
     );
 
     if (response.statusCode == 200) {
-      state = AuthSuccess.fromJson(jsonDecode(response.body));
-      return AuthSuccess.fromJson(jsonDecode(response.body));
+      var resp = AuthSuccess.fromJson(jsonDecode(response.body));
+      loginWithToken(resp.token);
     } else if (response.statusCode == 400) {
       return MFAInvalidError(error: "Invalid two-factor code");
     } else {

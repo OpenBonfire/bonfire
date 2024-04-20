@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:bonfire/features/auth/data/repositories/auth.dart';
 import 'package:bonfire/router/controller.dart';
 import 'package:bonfire/theme/theme.dart';
 import 'package:flutter/material.dart';

@@ -78,3 +78,5 @@ class MFAInvalidError extends AuthResponse {
   String error;
   MFAInvalidError({required this.error});
 }
+
+class NoAuth extends AuthResponse {}

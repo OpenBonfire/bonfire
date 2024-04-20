@@ -1,7 +1,6 @@
 import 'package:bonfire/features/auth/views/login.dart';
 import 'package:bonfire/features/auth/views/mfa.dart';
 import 'package:bonfire/features/overview/views/home.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
 
 final routerController = GoRouter(
