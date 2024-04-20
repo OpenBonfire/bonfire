@@ -10,11 +10,10 @@ abstract class AuthResponse {}
 @freezed
 class AuthSuccess extends AuthResponse with _$AuthSuccess {
   factory AuthSuccess({
-    required String userId,
+    required String user_id,
     required bool mfa,
+    required String token,
     bool? sms,
-    String? ticket,
-    String? token,
     bool? backup,
     bool? totp,
     dynamic webauthn,
@@ -22,6 +21,22 @@ class AuthSuccess extends AuthResponse with _$AuthSuccess {
 
   factory AuthSuccess.fromJson(Map<String, dynamic> json) =>
       _$AuthSuccessFromJson(json);
+}
+
+@freezed
+class MFARequired extends AuthResponse with _$MFARequired {
+  factory MFARequired({
+    required String user_id,
+    required bool mfa,
+    required String ticket,
+    bool? sms,
+    bool? backup,
+    bool? totp,
+    dynamic webauthn,
+  }) = _MFARequired;
+
+  factory MFARequired.fromJson(Map<String, dynamic> json) =>
+      _$MFARequiredFromJson(json);
 }
 
 @freezed

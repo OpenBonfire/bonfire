@@ -39,12 +39,16 @@ class Auth extends _$Auth {
     final json = jsonDecode(response.body) as Map<String, dynamic>;
     AuthResponse authResponse;
 
-    if (json.containsKey('user_id') && json.containsKey('mfa')) {
-      var success = AuthSuccess.fromJson(json);
-      NyxxGateway client =
-          await Nyxx.connectGateway(success.token!, GatewayIntents.all);
+    if (json.containsKey('user_id')) {
+      if (json.containsKey("ticket")) {
+        authResponse = MFARequired.fromJson(json);
+      } else {
+        final authObj = AuthSuccess.fromJson(json);
+        NyxxGateway client =
+            await Nyxx.connectGateway(authObj.token, GatewayIntents.all);
 
-      authResponse = AuthUser(token: json['token'], client: client);
+        authResponse = AuthUser(token: json['token'], client: client);
+      }
     } else if (json.containsKey('captcha_key') &&
         json.containsKey('captcha_sitekey') &&
         json.containsKey('captcha_service')) {

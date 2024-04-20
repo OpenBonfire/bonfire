@@ -20,11 +20,10 @@ AuthSuccess _$AuthSuccessFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$AuthSuccess {
-  String get userId => throw _privateConstructorUsedError;
+  String get user_id => throw _privateConstructorUsedError;
   bool get mfa => throw _privateConstructorUsedError;
+  String get token => throw _privateConstructorUsedError;
   bool? get sms => throw _privateConstructorUsedError;
-  String? get ticket => throw _privateConstructorUsedError;
-  String? get token => throw _privateConstructorUsedError;
   bool? get backup => throw _privateConstructorUsedError;
   bool? get totp => throw _privateConstructorUsedError;
   dynamic get webauthn => throw _privateConstructorUsedError;
@@ -42,11 +41,10 @@ abstract class $AuthSuccessCopyWith<$Res> {
       _$AuthSuccessCopyWithImpl<$Res, AuthSuccess>;
   @useResult
   $Res call(
-      {String userId,
+      {String user_id,
       bool mfa,
+      String token,
       bool? sms,
-      String? ticket,
-      String? token,
       bool? backup,
       bool? totp,
       dynamic webauthn});
@@ -65,36 +63,31 @@ class _$AuthSuccessCopyWithImpl<$Res, $Val extends AuthSuccess>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? userId = null,
+    Object? user_id = null,
     Object? mfa = null,
+    Object? token = null,
     Object? sms = freezed,
-    Object? ticket = freezed,
-    Object? token = freezed,
     Object? backup = freezed,
     Object? totp = freezed,
     Object? webauthn = freezed,
   }) {
     return _then(_value.copyWith(
-      userId: null == userId
-          ? _value.userId
-          : userId // ignore: cast_nullable_to_non_nullable
+      user_id: null == user_id
+          ? _value.user_id
+          : user_id // ignore: cast_nullable_to_non_nullable
               as String,
       mfa: null == mfa
           ? _value.mfa
           : mfa // ignore: cast_nullable_to_non_nullable
               as bool,
+      token: null == token
+          ? _value.token
+          : token // ignore: cast_nullable_to_non_nullable
+              as String,
       sms: freezed == sms
           ? _value.sms
           : sms // ignore: cast_nullable_to_non_nullable
               as bool?,
-      ticket: freezed == ticket
-          ? _value.ticket
-          : ticket // ignore: cast_nullable_to_non_nullable
-              as String?,
-      token: freezed == token
-          ? _value.token
-          : token // ignore: cast_nullable_to_non_nullable
-              as String?,
       backup: freezed == backup
           ? _value.backup
           : backup // ignore: cast_nullable_to_non_nullable
@@ -120,11 +113,10 @@ abstract class _$$AuthSuccessImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String userId,
+      {String user_id,
       bool mfa,
+      String token,
       bool? sms,
-      String? ticket,
-      String? token,
       bool? backup,
       bool? totp,
       dynamic webauthn});
@@ -141,36 +133,31 @@ class __$$AuthSuccessImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? userId = null,
+    Object? user_id = null,
     Object? mfa = null,
+    Object? token = null,
     Object? sms = freezed,
-    Object? ticket = freezed,
-    Object? token = freezed,
     Object? backup = freezed,
     Object? totp = freezed,
     Object? webauthn = freezed,
   }) {
     return _then(_$AuthSuccessImpl(
-      userId: null == userId
-          ? _value.userId
-          : userId // ignore: cast_nullable_to_non_nullable
+      user_id: null == user_id
+          ? _value.user_id
+          : user_id // ignore: cast_nullable_to_non_nullable
               as String,
       mfa: null == mfa
           ? _value.mfa
           : mfa // ignore: cast_nullable_to_non_nullable
               as bool,
+      token: null == token
+          ? _value.token
+          : token // ignore: cast_nullable_to_non_nullable
+              as String,
       sms: freezed == sms
           ? _value.sms
           : sms // ignore: cast_nullable_to_non_nullable
               as bool?,
-      ticket: freezed == ticket
-          ? _value.ticket
-          : ticket // ignore: cast_nullable_to_non_nullable
-              as String?,
-      token: freezed == token
-          ? _value.token
-          : token // ignore: cast_nullable_to_non_nullable
-              as String?,
       backup: freezed == backup
           ? _value.backup
           : backup // ignore: cast_nullable_to_non_nullable
@@ -191,11 +178,10 @@ class __$$AuthSuccessImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$AuthSuccessImpl implements _AuthSuccess {
   _$AuthSuccessImpl(
-      {required this.userId,
+      {required this.user_id,
       required this.mfa,
+      required this.token,
       this.sms,
-      this.ticket,
-      this.token,
       this.backup,
       this.totp,
       this.webauthn});
@@ -204,15 +190,13 @@ class _$AuthSuccessImpl implements _AuthSuccess {
       _$$AuthSuccessImplFromJson(json);
 
   @override
-  final String userId;
+  final String user_id;
   @override
   final bool mfa;
   @override
+  final String token;
+  @override
   final bool? sms;
-  @override
-  final String? ticket;
-  @override
-  final String? token;
   @override
   final bool? backup;
   @override
@@ -222,7 +206,7 @@ class _$AuthSuccessImpl implements _AuthSuccess {
 
   @override
   String toString() {
-    return 'AuthSuccess(userId: $userId, mfa: $mfa, sms: $sms, ticket: $ticket, token: $token, backup: $backup, totp: $totp, webauthn: $webauthn)';
+    return 'AuthSuccess(user_id: $user_id, mfa: $mfa, token: $token, sms: $sms, backup: $backup, totp: $totp, webauthn: $webauthn)';
   }
 
   @override
@@ -230,11 +214,10 @@ class _$AuthSuccessImpl implements _AuthSuccess {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$AuthSuccessImpl &&
-            (identical(other.userId, userId) || other.userId == userId) &&
+            (identical(other.user_id, user_id) || other.user_id == user_id) &&
             (identical(other.mfa, mfa) || other.mfa == mfa) &&
-            (identical(other.sms, sms) || other.sms == sms) &&
-            (identical(other.ticket, ticket) || other.ticket == ticket) &&
             (identical(other.token, token) || other.token == token) &&
+            (identical(other.sms, sms) || other.sms == sms) &&
             (identical(other.backup, backup) || other.backup == backup) &&
             (identical(other.totp, totp) || other.totp == totp) &&
             const DeepCollectionEquality().equals(other.webauthn, webauthn));
@@ -242,8 +225,8 @@ class _$AuthSuccessImpl implements _AuthSuccess {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, userId, mfa, sms, ticket, token,
-      backup, totp, const DeepCollectionEquality().hash(webauthn));
+  int get hashCode => Object.hash(runtimeType, user_id, mfa, token, sms, backup,
+      totp, const DeepCollectionEquality().hash(webauthn));
 
   @JsonKey(ignore: true)
   @override
@@ -261,11 +244,10 @@ class _$AuthSuccessImpl implements _AuthSuccess {
 
 abstract class _AuthSuccess implements AuthSuccess {
   factory _AuthSuccess(
-      {required final String userId,
+      {required final String user_id,
       required final bool mfa,
+      required final String token,
       final bool? sms,
-      final String? ticket,
-      final String? token,
       final bool? backup,
       final bool? totp,
       final dynamic webauthn}) = _$AuthSuccessImpl;
@@ -274,15 +256,13 @@ abstract class _AuthSuccess implements AuthSuccess {
       _$AuthSuccessImpl.fromJson;
 
   @override
-  String get userId;
+  String get user_id;
   @override
   bool get mfa;
   @override
+  String get token;
+  @override
   bool? get sms;
-  @override
-  String? get ticket;
-  @override
-  String? get token;
   @override
   bool? get backup;
   @override
@@ -292,6 +272,267 @@ abstract class _AuthSuccess implements AuthSuccess {
   @override
   @JsonKey(ignore: true)
   _$$AuthSuccessImplCopyWith<_$AuthSuccessImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+MFARequired _$MFARequiredFromJson(Map<String, dynamic> json) {
+  return _MFARequired.fromJson(json);
+}
+
+/// @nodoc
+mixin _$MFARequired {
+  String get user_id => throw _privateConstructorUsedError;
+  bool get mfa => throw _privateConstructorUsedError;
+  String get ticket => throw _privateConstructorUsedError;
+  bool? get sms => throw _privateConstructorUsedError;
+  bool? get backup => throw _privateConstructorUsedError;
+  bool? get totp => throw _privateConstructorUsedError;
+  dynamic get webauthn => throw _privateConstructorUsedError;
+
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  $MFARequiredCopyWith<MFARequired> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $MFARequiredCopyWith<$Res> {
+  factory $MFARequiredCopyWith(
+          MFARequired value, $Res Function(MFARequired) then) =
+      _$MFARequiredCopyWithImpl<$Res, MFARequired>;
+  @useResult
+  $Res call(
+      {String user_id,
+      bool mfa,
+      String ticket,
+      bool? sms,
+      bool? backup,
+      bool? totp,
+      dynamic webauthn});
+}
+
+/// @nodoc
+class _$MFARequiredCopyWithImpl<$Res, $Val extends MFARequired>
+    implements $MFARequiredCopyWith<$Res> {
+  _$MFARequiredCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? user_id = null,
+    Object? mfa = null,
+    Object? ticket = null,
+    Object? sms = freezed,
+    Object? backup = freezed,
+    Object? totp = freezed,
+    Object? webauthn = freezed,
+  }) {
+    return _then(_value.copyWith(
+      user_id: null == user_id
+          ? _value.user_id
+          : user_id // ignore: cast_nullable_to_non_nullable
+              as String,
+      mfa: null == mfa
+          ? _value.mfa
+          : mfa // ignore: cast_nullable_to_non_nullable
+              as bool,
+      ticket: null == ticket
+          ? _value.ticket
+          : ticket // ignore: cast_nullable_to_non_nullable
+              as String,
+      sms: freezed == sms
+          ? _value.sms
+          : sms // ignore: cast_nullable_to_non_nullable
+              as bool?,
+      backup: freezed == backup
+          ? _value.backup
+          : backup // ignore: cast_nullable_to_non_nullable
+              as bool?,
+      totp: freezed == totp
+          ? _value.totp
+          : totp // ignore: cast_nullable_to_non_nullable
+              as bool?,
+      webauthn: freezed == webauthn
+          ? _value.webauthn
+          : webauthn // ignore: cast_nullable_to_non_nullable
+              as dynamic,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$MFARequiredImplCopyWith<$Res>
+    implements $MFARequiredCopyWith<$Res> {
+  factory _$$MFARequiredImplCopyWith(
+          _$MFARequiredImpl value, $Res Function(_$MFARequiredImpl) then) =
+      __$$MFARequiredImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {String user_id,
+      bool mfa,
+      String ticket,
+      bool? sms,
+      bool? backup,
+      bool? totp,
+      dynamic webauthn});
+}
+
+/// @nodoc
+class __$$MFARequiredImplCopyWithImpl<$Res>
+    extends _$MFARequiredCopyWithImpl<$Res, _$MFARequiredImpl>
+    implements _$$MFARequiredImplCopyWith<$Res> {
+  __$$MFARequiredImplCopyWithImpl(
+      _$MFARequiredImpl _value, $Res Function(_$MFARequiredImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? user_id = null,
+    Object? mfa = null,
+    Object? ticket = null,
+    Object? sms = freezed,
+    Object? backup = freezed,
+    Object? totp = freezed,
+    Object? webauthn = freezed,
+  }) {
+    return _then(_$MFARequiredImpl(
+      user_id: null == user_id
+          ? _value.user_id
+          : user_id // ignore: cast_nullable_to_non_nullable
+              as String,
+      mfa: null == mfa
+          ? _value.mfa
+          : mfa // ignore: cast_nullable_to_non_nullable
+              as bool,
+      ticket: null == ticket
+          ? _value.ticket
+          : ticket // ignore: cast_nullable_to_non_nullable
+              as String,
+      sms: freezed == sms
+          ? _value.sms
+          : sms // ignore: cast_nullable_to_non_nullable
+              as bool?,
+      backup: freezed == backup
+          ? _value.backup
+          : backup // ignore: cast_nullable_to_non_nullable
+              as bool?,
+      totp: freezed == totp
+          ? _value.totp
+          : totp // ignore: cast_nullable_to_non_nullable
+              as bool?,
+      webauthn: freezed == webauthn
+          ? _value.webauthn
+          : webauthn // ignore: cast_nullable_to_non_nullable
+              as dynamic,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$MFARequiredImpl implements _MFARequired {
+  _$MFARequiredImpl(
+      {required this.user_id,
+      required this.mfa,
+      required this.ticket,
+      this.sms,
+      this.backup,
+      this.totp,
+      this.webauthn});
+
+  factory _$MFARequiredImpl.fromJson(Map<String, dynamic> json) =>
+      _$$MFARequiredImplFromJson(json);
+
+  @override
+  final String user_id;
+  @override
+  final bool mfa;
+  @override
+  final String ticket;
+  @override
+  final bool? sms;
+  @override
+  final bool? backup;
+  @override
+  final bool? totp;
+  @override
+  final dynamic webauthn;
+
+  @override
+  String toString() {
+    return 'MFARequired(user_id: $user_id, mfa: $mfa, ticket: $ticket, sms: $sms, backup: $backup, totp: $totp, webauthn: $webauthn)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$MFARequiredImpl &&
+            (identical(other.user_id, user_id) || other.user_id == user_id) &&
+            (identical(other.mfa, mfa) || other.mfa == mfa) &&
+            (identical(other.ticket, ticket) || other.ticket == ticket) &&
+            (identical(other.sms, sms) || other.sms == sms) &&
+            (identical(other.backup, backup) || other.backup == backup) &&
+            (identical(other.totp, totp) || other.totp == totp) &&
+            const DeepCollectionEquality().equals(other.webauthn, webauthn));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode => Object.hash(runtimeType, user_id, mfa, ticket, sms,
+      backup, totp, const DeepCollectionEquality().hash(webauthn));
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$MFARequiredImplCopyWith<_$MFARequiredImpl> get copyWith =>
+      __$$MFARequiredImplCopyWithImpl<_$MFARequiredImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$MFARequiredImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _MFARequired implements MFARequired {
+  factory _MFARequired(
+      {required final String user_id,
+      required final bool mfa,
+      required final String ticket,
+      final bool? sms,
+      final bool? backup,
+      final bool? totp,
+      final dynamic webauthn}) = _$MFARequiredImpl;
+
+  factory _MFARequired.fromJson(Map<String, dynamic> json) =
+      _$MFARequiredImpl.fromJson;
+
+  @override
+  String get user_id;
+  @override
+  bool get mfa;
+  @override
+  String get ticket;
+  @override
+  bool? get sms;
+  @override
+  bool? get backup;
+  @override
+  bool? get totp;
+  @override
+  dynamic get webauthn;
+  @override
+  @JsonKey(ignore: true)
+  _$$MFARequiredImplCopyWith<_$MFARequiredImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 

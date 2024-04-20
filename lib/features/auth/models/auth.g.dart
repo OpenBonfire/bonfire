@@ -8,11 +8,10 @@ part of 'auth.dart';
 
 _$AuthSuccessImpl _$$AuthSuccessImplFromJson(Map<String, dynamic> json) =>
     _$AuthSuccessImpl(
-      userId: json['userId'] as String,
+      user_id: json['user_id'] as String,
       mfa: json['mfa'] as bool,
+      token: json['token'] as String,
       sms: json['sms'] as bool?,
-      ticket: json['ticket'] as String?,
-      token: json['token'] as String?,
       backup: json['backup'] as bool?,
       totp: json['totp'] as bool?,
       webauthn: json['webauthn'],
@@ -20,11 +19,32 @@ _$AuthSuccessImpl _$$AuthSuccessImplFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$$AuthSuccessImplToJson(_$AuthSuccessImpl instance) =>
     <String, dynamic>{
-      'userId': instance.userId,
+      'user_id': instance.user_id,
       'mfa': instance.mfa,
-      'sms': instance.sms,
-      'ticket': instance.ticket,
       'token': instance.token,
+      'sms': instance.sms,
+      'backup': instance.backup,
+      'totp': instance.totp,
+      'webauthn': instance.webauthn,
+    };
+
+_$MFARequiredImpl _$$MFARequiredImplFromJson(Map<String, dynamic> json) =>
+    _$MFARequiredImpl(
+      user_id: json['user_id'] as String,
+      mfa: json['mfa'] as bool,
+      ticket: json['ticket'] as String,
+      sms: json['sms'] as bool?,
+      backup: json['backup'] as bool?,
+      totp: json['totp'] as bool?,
+      webauthn: json['webauthn'],
+    );
+
+Map<String, dynamic> _$$MFARequiredImplToJson(_$MFARequiredImpl instance) =>
+    <String, dynamic>{
+      'user_id': instance.user_id,
+      'mfa': instance.mfa,
+      'ticket': instance.ticket,
+      'sms': instance.sms,
       'backup': instance.backup,
       'totp': instance.totp,
       'webauthn': instance.webauthn,

@@ -1,32 +1,51 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+
+String? _family = GoogleFonts.publicSans().fontFamily;
 
 class CustomTextTheme {
-  final titleLarge = const TextStyle(
-    fontSize: 20,
-  );
-  final titleMedium = const TextStyle(
-    fontSize: 18,
-  );
-  final labelLarge = const TextStyle(
-    fontSize: 14,
+  final titleLarge = TextStyle(
+    fontSize: 36,
+    fontFamily: _family,
     fontWeight: FontWeight.w600,
   );
-  final subtitle1 = const TextStyle(
-    fontSize: 15,
+  final titleMedium = TextStyle(
+    fontSize: 24,
+    fontFamily: _family,
+    fontWeight: FontWeight.w600,
   );
-  final subtitle2 = const TextStyle(
+  final titleSmall = TextStyle(
+    fontSize: 18,
+    fontFamily: _family,
+    fontWeight: FontWeight.w600,
+  );
+  final labelLarge = TextStyle(
+    fontSize: 18,
+    fontWeight: FontWeight.w600,
+    fontFamily: _family,
+  );
+  final subtitle1 = TextStyle(
+    fontSize: 15,
+    fontFamily: _family,
+  );
+  final subtitle2 = TextStyle(
     fontSize: 14,
+    fontFamily: _family,
   );
-  final bodyText1 = const TextStyle(
+  final bodyText1 = TextStyle(
     fontSize: 16,
+    fontFamily: _family,
   );
-  final bodyText2 = const TextStyle(
+  final bodyText2 = TextStyle(
     fontSize: 15,
+    fontFamily: _family,
   );
-  final caption = const TextStyle(
+  final caption = TextStyle(
     fontSize: 12,
+    fontFamily: _family,
   );
-  final bold = const TextStyle(
+  final bold = TextStyle(
     fontWeight: FontWeight.w500,
+    fontFamily: _family,
   );
 }
