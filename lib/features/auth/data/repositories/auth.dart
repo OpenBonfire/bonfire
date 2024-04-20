@@ -20,7 +20,8 @@ class Auth extends _$Auth {
     return authResponse;
   }
 
-  loginWithCredentials(String username, String password) async {
+  Future<AuthResponse> loginWithCredentials(
+      String username, String password) async {
     Map<String, Object?> body = {
       'gift_code_sku_id': null,
       'login': username,
@@ -43,7 +44,6 @@ class Auth extends _$Auth {
         authResponse = MFARequired.fromJson(json);
         state = authResponse;
       } else {
-        print("GETTING AUTH FROM TOKEN!");
         final authObj = AuthSuccess.fromJson(json);
         return await loginWithToken(authObj.token);
       }
@@ -55,20 +55,26 @@ class Auth extends _$Auth {
     } else {
       throw Exception('Unknown response');
     }
+
+    return authResponse;
   }
 
+  /// Authenticate client with Discord [token]
   Future<AuthResponse> loginWithToken(String token) async {
-    print("Logging in with token...");
-    var newClient =
-        await Nyxx.connectGateway(token, GatewayIntents.allUnprivileged);
+    var newClient = await Nyxx.connectGateway(token, GatewayIntents.all);
     client = newClient;
-    print("WRITING!");
+
+    // This is how we save login information
     GetStorage().write('token', token);
+
+    // Save and notify state
     authResponse = AuthUser(token: token, client: client!);
     state = authResponse!;
+
     client!.onReady.listen((event) {
       print("Bot Ready!");
     });
+
     return authResponse!;
   }
 
@@ -102,5 +108,9 @@ class Auth extends _$Auth {
 
   Future<bool> submitPhoneAuth(String phoneToken) async {
     return true;
+  }
+
+  AuthResponse? getAuth() {
+    return authResponse;
   }
 }

@@ -1,16 +1,28 @@
+import 'package:bonfire/features/overview/widgets/icon.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class Sidebar extends StatefulWidget {
+class Sidebar extends ConsumerStatefulWidget {
   const Sidebar({super.key});
 
   @override
-  State<Sidebar> createState() => _SidebarState();
+  ConsumerState<Sidebar> createState() => _SidebarState();
 }
 
-class _SidebarState extends State<Sidebar> {
+class _SidebarState extends ConsumerState<Sidebar> {
   @override
   Widget build(BuildContext context) {
-    return const SizedBox(
-        width: 60, height: double.infinity, child: Placeholder());
+    return SizedBox(
+        width: 60,
+        height: double.infinity,
+        child: Center(
+          child: SizedBox(
+            width: 50,
+            child: ListView(
+              children: const [ServerIcon()],
+            ),
+          ),
+        ));
   }
 }

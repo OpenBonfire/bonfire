@@ -1,3 +1,4 @@
+import 'package:bonfire/features/guild/repositories/guilds.dart';
 import 'package:bonfire/features/overview/views/channel_list.dart';
 import 'package:bonfire/features/overview/views/overlapping_panels.dart';
 import 'package:bonfire/features/overview/views/sidebar.dart';
@@ -15,6 +16,7 @@ class HomeScreen extends ConsumerStatefulWidget {
 class _HomeState extends ConsumerState<HomeScreen> {
   @override
   Widget build(BuildContext context) {
+    var guilds = ref.watch(guildsProvider);
     return Scaffold(
         body: OverlappingPanels(
             left: SizedBox(
