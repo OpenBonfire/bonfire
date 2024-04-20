@@ -1,12 +1,9 @@
 import 'package:bonfire/features/auth/controllers/text.dart';
 import 'package:bonfire/features/auth/data/repositories/auth.dart';
 import 'package:bonfire/features/auth/models/auth.dart';
-import 'package:bonfire/features/auth/views/mfa.dart';
 import 'package:bonfire/shared/widgets/confirm_button.dart';
 import 'package:bonfire/theme/text_theme.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -104,6 +101,10 @@ class _LoginState extends ConsumerState<CredentialsScreen> {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         context.go('/mfa');
       });
+    } else if (auth is AuthSuccess) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        context.go('/home');
+      });
     }
 
     return Scaffold(
@@ -152,8 +153,8 @@ class _LoginState extends ConsumerState<CredentialsScreen> {
               ),
               ConfirmButton(
                   text: "Confirm",
-                  onPressed: () async {
-                    print(await submitCredentials());
+                  onPressed: () {
+                    submitCredentials();
                   })
             ],
           ),

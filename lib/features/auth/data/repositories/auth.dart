@@ -84,6 +84,7 @@ class Auth extends _$Auth {
     );
 
     if (response.statusCode == 200) {
+      state = AuthSuccess.fromJson(jsonDecode(response.body));
       return AuthSuccess.fromJson(jsonDecode(response.body));
     } else if (response.statusCode == 400) {
       return MFAInvalidError(error: "Invalid two-factor code");
