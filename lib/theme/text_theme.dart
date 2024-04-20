@@ -26,6 +26,7 @@ class CustomTextTheme {
   );
   final subtitle1 = TextStyle(
     fontSize: 15,
+    fontWeight: FontWeight.w600,
     fontFamily: _family,
   );
   final subtitle2 = TextStyle(

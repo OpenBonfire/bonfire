@@ -69,8 +69,29 @@ class Auth extends _$Auth {
     return true;
   }
 
-  Future<bool> submitMfa(String mfaToken) async {
-    return true;
+  Future<AuthSuccess> submitMfa(String mfaToken) async {
+    print("mfa token");
+    print(mfaToken);
+    var body = {
+      'code': int.parse(mfaToken),
+      'gift_code_sku_id': null,
+      'login_source': null,
+      'ticket': (state as MFARequired).ticket,
+    };
+
+    print("ticket: ");
+    print((state as MFARequired).ticket);
+
+    final response = await http.post(
+      Uri.https("discord.com", '/api/v9/auth/mfa/totp'),
+      headers: Headers().getHeaders(),
+      body: jsonEncode(body),
+    );
+
+    print("GOT RESPONSE!");
+    print(response.body);
+
+    return AuthSuccess.fromJson(jsonDecode(response.body));
   }
 
   Future<bool> submitPhoneAuth(String phoneToken) async {
