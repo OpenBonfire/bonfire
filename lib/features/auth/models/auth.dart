@@ -58,8 +58,6 @@ class CompletedAuth extends AuthResponse {
   CompletedAuth({required this.authUser});
 }
 
-class TestAuth extends AuthResponse {
-  final String test;
-
-  TestAuth({required this.test});
+class FailedAuth extends AuthResponse {
+  FailedAuth();
 }

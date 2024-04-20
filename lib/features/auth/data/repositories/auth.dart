@@ -13,10 +13,11 @@ part 'auth.g.dart';
 @riverpod
 class Auth extends _$Auth {
   NyxxGateway? client;
+  AuthResponse? authResponse;
 
   @override
-  Future<TestAuth> build() async {
-    return TestAuth(test: "asd");
+  Future<AuthResponse> build() async {
+    return authResponse!;
   }
 
   Future<AuthResponse> loginWithCredentials(
@@ -36,7 +37,7 @@ class Auth extends _$Auth {
     );
 
     final json = jsonDecode(response.body) as Map<String, dynamic>;
-    var authResponse;
+    AuthResponse authResponse;
 
     if (json.containsKey('user_id') && json.containsKey('mfa')) {
       var success = AuthSuccess.fromJson(json);
@@ -47,13 +48,11 @@ class Auth extends _$Auth {
     } else if (json.containsKey('captcha_key') &&
         json.containsKey('captcha_sitekey') &&
         json.containsKey('captcha_service')) {
-      print("got json: ");
-      print(json);
       authResponse = CaptchaResponse.fromJson(json);
     } else {
       throw Exception('Unknown response');
     }
-
+    authResponse = authResponse;
     return authResponse;
   }
 
@@ -61,15 +60,15 @@ class Auth extends _$Auth {
     return true;
   }
 
-  Future<bool> completeCaptcha(String captchaKey, String captchaToken) async {
+  Future<bool> submitCaptcha(String captchaKey, String captchaToken) async {
     return true;
   }
 
-  Future<bool> completeMfa(String mfaToken) async {
+  Future<bool> submitMfa(String mfaToken) async {
     return true;
   }
 
-  Future<bool> completePhoneAuth(String phoneToken) async {
+  Future<bool> submitPhoneAuth(String phoneToken) async {
     return true;
   }
 }

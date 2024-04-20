@@ -17,8 +17,6 @@ dependencies:
       ref: dev
 
   google_fonts: ^6.2.1
-  webview_flutter: ^4.7.0
-  flutter_webview_plugin: ^0.4.0
   flutter_riverpod: ^2.5.1
   riverpod_annotation: ^2.3.5
   get_storage: ^2.1.1
