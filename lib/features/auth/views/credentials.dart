@@ -1,4 +1,4 @@
-import 'package:bonfire/features/auth/controllers/text_controllers.dart';
+import 'package:bonfire/features/auth/controllers/text.dart';
 import 'package:bonfire/features/auth/data/repositories/auth.dart';
 import 'package:bonfire/features/auth/models/auth.dart';
 import 'package:bonfire/features/auth/views/mfa.dart';

@@ -9,17 +9,31 @@ final routerController = GoRouter(
     GoRoute(
       path: '/',
       builder: (context, state) => const LoginScreen(),
-      // routes: <RouteBase>[
-      //   GoRoute(
-      //     path: '/login',
-      //     builder: (context, state) => const LoginScreen(),
-      //   ),
-      //   GoRoute(
-      //     path: '/register',
-      //     builder: (context, state) => const LoginScreen(),
-      //   ),
-      //   GoRoute(path: '/mfa', builder: (context, state) => const MFAPage()),
-      // ],
+      routes: <RouteBase>[
+        GoRoute(
+          path: 'login',
+          builder: (context, state) => const LoginScreen(),
+        ),
+        GoRoute(
+          path: 'register',
+          builder: (context, state) => const LoginScreen(),
+        ),
+        GoRoute(
+            path: 'mfa',
+            pageBuilder: (context, state) {
+              return CustomTransitionPage(
+                  transitionsBuilder:
+                      (context, animation, secondaryAnimation, child) =>
+                          SlideTransition(
+                            position: Tween<Offset>(
+                              begin: const Offset(1.0, 0.0),
+                              end: Offset.zero,
+                            ).animate(animation),
+                            child: child,
+                          ),
+                  child: const MFAPage());
+            }),
+      ],
     ),
     GoRoute(
       path: '/home',
