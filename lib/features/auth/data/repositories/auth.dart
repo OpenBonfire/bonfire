@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:bonfire/features/auth/data/headers.dart';
 import 'package:bonfire/features/auth/data/repositories/discord_auth.dart';
 import 'package:bonfire/features/auth/models/auth.dart';
-import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:nyxx_self/nyxx.dart';
@@ -58,7 +57,7 @@ class Auth extends _$Auth {
     }
   }
 
-  loginWithToken(String token) async {
+  Future<AuthResponse> loginWithToken(String token) async {
     print("Logging in with token...");
     var newClient =
         await Nyxx.connectGateway(token, GatewayIntents.allUnprivileged);
@@ -70,13 +69,14 @@ class Auth extends _$Auth {
     client!.onReady.listen((event) {
       print("Bot Ready!");
     });
+    return authResponse!;
   }
 
   Future<bool> submitCaptcha(String captchaKey, String captchaToken) async {
     return true;
   }
 
-  submitMfa(String mfaToken) async {
+  Future<AuthResponse> submitMfa(String mfaToken) async {
     var body = {
       'code': int.parse(mfaToken),
       'gift_code_sku_id': null,
@@ -92,7 +92,7 @@ class Auth extends _$Auth {
 
     if (response.statusCode == 200) {
       var resp = AuthSuccess.fromJson(jsonDecode(response.body));
-      loginWithToken(resp.token);
+      return loginWithToken(resp.token);
     } else if (response.statusCode == 400) {
       return MFAInvalidError(error: "Invalid two-factor code");
     } else {

@@ -13,7 +13,7 @@ class AppColorsDark {
   static const redColor = Color(0xFFED4245);
   static const greenColor = Color(0xFF57F287);
   static const yellowColor = Color(0xFFFEE75C);
-  static const greyColor = Color(0xFF72767D);
+  static const greyColor1 = Color(0xFF1C1D22);
 }
 
 // todo: implement
@@ -23,7 +23,7 @@ class AppColorsLight {
   static const textColor2 = Color(0xFF9597A3);
   static const selectedIconColor = Color(0xFFE4E5E8);
   static const deselectedIconColor = Color(0xFF72767D);
-  static const greyColor = Color(0xFF72767D);
+  static const greyColor1 = Color(0xFF1C1D22);
 
   static const blurpleColor = Color(0xFF7289DA);
   static const redColor = Color(0xFFED4245);
@@ -42,7 +42,7 @@ class ColorTheme {
   final Color redColor;
   final Color greenColor;
   final Color yellowColor;
-  final Color greyColor;
+  final Color greyColor1;
 
   ColorTheme({
     required this.backgroundColor,
@@ -54,6 +54,6 @@ class ColorTheme {
     required this.redColor,
     required this.greenColor,
     required this.yellowColor,
-    required this.greyColor,
+    required this.greyColor1,
   });
 }

@@ -19,7 +19,7 @@ class CustomThemeData {
             redColor: AppColorsDark.redColor,
             greenColor: AppColorsDark.greenColor,
             yellowColor: AppColorsDark.yellowColor,
-            greyColor: AppColorsDark.greyColor,
+            greyColor1: AppColorsDark.greyColor1,
           )
         : ColorTheme(
             backgroundColor: AppColorsLight.backgroundColor,
@@ -31,7 +31,7 @@ class CustomThemeData {
             redColor: AppColorsLight.redColor,
             greenColor: AppColorsLight.greenColor,
             yellowColor: AppColorsLight.yellowColor,
-            greyColor: AppColorsLight.greyColor,
+            greyColor1: AppColorsLight.greyColor1,
           );
   }
 }
@@ -55,19 +55,6 @@ final _theme = ThemeData(
       fontSize: 16,
     ),
   ),
-  // appBarTheme: const AppBarTheme(
-  //   elevation: 0.0,
-  //   actionsIconTheme: IconThemeData(
-  //     color: AppColorsLight.iconColor,
-  //   ),
-  //   backgroundColor: AppColorsLight.appBarColor,
-  //   systemOverlayStyle: SystemUiOverlayStyle(
-  //     statusBarIconBrightness: Brightness.light,
-  //     statusBarColor: AppColorsLight.appBarColor,
-  //     systemNavigationBarColor: AppColorsLight.backgroundColor,
-  //     systemNavigationBarDividerColor: AppColorsLight.backgroundColor,
-  //   ),
-  // ),
   floatingActionButtonTheme: const FloatingActionButtonThemeData(
     backgroundColor: AppColorsLight.greenColor,
     foregroundColor: Colors.white,
@@ -80,16 +67,9 @@ final _theme = ThemeData(
     color: AppColorsLight.greenColor,
   ),
   dividerTheme: const DividerThemeData(
-    color: AppColorsLight.greyColor,
+    color: AppColorsLight.greyColor1,
     thickness: 0.1,
   ),
-  // tabBarTheme: const TabBarTheme(
-  //   indicatorColor: AppColorsLight.indicatorColor,
-  //   indicatorSize: TabBarIndicatorSize.tab,
-  //   labelColor: AppColorsLight.selectedLabelColor,
-  //   unselectedLabelColor: AppColorsLight.unselectedLabelColor,
-  //   dividerHeight: 0,
-  // ),
 );
 
 // Dark theme
@@ -109,19 +89,6 @@ final _darkTheme = ThemeData(
       fontSize: 16,
     ),
   ),
-  // appBarTheme: const AppBarTheme(
-  //   elevation: 0.0,
-  //   actionsIconTheme: IconThemeData(
-  //     color: AppColorsDark.iconColor,
-  //   ),
-  //   backgroundColor: AppColorsDark.appBarColor,
-  //   systemOverlayStyle: SystemUiOverlayStyle(
-  //     statusBarIconBrightness: Brightness.light,
-  //     statusBarColor: AppColorsDark.appBarColor,
-  //     systemNavigationBarColor: AppColorsDark.backgroundColor,
-  //     systemNavigationBarDividerColor: AppColorsDark.backgroundColor,
-  //   ),
-  // ),
   floatingActionButtonTheme: const FloatingActionButtonThemeData(
     backgroundColor: AppColorsDark.blurpleColor,
     foregroundColor: Colors.white,
@@ -134,16 +101,9 @@ final _darkTheme = ThemeData(
     color: AppColorsDark.greenColor,
   ),
   dividerTheme: const DividerThemeData(
-    color: AppColorsDark.greyColor,
+    color: AppColorsDark.greyColor1,
     thickness: 0.1,
   ),
-  // tabBarTheme: const TabBarTheme(
-  //   indicatorColor: AppColorsDark.indicatorColor,
-  //   indicatorSize: TabBarIndicatorSize.tab,
-  //   labelColor: AppColorsDark.selectedLabelColor,
-  //   unselectedLabelColor: AppColorsDark.unselectedLabelColor,
-  //   dividerHeight: 0,
-  // ),
 );
 
 extension CustomTheme on ThemeData {
