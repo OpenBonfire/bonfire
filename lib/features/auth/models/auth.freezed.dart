@@ -20,13 +20,8 @@ AuthSuccess _$AuthSuccessFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$AuthSuccess {
-  String get user_id => throw _privateConstructorUsedError;
-  bool get mfa => throw _privateConstructorUsedError;
   String get token => throw _privateConstructorUsedError;
-  bool? get sms => throw _privateConstructorUsedError;
-  bool? get backup => throw _privateConstructorUsedError;
-  bool? get totp => throw _privateConstructorUsedError;
-  dynamic get webauthn => throw _privateConstructorUsedError;
+  Map<String, dynamic> get user_settings => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -40,14 +35,7 @@ abstract class $AuthSuccessCopyWith<$Res> {
           AuthSuccess value, $Res Function(AuthSuccess) then) =
       _$AuthSuccessCopyWithImpl<$Res, AuthSuccess>;
   @useResult
-  $Res call(
-      {String user_id,
-      bool mfa,
-      String token,
-      bool? sms,
-      bool? backup,
-      bool? totp,
-      dynamic webauthn});
+  $Res call({String token, Map<String, dynamic> user_settings});
 }
 
 /// @nodoc
@@ -63,43 +51,18 @@ class _$AuthSuccessCopyWithImpl<$Res, $Val extends AuthSuccess>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? user_id = null,
-    Object? mfa = null,
     Object? token = null,
-    Object? sms = freezed,
-    Object? backup = freezed,
-    Object? totp = freezed,
-    Object? webauthn = freezed,
+    Object? user_settings = null,
   }) {
     return _then(_value.copyWith(
-      user_id: null == user_id
-          ? _value.user_id
-          : user_id // ignore: cast_nullable_to_non_nullable
-              as String,
-      mfa: null == mfa
-          ? _value.mfa
-          : mfa // ignore: cast_nullable_to_non_nullable
-              as bool,
       token: null == token
           ? _value.token
           : token // ignore: cast_nullable_to_non_nullable
               as String,
-      sms: freezed == sms
-          ? _value.sms
-          : sms // ignore: cast_nullable_to_non_nullable
-              as bool?,
-      backup: freezed == backup
-          ? _value.backup
-          : backup // ignore: cast_nullable_to_non_nullable
-              as bool?,
-      totp: freezed == totp
-          ? _value.totp
-          : totp // ignore: cast_nullable_to_non_nullable
-              as bool?,
-      webauthn: freezed == webauthn
-          ? _value.webauthn
-          : webauthn // ignore: cast_nullable_to_non_nullable
-              as dynamic,
+      user_settings: null == user_settings
+          ? _value.user_settings
+          : user_settings // ignore: cast_nullable_to_non_nullable
+              as Map<String, dynamic>,
     ) as $Val);
   }
 }
@@ -112,14 +75,7 @@ abstract class _$$AuthSuccessImplCopyWith<$Res>
       __$$AuthSuccessImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {String user_id,
-      bool mfa,
-      String token,
-      bool? sms,
-      bool? backup,
-      bool? totp,
-      dynamic webauthn});
+  $Res call({String token, Map<String, dynamic> user_settings});
 }
 
 /// @nodoc
@@ -133,43 +89,18 @@ class __$$AuthSuccessImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? user_id = null,
-    Object? mfa = null,
     Object? token = null,
-    Object? sms = freezed,
-    Object? backup = freezed,
-    Object? totp = freezed,
-    Object? webauthn = freezed,
+    Object? user_settings = null,
   }) {
     return _then(_$AuthSuccessImpl(
-      user_id: null == user_id
-          ? _value.user_id
-          : user_id // ignore: cast_nullable_to_non_nullable
-              as String,
-      mfa: null == mfa
-          ? _value.mfa
-          : mfa // ignore: cast_nullable_to_non_nullable
-              as bool,
       token: null == token
           ? _value.token
           : token // ignore: cast_nullable_to_non_nullable
               as String,
-      sms: freezed == sms
-          ? _value.sms
-          : sms // ignore: cast_nullable_to_non_nullable
-              as bool?,
-      backup: freezed == backup
-          ? _value.backup
-          : backup // ignore: cast_nullable_to_non_nullable
-              as bool?,
-      totp: freezed == totp
-          ? _value.totp
-          : totp // ignore: cast_nullable_to_non_nullable
-              as bool?,
-      webauthn: freezed == webauthn
-          ? _value.webauthn
-          : webauthn // ignore: cast_nullable_to_non_nullable
-              as dynamic,
+      user_settings: null == user_settings
+          ? _value._user_settings
+          : user_settings // ignore: cast_nullable_to_non_nullable
+              as Map<String, dynamic>,
     ));
   }
 }
@@ -178,35 +109,25 @@ class __$$AuthSuccessImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$AuthSuccessImpl implements _AuthSuccess {
   _$AuthSuccessImpl(
-      {required this.user_id,
-      required this.mfa,
-      required this.token,
-      this.sms,
-      this.backup,
-      this.totp,
-      this.webauthn});
+      {required this.token, required final Map<String, dynamic> user_settings})
+      : _user_settings = user_settings;
 
   factory _$AuthSuccessImpl.fromJson(Map<String, dynamic> json) =>
       _$$AuthSuccessImplFromJson(json);
 
   @override
-  final String user_id;
-  @override
-  final bool mfa;
-  @override
   final String token;
+  final Map<String, dynamic> _user_settings;
   @override
-  final bool? sms;
-  @override
-  final bool? backup;
-  @override
-  final bool? totp;
-  @override
-  final dynamic webauthn;
+  Map<String, dynamic> get user_settings {
+    if (_user_settings is EqualUnmodifiableMapView) return _user_settings;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableMapView(_user_settings);
+  }
 
   @override
   String toString() {
-    return 'AuthSuccess(user_id: $user_id, mfa: $mfa, token: $token, sms: $sms, backup: $backup, totp: $totp, webauthn: $webauthn)';
+    return 'AuthSuccess(token: $token, user_settings: $user_settings)';
   }
 
   @override
@@ -214,19 +135,15 @@ class _$AuthSuccessImpl implements _AuthSuccess {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$AuthSuccessImpl &&
-            (identical(other.user_id, user_id) || other.user_id == user_id) &&
-            (identical(other.mfa, mfa) || other.mfa == mfa) &&
             (identical(other.token, token) || other.token == token) &&
-            (identical(other.sms, sms) || other.sms == sms) &&
-            (identical(other.backup, backup) || other.backup == backup) &&
-            (identical(other.totp, totp) || other.totp == totp) &&
-            const DeepCollectionEquality().equals(other.webauthn, webauthn));
+            const DeepCollectionEquality()
+                .equals(other._user_settings, _user_settings));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, user_id, mfa, token, sms, backup,
-      totp, const DeepCollectionEquality().hash(webauthn));
+  int get hashCode => Object.hash(
+      runtimeType, token, const DeepCollectionEquality().hash(_user_settings));
 
   @JsonKey(ignore: true)
   @override
@@ -244,31 +161,16 @@ class _$AuthSuccessImpl implements _AuthSuccess {
 
 abstract class _AuthSuccess implements AuthSuccess {
   factory _AuthSuccess(
-      {required final String user_id,
-      required final bool mfa,
-      required final String token,
-      final bool? sms,
-      final bool? backup,
-      final bool? totp,
-      final dynamic webauthn}) = _$AuthSuccessImpl;
+      {required final String token,
+      required final Map<String, dynamic> user_settings}) = _$AuthSuccessImpl;
 
   factory _AuthSuccess.fromJson(Map<String, dynamic> json) =
       _$AuthSuccessImpl.fromJson;
 
   @override
-  String get user_id;
-  @override
-  bool get mfa;
-  @override
   String get token;
   @override
-  bool? get sms;
-  @override
-  bool? get backup;
-  @override
-  bool? get totp;
-  @override
-  dynamic get webauthn;
+  Map<String, dynamic> get user_settings;
   @override
   @JsonKey(ignore: true)
   _$$AuthSuccessImplCopyWith<_$AuthSuccessImpl> get copyWith =>

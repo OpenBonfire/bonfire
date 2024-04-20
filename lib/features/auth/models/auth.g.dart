@@ -8,24 +8,14 @@ part of 'auth.dart';
 
 _$AuthSuccessImpl _$$AuthSuccessImplFromJson(Map<String, dynamic> json) =>
     _$AuthSuccessImpl(
-      user_id: json['user_id'] as String,
-      mfa: json['mfa'] as bool,
       token: json['token'] as String,
-      sms: json['sms'] as bool?,
-      backup: json['backup'] as bool?,
-      totp: json['totp'] as bool?,
-      webauthn: json['webauthn'],
+      user_settings: json['user_settings'] as Map<String, dynamic>,
     );
 
 Map<String, dynamic> _$$AuthSuccessImplToJson(_$AuthSuccessImpl instance) =>
     <String, dynamic>{
-      'user_id': instance.user_id,
-      'mfa': instance.mfa,
       'token': instance.token,
-      'sms': instance.sms,
-      'backup': instance.backup,
-      'totp': instance.totp,
-      'webauthn': instance.webauthn,
+      'user_settings': instance.user_settings,
     };
 
 _$MFARequiredImpl _$$MFARequiredImplFromJson(Map<String, dynamic> json) =>

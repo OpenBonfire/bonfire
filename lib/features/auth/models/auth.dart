@@ -10,13 +10,8 @@ abstract class AuthResponse {}
 @freezed
 class AuthSuccess extends AuthResponse with _$AuthSuccess {
   factory AuthSuccess({
-    required String user_id,
-    required bool mfa,
     required String token,
-    bool? sms,
-    bool? backup,
-    bool? totp,
-    dynamic webauthn,
+    required Map<String, dynamic> user_settings,
   }) = _AuthSuccess;
 
   factory AuthSuccess.fromJson(Map<String, dynamic> json) =>
@@ -73,6 +68,13 @@ class CompletedAuth extends AuthResponse {
   CompletedAuth({required this.authUser});
 }
 
+/// Generic authentication error with message [error]
 class FailedAuth extends AuthResponse {
-  FailedAuth();
+  String error;
+  FailedAuth({required this.error});
+}
+
+class MFAInvalidError extends AuthResponse {
+  String error;
+  MFAInvalidError({required this.error});
 }
