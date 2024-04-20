@@ -63,11 +63,12 @@ class Auth extends _$Auth {
     var newClient =
         await Nyxx.connectGateway(token, GatewayIntents.allUnprivileged);
     client = newClient;
-    print(client);
+    print("WRITING!");
+    GetStorage().write('token', token);
+    authResponse = AuthUser(token: token, client: client!);
+    state = authResponse!;
     client!.onReady.listen((event) {
-      GetStorage().write('token', token);
-      authResponse = AuthUser(token: token, client: client!);
-      state = authResponse!;
+      print("Bot Ready!");
     });
   }
 
