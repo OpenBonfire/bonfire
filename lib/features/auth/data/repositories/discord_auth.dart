@@ -11,13 +11,3 @@ class AuthUser extends AuthResponse {
     required this.client,
   });
 }
-
-/*
-Handle if we need mfa / phone auth / etc
-*/
-class PartialAuthUser extends AuthResponse {
-  final String? token;
-  final String? ticket;
-
-  PartialAuthUser({this.token, this.ticket});
-}

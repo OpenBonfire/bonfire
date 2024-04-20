@@ -16,8 +16,8 @@ class Auth extends _$Auth {
   AuthResponse? authResponse;
 
   @override
-  Future<AuthResponse> build() async {
-    return authResponse!;
+  AuthResponse? build() {
+    return authResponse;
   }
 
   Future<AuthResponse> loginWithCredentials(
@@ -57,6 +57,7 @@ class Auth extends _$Auth {
       throw Exception('Unknown response');
     }
     authResponse = authResponse;
+    state = authResponse;
     return authResponse;
   }
 

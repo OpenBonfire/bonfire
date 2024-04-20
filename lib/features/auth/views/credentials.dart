@@ -27,6 +27,11 @@ class _LoginState extends ConsumerState<CredentialsScreen> {
     super.dispose();
   }
 
+  @override
+  void initState() {
+    super.initState();
+  }
+
   Widget loginBox(LoginType loginType) {
     TextEditingController controller = loginType == LoginType.username
         ? usernameController
@@ -94,6 +99,13 @@ class _LoginState extends ConsumerState<CredentialsScreen> {
     var topPadding = MediaQuery.of(context).viewPadding.top;
     var bottomPadding = MediaQuery.of(context).viewPadding.bottom;
 
+    var auth = ref.watch(authProvider);
+    if (auth is MFARequired) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        context.go('/mfa');
+      });
+    }
+
     return Scaffold(
         body: Stack(
       children: [
@@ -141,7 +153,6 @@ class _LoginState extends ConsumerState<CredentialsScreen> {
               ConfirmButton(
                   text: "Confirm",
                   onPressed: () async {
-                    context.go('/mfa');
                     print(await submitCredentials());
                   })
             ],
