@@ -1,13 +1,11 @@
 import 'dart:io';
 
+import 'package:bonfire/router/controller.dart';
+import 'package:bonfire/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:bonfire/features/auth/data/repositories/auth.dart';
-import 'package:bonfire/features/auth/data/repositories/discord_auth.dart';
-import 'package:bonfire/features/auth/models/auth.dart';
-import 'package:bonfire/shared/repositories/firebridge/auth.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,35 +15,21 @@ void main() async {
   runApp(const ProviderScope(child: MaterialApp(home: MainWindow())));
 }
 
-class MainWindow extends StatefulWidget {
+class MainWindow extends ConsumerStatefulWidget {
   const MainWindow({Key? key}) : super(key: key);
 
   @override
-  State<MainWindow> createState() => _MainWindowState();
+  ConsumerState<MainWindow> createState() => _MainWindowState();
 }
 
-class _MainWindowState extends State<MainWindow> {
+class _MainWindowState extends ConsumerState<MainWindow> {
   @override
   Widget build(BuildContext context) {
-    // SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-    //   systemNavigationBarColor: Colors.transparent,
-    //   systemNavigationBarIconBrightness: Brightness.dark,
-    //   statusBarColor: Colors.transparent,
-    // ));
-    return MaterialApp(
+    return MaterialApp.router(
       title: 'Bonfire',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: Scaffold(
-        extendBody: true,
-        body: Container(
-          color: const Color.fromARGB(255, 115, 69, 69),
-          child: const Center(
-            child: Text('Hello World'),
-          ),
-        ),
-      ),
+      theme: ref.read(lightThemeProvider),
+      darkTheme: ref.read(darkThemeProvider),
+      routerConfig: routerController,
     );
   }
 }
