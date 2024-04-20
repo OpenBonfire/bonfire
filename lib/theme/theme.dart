@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:bonfire/theme/color_theme.dart';
 import 'package:bonfire/theme/text_theme.dart';
@@ -11,52 +10,28 @@ class CustomThemeData {
   CustomThemeData({required bool isDarkTheme}) {
     colorTheme = isDarkTheme
         ? ColorTheme(
-            iconColor: AppColorsDark.iconColor,
+            backgroundColor: AppColorsDark.backgroundColor,
             textColor1: AppColorsDark.textColor1,
             textColor2: AppColorsDark.textColor2,
-            appBarColor: AppColorsDark.appBarColor,
-            dividerColor: AppColorsDark.dividerColor,
-            backgroundColor: AppColorsDark.backgroundColor,
-            errorSnackBarColor: AppColorsDark.errorSnackBarColor,
-            incomingMessageBubbleColor:
-                AppColorsDark.incomingMessageBubbleColor,
-            outgoingMessageBubbleColor:
-                AppColorsDark.outgoingMessageBubbleColor,
-            incomingEmbedColor: AppColorsDark.incomingEmbedColor,
-            outgoingEmbedColor: AppColorsDark.outgoingEmbedColor,
-            selectedLabelColor: AppColorsDark.selectedLabelColor,
-            unselectedLabelColor: AppColorsDark.unselectedLabelColor,
-            indicatorColor: AppColorsDark.indicatorColor,
-            blueColor: AppColorsDark.blueColor,
+            selectedIconColor: AppColorsDark.selectedIconColor,
+            deselectedIconColor: AppColorsDark.deselectedIconColor,
+            blurpleColor: AppColorsDark.blurpleColor,
+            redColor: AppColorsDark.redColor,
             greenColor: AppColorsDark.greenColor,
             yellowColor: AppColorsDark.yellowColor,
             greyColor: AppColorsDark.greyColor,
-            statusBarColor: AppColorsDark.statusBarColor,
-            navigationBarColor: AppColorsDark.navigationBarColor,
           )
         : ColorTheme(
-            iconColor: AppColorsLight.iconColor,
+            backgroundColor: AppColorsLight.backgroundColor,
             textColor1: AppColorsLight.textColor1,
             textColor2: AppColorsLight.textColor2,
-            appBarColor: AppColorsLight.appBarColor,
-            dividerColor: AppColorsLight.dividerColor,
-            backgroundColor: AppColorsLight.backgroundColor,
-            errorSnackBarColor: AppColorsLight.errorSnackBarColor,
-            incomingMessageBubbleColor:
-                AppColorsLight.incomingMessageBubbleColor,
-            outgoingMessageBubbleColor:
-                AppColorsLight.outgoingMessageBubbleColor,
-            incomingEmbedColor: AppColorsLight.incomingEmbedColor,
-            outgoingEmbedColor: AppColorsLight.outgoingEmbedColor,
-            selectedLabelColor: AppColorsLight.selectedLabelColor,
-            unselectedLabelColor: AppColorsLight.unselectedLabelColor,
-            indicatorColor: AppColorsLight.indicatorColor,
-            blueColor: AppColorsLight.blueColor,
+            selectedIconColor: AppColorsLight.selectedIconColor,
+            deselectedIconColor: AppColorsLight.deselectedIconColor,
+            blurpleColor: AppColorsLight.blurpleColor,
+            redColor: AppColorsLight.redColor,
             greenColor: AppColorsLight.greenColor,
             yellowColor: AppColorsLight.yellowColor,
             greyColor: AppColorsLight.greyColor,
-            statusBarColor: AppColorsLight.statusBarColor,
-            navigationBarColor: AppColorsLight.navigationBarColor,
           );
   }
 }
@@ -80,26 +55,26 @@ final _theme = ThemeData(
       fontSize: 16,
     ),
   ),
-  appBarTheme: const AppBarTheme(
-    elevation: 0.0,
-    actionsIconTheme: IconThemeData(
-      color: AppColorsLight.iconColor,
-    ),
-    backgroundColor: AppColorsLight.appBarColor,
-    systemOverlayStyle: SystemUiOverlayStyle(
-      statusBarIconBrightness: Brightness.light,
-      statusBarColor: AppColorsLight.appBarColor,
-      systemNavigationBarColor: AppColorsLight.backgroundColor,
-      systemNavigationBarDividerColor: AppColorsLight.backgroundColor,
-    ),
-  ),
+  // appBarTheme: const AppBarTheme(
+  //   elevation: 0.0,
+  //   actionsIconTheme: IconThemeData(
+  //     color: AppColorsLight.iconColor,
+  //   ),
+  //   backgroundColor: AppColorsLight.appBarColor,
+  //   systemOverlayStyle: SystemUiOverlayStyle(
+  //     statusBarIconBrightness: Brightness.light,
+  //     statusBarColor: AppColorsLight.appBarColor,
+  //     systemNavigationBarColor: AppColorsLight.backgroundColor,
+  //     systemNavigationBarDividerColor: AppColorsLight.backgroundColor,
+  //   ),
+  // ),
   floatingActionButtonTheme: const FloatingActionButtonThemeData(
     backgroundColor: AppColorsLight.greenColor,
     foregroundColor: Colors.white,
   ),
   scaffoldBackgroundColor: AppColorsLight.backgroundColor,
   iconTheme: const IconThemeData(
-    color: AppColorsLight.iconColor,
+    color: AppColorsLight.selectedIconColor,
   ),
   progressIndicatorTheme: const ProgressIndicatorThemeData(
     color: AppColorsLight.greenColor,
@@ -108,13 +83,13 @@ final _theme = ThemeData(
     color: AppColorsLight.greyColor,
     thickness: 0.1,
   ),
-  tabBarTheme: const TabBarTheme(
-    indicatorColor: AppColorsLight.indicatorColor,
-    indicatorSize: TabBarIndicatorSize.tab,
-    labelColor: AppColorsLight.selectedLabelColor,
-    unselectedLabelColor: AppColorsLight.unselectedLabelColor,
-    dividerHeight: 0,
-  ),
+  // tabBarTheme: const TabBarTheme(
+  //   indicatorColor: AppColorsLight.indicatorColor,
+  //   indicatorSize: TabBarIndicatorSize.tab,
+  //   labelColor: AppColorsLight.selectedLabelColor,
+  //   unselectedLabelColor: AppColorsLight.unselectedLabelColor,
+  //   dividerHeight: 0,
+  // ),
 );
 
 // Dark theme
@@ -126,7 +101,7 @@ final _darkTheme = ThemeData(
       side: const BorderSide(color: Colors.transparent),
       borderRadius: BorderRadius.circular(4.0),
     ),
-    backgroundColor: AppColorsDark.appBarColor,
+    backgroundColor: AppColorsDark.backgroundColor,
     titleTextStyle:
         const TextStyle(color: AppColorsLight.textColor1, fontSize: 16),
     contentTextStyle: const TextStyle(
@@ -134,26 +109,26 @@ final _darkTheme = ThemeData(
       fontSize: 16,
     ),
   ),
-  appBarTheme: const AppBarTheme(
-    elevation: 0.0,
-    actionsIconTheme: IconThemeData(
-      color: AppColorsDark.iconColor,
-    ),
-    backgroundColor: AppColorsDark.appBarColor,
-    systemOverlayStyle: SystemUiOverlayStyle(
-      statusBarIconBrightness: Brightness.light,
-      statusBarColor: AppColorsDark.appBarColor,
-      systemNavigationBarColor: AppColorsDark.backgroundColor,
-      systemNavigationBarDividerColor: AppColorsDark.backgroundColor,
-    ),
-  ),
+  // appBarTheme: const AppBarTheme(
+  //   elevation: 0.0,
+  //   actionsIconTheme: IconThemeData(
+  //     color: AppColorsDark.iconColor,
+  //   ),
+  //   backgroundColor: AppColorsDark.appBarColor,
+  //   systemOverlayStyle: SystemUiOverlayStyle(
+  //     statusBarIconBrightness: Brightness.light,
+  //     statusBarColor: AppColorsDark.appBarColor,
+  //     systemNavigationBarColor: AppColorsDark.backgroundColor,
+  //     systemNavigationBarDividerColor: AppColorsDark.backgroundColor,
+  //   ),
+  // ),
   floatingActionButtonTheme: const FloatingActionButtonThemeData(
-    backgroundColor: AppColorsDark.indicatorColor,
+    backgroundColor: AppColorsDark.blurpleColor,
     foregroundColor: Colors.white,
   ),
   scaffoldBackgroundColor: AppColorsDark.backgroundColor,
   iconTheme: const IconThemeData(
-    color: AppColorsDark.iconColor,
+    color: AppColorsDark.selectedIconColor,
   ),
   progressIndicatorTheme: const ProgressIndicatorThemeData(
     color: AppColorsDark.greenColor,
@@ -162,13 +137,13 @@ final _darkTheme = ThemeData(
     color: AppColorsDark.greyColor,
     thickness: 0.1,
   ),
-  tabBarTheme: const TabBarTheme(
-    indicatorColor: AppColorsDark.indicatorColor,
-    indicatorSize: TabBarIndicatorSize.tab,
-    labelColor: AppColorsDark.selectedLabelColor,
-    unselectedLabelColor: AppColorsDark.unselectedLabelColor,
-    dividerHeight: 0,
-  ),
+  // tabBarTheme: const TabBarTheme(
+  //   indicatorColor: AppColorsDark.indicatorColor,
+  //   indicatorSize: TabBarIndicatorSize.tab,
+  //   labelColor: AppColorsDark.selectedLabelColor,
+  //   unselectedLabelColor: AppColorsDark.unselectedLabelColor,
+  //   dividerHeight: 0,
+  // ),
 );
 
 extension CustomTheme on ThemeData {

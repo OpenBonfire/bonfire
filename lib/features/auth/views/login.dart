@@ -9,8 +9,46 @@ class LoginScreen extends ConsumerStatefulWidget {
 }
 
 class _LoginState extends ConsumerState<LoginScreen> {
+  Widget loginBox() {
+    return Container(
+      width: 300,
+      height: 300,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Column(
+        children: [
+          Text('Login'),
+          TextField(
+            decoration: InputDecoration(
+              hintText: 'Username',
+            ),
+          ),
+          TextField(
+            decoration: InputDecoration(
+              hintText: 'Password',
+            ),
+          ),
+          ElevatedButton(
+            onPressed: () {},
+            child: Text('Login'),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(body: Center(child: Text("login")));
+    return Scaffold(
+        body: SizedBox(
+      width: double.infinity,
+      height: double.infinity,
+      child: Image.asset(
+        'assets/images/login_background.png',
+        fit: BoxFit.cover,
+      ),
+    ));
   }
 }

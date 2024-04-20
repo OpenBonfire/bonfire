@@ -25,6 +25,11 @@ class MainWindow extends ConsumerStatefulWidget {
 class _MainWindowState extends ConsumerState<MainWindow> {
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+      systemNavigationBarColor: Colors.transparent,
+      systemNavigationBarIconBrightness: Brightness.dark,
+      statusBarColor: Colors.transparent,
+    ));
     return MaterialApp.router(
       title: 'Bonfire',
       theme: ref.read(lightThemeProvider),
