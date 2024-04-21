@@ -7,22 +7,22 @@ import 'package:bonfire/shared/utils/image.dart';
 import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-part 'guild.g.dart';
+part 'member.g.dart';
 
 @JsonSerializable()
-class Guild {
+class Member {
   final int id;
   final String name;
   @JsonKey(fromJson: Utils.imageFromJson, toJson: Utils.imageToJson)
   final Image? icon;
 
-  Guild({
+  Member({
     required this.id,
     required this.name,
     this.icon,
   });
 
-  factory Guild.fromJson(Map<String, dynamic> json) => _$GuildFromJson(json);
+  factory Member.fromJson(Map<String, dynamic> json) => _$MemberFromJson(json);
 
-  Map<String, dynamic> toJson() => _$GuildToJson(this);
+  Map<String, dynamic> toJson() => _$MemberToJson(this);
 }
