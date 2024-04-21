@@ -6,7 +6,7 @@ part of 'guild.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$guildControllerHash() => r'1b21ab51d7bfd8fb3627e76ac14b264e44a2c992';
+String _$guildControllerHash() => r'82b1c3cc6a10e1fe0f5dbe4a52ca826f4c626203';
 
 /// See also [GuildController].
 @ProviderFor(GuildController)

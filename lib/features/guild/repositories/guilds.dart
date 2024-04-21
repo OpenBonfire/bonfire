@@ -10,7 +10,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'guilds.g.dart';
 
 /*
-TODO: You can cache each guild by instantly returning the last value,
+TODO: We can cache each guild by instantly returning the last value,
 then setting `state` when the actual value is recieved.
 */
 

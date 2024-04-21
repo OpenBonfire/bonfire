@@ -14,7 +14,6 @@ class GuildController extends _$GuildController {
     var guildOutput = ref.watch(guildsProvider);
     guildOutput.when(
         data: (newGuilds) {
-          print("updating guilds!");
           guilds = newGuilds;
         },
         error: (data, trace) {},
