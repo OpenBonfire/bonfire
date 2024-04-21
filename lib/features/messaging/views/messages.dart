@@ -37,12 +37,10 @@ class _MessageViewState extends ConsumerState<MessageView> {
         itemCount: messages.length,
         reverse: true,
         itemBuilder: (context, index) {
-          // var cachedBox = messageWidgets[messages[index].id];
-          // if (cachedBox != null) {
-          //   print("returning cached message");
-          //   return cachedBox;
-          // }
-          // print("creating new message");
+          var cachedBox = messageWidgets[messages[index].id];
+          if (cachedBox != null) {
+            return cachedBox;
+          }
 
           var box = MessageBox(message: messages[index]);
           messageWidgets[messages[index].id] = box;

@@ -43,11 +43,16 @@ class Messages extends _$Messages {
       List<dynamic> cachedMessages =
           json.decode(utf8.decode(cacheData.file.readAsBytesSync()));
       for (var message in cachedMessages) {
-        // var pfp = await fetchMemberAvatarFromCache(message['member']['id']);
-        // message['member']['icon'] = Image.memory(pfp!);
-        // var newMessage = BonfireMessage.fromJson(message);
-        // newMessage.member.icon = Image.memory(pfp);
-        channelMessages.add(BonfireMessage.fromJson(message));
+        if (message['member']['id'] != null) {
+          var pfp =
+              await fetchMemberAvatarFromCache(message['member']['id'] as int);
+          var newMessage = BonfireMessage.fromJson(message);
+          newMessage.member.icon = Image.memory(pfp!);
+
+          channelMessages.add(newMessage);
+        } else {
+          channelMessages.add(message);
+        }
       }
     } else {
       print("cache is null!");
