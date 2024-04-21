@@ -57,6 +57,55 @@ class OverlappingPanelsState extends State<OverlappingPanels>
   double translate = 0;
   int lastDelta = 0;
 
+  void moveToState(RevealSide side) {
+    final mediaWidth = MediaQuery.of(context).size.width;
+    double goal;
+
+    switch (side) {
+      case RevealSide.left:
+        goal = _calculateGoal(mediaWidth, 1);
+        break;
+      case RevealSide.right:
+        goal = _calculateGoal(mediaWidth, -1);
+        break;
+      case RevealSide.main:
+      default:
+        goal = 0;
+        break;
+    }
+
+    final animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 200),
+    );
+
+    final animation = Tween<double>(
+      begin: translate,
+      end: goal,
+    ).animate(animationController);
+
+    animation.addListener(() {
+      setState(() {
+        translate = animation.value;
+      });
+    });
+
+    animation.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        if (widget.onSideChange != null) {
+          widget.onSideChange!(
+            translate == 0
+                ? RevealSide.main
+                : (translate > 0 ? RevealSide.left : RevealSide.right),
+          );
+        }
+        animationController.dispose();
+      }
+    });
+
+    animationController.forward();
+  }
+
   double _calculateGoal(double width, int multiplier) {
     return (multiplier * width) + (-multiplier * widget.restWidth);
   }

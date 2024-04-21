@@ -25,9 +25,9 @@ class _HomeState extends ConsumerState<HomeScreen> {
                 children: [Sidebar(), Expanded(child: ChannelsList())],
               ),
             ),
-            main: Container(
+            main: const SizedBox(
                 width: double.infinity,
                 height: double.infinity,
-                child: const MessageView())));
+                child: MessageView())));
   }
 }

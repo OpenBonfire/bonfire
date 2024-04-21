@@ -1,5 +1,6 @@
 import 'package:bonfire/features/channels/controllers/channel.dart';
 import 'package:bonfire/features/channels/repositories/channels.dart';
+import 'package:bonfire/features/overview/views/overlapping_panels.dart';
 import 'package:bonfire/shared/models/channel.dart';
 import 'package:bonfire/theme/theme.dart';
 import 'package:flutter/material.dart';
@@ -125,6 +126,12 @@ class _ChannelButtonState extends ConsumerState<ChannelButton> {
             ref
                 .read(channelControllerProvider.notifier)
                 .setChannel(widget.channel.id);
+
+            OverlappingPanelsState? overlappingPanelsState =
+                OverlappingPanels.of(context);
+            if (overlappingPanelsState != null) {
+              overlappingPanelsState.moveToState(RevealSide.main);
+            }
           },
           child: SizedBox(
             height: 35,

@@ -67,9 +67,9 @@ class Messages extends _$Messages {
       user = authOutput;
 
       var textChannel = await user!.client.channels
-          .fetch(nyxx.Snowflake(channelId)) as nyxx.GuildTextChannel;
+          .fetch(nyxx.Snowflake(channelId)) as nyxx.TextChannel;
 
-      var messages = await textChannel.messages.fetchMany(limit: 100);
+      var messages = await textChannel.messages.fetchMany(limit: 20);
 
       List<Uint8List> memberAvatars = await Future.wait(
         messages.map((message) => fetchMemberAvatar(message.author)),

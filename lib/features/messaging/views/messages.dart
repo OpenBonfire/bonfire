@@ -79,7 +79,15 @@ class _MessageBoxState extends State<MessageBox>
     var twelveHour = time.hour > 12 ? time.hour - 12 : time.hour;
     var section3 = time.hour > 12 ? 'PM' : 'AM';
 
-    section2 = ' at $twelveHour:${time.minute} $section3';
+    if (twelveHour == 0) {
+      twelveHour = 12;
+    }
+
+    if (twelveHour < 10) {
+      section2 = ' at 0$twelveHour:${time.minute} $section3';
+    } else {
+      section2 = ' at $twelveHour:${time.minute} $section3';
+    }
 
     return section1 + section2;
   }
@@ -144,7 +152,7 @@ class _MessageBoxState extends State<MessageBox>
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(
-                  width: width - 120,
+                  width: width - 140,
                   child: Row(
                     children: [
                       Padding(
@@ -177,9 +185,7 @@ class _MessageBoxState extends State<MessageBox>
                 Padding(
                   padding: const EdgeInsets.only(left: 6, top: 0),
                   child: SizedBox(
-                    width: 300,
-                    // width: MediaQuery.of(context).size.width -
-                    //     ((Platform.isAndroid | Platform.isIOS) ? 120 : 500),
+                    width: width - 105,
                     child: MarkdownViewer(
                       widget.message.content,
                       enableTaskList: true,
