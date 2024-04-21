@@ -17,6 +17,8 @@ class BonfireMember {
   // serialize / deserialize Image object
   // @JsonKey(fromJson: Utils.imageFromJson, toJson: Utils.imageToJson) doesn't work...
 
+  // we don't really want to encode this anyways, since we'll be storing multiple instances
+
   @JsonKey(includeFromJson: false, includeToJson: false)
   final Image? icon;
 

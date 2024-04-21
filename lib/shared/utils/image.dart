@@ -9,7 +9,7 @@ class Utils {
   static Image? imageFromJson(String base64String) {
     if (base64String.isEmpty) {
       // todo: do this differently
-      return Image.asset("assets/default_icon.png");
+      return null;
     }
     Uint8List bytes = base64.decode(base64String);
     return Image.memory(bytes);

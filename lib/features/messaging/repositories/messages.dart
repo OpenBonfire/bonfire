@@ -36,7 +36,6 @@ class Messages extends _$Messages {
 
     List<BonfireMessage> channelMessages = [];
 
-    // PULL FROM CACHE
     var cacheKey = channelId.toString();
     var cacheData = await _cacheManager.getFileFromCache(cacheKey);
 
@@ -44,6 +43,8 @@ class Messages extends _$Messages {
       List<dynamic> cachedMessages =
           json.decode(utf8.decode(cacheData.file.readAsBytesSync()));
       for (var message in cachedMessages) {
+        var pfp = await fetchMemberAvatarFromCache(message['member']['id']);
+        message['member']['icon'] = Image.memory(pfp!);
         channelMessages.add(BonfireMessage.fromJson(message));
       }
     } else {
@@ -93,8 +94,24 @@ class Messages extends _$Messages {
     }
   }
 
+  Future<Uint8List?> fetchMemberAvatarFromCache(int userId) async {
+    var cacheData = await _cacheManager.getFileFromCache(userId.toString());
+    if (cacheData == null) return null;
+
+    return cacheData.file.readAsBytesSync();
+  }
+
   Future<Uint8List> fetchMemberAvatar(nyxx.MessageAuthor user) async {
-    return await user.avatar!.fetch();
+    var cached = await fetchMemberAvatarFromCache(user.id.value);
+    if (cached != null) return cached; // todo: check hash so the PFP can change
+
+    print("fetching!");
+    var fetched = await user.avatar!.fetch();
+    await _cacheManager.putFile(
+      user.id.toString(),
+      fetched,
+    );
+    return fetched;
   }
 
   Future<void> _cacheMessages(
