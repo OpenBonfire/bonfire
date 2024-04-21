@@ -1,5 +1,5 @@
+import 'package:bonfire/features/channels/views/channels.dart';
 import 'package:bonfire/features/guild/repositories/guilds.dart';
-import 'package:bonfire/features/overview/views/channel_list.dart';
 import 'package:bonfire/features/overview/views/overlapping_panels.dart';
 import 'package:bonfire/features/overview/views/sidebar.dart';
 import 'package:bonfire/theme/theme.dart';
@@ -21,14 +21,14 @@ class _HomeState extends ConsumerState<HomeScreen> {
             left: SizedBox(
               width: MediaQuery.of(context).size.width,
               child: const Row(
-                children: [Sidebar(), Expanded(child: ChannelList())],
+                children: [Sidebar(), Expanded(child: ChannelsList())],
               ),
             ),
             main: Container(
               width: double.infinity,
               height: double.infinity,
               decoration: BoxDecoration(
-                  color: Theme.of(context).custom.colorTheme.greyColor1,
+                  color: Theme.of(context).custom.colorTheme.foreground,
                   boxShadow: [
                     BoxShadow(
                       color: Colors.black.withOpacity(0.1),

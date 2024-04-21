@@ -6,11 +6,11 @@ part 'guild.g.dart';
 
 @riverpod
 class GuildController extends _$GuildController {
-  int guildId = 0;
+  int? guildId;
   List<Guild> guilds = [];
 
   @override
-  int build() {
+  int? build() {
     var guildOutput = ref.watch(guildsProvider);
     guildOutput.when(
         data: (newGuilds) {
@@ -25,7 +25,7 @@ class GuildController extends _$GuildController {
 
   int setGuild(int newGuildId) {
     guildId = newGuildId;
-    state = guildId;
-    return state;
+    state = guildId!;
+    return state!;
   }
 }

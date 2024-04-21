@@ -19,7 +19,9 @@ class CustomThemeData {
             redColor: AppColorsDark.redColor,
             greenColor: AppColorsDark.greenColor,
             yellowColor: AppColorsDark.yellowColor,
-            greyColor1: AppColorsDark.greyColor1,
+            foreground: AppColorsDark.foreground,
+            cardSelected: AppColorsDark.cardSelected,
+            brightestGray: AppColorsDark.brightestGray,
           )
         : ColorTheme(
             backgroundColor: AppColorsLight.backgroundColor,
@@ -31,7 +33,9 @@ class CustomThemeData {
             redColor: AppColorsLight.redColor,
             greenColor: AppColorsLight.greenColor,
             yellowColor: AppColorsLight.yellowColor,
-            greyColor1: AppColorsLight.greyColor1,
+            foreground: AppColorsLight.foreground,
+            cardSelected: AppColorsLight.cardSelected,
+            brightestGray: AppColorsLight.brightestGray,
           );
   }
 }
@@ -67,7 +71,7 @@ final _theme = ThemeData(
     color: AppColorsLight.greenColor,
   ),
   dividerTheme: const DividerThemeData(
-    color: AppColorsLight.greyColor1,
+    color: AppColorsLight.foreground,
     thickness: 0.1,
   ),
 );
@@ -101,7 +105,7 @@ final _darkTheme = ThemeData(
     color: AppColorsDark.greenColor,
   ),
   dividerTheme: const DividerThemeData(
-    color: AppColorsDark.greyColor1,
+    color: AppColorsDark.foreground,
     thickness: 0.1,
   ),
 );

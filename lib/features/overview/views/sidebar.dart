@@ -25,7 +25,7 @@ class _SidebarState extends ConsumerState<Sidebar> {
     } else {
       return Container(
           decoration: BoxDecoration(
-              color: Theme.of(context).custom.colorTheme.greyColor1,
+              color: Theme.of(context).custom.colorTheme.foreground,
               borderRadius: const BorderRadius.all(Radius.circular(100))),
           width: 50,
           height: 50,
@@ -46,9 +46,6 @@ class _SidebarState extends ConsumerState<Sidebar> {
         },
         error: (data, trace) {},
         loading: () {});
-
-    print("selected guild (in build)");
-    print(selectedGuildId);
 
     return SizedBox(
       width: 60,
