@@ -17,10 +17,6 @@ class Channels extends _$Channels {
 
   @override
   Future<List<BonfireChannel>> build() async {
-    /*
-    Get guilds from client, then return response.
-    We can also do an initial `state =` when pulling from cache
-    */
     var currentGuild = ref.watch(guildControllerProvider);
     var auth = ref.watch(authProvider.notifier).getAuth();
 
@@ -30,17 +26,42 @@ class Channels extends _$Channels {
         var guildChannels = await auth.client.guilds.fetchGuildChannels(
           Snowflake(currentGuild),
         );
+
         for (var channel in guildChannels) {
-          var newChannel = BonfireChannel(
+          if (channel.type == ChannelType.guildCategory) {
+            var newChannel = BonfireChannel(
               id: channel.id.value,
               name: channel.name,
-              parent: _channels.firstWhereIndexedOrNull(
-                  (index, element) => element.id == channel.parentId?.value),
+              parent: null,
               position: channel.position,
               type: BonfireChannelType.values.firstWhere(
-                  (element) => element.value == channel.type.value));
-          _channels.add(newChannel);
+                (element) => element.value == channel.type.value,
+              ),
+            );
+            _channels.add(newChannel);
+          }
         }
+
+        for (var channel in guildChannels) {
+          if (channel.type != ChannelType.guildCategory) {
+            var parentChannel = _channels.firstWhereOrNull(
+              (element) => element.id == channel.parentId?.value,
+            );
+
+            var newChannel = BonfireChannel(
+              id: channel.id.value,
+              name: channel.name,
+              parent: parentChannel,
+              position: channel.position,
+              type: BonfireChannelType.values.firstWhere(
+                (element) => element.value == channel.type.value,
+              ),
+            );
+
+            _channels.add(newChannel);
+          }
+        }
+
         _channels.sort((a, b) => a.position.compareTo(b.position));
         channels = _channels;
         state = AsyncValue.data(channels);
