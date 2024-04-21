@@ -15,6 +15,8 @@ class MessageView extends ConsumerStatefulWidget {
 }
 
 class _MessageViewState extends ConsumerState<MessageView> {
+  Map<int, Widget> messageWidgets = {};
+
   @override
   Widget build(BuildContext context) {
     var messageOutput = ref.watch(messagesProvider);
@@ -35,7 +37,16 @@ class _MessageViewState extends ConsumerState<MessageView> {
         itemCount: messages.length,
         reverse: true,
         itemBuilder: (context, index) {
-          return MessageBox(message: messages[index]);
+          // var cachedBox = messageWidgets[messages[index].id];
+          // if (cachedBox != null) {
+          //   print("returning cached message");
+          //   return cachedBox;
+          // }
+          // print("creating new message");
+
+          var box = MessageBox(message: messages[index]);
+          messageWidgets[messages[index].id] = box;
+          return box;
         },
       ),
     );
@@ -49,8 +60,6 @@ class MessageBox extends StatefulWidget {
   @override
   State<MessageBox> createState() => _MessageBoxState();
 }
-
-Map<int, Widget> messageWidgets = Map<int, Widget>();
 
 class _MessageBoxState extends State<MessageBox>
     with AutomaticKeepAliveClientMixin {

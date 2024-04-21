@@ -43,8 +43,10 @@ class Messages extends _$Messages {
       List<dynamic> cachedMessages =
           json.decode(utf8.decode(cacheData.file.readAsBytesSync()));
       for (var message in cachedMessages) {
-        var pfp = await fetchMemberAvatarFromCache(message['member']['id']);
-        message['member']['icon'] = Image.memory(pfp!);
+        // var pfp = await fetchMemberAvatarFromCache(message['member']['id']);
+        // message['member']['icon'] = Image.memory(pfp!);
+        // var newMessage = BonfireMessage.fromJson(message);
+        // newMessage.member.icon = Image.memory(pfp);
         channelMessages.add(BonfireMessage.fromJson(message));
       }
     } else {
@@ -90,7 +92,12 @@ class Messages extends _$Messages {
         utf8.encode(
             json.encode(channelMessages.map((e) => e.toJson()).toList())),
       );
-      state = AsyncData(channelMessages);
+      if (channelId == ref.read(channelControllerProvider)) {
+        state = AsyncData(channelMessages);
+      } else {
+        // this is fine. We just don't want to return an invalid page state.
+        print("channel switched before state return!");
+      }
     }
   }
 

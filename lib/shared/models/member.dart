@@ -20,7 +20,7 @@ class BonfireMember {
   // we don't really want to encode this anyways, since we'll be storing multiple instances
 
   @JsonKey(includeFromJson: false, includeToJson: false)
-  final Image? icon;
+  Image? icon;
 
   BonfireMember({
     required this.id,
