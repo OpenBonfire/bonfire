@@ -28,6 +28,6 @@ class _HomeState extends ConsumerState<HomeScreen> {
             main: Container(
                 width: double.infinity,
                 height: double.infinity,
-                child: MessageView())));
+                child: const MessageView())));
   }
 }

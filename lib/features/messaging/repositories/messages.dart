@@ -105,7 +105,6 @@ class Messages extends _$Messages {
     var cached = await fetchMemberAvatarFromCache(user.id.value);
     if (cached != null) return cached; // todo: check hash so the PFP can change
 
-    print("fetching!");
     var fetched = await user.avatar!.fetch();
     await _cacheManager.putFile(
       user.id.toString(),

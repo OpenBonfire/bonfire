@@ -125,8 +125,12 @@ class _MessageBoxState extends State<MessageBox>
                           child:
                               Image(image: widget.message.member.icon!.image)),
                     ))
-                : const SizedBox(
-                    width: 25,
+                : const Padding(
+                    padding: EdgeInsets.only(right: 8),
+                    child: SizedBox(
+                      width: 40,
+                      height: 40,
+                    ),
                   ),
             Column(
               mainAxisAlignment: MainAxisAlignment.start,
