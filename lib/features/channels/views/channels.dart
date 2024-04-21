@@ -110,7 +110,7 @@ class _ChannelButtonState extends ConsumerState<ChannelButton> {
               padding: EdgeInsets.zero,
               side: BorderSide(
                 color: (widget.channel.id == channelController)
-                    ? Theme.of(context).custom.colorTheme.selectedIconColor
+                    ? Theme.of(context).custom.colorTheme.brightestGray
                     : Colors.transparent,
                 width: 0.3,
               ),

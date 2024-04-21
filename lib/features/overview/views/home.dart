@@ -1,5 +1,6 @@
 import 'package:bonfire/features/channels/views/channels.dart';
 import 'package:bonfire/features/guild/repositories/guilds.dart';
+import 'package:bonfire/features/messaging/views/messages.dart';
 import 'package:bonfire/features/overview/views/overlapping_panels.dart';
 import 'package:bonfire/features/overview/views/sidebar.dart';
 import 'package:bonfire/theme/theme.dart';
@@ -25,18 +26,8 @@ class _HomeState extends ConsumerState<HomeScreen> {
               ),
             ),
             main: Container(
-              width: double.infinity,
-              height: double.infinity,
-              decoration: BoxDecoration(
-                  color: Theme.of(context).custom.colorTheme.foreground,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.1),
-                      spreadRadius: 5,
-                      blurRadius: 7,
-                      offset: const Offset(0, 3),
-                    )
-                  ]),
-            )));
+                width: double.infinity,
+                height: double.infinity,
+                child: MessageView())));
   }
 }

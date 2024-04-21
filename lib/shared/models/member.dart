@@ -10,19 +10,20 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'member.g.dart';
 
 @JsonSerializable()
-class Member {
+class BonfireMember {
   final int id;
   final String name;
   @JsonKey(fromJson: Utils.imageFromJson, toJson: Utils.imageToJson)
   final Image? icon;
 
-  Member({
+  BonfireMember({
     required this.id,
     required this.name,
     this.icon,
   });
 
-  factory Member.fromJson(Map<String, dynamic> json) => _$MemberFromJson(json);
+  factory BonfireMember.fromJson(Map<String, dynamic> json) =>
+      _$BonfireMemberFromJson(json);
 
-  Map<String, dynamic> toJson() => _$MemberToJson(this);
+  Map<String, dynamic> toJson() => _$BonfireMemberToJson(this);
 }

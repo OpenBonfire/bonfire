@@ -1,19 +1,24 @@
+import 'package:bonfire/shared/models/member.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'message.g.dart';
 
 @JsonSerializable()
-class Message {
+class BonfireMessage {
   final int id;
-  final String name;
+  final String content;
+  final BonfireMember member;
+  final DateTime timestamp;
 
-  Message({
+  BonfireMessage({
     required this.id,
-    required this.name,
+    required this.content,
+    required this.member,
+    required this.timestamp,
   });
 
-  factory Message.fromJson(Map<String, dynamic> json) =>
-      _$MessageFromJson(json);
+  factory BonfireMessage.fromJson(Map<String, dynamic> json) =>
+      _$BonfireMessageFromJson(json);
 
-  Map<String, dynamic> toJson() => _$MessageToJson(this);
+  Map<String, dynamic> toJson() => _$BonfireMessageToJson(this);
 }

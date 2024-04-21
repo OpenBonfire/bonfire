@@ -70,6 +70,8 @@ class BonfireChannel {
   final int position;
   final BonfireChannel? parent;
 
+  // @JsonKey(includeToJson: false, includeFromJson: false)
+
   BonfireChannel({
     required this.id,
     required this.name,

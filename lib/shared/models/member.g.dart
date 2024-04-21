@@ -6,13 +6,15 @@ part of 'member.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-Member _$MemberFromJson(Map<String, dynamic> json) => Member(
+BonfireMember _$BonfireMemberFromJson(Map<String, dynamic> json) =>
+    BonfireMember(
       id: json['id'] as int,
       name: json['name'] as String,
       icon: Utils.imageFromJson(json['icon'] as String),
     );
 
-Map<String, dynamic> _$MemberToJson(Member instance) => <String, dynamic>{
+Map<String, dynamic> _$BonfireMemberToJson(BonfireMember instance) =>
+    <String, dynamic>{
       'id': instance.id,
       'name': instance.name,
       'icon': Utils.imageToJson(instance.icon),
