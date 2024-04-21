@@ -29,8 +29,11 @@ class Guilds extends _$Guilds {
       List<nyxx.UserGuild> userGuilds = await user!.client.listGuilds();
       List<Future<Guild>> guildFutures = userGuilds.map((guild) async {
         // Async icon lookup for speed
-        var iconBytes = await guild.icon?.fetch() ?? Uint8List(0);
-        var iconImage = Image.memory(iconBytes);
+        var iconImage;
+        if (guild.icon != null) {
+          var iconBytes = await guild.icon!.fetch();
+          iconImage = Image.memory(iconBytes);
+        }
         return Guild(
           id: guild.id.value,
           name: guild.name,
