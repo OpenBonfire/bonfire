@@ -1,3 +1,4 @@
+import 'package:bonfire/features/channels/controllers/channel.dart';
 import 'package:bonfire/features/channels/repositories/channels.dart';
 import 'package:bonfire/shared/models/channel.dart';
 import 'package:bonfire/theme/theme.dart';
@@ -62,7 +63,7 @@ class _ChannelsListState extends ConsumerState<ChannelsList> {
           itemBuilder: (context, index) {
             if (index < channelsWithoutParent.length) {
               var channel = channelsWithoutParent[index];
-              return ChannelButton(name: channel.name);
+              return ChannelButton(channel: channel);
             } else {
               var categoryIndex = index - channelsWithoutParent.length;
               var categoryId = categoryMap.keys.elementAt(categoryIndex);
@@ -83,19 +84,21 @@ class _ChannelsListState extends ConsumerState<ChannelsList> {
   }
 }
 
-class ChannelButton extends StatefulWidget {
-  String name;
-  ChannelButton({super.key, required this.name});
+class ChannelButton extends ConsumerStatefulWidget {
+  BonfireChannel channel;
+  ChannelButton({super.key, required this.channel});
 
   @override
-  State<ChannelButton> createState() => _ChannelButtonState();
+  ConsumerState<ChannelButton> createState() => _ChannelButtonState();
 }
 
-class _ChannelButtonState extends State<ChannelButton> {
+class _ChannelButtonState extends ConsumerState<ChannelButton> {
   Map<int, Widget> categoryMap = {};
 
   @override
   Widget build(BuildContext context) {
+    var channelController = ref.watch(channelControllerProvider);
+
     return Padding(
       padding: const EdgeInsets.only(bottom: 2, left: 8, right: 30),
       child: SizedBox(
@@ -103,22 +106,33 @@ class _ChannelButtonState extends State<ChannelButton> {
         height: 35,
         child: OutlinedButton(
           style: OutlinedButton.styleFrom(
-            minimumSize: Size.zero,
-            padding: EdgeInsets.zero,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-            foregroundColor: Theme.of(context).custom.colorTheme.textColor1,
-            backgroundColor: Theme.of(context).custom.colorTheme.cardSelected,
-          ),
-          onPressed: () {},
+              minimumSize: Size.zero,
+              padding: EdgeInsets.zero,
+              side: BorderSide(
+                color: (widget.channel.id == channelController)
+                    ? Theme.of(context).custom.colorTheme.selectedIconColor
+                    : Colors.transparent,
+                width: 0.3,
+              ),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              foregroundColor: Theme.of(context).custom.colorTheme.textColor1,
+              backgroundColor: (widget.channel.id == channelController)
+                  ? Theme.of(context).custom.colorTheme.cardSelected
+                  : Colors.transparent),
+          onPressed: () {
+            ref
+                .read(channelControllerProvider.notifier)
+                .setChannel(widget.channel.id);
+          },
           child: SizedBox(
             height: 35,
             child: Align(
               alignment: Alignment.centerLeft,
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 12),
-                child: Text(widget.name,
+                child: Text(widget.channel.name,
                     textAlign: TextAlign.left,
                     style: Theme.of(context).custom.textTheme.bodyText2),
               ),
@@ -164,7 +178,7 @@ class _CategoryState extends State<Category> {
           SizedBox(
             child: Column(
               children: widget.children
-                  .map((channel) => ChannelButton(name: channel.name))
+                  .map((channel) => ChannelButton(channel: channel))
                   .toList(),
             ),
           ),
