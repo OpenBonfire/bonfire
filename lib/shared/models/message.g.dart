@@ -18,6 +18,6 @@ Map<String, dynamic> _$BonfireMessageToJson(BonfireMessage instance) =>
     <String, dynamic>{
       'id': instance.id,
       'content': instance.content,
-      'member': instance.member,
       'timestamp': instance.timestamp.toIso8601String(),
+      'member': instance.member,
     };

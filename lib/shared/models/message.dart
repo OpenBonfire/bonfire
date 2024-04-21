@@ -7,8 +7,8 @@ part 'message.g.dart';
 class BonfireMessage {
   final int id;
   final String content;
-  final BonfireMember member;
   final DateTime timestamp;
+  final BonfireMember member;
 
   BonfireMessage({
     required this.id,

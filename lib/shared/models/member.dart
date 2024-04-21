@@ -13,7 +13,11 @@ part 'member.g.dart';
 class BonfireMember {
   final int id;
   final String name;
-  @JsonKey(fromJson: Utils.imageFromJson, toJson: Utils.imageToJson)
+
+  // serialize / deserialize Image object
+  // @JsonKey(fromJson: Utils.imageFromJson, toJson: Utils.imageToJson) doesn't work...
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
   final Image? icon;
 
   BonfireMember({
