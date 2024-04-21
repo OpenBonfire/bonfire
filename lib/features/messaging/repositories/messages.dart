@@ -32,27 +32,27 @@ class Messages extends _$Messages {
     var authOutput = ref.watch(authProvider.notifier).getAuth();
     var channelId = ref.watch(channelControllerProvider);
 
+    runAsyncServerTask(authOutput, channelId);
+
     List<BonfireMessage> channelMessages = [];
 
     // PULL FROM CACHE
     var cacheKey = channelId.toString();
     var cacheData = await _cacheManager.getFileFromCache(cacheKey);
-    print("cacheKey: $cacheKey");
+
     if (cacheData != null) {
-      print("CacheData: ");
-      print(cacheData.file.absolute.path);
-      print("doing decode on cache...");
-      // print(utf8.decode(cacheData.file.readAsBytesSync()));
       List<dynamic> cachedMessages =
           json.decode(utf8.decode(cacheData.file.readAsBytesSync()));
       for (var message in cachedMessages) {
         channelMessages.add(BonfireMessage.fromJson(message));
       }
-      return channelMessages;
     } else {
       print("cache is null!");
     }
+    return channelMessages;
+  }
 
+  void runAsyncServerTask(authOutput, channelId) async {
     if ((authOutput != null) &&
         (authOutput is AuthUser) &&
         (channelId != null)) {
@@ -67,6 +67,7 @@ class Messages extends _$Messages {
         messages.map((message) => fetchMemberAvatar(message.author)),
       );
 
+      List<BonfireMessage> channelMessages = [];
       for (int i = 0; i < messages.length; i++) {
         var message = messages[i];
         var memberAvatar = memberAvatars[i];
@@ -81,24 +82,15 @@ class Messages extends _$Messages {
           ),
         );
         channelMessages.add(newMessage);
-        _cacheMessages(channelMessages, cacheKey);
+        _cacheMessages(channelMessages, channelId.toString());
       }
-
-      print("saving to key: ");
-      print(cacheKey);
-
-      var file = await _cacheManager.putFile(
-        cacheKey,
+      await _cacheManager.putFile(
+        channelId.toString(),
         utf8.encode(
             json.encode(channelMessages.map((e) => e.toJson()).toList())),
       );
-      print(file.path);
-    } else {
-      print("Not an auth user. This is probably very bad.");
+      state = AsyncData(channelMessages);
     }
-    print("setting state");
-    state = AsyncData(channelMessages);
-    return channelMessages;
   }
 
   Future<Uint8List> fetchMemberAvatar(nyxx.MessageAuthor user) async {
