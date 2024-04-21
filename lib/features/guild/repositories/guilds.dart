@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:bonfire/features/auth/data/repositories/auth.dart';
 import 'package:bonfire/features/auth/data/repositories/discord_auth.dart';
 import 'package:bonfire/shared/models/guild.dart';
@@ -6,6 +8,11 @@ import 'package:nyxx_self/nyxx.dart' as nyxx;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'guilds.g.dart';
+
+/*
+TODO: You can cache each guild by instantly returning the last value,
+then setting `state` when the actual value is recieved.
+*/
 
 @riverpod
 class Guilds extends _$Guilds {
@@ -17,17 +24,23 @@ class Guilds extends _$Guilds {
     var authOutput = ref.read(authProvider.notifier).getAuth();
 
     if ((authOutput != null) & (authOutput! is AuthUser)) {
-      List<nyxx.UserGuild> guilds =
-          await user!.client.guilds.client.listGuilds();
+      user = authOutput as AuthUser;
 
-      List<Guild> _guilds = [];
-      for (nyxx.UserGuild guild in guilds) {
-        _guilds.add(Guild(
-            id: guild.id.value,
-            name: guild.name,
-            // todo: pull images from flutter cache
-            icon: Image.memory(await guild.icon!.fetch())));
-      }
+      List<nyxx.UserGuild> userGuilds = await user!.client.listGuilds();
+      List<Future<Guild>> guildFutures = userGuilds.map((guild) async {
+        // Async icon lookup for speed
+        var iconBytes = await guild.icon?.fetch() ?? Uint8List(0);
+        var iconImage = Image.memory(iconBytes);
+        return Guild(
+          id: guild.id.value,
+          name: guild.name,
+          icon: iconImage,
+        );
+      }).toList();
+
+      // Wait for all guilds to be fetched concurrently
+      List<Guild> fetchedGuilds = await Future.wait(guildFutures);
+      return fetchedGuilds;
     } else {
       print("Not an auth user. This is probably very bad.");
     }

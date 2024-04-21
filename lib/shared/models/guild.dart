@@ -13,19 +13,19 @@ class Guild {
   final int id;
   final String name;
   @JsonKey(fromJson: _imageFromJson, toJson: _imageToJson)
-  final Image icon;
+  final Image? icon;
 
   Guild({
     required this.id,
     required this.name,
-    required this.icon,
+    this.icon,
   });
 
   factory Guild.fromJson(Map<String, dynamic> json) => _$GuildFromJson(json);
 
   Map<String, dynamic> toJson() => _$GuildToJson(this);
 
-  static Image _imageFromJson(String base64String) {
+  static Image? _imageFromJson(String base64String) {
     if (base64String.isEmpty) {
       // todo: do this differently
       return Image.asset("assets/default_icon.png");
@@ -34,7 +34,9 @@ class Guild {
     return Image.memory(bytes);
   }
 
-  static Future<String> _imageToJson(Image icon) async {
+  static Future<String?> _imageToJson(Image? icon) async {
+    if (icon == null) return null;
+
     Completer<String> completer = Completer();
     icon.image.resolve(const ImageConfiguration()).addListener(
       ImageStreamListener(

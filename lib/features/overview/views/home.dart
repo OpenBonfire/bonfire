@@ -16,7 +16,6 @@ class HomeScreen extends ConsumerStatefulWidget {
 class _HomeState extends ConsumerState<HomeScreen> {
   @override
   Widget build(BuildContext context) {
-    var guilds = ref.watch(guildsProvider);
     return Scaffold(
         body: OverlappingPanels(
             left: SizedBox(
