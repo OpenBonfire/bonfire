@@ -51,11 +51,14 @@ class _ChannelsListState extends ConsumerState<ChannelsList> {
     });
 
     return Padding(
-      padding: EdgeInsets.only(top: topPadding),
+      padding: EdgeInsets.only(top: topPadding, right: 30),
       child: Container(
         height: double.infinity,
         decoration: BoxDecoration(
-          borderRadius: const BorderRadius.only(topLeft: Radius.circular(36)),
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(30),
+            topRight: Radius.circular(8),
+          ),
           color: Theme.of(context).custom.colorTheme.foreground,
         ),
         child: ListView.builder(

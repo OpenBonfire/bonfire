@@ -57,7 +57,7 @@ class Messages extends _$Messages {
       var beforeSnowflake = before != null ? nyxx.Snowflake(before) : null;
 
       var messages = await textChannel.messages
-          .fetchMany(limit: 100, before: beforeSnowflake);
+          .fetchMany(limit: 40, before: beforeSnowflake);
 
       List<Uint8List> memberAvatars = await Future.wait(
         messages.map((message) => fetchMemberAvatar(message.author)),
@@ -92,8 +92,6 @@ class Messages extends _$Messages {
       } else {
         channelMessagesMap[channelId.toString()] = channelMessages;
       }
-
-      print(channelMessagesMap.length);
 
       await _cacheManager.putFile(
         channelId.toString(),
