@@ -46,6 +46,7 @@ class Messages extends _$Messages {
   }
 
   void getMessages(authOutput, channelId, {int? before}) async {
+    loadingMessages = true;
     if ((authOutput != null) &&
         (authOutput is AuthUser) &&
         (channelId != null)) {
@@ -101,22 +102,21 @@ class Messages extends _$Messages {
 
       if (channelId == ref.read(channelControllerProvider)) {
         var newChannels = channelMessagesMap[channelId.toString()]!;
-        var chunkSize = 50;
 
-        for (var i = 0; i < newChannels.length; i += chunkSize) {
-          var endIndex = (i + chunkSize < newChannels.length)
-              ? i + chunkSize
-              : newChannels.length;
-          var range = newChannels.getRange(i, endIndex).toList();
+        var max = newChannels.length;
+        var range1 = newChannels.getRange(0, (max < 49) ? max : 49).toList();
+        var range2 = newChannels.getRange(50, newChannels.length).toList();
 
-          state = AsyncData(range);
-          await Future.delayed(const Duration(seconds: 1));
-        }
+        state = AsyncData(range1);
+        await Future.delayed(const Duration(milliseconds: 100));
+        range1.addAll(range2);
+        state = AsyncData(range1);
       } else {
         // this is fine. We just don't want to return an invalid page state.
         print("channel switched before state return!");
       }
     }
+    loadingMessages = false;
   }
 
   void fetchMoreMessages() {

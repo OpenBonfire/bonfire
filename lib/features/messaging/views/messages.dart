@@ -35,15 +35,16 @@ class _MessageViewState extends ConsumerState<MessageView> {
 
   void _scrollListener() {
     if (_scrollController.position.pixels >=
-        _scrollController.position.maxScrollExtent - 2000) {
+        _scrollController.position.maxScrollExtent - 1000) {
       _loadMoreMessages();
     }
   }
 
   void _loadMoreMessages() {
-    if (!ref.read(messagesProvider.notifier).loadingMessages) {
-      ref.read(messagesProvider.notifier).fetchMoreMessages();
-    }
+    // if (!ref.read(messagesProvider.notifier).loadingMessages) {
+    print("loading messaged!");
+    ref.read(messagesProvider.notifier).fetchMoreMessages();
+    // }
   }
 
   Widget _messageBarIcon() {
