@@ -94,11 +94,15 @@ class Messages extends _$Messages {
         channelMessagesMap[channelId.toString()] = channelMessages;
       }
 
-      await _cacheManager.putFile(
-        channelId.toString(),
-        utf8.encode(
-            json.encode(channelMessages.map((e) => e.toJson()).toList())),
-      );
+      // we only want to cache the first messages
+      // it would be useless to polute the cache with old data
+      if (before == null) {
+        await _cacheManager.putFile(
+          channelId.toString(),
+          utf8.encode(
+              json.encode(channelMessages.map((e) => e.toJson()).toList())),
+        );
+      }
 
       if (channelId == ref.read(channelControllerProvider)) {
         var newChannels = channelMessagesMap[channelId.toString()]!;
