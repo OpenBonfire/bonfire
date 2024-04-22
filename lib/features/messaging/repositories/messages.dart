@@ -19,48 +19,33 @@ part 'messages.g.dart';
 @Riverpod(keepAlive: false)
 class Messages extends _$Messages {
   AuthUser? user;
+  bool loadingMessages = false;
+  nyxx.Message? oldestMessage;
+
   final _cacheManager = CacheManager(
     Config(
       'bonfire_cache',
-      // stalePeriod: const Duration(days: 7),
-      // maxNrOfCacheObjects: 100,
+      stalePeriod: const Duration(days: 7),
+      maxNrOfCacheObjects: 100,
     ),
   );
+
+  Map<String, List<BonfireMessage>> channelMessagesMap = {};
 
   @override
   Future<List<BonfireMessage>> build() async {
     var authOutput = ref.watch(authProvider.notifier).getAuth();
     var channelId = ref.watch(channelControllerProvider);
 
-    runAsyncServerTask(authOutput, channelId);
+    getMessages(authOutput, channelId);
 
-    List<BonfireMessage> channelMessages = [];
-
-    var cacheKey = channelId.toString();
-    var cacheData = await _cacheManager.getFileFromCache(cacheKey);
-
-    if (cacheData != null) {
-      List<dynamic> cachedMessages =
-          json.decode(utf8.decode(cacheData.file.readAsBytesSync()));
-      for (var message in cachedMessages) {
-        if (message['member']['id'] != null) {
-          var pfp =
-              await fetchMemberAvatarFromCache(message['member']['id'] as int);
-          var newMessage = BonfireMessage.fromJson(message);
-          newMessage.member.icon = Image.memory(pfp!);
-
-          channelMessages.add(newMessage);
-        } else {
-          channelMessages.add(message);
-        }
-      }
-    } else {
-      print("cache is null!");
-    }
+    List<BonfireMessage> channelMessages =
+        channelMessagesMap[channelId.toString()] ?? [];
+    print("sending cached");
     return channelMessages;
   }
 
-  void runAsyncServerTask(authOutput, channelId) async {
+  void getMessages(authOutput, channelId, {int? before}) async {
     if ((authOutput != null) &&
         (authOutput is AuthUser) &&
         (channelId != null)) {
@@ -69,7 +54,10 @@ class Messages extends _$Messages {
       var textChannel = await user!.client.channels
           .fetch(nyxx.Snowflake(channelId)) as nyxx.TextChannel;
 
-      var messages = await textChannel.messages.fetchMany(limit: 20);
+      var beforeSnowflake = before != null ? nyxx.Snowflake(before) : null;
+
+      var messages = await textChannel.messages
+          .fetchMany(limit: 50, before: beforeSnowflake);
 
       List<Uint8List> memberAvatars = await Future.wait(
         messages.map((message) => fetchMemberAvatar(message.author)),
@@ -78,6 +66,13 @@ class Messages extends _$Messages {
       List<BonfireMessage> channelMessages = [];
       for (int i = 0; i < messages.length; i++) {
         var message = messages[i];
+        // check & set oldest message
+        if (oldestMessage == null) {
+          oldestMessage = message;
+        } else if (message.timestamp.isBefore(oldestMessage!.timestamp)) {
+          oldestMessage = message;
+        }
+
         var memberAvatar = memberAvatars[i];
         var newMessage = BonfireMessage(
           id: message.id.value,
@@ -90,20 +85,36 @@ class Messages extends _$Messages {
           ),
         );
         channelMessages.add(newMessage);
-        _cacheMessages(channelMessages, channelId.toString());
       }
+
+      if (channelMessagesMap[channelId.toString()] != null) {
+        channelMessagesMap[channelId.toString()]!.addAll(channelMessages);
+      } else {
+        channelMessagesMap[channelId.toString()] = channelMessages;
+      }
+
+      print(channelMessagesMap.length);
+
       await _cacheManager.putFile(
         channelId.toString(),
         utf8.encode(
             json.encode(channelMessages.map((e) => e.toJson()).toList())),
       );
+
       if (channelId == ref.read(channelControllerProvider)) {
-        state = AsyncData(channelMessages);
+        state = AsyncData(channelMessagesMap[channelId.toString()]!);
       } else {
         // this is fine. We just don't want to return an invalid page state.
         print("channel switched before state return!");
       }
     }
+  }
+
+  void fetchMoreMessages() {
+    var authOutput = ref.watch(authProvider.notifier).getAuth();
+    var channelId = ref.watch(channelControllerProvider);
+
+    getMessages(authOutput, channelId, before: oldestMessage!.id.value);
   }
 
   Future<Uint8List?> fetchMemberAvatarFromCache(int userId) async {

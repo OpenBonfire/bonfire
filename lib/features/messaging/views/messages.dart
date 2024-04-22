@@ -15,7 +15,34 @@ class MessageView extends ConsumerStatefulWidget {
 }
 
 class _MessageViewState extends ConsumerState<MessageView> {
+  final ScrollController _scrollController = ScrollController();
   Map<int, Widget> messageWidgets = {};
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_scrollListener);
+  }
+
+  @override
+  void dispose() {
+    _scrollController.removeListener(_scrollListener);
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _scrollListener() {
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent - 100) {
+      _loadMoreMessages();
+    }
+  }
+
+  void _loadMoreMessages() {
+    if (!ref.read(messagesProvider.notifier).loadingMessages) {
+      ref.read(messagesProvider.notifier).fetchMoreMessages();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,6 +61,7 @@ class _MessageViewState extends ConsumerState<MessageView> {
         ],
       ),
       child: ListView.builder(
+        controller: _scrollController,
         itemCount: messages.length,
         reverse: true,
         itemBuilder: (context, index) {
@@ -87,6 +115,10 @@ class _MessageBoxState extends State<MessageBox>
       section2 = ' at 0$twelveHour:${time.minute} $section3';
     } else {
       section2 = ' at $twelveHour:${time.minute} $section3';
+    }
+
+    if (time.minute < 10) {
+      section2 = ' at $twelveHour:0${time.minute} $section3';
     }
 
     return section1 + section2;
