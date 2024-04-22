@@ -5,8 +5,6 @@ import 'package:bonfire/features/auth/data/repositories/auth.dart';
 import 'package:bonfire/features/auth/data/repositories/discord_auth.dart';
 import 'package:bonfire/features/channels/controllers/channel.dart';
 import 'package:bonfire/features/guild/controllers/guild.dart';
-import 'package:bonfire/shared/models/channel.dart';
-import 'package:bonfire/shared/models/guild.dart';
 import 'package:bonfire/shared/models/member.dart';
 import 'package:bonfire/shared/models/message.dart';
 import 'package:flutter/widgets.dart';
@@ -79,7 +77,7 @@ class Messages extends _$Messages {
           // var user = message.author as nyxx.Member;
           var user = message.author as nyxx.User;
           // username = user.nick ?? user.user!.globalName!;
-          username = user.globalName!;
+          username = user.globalName ?? username;
 
           // TODO: fetch guild member
         }
