@@ -26,7 +26,7 @@ class Messages extends _$Messages {
     Config(
       'bonfire_cache',
       stalePeriod: const Duration(days: 7),
-      maxNrOfCacheObjects: 100,
+      maxNrOfCacheObjects: 10000,
     ),
   );
 
@@ -57,7 +57,7 @@ class Messages extends _$Messages {
       var beforeSnowflake = before != null ? nyxx.Snowflake(before) : null;
 
       var messages = await textChannel.messages
-          .fetchMany(limit: 50, before: beforeSnowflake);
+          .fetchMany(limit: 100, before: beforeSnowflake);
 
       List<Uint8List> memberAvatars = await Future.wait(
         messages.map((message) => fetchMemberAvatar(message.author)),
