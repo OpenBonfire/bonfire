@@ -8,7 +8,7 @@ class BonfireMessage {
   final int id;
   final String content;
   final DateTime timestamp;
-  final BonfireMember member;
+  final BonfireGuildMember member;
 
   BonfireMessage({
     required this.id,

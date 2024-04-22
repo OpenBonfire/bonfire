@@ -10,9 +10,12 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'member.g.dart';
 
 @JsonSerializable()
-class BonfireMember {
+class BonfireGuildMember {
   final int id;
+  final int guildId;
   final String name;
+  final String displayName;
+  final String? nickName;
 
   // serialize / deserialize Image object
   // @JsonKey(fromJson: Utils.imageFromJson, toJson: Utils.imageToJson) doesn't work...
@@ -22,14 +25,17 @@ class BonfireMember {
   @JsonKey(includeFromJson: false, includeToJson: false)
   Image? icon;
 
-  BonfireMember({
+  BonfireGuildMember({
     required this.id,
+    required this.guildId,
+    required this.displayName,
     required this.name,
+    this.nickName,
     this.icon,
   });
 
-  factory BonfireMember.fromJson(Map<String, dynamic> json) =>
-      _$BonfireMemberFromJson(json);
+  factory BonfireGuildMember.fromJson(Map<String, dynamic> json) =>
+      _$BonfireGuildMemberFromJson(json);
 
-  Map<String, dynamic> toJson() => _$BonfireMemberToJson(this);
+  Map<String, dynamic> toJson() => _$BonfireGuildMemberToJson(this);
 }

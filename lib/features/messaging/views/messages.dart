@@ -226,6 +226,8 @@ class _MessageBoxState extends State<MessageBox>
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
 
+    var name = widget.message.member.name;
+
     return OutlinedButton(
       style: ButtonStyle(
         alignment: Alignment.centerLeft,
@@ -288,7 +290,7 @@ class _MessageBoxState extends State<MessageBox>
                       Padding(
                           padding: const EdgeInsets.only(left: 6, top: 0),
                           child: Text(
-                            widget.message.member.name,
+                            widget.message.member.displayName,
                             textAlign: TextAlign.left,
                             style: const TextStyle(
                               color: Color.fromARGB(255, 255, 255, 255),

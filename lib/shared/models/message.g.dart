@@ -10,7 +10,8 @@ BonfireMessage _$BonfireMessageFromJson(Map<String, dynamic> json) =>
     BonfireMessage(
       id: json['id'] as int,
       content: json['content'] as String,
-      member: BonfireMember.fromJson(json['member'] as Map<String, dynamic>),
+      member:
+          BonfireGuildMember.fromJson(json['member'] as Map<String, dynamic>),
       timestamp: DateTime.parse(json['timestamp'] as String),
     );
 

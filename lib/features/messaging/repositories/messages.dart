@@ -53,7 +53,7 @@ class Messages extends _$Messages {
       user = authOutput;
 
       var textChannel = await user!.client.channels
-          .fetch(nyxx.Snowflake(channelId)) as nyxx.TextChannel;
+          .get(nyxx.Snowflake(channelId)) as nyxx.TextChannel;
 
       var beforeSnowflake = before != null ? nyxx.Snowflake(before) : null;
 
@@ -74,15 +74,28 @@ class Messages extends _$Messages {
           oldestMessage = message;
         }
 
+        var username = message.author.username;
+        if (message.author is nyxx.User) {
+          // var user = message.author as nyxx.Member;
+          var user = message.author as nyxx.User;
+          // username = user.nick ?? user.user!.globalName!;
+          username = user.globalName!;
+
+          // TODO: fetch guild member
+        }
+
         var memberAvatar = memberAvatars[i];
         var newMessage = BonfireMessage(
           id: message.id.value,
           content: message.content,
           timestamp: message.timestamp,
-          member: BonfireMember(
+          member: BonfireGuildMember(
             id: message.author.id.value,
             name: message.author.username,
             icon: Image.memory(memberAvatar),
+            displayName: username,
+            guildId:
+                ref.read(guildControllerProvider.notifier).currentGuild!.id,
           ),
         );
         channelMessages.add(newMessage);
@@ -106,15 +119,7 @@ class Messages extends _$Messages {
 
       if (channelId == ref.read(channelControllerProvider)) {
         var newChannels = channelMessagesMap[channelId.toString()]!;
-
-        // var max = newChannels.length;
-        // var range1 = newChannels.getRange(0, (max < 49) ? max : 49).toList();
-        // var range2 = newChannels.getRange(50, newChannels.length).toList();
         state = AsyncData(newChannels);
-        // state = AsyncData(range1);
-        // await Future.delayed(const Duration(milliseconds: 100));
-        // range1.addAll(range2);
-        // state = AsyncData(range1);
       } else {
         // this is fine. We just don't want to return an invalid page state.
         print("channel switched before state return!");
