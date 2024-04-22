@@ -14,7 +14,7 @@ class CurrentGuildController extends _$CurrentGuildController {
   Guild? build() {
     var guildController = ref.watch(guildControllerProvider);
     var guildsOutput = ref.read(guildsProvider);
-    print(guildController);
+
     guildsOutput.when(
       data: (newGuilds) {
         guilds = newGuilds;

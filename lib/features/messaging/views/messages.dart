@@ -213,11 +213,7 @@ class _MessageBoxState extends State<MessageBox>
       twelveHour = 12;
     }
 
-    if (twelveHour < 10) {
-      section2 = ' at 0$twelveHour:${time.minute} $section3';
-    } else {
-      section2 = ' at $twelveHour:${time.minute} $section3';
-    }
+    section2 = ' at $twelveHour:${time.minute} $section3';
 
     if (time.minute < 10) {
       section2 = ' at $twelveHour:0${time.minute} $section3';

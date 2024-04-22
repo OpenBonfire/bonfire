@@ -57,7 +57,7 @@ class Messages extends _$Messages {
       var beforeSnowflake = before != null ? nyxx.Snowflake(before) : null;
 
       var messages = await textChannel.messages
-          .fetchMany(limit: 40, before: beforeSnowflake);
+          .fetchMany(limit: 100, before: beforeSnowflake);
 
       List<Uint8List> memberAvatars = await Future.wait(
         messages.map((message) => fetchMemberAvatar(message.author)),
@@ -100,7 +100,18 @@ class Messages extends _$Messages {
       );
 
       if (channelId == ref.read(channelControllerProvider)) {
-        state = AsyncData(channelMessagesMap[channelId.toString()]!);
+        var newChannels = channelMessagesMap[channelId.toString()]!;
+        var chunkSize = 50;
+
+        for (var i = 0; i < newChannels.length; i += chunkSize) {
+          var endIndex = (i + chunkSize < newChannels.length)
+              ? i + chunkSize
+              : newChannels.length;
+          var range = newChannels.getRange(i, endIndex).toList();
+
+          state = AsyncData(range);
+          await Future.delayed(const Duration(seconds: 1));
+        }
       } else {
         // this is fine. We just don't want to return an invalid page state.
         print("channel switched before state return!");
