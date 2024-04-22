@@ -6,7 +6,7 @@ part of 'realtime_messages.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$realtimeMessagesHash() => r'0facbf0061bfefe3b5ed45d72f39cf3c806ff978';
+String _$realtimeMessagesHash() => r'b0b2d2e685926a231fc4651c548777b9572e3a8a';
 
 /// See also [realtimeMessages].
 @ProviderFor(realtimeMessages)

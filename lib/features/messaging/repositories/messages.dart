@@ -5,8 +5,10 @@ import 'package:bonfire/features/auth/data/repositories/auth.dart';
 import 'package:bonfire/features/auth/data/repositories/discord_auth.dart';
 import 'package:bonfire/features/channels/controllers/channel.dart';
 import 'package:bonfire/features/guild/controllers/guild.dart';
+import 'package:bonfire/features/messaging/repositories/realtime_messages.dart';
 import 'package:bonfire/shared/models/member.dart';
 import 'package:bonfire/shared/models/message.dart';
+import 'package:bonfire/shared/utils/message.dart';
 import 'package:flutter/widgets.dart';
 import 'package:nyxx_self/nyxx.dart' as nyxx;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -27,11 +29,18 @@ class Messages extends _$Messages {
     ),
   );
   Map<String, List<BonfireMessage>> channelMessagesMap = {};
+  bool realtimeListernRunning = false;
 
   @override
   Future<List<BonfireMessage>> build() async {
     var authOutput = ref.watch(authProvider.notifier).getAuth();
     var channelId = ref.watch(channelControllerProvider);
+    var realtimeProvider = ref.watch(realtimeMessagesProvider);
+
+    realtimeProvider.whenData((value) {
+      processRealtimeMessages(value);
+    });
+
     await getMessages(authOutput, channelId);
     return channelMessagesMap[channelId.toString()] ?? [];
   }
@@ -95,6 +104,21 @@ class Messages extends _$Messages {
       state = AsyncData(channelMessagesMap[channelId.toString()] ?? []);
     }
     loadingMessages = false;
+  }
+
+  void processRealtimeMessages(List<BonfireMessage> messages) async {
+    print("got data!...");
+    if (messages.isNotEmpty) {
+      var channelId = ref.watch(channelControllerProvider);
+      print(channelId);
+      if (channelId != null) {
+        // TODO: Only take the first message, and append :D
+        // you could also take all of them and compare, to ensure we
+        // didn't lose anything in a race condition
+        channelMessagesMap[channelId.toString()] = messages.reversed.toList();
+        // state = AsyncData(channelMessagesMap[channelId.toString()] ?? []);
+      }
+    }
   }
 
   void fetchMoreMessages() {

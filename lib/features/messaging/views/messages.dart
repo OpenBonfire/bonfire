@@ -73,8 +73,8 @@ class _MessageViewState extends ConsumerState<MessageView> {
 
     var realtimeMessages = ref.watch(realtimeMessagesProvider);
     realtimeMessages.whenData((value) {
-      print(value[0].member.name);
-      print(value[0].member.displayName);
+      // print(value[0].member.name);
+      // print(value[0].member.displayName);
     });
 
     var currentGuild = ref.watch(currentGuildControllerProvider);
@@ -157,9 +157,10 @@ class _MessageViewState extends ConsumerState<MessageView> {
             child: Row(
               children: [
                 _messageBarIcon(
-                  Icon(
+                  const Icon(
                     Icons.add,
-                    color: Theme.of(context).custom.colorTheme.cardSelected,
+                    // TODO: This might be bad for light theme.
+                    color: Colors.white,
                   ),
                   () => print("add"),
                 ),

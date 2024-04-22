@@ -19,19 +19,6 @@ Stream<List<BonfireMessage>> realtimeMessages(RealtimeMessagesRef ref) async* {
     await for (final event in client.onMessageCreate) {
       var message =
           await MessageConverter.convert(event.message, event.guildId!.value);
-      // var message = BonfireMessage(
-      //   id: event.message.id.value,
-      //   content: event.message.content,
-      //   timestamp: event.message.timestamp,
-      //   member: BonfireGuildMember(
-      //     id: event.message.author.id.value,
-      //     displayName: event.message.author.username,
-      //     // warning: I think guildId is null for DMs!
-      //     // this needs to be handled properly
-      //     guildId: event.guildId!.value,
-      //     name: event.message.author.username,
-      //   ),
-      // );
 
       messageQueue.add(message);
 
@@ -39,7 +26,7 @@ Stream<List<BonfireMessage>> realtimeMessages(RealtimeMessagesRef ref) async* {
         messageQueue.removeAt(0);
       }
 
-      yield List.from(messageQueue.reversed);
+      yield List.from(messageQueue);
     }
   }
 }
