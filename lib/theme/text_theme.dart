@@ -15,7 +15,7 @@ class CustomTextTheme {
     fontWeight: FontWeight.w600,
   );
   final titleSmall = TextStyle(
-    fontSize: 18,
+    fontSize: 20,
     fontFamily: _family,
     fontWeight: FontWeight.w600,
   );

@@ -73,6 +73,11 @@ class _MessageViewState extends ConsumerState<MessageView> {
     var height = MediaQuery.of(context).size.height;
 
     var currentGuild = ref.watch(currentGuildControllerProvider);
+    var currentChannel =
+        ref.read(channelControllerProvider.notifier).getChannel();
+
+    print("got current channel!");
+    print(currentChannel);
 
     return Container(
       decoration: BoxDecoration(
@@ -107,7 +112,9 @@ class _MessageViewState extends ConsumerState<MessageView> {
                   child: Row(
                     children: [
                       Text(
-                        (currentGuild != null) ? currentGuild.name : "",
+                        (currentGuild != null && currentChannel != null)
+                            ? "# ${currentChannel.name}"
+                            : "",
                         textAlign: TextAlign.left,
                         style: Theme.of(context).custom.textTheme.titleSmall,
                       ),
@@ -156,13 +163,14 @@ class _MessageViewState extends ConsumerState<MessageView> {
                         color: Theme.of(context).custom.colorTheme.cardSelected,
                         borderRadius: BorderRadius.circular(36),
                       ),
-                      child: const Padding(
-                        padding: EdgeInsets.only(left: 16),
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 16),
                         child: TextField(
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             hintText: 'Message #channel-name',
                             border: InputBorder.none,
                           ),
+                          style: Theme.of(context).custom.textTheme.bodyText1,
                         ),
                       ),
                     ),

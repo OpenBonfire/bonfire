@@ -25,9 +25,19 @@ class _HomeState extends ConsumerState<HomeScreen> {
                 children: [Sidebar(), Expanded(child: ChannelsList())],
               ),
             ),
-            main: const SizedBox(
+            main: SizedBox(
                 width: double.infinity,
                 height: double.infinity,
-                child: MessageView())));
+                child: OverlappingPanels(
+                  main: const MessageView(),
+                  right: Container(
+                    width: 100,
+                    height: 100,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                ))));
   }
 }
