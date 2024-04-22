@@ -9,7 +9,7 @@ class AppColorsDark {
   static const selectedIconColor = Color(0xFFE4E5E8);
   static const deselectedIconColor = Color(0xFF72767D);
 
-  static const blurpleColor = Color(0xFF7289DA);
+  static const blurpleColor = Color(0xFF5B65EA);
   static const redColor = Color(0xFFED4245);
   static const greenColor = Color(0xFF57F287);
   static const yellowColor = Color(0xFFFEE75C);
@@ -29,7 +29,7 @@ class AppColorsLight {
   static const cardSelected = Color(0xFF26272F);
   static const brightestGray = Color(0xFF383A43);
 
-  static const blurpleColor = Color(0xFF7289DA);
+  static const blurpleColor = Color(0xFF5B65EA);
   static const redColor = Color(0xFFED4245);
   static const greenColor = Color(0xFF57F287);
   static const yellowColor = Color(0xFFFEE75C);

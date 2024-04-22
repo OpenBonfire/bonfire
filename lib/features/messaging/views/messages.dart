@@ -1,6 +1,7 @@
 import 'package:bonfire/features/channels/controllers/channel.dart';
 import 'package:bonfire/features/guild/controllers/current_guild.dart';
 import 'package:bonfire/features/guild/controllers/guild.dart';
+import 'package:bonfire/features/messaging/controllers/message_bar.dart';
 import 'package:bonfire/features/messaging/repositories/messages.dart';
 import 'package:bonfire/shared/models/message.dart';
 import 'package:bonfire/theme/theme.dart';
@@ -19,6 +20,13 @@ class MessageView extends ConsumerStatefulWidget {
 class _MessageViewState extends ConsumerState<MessageView> {
   final ScrollController _scrollController = ScrollController();
   Map<int, Widget> messageWidgets = {};
+
+  // print("sending message: ");
+  // print(messageBarController.text);
+  // ref
+  //     .read(messagesProvider.notifier)
+  //     .sendMessage(messageBarController.text);
+  // messageBarController.text = "";
 
   @override
   void initState() {
@@ -46,20 +54,17 @@ class _MessageViewState extends ConsumerState<MessageView> {
     }
   }
 
-  Widget _messageBarIcon() {
+  Widget _messageBarIcon(Icon icon, void Function() onPressed,
+      {Color? backgroundColor}) {
     return Padding(
-      padding: const EdgeInsets.only(left: 6, top: 8, bottom: 6),
+      padding: const EdgeInsets.all(6),
       child: Container(
         decoration: BoxDecoration(
-          color: Theme.of(context).custom.colorTheme.cardSelected,
+          color: backgroundColor ??
+              Theme.of(context).custom.colorTheme.cardSelected,
           shape: BoxShape.circle,
         ),
-        child: IconButton(
-          icon: const Icon(Icons.add),
-          onPressed: () {
-            print("add message pressed");
-          },
-        ),
+        child: IconButton(icon: icon, onPressed: onPressed),
       ),
     );
   }
@@ -122,7 +127,7 @@ class _MessageViewState extends ConsumerState<MessageView> {
             ),
           ),
           SizedBox(
-            height: height - topPadding - 20 - 110,
+            height: height - topPadding - 30 - 110,
             child: ListView.builder(
               controller: _scrollController,
               itemCount: messages.length,
@@ -151,10 +156,16 @@ class _MessageViewState extends ConsumerState<MessageView> {
                 )),
             child: Row(
               children: [
-                _messageBarIcon(),
+                _messageBarIcon(
+                  Icon(
+                    Icons.add,
+                    color: Theme.of(context).custom.colorTheme.cardSelected,
+                  ),
+                  () => print("add"),
+                ),
                 Expanded(
                   child: Padding(
-                    padding: const EdgeInsets.all(6),
+                    padding: const EdgeInsets.symmetric(vertical: 6),
                     child: Container(
                       decoration: BoxDecoration(
                         color: Theme.of(context).custom.colorTheme.cardSelected,
@@ -163,8 +174,10 @@ class _MessageViewState extends ConsumerState<MessageView> {
                       child: Padding(
                         padding: const EdgeInsets.only(left: 16),
                         child: TextField(
+                          controller: messageBarController,
                           decoration: InputDecoration(
-                            hintText: 'Message #${currentChannel!.name}',
+                            hintText:
+                                'Message #${(currentChannel != null) ? currentChannel.name : ""}',
                             border: InputBorder.none,
                           ),
                           style: Theme.of(context).custom.textTheme.bodyText1,
@@ -173,12 +186,29 @@ class _MessageViewState extends ConsumerState<MessageView> {
                     ),
                   ),
                 ),
+                _messageBarIcon(
+                  const Icon(
+                    Icons.send,
+                    color: Colors.white,
+                    weight: 10,
+                  ),
+                  () {
+                    print("sending message: ");
+                    print(messageBarController.text);
+                    ref
+                        .read(messagesProvider.notifier)
+                        .sendMessage(messageBarController.text);
+                    messageBarController.text = "";
+                  },
+                  backgroundColor:
+                      Theme.of(context).custom.colorTheme.blurpleColor,
+                ),
               ],
             ),
           ),
           Container(
             // bottom padding is just returning 0...
-            height: 20,
+            height: 30,
           )
         ],
       ),
@@ -186,15 +216,15 @@ class _MessageViewState extends ConsumerState<MessageView> {
   }
 }
 
-class MessageBox extends StatefulWidget {
+class MessageBox extends ConsumerStatefulWidget {
   final BonfireMessage message;
   MessageBox({Key? key, required this.message}) : super(key: key);
 
   @override
-  State<MessageBox> createState() => _MessageBoxState();
+  ConsumerState<MessageBox> createState() => _MessageBoxState();
 }
 
-class _MessageBoxState extends State<MessageBox>
+class _MessageBoxState extends ConsumerState<MessageBox>
     with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
@@ -244,9 +274,7 @@ class _MessageBoxState extends State<MessageBox>
           borderRadius: BorderRadius.circular(0),
         ),
       ),
-      onPressed: () {
-        print("message pressed");
-      },
+      onPressed: () {},
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 8),
         child: Row(

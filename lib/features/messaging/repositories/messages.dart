@@ -14,6 +14,18 @@ import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 
 part 'messages.g.dart';
 
+/*
+TODO: Implement "traditional" Riverpod loading management
+
+Right now, I'm just updating the state. This isn't great, although works.
+Essentially, when a widget listens in on a provider, it will recieve the data
+immediately as if a request were completed, then is updated *again* with the
+actual data.
+
+We should change this to use a loading state, and then update the data when it's
+recieved.
+*/
+
 @Riverpod(keepAlive: false)
 class Messages extends _$Messages {
   AuthUser? user;
@@ -74,12 +86,8 @@ class Messages extends _$Messages {
 
         var username = message.author.username;
         if (message.author is nyxx.User) {
-          // var user = message.author as nyxx.Member;
           var user = message.author as nyxx.User;
-          // username = user.nick ?? user.user!.globalName!;
           username = user.globalName ?? username;
-
-          // TODO: fetch guild member
         }
 
         var memberAvatar = memberAvatars[i];
@@ -96,6 +104,7 @@ class Messages extends _$Messages {
                 ref.read(guildControllerProvider.notifier).currentGuild!.id,
           ),
         );
+
         channelMessages.add(newMessage);
       }
 
@@ -105,8 +114,6 @@ class Messages extends _$Messages {
         channelMessagesMap[channelId.toString()] = channelMessages;
       }
 
-      // we only want to cache the first messages
-      // it would be useless to polute the cache with old data
       if (before == null) {
         await _cacheManager.putFile(
           channelId.toString(),
@@ -115,13 +122,9 @@ class Messages extends _$Messages {
         );
       }
 
-      if (channelId == ref.read(channelControllerProvider)) {
-        var newChannels = channelMessagesMap[channelId.toString()]!;
-        state = AsyncData(newChannels);
-      } else {
-        // this is fine. We just don't want to return an invalid page state.
-        print("channel switched before state return!");
-      }
+      state = const AsyncLoading();
+
+      state = AsyncData(channelMessages);
     }
     loadingMessages = false;
   }
@@ -158,5 +161,33 @@ class Messages extends _$Messages {
       cacheKey,
       utf8.encode(json.encode(messages.map((e) => e.toJson()).toList())),
     );
+  }
+
+  Future<bool> sendMessage(String message, {int? channelId}) async {
+    var authOutput = ref.watch(authProvider.notifier).getAuth();
+    int? _channelId;
+
+    if (channelId != null) {
+      _channelId = channelId;
+    } else {
+      _channelId = ref.watch(channelControllerProvider);
+    }
+
+    if ((authOutput != null) &&
+        (authOutput is AuthUser) &&
+        (_channelId != null)) {
+      user = authOutput;
+
+      var textChannel = await user!.client.channels
+          .get(nyxx.Snowflake(_channelId)) as nyxx.TextChannel;
+
+      await textChannel.sendMessage(nyxx.MessageBuilder(
+        content: message,
+      ));
+
+      return true;
+    }
+
+    return false;
   }
 }
