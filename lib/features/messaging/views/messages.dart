@@ -35,16 +35,15 @@ class _MessageViewState extends ConsumerState<MessageView> {
 
   void _scrollListener() {
     if (_scrollController.position.pixels >=
-        _scrollController.position.maxScrollExtent - 1000) {
+        _scrollController.position.maxScrollExtent - 50000) {
       _loadMoreMessages();
     }
   }
 
   void _loadMoreMessages() {
-    // if (!ref.read(messagesProvider.notifier).loadingMessages) {
-    print("loading messaged!");
-    ref.read(messagesProvider.notifier).fetchMoreMessages();
-    // }
+    if (!ref.read(messagesProvider.notifier).loadingMessages) {
+      ref.read(messagesProvider.notifier).fetchMoreMessages();
+    }
   }
 
   Widget _messageBarIcon() {
@@ -204,7 +203,7 @@ class _MessageBoxState extends State<MessageBox>
     } else if (time.day == DateTime.now().day - 1) {
       section1 = 'Yesterday';
     } else {
-      section1 = '${time.day}/${time.month}/${time.year}';
+      section1 = '${time.month}/${time.day}/${time.year}';
     }
 
     var twelveHour = time.hour > 12 ? time.hour - 12 : time.hour;
