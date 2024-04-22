@@ -76,9 +76,6 @@ class _MessageViewState extends ConsumerState<MessageView> {
     var currentChannel =
         ref.read(channelControllerProvider.notifier).getChannel();
 
-    print("got current channel!");
-    print(currentChannel);
-
     return Container(
       decoration: BoxDecoration(
         color: Theme.of(context).custom.colorTheme.foreground,
@@ -166,8 +163,8 @@ class _MessageViewState extends ConsumerState<MessageView> {
                       child: Padding(
                         padding: const EdgeInsets.only(left: 16),
                         child: TextField(
-                          decoration: const InputDecoration(
-                            hintText: 'Message #channel-name',
+                          decoration: InputDecoration(
+                            hintText: 'Message #${currentChannel!.name}',
                             border: InputBorder.none,
                           ),
                           style: Theme.of(context).custom.textTheme.bodyText1,
@@ -237,27 +234,14 @@ class _MessageBoxState extends State<MessageBox>
     var name = widget.message.member.name;
 
     return OutlinedButton(
-      style: ButtonStyle(
-        alignment: Alignment.centerLeft,
-        backgroundColor: MaterialStateProperty.all<Color>(Colors.transparent),
-        side: MaterialStateProperty.all<BorderSide>(
-          const BorderSide(
-            width: 0,
-            color: Color.fromARGB(0, 77, 77, 77),
-          ),
+      style: OutlinedButton.styleFrom(
+        padding: const EdgeInsets.symmetric(horizontal: 12),
+        side: const BorderSide(
+          color: Color.fromARGB(0, 255, 255, 255),
+          width: 0.5,
         ),
-        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-          RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(0),
-          ),
-        ),
-        overlayColor: MaterialStateProperty.resolveWith<Color>(
-          (Set<MaterialState> states) {
-            if (states.contains(MaterialState.pressed)) {
-              return Theme.of(context).custom.colorTheme.foreground;
-            }
-            return Colors.transparent;
-          },
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(0),
         ),
       ),
       onPressed: () {
@@ -273,8 +257,8 @@ class _MessageBoxState extends State<MessageBox>
                 ? Padding(
                     padding: const EdgeInsets.only(right: 8),
                     child: SizedBox(
-                      width: 40,
-                      height: 40,
+                      width: 45,
+                      height: 45,
                       child: ClipRRect(
                           borderRadius: BorderRadius.circular(100),
                           child:
@@ -283,8 +267,8 @@ class _MessageBoxState extends State<MessageBox>
                 : const Padding(
                     padding: EdgeInsets.only(right: 8),
                     child: SizedBox(
-                      width: 40,
-                      height: 40,
+                      width: 45,
+                      height: 45,
                     ),
                   ),
             Column(
@@ -292,7 +276,7 @@ class _MessageBoxState extends State<MessageBox>
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(
-                  width: width - 140,
+                  width: width - 100,
                   child: Row(
                     children: [
                       Padding(
