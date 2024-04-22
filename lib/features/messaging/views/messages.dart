@@ -3,6 +3,7 @@ import 'package:bonfire/features/guild/controllers/current_guild.dart';
 import 'package:bonfire/features/guild/controllers/guild.dart';
 import 'package:bonfire/features/messaging/controllers/message_bar.dart';
 import 'package:bonfire/features/messaging/repositories/messages.dart';
+import 'package:bonfire/features/messaging/repositories/realtime_messages.dart';
 import 'package:bonfire/shared/models/message.dart';
 import 'package:bonfire/theme/theme.dart';
 import 'package:flutter/material.dart';
@@ -20,13 +21,6 @@ class MessageView extends ConsumerStatefulWidget {
 class _MessageViewState extends ConsumerState<MessageView> {
   final ScrollController _scrollController = ScrollController();
   Map<int, Widget> messageWidgets = {};
-
-  // print("sending message: ");
-  // print(messageBarController.text);
-  // ref
-  //     .read(messagesProvider.notifier)
-  //     .sendMessage(messageBarController.text);
-  // messageBarController.text = "";
 
   @override
   void initState() {
@@ -76,6 +70,12 @@ class _MessageViewState extends ConsumerState<MessageView> {
     var topPadding = MediaQuery.of(context).padding.top;
     var bottomPadding = MediaQuery.of(context).padding.bottom;
     var height = MediaQuery.of(context).size.height;
+
+    var realtimeMessages = ref.watch(realtimeMessagesProvider);
+    realtimeMessages.whenData((value) {
+      print(value[0].member.name);
+      print(value[0].member.displayName);
+    });
 
     var currentGuild = ref.watch(currentGuildControllerProvider);
     var currentChannel =
