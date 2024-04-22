@@ -1,4 +1,6 @@
 import 'package:bonfire/features/channels/controllers/channel.dart';
+import 'package:bonfire/features/guild/controllers/current_guild.dart';
+import 'package:bonfire/features/guild/controllers/guild.dart';
 import 'package:bonfire/features/messaging/repositories/messages.dart';
 import 'package:bonfire/shared/models/message.dart';
 import 'package:bonfire/theme/theme.dart';
@@ -44,10 +46,33 @@ class _MessageViewState extends ConsumerState<MessageView> {
     }
   }
 
+  Widget _messageBarIcon() {
+    return Padding(
+      padding: const EdgeInsets.only(left: 6, top: 8, bottom: 6),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Theme.of(context).custom.colorTheme.cardSelected,
+          shape: BoxShape.circle,
+        ),
+        child: IconButton(
+          icon: const Icon(Icons.add),
+          onPressed: () {
+            print("add message pressed");
+          },
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     var messageOutput = ref.watch(messagesProvider);
     var messages = messageOutput.valueOrNull ?? [];
+    var topPadding = MediaQuery.of(context).padding.top;
+    var bottomPadding = MediaQuery.of(context).padding.bottom;
+    var height = MediaQuery.of(context).size.height;
+
+    var currentGuild = ref.watch(currentGuildControllerProvider);
 
     return Container(
       decoration: BoxDecoration(
@@ -60,20 +85,97 @@ class _MessageViewState extends ConsumerState<MessageView> {
           ),
         ],
       ),
-      child: ListView.builder(
-        controller: _scrollController,
-        itemCount: messages.length,
-        reverse: true,
-        itemBuilder: (context, index) {
-          var cachedBox = messageWidgets[messages[index].id];
-          if (cachedBox != null) {
-            return cachedBox;
-          }
+      child: Column(
+        children: [
+          Container(
+            height: topPadding + 50,
+            decoration: BoxDecoration(
+              color: Theme.of(context).custom.colorTheme.foreground,
+              border: Border(
+                bottom: BorderSide(
+                  color: Theme.of(context).custom.colorTheme.brightestGray,
+                  width: 1,
+                ),
+              ),
+            ),
+            child: Align(
+              alignment: Alignment.bottomLeft,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: Row(
+                    children: [
+                      Text(
+                        (currentGuild != null) ? currentGuild.name : "",
+                        textAlign: TextAlign.left,
+                        style: Theme.of(context).custom.textTheme.titleSmall,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+          SizedBox(
+            height: height - topPadding - 20 - 110,
+            child: ListView.builder(
+              controller: _scrollController,
+              itemCount: messages.length,
+              reverse: true,
+              itemBuilder: (context, index) {
+                var cachedBox = messageWidgets[messages[index].id];
+                if (cachedBox != null) {
+                  return cachedBox;
+                }
 
-          var box = MessageBox(message: messages[index]);
-          messageWidgets[messages[index].id] = box;
-          return box;
-        },
+                var box = MessageBox(message: messages[index]);
+                messageWidgets[messages[index].id] = box;
+                return box;
+              },
+            ),
+          ),
+          Container(
+            height: 60,
+            decoration: BoxDecoration(
+                color: Theme.of(context).custom.colorTheme.foreground,
+                border: Border.symmetric(
+                  horizontal: BorderSide(
+                    color: Theme.of(context).custom.colorTheme.brightestGray,
+                    width: 1,
+                  ),
+                )),
+            child: Row(
+              children: [
+                _messageBarIcon(),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.all(6),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).custom.colorTheme.cardSelected,
+                        borderRadius: BorderRadius.circular(36),
+                      ),
+                      child: const Padding(
+                        padding: EdgeInsets.only(left: 16),
+                        child: TextField(
+                          decoration: InputDecoration(
+                            hintText: 'Message #channel-name',
+                            border: InputBorder.none,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Container(
+            // bottom padding is just returning 0...
+            height: 20,
+          )
+        ],
       ),
     );
   }
