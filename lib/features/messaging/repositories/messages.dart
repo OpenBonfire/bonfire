@@ -67,7 +67,7 @@ class Messages extends _$Messages {
     if (authOutput is AuthUser && channel is nyxx.TextChannel) {
       var age = await getAgeOfMessageEntry(channel.id.value);
       if (age == null || age.inDays > 1) {
-        getMessages(authOutput, channel.id.value, count: 20);
+        getMessages(authOutput, channel.id.value, count: 20, lock: false);
       }
     }
   }

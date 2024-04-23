@@ -28,7 +28,7 @@ class _SidebarState extends ConsumerState<Sidebar> {
               color: Theme.of(context).custom.colorTheme.foreground,
               borderRadius: const BorderRadius.all(Radius.circular(100))),
           width: 50,
-          height: 50,
+          height: 47,
           child: Center(
               child: Text(guild.name[0], style: CustomTextTheme().titleSmall)));
     }
@@ -62,7 +62,7 @@ class _SidebarState extends ConsumerState<Sidebar> {
                       children: [
                         (selectedGuildId == guildList[index].id)
                             ? Container(
-                                height: 45,
+                                height: 47,
                                 width: 4,
                                 decoration: const BoxDecoration(
                                     color: Colors.white,

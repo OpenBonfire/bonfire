@@ -22,12 +22,12 @@ class Channels extends _$Channels {
   Future<void> runPrecache(List<GuildChannel> channels) async {
     for (var channel in channels) {
       try {
-        await ref.read(messagesProvider.notifier).runPreCacheRoutine(channel);
+        ref.read(messagesProvider.notifier).runPreCacheRoutine(channel);
       } catch (e) {
         print("error while pre-caching!");
         print(e);
       }
-      await Future.delayed(const Duration(milliseconds: 500));
+      //  await Future.delayed(const Duration(milliseconds: 500));
     }
   }
 
