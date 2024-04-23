@@ -21,6 +21,7 @@ part 'messages.g.dart';
 class Messages extends _$Messages {
   AuthUser? user;
   bool loadingMessages = false;
+  bool listenerRunning = false;
   nyxx.Message? oldestMessage;
   final _cacheManager = CacheManager(
     Config(
@@ -36,19 +37,27 @@ class Messages extends _$Messages {
   Future<List<BonfireMessage>> build() async {
     var authOutput = ref.watch(authProvider.notifier).getAuth();
     var channelId = ref.watch(channelControllerProvider);
-    var realtimeProvider = ref.watch(realtimeMessagesProvider);
+    // var realtimeProvider = ref.watch(realtimeMessagesProvider);
 
-    realtimeProvider.whenData((value) {
-      ref.read(messagesProvider.notifier).processRealtimeMessages(value);
-    });
+    // realtimeProvider.whenData((value) {
+    //   ref.read(messagesProvider.notifier).processRealtimeMessages(value);
+    // });
 
     if (channelId != null) {
-      print("getting messages fml");
       getMessages(authOutput, channelId);
       var fromCache = (await getChannelFromCache(channelId))!;
       return fromCache;
     }
     return [];
+  }
+
+  void startRealtimeMessageListener() {
+    ref.watch(realtimeMessagesProvider).maybeWhen(
+          data: (value) {
+            ref.read(messagesProvider.notifier).processRealtimeMessages(value);
+          },
+          orElse: () {},
+        );
   }
 
   // Future<List<BonfireMessage>> fetchMessages(authOutput, channelId) async {
