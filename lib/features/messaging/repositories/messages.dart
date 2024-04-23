@@ -51,8 +51,6 @@ class Messages extends _$Messages {
     return [];
   }
 
-  void startRealtimeMessageListener() {}
-
   // Future<List<BonfireMessage>> fetchMessages(authOutput, channelId) async {
   //   List<BonfireMessage> fromCache = [];
   //   if (channelId != null) {
@@ -63,7 +61,18 @@ class Messages extends _$Messages {
   //   return fromCache;
   // }
 
-  Future<void> getMessages(authOutput, channelId, {int? before}) async {
+  Future<void> runPreCacheRoutine(nyxx.Channel channel) async {
+    var authOutput = ref.watch(authProvider.notifier).getAuth();
+    if (authOutput is AuthUser && channel is nyxx.TextChannel) {
+      var channelFromCache = await getChannelFromCache(channel.id.value);
+      if (channelFromCache == null) {
+        getMessages(authOutput, channel.id.value, count: 20);
+      }
+    }
+  }
+
+  Future<void> getMessages(authOutput, int channelId,
+      {int? before, int? count, int? guildId}) async {
     loadingMessages = true;
     if ((authOutput != null) &&
         (authOutput is AuthUser) &&
@@ -73,9 +82,15 @@ class Messages extends _$Messages {
           .get(nyxx.Snowflake(channelId)) as nyxx.TextChannel;
       var beforeSnowflake = before != null ? nyxx.Snowflake(before) : null;
       var messages = await textChannel.messages
-          .fetchMany(limit: 100, before: beforeSnowflake);
-      List<Uint8List> memberAvatars = await Future.wait(
-        messages.map((message) => fetchMemberAvatar(message.author)),
+          .fetchMany(limit: count ?? 50, before: beforeSnowflake);
+      List<Uint8List?> memberAvatars = await Future.wait(
+        messages.map((message) async {
+          var avatar = await fetchMemberAvatar(message.author);
+          if (avatar == null) {
+            return message.author.avatar!.fetch();
+          }
+          return avatar;
+        }),
       );
       List<BonfireMessage> channelMessages = [];
       for (int i = 0; i < messages.length; i++) {
@@ -98,9 +113,9 @@ class Messages extends _$Messages {
           member: BonfireGuildMember(
             id: message.author.id.value,
             name: message.author.username,
-            icon: Image.memory(memberAvatar),
+            icon: (memberAvatar != null) ? Image.memory(memberAvatar) : null,
             displayName: username,
-            guildId:
+            guildId: guildId ??
                 ref.read(guildControllerProvider.notifier).currentGuild!.id,
           ),
         );
@@ -116,8 +131,10 @@ class Messages extends _$Messages {
           cacheMessages(channelMessages, channelId.toString());
         }
       }
-      state = AsyncLoading();
-      state = AsyncData(channelMessagesMap[channelId.toString()] ?? []);
+
+      if (channelId == ref.read(channelControllerProvider)) {
+        state = AsyncData(channelMessagesMap[channelId.toString()] ?? []);
+      }
     }
     loadingMessages = false;
   }
@@ -168,7 +185,9 @@ class Messages extends _$Messages {
   void fetchMoreMessages() {
     var authOutput = ref.watch(authProvider.notifier).getAuth();
     var channelId = ref.watch(channelControllerProvider);
-    getMessages(authOutput, channelId, before: oldestMessage!.id.value);
+    if (channelId != null) {
+      getMessages(authOutput, channelId, before: oldestMessage!.id.value);
+    }
   }
 
   Future<Uint8List?> fetchMemberAvatarFromCache(int userId) async {
@@ -176,9 +195,10 @@ class Messages extends _$Messages {
     return cacheData?.file.readAsBytesSync();
   }
 
-  Future<Uint8List> fetchMemberAvatar(nyxx.MessageAuthor user) async {
+  Future<Uint8List?> fetchMemberAvatar(nyxx.MessageAuthor user) async {
     var cached = await fetchMemberAvatarFromCache(user.id.value);
     if (cached != null) return cached;
+    if (user.avatar != null) return null;
     var fetched = await user.avatar!.fetch();
     await _cacheManager.putFile(
       user.id.toString(),

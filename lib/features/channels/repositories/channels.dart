@@ -2,6 +2,7 @@ import 'package:bonfire/features/auth/data/repositories/auth.dart';
 import 'package:bonfire/features/auth/data/repositories/discord_auth.dart';
 import 'package:bonfire/features/guild/controllers/guild.dart';
 import 'package:bonfire/features/guild/repositories/guilds.dart';
+import 'package:bonfire/features/messaging/repositories/messages.dart';
 import 'package:bonfire/shared/models/channel.dart';
 import 'package:bonfire/shared/models/guild.dart';
 import 'package:nyxx_extensions/nyxx_extensions.dart';
@@ -17,6 +18,19 @@ class Channels extends _$Channels {
   int? guildId;
   List<BonfireChannel> channels = [];
   Map<int, Member> selfMembers = {};
+
+  Future<void> runPrecache(List<GuildChannel> channels) async {
+    for (var channel in channels) {
+      try {
+        await ref.read(messagesProvider.notifier).runPreCacheRoutine(channel);
+        // wait a second
+      } catch (e) {
+        print("error while pre-caching!");
+        print(e);
+      }
+      await Future.delayed(const Duration(milliseconds: 1000));
+    }
+  }
 
   @override
   Future<List<BonfireChannel>> build() async {
@@ -37,7 +51,7 @@ class Channels extends _$Channels {
           Snowflake(currentGuild),
         );
 
-        var guildChannels = [];
+        List<GuildChannel> guildChannels = [];
 
         // filter out channels that the user can't view
         for (var channel in rawGuildChannels) {
@@ -46,6 +60,7 @@ class Channels extends _$Channels {
             guildChannels.add(channel);
           }
         }
+        // runPrecache(guildChannels);
 
         // first load categories, so we can parent channels later
         for (var channel in guildChannels) {
