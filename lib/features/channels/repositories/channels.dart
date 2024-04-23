@@ -27,11 +27,13 @@ class Channels extends _$Channels {
     List<BonfireChannel> _channels = [];
     if (currentGuild != null) {
       if (auth != null && auth is AuthUser) {
+        // var asd = await auth.client.guilds[Snowflake(currentGuild)].members
+        //     .get(auth.client.user.id);
+
         if (selfMembers[currentGuild] == null) {
-          selfMembers[currentGuild] =
-              await (await auth.client.guilds.get(Snowflake(currentGuild)))
-                  .members
-                  .get(auth.client.user.id);
+          selfMembers[currentGuild] = await auth
+              .client.guilds[Snowflake(currentGuild)].members
+              .get(auth.client.user.id);
         }
 
         var selfMember = selfMembers[currentGuild]!;
