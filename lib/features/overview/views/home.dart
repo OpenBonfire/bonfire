@@ -25,14 +25,15 @@ class _HomeState extends ConsumerState<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      ref.watch(realtimeMessagesProvider).when(data: (value) {
-        print("data!");
-        ref.read(messagesProvider.notifier).processRealtimeMessages(value);
-      }, loading: () {
-        print("loading!");
-      }, error: (error, stackTrace) {
-        print("errored... bruh");
-      });
+      ref.watch(realtimeMessagesProvider).when(
+          data: (value) {
+            ref.read(messagesProvider.notifier).processRealtimeMessages(value);
+          },
+          loading: () {},
+          error: (error, stackTrace) {
+            print(
+                "DateTime errored! Not showing call stack, but you should probably do that...");
+          });
     });
 
     return Scaffold(
