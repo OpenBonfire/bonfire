@@ -6,6 +6,7 @@ import 'package:bonfire/features/auth/models/auth.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:nyxx_self/nyxx.dart';
+import "package:nyxx_extensions/nyxx_extensions.dart";
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'auth.g.dart';
@@ -61,7 +62,8 @@ class Auth extends _$Auth {
 
   /// Authenticate client with Discord [token]
   Future<AuthResponse> loginWithToken(String token) async {
-    var newClient = await Nyxx.connectGateway(token, GatewayIntents.all);
+    var newClient = await Nyxx.connectGateway(token, GatewayIntents.all,
+        options: const GatewayClientOptions(plugins: []));
     client = newClient;
 
     // This is how we save login information
@@ -72,7 +74,7 @@ class Auth extends _$Auth {
     state = authResponse!;
 
     client!.onReady.listen((event) {
-      print("Bot Ready!");
+      print("User Ready!");
     });
 
     return authResponse!;

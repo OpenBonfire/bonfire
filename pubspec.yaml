@@ -15,6 +15,9 @@ dependencies:
     git:
       url: https://github.com/V3ntus/nyxx-self
       ref: dev
+  nyxx_extensions: 
+    git:
+      url: https://github.com/Bonfire-Development/firebridge_extensions
 
   google_fonts: ^6.2.1
   flutter_riverpod: ^2.5.1

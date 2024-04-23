@@ -521,18 +521,18 @@ packages:
     dependency: "direct main"
     description:
       name: isar
-      sha256: "91b889d1ccbd14de5f57827a5d9e231fcdc18456875f5c2006b39e611b588a9b"
+      sha256: d1863d38b3bd3acb7e040414a8d1d98d708c4621db3c09980b7a310b63460e2c
       url: "https://pub.dev"
     source: hosted
-    version: "2.1.4"
+    version: "2.5.0"
   js:
     dependency: transitive
     description:
       name: js
-      sha256: c1b2e9b5ea78c45e1a0788d29606ba27dc5f71f019f32ca5140f61ef071838cf
+      sha256: f2c445dce49627136094980615a031419f7f3eb393237e4ecd97ac15dea343f3
       url: "https://pub.dev"
     source: hosted
-    version: "0.7.1"
+    version: "0.6.7"
   json_annotation:
     dependency: transitive
     description:
@@ -645,6 +645,15 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.0"
+  nyxx_extensions:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: HEAD
+      resolved-ref: "368c862506520e383fefa7da73acce10fcf67815"
+      url: "https://github.com/Bonfire-Development/firebridge_extensions"
+    source: git
+    version: "4.1.0"
   nyxx_self:
     dependency: "direct main"
     description:
@@ -866,26 +875,26 @@ packages:
     dependency: "direct main"
     description:
       name: signals
-      sha256: "8e48aee8951f85098afa9dac598972ed7c247dce591ea446cffea278afe68777"
+      sha256: "623a12333d53aeeaebeca83db2c7be04d09c46226d1bf9e3b5023fd1517399ed"
       url: "https://pub.dev"
     source: hosted
-    version: "5.0.0"
+    version: "5.2.0"
   signals_core:
     dependency: transitive
     description:
       name: signals_core
-      sha256: c46c4997379999311e2cce120f07cf5c61db3ffb28d58e2429a12755846aca68
+      sha256: e6d4940367e595c49fb93c1b918bfb03459d60ef7b7f9469befb5c236b6e20d0
       url: "https://pub.dev"
     source: hosted
-    version: "5.0.0"
+    version: "5.1.0"
   signals_flutter:
     dependency: transitive
     description:
       name: signals_flutter
-      sha256: "66622d32baddc50b9d119d630cf24d74ca7fcc3824c4045135e1233f46f91d67"
+      sha256: "74e78aa2da49984c32576817fc878f16feb6f1e57278898835659cc85a023f9f"
       url: "https://pub.dev"
     source: hosted
-    version: "5.0.0"
+    version: "5.2.0"
   sky_engine:
     dependency: transitive
     description: flutter

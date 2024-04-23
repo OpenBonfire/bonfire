@@ -4,6 +4,7 @@ import 'package:bonfire/features/guild/controllers/guild.dart';
 import 'package:bonfire/features/guild/repositories/guilds.dart';
 import 'package:bonfire/shared/models/channel.dart';
 import 'package:bonfire/shared/models/guild.dart';
+import 'package:nyxx_extensions/nyxx_extensions.dart';
 import 'package:nyxx_self/nyxx.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:collection/collection.dart';
@@ -23,9 +24,26 @@ class Channels extends _$Channels {
     List<BonfireChannel> _channels = [];
     if (currentGuild != null) {
       if (auth != null && auth is AuthUser) {
-        var guildChannels = await auth.client.guilds.fetchGuildChannels(
+        print("Start member fetch");
+        var selfMember =
+            await auth.client.guilds.client.users.fetchCurrentUserMember(
           Snowflake(currentGuild),
         );
+        print("end member fetch");
+
+        var rawGuildChannels = await auth.client.guilds.fetchGuildChannels(
+          Snowflake(currentGuild),
+        );
+
+        print("Start parse");
+        var guildChannels = [];
+        for (var channel in rawGuildChannels) {
+          var permissions = await computePermissions(channel, selfMember);
+          if (permissions.canViewChannel) {
+            guildChannels.add(channel);
+          }
+        }
+        print("end parse");
 
         for (var channel in guildChannels) {
           if (channel.type == ChannelType.guildCategory) {
