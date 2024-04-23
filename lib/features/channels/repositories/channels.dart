@@ -12,6 +12,8 @@ import 'package:collection/collection.dart';
 part 'channels.g.dart';
 
 @riverpod
+
+/// A riverpod provider that fetches the channels for the current guild.
 class Channels extends _$Channels {
   int? guildId;
   List<BonfireChannel> channels = [];
@@ -25,12 +27,7 @@ class Channels extends _$Channels {
     List<BonfireChannel> _channels = [];
     if (currentGuild != null) {
       if (auth != null && auth is AuthUser) {
-        print("Start member fetch");
         if (selfMembers[currentGuild] == null) {
-          // selfMembers[currentGuild] =
-          //     await auth.client.guilds.client.users.fetchCurrentUserMember(
-          //   Snowflake(currentGuild),
-          // );
           selfMembers[currentGuild] =
               await (await auth.client.guilds.get(Snowflake(currentGuild)))
                   .members
@@ -42,16 +39,17 @@ class Channels extends _$Channels {
           Snowflake(currentGuild),
         );
 
-        print("Start parse");
         var guildChannels = [];
+
+        // filter out channels that the user can't view
         for (var channel in rawGuildChannels) {
           var permissions = await channel.computePermissionsFor(selfMember);
           if (permissions.canViewChannel) {
             guildChannels.add(channel);
           }
         }
-        print("end parse");
 
+        // first load categories, so we can parent channels later
         for (var channel in guildChannels) {
           if (channel.type == ChannelType.guildCategory) {
             var newChannel = BonfireChannel(
@@ -67,6 +65,7 @@ class Channels extends _$Channels {
           }
         }
 
+        // load channels, parenting them to their categories if applicable
         for (var channel in guildChannels) {
           if (channel.type != ChannelType.guildCategory) {
             var parentChannel = _channels.firstWhereOrNull(
@@ -87,6 +86,7 @@ class Channels extends _$Channels {
           }
         }
 
+        // sorts the channels by position (provided by nyxx)
         _channels.sort((a, b) => a.position.compareTo(b.position));
         channels = _channels;
         state = AsyncValue.data(channels);

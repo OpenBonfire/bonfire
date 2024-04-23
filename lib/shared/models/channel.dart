@@ -63,6 +63,10 @@ enum BonfireChannelType {
 }
 
 @JsonSerializable()
+
+// create doc with params
+
+/// A channel in a [Guild].
 class BonfireChannel {
   final int id;
   final String name;
