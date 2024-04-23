@@ -43,7 +43,9 @@ class _MessageViewState extends ConsumerState<MessageView> {
   }
 
   void _loadMoreMessages() {
+    print("checking for lock...");
     if (!ref.read(messagesProvider.notifier).loadingMessages) {
+      print("loading more messages!");
       ref.read(messagesProvider.notifier).fetchMoreMessages();
     }
   }

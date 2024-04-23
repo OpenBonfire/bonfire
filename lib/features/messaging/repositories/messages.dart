@@ -17,6 +17,11 @@ import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 
 part 'messages.g.dart';
 
+/*
+TODO: get messages when scrolling stop retrieving the correct data when
+running the realtime listener
+*/
+
 @Riverpod(keepAlive: false)
 class Messages extends _$Messages {
   AuthUser? user;
@@ -37,12 +42,7 @@ class Messages extends _$Messages {
   Future<List<BonfireMessage>> build() async {
     var authOutput = ref.watch(authProvider.notifier).getAuth();
     var channelId = ref.watch(channelControllerProvider);
-    // var realtimeProvider = ref.watch(realtimeMessagesProvider);
-
-    // realtimeProvider.whenData((value) {
-    //   ref.read(messagesProvider.notifier).processRealtimeMessages(value);
-    // });
-
+    print("building!");
     if (channelId != null) {
       getMessages(authOutput, channelId);
       var fromCache = (await getChannelFromCache(channelId))!;
@@ -51,14 +51,7 @@ class Messages extends _$Messages {
     return [];
   }
 
-  void startRealtimeMessageListener() {
-    ref.watch(realtimeMessagesProvider).maybeWhen(
-          data: (value) {
-            ref.read(messagesProvider.notifier).processRealtimeMessages(value);
-          },
-          orElse: () {},
-        );
-  }
+  void startRealtimeMessageListener() {}
 
   // Future<List<BonfireMessage>> fetchMessages(authOutput, channelId) async {
   //   List<BonfireMessage> fromCache = [];
@@ -137,14 +130,13 @@ class Messages extends _$Messages {
         // TODO: Only take the first message, and append :D
         // you could also take all of them and compare, to ensure we
         // didn't lose anything in a race condition
+        print('processing!');
         if (channelMessagesMap[channelId.toString()] == null) {
           channelMessagesMap[channelId.toString()] = [];
         }
-        channelMessagesMap[channelId.toString()]!.add(messages.last);
-        if (channelId == ref.watch(channelControllerProvider)) {
-          print("setting state!");
-          state = AsyncData(channelMessagesMap[channelId.toString()] ?? []);
-        }
+        channelMessagesMap[channelId.toString()]!.insert(0, message);
+        print("setting state!");
+        state = AsyncData(channelMessagesMap[channelId.toString()] ?? []);
       }
     }
   }

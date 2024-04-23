@@ -1,6 +1,7 @@
 import 'package:bonfire/features/channels/views/channels.dart';
 import 'package:bonfire/features/guild/repositories/guilds.dart';
 import 'package:bonfire/features/messaging/repositories/messages.dart';
+import 'package:bonfire/features/messaging/repositories/realtime_messages.dart';
 import 'package:bonfire/features/messaging/views/messages.dart';
 import 'package:bonfire/features/overview/views/overlapping_panels.dart';
 import 'package:bonfire/features/overview/views/sidebar.dart';
@@ -17,9 +18,23 @@ class HomeScreen extends ConsumerStatefulWidget {
 
 class _HomeState extends ConsumerState<HomeScreen> {
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    ref.watch(messagesProvider);
-    ref.read(messagesProvider.notifier).startRealtimeMessageListener();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      ref.watch(realtimeMessagesProvider).when(data: (value) {
+        print("data!");
+        ref.read(messagesProvider.notifier).processRealtimeMessages(value);
+      }, loading: () {
+        print("loading!");
+      }, error: (error, stackTrace) {
+        print("errored... bruh");
+      });
+    });
+
     return Scaffold(
         body: OverlappingPanels(
       left: SizedBox(
