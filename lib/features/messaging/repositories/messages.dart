@@ -39,23 +39,27 @@ class Messages extends _$Messages {
     var realtimeProvider = ref.watch(realtimeMessagesProvider);
 
     realtimeProvider.whenData((value) {
-      ref
-          .read(messagesProvider.notifier)
-          .processRealtimeMessages(value, channelId);
+      ref.read(messagesProvider.notifier).processRealtimeMessages(value);
     });
 
+    if (channelId != null) {
+      print("getting messages fml");
+      getMessages(authOutput, channelId);
+      var fromCache = (await getChannelFromCache(channelId))!;
+      return fromCache;
+    }
     return [];
   }
 
-  Future<List<BonfireMessage>> fetchMessages(authOutput, channelId) async {
-    List<BonfireMessage> fromCache = [];
-    if (channelId != null) {
-      getMessages(authOutput, channelId);
-      fromCache = (await getChannelFromCache(channelId)) ?? [];
-    }
+  // Future<List<BonfireMessage>> fetchMessages(authOutput, channelId) async {
+  //   List<BonfireMessage> fromCache = [];
+  //   if (channelId != null) {
+  //     getMessages(authOutput, channelId);
+  //     fromCache = (await getChannelFromCache(channelId)) ?? [];
+  //   }
 
-    return fromCache;
-  }
+  //   return fromCache;
+  // }
 
   Future<void> getMessages(authOutput, channelId, {int? before}) async {
     loadingMessages = true;
@@ -116,16 +120,22 @@ class Messages extends _$Messages {
     loadingMessages = false;
   }
 
-  void processRealtimeMessages(
-      List<BonfireMessage> messages, int? channelId) async {
+  void processRealtimeMessages(List<BonfireMessage> messages) async {
     if (messages.isNotEmpty) {
-      print(channelId);
-      if (channelId != null) {
+      var message = messages.last;
+      var channelId = message.channelId;
+      if (channelId == ref.read(channelControllerProvider)) {
         // TODO: Only take the first message, and append :D
         // you could also take all of them and compare, to ensure we
         // didn't lose anything in a race condition
-        // channelMessagesMap[channelId.toString()] = messages.reversed.toList();
-        // state = AsyncData(channelMessagesMap[channelId.toString()] ?? []);
+        if (channelMessagesMap[channelId.toString()] == null) {
+          channelMessagesMap[channelId.toString()] = [];
+        }
+        channelMessagesMap[channelId.toString()]!.add(messages.last);
+        if (channelId == ref.watch(channelControllerProvider)) {
+          print("setting state!");
+          state = AsyncData(channelMessagesMap[channelId.toString()] ?? []);
+        }
       }
     }
   }
