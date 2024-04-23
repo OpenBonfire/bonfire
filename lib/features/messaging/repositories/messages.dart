@@ -5,6 +5,7 @@ import 'package:bonfire/features/auth/data/repositories/auth.dart';
 import 'package:bonfire/features/auth/data/repositories/discord_auth.dart';
 import 'package:bonfire/features/channels/controllers/channel.dart';
 import 'package:bonfire/features/guild/controllers/guild.dart';
+import 'package:bonfire/features/messaging/repositories/realtime_bind.dart';
 import 'package:bonfire/features/messaging/repositories/realtime_messages.dart';
 import 'package:bonfire/shared/models/member.dart';
 import 'package:bonfire/shared/models/message.dart';
@@ -35,18 +36,25 @@ class Messages extends _$Messages {
   Future<List<BonfireMessage>> build() async {
     var authOutput = ref.watch(authProvider.notifier).getAuth();
     var channelId = ref.watch(channelControllerProvider);
-    // var realtimeProvider = ref.watch(realtimeMessagesProvider);
+    var realtimeProvider = ref.watch(realtimeMessagesProvider);
 
-    // realtimeProvider.whenData((value) {
-    //   processRealtimeMessages(value);
-    // });
+    realtimeProvider.whenData((value) {
+      ref
+          .read(messagesProvider.notifier)
+          .processRealtimeMessages(value, channelId);
+    });
+
+    return [];
+  }
+
+  Future<List<BonfireMessage>> fetchMessages(authOutput, channelId) async {
+    List<BonfireMessage> fromCache = [];
     if (channelId != null) {
       getMessages(authOutput, channelId);
-      var fromCache = (await getChannelFromCache(channelId))!;
-      return fromCache;
-      // return channelMessagesMap[channelId.toString()] ?? [];
+      fromCache = (await getChannelFromCache(channelId)) ?? [];
     }
-    return [];
+
+    return fromCache;
   }
 
   Future<void> getMessages(authOutput, channelId, {int? before}) async {
@@ -108,16 +116,15 @@ class Messages extends _$Messages {
     loadingMessages = false;
   }
 
-  void processRealtimeMessages(List<BonfireMessage> messages) async {
-    print("got data!...");
+  void processRealtimeMessages(
+      List<BonfireMessage> messages, int? channelId) async {
     if (messages.isNotEmpty) {
-      var channelId = ref.watch(channelControllerProvider);
       print(channelId);
       if (channelId != null) {
         // TODO: Only take the first message, and append :D
         // you could also take all of them and compare, to ensure we
         // didn't lose anything in a race condition
-        channelMessagesMap[channelId.toString()] = messages.reversed.toList();
+        // channelMessagesMap[channelId.toString()] = messages.reversed.toList();
         // state = AsyncData(channelMessagesMap[channelId.toString()] ?? []);
       }
     }
