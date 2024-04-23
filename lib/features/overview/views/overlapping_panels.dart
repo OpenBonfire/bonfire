@@ -1,9 +1,6 @@
 library overlapping_panels;
 
-// https://github.com/blackmann/overlapping_panels
-
 import 'package:flutter/material.dart';
-
 import 'dart:core';
 
 const double bleedWidth = 20;
@@ -36,7 +33,7 @@ class OverlappingPanels extends StatefulWidget {
       {this.left,
       required this.main,
       this.right,
-      this.restWidth = 20,
+      this.restWidth = 40,
       this.onSideChange,
       Key? key})
       : super(key: key);
@@ -114,40 +111,50 @@ class OverlappingPanelsState extends State<OverlappingPanels>
     final mediaWidth = MediaQuery.of(context).size.width;
 
     final animationController = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 200));
+      vsync: this,
+      duration: const Duration(milliseconds: 200),
+    );
 
-    animationController.addStatusListener((status) {
+    var goal = 0.0;
+    if (lastDelta > 0) {
+      goal = _calculateGoal(mediaWidth, 1);
+    }
+
+    if (lastDelta < 0) {
+      goal = _calculateGoal(mediaWidth, -1);
+    }
+
+    if (lastDelta > 0 && translate < 0) {
+      goal = 0;
+    }
+
+    if (lastDelta < 0 && translate > 0) {
+      goal = 0;
+    }
+
+    final animation = Tween<double>(
+      begin: translate,
+      end: goal.toDouble(),
+    ).animate(animationController);
+
+    animation.addListener(() {
+      setState(() {
+        translate = animation.value;
+      });
+    });
+
+    animation.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
         if (widget.onSideChange != null) {
-          widget.onSideChange!(translate == 0
-              ? RevealSide.main
-              : (translate > 0 ? RevealSide.left : RevealSide.right));
+          widget.onSideChange!(
+            translate == 0
+                ? RevealSide.main
+                : (translate > 0 ? RevealSide.left : RevealSide.right),
+          );
         }
         animationController.dispose();
       }
     });
-    if (lastDelta > 0) {
-      final multiplier = (translate > 0 ? 1 : -1);
-      final goal = _calculateGoal(mediaWidth, multiplier);
-      final Tween<double> tween = Tween(begin: translate, end: goal);
-
-      final animation = tween.animate(animationController);
-
-      animation.addListener(() {
-        setState(() {
-          translate = animation.value;
-        });
-      });
-    } else {
-      final animation =
-          Tween<double>(begin: translate, end: 0).animate(animationController);
-
-      animation.addListener(() {
-        setState(() {
-          translate = animation.value;
-        });
-      });
-    }
 
     animationController.forward();
   }
@@ -164,7 +171,7 @@ class OverlappingPanelsState extends State<OverlappingPanels>
     final goal = _calculateGoal(mediaWidth, multiplier);
 
     final animationController = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 100));
+        vsync: this, duration: const Duration(milliseconds: 200));
 
     animationController.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
