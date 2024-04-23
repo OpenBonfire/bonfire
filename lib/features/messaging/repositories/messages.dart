@@ -83,7 +83,7 @@ class Messages extends _$Messages {
       var beforeSnowflake = before != null ? nyxx.Snowflake(before) : null;
       var messages = await textChannel.messages
           .fetchMany(limit: count ?? 50, before: beforeSnowflake);
-      List<Uint8List?> memberAvatars = await Future.wait(
+      List<Uint8List> memberAvatars = await Future.wait(
         messages.map((message) async {
           var avatar = await fetchMemberAvatar(message.author);
           if (avatar == null) {
@@ -113,7 +113,7 @@ class Messages extends _$Messages {
           member: BonfireGuildMember(
             id: message.author.id.value,
             name: message.author.username,
-            icon: (memberAvatar != null) ? Image.memory(memberAvatar) : null,
+            icon: Image.memory(memberAvatar),
             displayName: username,
             guildId: guildId ??
                 ref.read(guildControllerProvider.notifier).currentGuild!.id,
@@ -195,10 +195,10 @@ class Messages extends _$Messages {
     return cacheData?.file.readAsBytesSync();
   }
 
-  Future<Uint8List?> fetchMemberAvatar(nyxx.MessageAuthor user) async {
+  Future<Uint8List> fetchMemberAvatar(nyxx.MessageAuthor user) async {
     var cached = await fetchMemberAvatarFromCache(user.id.value);
     if (cached != null) return cached;
-    if (user.avatar != null) return null;
+    // if (user.avatar != null) return null;
     var fetched = await user.avatar!.fetch();
     await _cacheManager.putFile(
       user.id.toString(),

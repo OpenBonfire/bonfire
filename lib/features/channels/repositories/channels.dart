@@ -22,13 +22,12 @@ class Channels extends _$Channels {
   Future<void> runPrecache(List<GuildChannel> channels) async {
     for (var channel in channels) {
       try {
-        await ref.read(messagesProvider.notifier).runPreCacheRoutine(channel);
-        // wait a second
+        ref.read(messagesProvider.notifier).runPreCacheRoutine(channel);
       } catch (e) {
         print("error while pre-caching!");
         print(e);
       }
-      await Future.delayed(const Duration(milliseconds: 1000));
+      // await Future.delayed(const Duration(milliseconds: 1000));
     }
   }
 
@@ -60,7 +59,7 @@ class Channels extends _$Channels {
             guildChannels.add(channel);
           }
         }
-        // runPrecache(guildChannels);
+        runPrecache(guildChannels);
 
         // first load categories, so we can parent channels later
         for (var channel in guildChannels) {
