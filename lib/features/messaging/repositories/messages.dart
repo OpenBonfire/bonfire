@@ -42,7 +42,7 @@ class Messages extends _$Messages {
   Future<List<BonfireMessage>> build() async {
     var authOutput = ref.watch(authProvider.notifier).getAuth();
     var channelId = ref.watch(channelControllerProvider);
-    print("building!");
+
     if (channelId != null) {
       getMessages(authOutput, channelId);
       var fromCache = (await getChannelFromCache(channelId))!;
@@ -130,12 +130,11 @@ class Messages extends _$Messages {
         // TODO: Only take the first message, and append :D
         // you could also take all of them and compare, to ensure we
         // didn't lose anything in a race condition
-        print('processing!');
+
         if (channelMessagesMap[channelId.toString()] == null) {
           channelMessagesMap[channelId.toString()] = [];
         }
         channelMessagesMap[channelId.toString()]!.insert(0, message);
-        print("setting state!");
         state = AsyncData(channelMessagesMap[channelId.toString()] ?? []);
       }
     }
@@ -153,6 +152,8 @@ class Messages extends _$Messages {
 
         return message;
       }).toList();
+
+      print("got ${messagesFuture.length} messages from cache");
 
       return await Future.wait(messagesFuture);
 
@@ -189,9 +190,13 @@ class Messages extends _$Messages {
   Future<void> cacheMessages(
       List<BonfireMessage> messages, String cacheKey) async {
     print("caching messages using key $cacheKey");
+    var toCache = messages;
+    if (toCache.length >= 21) {
+      toCache = toCache.sublist(0, 20);
+    }
     await _cacheManager.putFile(
       cacheKey,
-      utf8.encode(json.encode(messages.map((e) => e.toJson()).toList())),
+      utf8.encode(json.encode(toCache.map((e) => e.toJson()).toList())),
     );
   }
 
