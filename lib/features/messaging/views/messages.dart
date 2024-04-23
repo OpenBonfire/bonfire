@@ -38,7 +38,7 @@ class _MessageViewState extends ConsumerState<MessageView> {
   void _scrollListener() {
     if (_scrollController.position.pixels > 100 &&
         _scrollController.position.pixels >=
-            _scrollController.position.maxScrollExtent - 50000) {
+            _scrollController.position.maxScrollExtent - 10000) {
       _loadMoreMessages();
     }
     // print(_scrollController.position.pixels);

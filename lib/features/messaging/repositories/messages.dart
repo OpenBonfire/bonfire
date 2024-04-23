@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
+
 import 'package:bonfire/features/auth/data/repositories/auth.dart';
 import 'package:bonfire/features/auth/data/repositories/discord_auth.dart';
 import 'package:bonfire/features/channels/controllers/channel.dart';
@@ -64,19 +65,17 @@ class Messages extends _$Messages {
   Future<void> runPreCacheRoutine(nyxx.Channel channel) async {
     var authOutput = ref.watch(authProvider.notifier).getAuth();
     if (authOutput is AuthUser && channel is nyxx.TextChannel) {
-      var channelFromCache = await getChannelFromCache(channel.id.value);
-      if (channelFromCache == null) {
+      var age = await getAgeOfMessageEntry(channel.id.value);
+      if (age == null || age.inDays > 1) {
         getMessages(authOutput, channel.id.value, count: 20);
       }
     }
   }
 
   Future<void> getMessages(authOutput, int channelId,
-      {int? before, int? count, int? guildId}) async {
-    loadingMessages = true;
-    if ((authOutput != null) &&
-        (authOutput is AuthUser) &&
-        (channelId != null)) {
+      {int? before, int? count, int? guildId, bool? lock = false}) async {
+    if (lock == true) loadingMessages = true;
+    if ((authOutput != null) && (authOutput is AuthUser)) {
       user = authOutput;
       var textChannel = await user!.client.channels
           .get(nyxx.Snowflake(channelId)) as nyxx.TextChannel;
@@ -86,9 +85,6 @@ class Messages extends _$Messages {
       List<Uint8List> memberAvatars = await Future.wait(
         messages.map((message) async {
           var avatar = await fetchMemberAvatar(message.author);
-          if (avatar == null) {
-            return message.author.avatar!.fetch();
-          }
           return avatar;
         }),
       );
@@ -180,6 +176,15 @@ class Messages extends _$Messages {
     }
     // no cache
     return null;
+  }
+
+  /// Returns the age of the message entry in the cache from [channelId]
+  Future<Duration?> getAgeOfMessageEntry(int channelId) async {
+    var cacheData = await _cacheManager.getFileFromCache(channelId.toString());
+    if (cacheData == null) return null;
+
+    var age = cacheData.file.lastModifiedSync().difference(DateTime.now());
+    return age;
   }
 
   void fetchMoreMessages() {
