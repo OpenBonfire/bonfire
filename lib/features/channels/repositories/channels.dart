@@ -15,6 +15,7 @@ part 'channels.g.dart';
 class Channels extends _$Channels {
   int? guildId;
   List<BonfireChannel> channels = [];
+  Map<int, Member> selfMembers = {};
 
   @override
   Future<List<BonfireChannel>> build() async {
@@ -25,12 +26,18 @@ class Channels extends _$Channels {
     if (currentGuild != null) {
       if (auth != null && auth is AuthUser) {
         print("Start member fetch");
-        var selfMember =
-            await auth.client.guilds.client.users.fetchCurrentUserMember(
-          Snowflake(currentGuild),
-        );
-        print("end member fetch");
+        if (selfMembers[currentGuild] == null) {
+          // selfMembers[currentGuild] =
+          //     await auth.client.guilds.client.users.fetchCurrentUserMember(
+          //   Snowflake(currentGuild),
+          // );
+          selfMembers[currentGuild] =
+              await (await auth.client.guilds.get(Snowflake(currentGuild)))
+                  .members
+                  .get(auth.client.user.id);
+        }
 
+        var selfMember = selfMembers[currentGuild]!;
         var rawGuildChannels = await auth.client.guilds.fetchGuildChannels(
           Snowflake(currentGuild),
         );
@@ -38,7 +45,7 @@ class Channels extends _$Channels {
         print("Start parse");
         var guildChannels = [];
         for (var channel in rawGuildChannels) {
-          var permissions = await computePermissions(channel, selfMember);
+          var permissions = await channel.computePermissionsFor(selfMember);
           if (permissions.canViewChannel) {
             guildChannels.add(channel);
           }
