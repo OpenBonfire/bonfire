@@ -76,7 +76,7 @@ class OverlappingPanelsState extends State<OverlappingPanels>
 
     final animationController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 200),
+      duration: const Duration(milliseconds: 100),
     );
 
     final animation = Tween<double>(
@@ -164,7 +164,7 @@ class OverlappingPanelsState extends State<OverlappingPanels>
     final goal = _calculateGoal(mediaWidth, multiplier);
 
     final animationController = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 200));
+        vsync: this, duration: const Duration(milliseconds: 100));
 
     animationController.addStatusListener((status) {
       if (status == AnimationStatus.completed) {

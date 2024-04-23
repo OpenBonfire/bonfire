@@ -18,6 +18,7 @@ class MessageConverter {
     var memberAvatar = await fetchMemberAvatar(message.author);
     var bonfireMessage = BonfireMessage(
       id: message.id.value,
+      channelId: message.channelId.value,
       content: message.content,
       timestamp: message.timestamp,
       member: BonfireGuildMember(
