@@ -78,9 +78,11 @@ class Messages extends _$Messages {
     var textChannel = await user!.client.channels.get(nyxx.Snowflake(channelId))
         as nyxx.TextChannel;
     var beforeSnowflake = before != null ? nyxx.Snowflake(before) : null;
+    print("GETTING MESSAGES!");
     var messages = await textChannel.messages
         .fetchMany(limit: 100, before: beforeSnowflake);
-    List<Uint8List> memberAvatars = await Future.wait(
+    print("got messages");
+    List<Uint8List?> memberAvatars = await Future.wait(
       messages.map((message) => fetchMemberAvatar(message.author)),
     );
     List<BonfireMessage> channelMessages = [];
@@ -96,6 +98,7 @@ class Messages extends _$Messages {
         username = user.globalName ?? username;
       }
       var memberAvatar = memberAvatars[i];
+      var icon = (memberAvatar == null) ? Image.memory(memberAvatar!) : null;
       var newMessage = BonfireMessage(
         id: message.id.value,
         channelId: message.channelId.value,
@@ -104,7 +107,7 @@ class Messages extends _$Messages {
         member: BonfireGuildMember(
           id: message.author.id.value,
           name: message.author.username,
-          icon: Image.memory(memberAvatar),
+          icon: icon,
           displayName: username,
           guildId: ref.read(guildControllerProvider.notifier).currentGuild!.id,
         ),
@@ -184,15 +187,17 @@ class Messages extends _$Messages {
     return cacheData?.file.readAsBytesSync();
   }
 
-  Future<Uint8List> fetchMemberAvatar(nyxx.MessageAuthor user) async {
+  Future<Uint8List?> fetchMemberAvatar(nyxx.MessageAuthor user) async {
     var cached = await fetchMemberAvatarFromCache(user.id.value);
     if (cached != null) return cached;
-    var fetched = await user.avatar!.fetch();
-    await _cacheManager.putFile(
-      user.id.toString(),
-      fetched,
-    );
-    return fetched;
+    if (user.avatar != null) {
+      var fetched = await user.avatar!.fetch();
+      await _cacheManager.putFile(
+        user.id.toString(),
+        fetched,
+      );
+      return fetched;
+    }
   }
 
 // Future<void> cacheMessages(
