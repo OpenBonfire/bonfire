@@ -6,7 +6,7 @@ part of 'channels.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$channelsHash() => r'3b932c72b951c699c7f6620b816c3142d4fa1571';
+String _$channelsHash() => r'0629462978b54c869a92420e3097989c793e884c';
 
 /// A riverpod provider that fetches the channels for the current guild.
 ///
