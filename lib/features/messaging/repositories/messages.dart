@@ -41,14 +41,18 @@ class Messages extends _$Messages {
     //   processRealtimeMessages(value);
     // });
     print("building...");
+    // return cache, send concurrent network request
+    requestMessageBuildUpdate();
+    return await getChannelFromCache(channelId);
   }
 
-  Future<List<BonfireMessage>?> requestMessageBuildUpdate() async {
+  void requestMessageBuildUpdate() async {
     if (channelId != null) {
-      var channels = (await getChannelFromCache(channelId)) ?? [];
-      // await getMessages(authOutput, channelId);
-      // state = AsyncData((await getChannelFromCache(channelId)) ?? []);
-      return channels;
+      // var channels = (await getChannelFromCache(channelId)) ?? [];
+      // // await getMessages(authOutput, channelId);
+      // // state = AsyncData((await getChannelFromCache(channelId)) ?? []);
+      // return channels;
+      getMessages(authOutput, channelId);
     }
   }
 
@@ -159,8 +163,8 @@ class Messages extends _$Messages {
           json.decode(utf8.decode(cacheData.file.readAsBytesSync()));
       var messagesFuture = (cachedMessages as List<dynamic>).map((e) async {
         var message = BonfireMessage.fromJson(e);
-        message.member.icon = Image.memory(
-            (await fetchMemberAvatarFromCache(message.member.id))!);
+        var icon = (await fetchMemberAvatarFromCache(message.member.id));
+        if (icon != null) message.member.icon = Image.memory(icon);
 
         return message;
       }).toList();
