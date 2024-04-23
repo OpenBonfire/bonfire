@@ -73,7 +73,7 @@ class Messages extends _$Messages {
   }
 
   Future<void> getMessages(authOutput, int channelId,
-      {int? before, int? count, int? guildId, bool? lock = false}) async {
+      {int? before, int? count, int? guildId, bool? lock = true}) async {
     if (lock == true) loadingMessages = true;
     if ((authOutput != null) && (authOutput is AuthUser)) {
       user = authOutput;

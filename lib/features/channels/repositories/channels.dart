@@ -27,7 +27,7 @@ class Channels extends _$Channels {
         print("error while pre-caching!");
         print(e);
       }
-      await Future.delayed(const Duration(milliseconds: 2000));
+      await Future.delayed(const Duration(milliseconds: 500));
     }
   }
 
@@ -59,7 +59,7 @@ class Channels extends _$Channels {
             guildChannels.add(channel);
           }
         }
-        // runPrecache(guildChannels);
+        runPrecache(guildChannels);
 
         // first load categories, so we can parent channels later
         for (var channel in guildChannels) {
