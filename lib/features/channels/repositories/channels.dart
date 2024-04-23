@@ -11,9 +11,8 @@ import 'package:collection/collection.dart';
 
 part 'channels.g.dart';
 
-@riverpod
-
 /// A riverpod provider that fetches the channels for the current guild.
+@riverpod
 class Channels extends _$Channels {
   int? guildId;
   List<BonfireChannel> channels = [];
@@ -27,9 +26,6 @@ class Channels extends _$Channels {
     List<BonfireChannel> _channels = [];
     if (currentGuild != null) {
       if (auth != null && auth is AuthUser) {
-        // var asd = await auth.client.guilds[Snowflake(currentGuild)].members
-        //     .get(auth.client.user.id);
-
         if (selfMembers[currentGuild] == null) {
           selfMembers[currentGuild] = await auth
               .client.guilds[Snowflake(currentGuild)].members

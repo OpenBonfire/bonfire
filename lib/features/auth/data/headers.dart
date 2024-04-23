@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 class Headers {
-  var superProps = {
+  static var superProps = {
     'os': 'Windows',
     'browser': 'Chrome',
     'device': '',
@@ -20,7 +20,7 @@ class Headers {
     'design_id': 0,
   };
 
-  Map<String, String> getHeaders() => {
+  static Map<String, String> getHeaders() => {
         "X-Discord-Timezone": "America/New_York",
         "Sec-Ch-Ua-Platform": '"Windows"',
         'Accept-Language': 'en-US',

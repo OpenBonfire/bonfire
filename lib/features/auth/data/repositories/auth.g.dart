@@ -6,9 +6,11 @@ part of 'auth.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$authHash() => r'df06e80c119122d05d2a8e896614522f20d68d96';
+String _$authHash() => r'0e778767809cc495b4c8a3016cf9f6c347ae6597';
 
-/// See also [Auth].
+/// A riverpod provider that handles authentication with Discord.
+///
+/// Copied from [Auth].
 @ProviderFor(Auth)
 final authProvider = AutoDisposeNotifierProvider<Auth, AuthResponse?>.internal(
   Auth.new,

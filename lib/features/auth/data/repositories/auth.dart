@@ -11,6 +11,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'auth.g.dart';
 
+/// A riverpod provider that handles authentication with Discord.
 @riverpod
 class Auth extends _$Auth {
   NyxxGateway? client;
@@ -21,6 +22,7 @@ class Auth extends _$Auth {
     return authResponse;
   }
 
+  /// Authenticate client with Discord [username] and [password]
   Future<AuthResponse> loginWithCredentials(
       String username, String password) async {
     Map<String, Object?> body = {
@@ -33,7 +35,7 @@ class Auth extends _$Auth {
 
     final response = await http.post(
       Uri.https("discord.com", '/api/v9/auth/login'),
-      headers: Headers().getHeaders(),
+      headers: Headers.getHeaders(),
       body: jsonEncode(body),
     );
 
@@ -81,10 +83,12 @@ class Auth extends _$Auth {
     return authResponse!;
   }
 
+  /// Submit captcha with [captchaKey] and [captchaToken]
   Future<bool> submitCaptcha(String captchaKey, String captchaToken) async {
     return true;
   }
 
+  /// Submit multi-factor authentication with [mfaToken]
   Future<AuthResponse> submitMfa(String mfaToken) async {
     var body = {
       'code': int.parse(mfaToken),
@@ -95,7 +99,7 @@ class Auth extends _$Auth {
 
     final response = await http.post(
       Uri.https("discord.com", '/api/v9/auth/mfa/totp'),
-      headers: Headers().getHeaders(),
+      headers: Headers.getHeaders(),
       body: jsonEncode(body),
     );
 
@@ -109,10 +113,14 @@ class Auth extends _$Auth {
     }
   }
 
+  /// Submit sms authentication with [phoneToken]
   Future<bool> submitPhoneAuth(String phoneToken) async {
     return true;
   }
 
+  /// Get the current authentication state
+  ///
+  /// Returns [AuthResponse] if authenticated, otherwise null
   AuthResponse? getAuth() {
     return authResponse;
   }

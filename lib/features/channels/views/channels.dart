@@ -130,11 +130,11 @@ class _ChannelButtonState extends ConsumerState<ChannelButton> {
                 .read(channelControllerProvider.notifier)
                 .setChannel(widget.channel.id);
 
-            // OverlappingPanelsState? overlappingPanelsState =
-            //     OverlappingPanels.of(context);
-            // if (overlappingPanelsState != null) {
-            //   overlappingPanelsState.moveToState(RevealSide.main);
-            // }
+            OverlappingPanelsState? overlappingPanelsState =
+                OverlappingPanels.of(context);
+            if (overlappingPanelsState != null) {
+              overlappingPanelsState.moveToState(RevealSide.main);
+            }
           },
           child: SizedBox(
             height: 35,

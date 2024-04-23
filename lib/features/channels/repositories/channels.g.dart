@@ -6,9 +6,11 @@ part of 'channels.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$channelsHash() => r'3b42101e88e693356998261a2b4469add2cf10e0';
+String _$channelsHash() => r'72398aa1d7748795adc0c309175eb48141c69757';
 
-/// See also [Channels].
+/// A riverpod provider that fetches the channels for the current guild.
+///
+/// Copied from [Channels].
 @ProviderFor(Channels)
 final channelsProvider =
     AutoDisposeAsyncNotifierProvider<Channels, List<BonfireChannel>>.internal(
