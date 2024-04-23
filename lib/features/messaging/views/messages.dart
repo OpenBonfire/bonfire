@@ -71,11 +71,11 @@ class _MessageViewState extends ConsumerState<MessageView> {
     var bottomPadding = MediaQuery.of(context).padding.bottom;
     var height = MediaQuery.of(context).size.height;
 
-    var realtimeMessages = ref.watch(realtimeMessagesProvider);
-    realtimeMessages.whenData((value) {
-      // print(value[0].member.name);
-      // print(value[0].member.displayName);
-    });
+    // var realtimeMessages = ref.watch(realtimeMessagesProvider);
+    // realtimeMessages.whenData((value) {
+    //   // print(value[0].member.name);
+    //   // print(value[0].member.displayName);
+    // });
 
     var currentGuild = ref.watch(currentGuildControllerProvider);
     var currentChannel =

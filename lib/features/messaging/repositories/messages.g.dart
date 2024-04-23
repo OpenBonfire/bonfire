@@ -6,12 +6,12 @@ part of 'messages.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$messagesHash() => r'bba1625fc8c0f1db9820b9a5339941236e52b7b7';
+String _$messagesHash() => r'b92ac86a0c3fb5a8f00e41ccb9074adc3e6e6abe';
 
 /// See also [Messages].
 @ProviderFor(Messages)
 final messagesProvider =
-    AutoDisposeAsyncNotifierProvider<Messages, List<BonfireMessage>?>.internal(
+    AutoDisposeAsyncNotifierProvider<Messages, List<BonfireMessage>>.internal(
   Messages.new,
   name: r'messagesProvider',
   debugGetCreateSourceHash:
@@ -20,6 +20,6 @@ final messagesProvider =
   allTransitiveDependencies: null,
 );
 
-typedef _$Messages = AutoDisposeAsyncNotifier<List<BonfireMessage>?>;
+typedef _$Messages = AutoDisposeAsyncNotifier<List<BonfireMessage>>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
