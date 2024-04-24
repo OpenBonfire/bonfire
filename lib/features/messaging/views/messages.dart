@@ -350,9 +350,13 @@ class _MessageBoxState extends ConsumerState<MessageBox>
                       enableSubscript: false,
                       enableFootnote: false,
                       enableImageSize: false,
+                      selectable: false,
                       enableKbd: false,
                       syntaxExtensions: const [],
                       elementBuilders: const [],
+                      onTapLink: (href, title) {
+                        print("Tapped link: $href");
+                      },
                       styleSheet: MarkdownStyle(
                           paragraph:
                               Theme.of(context).custom.textTheme.bodyText1),

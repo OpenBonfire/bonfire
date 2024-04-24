@@ -64,11 +64,11 @@ class Messages extends _$Messages {
   late Timer lockTimer;
 
   void enableLock() {
-    if (!loadingMessages) {
-      lockTimer = Timer(const Duration(seconds: 3), () {
-        loadingMessages = false;
-      });
-    }
+    // if (!loadingMessages) {
+    lockTimer = Timer(const Duration(seconds: 3), () {
+      loadingMessages = false;
+    });
+    // }
   }
 
   void removeLock() {
@@ -105,6 +105,20 @@ class Messages extends _$Messages {
           var user = message.author as nyxx.User;
           username = user.globalName ?? username;
         }
+        message.embeds.forEach((element) {
+          print(element.image);
+          print(element.thumbnail);
+          print(element.author);
+          print(element.footer);
+          print(element.provider);
+          print(element.video);
+          print(element.url);
+
+          // if (element.image != null) {
+          //   print("new image just dropped");
+          //   print(element.image);
+          // }
+        });
         var memberAvatar = memberAvatars[i];
         var newMessage = BonfireMessage(
           id: message.id.value,
