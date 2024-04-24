@@ -52,16 +52,6 @@ class Messages extends _$Messages {
     return [];
   }
 
-  // Future<List<BonfireMessage>> fetchMessages(authOutput, channelId) async {
-  //   List<BonfireMessage> fromCache = [];
-  //   if (channelId != null) {
-  //     getMessages(authOutput, channelId);
-  //     fromCache = (await getChannelFromCache(channelId)) ?? [];
-  //   }
-
-  //   return fromCache;
-  // }
-
   Future<void> runPreCacheRoutine(nyxx.Channel channel) async {
     var authOutput = ref.watch(authProvider.notifier).getAuth();
     if (authOutput is AuthUser && channel is nyxx.TextChannel) {
@@ -70,6 +60,25 @@ class Messages extends _$Messages {
         getMessages(authOutput, channel.id.value, count: 20, lock: false);
       }
     }
+  }
+
+  var lockThread = Completer<void>();
+  // create 2 methods; one to enable the lock, and one to remove the lock
+  // on enabled, if that same lock is still active after 3 seconds,
+  // remove the lock. The lock is represented by the variable "loadingMessages"
+  void enableLock() {
+    loadingMessages = true;
+    lockThread = Completer<void>();
+    Future.delayed(const Duration(seconds: 3), () {
+      if (!lockThread.isCompleted) {
+        lockThread.complete();
+      }
+    });
+  }
+
+  void removeLock() {
+    loadingMessages = false;
+    lockThread.complete();
   }
 
   Future<void> getMessages(authOutput, int channelId,

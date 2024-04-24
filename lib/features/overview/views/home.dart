@@ -4,10 +4,13 @@ import 'package:bonfire/features/members/views/member_list.dart';
 import 'package:bonfire/features/messaging/repositories/messages.dart';
 import 'package:bonfire/features/messaging/repositories/realtime_messages.dart';
 import 'package:bonfire/features/messaging/views/messages.dart';
+import 'package:bonfire/features/overview/controllers/navigation_bar.dart';
+import 'package:bonfire/features/overview/views/navigator.dart';
 import 'package:bonfire/features/overview/views/overlapping_panels.dart';
 import 'package:bonfire/features/overview/views/sidebar.dart';
 import 'package:bonfire/theme/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
@@ -32,20 +35,24 @@ class _HomeState extends ConsumerState<HomeScreen> {
           },
           loading: () {},
           error: (error, stackTrace) {
-            print(
-                "DateTime errored! Not showing call stack, but you should probably do that...");
+            // trust me bro
           });
     });
 
     return Scaffold(
-        body: OverlappingPanels(
-            left: SizedBox(
-              width: MediaQuery.of(context).size.width,
-              child: const Row(
-                children: [Sidebar(), Expanded(child: ChannelsList())],
-              ),
-            ),
-            main: const MessageView(),
-            right: const MemberList()));
+        body: PopUpNavigationBar(
+            panel: OverlappingPanels(
+      onSideChange: (value) {
+        ref.read(navigationBarProvider.notifier).onSideChange(value);
+      },
+      left: SizedBox(
+        width: MediaQuery.of(context).size.width,
+        child: const Row(
+          children: [Sidebar(), Expanded(child: ChannelsList())],
+        ),
+      ),
+      main: const MessageView(),
+      right: const MemberList(),
+    )));
   }
 }

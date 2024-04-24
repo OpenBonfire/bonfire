@@ -6,7 +6,7 @@ part of 'messages.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$messagesHash() => r'66e28369123969df562c53bc67412cdce333eb6e';
+String _$messagesHash() => r'e532dbc9b50f2da83a8bcb71b6e8945f752be15c';
 
 /// See also [Messages].
 @ProviderFor(Messages)

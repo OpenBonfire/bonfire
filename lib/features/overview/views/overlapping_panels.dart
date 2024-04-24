@@ -29,7 +29,7 @@ class OverlappingPanels extends StatefulWidget {
   /// A callback to notify when a panel reveal has completed.
   final ValueChanged<RevealSide>? onSideChange;
 
-  const OverlappingPanels(
+  OverlappingPanels(
       {this.left,
       required this.main,
       this.right,
