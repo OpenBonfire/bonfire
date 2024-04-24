@@ -143,16 +143,20 @@ class Messages extends _$Messages {
     if (messages.isNotEmpty) {
       var message = messages.last;
       var channelId = message.channelId;
+      if (channelMessagesMap[channelId.toString()] == null) {
+        channelMessagesMap[channelId.toString()] = [];
+      }
+      channelMessagesMap[channelId.toString()]!.insert(0, message);
       if (channelId == ref.read(channelControllerProvider)) {
         // TODO: Only take the first message, and append :D
         // you could also take all of them and compare, to ensure we
         // didn't lose anything in a race condition
 
-        if (channelMessagesMap[channelId.toString()] == null) {
-          channelMessagesMap[channelId.toString()] = [];
-        }
-        channelMessagesMap[channelId.toString()]!.insert(0, message);
-        state = AsyncData(channelMessagesMap[channelId.toString()] ?? []);
+        var newState = channelMessagesMap[channelId.toString()];
+        var cacheKey = channelId.toString();
+
+        cacheMessages(messages, cacheKey);
+        state = AsyncData(newState ?? []);
       }
     }
   }
