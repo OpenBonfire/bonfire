@@ -74,12 +74,12 @@ class Messages extends _$Messages {
 
   Future<void> getMessages(authOutput, int channelId,
       {int? before, int? count, int? guildId, bool? lock = true}) async {
-    if (lock == true) loadingMessages = true;
     if ((authOutput != null) && (authOutput is AuthUser)) {
       user = authOutput;
       var textChannel = await user!.client.channels
           .get(nyxx.Snowflake(channelId)) as nyxx.TextChannel;
       var beforeSnowflake = before != null ? nyxx.Snowflake(before) : null;
+      if (lock == true) loadingMessages = true;
       var messages = await textChannel.messages
           .fetchMany(limit: count ?? 50, before: beforeSnowflake);
       List<Uint8List> memberAvatars = await Future.wait(
@@ -88,6 +88,7 @@ class Messages extends _$Messages {
           return avatar;
         }),
       );
+      loadingMessages = false;
       List<BonfireMessage> channelMessages = [];
       for (int i = 0; i < messages.length; i++) {
         var message = messages[i];
@@ -132,7 +133,6 @@ class Messages extends _$Messages {
         state = AsyncData(channelMessagesMap[channelId.toString()] ?? []);
       }
     }
-    loadingMessages = false;
   }
 
   void processRealtimeMessages(List<BonfireMessage> messages) async {
