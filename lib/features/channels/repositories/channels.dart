@@ -31,6 +31,7 @@ class Channels extends _$Channels {
   @override
   Future<List<BonfireChannel>> build() async {
     var currentGuild = ref.watch(guildControllerProvider);
+    var lastGuild;
     var auth = ref.watch(authProvider.notifier).getAuth();
 
     List<BonfireChannel> _channels = [];
@@ -39,10 +40,11 @@ class Channels extends _$Channels {
       if (cachedChannels != null) {
         if (cachedChannels.isNotEmpty) {
           channels = cachedChannels;
+          lastGuild = currentGuild;
           state = AsyncValue.data(channels);
         }
       }
-      // await Future.delayed(const Duration(seconds: 10));
+
       if (auth != null && auth is AuthUser) {
         if (selfMembers[currentGuild] == null) {
           selfMembers[currentGuild] = await auth
@@ -108,7 +110,13 @@ class Channels extends _$Channels {
         _channels.sort((a, b) => a.position.compareTo(b.position));
         channels = _channels;
         saveToCache(channels);
-        state = AsyncValue.data(channels);
+
+        // ensure guild id is correct
+        if (ref.read(guildControllerProvider) == lastGuild) {
+          state = AsyncValue.data(channels);
+        } else {
+          print("guild changed, not updating channels");
+        }
       }
     }
     return channels;
