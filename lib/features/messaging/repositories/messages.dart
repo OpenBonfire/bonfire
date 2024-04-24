@@ -72,7 +72,6 @@ class Messages extends _$Messages {
   }
 
   void removeLock() {
-    print("lock removed manually");
     loadingMessages = false;
     lockTimer.cancel();
   }
