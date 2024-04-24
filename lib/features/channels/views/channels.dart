@@ -2,6 +2,7 @@ import 'package:bonfire/features/channels/controllers/channel.dart';
 import 'package:bonfire/features/channels/repositories/channels.dart';
 import 'package:bonfire/features/overview/views/overlapping_panels.dart';
 import 'package:bonfire/shared/models/channel.dart';
+import 'package:bonfire/shared/utils/icons.dart';
 import 'package:bonfire/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -142,9 +143,15 @@ class _ChannelButtonState extends ConsumerState<ChannelButton> {
               alignment: Alignment.centerLeft,
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 12),
-                child: Text(widget.channel.name,
-                    textAlign: TextAlign.left,
-                    style: Theme.of(context).custom.textTheme.bodyText2),
+                child: Row(
+                  children: [
+                    BonfireIcons.channelIcons[widget.channel.type]!,
+                    const SizedBox(width: 8),
+                    Text(widget.channel.name,
+                        textAlign: TextAlign.left,
+                        style: Theme.of(context).custom.textTheme.bodyText2),
+                  ],
+                ),
               ),
             ),
           ),

@@ -1,5 +1,6 @@
 import 'package:bonfire/features/channels/views/channels.dart';
 import 'package:bonfire/features/guild/repositories/guilds.dart';
+import 'package:bonfire/features/members/views/member_list.dart';
 import 'package:bonfire/features/messaging/repositories/messages.dart';
 import 'package:bonfire/features/messaging/repositories/realtime_messages.dart';
 import 'package:bonfire/features/messaging/views/messages.dart';
@@ -38,21 +39,13 @@ class _HomeState extends ConsumerState<HomeScreen> {
 
     return Scaffold(
         body: OverlappingPanels(
-      left: SizedBox(
-        width: MediaQuery.of(context).size.width,
-        child: const Row(
-          children: [Sidebar(), Expanded(child: ChannelsList())],
-        ),
-      ),
-      main: const MessageView(),
-      right: Container(
-        width: 100,
-        height: 100,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(10),
-        ),
-      ),
-    ));
+            left: SizedBox(
+              width: MediaQuery.of(context).size.width,
+              child: const Row(
+                children: [Sidebar(), Expanded(child: ChannelsList())],
+              ),
+            ),
+            main: const MessageView(),
+            right: const MemberList()));
   }
 }
