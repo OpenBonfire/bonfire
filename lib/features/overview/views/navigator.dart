@@ -52,7 +52,7 @@ class _BarWidgetState extends ConsumerState<BarWidget> {
       visible = false;
     }
     return AnimatedPositioned(
-      duration: const Duration(milliseconds: 200),
+      duration: const Duration(milliseconds: 300),
       bottom: visible ? 0 : -80,
       left: 0,
       right: 0,

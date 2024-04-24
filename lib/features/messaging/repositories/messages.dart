@@ -25,6 +25,8 @@ class Messages extends _$Messages {
   AuthUser? user;
   bool listenerRunning = false;
   nyxx.Message? oldestMessage;
+  DateTime lastFetchTime = DateTime.now();
+
   final _cacheManager = CacheManager(
     Config(
       'bonfire_cache',
@@ -63,15 +65,14 @@ class Messages extends _$Messages {
 
   void enableLock() {
     if (!loadingMessages) {
-      loadingMessages = true;
-      lockTimer = Timer(Duration(seconds: 3), () {
-        print("Lock removed");
+      lockTimer = Timer(const Duration(seconds: 3), () {
         loadingMessages = false;
       });
     }
   }
 
   void removeLock() {
+    print("lock removed manually");
     loadingMessages = false;
     lockTimer.cancel();
   }
@@ -83,7 +84,7 @@ class Messages extends _$Messages {
       var textChannel = await user!.client.channels
           .get(nyxx.Snowflake(channelId)) as nyxx.TextChannel;
       var beforeSnowflake = before != null ? nyxx.Snowflake(before) : null;
-      if (lock == true) loadingMessages = true;
+      if (lock == true) enableLock();
       var messages = await textChannel.messages
           .fetchMany(limit: count ?? 50, before: beforeSnowflake);
       List<Uint8List> memberAvatars = await Future.wait(
@@ -92,7 +93,7 @@ class Messages extends _$Messages {
           return avatar;
         }),
       );
-      loadingMessages = false;
+      removeLock();
       List<BonfireMessage> channelMessages = [];
       for (int i = 0; i < messages.length; i++) {
         var message = messages[i];
@@ -192,6 +193,10 @@ class Messages extends _$Messages {
   }
 
   void fetchMoreMessages() {
+    var delta = DateTime.now().difference(lastFetchTime);
+    if (delta.inMilliseconds < 500) return;
+    lastFetchTime = DateTime.now();
+
     var authOutput = ref.watch(authProvider.notifier).getAuth();
     var channelId = ref.watch(channelControllerProvider);
     if (channelId != null) {

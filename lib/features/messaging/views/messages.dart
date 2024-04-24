@@ -48,6 +48,7 @@ class _MessageViewState extends ConsumerState<MessageView> {
     // from hitting a rate limit, as well as lagging due to unnecessary
     // state updates.
     if (!ref.read(messagesProvider.notifier).loadingMessages) {
+      print("fetching");
       ref.read(messagesProvider.notifier).fetchMoreMessages();
     }
   }
