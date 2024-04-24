@@ -67,7 +67,7 @@ class _BarWidgetState extends ConsumerState<BarWidget> {
         )),
         child: Container(
           decoration: BoxDecoration(
-            color: Theme.of(context).custom.colorTheme.brightestGray,
+            color: Theme.of(context).custom.colorTheme.cardSelected,
           ),
           height: 80,
         ),

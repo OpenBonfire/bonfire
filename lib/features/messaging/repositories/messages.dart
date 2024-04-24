@@ -6,11 +6,8 @@ import 'package:bonfire/features/auth/data/repositories/auth.dart';
 import 'package:bonfire/features/auth/data/repositories/discord_auth.dart';
 import 'package:bonfire/features/channels/controllers/channel.dart';
 import 'package:bonfire/features/guild/controllers/guild.dart';
-import 'package:bonfire/features/messaging/repositories/realtime_bind.dart';
-import 'package:bonfire/features/messaging/repositories/realtime_messages.dart';
 import 'package:bonfire/shared/models/member.dart';
 import 'package:bonfire/shared/models/message.dart';
-import 'package:bonfire/shared/utils/message.dart';
 import 'package:flutter/widgets.dart';
 import 'package:nyxx_self/nyxx.dart' as nyxx;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -26,7 +23,6 @@ running the realtime listener
 @Riverpod(keepAlive: false)
 class Messages extends _$Messages {
   AuthUser? user;
-  bool loadingMessages = false;
   bool listenerRunning = false;
   nyxx.Message? oldestMessage;
   final _cacheManager = CacheManager(
@@ -62,23 +58,22 @@ class Messages extends _$Messages {
     }
   }
 
-  var lockThread = Completer<void>();
-  // create 2 methods; one to enable the lock, and one to remove the lock
-  // on enabled, if that same lock is still active after 3 seconds,
-  // remove the lock. The lock is represented by the variable "loadingMessages"
+  bool loadingMessages = false;
+  late Timer lockTimer;
+
   void enableLock() {
-    loadingMessages = true;
-    lockThread = Completer<void>();
-    Future.delayed(const Duration(seconds: 3), () {
-      if (!lockThread.isCompleted) {
-        lockThread.complete();
-      }
-    });
+    if (!loadingMessages) {
+      loadingMessages = true;
+      lockTimer = Timer(Duration(seconds: 3), () {
+        print("Lock removed");
+        loadingMessages = false;
+      });
+    }
   }
 
   void removeLock() {
     loadingMessages = false;
-    lockThread.complete();
+    lockTimer.cancel();
   }
 
   Future<void> getMessages(authOutput, int channelId,

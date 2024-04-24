@@ -112,7 +112,7 @@ class OverlappingPanelsState extends State<OverlappingPanels>
 
     final animationController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 200),
+      duration: const Duration(milliseconds: 80),
     );
 
     var goal = 0.0;
