@@ -12,6 +12,7 @@ import 'package:flutter/widgets.dart';
 import 'package:nyxx_self/nyxx.dart' as nyxx;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import 'dart:isolate';
 
 part 'messages.g.dart';
 
@@ -24,7 +25,7 @@ running the realtime listener
 class Messages extends _$Messages {
   AuthUser? user;
   bool listenerRunning = false;
-  nyxx.Message? oldestMessage;
+  Map<int, nyxx.Message?> oldestMessage = {};
   DateTime lastFetchTime = DateTime.now();
 
   final _cacheManager = CacheManager(
@@ -96,9 +97,9 @@ class Messages extends _$Messages {
       List<BonfireMessage> channelMessages = [];
       for (int i = 0; i < messages.length; i++) {
         var message = messages[i];
-        if (oldestMessage == null ||
-            message.timestamp.isBefore(oldestMessage!.timestamp)) {
-          oldestMessage = message;
+        if (oldestMessage[channelId] == null ||
+            message.timestamp.isBefore(oldestMessage[channelId]!.timestamp)) {
+          oldestMessage[channelId] = message;
         }
         var username = message.author.username;
         if (message.author is nyxx.User) {
@@ -106,13 +107,13 @@ class Messages extends _$Messages {
           username = user.globalName ?? username;
         }
         message.embeds.forEach((element) {
-          print(element.image);
-          print(element.thumbnail);
-          print(element.author);
-          print(element.footer);
-          print(element.provider);
-          print(element.video);
-          print(element.url);
+          // print(element.image);
+          // print(element.thumbnail);
+          // print(element.author);
+          // print(element.footer);
+          // print(element.provider);
+          // print(element.video);
+          // print(element.url);
 
           // if (element.image != null) {
           //   print("new image just dropped");
@@ -191,10 +192,6 @@ class Messages extends _$Messages {
       print("got ${messagesFuture.length} messages from cache");
 
       return await Future.wait(messagesFuture);
-
-      // var messages = await Future.wait(messagesFuture);
-      // channelMessagesMap[channelId.toString()] = messages;
-      // state = AsyncData(messages);
     }
     // no cache
     return null;
@@ -217,7 +214,8 @@ class Messages extends _$Messages {
     var authOutput = ref.watch(authProvider.notifier).getAuth();
     var channelId = ref.watch(channelControllerProvider);
     if (channelId != null) {
-      getMessages(authOutput, channelId, before: oldestMessage!.id.value);
+      getMessages(authOutput, channelId,
+          before: oldestMessage[channelId]!.id.value);
     }
   }
 
