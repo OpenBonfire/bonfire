@@ -285,7 +285,9 @@ class _MessageBoxState extends ConsumerState<MessageBox>
       onPressed: () {},
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 8),
-        child: Wrap(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             (widget.message.member.icon != null)
                 ? Padding(
@@ -311,7 +313,7 @@ class _MessageBoxState extends ConsumerState<MessageBox>
               children: [
                 SizedBox(
                   width: width - 100,
-                  child: Row(
+                  child: Wrap(
                     children: [
                       Padding(
                           padding: const EdgeInsets.only(left: 6, top: 0),
@@ -370,7 +372,7 @@ class _MessageBoxState extends ConsumerState<MessageBox>
                       padding: const EdgeInsets.only(left: 6, top: 0),
                       child: Image.network(
                         embed.thumbnailUrl!,
-                        height: 250,
+                        width: width - 105,
                       )),
               ],
             ),
