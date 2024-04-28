@@ -6,13 +6,13 @@ import 'package:bonfire/features/auth/data/repositories/auth.dart';
 import 'package:bonfire/features/auth/data/repositories/discord_auth.dart';
 import 'package:bonfire/features/channels/controllers/channel.dart';
 import 'package:bonfire/features/guild/controllers/guild.dart';
+import 'package:bonfire/shared/models/embed.dart';
 import 'package:bonfire/shared/models/member.dart';
 import 'package:bonfire/shared/models/message.dart';
 import 'package:flutter/widgets.dart';
 import 'package:nyxx_self/nyxx.dart' as nyxx;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
-import 'dart:isolate';
 
 part 'messages.g.dart';
 
@@ -106,35 +106,33 @@ class Messages extends _$Messages {
           var user = message.author as nyxx.User;
           username = user.globalName ?? username;
         }
-        message.embeds.forEach((element) {
-          // print(element.image);
-          // print(element.thumbnail);
-          // print(element.author);
-          // print(element.footer);
-          // print(element.provider);
-          // print(element.video);
-          // print(element.url);
 
-          // if (element.image != null) {
-          //   print("new image just dropped");
-          //   print(element.image);
-          // }
+        List<BonfireEmbed> embeds = [];
+        message.embeds.forEach((embed) {
+          if (embed.thumbnail != null) {
+            embeds.add(BonfireEmbed(
+              width: embed.thumbnail!.width!,
+              height: embed.thumbnail!.height!,
+              thumbnailUrl: embed.thumbnail!.url.toString(),
+            ));
+          }
         });
+
         var memberAvatar = memberAvatars[i];
         var newMessage = BonfireMessage(
-          id: message.id.value,
-          channelId: channelId,
-          content: message.content,
-          timestamp: message.timestamp,
-          member: BonfireGuildMember(
-            id: message.author.id.value,
-            name: message.author.username,
-            icon: Image.memory(memberAvatar),
-            displayName: username,
-            guildId: guildId ??
-                ref.read(guildControllerProvider.notifier).currentGuild!.id,
-          ),
-        );
+            id: message.id.value,
+            channelId: channelId,
+            content: message.content,
+            timestamp: message.timestamp,
+            member: BonfireGuildMember(
+              id: message.author.id.value,
+              name: message.author.username,
+              icon: Image.memory(memberAvatar),
+              displayName: username,
+              guildId: guildId ??
+                  ref.read(guildControllerProvider.notifier).currentGuild!.id,
+            ),
+            embeds: embeds);
         channelMessages.add(newMessage);
       }
       if (before == null) {

@@ -264,9 +264,12 @@ class _MessageBoxState extends ConsumerState<MessageBox>
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     var width = MediaQuery.of(context).size.width;
+    var embeds = widget.message.embeds ?? [];
 
-    var name = widget.message.member.name;
+    var name =
+        widget.message.member.nickName ?? widget.message.member.displayName;
 
     return OutlinedButton(
       style: OutlinedButton.styleFrom(
@@ -282,9 +285,7 @@ class _MessageBoxState extends ConsumerState<MessageBox>
       onPressed: () {},
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 8),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: Wrap(
           children: [
             (widget.message.member.icon != null)
                 ? Padding(
@@ -315,7 +316,7 @@ class _MessageBoxState extends ConsumerState<MessageBox>
                       Padding(
                           padding: const EdgeInsets.only(left: 6, top: 0),
                           child: Text(
-                            widget.message.member.displayName,
+                            name,
                             textAlign: TextAlign.left,
                             style: const TextStyle(
                               color: Color.fromARGB(255, 255, 255, 255),
@@ -363,6 +364,14 @@ class _MessageBoxState extends ConsumerState<MessageBox>
                     ),
                   ),
                 ),
+                // add per embed
+                for (var embed in embeds)
+                  Padding(
+                      padding: const EdgeInsets.only(left: 6, top: 0),
+                      child: Image.network(
+                        embed.thumbnailUrl!,
+                        height: 250,
+                      )),
               ],
             ),
           ],

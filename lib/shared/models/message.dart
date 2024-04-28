@@ -1,3 +1,4 @@
+import 'package:bonfire/shared/models/embed.dart';
 import 'package:bonfire/shared/models/member.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -10,6 +11,7 @@ class BonfireMessage {
   final String content;
   final DateTime timestamp;
   final BonfireGuildMember member;
+  final List<BonfireEmbed>? embeds;
 
   BonfireMessage({
     required this.id,
@@ -17,6 +19,7 @@ class BonfireMessage {
     required this.content,
     required this.member,
     required this.timestamp,
+    this.embeds,
   });
 
   factory BonfireMessage.fromJson(Map<String, dynamic> json) =>

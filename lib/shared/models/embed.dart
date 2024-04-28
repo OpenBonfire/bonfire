@@ -11,7 +11,15 @@ part 'embed.g.dart';
 
 @JsonSerializable()
 class BonfireEmbed {
-  BonfireEmbed();
+  final int width;
+  final int height;
+  final String? thumbnailUrl;
+
+  BonfireEmbed({
+    required this.width,
+    required this.height,
+    this.thumbnailUrl,
+  });
 
   factory BonfireEmbed.fromJson(Map<String, dynamic> json) =>
       _$BonfireEmbedFromJson(json);

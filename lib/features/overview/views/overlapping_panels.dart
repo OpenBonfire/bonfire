@@ -73,7 +73,7 @@ class OverlappingPanelsState extends State<OverlappingPanels>
 
     final animationController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 100),
+      duration: const Duration(milliseconds: 150),
     );
 
     final animation = Tween<double>(
