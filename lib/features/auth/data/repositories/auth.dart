@@ -80,6 +80,13 @@ class Auth extends _$Auth {
       print("User Ready!");
     });
 
+    client!.gateway.shards[0].done.then((value) {
+      // not sure what to do with this, but it works so yeah
+      // essentially, it signals shard disconnect
+      print("Shard 0 done!");
+      state = authResponse;
+    });
+
     return authResponse!;
   }
 
