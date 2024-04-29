@@ -141,8 +141,16 @@ class _MessageViewState extends ConsumerState<MessageView> {
                 if (cachedBox != null) {
                   return cachedBox;
                 }
+                bool showAuthor = true;
+                if (index + 1 < messages.length) {
+                  showAuthor = messages[index + 1].member.id ==
+                      messages[index].member.id;
+                }
 
-                var box = MessageBox(message: messages[index]);
+                var box = MessageBox(
+                  message: messages[index],
+                  showSenderInfo: !showAuthor,
+                );
                 messageWidgets[messages[index].id] = box;
                 return box;
               },
@@ -223,7 +231,9 @@ class _MessageViewState extends ConsumerState<MessageView> {
 
 class MessageBox extends ConsumerStatefulWidget {
   final BonfireMessage message;
-  MessageBox({Key? key, required this.message}) : super(key: key);
+  final bool showSenderInfo;
+  MessageBox({Key? key, required this.message, required this.showSenderInfo})
+      : super(key: key);
 
   @override
   ConsumerState<MessageBox> createState() => _MessageBoxState();
@@ -284,12 +294,13 @@ class _MessageBoxState extends ConsumerState<MessageBox>
       ),
       onPressed: () {},
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8),
+        padding: EdgeInsets.only(top: widget.showSenderInfo ? 16 : 0),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            (widget.message.member.icon != null)
+            (widget.message.member.icon != null &&
+                    widget.showSenderInfo == true)
                 ? Padding(
                     padding: const EdgeInsets.only(right: 8),
                     child: SizedBox(
@@ -311,37 +322,42 @@ class _MessageBoxState extends ConsumerState<MessageBox>
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(
-                  width: width - 100,
-                  child: Wrap(
-                    children: [
-                      Padding(
-                          padding: const EdgeInsets.only(left: 6, top: 0),
-                          child: Text(
-                            name,
-                            textAlign: TextAlign.left,
-                            style: const TextStyle(
-                              color: Color.fromARGB(255, 255, 255, 255),
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
+                widget.showSenderInfo
+                    ? SizedBox(
+                        width: width - 100,
+                        child: Wrap(
+                          // verticalDirection: VerticalDirection.down,
+                          children: [
+                            Padding(
+                                padding: const EdgeInsets.only(left: 6, top: 0),
+                                child: Text(
+                                  name,
+                                  textAlign: TextAlign.left,
+                                  style: const TextStyle(
+                                    color: Color.fromARGB(255, 255, 255, 255),
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                )),
+                            Padding(
+                              // I dislike the top padding, should fix alignment
+                              padding: const EdgeInsets.only(left: 6, top: 4),
+                              child: Text(
+                                dateTimeFormat(
+                                    widget.message.timestamp.toLocal()),
+                                textAlign: TextAlign.left,
+                                softWrap: true,
+                                overflow: TextOverflow.fade,
+                                style: const TextStyle(
+                                  color: Color.fromARGB(189, 255, 255, 255),
+                                  fontSize: 12,
+                                ),
+                              ),
                             ),
-                          )),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 6, top: 0),
-                        child: Text(
-                          dateTimeFormat(widget.message.timestamp.toLocal()),
-                          textAlign: TextAlign.left,
-                          softWrap: true,
-                          overflow: TextOverflow.fade,
-                          style: const TextStyle(
-                            color: Color.fromARGB(189, 255, 255, 255),
-                            fontSize: 12,
-                          ),
+                          ],
                         ),
-                      ),
-                    ],
-                  ),
-                ),
+                      )
+                    : const SizedBox(),
                 Padding(
                   padding: const EdgeInsets.only(left: 6, top: 0),
                   child: SizedBox(
@@ -368,12 +384,18 @@ class _MessageBoxState extends ConsumerState<MessageBox>
                 ),
                 // add per embed
                 for (var embed in embeds)
-                  Padding(
-                      padding: const EdgeInsets.only(left: 6, top: 0),
-                      child: Image.network(
-                        embed.thumbnailUrl!,
-                        width: width - 105,
-                      )),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Padding(
+                        padding: const EdgeInsets.only(left: 6, top: 6),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(16),
+                          child: Image.network(
+                            embed.thumbnailUrl!,
+                            width: width - 105,
+                          ),
+                        )),
+                  ),
               ],
             ),
           ],

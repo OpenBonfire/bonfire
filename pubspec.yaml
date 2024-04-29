@@ -13,7 +13,7 @@ dependencies:
 
   nyxx_self:
     git:
-      url: https://github.com/V3ntus/nyxx-self
+      url: https://github.com/Bonfire-Development/firebridge
       ref: dev
   nyxx_extensions: 
     git:

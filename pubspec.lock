@@ -397,6 +397,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  foundation:
+    dependency: transitive
+    description:
+      name: foundation
+      sha256: "6f1fda07bd2a422145724b0f94ee68fabac95fabff982d5f334fe1a38cbed6a7"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.5"
   freezed:
     dependency: "direct dev"
     description:
@@ -650,17 +658,17 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: "368c862506520e383fefa7da73acce10fcf67815"
+      resolved-ref: "33ae2d494409ac276832985aded3c5008e60562a"
       url: "https://github.com/Bonfire-Development/firebridge_extensions"
     source: git
-    version: "4.1.0"
+    version: "4.1.1"
   nyxx_self:
     dependency: "direct main"
     description:
       path: "."
       ref: dev
-      resolved-ref: "0719df21b023f6649362532bd8cec85f9d91a6d1"
-      url: "https://github.com/V3ntus/nyxx-self"
+      resolved-ref: "893fba4c249a40c48382e3ee69467f667c02ce95"
+      url: "https://github.com/Bonfire-Development/firebridge"
     source: git
     version: "6.2.1"
   octo_image:

@@ -1,28 +1,40 @@
-import 'dart:async';
-import 'dart:convert';
-import 'dart:typed_data';
-import 'dart:ui';
-
-import 'package:bonfire/shared/utils/image.dart';
 import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:json_annotation/json_annotation.dart';
 
 part 'embed.g.dart';
 
 @JsonSerializable()
 class BonfireEmbed {
-  final int width;
-  final int height;
+  final int? width;
+  final int? height;
   final String? thumbnailUrl;
+  @ColorConverter()
+  final Color? color;
 
   BonfireEmbed({
-    required this.width,
-    required this.height,
+    this.width,
+    this.height,
     this.thumbnailUrl,
+    this.color,
   });
 
   factory BonfireEmbed.fromJson(Map<String, dynamic> json) =>
       _$BonfireEmbedFromJson(json);
 
   Map<String, dynamic> toJson() => _$BonfireEmbedToJson(this);
+}
+
+class ColorConverter implements JsonConverter<Color?, int?> {
+  const ColorConverter();
+
+  @override
+  Color? fromJson(int? json) {
+    return json != null ? Color(json) : null;
+  }
+
+  @override
+  int? toJson(Color? object) {
+    return object?.value;
+  }
 }

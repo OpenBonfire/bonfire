@@ -1,8 +1,6 @@
 import 'dart:async';
 import 'package:bonfire/features/auth/data/repositories/auth.dart';
 import 'package:bonfire/features/auth/data/repositories/discord_auth.dart';
-import 'package:bonfire/features/messaging/repositories/messages.dart';
-import 'package:bonfire/shared/models/member.dart';
 import 'package:bonfire/shared/models/message.dart';
 import 'package:bonfire/shared/utils/message.dart';
 import 'package:nyxx_self/nyxx.dart' as nyxx;

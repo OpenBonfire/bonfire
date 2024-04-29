@@ -103,6 +103,7 @@ class _ChannelButtonState extends ConsumerState<ChannelButton> {
   @override
   Widget build(BuildContext context) {
     var channelController = ref.watch(channelControllerProvider);
+    bool selected = widget.channel.id == channelController;
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 2, left: 8, right: 30),
@@ -122,8 +123,10 @@ class _ChannelButtonState extends ConsumerState<ChannelButton> {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
               ),
-              foregroundColor: Theme.of(context).custom.colorTheme.textColor1,
-              backgroundColor: (widget.channel.id == channelController)
+              foregroundColor: selected
+                  ? Theme.of(context).custom.colorTheme.textColor1
+                  : Theme.of(context).custom.colorTheme.textColor2,
+              backgroundColor: selected
                   ? Theme.of(context).custom.colorTheme.cardSelected
                   : Colors.transparent),
           onPressed: () {
