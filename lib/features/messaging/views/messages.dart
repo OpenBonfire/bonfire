@@ -326,7 +326,6 @@ class _MessageBoxState extends ConsumerState<MessageBox>
                     ? SizedBox(
                         width: width - 100,
                         child: Wrap(
-                          // verticalDirection: VerticalDirection.down,
                           children: [
                             Padding(
                                 padding: const EdgeInsets.only(left: 6, top: 0),
