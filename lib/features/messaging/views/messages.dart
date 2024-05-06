@@ -307,18 +307,33 @@ class _MessageBoxState extends ConsumerState<MessageBox>
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            (widget.message!.member.icon != null &&
-                    widget.showSenderInfo == true)
+            (widget.showSenderInfo == true)
                 ? Padding(
                     padding: const EdgeInsets.only(right: 8),
                     child: SizedBox(
-                      width: 45,
-                      height: 45,
-                      child: ClipRRect(
-                          borderRadius: BorderRadius.circular(100),
-                          child:
-                              Image(image: widget.message!.member.icon!.image)),
-                    ))
+                        width: 45,
+                        height: 45,
+                        child: ClipRRect(
+                            borderRadius: BorderRadius.circular(100),
+                            child: (widget.message!.member.icon != null)
+                                ? Image(
+                                    image: widget.message!.member.icon!.image)
+                                : FutureBuilder(
+                                    future: ref
+                                        .read(messagesProvider.notifier)
+                                        .fetchMemberAvatar(
+                                            widget.message!.member),
+                                    builder: (context, snapshot) {
+                                      if (snapshot.connectionState ==
+                                          ConnectionState.done) {
+                                        return Image.memory(snapshot.data!);
+                                      } else {
+                                        return const SizedBox(
+                                          width: 45,
+                                          height: 45,
+                                        );
+                                      }
+                                    }))))
                 : const Padding(
                     padding: EdgeInsets.only(right: 8),
                     child: SizedBox(

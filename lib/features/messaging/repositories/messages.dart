@@ -13,6 +13,7 @@ import 'package:flutter/widgets.dart';
 import 'package:nyxx_self/nyxx.dart' as nyxx;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import 'package:http/http.dart' as http;
 
 part 'messages.g.dart';
 
@@ -56,7 +57,8 @@ class Messages extends _$Messages {
     if (authOutput is AuthUser && channel is nyxx.TextChannel) {
       var age = await getAgeOfMessageEntry(channel.id.value);
       if (age == null || age.inDays > 1) {
-        getMessages(authOutput, channel.id.value, count: 20, lock: false);
+        getMessages(authOutput, channel.id.value,
+            count: 20, lock: false, requestAvatar: false);
       }
     }
   }
@@ -77,22 +79,47 @@ class Messages extends _$Messages {
     lockTimer.cancel();
   }
 
-  Future<void> getMessages(authOutput, int channelId,
-      {int? before, int? count, int? guildId, bool? lock = true}) async {
+  Future<void> getMessages(
+    authOutput,
+    int channelId, {
+    int? before,
+    int? count,
+    int? guildId,
+    bool? lock = true,
+    bool? requestAvatar = true,
+  }) async {
     if ((authOutput != null) && (authOutput is AuthUser)) {
       user = authOutput;
       var textChannel = await user!.client.channels
           .get(nyxx.Snowflake(channelId)) as nyxx.TextChannel;
       var beforeSnowflake = before != null ? nyxx.Snowflake(before) : null;
+
+      // don't load messages until this one returns
+      // the lock only applies if the method itself also intends on locking the request
       if (lock == true) enableLock();
+
+      // load 50 messages, could be 100 max but unnecessary
       var messages = await textChannel.messages
           .fetchMany(limit: count ?? 50, before: beforeSnowflake);
-      List<Uint8List> memberAvatars = await Future.wait(
-        messages.map((message) async {
-          var avatar = await fetchMemberAvatar(message.author);
-          return avatar;
-        }),
-      );
+      List<Uint8List> memberAvatars = [];
+
+      if (requestAvatar == true) {
+        memberAvatars = await Future.wait(
+          messages.map((message) async {
+            var avatar = await fetchMemberAvatar(
+              BonfireGuildMember(
+                id: message.author.id.value,
+                name: message.author.username,
+                iconUrl: message.author.avatar!.url.toString(),
+                displayName: message.author.username,
+                guildId: guildId ??
+                    ref.read(guildControllerProvider.notifier).currentGuild!.id,
+              ),
+            );
+            return avatar;
+          }),
+        );
+      }
       removeLock();
       List<BonfireMessage> channelMessages = [];
       for (int i = 0; i < messages.length; i++) {
@@ -118,7 +145,9 @@ class Messages extends _$Messages {
           }
         });
 
-        var memberAvatar = memberAvatars[i];
+        Uint8List? memberAvatar =
+            memberAvatars.isNotEmpty ? memberAvatars[i] : null;
+
         var newMessage = BonfireMessage(
             id: message.id.value,
             channelId: channelId,
@@ -128,7 +157,7 @@ class Messages extends _$Messages {
               id: message.author.id.value,
               name: message.author.username,
               iconUrl: message.author.avatar!.url.toString(),
-              icon: Image.memory(memberAvatar),
+              icon: (memberAvatar != null) ? Image.memory(memberAvatar) : null,
               displayName: username,
               guildId: guildId ??
                   ref.read(guildControllerProvider.notifier).currentGuild!.id,
@@ -223,11 +252,13 @@ class Messages extends _$Messages {
     return cacheData?.file.readAsBytesSync();
   }
 
-  Future<Uint8List> fetchMemberAvatar(nyxx.MessageAuthor user) async {
-    var cached = await fetchMemberAvatarFromCache(user.id.value);
-    if (cached != null) return cached;
+  Future<Uint8List> fetchMemberAvatar(BonfireGuildMember user) async {
+    // var cached = await fetchMemberAvatarFromCache(user.id);
+    // if (cached != null) return cached;
     // if (user.avatar != null) return null;
-    var fetched = await user.avatar!.fetch();
+    var icon_url = user.iconUrl;
+    var fetched = (await http.get(Uri.parse(icon_url))).bodyBytes;
+
     await _cacheManager.putFile(
       user.id.toString(),
       fetched,

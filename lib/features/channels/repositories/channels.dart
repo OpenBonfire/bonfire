@@ -159,8 +159,6 @@ class Channels extends _$Channels {
         print("error while pre-caching!");
         print(e);
       }
-
-      await Future.delayed(const Duration(milliseconds: 500));
     }
   }
 }

@@ -152,7 +152,21 @@ class _ChannelButtonState extends ConsumerState<ChannelButton> {
                     const SizedBox(width: 8),
                     Text(widget.channel.name,
                         textAlign: TextAlign.left,
-                        style: Theme.of(context).custom.textTheme.bodyText2),
+                        style: Theme.of(context)
+                            .custom
+                            .textTheme
+                            .bodyText1
+                            .copyWith(
+                              color: selected
+                                  ? Theme.of(context)
+                                      .custom
+                                      .colorTheme
+                                      .textColor1
+                                  : Theme.of(context)
+                                      .custom
+                                      .colorTheme
+                                      .textColor2,
+                            )),
                   ],
                 ),
               ),
