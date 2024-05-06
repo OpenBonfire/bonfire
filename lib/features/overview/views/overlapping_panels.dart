@@ -3,8 +3,6 @@ library overlapping_panels;
 import 'package:flutter/material.dart';
 import 'dart:core';
 
-const double bleedWidth = 20;
-
 /// Display sections
 enum RevealSide { left, right, main }
 
@@ -33,7 +31,7 @@ class OverlappingPanels extends StatefulWidget {
       {this.left,
       required this.main,
       this.right,
-      this.restWidth = 40,
+      this.restWidth = 25,
       this.onSideChange,
       Key? key})
       : super(key: key);

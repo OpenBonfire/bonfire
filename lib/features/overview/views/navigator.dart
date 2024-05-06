@@ -66,11 +66,57 @@ class _BarWidgetState extends ConsumerState<BarWidget> {
           curve: Curves.easeInOut,
         )),
         child: Container(
-          decoration: BoxDecoration(
-            color: Theme.of(context).custom.colorTheme.cardSelected,
+            decoration: BoxDecoration(
+              color: Theme.of(context).custom.colorTheme.cardSelected,
+            ),
+            height: 75,
+            child: const Padding(
+              padding: EdgeInsets.only(top: 16, left: 32, right: 32),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  NavigatorIcon(icon: Icons.home_rounded, label: 'Home'),
+                  NavigatorIcon(icon: Icons.message_rounded, label: 'Messages'),
+                  NavigatorIcon(
+                      icon: Icons.notifications_rounded,
+                      label: 'Notifications'),
+                ],
+              ),
+            )),
+      ),
+    );
+  }
+}
+
+class NavigatorIcon extends StatefulWidget {
+  final IconData icon;
+  final String label;
+  const NavigatorIcon({super.key, required this.icon, required this.label});
+
+  @override
+  State<NavigatorIcon> createState() => NavigatorIconState();
+}
+
+class NavigatorIconState extends State<NavigatorIcon> {
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 75,
+      child: Column(
+        children: [
+          Icon(
+            widget.icon,
+            grade: 50,
+            size: 28,
+            color: Theme.of(context).custom.colorTheme.textColor1,
           ),
-          height: 80,
-        ),
+          Text(widget.label,
+              textAlign: TextAlign.center,
+              style: Theme.of(context).custom.textTheme.subtitle2.copyWith(
+                    fontSize: 12,
+                    color: Theme.of(context).custom.colorTheme.textColor1,
+                  ))
+        ],
       ),
     );
   }
