@@ -1,9 +1,7 @@
 import 'package:bonfire/features/channels/controllers/channel.dart';
 import 'package:bonfire/features/guild/controllers/current_guild.dart';
-import 'package:bonfire/features/guild/controllers/guild.dart';
 import 'package:bonfire/features/messaging/controllers/message_bar.dart';
 import 'package:bonfire/features/messaging/repositories/messages.dart';
-import 'package:bonfire/features/messaging/repositories/realtime_messages.dart';
 import 'package:bonfire/shared/models/message.dart';
 import 'package:bonfire/theme/theme.dart';
 import 'package:flutter/material.dart';

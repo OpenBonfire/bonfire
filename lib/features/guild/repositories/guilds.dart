@@ -1,11 +1,10 @@
-import 'dart:typed_data';
-
 import 'package:bonfire/features/auth/data/repositories/auth.dart';
 import 'package:bonfire/features/auth/data/repositories/discord_auth.dart';
 import 'package:bonfire/shared/models/guild.dart';
 import 'package:flutter/widgets.dart';
 import 'package:nyxx_self/nyxx.dart' as nyxx;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 
 part 'guilds.g.dart';
 
@@ -19,6 +18,14 @@ class Guilds extends _$Guilds {
   AuthUser? user;
   List<Guild> guilds = [];
 
+  final _cacheManager = CacheManager(
+    Config(
+      'guilds',
+      stalePeriod: const Duration(days: 7),
+      maxNrOfCacheObjects: 10000,
+    ),
+  );
+
   @override
   Future<List<Guild>> build() async {
     var authOutput = ref.read(authProvider.notifier).getAuth();
@@ -29,10 +36,19 @@ class Guilds extends _$Guilds {
       List<nyxx.UserGuild> userGuilds = await user!.client.listGuilds();
       List<Future<Guild>> guildFutures = userGuilds.map((guild) async {
         // Async icon lookup for speed
+
         var iconImage;
         if (guild.icon != null) {
-          var iconBytes = await guild.icon!.fetch();
-          iconImage = Image.memory(iconBytes);
+          var cacheData =
+              await _cacheManager.getFileFromCache(guild.icon!.hash);
+          if (cacheData != null) {
+            var iconBytes = cacheData.file.readAsBytesSync();
+            iconImage = Image.memory(iconBytes);
+          } else {
+            var iconBytes = await guild.icon!.fetch();
+            iconImage = Image.memory(iconBytes);
+            _cacheManager.putFile(guild.icon!.hash, iconBytes);
+          }
         }
         return Guild(
           id: guild.id.value,

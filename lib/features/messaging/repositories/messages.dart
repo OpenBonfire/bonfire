@@ -31,7 +31,7 @@ class Messages extends _$Messages {
 
   final _cacheManager = CacheManager(
     Config(
-      'bonfire_cache',
+      'messages',
       stalePeriod: const Duration(days: 7),
       maxNrOfCacheObjects: 10000,
     ),
