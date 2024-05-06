@@ -137,21 +137,21 @@ class _MessageViewState extends ConsumerState<MessageView> {
               itemCount: messages.length,
               reverse: true,
               itemBuilder: (context, index) {
-                var cachedBox = messageWidgets[messages[index].id];
-                if (cachedBox != null) {
-                  return cachedBox;
-                }
+                var box = messageWidgets[messages[index].id];
                 bool showAuthor = true;
+
                 if (index + 1 < messages.length) {
                   showAuthor = messages[index + 1].member.id ==
                       messages[index].member.id;
                 }
 
-                var box = MessageBox(
-                  message: messages[index],
-                  showSenderInfo: !showAuthor,
-                );
+                box ??= MessageBox();
+
+                (box as MessageBox);
+                box.setMessage(messages[index]);
+                box.setShowSenderInfo(!showAuthor);
                 messageWidgets[messages[index].id] = box;
+
                 return box;
               },
             ),
@@ -231,13 +231,20 @@ class _MessageViewState extends ConsumerState<MessageView> {
 }
 
 class MessageBox extends ConsumerStatefulWidget {
-  final BonfireMessage message;
-  final bool showSenderInfo;
-  MessageBox({Key? key, required this.message, required this.showSenderInfo})
-      : super(key: key);
+  BonfireMessage? message;
+  bool showSenderInfo = true;
+  MessageBox({Key? key}) : super(key: key);
 
   @override
   ConsumerState<MessageBox> createState() => _MessageBoxState();
+
+  void setMessage(BonfireMessage message) {
+    this.message = message;
+  }
+
+  void setShowSenderInfo(bool showSenderInfo) {
+    this.showSenderInfo = showSenderInfo;
+  }
 }
 
 class _MessageBoxState extends ConsumerState<MessageBox>
@@ -277,10 +284,10 @@ class _MessageBoxState extends ConsumerState<MessageBox>
   Widget build(BuildContext context) {
     super.build(context);
     var width = MediaQuery.of(context).size.width;
-    var embeds = widget.message.embeds ?? [];
+    var embeds = widget.message!.embeds ?? [];
 
     var name =
-        widget.message.member.nickName ?? widget.message.member.displayName;
+        widget.message!.member.nickName ?? widget.message!.member.displayName;
 
     return OutlinedButton(
       style: OutlinedButton.styleFrom(
@@ -300,7 +307,7 @@ class _MessageBoxState extends ConsumerState<MessageBox>
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            (widget.message.member.icon != null &&
+            (widget.message!.member.icon != null &&
                     widget.showSenderInfo == true)
                 ? Padding(
                     padding: const EdgeInsets.only(right: 8),
@@ -310,7 +317,7 @@ class _MessageBoxState extends ConsumerState<MessageBox>
                       child: ClipRRect(
                           borderRadius: BorderRadius.circular(100),
                           child:
-                              Image(image: widget.message.member.icon!.image)),
+                              Image(image: widget.message!.member.icon!.image)),
                     ))
                 : const Padding(
                     padding: EdgeInsets.only(right: 8),
@@ -344,7 +351,7 @@ class _MessageBoxState extends ConsumerState<MessageBox>
                               padding: const EdgeInsets.only(left: 6, top: 4),
                               child: Text(
                                 dateTimeFormat(
-                                    widget.message.timestamp.toLocal()),
+                                    widget.message!.timestamp.toLocal()),
                                 textAlign: TextAlign.left,
                                 softWrap: true,
                                 overflow: TextOverflow.fade,
@@ -363,7 +370,7 @@ class _MessageBoxState extends ConsumerState<MessageBox>
                   child: SizedBox(
                     width: width - 105,
                     child: MarkdownViewer(
-                      widget.message.content,
+                      widget.message!.content,
                       enableTaskList: true,
                       enableSuperscript: false,
                       enableSubscript: false,
