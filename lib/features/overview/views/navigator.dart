@@ -71,13 +71,16 @@ class _BarWidgetState extends ConsumerState<BarWidget> {
             ),
             height: 75,
             child: const Padding(
-              padding: EdgeInsets.only(top: 16, left: 32, right: 32),
+              padding: EdgeInsets.only(top: 16, left: 28, right: 28),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   NavigatorIcon(icon: Icons.home_rounded, label: 'Home'),
                   NavigatorIcon(icon: Icons.message_rounded, label: 'Messages'),
                   NavigatorIcon(
+                      icon: Icons.notifications_rounded,
+                      label: 'Notifications'),
+                      NavigatorIcon(
                       icon: Icons.notifications_rounded,
                       label: 'Notifications'),
                 ],
@@ -107,13 +110,14 @@ class NavigatorIconState extends State<NavigatorIcon> {
           Icon(
             widget.icon,
             grade: 50,
-            size: 28,
+            weight: 50,
+            size: 25,
             color: Theme.of(context).custom.colorTheme.textColor1,
           ),
           Text(widget.label,
               textAlign: TextAlign.center,
               style: Theme.of(context).custom.textTheme.subtitle2.copyWith(
-                    fontSize: 12,
+                    fontSize: 9,
                     color: Theme.of(context).custom.colorTheme.textColor1,
                   ))
         ],
