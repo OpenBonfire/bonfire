@@ -60,7 +60,7 @@ class _LoginState extends ConsumerState<CredentialsScreen> {
                 Expanded(
                   child: TextFormField(
                     autovalidateMode: AutovalidateMode.onUserInteraction,
-                    style: CustomTextTheme().bodyText2,
+                    style: CustomTextTheme().bodyText1,
                     controller: controller,
                     obscureText: loginType == LoginType.password,
                     autofillHints: loginType == LoginType.username

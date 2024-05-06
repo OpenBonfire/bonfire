@@ -42,7 +42,7 @@ class _MFAPageState extends ConsumerState<MFAPage> {
                 Expanded(
                   child: TextFormField(
                     autovalidateMode: AutovalidateMode.onUserInteraction,
-                    style: CustomTextTheme().bodyText2,
+                    style: CustomTextTheme().bodyText1,
                     controller: controller,
                     autofillHints: const [AutofillHints.oneTimeCode],
                     autocorrect: true,
@@ -68,7 +68,7 @@ class _MFAPageState extends ConsumerState<MFAPage> {
 
     resp.then((value) {
       print("GOT MFA RESP!");
-      print(value);
+      print(value.toString());
     });
   }
 

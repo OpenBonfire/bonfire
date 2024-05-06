@@ -36,10 +36,12 @@ class CustomTextTheme {
   final bodyText1 = TextStyle(
     fontSize: 16,
     fontFamily: _family,
+    color: const Color.fromARGB(255, 255, 255, 255),
   );
   final bodyText2 = TextStyle(
     fontSize: 15,
     fontFamily: _family,
+    color: const Color.fromARGB(255, 255, 255, 255),
   );
   final caption = TextStyle(
     fontSize: 12,

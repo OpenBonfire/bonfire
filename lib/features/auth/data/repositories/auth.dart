@@ -55,6 +55,11 @@ class Auth extends _$Auth {
         json.containsKey('captcha_service')) {
       authResponse = CaptchaResponse.fromJson(json);
       state = authResponse;
+    } else if (json['errors']['login']['_errors'][0]['code'] ==
+        'INVALID_LOGIN') {
+      authResponse =
+          FailedAuth(error: json['errors']['login']['_errors'][0]['message']);
+      state = authResponse;
     } else {
       throw Exception('Unknown response');
     }

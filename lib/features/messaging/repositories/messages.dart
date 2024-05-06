@@ -62,7 +62,7 @@ class Messages extends _$Messages {
   }
 
   bool loadingMessages = false;
-  late Timer lockTimer;
+  Timer lockTimer = Timer(Duration.zero, () {});
 
   void enableLock() {
     // if (!loadingMessages) {

@@ -191,6 +191,7 @@ class _MessageViewState extends ConsumerState<MessageView> {
                           decoration: InputDecoration(
                             hintText:
                                 'Message #${(currentChannel != null) ? currentChannel.name : ""}',
+                            hintStyle: const TextStyle(color: Colors.white),
                             border: InputBorder.none,
                           ),
                           style: Theme.of(context).custom.textTheme.bodyText1,
