@@ -2,6 +2,7 @@ import 'package:bonfire/features/channels/controllers/channel.dart';
 import 'package:bonfire/features/guild/controllers/current_guild.dart';
 import 'package:bonfire/features/messaging/controllers/message_bar.dart';
 import 'package:bonfire/features/messaging/repositories/messages.dart';
+import 'package:bonfire/features/messaging/views/embed.dart';
 import 'package:bonfire/shared/models/message.dart';
 import 'package:bonfire/theme/theme.dart';
 import 'package:flutter/material.dart';
@@ -277,6 +278,11 @@ class _MessageBoxState extends ConsumerState<MessageBox>
     var width = MediaQuery.of(context).size.width;
     var embeds = widget.message!.embeds ?? [];
 
+    if (embeds.isNotEmpty) {
+      // print("building with embeds");
+      // print(embeds[0].type);
+    }
+
     var name =
         widget.message!.member.nickName ?? widget.message!.member.displayName;
 
@@ -397,18 +403,9 @@ class _MessageBoxState extends ConsumerState<MessageBox>
                 ),
                 // add per embed
                 for (var embed in embeds)
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Padding(
-                        padding: const EdgeInsets.only(left: 6, top: 6),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(16),
-                          child: Image.network(
-                            embed.thumbnailUrl!,
-                            width: width - 105,
-                          ),
-                        )),
-                  ),
+                  EmbedWidget(
+                    embed: embed,
+                  )
               ],
             ),
           ],

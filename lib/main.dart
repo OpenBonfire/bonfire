@@ -1,14 +1,20 @@
-import 'dart:io';
-
-import 'package:bonfire/features/auth/data/repositories/auth.dart';
 import 'package:bonfire/router/controller.dart';
 import 'package:bonfire/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:video_player_media_kit/video_player_media_kit.dart';
 
 void main() async {
+    VideoPlayerMediaKit.ensureInitialized(
+    android: true,
+    iOS: true,
+    macOS: true,
+    windows: true,
+    linux: true,
+  );
+
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
       overlays: [SystemUiOverlay.top]);

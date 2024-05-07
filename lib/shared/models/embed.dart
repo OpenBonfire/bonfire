@@ -4,18 +4,43 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'embed.g.dart';
 
+enum EmbedType {
+  @JsonValue('image')
+  image,
+  @JsonValue('video')
+  video,
+  @JsonValue('audio')
+  audio,
+  @JsonValue('file')
+  file,
+}
+
 @JsonSerializable()
 class BonfireEmbed {
+  final EmbedType type;
   final int? width;
   final int? height;
   final String? thumbnailUrl;
+  final String? imageUrl;
+  final String? title;
+  final String? description;
+  final String? provider;
+  final String? videoUrl;
+  final String? proxiedUrl;
   @ColorConverter()
   final Color? color;
 
   BonfireEmbed({
+    required this.type,
     this.width,
     this.height,
     this.thumbnailUrl,
+    this.imageUrl,
+    this.title,
+    this.description,
+    this.provider,
+    this.videoUrl,
+    this.proxiedUrl,
     this.color,
   });
 

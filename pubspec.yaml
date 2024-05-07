@@ -34,8 +34,14 @@ dependencies:
   freezed_annotation: ^2.4.1
   json_serializable: ^6.7.1
   go_router: ^13.2.4
-  isar: ^2.1.4
   flutter_background_service: ^5.0.5
+  
+  video_player_media_kit: ^1.0.5
+  media_kit_libs_android_video: any
+  media_kit_libs_ios_video: any
+  media_kit_libs_macos_video: any
+  media_kit_libs_windows_video: any
+  media_kit_libs_linux: any
 
 dev_dependencies:
   flutter_test:

@@ -22,6 +22,23 @@ TODO: get messages when scrolling stop retrieving the correct data when
 running the realtime listener
 */
 
+extension HexColor on Color {
+  /// String is in the format "aabbcc" or "ffaabbcc" with an optional leading "#".
+  static Color fromHex(String hexString) {
+    final buffer = StringBuffer();
+    if (hexString.length == 6 || hexString.length == 7) buffer.write('ff');
+    buffer.write(hexString.replaceFirst('#', ''));
+    return Color(int.parse(buffer.toString(), radix: 16));
+  }
+
+  /// Prefixes a hash sign if [leadingHashSign] is set to `true` (default is `true`).
+  String toHex({bool leadingHashSign = true}) => '${leadingHashSign ? '#' : ''}'
+      '${alpha.toRadixString(16).padLeft(2, '0')}'
+      '${red.toRadixString(16).padLeft(2, '0')}'
+      '${green.toRadixString(16).padLeft(2, '0')}'
+      '${blue.toRadixString(16).padLeft(2, '0')}';
+}
+
 @Riverpod(keepAlive: false)
 class Messages extends _$Messages {
   AuthUser? user;
@@ -135,12 +152,43 @@ class Messages extends _$Messages {
 
         List<BonfireEmbed> embeds = [];
         message.embeds.forEach((embed) {
-          if (embed.thumbnail != null) {
+          Color? embedColor;
+
+          if (embed.color != null) {
+            embedColor = Color.fromRGBO(
+              embed.color!.r,
+              embed.color!.g,
+              embed.color!.b,
+              255,
+            );
+          }
+
+          if (embed.video != null) {
             embeds.add(BonfireEmbed(
-              width: embed.thumbnail!.width!,
-              height: embed.thumbnail!.height!,
+              type: EmbedType.video,
+              width: embed.thumbnail?.width,
+              height: embed.thumbnail?.height,
+              thumbnailUrl: embed.thumbnail?.url.toString(),
+              videoUrl: embed.video?.url.toString(),
+              proxiedUrl: embed.video?.proxiedUrl.toString(),
+              title: embed.title,
+              description: embed.description,
+              provider: embed.provider!.name,
+              color: embedColor
+            ));
+          } else if (embed.image != null) {
+            // print("image!");
+            embeds.add(BonfireEmbed(
+              type: EmbedType.image,
+              width: embed.image!.width,
+              height: embed.image!.height,
+              // width: embed.thumbnail!.width!,
+              // height: embed.thumbnail!.height!,
+              provider: embed.provider!.name,
               thumbnailUrl: embed.thumbnail!.url.toString(),
             ));
+          } else {
+            // print("unknown embed type: ${embed.fields}");
           }
         });
 
