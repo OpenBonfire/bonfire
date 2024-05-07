@@ -403,8 +403,11 @@ class _MessageBoxState extends ConsumerState<MessageBox>
                 ),
                 // add per embed
                 for (var embed in embeds)
-                  EmbedWidget(
-                    embed: embed,
+                  Padding(
+                    padding: const EdgeInsets.only(left: 8.0),
+                    child: EmbedWidget(
+                      embed: embed,
+                    ),
                   )
               ],
             ),

@@ -6,6 +6,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:media_kit/media_kit.dart';
 import 'package:media_kit_video/media_kit_video.dart';
+import 'package:webview_windows/webview_windows.dart';
 
 class EmbedWidget extends ConsumerStatefulWidget {
   final BonfireEmbed embed;
@@ -63,9 +64,14 @@ class VideoEmbedState extends ConsumerState<VideoEmbed> {
   late final controller = VideoController(player);
   // https://user-images.githubusercontent.com/28951144/229373695-22f88f13-d18f-4288-9bf1-c3e078d83722.mp4
 
+  final _controller = WebviewController();
+  
+
   @override
   void initState() {
     super.initState();
+    _controller.initialize();
+
     if (widget.embed.proxiedUrl != null) {
       print("VIDEO URL");
       print(widget.embed.proxiedUrl);
@@ -76,38 +82,47 @@ class VideoEmbedState extends ConsumerState<VideoEmbed> {
 
   @override
   Widget build(BuildContext context) {
-    player.open(Media(widget.embed.videoUrl!));
+
     print("--");
     print(widget.embed.provider);
     print(widget.embed.videoUrl);
     print(widget.embed.proxiedUrl);
     print("--");
-    return SizedBox(
-      width: 500,
-      height: 300,
-      child: (widget.embed.videoUrl != null) ? Video(controller: controller): const Text("URL is null"),
+
+    if (widget.embed.provider == "YouTube") {
+      print("WEBVIEW!!");
+      _controller.loadUrl(widget.embed.videoUrl!);
+      return SizedBox(
+        width: 400,
+        height: 200,
+        child: Webview(
+          _controller,
+          width: 100,
+          height: 100,
+        ),
       );
-    // return (widget.embed.provider != "Tenor")
-    //     ? Image.network(
-    //         width: min(widget.embed.width!.toDouble(), 500),
-    //         widget.embed.thumbnailUrl!)
-    //     : Container(
-    //         height: widget.embed.height!.toDouble(),
-    //         width: min(widget.embed.width!.toDouble(), 500),
-    //         child: ClipRRect(
-    //           // widget.embed.videoUrl!
-    //           borderRadius: BorderRadius.circular(12),
-    //           child: Video(controller: controller),
-    //         )
-    //         // child: Column(
-    //         //   children: [
-    //         //     // SizedBox(
-    //         //     //   width: 200,
-    //         //     //   height: 200,
-    //         //     //   child: Image.network(widget.embed.thumbnailUrl!)),
-    //         //     Text(widget.embed.description!)
-    //         //   ],
-    //         // ),
-    //         );
+    }
+
+    if (widget.embed.proxiedUrl != null) {
+      player.open(Media(widget.embed.proxiedUrl!));
+      player.setPlaylistMode(PlaylistMode.loop);
+    }
+
+    return (widget.embed.provider != "Tenor")
+        ? Image.network(
+            width: min(widget.embed.width!.toDouble(), 500),
+            widget.embed.thumbnailUrl!)
+        : Container(
+            height: widget.embed.height!.toDouble(),
+            width: min(widget.embed.width!.toDouble(), 500),
+            child: ClipRRect(
+              // widget.embed.videoUrl!
+              borderRadius: BorderRadius.circular(12),
+              child: (widget.embed.videoUrl != null)
+                  ? Video(
+                      controller: controller,
+                    )
+                  : const Text("URL is null"),
+            ));
   }
 }

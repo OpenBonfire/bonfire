@@ -173,7 +173,7 @@ class Messages extends _$Messages {
               proxiedUrl: embed.video?.proxiedUrl.toString(),
               title: embed.title,
               description: embed.description,
-              provider: embed.provider!.name,
+              provider: embed.provider?.name,
               color: embedColor
             ));
           } else if (embed.image != null) {

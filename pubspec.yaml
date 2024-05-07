@@ -42,6 +42,7 @@ dependencies:
   media_kit_libs_macos_video: any
   media_kit_libs_windows_video: any
   media_kit_libs_linux: any
+  webview_windows: ^0.4.0
 
 dev_dependencies:
   flutter_test:
