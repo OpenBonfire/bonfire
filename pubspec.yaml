@@ -15,9 +15,15 @@ dependencies:
     git:
       url: https://github.com/Bonfire-Development/firebridge
       ref: dev
+
   nyxx_extensions: 
     git:
       url: https://github.com/Bonfire-Development/firebridge_extensions
+      
+  fireview:
+    git:
+      url: https://github.com/Bonfire-Development/fireview
+  
 
   google_fonts: ^6.2.1
   flutter_riverpod: ^2.5.1
@@ -42,7 +48,6 @@ dependencies:
   media_kit_libs_macos_video: any
   media_kit_libs_windows_video: any
   media_kit_libs_linux: any
-  webview_windows: ^0.4.0
 
 dev_dependencies:
   flutter_test:

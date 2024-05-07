@@ -6,7 +6,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:media_kit/media_kit.dart';
 import 'package:media_kit_video/media_kit_video.dart';
-import 'package:webview_windows/webview_windows.dart';
+import 'package:fireview/webview_all.dart';
 
 class EmbedWidget extends ConsumerStatefulWidget {
   final BonfireEmbed embed;
@@ -64,13 +64,10 @@ class VideoEmbedState extends ConsumerState<VideoEmbed> {
   late final controller = VideoController(player);
   // https://user-images.githubusercontent.com/28951144/229373695-22f88f13-d18f-4288-9bf1-c3e078d83722.mp4
 
-  final _controller = WebviewController();
-  
 
   @override
   void initState() {
     super.initState();
-    _controller.initialize();
 
     if (widget.embed.proxiedUrl != null) {
       print("VIDEO URL");
@@ -91,14 +88,11 @@ class VideoEmbedState extends ConsumerState<VideoEmbed> {
 
     if (widget.embed.provider == "YouTube") {
       print("WEBVIEW!!");
-      _controller.loadUrl(widget.embed.videoUrl!);
+      // _controller.loadUrl(widget.embed.videoUrl!);
       return SizedBox(
         width: 400,
         height: 200,
-        child: Webview(
-          _controller,
-          width: 100,
-          height: 100,
+        child: Webview(url: widget.embed.videoUrl!,
         ),
       );
     }
