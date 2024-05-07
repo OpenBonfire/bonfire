@@ -68,10 +68,16 @@ class _BarWidgetState extends ConsumerState<BarWidget> {
         child: Container(
             decoration: BoxDecoration(
               color: Theme.of(context).custom.colorTheme.cardSelected,
+              border: Border(
+                top: BorderSide(
+                  color: Theme.of(context).custom.colorTheme.brightestGray,
+                  width: 0.5,
+                ),
+              ),
             ),
             height: 75,
             child: const Padding(
-              padding: EdgeInsets.only(top: 16, left: 28, right: 28),
+              padding: EdgeInsets.only(top: 16, left: 18, right: 18),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -80,7 +86,7 @@ class _BarWidgetState extends ConsumerState<BarWidget> {
                   NavigatorIcon(
                       icon: Icons.notifications_rounded,
                       label: 'Notifications'),
-                      NavigatorIcon(
+                  NavigatorIcon(
                       icon: Icons.notifications_rounded,
                       label: 'Notifications'),
                 ],
@@ -112,13 +118,14 @@ class NavigatorIconState extends State<NavigatorIcon> {
             grade: 50,
             weight: 50,
             size: 25,
-            color: Theme.of(context).custom.colorTheme.textColor1,
+            color: Theme.of(context).custom.colorTheme.selectedIconColor,
           ),
           Text(widget.label,
               textAlign: TextAlign.center,
               style: Theme.of(context).custom.textTheme.subtitle2.copyWith(
                     fontSize: 9,
-                    color: Theme.of(context).custom.colorTheme.textColor1,
+                    color:
+                        Theme.of(context).custom.colorTheme.selectedIconColor,
                   ))
         ],
       ),

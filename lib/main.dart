@@ -12,6 +12,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
       overlays: [SystemUiOverlay.top]);
+
   await GetStorage.init();
   runApp(const ProviderScope(child: MaterialApp(home: MainWindow())));
 }
@@ -28,9 +29,10 @@ class _MainWindowState extends ConsumerState<MainWindow> {
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       systemNavigationBarColor: Colors.transparent,
-      systemNavigationBarIconBrightness: Brightness.dark,
+      systemNavigationBarIconBrightness: Brightness.light,
       statusBarColor: Colors.transparent,
     ));
+
     return MaterialApp.router(
       title: 'Bonfire',
       theme: ref.read(lightThemeProvider),
