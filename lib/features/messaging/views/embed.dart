@@ -64,8 +64,8 @@ class VideoEmbedState extends ConsumerState<VideoEmbed> {
   var player = Player();
   // Create a [VideoController] to handle video output from [Player].
   late final controller = VideoController(player);
-  // Store whether the video is currently visible or not.
-  bool _isVisible = false;
+
+  bool _isVisible = true;
 
   @override
   void initState() {
@@ -76,6 +76,14 @@ class VideoEmbedState extends ConsumerState<VideoEmbed> {
       print(widget.embed.proxiedUrl);
     } else {
       print("video url null!");
+    }
+    isVisibleThread();
+  }
+
+  void isVisibleThread() async {
+    while (true) {
+      await Future.delayed(const Duration(milliseconds: 1000));
+      // if (_isVisible) print("VIDEO VISIBLE!");
     }
   }
 
@@ -88,29 +96,29 @@ class VideoEmbedState extends ConsumerState<VideoEmbed> {
 
   @override
   Widget build(BuildContext context) {
+    var key = Key('video-visibility-${widget.embed.videoUrl ?? widget.embed.proxiedUrl ?? widget.embed.thumbnailUrl ?? widget.embed.imageUrl}');
     return VisibilityDetector(
-      key: Key('video-visibility-${widget.embed.videoUrl ?? widget.embed.proxiedUrl ?? widget.embed.thumbnailUrl ?? widget.embed.imageUrl}'),
+      key: key,
       onVisibilityChanged: (visibilityInfo) {
-        bool _vischeck = visibilityInfo.visibleFraction > 0;
-        if (_vischeck == _isVisible) return;
+        bool _vischeck = visibilityInfo.visibleFraction > 0.2;
+        print(visibilityInfo.visibleFraction);
+        // if (_vischeck == _isVisible) return;
         setState(() {
           _isVisible = _vischeck;
           if (!_isVisible) {
-            player.dispose();
+            // print("STOPPING PLAYER!");
+            player.stop();
           } else {
-            player = Player();
-            player.open(Media(widget.embed.proxiedUrl!));
-            player.setPlaylistMode(PlaylistMode.loop);
-            player.setVolume(0);
+            // print("PLAYING PLAYER!");
+            player.play();
           }
         });
       },
-      child: _buildVideoWidget(),
+      child: _isVisible ? _buildVideoWidget() : const SizedBox(),
     );
   }
 
   Widget _buildVideoWidget() {
-    print("building widget!");
     if (widget.embed.provider == "YouTube") {
       return WebVideo(embed: widget.embed);
     }
@@ -134,15 +142,15 @@ class VideoEmbedState extends ConsumerState<VideoEmbed> {
             height: widget.embed.thumbnailHeight!.toDouble(),
             width: min(widget.embed.thumbnailWidth!.toDouble(),
                 MediaQuery.of(context).size.width - 90),
-            // child: ClipRRect(
-            //   // widget.embed.videoUrl!
-            //   borderRadius: BorderRadius.circular(12),
-            //   child: (widget.embed.videoUrl != null)
-            //       ? Video(
-            //           controller: controller,
-            //         )
-            //       : const Text("URL is null"),
-            // ),
+            child: ClipRRect(
+              // widget.embed.videoUrl!
+              borderRadius: BorderRadius.circular(12),
+              child: (widget.embed.videoUrl != null)
+                  ? Video(
+                      controller: controller,
+                    )
+                  : const Text("URL is null"),
+            ),
           );
   }
 }
