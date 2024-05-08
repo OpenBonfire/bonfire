@@ -97,25 +97,7 @@ class VideoEmbedState extends ConsumerState<VideoEmbed> {
   @override
   Widget build(BuildContext context) {
     var key = Key('video-visibility-${widget.embed.videoUrl ?? widget.embed.proxiedUrl ?? widget.embed.thumbnailUrl ?? widget.embed.imageUrl}');
-    return VisibilityDetector(
-      key: key,
-      onVisibilityChanged: (visibilityInfo) {
-        bool _vischeck = visibilityInfo.visibleFraction > 0.2;
-        print(visibilityInfo.visibleFraction);
-        // if (_vischeck == _isVisible) return;
-        setState(() {
-          _isVisible = _vischeck;
-          if (!_isVisible) {
-            // print("STOPPING PLAYER!");
-            player.stop();
-          } else {
-            // print("PLAYING PLAYER!");
-            player.play();
-          }
-        });
-      },
-      child: _isVisible ? _buildVideoWidget() : const SizedBox(),
-    );
+    return _buildVideoWidget();
   }
 
   Widget _buildVideoWidget() {
@@ -125,7 +107,8 @@ class VideoEmbedState extends ConsumerState<VideoEmbed> {
 
     if (widget.embed.proxiedUrl != null) {
       player.open(Media(widget.embed.proxiedUrl!));
-      player.setPlaylistMode(PlaylistMode.loop);
+      player.pause();
+      // player.setPlaylistMode(PlaylistMode.loop);
       player.setVolume(0);
     }
 
