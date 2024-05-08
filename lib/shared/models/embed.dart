@@ -18,8 +18,10 @@ enum EmbedType {
 @JsonSerializable()
 class BonfireEmbed {
   final EmbedType type;
-  final int? width;
-  final int? height;
+  final int? contentWidth;
+  final int? contentHeight;
+  final int? thumbnailWidth;
+  final int? thumbnailHeight;
   final String? thumbnailUrl;
   final String? imageUrl;
   final String? title;
@@ -32,8 +34,10 @@ class BonfireEmbed {
 
   BonfireEmbed({
     required this.type,
-    this.width,
-    this.height,
+    this.thumbnailWidth,
+    this.thumbnailHeight,
+    this.contentWidth,
+    this.contentHeight,
     this.thumbnailUrl,
     this.imageUrl,
     this.title,

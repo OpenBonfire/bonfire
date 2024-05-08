@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:bonfire/shared/models/embed.dart';
+import 'package:bonfire/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -42,8 +43,8 @@ class ImageEmbedState extends ConsumerState<ImageEmbed> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: widget.embed.width!.toDouble(),
-      height: widget.embed.height!.toDouble(),
+      width: widget.embed.thumbnailWidth!.toDouble(),
+      height: widget.embed.thumbnailHeight!.toDouble(),
       child: Image.network(widget.embed.imageUrl!),
     );
   }
@@ -64,7 +65,6 @@ class VideoEmbedState extends ConsumerState<VideoEmbed> {
   late final controller = VideoController(player);
   // https://user-images.githubusercontent.com/28951144/229373695-22f88f13-d18f-4288-9bf1-c3e078d83722.mp4
 
-
   @override
   void initState() {
     super.initState();
@@ -79,22 +79,14 @@ class VideoEmbedState extends ConsumerState<VideoEmbed> {
 
   @override
   Widget build(BuildContext context) {
-
-    print("--");
-    print(widget.embed.provider);
-    print(widget.embed.videoUrl);
-    print(widget.embed.proxiedUrl);
-    print("--");
+    // print("--");
+    // print(widget.embed.provider);
+    // print(widget.embed.videoUrl);
+    // print(widget.embed.proxiedUrl);
+    // print("--");
 
     if (widget.embed.provider == "YouTube") {
-      print("WEBVIEW!!");
-      // _controller.loadUrl(widget.embed.videoUrl!);
-      return SizedBox(
-        width: 400,
-        height: 200,
-        child: Webview(url: widget.embed.videoUrl!,
-        ),
-      );
+      return WebVideo(embed: widget.embed);
     }
 
     if (widget.embed.proxiedUrl != null) {
@@ -104,11 +96,13 @@ class VideoEmbedState extends ConsumerState<VideoEmbed> {
 
     return (widget.embed.provider != "Tenor")
         ? Image.network(
-            width: min(widget.embed.width!.toDouble(), 500),
+            width: min(widget.embed.thumbnailWidth!.toDouble(),
+                MediaQuery.of(context).size.width - 90),
             widget.embed.thumbnailUrl!)
         : Container(
-            height: widget.embed.height!.toDouble(),
-            width: min(widget.embed.width!.toDouble(), 500),
+            height: widget.embed.thumbnailHeight!.toDouble(),
+            width: min(widget.embed.thumbnailWidth!.toDouble(),
+                MediaQuery.of(context).size.width - 90),
             child: ClipRRect(
               // widget.embed.videoUrl!
               borderRadius: BorderRadius.circular(12),
@@ -118,5 +112,106 @@ class VideoEmbedState extends ConsumerState<VideoEmbed> {
                     )
                   : const Text("URL is null"),
             ));
+  }
+}
+
+class WebVideo extends ConsumerStatefulWidget {
+  final BonfireEmbed embed;
+  const WebVideo({super.key, required this.embed});
+
+  @override
+  ConsumerState<ConsumerStatefulWidget> createState() => _WebVideoState();
+}
+
+class _WebVideoState extends ConsumerState<WebVideo> {
+  bool _isPlaying = false;
+  double height = 200;
+
+  Widget embedWidget() {
+    return _isPlaying
+        ? SizedBox(
+            width: min(
+                min(widget.embed.thumbnailWidth!.toDouble(),
+                    MediaQuery.of(context).size.width - 90),
+                500),
+            height: height,
+            child: Webview(
+              url: widget.embed.videoUrl!,
+            ))
+        : OutlinedButton(
+            style: OutlinedButton.styleFrom(
+              padding: const EdgeInsets.all(0),
+              side: const BorderSide(
+                color: Color.fromARGB(0, 255, 255, 255),
+                width: 0,
+              ),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(0),
+              ),
+            ),
+            onPressed: () {
+              setState(() {
+                _isPlaying = true;
+                // force a second state update
+                // pretty ugly solution, but reliable
+                Future.delayed(const Duration(milliseconds: 200), () {
+                  setState(() {
+                    _isPlaying = true;
+                  });
+                });
+              });
+            },
+            child: Image.network(widget.embed.thumbnailUrl!),
+          );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    var aspect = widget.embed.thumbnailWidth! / widget.embed.thumbnailHeight!;
+    var width = min(
+        min(widget.embed.thumbnailWidth!.toDouble(),
+            MediaQuery.of(context).size.width - 90),
+        500);
+
+    height = width / aspect;
+
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(12),
+      child: Container(
+        // height: height,
+        decoration: const BoxDecoration(
+          color:
+              Colors.red, // Theme.of(context).custom.colorTheme.brightestGray,
+        ),
+        child: Padding(
+          padding: const EdgeInsets.only(left: 8),
+          child: Container(
+            decoration: BoxDecoration(
+              color: Theme.of(context).custom.colorTheme.brightestGray,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 8.0),
+                  child: Text(
+                    widget.embed.provider ?? "Provider not found",
+                    style: Theme.of(context).custom.textTheme.bodyText1,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 8.0),
+                  child: Text(
+                    widget.embed.provider ?? "Provider not found",
+                    style: Theme.of(context).custom.textTheme.bodyText1,
+                  ),
+                ),
+                SizedBox(width: width.toDouble(), child: embedWidget()),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }

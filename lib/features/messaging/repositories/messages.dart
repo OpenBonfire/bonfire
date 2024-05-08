@@ -166,8 +166,8 @@ class Messages extends _$Messages {
           if (embed.video != null) {
             embeds.add(BonfireEmbed(
               type: EmbedType.video,
-              width: embed.thumbnail?.width,
-              height: embed.thumbnail?.height,
+              thumbnailWidth: embed.thumbnail?.width,
+              thumbnailHeight: embed.thumbnail?.height,
               thumbnailUrl: embed.thumbnail?.url.toString(),
               videoUrl: embed.video?.url.toString(),
               proxiedUrl: embed.video?.proxiedUrl.toString(),
@@ -180,10 +180,10 @@ class Messages extends _$Messages {
             // print("image!");
             embeds.add(BonfireEmbed(
               type: EmbedType.image,
-              width: embed.image!.width,
-              height: embed.image!.height,
-              // width: embed.thumbnail!.width!,
-              // height: embed.thumbnail!.height!,
+              contentWidth: embed.image!.width,
+              contentHeight: embed.image!.height,
+              thumbnailWidth: embed.thumbnail?.width,
+              thumbnailHeight: embed.thumbnail?.height,
               provider: embed.provider!.name,
               thumbnailUrl: embed.thumbnail!.url.toString(),
             ));
