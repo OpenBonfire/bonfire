@@ -168,46 +168,62 @@ class _WebVideoState extends ConsumerState<WebVideo> {
   @override
   Widget build(BuildContext context) {
     var aspect = widget.embed.thumbnailWidth! / widget.embed.thumbnailHeight!;
-    var width = min(
+    double width = min(
         min(widget.embed.thumbnailWidth!.toDouble(),
             MediaQuery.of(context).size.width - 90),
         500);
 
     height = width / aspect;
 
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(12),
-      child: Container(
-        // height: height,
-        decoration: const BoxDecoration(
-          color:
-              Colors.red, // Theme.of(context).custom.colorTheme.brightestGray,
-        ),
-        child: Padding(
-          padding: const EdgeInsets.only(left: 8),
-          child: Container(
-            decoration: BoxDecoration(
-              color: Theme.of(context).custom.colorTheme.brightestGray,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 8.0),
-                  child: Text(
-                    widget.embed.provider ?? "Provider not found",
-                    style: Theme.of(context).custom.textTheme.bodyText1,
+    return Container(
+      width: width,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(8),
+        child: Container(
+          decoration: BoxDecoration(
+            color: Theme.of(context).custom.colorTheme.redColor,
+          ),
+          child: Padding(
+            padding: const EdgeInsets.only(left: 5),
+            child: Container(
+              decoration: BoxDecoration(
+                color: Theme.of(context).custom.colorTheme.brightestGray,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(12),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(widget.embed.provider ?? "Provider not found",
+                            textAlign: TextAlign.start,
+                            style: Theme.of(context)
+                                .custom
+                                .textTheme
+                                .bodyText2
+                                .copyWith(
+                                    color:
+                                        const Color.fromARGB(255, 172, 172, 172),
+                                    fontSize: 14)),
+                        const SizedBox(height: 4),
+                        Text(widget.embed.title ?? "Title not found",
+                            textAlign: TextAlign.start,
+                            style: Theme.of(context)
+                                .custom
+                                .textTheme
+                                .bodyText2
+                                .copyWith(fontSize: 14)),
+                      ],
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 8.0),
-                  child: Text(
-                    widget.embed.provider ?? "Provider not found",
-                    style: Theme.of(context).custom.textTheme.bodyText1,
+                  SizedBox(
+                    width: width.toDouble(),
+                    child: embedWidget(),
                   ),
-                ),
-                SizedBox(width: width.toDouble(), child: embedWidget()),
-              ],
+                ],
+              ),
             ),
           ),
         ),
