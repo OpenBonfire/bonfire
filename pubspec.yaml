@@ -36,6 +36,7 @@ dependencies:
   go_router: ^13.2.4
   isar: ^2.1.4
   flutter_background_service: ^5.0.5
+  flutter_prism: ^0.2.2
 
 dev_dependencies:
   flutter_test:

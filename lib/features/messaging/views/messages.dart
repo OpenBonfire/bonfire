@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:markdown_viewer/markdown_viewer.dart';
+import 'package:flutter_prism/flutter_prism.dart';
 
 class MessageView extends ConsumerStatefulWidget {
   const MessageView({super.key});
@@ -373,12 +374,27 @@ class _MessageBoxState extends ConsumerState<MessageBox>
                       enableKbd: false,
                       syntaxExtensions: const [],
                       elementBuilders: const [],
+                      highlightBuilder: (text, language, infoString) {
+                        final prism = Prism(
+                            style:
+                                Theme.of(context).brightness == Brightness.dark
+                                    ? const PrismStyle.dark()
+                                    : const PrismStyle());
+                        return prism.render(text, language ?? 'plain');
+                      },
                       onTapLink: (href, title) {
                         print("Tapped link: $href");
                       },
                       styleSheet: MarkdownStyle(
-                          paragraph:
-                              Theme.of(context).custom.textTheme.bodyText1),
+                        paragraph: Theme.of(context).custom.textTheme.bodyText1,
+                        codeBlock: Theme.of(context).custom.textTheme.bodyText1,
+                        codeblockDecoration: BoxDecoration(
+                            color: Theme.of(context)
+                                .custom
+                                .colorTheme
+                                .cardSelected,
+                            borderRadius: BorderRadius.circular(8)),
+                      ),
                     ),
                   ),
                 ),
