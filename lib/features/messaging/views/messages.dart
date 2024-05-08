@@ -279,11 +279,6 @@ class _MessageBoxState extends ConsumerState<MessageBox>
     var width = MediaQuery.of(context).size.width;
     var embeds = widget.message!.embeds ?? [];
 
-    if (embeds.isNotEmpty) {
-      // print("building with embeds");
-      // print(embeds[0].type);
-    }
-
     var name =
         widget.message!.member.nickName ?? widget.message!.member.displayName;
 
