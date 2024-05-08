@@ -1,9 +1,8 @@
 import 'package:bonfire/features/channels/controllers/channel.dart';
 import 'package:bonfire/features/guild/controllers/current_guild.dart';
-import 'package:bonfire/features/guild/controllers/guild.dart';
 import 'package:bonfire/features/messaging/controllers/message_bar.dart';
 import 'package:bonfire/features/messaging/repositories/messages.dart';
-import 'package:bonfire/features/messaging/repositories/realtime_messages.dart';
+import 'package:bonfire/features/messaging/views/embed.dart';
 import 'package:bonfire/shared/models/message.dart';
 import 'package:bonfire/theme/theme.dart';
 import 'package:flutter/material.dart';
@@ -73,14 +72,7 @@ class _MessageViewState extends ConsumerState<MessageView> {
     var messageOutput = ref.watch(messagesProvider);
     var messages = messageOutput.valueOrNull ?? [];
     var topPadding = MediaQuery.of(context).padding.top;
-    var bottomPadding = MediaQuery.of(context).padding.bottom;
     var height = MediaQuery.of(context).size.height;
-
-    // var realtimeMessages = ref.watch(realtimeMessagesProvider);
-    // realtimeMessages.whenData((value) {
-    //   // print(value[0].member.name);
-    //   // print(value[0].member.displayName);
-    // });
 
     var currentGuild = ref.watch(currentGuildControllerProvider);
     var currentChannel =
@@ -138,21 +130,21 @@ class _MessageViewState extends ConsumerState<MessageView> {
               itemCount: messages.length,
               reverse: true,
               itemBuilder: (context, index) {
-                var cachedBox = messageWidgets[messages[index].id];
-                if (cachedBox != null) {
-                  return cachedBox;
-                }
+                var box = messageWidgets[messages[index].id];
                 bool showAuthor = true;
+
                 if (index + 1 < messages.length) {
                   showAuthor = messages[index + 1].member.id ==
                       messages[index].member.id;
                 }
 
-                var box = MessageBox(
-                  message: messages[index],
-                  showSenderInfo: !showAuthor,
-                );
+                box ??= MessageBox();
+
+                (box as MessageBox);
+                box.setMessage(messages[index]);
+                box.setShowSenderInfo(!showAuthor);
                 messageWidgets[messages[index].id] = box;
+
                 return box;
               },
             ),
@@ -232,13 +224,20 @@ class _MessageViewState extends ConsumerState<MessageView> {
 }
 
 class MessageBox extends ConsumerStatefulWidget {
-  final BonfireMessage message;
-  final bool showSenderInfo;
-  MessageBox({Key? key, required this.message, required this.showSenderInfo})
-      : super(key: key);
+  BonfireMessage? message;
+  bool showSenderInfo = true;
+  MessageBox({Key? key}) : super(key: key);
 
   @override
   ConsumerState<MessageBox> createState() => _MessageBoxState();
+
+  void setMessage(BonfireMessage message) {
+    this.message = message;
+  }
+
+  void setShowSenderInfo(bool showSenderInfo) {
+    this.showSenderInfo = showSenderInfo;
+  }
 }
 
 class _MessageBoxState extends ConsumerState<MessageBox>
@@ -278,10 +277,15 @@ class _MessageBoxState extends ConsumerState<MessageBox>
   Widget build(BuildContext context) {
     super.build(context);
     var width = MediaQuery.of(context).size.width;
-    var embeds = widget.message.embeds ?? [];
+    var embeds = widget.message!.embeds ?? [];
+
+    if (embeds.isNotEmpty) {
+      // print("building with embeds");
+      // print(embeds[0].type);
+    }
 
     var name =
-        widget.message.member.nickName ?? widget.message.member.displayName;
+        widget.message!.member.nickName ?? widget.message!.member.displayName;
 
     return OutlinedButton(
       style: OutlinedButton.styleFrom(
@@ -301,18 +305,33 @@ class _MessageBoxState extends ConsumerState<MessageBox>
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            (widget.message.member.icon != null &&
-                    widget.showSenderInfo == true)
+            (widget.showSenderInfo == true)
                 ? Padding(
                     padding: const EdgeInsets.only(right: 8),
                     child: SizedBox(
-                      width: 45,
-                      height: 45,
-                      child: ClipRRect(
-                          borderRadius: BorderRadius.circular(100),
-                          child:
-                              Image(image: widget.message.member.icon!.image)),
-                    ))
+                        width: 45,
+                        height: 45,
+                        child: ClipRRect(
+                            borderRadius: BorderRadius.circular(100),
+                            child: (widget.message!.member.icon != null)
+                                ? Image(
+                                    image: widget.message!.member.icon!.image)
+                                : FutureBuilder(
+                                    future: ref
+                                        .read(messagesProvider.notifier)
+                                        .fetchMemberAvatar(
+                                            widget.message!.member),
+                                    builder: (context, snapshot) {
+                                      if (snapshot.connectionState ==
+                                          ConnectionState.done) {
+                                        return Image.memory(snapshot.data!);
+                                      } else {
+                                        return const SizedBox(
+                                          width: 45,
+                                          height: 45,
+                                        );
+                                      }
+                                    }))))
                 : const Padding(
                     padding: EdgeInsets.only(right: 8),
                     child: SizedBox(
@@ -345,7 +364,7 @@ class _MessageBoxState extends ConsumerState<MessageBox>
                               padding: const EdgeInsets.only(left: 6, top: 4),
                               child: Text(
                                 dateTimeFormat(
-                                    widget.message.timestamp.toLocal()),
+                                    widget.message!.timestamp.toLocal()),
                                 textAlign: TextAlign.left,
                                 softWrap: true,
                                 overflow: TextOverflow.fade,
@@ -364,7 +383,7 @@ class _MessageBoxState extends ConsumerState<MessageBox>
                   child: SizedBox(
                     width: width - 105,
                     child: MarkdownViewer(
-                      widget.message.content,
+                      widget.message!.content,
                       enableTaskList: true,
                       enableSuperscript: false,
                       enableSubscript: false,
@@ -400,18 +419,12 @@ class _MessageBoxState extends ConsumerState<MessageBox>
                 ),
                 // add per embed
                 for (var embed in embeds)
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Padding(
-                        padding: const EdgeInsets.only(left: 6, top: 6),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(16),
-                          child: Image.network(
-                            embed.thumbnailUrl!,
-                            width: width - 105,
-                          ),
-                        )),
-                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 8.0),
+                    child: EmbedWidget(
+                      embed: embed,
+                    ),
+                  )
               ],
             ),
           ],

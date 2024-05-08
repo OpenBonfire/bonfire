@@ -13,6 +13,7 @@ import 'package:flutter/widgets.dart';
 import 'package:nyxx_self/nyxx.dart' as nyxx;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import 'package:http/http.dart' as http;
 
 part 'messages.g.dart';
 
@@ -20,6 +21,23 @@ part 'messages.g.dart';
 TODO: get messages when scrolling stop retrieving the correct data when
 running the realtime listener
 */
+
+extension HexColor on Color {
+  /// String is in the format "aabbcc" or "ffaabbcc" with an optional leading "#".
+  static Color fromHex(String hexString) {
+    final buffer = StringBuffer();
+    if (hexString.length == 6 || hexString.length == 7) buffer.write('ff');
+    buffer.write(hexString.replaceFirst('#', ''));
+    return Color(int.parse(buffer.toString(), radix: 16));
+  }
+
+  /// Prefixes a hash sign if [leadingHashSign] is set to `true` (default is `true`).
+  String toHex({bool leadingHashSign = true}) => '${leadingHashSign ? '#' : ''}'
+      '${alpha.toRadixString(16).padLeft(2, '0')}'
+      '${red.toRadixString(16).padLeft(2, '0')}'
+      '${green.toRadixString(16).padLeft(2, '0')}'
+      '${blue.toRadixString(16).padLeft(2, '0')}';
+}
 
 @Riverpod(keepAlive: false)
 class Messages extends _$Messages {
@@ -30,7 +48,7 @@ class Messages extends _$Messages {
 
   final _cacheManager = CacheManager(
     Config(
-      'bonfire_cache',
+      'messages',
       stalePeriod: const Duration(days: 7),
       maxNrOfCacheObjects: 10000,
     ),
@@ -56,7 +74,8 @@ class Messages extends _$Messages {
     if (authOutput is AuthUser && channel is nyxx.TextChannel) {
       var age = await getAgeOfMessageEntry(channel.id.value);
       if (age == null || age.inDays > 1) {
-        getMessages(authOutput, channel.id.value, count: 20, lock: false);
+        getMessages(authOutput, channel.id.value,
+            count: 20, lock: false, requestAvatar: false);
       }
     }
   }
@@ -65,11 +84,10 @@ class Messages extends _$Messages {
   Timer lockTimer = Timer(Duration.zero, () {});
 
   void enableLock() {
-    // if (!loadingMessages) {
+    if (loadingMessages) return;
     lockTimer = Timer(const Duration(seconds: 3), () {
       loadingMessages = false;
     });
-    // }
   }
 
   void removeLock() {
@@ -77,22 +95,47 @@ class Messages extends _$Messages {
     lockTimer.cancel();
   }
 
-  Future<void> getMessages(authOutput, int channelId,
-      {int? before, int? count, int? guildId, bool? lock = true}) async {
+  Future<void> getMessages(
+    authOutput,
+    int channelId, {
+    int? before,
+    int? count,
+    int? guildId,
+    bool? lock = true,
+    bool? requestAvatar = true,
+  }) async {
     if ((authOutput != null) && (authOutput is AuthUser)) {
       user = authOutput;
       var textChannel = await user!.client.channels
           .get(nyxx.Snowflake(channelId)) as nyxx.TextChannel;
       var beforeSnowflake = before != null ? nyxx.Snowflake(before) : null;
+
+      // don't load messages until this one returns
+      // the lock only applies if the method itself also intends on locking the request
       if (lock == true) enableLock();
+
+      // load 50 messages, could be 100 max but unnecessary
       var messages = await textChannel.messages
           .fetchMany(limit: count ?? 50, before: beforeSnowflake);
-      List<Uint8List> memberAvatars = await Future.wait(
-        messages.map((message) async {
-          var avatar = await fetchMemberAvatar(message.author);
-          return avatar;
-        }),
-      );
+      List<Uint8List> memberAvatars = [];
+
+      if (requestAvatar == true) {
+        memberAvatars = await Future.wait(
+          messages.map((message) async {
+            var avatar = await fetchMemberAvatar(
+              BonfireGuildMember(
+                id: message.author.id.value,
+                name: message.author.username,
+                iconUrl: message.author.avatar!.url.toString(),
+                displayName: message.author.username,
+                guildId: guildId ??
+                    ref.read(guildControllerProvider.notifier).currentGuild!.id,
+              ),
+            );
+            return avatar;
+          }),
+        );
+      }
       removeLock();
       List<BonfireMessage> channelMessages = [];
       for (int i = 0; i < messages.length; i++) {
@@ -109,16 +152,49 @@ class Messages extends _$Messages {
 
         List<BonfireEmbed> embeds = [];
         message.embeds.forEach((embed) {
-          if (embed.thumbnail != null) {
+          Color? embedColor;
+
+          if (embed.color != null) {
+            embedColor = Color.fromRGBO(
+              embed.color!.r,
+              embed.color!.g,
+              embed.color!.b,
+              255,
+            );
+          }
+
+          if (embed.video != null) {
             embeds.add(BonfireEmbed(
-              width: embed.thumbnail!.width!,
-              height: embed.thumbnail!.height!,
+              type: EmbedType.video,
+              thumbnailWidth: embed.thumbnail?.width,
+              thumbnailHeight: embed.thumbnail?.height,
+              thumbnailUrl: embed.thumbnail?.url.toString(),
+              videoUrl: embed.video?.url.toString(),
+              proxiedUrl: embed.video?.proxiedUrl.toString(),
+              title: embed.title,
+              description: embed.description,
+              provider: embed.provider?.name,
+              color: embedColor
+            ));
+          } else if (embed.image != null) {
+            // print("image!");
+            embeds.add(BonfireEmbed(
+              type: EmbedType.image,
+              contentWidth: embed.image!.width,
+              contentHeight: embed.image!.height,
+              thumbnailWidth: embed.thumbnail?.width,
+              thumbnailHeight: embed.thumbnail?.height,
+              provider: embed.provider!.name,
               thumbnailUrl: embed.thumbnail!.url.toString(),
             ));
+          } else {
+            // print("unknown embed type: ${embed.fields}");
           }
         });
 
-        var memberAvatar = memberAvatars[i];
+        Uint8List? memberAvatar =
+            memberAvatars.isNotEmpty ? memberAvatars[i] : null;
+
         var newMessage = BonfireMessage(
             id: message.id.value,
             channelId: channelId,
@@ -127,7 +203,8 @@ class Messages extends _$Messages {
             member: BonfireGuildMember(
               id: message.author.id.value,
               name: message.author.username,
-              icon: Image.memory(memberAvatar),
+              iconUrl: message.author.avatar!.url.toString(),
+              icon: (memberAvatar != null) ? Image.memory(memberAvatar) : null,
               displayName: username,
               guildId: guildId ??
                   ref.read(guildControllerProvider.notifier).currentGuild!.id,
@@ -222,11 +299,13 @@ class Messages extends _$Messages {
     return cacheData?.file.readAsBytesSync();
   }
 
-  Future<Uint8List> fetchMemberAvatar(nyxx.MessageAuthor user) async {
-    var cached = await fetchMemberAvatarFromCache(user.id.value);
-    if (cached != null) return cached;
+  Future<Uint8List> fetchMemberAvatar(BonfireGuildMember user) async {
+    // var cached = await fetchMemberAvatarFromCache(user.id);
+    // if (cached != null) return cached;
     // if (user.avatar != null) return null;
-    var fetched = await user.avatar!.fetch();
+    var icon_url = user.iconUrl;
+    var fetched = (await http.get(Uri.parse(icon_url))).bodyBytes;
+
     await _cacheManager.putFile(
       user.id.toString(),
       fetched,

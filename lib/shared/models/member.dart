@@ -14,6 +14,7 @@ class BonfireGuildMember {
   final int id;
   final int guildId;
   final String name;
+  final String iconUrl;
   final String displayName;
   final String? nickName;
 
@@ -30,6 +31,7 @@ class BonfireGuildMember {
     required this.guildId,
     required this.displayName,
     required this.name,
+    required this.iconUrl,
     this.nickName,
     this.icon,
   });

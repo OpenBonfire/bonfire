@@ -6,7 +6,7 @@ part of 'guilds.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$guildsHash() => r'31cdce17a54102daa994179c4c02937b8c3d365b';
+String _$guildsHash() => r'57f2ebd279d839dbbf73c6eea3b7384ac507141a';
 
 /// See also [Guilds].
 @ProviderFor(Guilds)

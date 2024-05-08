@@ -6,7 +6,7 @@ class AppColorsDark {
   static const backgroundColor = Color(0xFF131318);
   static const textColor1 = Color(0xFFE4E5E8);
   static const textColor2 = Color(0xFF9597A3);
-  static const selectedIconColor = Color(0xFFE4E5E8);
+  static const selectedIconColor = Color.fromARGB(255, 255, 255, 255);
   static const deselectedIconColor = Color(0xFF72767D);
 
   static const blurpleColor = Color(0xFF5B65EA);
