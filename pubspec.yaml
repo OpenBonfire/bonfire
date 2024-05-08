@@ -48,6 +48,7 @@ dependencies:
   media_kit_libs_macos_video: any
   media_kit_libs_windows_video: any
   media_kit_libs_linux: any
+  visibility_detector: ^0.4.0+2
 
 dev_dependencies:
   flutter_test:

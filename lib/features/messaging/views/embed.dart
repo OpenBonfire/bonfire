@@ -8,6 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:media_kit/media_kit.dart';
 import 'package:media_kit_video/media_kit_video.dart';
 import 'package:fireview/webview_all.dart';
+import 'package:visibility_detector/visibility_detector.dart';
 
 class EmbedWidget extends ConsumerStatefulWidget {
   final BonfireEmbed embed;
@@ -60,10 +61,11 @@ class VideoEmbed extends ConsumerStatefulWidget {
 
 class VideoEmbedState extends ConsumerState<VideoEmbed> {
   // Create a [Player] to control playback.
-  late final player = Player();
+  var player = Player();
   // Create a [VideoController] to handle video output from [Player].
   late final controller = VideoController(player);
-  // https://user-images.githubusercontent.com/28951144/229373695-22f88f13-d18f-4288-9bf1-c3e078d83722.mp4
+  // Store whether the video is currently visible or not.
+  bool _isVisible = false;
 
   @override
   void initState() {
@@ -78,13 +80,37 @@ class VideoEmbedState extends ConsumerState<VideoEmbed> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    // print("--");
-    // print(widget.embed.provider);
-    // print(widget.embed.videoUrl);
-    // print(widget.embed.proxiedUrl);
-    // print("--");
+  void dispose() {
+    print('DISPOSING EMBED!!!');
+    player.dispose();
+    super.dispose();
+  }
 
+  @override
+  Widget build(BuildContext context) {
+    return VisibilityDetector(
+      key: Key('video-visibility-${widget.embed.videoUrl ?? widget.embed.proxiedUrl ?? widget.embed.thumbnailUrl ?? widget.embed.imageUrl}'),
+      onVisibilityChanged: (visibilityInfo) {
+        bool _vischeck = visibilityInfo.visibleFraction > 0;
+        if (_vischeck == _isVisible) return;
+        setState(() {
+          _isVisible = _vischeck;
+          if (!_isVisible) {
+            player.dispose();
+          } else {
+            player = Player();
+            player.open(Media(widget.embed.proxiedUrl!));
+            player.setPlaylistMode(PlaylistMode.loop);
+            player.setVolume(0);
+          }
+        });
+      },
+      child: _buildVideoWidget(),
+    );
+  }
+
+  Widget _buildVideoWidget() {
+    print("building widget!");
     if (widget.embed.provider == "YouTube") {
       return WebVideo(embed: widget.embed);
     }
@@ -92,28 +118,35 @@ class VideoEmbedState extends ConsumerState<VideoEmbed> {
     if (widget.embed.proxiedUrl != null) {
       player.open(Media(widget.embed.proxiedUrl!));
       player.setPlaylistMode(PlaylistMode.loop);
+      player.setVolume(0);
+    }
+
+    if (widget.embed.thumbnailWidth == null) {
+      return const SizedBox();
     }
 
     return (widget.embed.provider != "Tenor")
         ? Image.network(
-            width: min(widget.embed.thumbnailWidth!.toDouble(),
+            width: min(widget.embed.thumbnailWidth?.toDouble() ?? 200,
                 MediaQuery.of(context).size.width - 90),
             widget.embed.thumbnailUrl!)
         : Container(
             height: widget.embed.thumbnailHeight!.toDouble(),
             width: min(widget.embed.thumbnailWidth!.toDouble(),
                 MediaQuery.of(context).size.width - 90),
-            child: ClipRRect(
-              // widget.embed.videoUrl!
-              borderRadius: BorderRadius.circular(12),
-              child: (widget.embed.videoUrl != null)
-                  ? Video(
-                      controller: controller,
-                    )
-                  : const Text("URL is null"),
-            ));
+            // child: ClipRRect(
+            //   // widget.embed.videoUrl!
+            //   borderRadius: BorderRadius.circular(12),
+            //   child: (widget.embed.videoUrl != null)
+            //       ? Video(
+            //           controller: controller,
+            //         )
+            //       : const Text("URL is null"),
+            // ),
+          );
   }
 }
+
 
 class WebVideo extends ConsumerStatefulWidget {
   final BonfireEmbed embed;
@@ -175,7 +208,7 @@ class _WebVideoState extends ConsumerState<WebVideo> {
 
     height = width / aspect;
 
-    return Container(
+    return SizedBox(
       width: width,
       child: ClipRRect(
         borderRadius: BorderRadius.circular(8),
@@ -204,8 +237,8 @@ class _WebVideoState extends ConsumerState<WebVideo> {
                                 .textTheme
                                 .bodyText2
                                 .copyWith(
-                                    color:
-                                        const Color.fromARGB(255, 172, 172, 172),
+                                    color: const Color.fromARGB(
+                                        255, 172, 172, 172),
                                     fontSize: 14)),
                         const SizedBox(height: 4),
                         Text(widget.embed.title ?? "Title not found",
