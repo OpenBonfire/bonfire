@@ -109,7 +109,7 @@ class VideoEmbedState extends ConsumerState<VideoEmbed> {
       player.open(Media(widget.embed.proxiedUrl!));
       player.pause();
       // player.setPlaylistMode(PlaylistMode.loop);
-      player.setVolume(0);
+      player.setVolume(100);
     }
 
     if (widget.embed.thumbnailWidth == null) {
