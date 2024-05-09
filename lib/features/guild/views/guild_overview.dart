@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:bonfire/features/guild/controllers/current_guild.dart';
 
-
 class GuildOverview extends ConsumerStatefulWidget {
   const GuildOverview({super.key});
 

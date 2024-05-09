@@ -46,12 +46,7 @@ class _MessageViewState extends ConsumerState<MessageView> {
 
   void _loadMoreMessages() {
     
-    // It will try to load messages really fast, so this prevents us
-    // from hitting a rate limit, as well as lagging due to unnecessary
-    // state updates.
-    if (!ref.read(messagesProvider.notifier).loadingMessages) {
-      ref.read(messagesProvider.notifier).fetchMoreMessages();
-    }
+    ref.read(messagesProvider.notifier).fetchMoreMessages();
   }
 
   Widget _messageBarIcon(Icon icon, void Function() onPressed,

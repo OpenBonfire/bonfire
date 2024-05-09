@@ -2,7 +2,7 @@ import 'package:bonfire/features/auth/data/repositories/auth.dart';
 import 'package:bonfire/features/auth/data/repositories/discord_auth.dart';
 import 'package:bonfire/shared/models/guild.dart';
 import 'package:flutter/widgets.dart';
-import 'package:nyxx_self/nyxx.dart' as nyxx;
+import 'package:nyxx/nyxx.dart' as nyxx;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 
@@ -36,7 +36,7 @@ class Guilds extends _$Guilds {
       List<nyxx.UserGuild> userGuilds = await user!.client.listGuilds();
       List<Future<Guild>> guildFutures = userGuilds.map((guild) async {
         // Async icon lookup for speed
-
+        // guild.fetchPreview();
         var iconImage;
         if (guild.icon != null) {
           var cacheData =

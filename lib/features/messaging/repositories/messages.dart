@@ -10,7 +10,7 @@ import 'package:bonfire/shared/models/embed.dart';
 import 'package:bonfire/shared/models/member.dart';
 import 'package:bonfire/shared/models/message.dart';
 import 'package:flutter/widgets.dart';
-import 'package:nyxx_self/nyxx.dart' as nyxx;
+import 'package:nyxx/nyxx.dart' as nyxx;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:http/http.dart' as http;
@@ -114,6 +114,8 @@ class Messages extends _$Messages {
       // don't load messages until this one returns
       // the lock only applies if the method itself also intends on locking the request
       if (lock == true) enableLock();
+
+      if (loadingMessages == true && lock == true) return;
 
       // load 50 messages, could be 100 max but unnecessary
       var messages = await textChannel.messages

@@ -83,6 +83,8 @@ class _ChannelsListState extends ConsumerState<ChannelsList> {
                 ret = Category(category: category, children: children);
               }
 
+              return ret;
+
               return StickyHeader(
                 header: (index == 0) ? const GuildOverview(): Container(),
                 content: ret ?? Container(),

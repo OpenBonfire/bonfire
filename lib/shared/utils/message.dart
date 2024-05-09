@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:typed_data';
 import 'package:flutter/widgets.dart';
-import 'package:nyxx_self/nyxx.dart' as nyxx;
+import 'package:nyxx/nyxx.dart' as nyxx;
 import 'package:bonfire/shared/models/member.dart';
 import 'package:bonfire/shared/models/message.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
