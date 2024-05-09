@@ -61,15 +61,17 @@ class _ChannelsListState extends ConsumerState<ChannelsList> {
         ),
         child: ListView.builder(
           padding: const EdgeInsets.only(top: 12),
-          itemCount: channelsWithoutParent.length + categoryMap.length,
+          itemCount: channelsWithoutParent.length + categoryMap.length + 1,
           itemBuilder: (context, index) {
-            // GuildOverview()
-            var ret;
-            if (index < channelsWithoutParent.length) {
-              var channel = channelsWithoutParent[index];
+            int idx = index -1;
+            if (index == 0) return const GuildOverview();
+
+            Widget? ret;
+            if (idx < channelsWithoutParent.length) {
+              var channel = channelsWithoutParent[idx];
               ret = ChannelButton(channel: channel);
             } else {
-              var categoryIndex = index - channelsWithoutParent.length;
+              var categoryIndex = idx - channelsWithoutParent.length;
               var categoryId = categoryMap.keys.elementAt(categoryIndex);
               var category = channels.firstWhereOrNull(
                 (channel) => channel.id == categoryId,
@@ -78,13 +80,7 @@ class _ChannelsListState extends ConsumerState<ChannelsList> {
               if (category != null) {
                 ret = Category(category: category, children: children);
               }
-
-              if (index == 0) {
-                ret = Column(children: [
-                  const GuildOverview(),
-                  ret
-                ]);
-              }
+              
               return ret;
             }
           },
