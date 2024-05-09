@@ -44,8 +44,8 @@ class ImageEmbedState extends ConsumerState<ImageEmbed> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: widget.embed.thumbnailWidth!.toDouble(),
-      height: widget.embed.thumbnailHeight!.toDouble(),
+      width: widget.embed.thumbnailWidth?.toDouble(),
+      height: widget.embed.thumbnailHeight?.toDouble(),
       child: Image.network(widget.embed.imageUrl!),
     );
   }
@@ -96,7 +96,8 @@ class VideoEmbedState extends ConsumerState<VideoEmbed> {
 
   @override
   Widget build(BuildContext context) {
-    var key = Key('video-visibility-${widget.embed.videoUrl ?? widget.embed.proxiedUrl ?? widget.embed.thumbnailUrl ?? widget.embed.imageUrl}');
+    var key = Key(
+        'video-visibility-${widget.embed.videoUrl ?? widget.embed.proxiedUrl ?? widget.embed.thumbnailUrl ?? widget.embed.imageUrl}');
     return _buildVideoWidget();
   }
 
@@ -137,7 +138,6 @@ class VideoEmbedState extends ConsumerState<VideoEmbed> {
           );
   }
 }
-
 
 class WebVideo extends ConsumerStatefulWidget {
   final BonfireEmbed embed;

@@ -166,27 +166,26 @@ class Messages extends _$Messages {
 
           if (embed.video != null) {
             embeds.add(BonfireEmbed(
-              type: EmbedType.video,
-              thumbnailWidth: embed.thumbnail?.width,
-              thumbnailHeight: embed.thumbnail?.height,
-              thumbnailUrl: embed.thumbnail?.url.toString(),
-              videoUrl: embed.video?.url.toString(),
-              proxiedUrl: embed.video?.proxiedUrl.toString(),
-              title: embed.title,
-              description: embed.description,
-              provider: embed.provider?.name,
-              color: embedColor
-            ));
+                type: EmbedType.video,
+                thumbnailWidth: embed.thumbnail?.width,
+                thumbnailHeight: embed.thumbnail?.height,
+                thumbnailUrl: embed.thumbnail?.url.toString(),
+                videoUrl: embed.video?.url.toString(),
+                proxiedUrl: embed.video?.proxiedUrl.toString(),
+                title: embed.title,
+                description: embed.description,
+                provider: embed.provider?.name,
+                color: embedColor));
           } else if (embed.image != null) {
             // print("image!");
             embeds.add(BonfireEmbed(
               type: EmbedType.image,
-              contentWidth: embed.image!.width,
-              contentHeight: embed.image!.height,
+              contentWidth: embed.image?.width,
+              contentHeight: embed.image?.height,
               thumbnailWidth: embed.thumbnail?.width,
               thumbnailHeight: embed.thumbnail?.height,
-              provider: embed.provider!.name,
-              thumbnailUrl: embed.thumbnail!.url.toString(),
+              provider: embed.provider?.name,
+              thumbnailUrl: embed.thumbnail?.url.toString(),
             ));
           } else {
             // print("unknown embed type: ${embed.fields}");

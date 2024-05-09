@@ -50,6 +50,10 @@ dependencies:
   media_kit_libs_windows_video: any
   media_kit_libs_linux: any
   visibility_detector: ^0.4.0+2
+  url_launcher: ^6.2.6
+
+dependency_overrides:
+  webview_flutter_platform_interface: ^2.4.0
 
 dev_dependencies:
   flutter_test:
@@ -60,6 +64,12 @@ dev_dependencies:
   riverpod_lint: ^2.3.10
   flutter_lints: ^3.0.0
   freezed: ^2.5.2
+  flutter_launcher_icons: ^0.13.1
+
+flutter_launcher_icons:
+  ios: true
+  android: true
+  image_path: "assets/images/icon.png"
 
 flutter:
   uses-material-design: true
