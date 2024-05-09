@@ -44,8 +44,8 @@ class ImageEmbedState extends ConsumerState<ImageEmbed> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: widget.embed.thumbnailWidth!.toDouble(),
-      height: widget.embed.thumbnailHeight!.toDouble(),
+      width: widget.embed.thumbnailWidth?.toDouble(),
+      height: widget.embed.thumbnailHeight?.toDouble(),
       child: Image.network(widget.embed.imageUrl!),
     );
   }
@@ -96,26 +96,9 @@ class VideoEmbedState extends ConsumerState<VideoEmbed> {
 
   @override
   Widget build(BuildContext context) {
-    return VisibilityDetector(
-      key: Key(
-          'video-visibility-${widget.embed.videoUrl ?? widget.embed.proxiedUrl ?? widget.embed.thumbnailUrl ?? widget.embed.imageUrl}'),
-      onVisibilityChanged: (visibilityInfo) {
-        bool _vischeck = visibilityInfo.visibleFraction > 0;
-        if (_vischeck == _isVisible) return;
-        setState(() {
-          _isVisible = _vischeck;
-          if (!_isVisible) {
-            player.dispose();
-          } else {
-            player = Player();
-            player.open(Media(widget.embed.proxiedUrl!));
-            player.setPlaylistMode(PlaylistMode.loop);
-            player.setVolume(0);
-          }
-        });
-      },
-      child: _buildVideoWidget(),
-    );
+    var key = Key(
+        'video-visibility-${widget.embed.videoUrl ?? widget.embed.proxiedUrl ?? widget.embed.thumbnailUrl ?? widget.embed.imageUrl}');
+    return _buildVideoWidget();
   }
 
   Widget _buildVideoWidget() {

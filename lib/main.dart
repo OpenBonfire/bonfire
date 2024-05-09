@@ -7,7 +7,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:video_player_media_kit/video_player_media_kit.dart';
 
 void main() async {
-    VideoPlayerMediaKit.ensureInitialized(
+  VideoPlayerMediaKit.ensureInitialized(
     android: true,
     iOS: true,
     macOS: true,

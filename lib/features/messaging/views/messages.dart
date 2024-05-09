@@ -10,6 +10,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:markdown_viewer/markdown_viewer.dart';
 import 'package:flutter_prism/flutter_prism.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class MessageView extends ConsumerStatefulWidget {
   const MessageView({super.key});
