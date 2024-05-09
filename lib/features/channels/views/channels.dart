@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:collection/collection.dart';
+import 'package:sticky_headers/sticky_headers.dart';
 
 class ChannelsList extends ConsumerStatefulWidget {
   const ChannelsList({super.key});
@@ -65,17 +66,14 @@ class _ChannelsListState extends ConsumerState<ChannelsList> {
         ),
         child: ListView.builder(
           padding: const EdgeInsets.only(top: 8),
-          itemCount: channelsWithoutParent.length + categoryMap.length + 1,
+          itemCount: channelsWithoutParent.length + categoryMap.length,
           itemBuilder: (context, index) {
-            int idx = index -1;
-            if (index == 0) return const GuildOverview();
-
             Widget? ret;
-            if (idx < channelsWithoutParent.length) {
-              var channel = channelsWithoutParent[idx];
+            if (index < channelsWithoutParent.length) {
+              var channel = channelsWithoutParent[index];
               ret = ChannelButton(channel: channel);
             } else {
-              var categoryIndex = idx - channelsWithoutParent.length;
+              var categoryIndex = index - channelsWithoutParent.length;
               var categoryId = categoryMap.keys.elementAt(categoryIndex);
               var category = channels.firstWhereOrNull(
                 (channel) => channel.id == categoryId,
@@ -84,8 +82,11 @@ class _ChannelsListState extends ConsumerState<ChannelsList> {
               if (category != null) {
                 ret = Category(category: category, children: children);
               }
-              
-              return ret;
+
+              return StickyHeader(
+                header: (index == 0) ? const GuildOverview(): Container(),
+                content: ret ?? Container(),
+              );
             }
           },
         ),
