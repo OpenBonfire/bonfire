@@ -58,9 +58,13 @@ class _ChannelsListState extends ConsumerState<ChannelsList> {
         height: double.infinity,
         decoration: BoxDecoration(
           color: Theme.of(context).custom.colorTheme.foreground,
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(24),
+            topRight: Radius.circular(8),
+          ),
         ),
         child: ListView.builder(
-          padding: const EdgeInsets.only(top: 12),
+          padding: const EdgeInsets.only(top: 8),
           itemCount: channelsWithoutParent.length + categoryMap.length + 1,
           itemBuilder: (context, index) {
             int idx = index -1;
