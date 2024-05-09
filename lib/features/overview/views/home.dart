@@ -54,9 +54,7 @@ class _HomeState extends ConsumerState<HomeScreen> {
           children: [
             Sidebar(),
             Expanded(
-              child: Column(
-                children: [GuildOverview(), Expanded(child: ChannelsList())],
-              ),
+              child: Expanded(child: ChannelsList())
             )
           ],
         ),

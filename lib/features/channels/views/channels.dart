@@ -1,5 +1,6 @@
 import 'package:bonfire/features/channels/controllers/channel.dart';
 import 'package:bonfire/features/channels/repositories/channels.dart';
+import 'package:bonfire/features/guild/views/guild_overview.dart';
 import 'package:bonfire/features/overview/views/overlapping_panels.dart';
 import 'package:bonfire/shared/models/channel.dart';
 import 'package:bonfire/shared/utils/icons.dart';
@@ -62,9 +63,11 @@ class _ChannelsListState extends ConsumerState<ChannelsList> {
           padding: const EdgeInsets.only(top: 12),
           itemCount: channelsWithoutParent.length + categoryMap.length,
           itemBuilder: (context, index) {
+            // GuildOverview()
+            var ret;
             if (index < channelsWithoutParent.length) {
               var channel = channelsWithoutParent[index];
-              return ChannelButton(channel: channel);
+              ret = ChannelButton(channel: channel);
             } else {
               var categoryIndex = index - channelsWithoutParent.length;
               var categoryId = categoryMap.keys.elementAt(categoryIndex);
@@ -73,10 +76,16 @@ class _ChannelsListState extends ConsumerState<ChannelsList> {
               );
               var children = categoryMap[categoryId] ?? [];
               if (category != null) {
-                return Category(category: category, children: children);
-              } else {
-                return null;
+                ret = Category(category: category, children: children);
               }
+
+              if (index == 0) {
+                ret = Column(children: [
+                  const GuildOverview(),
+                  ret
+                ]);
+              }
+              return ret;
             }
           },
         ),

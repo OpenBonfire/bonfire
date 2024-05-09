@@ -34,7 +34,7 @@ class CustomTextTheme {
     fontFamily: _family,
   );
   final bodyText1 = TextStyle(
-    fontSize: 16,
+    fontSize: 15,
     fontFamily: _family,
     color: const Color.fromARGB(255, 255, 255, 255),
   );

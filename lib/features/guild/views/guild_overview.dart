@@ -1,19 +1,11 @@
 import 'dart:math';
 
-import 'package:bonfire/features/channels/controllers/channel.dart';
-import 'package:bonfire/features/channels/repositories/channels.dart';
-import 'package:bonfire/features/overview/views/overlapping_panels.dart';
-import 'package:bonfire/shared/models/channel.dart';
-import 'package:bonfire/shared/utils/icons.dart';
 import 'package:bonfire/theme/text_theme.dart';
 import 'package:bonfire/theme/theme.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:collection/collection.dart';
 import 'package:bonfire/features/guild/controllers/current_guild.dart';
-import 'dart:math';
+
 
 class GuildOverview extends ConsumerStatefulWidget {
   const GuildOverview({super.key});

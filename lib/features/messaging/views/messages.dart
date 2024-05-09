@@ -57,7 +57,7 @@ class _MessageViewState extends ConsumerState<MessageView> {
   Widget _messageBarIcon(Icon icon, void Function() onPressed,
       {Color? backgroundColor}) {
     return Padding(
-      padding: const EdgeInsets.all(6),
+      padding: const EdgeInsets.all(8),
       child: Container(
         decoration: BoxDecoration(
           color: backgroundColor ??
@@ -173,7 +173,7 @@ class _MessageViewState extends ConsumerState<MessageView> {
                 ),
                 Expanded(
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 6),
+                    padding: const EdgeInsets.symmetric(vertical: 8),
                     child: Container(
                       decoration: BoxDecoration(
                         color: Theme.of(context).custom.colorTheme.cardSelected,
