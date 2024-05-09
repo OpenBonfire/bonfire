@@ -45,6 +45,7 @@ class _MessageViewState extends ConsumerState<MessageView> {
   }
 
   void _loadMoreMessages() {
+    
     // It will try to load messages really fast, so this prevents us
     // from hitting a rate limit, as well as lagging due to unnecessary
     // state updates.
@@ -78,9 +79,6 @@ class _MessageViewState extends ConsumerState<MessageView> {
     var currentGuild = ref.watch(currentGuildControllerProvider);
     var currentChannel =
         ref.read(channelControllerProvider.notifier).getChannel();
-
-    print("BOTTOM INSET!");
-    print(MediaQuery.of(context).padding.bottom);
 
     return Container(
       decoration: BoxDecoration(
@@ -128,7 +126,7 @@ class _MessageViewState extends ConsumerState<MessageView> {
             ),
           ),
           SizedBox(
-            height: height - topPadding - 30 - 110,
+            height: height - topPadding - MediaQuery.of(context).padding.bottom - 110,
             child: ListView.builder(
               controller: _scrollController,
               itemCount: messages.length,
@@ -217,10 +215,9 @@ class _MessageViewState extends ConsumerState<MessageView> {
               ],
             ),
           ),
-          Container(
-            // bottom padding is just returning 0...
-            height: 30,
-          )
+          // Container(
+          //   height: MediaQuery.of(context).padding.bottom,
+          // )
         ],
       ),
     );

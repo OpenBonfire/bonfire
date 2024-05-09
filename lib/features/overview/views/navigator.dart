@@ -65,33 +65,43 @@ class _BarWidgetState extends ConsumerState<BarWidget> {
           parent: ModalRoute.of(context)!.animation!,
           curve: Curves.easeInOut,
         )),
-        child: Container(
-            decoration: BoxDecoration(
-              color: Theme.of(context).custom.colorTheme.cardSelected,
-              border: Border(
-                top: BorderSide(
-                  color: Theme.of(context).custom.colorTheme.brightestGray,
-                  width: 0.5,
+        child: Column(
+          children: [
+            Container(
+                decoration: BoxDecoration(
+                  color: Theme.of(context).custom.colorTheme.cardSelected,
+                  border: Border(
+                      top: BorderSide(
+                    color: Theme.of(context).custom.colorTheme.brightestGray,
+                    width: 1,
+                  )),
                 ),
+                height: 55,
+                child: const Padding(
+                  padding: EdgeInsets.only(top: 16, left: 18, right: 18),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      NavigatorIcon(icon: Icons.home_rounded, label: 'Home'),
+                      NavigatorIcon(
+                          icon: Icons.message_rounded, label: 'Messages'),
+                      NavigatorIcon(
+                          icon: Icons.notifications_rounded,
+                          label: 'Notifications'),
+                      NavigatorIcon(
+                          icon: Icons.notifications_rounded,
+                          label: 'Notifications'),
+                    ],
+                  ),
+                )),
+            Container(
+              decoration: BoxDecoration(
+                color: Theme.of(context).custom.colorTheme.cardSelected,
               ),
-            ),
-            height: 75,
-            child: const Padding(
-              padding: EdgeInsets.only(top: 16, left: 18, right: 18),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  NavigatorIcon(icon: Icons.home_rounded, label: 'Home'),
-                  NavigatorIcon(icon: Icons.message_rounded, label: 'Messages'),
-                  NavigatorIcon(
-                      icon: Icons.notifications_rounded,
-                      label: 'Notifications'),
-                  NavigatorIcon(
-                      icon: Icons.notifications_rounded,
-                      label: 'Notifications'),
-                ],
-              ),
-            )),
+              height: MediaQuery.of(context).padding.bottom,
+            )
+          ],
+        ),
       ),
     );
   }
