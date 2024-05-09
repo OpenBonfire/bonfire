@@ -8,6 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'dart:math';
 
 class Sidebar extends ConsumerStatefulWidget {
   const Sidebar({super.key});
@@ -24,9 +25,14 @@ class _SidebarState extends ConsumerState<Sidebar> {
           child: guild.icon!);
     } else {
       String iconText = "";
-      guild.name.split(" ").forEach((word) {
+      List<String> words = guild.name.split(" ");
+      for (String word in words) {
         iconText += word[0];
-      });
+      }
+      // Shrink font size when icon text is longer up to a certain amount
+      double iconTextSize = max(
+          CustomTextTheme().titleSmall.fontSize! - 4 * max(words.length - 3, 0),
+          10);
       return Container(
           decoration: BoxDecoration(
               color: Theme.of(context).custom.colorTheme.foreground,
@@ -34,7 +40,13 @@ class _SidebarState extends ConsumerState<Sidebar> {
           width: 50,
           height: 47,
           child: Center(
-              child: Text(iconText, style: CustomTextTheme().titleSmall)));
+              child: Text(
+            iconText,
+            style: CustomTextTheme().titleSmall.copyWith(
+                  fontSize: iconTextSize,
+                ),
+            maxLines: 1,
+          )));
     }
   }
 
