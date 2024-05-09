@@ -79,6 +79,9 @@ class _MessageViewState extends ConsumerState<MessageView> {
     var currentChannel =
         ref.read(channelControllerProvider.notifier).getChannel();
 
+    print("BOTTOM INSET!");
+    print(MediaQuery.of(context).padding.bottom);
+
     return Container(
       decoration: BoxDecoration(
         color: Theme.of(context).custom.colorTheme.foreground,

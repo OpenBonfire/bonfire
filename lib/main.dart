@@ -16,8 +16,22 @@ void main() async {
   );
 
   WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
-      overlays: [SystemUiOverlay.top]);
+  // SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
+  //     overlays: [SystemUiOverlay.top]);
+
+  //Setting SysemUIOverlay
+  // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+  //     systemStatusBarContrastEnforced: true,
+  //     systemNavigationBarColor: Colors.transparent,
+  //     systemNavigationBarDividerColor: Colors.transparent,
+  //     systemNavigationBarIconBrightness: Brightness.dark,
+  //     statusBarIconBrightness: Brightness.dark,
+  //     statusBarColor: Colors.transparent
+  //     )
+  // );
+      
+  //Setting SystmeUIMode
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge, overlays: [SystemUiOverlay.top]);
 
   await GetStorage.init();
   runApp(const ProviderScope(child: MaterialApp(home: MainWindow())));
