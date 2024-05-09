@@ -96,8 +96,26 @@ class VideoEmbedState extends ConsumerState<VideoEmbed> {
 
   @override
   Widget build(BuildContext context) {
-    var key = Key('video-visibility-${widget.embed.videoUrl ?? widget.embed.proxiedUrl ?? widget.embed.thumbnailUrl ?? widget.embed.imageUrl}');
-    return _buildVideoWidget();
+    return VisibilityDetector(
+      key: Key(
+          'video-visibility-${widget.embed.videoUrl ?? widget.embed.proxiedUrl ?? widget.embed.thumbnailUrl ?? widget.embed.imageUrl}'),
+      onVisibilityChanged: (visibilityInfo) {
+        bool _vischeck = visibilityInfo.visibleFraction > 0;
+        if (_vischeck == _isVisible) return;
+        setState(() {
+          _isVisible = _vischeck;
+          if (!_isVisible) {
+            player.dispose();
+          } else {
+            player = Player();
+            player.open(Media(widget.embed.proxiedUrl!));
+            player.setPlaylistMode(PlaylistMode.loop);
+            player.setVolume(0);
+          }
+        });
+      },
+      child: _buildVideoWidget(),
+    );
   }
 
   Widget _buildVideoWidget() {
@@ -137,7 +155,6 @@ class VideoEmbedState extends ConsumerState<VideoEmbed> {
           );
   }
 }
-
 
 class WebVideo extends ConsumerStatefulWidget {
   final BonfireEmbed embed;

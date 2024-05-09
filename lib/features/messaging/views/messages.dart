@@ -394,7 +394,15 @@ class _MessageBoxState extends ConsumerState<MessageBox>
                                 Theme.of(context).brightness == Brightness.dark
                                     ? const PrismStyle.dark()
                                     : const PrismStyle());
-                        return prism.render(text, language ?? 'plain');
+
+                        try {
+                          var rendered =
+                              prism.render(text, language ?? 'plain');
+                          return rendered;
+                        } catch (e) {
+                          // fixes grammar issue?
+                          return <TextSpan>[TextSpan(text: text)];
+                        }
                       },
                       onTapLink: (href, title) {
                         print("Tapped link: $href");
