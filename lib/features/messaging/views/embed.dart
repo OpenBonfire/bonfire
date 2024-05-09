@@ -89,7 +89,8 @@ class VideoEmbedState extends ConsumerState<VideoEmbed> {
   @override
   Widget build(BuildContext context) {
     return VisibilityDetector(
-      key: Key('video-visibility-${widget.embed.videoUrl ?? widget.embed.proxiedUrl ?? widget.embed.thumbnailUrl ?? widget.embed.imageUrl}'),
+      key: Key(
+          'video-visibility-${widget.embed.videoUrl ?? widget.embed.proxiedUrl ?? widget.embed.thumbnailUrl ?? widget.embed.imageUrl}'),
       onVisibilityChanged: (visibilityInfo) {
         bool _vischeck = visibilityInfo.visibleFraction > 0;
         if (_vischeck == _isVisible) return;
@@ -134,19 +135,18 @@ class VideoEmbedState extends ConsumerState<VideoEmbed> {
             height: widget.embed.thumbnailHeight!.toDouble(),
             width: min(widget.embed.thumbnailWidth!.toDouble(),
                 MediaQuery.of(context).size.width - 90),
-            // child: ClipRRect(
-            //   // widget.embed.videoUrl!
-            //   borderRadius: BorderRadius.circular(12),
-            //   child: (widget.embed.videoUrl != null)
-            //       ? Video(
-            //           controller: controller,
-            //         )
-            //       : const Text("URL is null"),
-            // ),
+            child: ClipRRect(
+              // widget.embed.videoUrl!
+              borderRadius: BorderRadius.circular(12),
+              child: (widget.embed.videoUrl != null)
+                  ? Video(
+                      controller: controller,
+                    )
+                  : const Text("URL is null"),
+            ),
           );
   }
 }
-
 
 class WebVideo extends ConsumerStatefulWidget {
   final BonfireEmbed embed;
