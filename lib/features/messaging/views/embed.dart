@@ -64,8 +64,8 @@ class VideoEmbedState extends ConsumerState<VideoEmbed> {
   var player = Player();
   // Create a [VideoController] to handle video output from [Player].
   late final controller = VideoController(player);
-  // Store whether the video is currently visible or not.
-  bool _isVisible = false;
+
+  bool _isVisible = true;
 
   @override
   void initState() {
@@ -76,6 +76,14 @@ class VideoEmbedState extends ConsumerState<VideoEmbed> {
       print(widget.embed.proxiedUrl);
     } else {
       print("video url null!");
+    }
+    isVisibleThread();
+  }
+
+  void isVisibleThread() async {
+    while (true) {
+      await Future.delayed(const Duration(milliseconds: 1000));
+      // if (_isVisible) print("VIDEO VISIBLE!");
     }
   }
 
@@ -111,15 +119,15 @@ class VideoEmbedState extends ConsumerState<VideoEmbed> {
   }
 
   Widget _buildVideoWidget() {
-    print("building widget!");
     if (widget.embed.provider == "YouTube") {
       return WebVideo(embed: widget.embed);
     }
 
     if (widget.embed.proxiedUrl != null) {
       player.open(Media(widget.embed.proxiedUrl!));
-      player.setPlaylistMode(PlaylistMode.loop);
-      player.setVolume(0);
+      player.pause();
+      // player.setPlaylistMode(PlaylistMode.loop);
+      player.setVolume(100);
     }
 
     if (widget.embed.thumbnailWidth == null) {

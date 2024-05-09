@@ -6,9 +6,9 @@ import 'package:bonfire/theme/text_theme.dart';
 import 'package:bonfire/theme/theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'dart:math';
 
 class Sidebar extends ConsumerStatefulWidget {
   const Sidebar({super.key});
@@ -18,8 +18,37 @@ class Sidebar extends ConsumerStatefulWidget {
 }
 
 class _SidebarState extends ConsumerState<Sidebar> {
-  double iconHeight = 8.0;
-  int? previousSelectedGuildId;
+  Widget iconBuilder(Guild guild) {
+    if (guild.icon != null) {
+      return ClipRRect(
+          borderRadius: const BorderRadius.all(Radius.circular(100)),
+          child: guild.icon!);
+    } else {
+      String iconText = "";
+      List<String> words = guild.name.split(" ");
+      for (String word in words) {
+        iconText += word[0];
+      }
+      // Shrink font size when icon text is longer up to a certain amount
+      double iconTextSize = max(
+          CustomTextTheme().titleSmall.fontSize! - 4 * max(words.length - 3, 0),
+          10);
+      return Container(
+          decoration: BoxDecoration(
+              color: Theme.of(context).custom.colorTheme.foreground,
+              borderRadius: const BorderRadius.all(Radius.circular(100))),
+          width: 50,
+          height: 47,
+          child: Center(
+              child: Text(
+            iconText,
+            style: CustomTextTheme().titleSmall.copyWith(
+                  fontSize: iconTextSize,
+                ),
+            maxLines: 1,
+          )));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,9 +74,35 @@ class _SidebarState extends ConsumerState<Sidebar> {
               itemBuilder: (context, index) {
                 return Column(
                   children: [
-                    SidebarIcon(
-                      selected: selectedGuildId == guildList[index].id,
-                      guild: guildList[index],
+                    Stack(
+                      children: [
+                        (selectedGuildId == guildList[index].id)
+                            ? Container(
+                                height: 47,
+                                width: 4,
+                                decoration: const BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.only(
+                                      bottomRight: Radius.circular(8),
+                                      topRight: Radius.circular(8),
+                                    )),
+                              )
+                            : const SizedBox(),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 7),
+                          child: TextButton(
+                            style: TextButton.styleFrom(
+                                padding: EdgeInsets.zero,
+                                minimumSize: const Size(0, 0)),
+                            onPressed: () {
+                              ref
+                                  .read(guildControllerProvider.notifier)
+                                  .setGuild(guildList[index].id);
+                            },
+                            child: iconBuilder(guildList[index]),
+                          ),
+                        ),
+                      ],
                     ),
                     const SizedBox(
                       height: 8,
@@ -56,90 +111,6 @@ class _SidebarState extends ConsumerState<Sidebar> {
                 );
               },
             )),
-      ),
-    );
-  }
-}
-
-class SidebarIcon extends ConsumerStatefulWidget {
-  final bool selected;
-  final Guild guild;
-
-  const SidebarIcon({Key? key, required this.selected, required this.guild})
-      : super(key: key);
-
-  @override
-  ConsumerState<SidebarIcon> createState() => _SidebarIconState();
-}
-
-class _SidebarIconState extends ConsumerState<SidebarIcon> {
-  Future<double> get iconHeight => Future<double>.value(40);
-
-  Widget iconBuilder(Guild guild) {
-    if (guild.icon != null) {
-      return ClipRRect(
-          borderRadius: const BorderRadius.all(Radius.circular(100)),
-          child: guild.icon!);
-    } else {
-      return Container(
-          decoration: BoxDecoration(
-              color: Theme.of(context).custom.colorTheme.foreground,
-              borderRadius: const BorderRadius.all(Radius.circular(100))),
-          width: 50,
-          height: 47,
-          child: Center(
-              child: Text(guild.name[0], style: CustomTextTheme().titleSmall)));
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: 60,
-      child: Stack(
-        alignment: Alignment.centerLeft,
-        children: [
-          Center(
-            child: SizedBox(
-              width: 45,
-              height: 45,
-              child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 0),
-                  child: TextButton(
-                      style: TextButton.styleFrom(
-                        padding: EdgeInsets.zero,
-                        minimumSize: const Size(0, 0),
-                      ),
-                      onPressed: () {
-                        ref
-                            .read(guildControllerProvider.notifier)
-                            .setGuild(widget.guild.id);
-                      },
-                      child: iconBuilder(widget.guild))),
-            ),
-          ),
-          if (widget.selected)
-            Positioned(
-              left: 0,
-              child: FutureBuilder<double>(
-                future: iconHeight,
-                builder: (context, snapshot) {
-                  return AnimatedContainer(
-                    duration: const Duration(milliseconds: 200),
-                    curve: Curves.easeInOutExpo,
-                    width: 4,
-                    height: snapshot.data ?? 8,
-                    decoration: const BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.only(
-                          bottomRight: Radius.circular(8),
-                          topRight: Radius.circular(8),
-                        )),
-                  );
-                },
-              ),
-            )
-        ],
       ),
     );
   }
