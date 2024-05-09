@@ -52,14 +52,10 @@ class _ChannelsListState extends ConsumerState<ChannelsList> {
     });
 
     return Padding(
-      padding: EdgeInsets.only(top: topPadding, right: 35),
+      padding: EdgeInsets.only(top: topPadding, right: 30),
       child: Container(
         height: double.infinity,
         decoration: BoxDecoration(
-          borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(30),
-            topRight: Radius.circular(8),
-          ),
           color: Theme.of(context).custom.colorTheme.foreground,
         ),
         child: ListView.builder(
@@ -152,21 +148,7 @@ class _ChannelButtonState extends ConsumerState<ChannelButton> {
                     const SizedBox(width: 8),
                     Text(widget.channel.name,
                         textAlign: TextAlign.left,
-                        style: Theme.of(context)
-                            .custom
-                            .textTheme
-                            .bodyText1
-                            .copyWith(
-                              color: selected
-                                  ? Theme.of(context)
-                                      .custom
-                                      .colorTheme
-                                      .textColor1
-                                  : Theme.of(context)
-                                      .custom
-                                      .colorTheme
-                                      .textColor2,
-                            )),
+                        style: Theme.of(context).custom.textTheme.bodyText2),
                   ],
                 ),
               ),
@@ -200,14 +182,14 @@ class _CategoryState extends State<Category> {
           Padding(
             padding: const EdgeInsets.only(left: 12),
             child: SizedBox(
-                height: 25,
-                child: Text(
-                  widget.category.name,
-                  style: Theme.of(context).custom.textTheme.bodyText2.copyWith(
-                        color: Theme.of(context).custom.colorTheme.textColor2,
-                        fontWeight: FontWeight.bold,
-                      ),
-                )),
+              height: 25,
+              child: Text(widget.category.name,
+                  style: GoogleFonts.inriaSans(
+                    color: const Color.fromARGB(189, 255, 255, 255),
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                  )),
+            ),
           ),
           SizedBox(
             child: Column(
