@@ -8,8 +8,8 @@ part of 'member.dart';
 
 BonfireGuildMember _$BonfireGuildMemberFromJson(Map<String, dynamic> json) =>
     BonfireGuildMember(
-      id: json['id'] as int,
-      guildId: json['guildId'] as int,
+      id: (json['id'] as num).toInt(),
+      guildId: (json['guildId'] as num).toInt(),
       displayName: json['displayName'] as String,
       name: json['name'] as String,
       iconUrl: json['iconUrl'] as String,

@@ -8,8 +8,8 @@ part of 'message.dart';
 
 BonfireMessage _$BonfireMessageFromJson(Map<String, dynamic> json) =>
     BonfireMessage(
-      id: json['id'] as int,
-      channelId: json['channelId'] as int,
+      id: (json['id'] as num).toInt(),
+      channelId: (json['channelId'] as num).toInt(),
       content: json['content'] as String,
       member:
           BonfireGuildMember.fromJson(json['member'] as Map<String, dynamic>),

@@ -7,7 +7,7 @@ part of 'guild.dart';
 // **************************************************************************
 
 Guild _$GuildFromJson(Map<String, dynamic> json) => Guild(
-      id: json['id'] as int,
+      id: (json['id'] as num).toInt(),
       name: json['name'] as String,
       icon: Utils.imageFromJson(json['icon'] as String),
     );

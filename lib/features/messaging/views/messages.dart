@@ -106,13 +106,25 @@ class _MessageViewState extends ConsumerState<MessageView> {
                   padding: const EdgeInsets.all(12),
                   child: Row(
                     children: [
-                      Text(
-                        (currentGuild != null && currentChannel != null)
-                            ? "# ${currentChannel.name}"
-                            : "",
-                        textAlign: TextAlign.left,
-                        style: Theme.of(context).custom.textTheme.titleSmall,
-                      ),
+                      Expanded(
+                          child: Text(
+                              (currentGuild != null && currentChannel != null)
+                                  ? "# ${currentChannel.name}"
+                                  : "",
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                              softWrap: false,
+                              textAlign: TextAlign.left,
+                              style: Theme.of(context)
+                                  .custom
+                                  .textTheme
+                                  .titleSmall
+                                  .copyWith(
+                                    color: Theme.of(context)
+                                        .custom
+                                        .colorTheme
+                                        .textColor1,
+                                  ))),
                     ],
                   ),
                 ),
@@ -120,7 +132,10 @@ class _MessageViewState extends ConsumerState<MessageView> {
             ),
           ),
           SizedBox(
-            height: height - topPadding - MediaQuery.of(context).padding.bottom - 110,
+            height: height -
+                topPadding -
+                MediaQuery.of(context).padding.bottom -
+                110,
             child: ListView.builder(
               controller: _scrollController,
               itemCount: messages.length,

@@ -8,10 +8,10 @@ part of 'embed.dart';
 
 BonfireEmbed _$BonfireEmbedFromJson(Map<String, dynamic> json) => BonfireEmbed(
       type: $enumDecode(_$EmbedTypeEnumMap, json['type']),
-      thumbnailWidth: json['thumbnailWidth'] as int?,
-      thumbnailHeight: json['thumbnailHeight'] as int?,
-      contentWidth: json['contentWidth'] as int?,
-      contentHeight: json['contentHeight'] as int?,
+      thumbnailWidth: (json['thumbnailWidth'] as num?)?.toInt(),
+      thumbnailHeight: (json['thumbnailHeight'] as num?)?.toInt(),
+      contentWidth: (json['contentWidth'] as num?)?.toInt(),
+      contentHeight: (json['contentHeight'] as num?)?.toInt(),
       thumbnailUrl: json['thumbnailUrl'] as String?,
       imageUrl: json['imageUrl'] as String?,
       title: json['title'] as String?,
@@ -19,7 +19,7 @@ BonfireEmbed _$BonfireEmbedFromJson(Map<String, dynamic> json) => BonfireEmbed(
       provider: json['provider'] as String?,
       videoUrl: json['videoUrl'] as String?,
       proxiedUrl: json['proxiedUrl'] as String?,
-      color: const ColorConverter().fromJson(json['color'] as int?),
+      color: const ColorConverter().fromJson((json['color'] as num?)?.toInt()),
     );
 
 Map<String, dynamic> _$BonfireEmbedToJson(BonfireEmbed instance) =>

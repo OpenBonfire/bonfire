@@ -8,10 +8,10 @@ part of 'channel.dart';
 
 BonfireChannel _$BonfireChannelFromJson(Map<String, dynamic> json) =>
     BonfireChannel(
-      id: json['id'] as int,
+      id: (json['id'] as num).toInt(),
       name: json['name'] as String,
       type: $enumDecode(_$BonfireChannelTypeEnumMap, json['type']),
-      position: json['position'] as int,
+      position: (json['position'] as num).toInt(),
       parent: json['parent'] == null
           ? null
           : BonfireChannel.fromJson(json['parent'] as Map<String, dynamic>),
