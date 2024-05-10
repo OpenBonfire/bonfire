@@ -10,7 +10,7 @@ import 'package:bonfire/shared/models/embed.dart';
 import 'package:bonfire/shared/models/member.dart';
 import 'package:bonfire/shared/models/message.dart';
 import 'package:flutter/widgets.dart';
-import 'package:nyxx/nyxx.dart' as nyxx;
+import 'package:firebridge/firebridge.dart' as firebridge;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:http/http.dart' as http;
@@ -43,7 +43,7 @@ extension HexColor on Color {
 class Messages extends _$Messages {
   AuthUser? user;
   bool listenerRunning = false;
-  Map<int, nyxx.Message?> oldestMessage = {};
+  Map<int, firebridge.Message?> oldestMessage = {};
   DateTime lastFetchTime = DateTime.now();
 
   final _cacheManager = CacheManager(
@@ -69,9 +69,9 @@ class Messages extends _$Messages {
     return [];
   }
 
-  Future<void> runPreCacheRoutine(nyxx.Channel channel) async {
+  Future<void> runPreCacheRoutine(firebridge.Channel channel) async {
     var authOutput = ref.watch(authProvider.notifier).getAuth();
-    if (authOutput is AuthUser && channel is nyxx.TextChannel) {
+    if (authOutput is AuthUser && channel is firebridge.TextChannel) {
       var age = await getAgeOfMessageEntry(channel.id.value);
       if (age == null || age.inDays > 1) {
         getMessages(authOutput, channel.id.value,
@@ -108,8 +108,8 @@ class Messages extends _$Messages {
     if ((authOutput != null) && (authOutput is AuthUser)) {
       user = authOutput;
       var textChannel = await user!.client.channels
-          .get(nyxx.Snowflake(channelId)) as nyxx.TextChannel;
-      var beforeSnowflake = before != null ? nyxx.Snowflake(before) : null;
+          .get(firebridge.Snowflake(channelId)) as firebridge.TextChannel;
+      var beforeSnowflake = before != null ? firebridge.Snowflake(before) : null;
 
       // don't load messages until this one returns
       // the lock only applies if the method itself also intends on locking the request
@@ -148,8 +148,8 @@ class Messages extends _$Messages {
           oldestMessage[channelId] = message;
         }
         var username = message.author.username;
-        if (message.author is nyxx.User) {
-          var user = message.author as nyxx.User;
+        if (message.author is firebridge.User) {
+          var user = message.author as firebridge.User;
           username = user.globalName ?? username;
         }
 
@@ -341,8 +341,8 @@ class Messages extends _$Messages {
         (_channelId != null)) {
       user = authOutput;
       var textChannel = await user!.client.channels
-          .get(nyxx.Snowflake(_channelId)) as nyxx.TextChannel;
-      await textChannel.sendMessage(nyxx.MessageBuilder(
+          .get(firebridge.Snowflake(_channelId)) as firebridge.TextChannel;
+      await textChannel.sendMessage(firebridge.MessageBuilder(
         content: message,
       ));
       return true;

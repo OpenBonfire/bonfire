@@ -313,6 +313,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "7.0.0"
+  firebridge:
+    dependency: "direct main"
+    description:
+      name: firebridge
+      sha256: "8bc6da5af7a352b7d5482870a0cdf40d9d077b1b69f1b8f0bcfe6d8d8fde20a5"
+      url: "https://pub.dev"
+    source: hosted
+    version: "6.2.2"
+  firebridge_extensions:
+    dependency: "direct main"
+    description:
+      name: firebridge_extensions
+      sha256: f8f57e014d3019ad39a0ad04c4ebb67289696147c8181fcd15d02fd0abcb40a1
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.1.0"
   fireview:
     dependency: "direct main"
     description:
@@ -814,24 +830,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.0"
-  nyxx:
-    dependency: "direct main"
-    description:
-      path: "."
-      ref: dev
-      resolved-ref: a917fe91d3cd3f886fca37b4a20703847b4324d4
-      url: "https://github.com/Bonfire-Development/firebridge"
-    source: git
-    version: "6.2.2"
-  nyxx_extensions:
-    dependency: "direct main"
-    description:
-      path: "."
-      ref: HEAD
-      resolved-ref: "6d6fc16d552a4ff2f1f2a7039d5e1be561c2de9c"
-      url: "https://github.com/Bonfire-Development/firebridge_extensions"
-    source: git
-    version: "4.1.3"
   oauth2:
     dependency: transitive
     description:

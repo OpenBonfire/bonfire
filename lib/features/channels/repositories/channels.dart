@@ -8,8 +8,8 @@ import 'package:bonfire/features/messaging/repositories/messages.dart';
 import 'package:bonfire/shared/models/channel.dart';
 import 'package:bonfire/shared/models/guild.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
-import 'package:nyxx_extensions/nyxx_extensions.dart';
-import 'package:nyxx/nyxx.dart';
+import 'package:firebridge_extensions/firebridge_extensions.dart';
+import 'package:firebridge/firebridge.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:collection/collection.dart';
 

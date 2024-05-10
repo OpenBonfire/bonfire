@@ -1,5 +1,5 @@
 import 'package:bonfire/features/auth/models/auth.dart';
-import 'package:nyxx/nyxx.dart';
+import 'package:firebridge/firebridge.dart';
 
 class AuthUser extends AuthResponse {
   final NyxxGateway client;

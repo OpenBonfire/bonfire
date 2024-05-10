@@ -2,7 +2,7 @@ import 'package:bonfire/features/auth/data/repositories/auth.dart';
 import 'package:bonfire/features/auth/data/repositories/discord_auth.dart';
 import 'package:bonfire/shared/models/guild.dart';
 import 'package:flutter/widgets.dart';
-import 'package:nyxx/nyxx.dart' as nyxx;
+import 'package:firebridge/firebridge.dart' as firebridge;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 
@@ -33,7 +33,7 @@ class Guilds extends _$Guilds {
     if ((authOutput != null) & (authOutput! is AuthUser)) {
       user = authOutput as AuthUser;
 
-      List<nyxx.UserGuild> userGuilds = await user!.client.listGuilds();
+      List<firebridge.UserGuild> userGuilds = await user!.client.listGuilds();
       List<Future<Guild>> guildFutures = userGuilds.map((guild) async {
         // Async icon lookup for speed
         // guild.fetchPreview();

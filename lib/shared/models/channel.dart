@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:nyxx/nyxx.dart';
+import 'package:firebridge/firebridge.dart';
 
 part 'channel.g.dart';
 

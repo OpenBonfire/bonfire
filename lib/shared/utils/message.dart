@@ -1,17 +1,17 @@
 import 'dart:convert';
 import 'dart:typed_data';
 import 'package:flutter/widgets.dart';
-import 'package:nyxx/nyxx.dart' as nyxx;
+import 'package:firebridge/firebridge.dart' as firebridge;
 import 'package:bonfire/shared/models/member.dart';
 import 'package:bonfire/shared/models/message.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 
 class MessageConverter {
   static Future<BonfireMessage> convert(
-      nyxx.Message message, int guildId) async {
+      firebridge.Message message, int guildId) async {
     var username = message.author.username;
-    if (message.author is nyxx.User) {
-      var user = message.author as nyxx.User;
+    if (message.author is firebridge.User) {
+      var user = message.author as firebridge.User;
       username = user.globalName ?? username;
     }
 
@@ -32,7 +32,7 @@ class MessageConverter {
     return bonfireMessage;
   }
 
-  static Future<Uint8List> fetchMemberAvatar(nyxx.MessageAuthor user) async {
+  static Future<Uint8List> fetchMemberAvatar(firebridge.MessageAuthor user) async {
     String cacheKey = user.avatarHash ?? user.id.toString();
 
     var cacheManager = CacheManager(Config('avatar_cache'));
