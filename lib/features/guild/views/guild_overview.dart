@@ -28,7 +28,7 @@ class _GuildOverviewState extends ConsumerState<GuildOverview> {
             decoration: BoxDecoration(
                 color: Theme.of(context).custom.colorTheme.foreground,
                 borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(15), topRight: Radius.circular(8)),
+                    topLeft: Radius.circular(30), topRight: Radius.circular(8)),
                 border: Border(
                     bottom: BorderSide(
                         color:
@@ -39,10 +39,12 @@ class _GuildOverviewState extends ConsumerState<GuildOverview> {
               child: Row(
                 children: [
                   Padding(
-                    padding: const EdgeInsets.only(left: 10.0),
+                    padding: const EdgeInsets.only(left: 15.0),
                     child: Text(
                       guildTitle,
-                      style: CustomTextTheme().titleSmall,
+                      style: CustomTextTheme().titleSmall.copyWith(
+                            color: Colors.white,
+                          ),
                     ),
                   ),
                   Transform.rotate(
