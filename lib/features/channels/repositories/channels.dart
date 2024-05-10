@@ -115,7 +115,8 @@ class Channels extends _$Channels {
         if (ref.read(guildControllerProvider) == lastGuild) {
           state = AsyncValue.data(channels);
         } else {
-          print("guild changed, not updating channels");
+          print(
+              "Not updating state! This is because the current guild ID is ${ref.read(guildControllerProvider)} is not the same as the last guild ID $lastGuild.");
         }
       }
     }

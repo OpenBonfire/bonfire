@@ -110,7 +110,8 @@ class Messages extends _$Messages {
       user = authOutput;
       var textChannel = await user!.client.channels
           .get(firebridge.Snowflake(channelId)) as firebridge.TextChannel;
-      var beforeSnowflake = before != null ? firebridge.Snowflake(before) : null;
+      var beforeSnowflake =
+          before != null ? firebridge.Snowflake(before) : null;
 
       // don't load messages until this one returns
       // the lock only applies if the method itself also intends on locking the request
@@ -123,11 +124,10 @@ class Messages extends _$Messages {
 
       // load 50 messages, could be 100 max but unnecessary
 
-      print("loading messages!");
+      print("Loading messages!");
       var messages = await textChannel.messages
           .fetchMany(limit: count ?? 50, before: beforeSnowflake);
-      print("loaded!");
-      print(messages);
+      print("Loaded ${messages.length} messages");
       List<Uint8List> memberAvatars = [];
 
       if (requestAvatar == true) {
