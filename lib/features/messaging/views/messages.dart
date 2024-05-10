@@ -45,7 +45,6 @@ class _MessageViewState extends ConsumerState<MessageView> {
   }
 
   void _loadMoreMessages() {
-    
     ref.read(messagesProvider.notifier).fetchMoreMessages();
   }
 

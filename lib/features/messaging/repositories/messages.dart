@@ -106,6 +106,7 @@ class Messages extends _$Messages {
     bool? requestAvatar = true,
   }) async {
     if ((authOutput != null) && (authOutput is AuthUser)) {
+      print("got auth!");
       user = authOutput;
       var textChannel = await user!.client.channels
           .get(firebridge.Snowflake(channelId)) as firebridge.TextChannel;
@@ -113,13 +114,20 @@ class Messages extends _$Messages {
 
       // don't load messages until this one returns
       // the lock only applies if the method itself also intends on locking the request
+
+      print("at lock");
+
+      if (loadingMessages == true) return;
+
       if (lock == true) enableLock();
 
-      if (loadingMessages == true && lock == true) return;
-
       // load 50 messages, could be 100 max but unnecessary
+
+      print("loading messages!");
       var messages = await textChannel.messages
           .fetchMany(limit: count ?? 50, before: beforeSnowflake);
+      print("loaded!");
+      print(messages);
       List<Uint8List> memberAvatars = [];
 
       if (requestAvatar == true) {
@@ -228,6 +236,8 @@ class Messages extends _$Messages {
       if (channelId == ref.read(channelControllerProvider)) {
         state = AsyncData(channelMessagesMap[channelId.toString()] ?? []);
       }
+    } else {
+      print("no auth output");
     }
   }
 
@@ -291,6 +301,7 @@ class Messages extends _$Messages {
     var authOutput = ref.watch(authProvider.notifier).getAuth();
     var channelId = ref.watch(channelControllerProvider);
     if (channelId != null) {
+      print("getting messages...");
       getMessages(authOutput, channelId,
           before: oldestMessage[channelId]!.id.value);
     }
