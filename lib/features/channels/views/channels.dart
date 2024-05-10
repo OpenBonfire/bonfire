@@ -84,7 +84,7 @@ class _ChannelsListState extends ConsumerState<ChannelsList> {
               }
 
               return StickyHeader(
-                header: (index == 0) ? const GuildOverview(): Container(),
+                header: (index == 0) ? const GuildOverview() : Container(),
                 content: ret ?? Container(),
               );
             }
@@ -156,23 +156,27 @@ class _ChannelButtonState extends ConsumerState<ChannelButton> {
                   children: [
                     BonfireIcons.channelIcons[widget.channel.type]!,
                     const SizedBox(width: 8),
-                    Text(widget.channel.name,
-                        textAlign: TextAlign.left,
-                        style: Theme.of(context)
-                            .custom
-                            .textTheme
-                            .bodyText1
-                            .copyWith(
-                              color: selected
-                                  ? Theme.of(context)
-                                      .custom
-                                      .colorTheme
-                                      .textColor1
-                                  : Theme.of(context)
-                                      .custom
-                                      .colorTheme
-                                      .textColor2,
-                            )),
+                    Expanded(
+                        child: Text(widget.channel.name,
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
+                            softWrap: false,
+                            textAlign: TextAlign.left,
+                            style: Theme.of(context)
+                                .custom
+                                .textTheme
+                                .bodyText1
+                                .copyWith(
+                                  color: selected
+                                      ? Theme.of(context)
+                                          .custom
+                                          .colorTheme
+                                          .textColor1
+                                      : Theme.of(context)
+                                          .custom
+                                          .colorTheme
+                                          .textColor2,
+                                ))),
                   ],
                 ),
               ),
