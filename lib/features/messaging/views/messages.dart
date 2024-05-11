@@ -147,6 +147,8 @@ class _MessageViewState extends ConsumerState<MessageView> {
                 if (index + 1 < messages.length) {
                   showAuthor = messages[index + 1].member.id ==
                       messages[index].member.id;
+                } else {
+                  showAuthor = false;
                 }
 
                 box ??= MessageBox();

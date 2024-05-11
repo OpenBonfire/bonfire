@@ -20,7 +20,7 @@ class _GuildOverviewState extends ConsumerState<GuildOverview> {
     String guildTitle = currentGuild?.name ?? "Not in a server";
 
     return Padding(
-      padding: const EdgeInsets.only(right: 30.0),
+      padding: const EdgeInsets.only(right: 0),
       child: SizedBox(
           width: double.infinity,
           child: Container(

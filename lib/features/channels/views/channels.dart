@@ -85,7 +85,7 @@ class _ChannelsListState extends ConsumerState<ChannelsList> {
           ),
         ),
         child: Padding(
-          padding: const EdgeInsets.only(top: 12),
+          padding: const EdgeInsets.only(top: 0),
           child: Builder(builder: (context) {
             var colItems = <Widget>[];
             for (var i = 0;
@@ -95,14 +95,23 @@ class _ChannelsListState extends ConsumerState<ChannelsList> {
             }
             return ListView(children: [
               Container(
-                width: 50,
                 height: 100,
-                color: Colors.red,
+                decoration: const BoxDecoration(
+                  color: Color.fromARGB(255, 68, 69, 74),
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(24),
+                    topRight: Radius.circular(12)
+                  ),
+                
+                ),
               ),
               StickyHeader(
                 header: const GuildOverview(),
-                content: Column(
-                  children: colItems,
+                content: Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: Column(
+                    children: colItems,
+                  ),
                 ),
               )
             ]);
