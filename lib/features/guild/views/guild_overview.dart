@@ -19,16 +19,14 @@ class _GuildOverviewState extends ConsumerState<GuildOverview> {
     var currentGuild = ref.watch(currentGuildControllerProvider);
     String guildTitle = currentGuild?.name ?? "Not in a server";
 
-    return Padding(
-      padding: const EdgeInsets.only(right: 0),
-      child: SizedBox(
+    return SizedBox(
           width: double.infinity,
           child: Container(
             height: 60,
             decoration: BoxDecoration(
                 color: Theme.of(context).custom.colorTheme.foreground,
                 borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(30), topRight: Radius.circular(8)),
+                    topLeft: Radius.circular(0), topRight: Radius.circular(0)),
                 border: Border(
                     bottom: BorderSide(
                         color:
@@ -53,7 +51,6 @@ class _GuildOverviewState extends ConsumerState<GuildOverview> {
                 ],
               ),
             ),
-          )),
-    );
+          ));
   }
 }

@@ -93,28 +93,36 @@ class _ChannelsListState extends ConsumerState<ChannelsList> {
                 i++) {
               colItems.add(buildChannelButton(i));
             }
-            return ListView(children: [
-              Container(
-                height: 100,
-                decoration: const BoxDecoration(
-                  color: Color.fromARGB(255, 68, 69, 74),
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(24),
-                    topRight: Radius.circular(12)
-                  ),
-                
-                ),
+            return ClipRRect(
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(24),
+                topRight: Radius.circular(8),
               ),
-              StickyHeader(
-                header: const GuildOverview(),
-                content: Padding(
-                  padding: const EdgeInsets.only(top: 8.0),
-                  child: Column(
-                    children: colItems,
+              child: ListView(
+                padding: EdgeInsets.zero,
+                children: [
+                Container(
+                  height: 100,
+                  decoration: const BoxDecoration(
+                    color: Color.fromARGB(255, 68, 69, 74),
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(24),
+                      topRight: Radius.circular(12)
+                    ),
+                  
                   ),
                 ),
-              )
-            ]);
+                StickyHeader(
+                  header: const GuildOverview(),
+                  content: Padding(
+                    padding: const EdgeInsets.only(top: 8.0),
+                    child: Column(
+                      children: colItems,
+                    ),
+                  ),
+                )
+              ]),
+            );
           }),
         ),
 
