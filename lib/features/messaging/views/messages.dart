@@ -285,6 +285,17 @@ class _MessageBoxState extends ConsumerState<MessageBox>
     return section1 + section2;
   }
 
+  void launchCustomUrl(Uri uri) async {
+  // Check if the URL can be launched
+  if (await canLaunchUrl(uri)) {
+    // Launch the URL
+    await launchUrl(uri);
+  } else {
+    // Handle the case when the URL can't be launched
+    print('Could not launch $uri');
+  }
+}
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -417,6 +428,9 @@ class _MessageBoxState extends ConsumerState<MessageBox>
                       },
                       onTapLink: (href, title) {
                         print("Tapped link: $href");
+                        launchUrl(Uri.parse(href!),
+                        mode: LaunchMode.externalApplication
+                        );
                       },
                       styleSheet: MarkdownStyle(
                         paragraph: Theme.of(context).custom.textTheme.bodyText1,
