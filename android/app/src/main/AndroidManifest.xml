@@ -48,12 +48,20 @@
 
         <intent>
             <action android:name="android.intent.action.PROCESS_TEXT" />
-            <action android:name="android.support.customtabs.action.CustomTabsService" />
-            <action android:name="android.intent.action.VIEW" />
-
             <data android:mimeType="text/plain" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
             <data android:scheme="sms" />
+        </intent>
+        <!-- If your app checks for call support -->
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
             <data android:scheme="tel" />
+        </intent>
+        <!-- If your application checks for inAppBrowserView launch mode support -->
+        <intent>
+            <action android:name="android.support.customtabs.action.CustomTabsService" />
         </intent>
     </queries>
 </manifest>
