@@ -305,7 +305,7 @@ class _MessageBoxState extends ConsumerState<MessageBox>
       ),
       onPressed: () {},
       child: Padding(
-        padding: EdgeInsets.only(top: widget.showSenderInfo ? 16 : 0),
+        padding: EdgeInsets.only(top: widget.showSenderInfo ? 8 : 0, bottom: 8),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -341,7 +341,6 @@ class _MessageBoxState extends ConsumerState<MessageBox>
                     padding: EdgeInsets.only(right: 8),
                     child: SizedBox(
                       width: 45,
-                      height: 45,
                     ),
                   ),
             Column(

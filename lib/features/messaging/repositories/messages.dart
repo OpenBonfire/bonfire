@@ -213,7 +213,7 @@ class Messages extends _$Messages {
             member: BonfireGuildMember(
               id: message.author.id.value,
               name: message.author.username,
-              iconUrl: message.author.avatar!.url.toString(),
+              iconUrl: message.author.avatar?.url.toString() ?? "",
               icon: (memberAvatar != null) ? Image.memory(memberAvatar) : null,
               displayName: username,
               guildId: guildId ??

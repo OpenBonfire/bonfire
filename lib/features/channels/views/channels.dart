@@ -1,6 +1,7 @@
 import 'package:bonfire/features/channels/controllers/channel.dart';
 import 'package:bonfire/features/channels/repositories/channels.dart';
 import 'package:bonfire/features/guild/views/guild_overview.dart';
+// import 'package:bonfire/features/guild/views/guild_overview.dart';
 import 'package:bonfire/features/overview/views/overlapping_panels.dart';
 import 'package:bonfire/shared/models/channel.dart';
 import 'package:bonfire/shared/utils/icons.dart';
@@ -53,6 +54,25 @@ class _ChannelsListState extends ConsumerState<ChannelsList> {
       }
     });
 
+    Widget buildChannelButton(int index) {
+      if (index < channelsWithoutParent.length) {
+        var channel = channelsWithoutParent[index];
+        return ChannelButton(channel: channel);
+      } else {
+        var categoryIndex = index - channelsWithoutParent.length;
+        var categoryId = categoryMap.keys.elementAt(categoryIndex);
+        var category = channels.firstWhereOrNull(
+          (channel) => channel.id == categoryId,
+        );
+        var children = categoryMap[categoryId] ?? [];
+        if (category != null) {
+          return Category(category: category, children: children);
+        } else {
+          return Container();
+        }
+      }
+    }
+
     return Padding(
       padding: EdgeInsets.only(top: topPadding, right: 30),
       child: Container(
@@ -64,32 +84,35 @@ class _ChannelsListState extends ConsumerState<ChannelsList> {
             topRight: Radius.circular(8),
           ),
         ),
-        child: ListView.builder(
-          padding: const EdgeInsets.only(top: 8),
-          itemCount: channelsWithoutParent.length + categoryMap.length,
-          itemBuilder: (context, index) {
-            Widget? ret;
-            if (index < channelsWithoutParent.length) {
-              var channel = channelsWithoutParent[index];
-              ret = ChannelButton(channel: channel);
-            } else {
-              var categoryIndex = index - channelsWithoutParent.length;
-              var categoryId = categoryMap.keys.elementAt(categoryIndex);
-              var category = channels.firstWhereOrNull(
-                (channel) => channel.id == categoryId,
-              );
-              var children = categoryMap[categoryId] ?? [];
-              if (category != null) {
-                ret = Category(category: category, children: children);
-              }
-
-              return StickyHeader(
-                header: (index == 0) ? const GuildOverview() : Container(),
-                content: ret ?? Container(),
-              );
+        child: Padding(
+          padding: const EdgeInsets.only(top: 12),
+          child: Builder(builder: (context) {
+            var colItems = <Widget>[];
+            for (var i = 0;
+                i < channelsWithoutParent.length + categoryMap.length;
+                i++) {
+              colItems.add(buildChannelButton(i));
             }
-          },
+            return ListView(children: [
+              Container(
+                width: 50,
+                height: 100,
+                color: Colors.red,
+              ),
+              StickyHeader(
+                header: const GuildOverview(),
+                content: Column(
+                  children: colItems,
+                ),
+              )
+            ]);
+          }),
         ),
+
+        // return StickyHeader(
+        //   header: (index == 0) ? const GuildOverview() : Container(),
+        //   content: ret ?? Container(),
+        // );
       ),
     );
   }
@@ -112,7 +135,7 @@ class _ChannelButtonState extends ConsumerState<ChannelButton> {
     bool selected = widget.channel.id == channelController;
 
     return Padding(
-      padding: const EdgeInsets.only(bottom: 2, left: 8, right: 30),
+      padding: const EdgeInsets.only(bottom: 2, left: 8, right: 10),
       child: SizedBox(
         width: double.infinity,
         height: 35,
