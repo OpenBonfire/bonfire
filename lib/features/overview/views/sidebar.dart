@@ -78,6 +78,11 @@ class _SidebarIconState extends ConsumerState<SidebarIcon> {
   Future<double> get iconHeight => Future<double>.value(40);
 
   Widget iconBuilder(Guild guild) {
+    String iconText = "";
+    List<String> words = guild.name.split(" ");
+    for (var word in words) {
+      iconText += word[0];
+    }
     if (guild.icon != null) {
       return ClipRRect(
           borderRadius: const BorderRadius.all(Radius.circular(100)),
@@ -90,7 +95,9 @@ class _SidebarIconState extends ConsumerState<SidebarIcon> {
           width: 50,
           height: 47,
           child: Center(
-              child: Text(guild.name[0], style: CustomTextTheme().titleSmall)));
+              child: Text(iconText,
+                  overflow: TextOverflow.ellipsis,
+                  style: CustomTextTheme().titleSmall.copyWith(fontSize: 12))));
     }
   }
 

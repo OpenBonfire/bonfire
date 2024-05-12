@@ -20,37 +20,38 @@ class _GuildOverviewState extends ConsumerState<GuildOverview> {
     String guildTitle = currentGuild?.name ?? "Not in a server";
 
     return SizedBox(
-          width: double.infinity,
-          child: Container(
-            height: 60,
-            decoration: BoxDecoration(
-                color: Theme.of(context).custom.colorTheme.foreground,
-                borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(0), topRight: Radius.circular(0)),
-                border: Border(
-                    bottom: BorderSide(
-                        color:
-                            Theme.of(context).custom.colorTheme.brightestGray,
-                        width: 1.0))),
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: Row(
-                children: [
-                  Padding(
+        width: double.infinity,
+        child: Container(
+          height: 60,
+          decoration: BoxDecoration(
+              color: Theme.of(context).custom.colorTheme.foreground,
+              borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(15), topRight: Radius.circular(8)),
+              border: Border(
+                  bottom: BorderSide(
+                      color: Theme.of(context).custom.colorTheme.brightestGray,
+                      width: 1.0))),
+          child: Align(
+            alignment: Alignment.centerLeft,
+            child: Row(
+              children: [
+                Flexible(
+                  child: Padding(
                     padding: const EdgeInsets.only(left: 15.0),
                     child: Text(
+                      overflow: TextOverflow.ellipsis,
                       guildTitle,
                       style: CustomTextTheme().titleSmall.copyWith(
                             color: Colors.white,
                           ),
                     ),
                   ),
-                  Transform.rotate(
-                      angle: pi / 2,
-                      child: const Icon(Icons.expand_less_rounded))
-                ],
-              ),
+                ),
+                Transform.rotate(
+                    angle: pi / 2, child: const Icon(Icons.expand_less_rounded))
+              ],
             ),
-          ));
+          ),
+        ));
   }
 }

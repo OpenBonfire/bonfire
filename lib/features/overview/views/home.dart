@@ -53,9 +53,7 @@ class _HomeState extends ConsumerState<HomeScreen> {
         child: const Row(
           children: [
             Sidebar(),
-            Expanded(
-              child: Expanded(child: ChannelsList())
-            )
+            Expanded(child: Expanded(child: ChannelsList()))
           ],
         ),
       ),

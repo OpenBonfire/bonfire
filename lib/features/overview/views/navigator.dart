@@ -76,7 +76,7 @@ class _BarWidgetState extends ConsumerState<BarWidget> {
                     width: 1,
                   )),
                 ),
-                height: 55,
+                height: 75,
                 child: const Padding(
                   padding: EdgeInsets.only(top: 16, left: 18, right: 18),
                   child: Row(

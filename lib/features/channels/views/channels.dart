@@ -98,18 +98,14 @@ class _ChannelsListState extends ConsumerState<ChannelsList> {
                 topLeft: Radius.circular(24),
                 topRight: Radius.circular(8),
               ),
-              child: ListView(
-                padding: EdgeInsets.zero,
-                children: [
+              child: ListView(padding: EdgeInsets.zero, children: [
                 Container(
                   height: 100,
                   decoration: const BoxDecoration(
                     color: Color.fromARGB(255, 68, 69, 74),
                     borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(24),
-                      topRight: Radius.circular(12)
-                    ),
-                  
+                        topLeft: Radius.circular(24),
+                        topRight: Radius.circular(12)),
                   ),
                 ),
                 StickyHeader(
@@ -120,16 +116,11 @@ class _ChannelsListState extends ConsumerState<ChannelsList> {
                       children: colItems,
                     ),
                   ),
-                )
+                ),
               ]),
             );
           }),
         ),
-
-        // return StickyHeader(
-        //   header: (index == 0) ? const GuildOverview() : Container(),
-        //   content: ret ?? Container(),
-        // );
       ),
     );
   }
