@@ -20,12 +20,16 @@ class ChannelsList extends ConsumerStatefulWidget {
 }
 
 class _ChannelsListState extends ConsumerState<ChannelsList> {
+  ScrollController scrollController = ScrollController();
+
   @override
   Widget build(BuildContext context) {
     var topPadding = MediaQuery.of(context).padding.top;
     var channelWatch = ref.watch(channelsProvider);
 
     var channels = channelWatch.valueOrNull ?? [];
+
+    if (scrollController.hasClients) scrollController.jumpTo(0.0);
 
     var channelsWithoutParent = channels
         .where((channel) =>
@@ -98,26 +102,29 @@ class _ChannelsListState extends ConsumerState<ChannelsList> {
                 topLeft: Radius.circular(24),
                 topRight: Radius.circular(8),
               ),
-              child: ListView(padding: EdgeInsets.zero, children: [
-                Container(
-                  height: 100,
-                  decoration: const BoxDecoration(
-                    color: Color.fromARGB(255, 68, 69, 74),
-                    borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(24),
-                        topRight: Radius.circular(12)),
-                  ),
-                ),
-                StickyHeader(
-                  header: const GuildOverview(),
-                  content: Padding(
-                    padding: const EdgeInsets.only(top: 8.0),
-                    child: Column(
-                      children: colItems,
+              child: ListView(
+                  controller: scrollController,
+                  padding: EdgeInsets.zero,
+                  children: [
+                    Container(
+                      height: 100,
+                      decoration: const BoxDecoration(
+                        color: Color.fromARGB(255, 68, 69, 74),
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(24),
+                            topRight: Radius.circular(12)),
+                      ),
                     ),
-                  ),
-                ),
-              ]),
+                    StickyHeader(
+                      header: const GuildOverview(),
+                      content: Padding(
+                        padding: const EdgeInsets.only(top: 8.0),
+                        child: Column(
+                          children: colItems,
+                        ),
+                      ),
+                    ),
+                  ]),
             );
           }),
         ),
