@@ -53,17 +53,17 @@ class _BarWidgetState extends ConsumerState<BarWidget> {
     }
     return AnimatedPositioned(
       duration: const Duration(milliseconds: 300),
-      bottom: visible ? 0 : -80,
+      bottom: visible ? 0 : -80 - MediaQuery.of(context).padding.bottom,
       left: 0,
       right: 0,
-      curve: Curves.easeInOutExpo,
+      curve: Curves.ease,
       child: SlideTransition(
         position: Tween<Offset>(
           begin: const Offset(0.0, 1.0),
           end: Offset.zero,
         ).animate(CurvedAnimation(
           parent: ModalRoute.of(context)!.animation!,
-          curve: Curves.easeInOut,
+          curve: Curves.linear,
         )),
         child: Column(
           children: [
@@ -76,9 +76,9 @@ class _BarWidgetState extends ConsumerState<BarWidget> {
                     width: 1,
                   )),
                 ),
-                height: 75,
+                height: 55,
                 child: const Padding(
-                  padding: EdgeInsets.only(top: 16, left: 18, right: 18),
+                  padding: EdgeInsets.only(top: 10, left: 18, right: 18),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [

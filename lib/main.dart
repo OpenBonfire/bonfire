@@ -16,7 +16,8 @@ void main() async {
   );
 
   WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge, overlays: [SystemUiOverlay.top]);
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge,
+      overlays: [SystemUiOverlay.top]);
 
   await GetStorage.init();
   runApp(const ProviderScope(child: MaterialApp(home: MainWindow())));
@@ -36,6 +37,8 @@ class _MainWindowState extends ConsumerState<MainWindow> {
       systemNavigationBarColor: Colors.transparent,
       systemNavigationBarIconBrightness: Brightness.light,
       statusBarColor: Colors.transparent,
+      systemStatusBarContrastEnforced: false,
+      systemNavigationBarContrastEnforced: false,
     ));
 
     return MaterialApp.router(
