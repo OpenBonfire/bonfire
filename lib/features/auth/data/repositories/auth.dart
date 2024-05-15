@@ -6,7 +6,6 @@ import 'package:bonfire/features/auth/models/auth.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:firebridge/firebridge.dart';
-import 'package:firebridge_extensions/firebridge_extensions.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'auth.g.dart';

@@ -317,10 +317,10 @@ packages:
     dependency: "direct main"
     description:
       name: firebridge
-      sha256: "13631c2c1c1354381353dd1330ffed4027f2a1d6c3dedb1c2dd4350978bfa73a"
+      sha256: "373e42e25de3e266d86a687b0b47039c5404ab216e5bca8bd27bcef00840402b"
       url: "https://pub.dev"
     source: hosted
-    version: "6.2.6"
+    version: "6.2.7"
   firebridge_extensions:
     dependency: "direct main"
     description:
@@ -1587,10 +1587,10 @@ packages:
     dependency: transitive
     description:
       name: webview_flutter_wkwebview
-      sha256: f12f8d8a99784b863e8b85e4a9a5e3cf1839d6803d2c0c3e0533a8f3c5a992a7
+      sha256: "7affdf9d680c015b11587181171d3cad8093e449db1f7d9f0f08f4f33d24f9a0"
       url: "https://pub.dev"
     source: hosted
-    version: "3.13.0"
+    version: "3.13.1"
   webview_win_floating:
     dependency: transitive
     description:

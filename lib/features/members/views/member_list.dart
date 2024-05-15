@@ -76,8 +76,8 @@ class MemberScrollViewState extends ConsumerState<MemberScrollView> {
         ref.watch(guildMembersProvider); //.fetchMembers(currentGuild!.id);
     var memberList = memberListProvider.valueOrNull ?? [];
 
-    print("LOADED MEMBERS!");
-    print(memberList);
+    // print("LOADED MEMBERS!");
+    // print(memberList);
 
     return Center(
       child: ListView.builder(

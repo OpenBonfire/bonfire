@@ -114,22 +114,12 @@ class Messages extends _$Messages {
       // load 50 messages, could be 100 max but unnecessary
 
       print("Loading messages!");
-      if (permissions.canViewChannel == false) {
-        // print("No permissions to view channel ${textChannel.id}");
+      if (permissions.canReadMessageHistory == false) {
         print(
-            "Error fetching messages in channel ${textChannel.id}, likely do not have access to channel bozo!");
+           "Error fetching messages in channel ${textChannel.id}, likely do not have access to channel bozo!");
         removeLock();
         return;
       }
-
-      // try {
-      //   await textChannel.messages.fetchMany(limit: 1);
-      // } catch (e) {
-      //   print(
-      //       "Error fetching messages in channel ${textChannel.id}, likely do not have access to channel bozo!");
-      //   removeLock();
-      //   return;
-      // }
 
       var messages = await textChannel.messages
           .fetchMany(limit: count ?? 50, before: beforeSnowflake);

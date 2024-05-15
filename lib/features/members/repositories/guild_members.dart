@@ -43,14 +43,15 @@ class GuildMembers extends _$GuildMembers {
       var guildSnowflake = Snowflake(guildId);
       print("getting client...");
       print(user);
-      var client = user!.client;
+      // var client = user!.client;
       // print("getting guilds...");
       // var guilds = client.guilds;
       // print("getting guild...");
       // var guild = await guilds.get(guildSnowflake);
       print("getting members...");
       var members = user!.client.gateway.listGuildMembers(
-        guildSnowflake
+        guildSnowflake,
+        limit: 20
       );
 
       print("MEMBERS!");
