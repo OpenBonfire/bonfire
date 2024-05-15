@@ -49,6 +49,28 @@ dependency_overrides:
   webview_flutter_platform_interface: ^2.4.0
   firebridge: ^6.2.6
 
+  media_kit:
+    git:
+      url: https://github.com/media-kit/media-kit
+      path: media_kit
+      ref: main
+  media_kit_video:
+    git:
+      url: https://github.com/media-kit/media-kit
+      path: media_kit_video
+      ref: main
+  media_kit_libs_video:
+    git:
+      url: https://github.com/media-kit/media-kit
+      path: libs/universal/media_kit_libs_video
+      ref: main
+
+  media_kit_native_event_loop:
+    git:
+      url: https://github.com/media-kit/media-kit
+      path: media_kit_native_event_loop
+      ref: main
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

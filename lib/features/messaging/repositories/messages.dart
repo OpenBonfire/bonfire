@@ -66,7 +66,7 @@ class Messages extends _$Messages {
   void enableLock() {
     if (loadingMessages) return;
     loadingMessages = true;
-    lockTimer = Timer(const Duration(seconds: 3), () {
+    lockTimer = Timer(const Duration(seconds: 1), () {
       loadingMessages = false;
     });
   }
