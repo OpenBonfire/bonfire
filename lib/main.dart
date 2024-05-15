@@ -1,3 +1,4 @@
+import 'package:bonfire/features/members/repositories/guild_members.dart';
 import 'package:bonfire/router/controller.dart';
 import 'package:bonfire/theme/theme.dart';
 import 'package:flutter/material.dart';
@@ -40,6 +41,11 @@ class _MainWindowState extends ConsumerState<MainWindow> {
       systemStatusBarContrastEnforced: false,
       systemNavigationBarContrastEnforced: false,
     ));
+
+    // Tree shaker? I hardly know her!
+    // Tree shaking is interesting but super questionable, it breaks eager initialization
+
+    // ref.watch(guildMembersProvider);
 
     return MaterialApp.router(
       title: 'Bonfire',

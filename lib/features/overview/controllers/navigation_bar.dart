@@ -3,6 +3,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'navigation_bar.g.dart';
 
+/// State notifier to bound to overlapping panels navigation
 @riverpod
 class NavigationBar extends _$NavigationBar {
   RevealSide side = RevealSide.main;

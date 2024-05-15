@@ -2,7 +2,6 @@ import 'dart:math';
 
 import 'package:bonfire/features/guild/controllers/guild.dart';
 import 'package:bonfire/features/guild/repositories/guilds.dart';
-import 'package:bonfire/features/overview/widgets/icon.dart';
 import 'package:bonfire/shared/models/guild.dart';
 import 'package:bonfire/theme/text_theme.dart';
 import 'package:bonfire/theme/theme.dart';
@@ -12,6 +11,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+/// Sidebar with icons for each guild
 class Sidebar extends ConsumerStatefulWidget {
   const Sidebar({super.key});
 
@@ -63,6 +63,7 @@ class _SidebarState extends ConsumerState<Sidebar> {
   }
 }
 
+/// Icon for each guild in the sidebar
 class SidebarIcon extends ConsumerStatefulWidget {
   final bool selected;
   final Guild guild;

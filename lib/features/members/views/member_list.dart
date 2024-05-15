@@ -1,7 +1,11 @@
+import 'package:bonfire/features/guild/controllers/current_guild.dart';
+import 'package:bonfire/features/members/repositories/guild_members.dart';
 import 'package:bonfire/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+/// List of members in the selected guild (not implemented)
 class MemberList extends StatefulWidget {
   const MemberList({super.key});
 
@@ -49,22 +53,38 @@ class _MemberListState extends State<MemberList> {
       child: Padding(
           padding: const EdgeInsets.only(left: 0), // 40
           child: Column(
-            children: [topBox()],
+            children: [topBox(), Expanded(child: MemberScrollView())],
           )),
     );
   }
 }
 
-class MemberScrollView extends StatefulWidget {
+class MemberScrollView extends ConsumerStatefulWidget {
   const MemberScrollView({super.key});
 
   @override
-  State<MemberScrollView> createState() => MemberScrollViewState();
+  ConsumerState<MemberScrollView> createState() => MemberScrollViewState();
 }
 
-class MemberScrollViewState extends State<MemberScrollView> {
+class MemberScrollViewState extends ConsumerState<MemberScrollView> {
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    var currentGuild = ref.watch(currentGuildControllerProvider);
+
+    // TODO: Handle if current guild is null
+    var memberListProvider =
+        ref.watch(guildMembersProvider); //.fetchMembers(currentGuild!.id);
+    var memberList = memberListProvider.valueOrNull ?? [];
+
+    print("LOADED MEMBERS!");
+    print(memberList);
+
+    return Center(
+      child: ListView.builder(
+          itemCount: memberList.length,
+          itemBuilder: (context, index) {
+            return Text("Member $index");
+          }),
+    );
   }
 }

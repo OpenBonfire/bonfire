@@ -8,7 +8,9 @@ part of 'navigation_bar.dart';
 
 String _$navigationBarHash() => r'04a40dc6b2a59979dee4759db5125be6106eee24';
 
-/// See also [NavigationBar].
+/// State notifier to bound to overlapping panels navigation
+///
+/// Copied from [NavigationBar].
 @ProviderFor(NavigationBar)
 final navigationBarProvider =
     AutoDisposeNotifierProvider<NavigationBar, RevealSide>.internal(

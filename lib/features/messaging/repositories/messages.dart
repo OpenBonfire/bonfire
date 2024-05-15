@@ -9,6 +9,7 @@ import 'package:bonfire/features/guild/controllers/guild.dart';
 import 'package:bonfire/shared/models/embed.dart';
 import 'package:bonfire/shared/models/member.dart';
 import 'package:bonfire/shared/models/message.dart';
+import 'package:firebridge_extensions/firebridge_extensions.dart';
 import 'package:flutter/widgets.dart';
 import 'package:firebridge/firebridge.dart' as firebridge;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -17,6 +18,7 @@ import 'package:http/http.dart' as http;
 
 part 'messages.g.dart';
 
+/// Message provider for fetching messages from the Discord API
 @Riverpod(keepAlive: false)
 class Messages extends _$Messages {
   AuthUser? user;
@@ -91,6 +93,9 @@ class Messages extends _$Messages {
       var beforeSnowflake =
           before != null ? firebridge.Snowflake(before) : null;
 
+      var channelGuildId = guildId ??
+          ref.read(guildControllerProvider.notifier).currentGuild!.id;
+
       // don't load messages until this one returns
       // the lock only applies if the method itself also intends on locking the request
 
@@ -100,18 +105,31 @@ class Messages extends _$Messages {
 
       if (lock == true) enableLock();
 
+      var selfMember = await user!
+          .client.guilds[firebridge.Snowflake(channelGuildId)].members
+          .get(user!.client.user.id);
+      var permissions = await (textChannel as firebridge.GuildChannel)
+          .computePermissionsFor(selfMember);
+
       // load 50 messages, could be 100 max but unnecessary
 
       print("Loading messages!");
-
-      try {
-        await textChannel.messages.fetchMany(limit: 1);
-      } catch (e) {
+      if (permissions.canViewChannel == false) {
+        // print("No permissions to view channel ${textChannel.id}");
         print(
             "Error fetching messages in channel ${textChannel.id}, likely do not have access to channel bozo!");
         removeLock();
         return;
       }
+
+      // try {
+      //   await textChannel.messages.fetchMany(limit: 1);
+      // } catch (e) {
+      //   print(
+      //       "Error fetching messages in channel ${textChannel.id}, likely do not have access to channel bozo!");
+      //   removeLock();
+      //   return;
+      // }
 
       var messages = await textChannel.messages
           .fetchMany(limit: count ?? 50, before: beforeSnowflake);

@@ -6,9 +6,11 @@ part of 'messages.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$messagesHash() => r'52824f9c88430ff29f16b066fa146160f9df4e48';
+String _$messagesHash() => r'0dfa59ae2459290c9ba69735f5887b834da8b0d3';
 
-/// See also [Messages].
+/// Message provider for fetching messages from the Discord API
+///
+/// Copied from [Messages].
 @ProviderFor(Messages)
 final messagesProvider =
     AutoDisposeAsyncNotifierProvider<Messages, List<BonfireMessage>>.internal(
