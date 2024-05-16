@@ -147,9 +147,6 @@ class _MessageViewState extends ConsumerState<MessageView> {
               ),
             ),
           ),
-          // Container(
-          //   height: MediaQuery.of(context).padding.bottom,
-          // )
           MessageBar(currentChannel: currentChannel as BonfireChannel),
         ],
       ),
@@ -245,6 +242,9 @@ class _MessageBarState extends ConsumerState<MessageBar> {
             },
             backgroundColor: Theme.of(context).custom.colorTheme.blurpleColor,
           ),
+          Container(
+            height: MediaQuery.of(context).padding.bottom,
+          )
         ],
       ),
     );
