@@ -3,6 +3,7 @@ import 'package:bonfire/features/guild/controllers/current_guild.dart';
 import 'package:bonfire/features/messaging/controllers/message_bar.dart';
 import 'package:bonfire/features/messaging/repositories/messages.dart';
 import 'package:bonfire/features/messaging/views/embed.dart';
+import 'package:bonfire/shared/models/channel.dart';
 import 'package:bonfire/shared/models/message.dart';
 import 'package:bonfire/theme/theme.dart';
 import 'package:flutter/material.dart';
@@ -48,21 +49,6 @@ class _MessageViewState extends ConsumerState<MessageView> {
     ref.read(messagesProvider.notifier).fetchMoreMessages();
   }
 
-  Widget _messageBarIcon(Icon icon, void Function() onPressed,
-      {Color? backgroundColor}) {
-    return Padding(
-      padding: const EdgeInsets.all(8),
-      child: Container(
-        decoration: BoxDecoration(
-          color: backgroundColor ??
-              Theme.of(context).custom.colorTheme.cardSelected,
-          shape: BoxShape.circle,
-        ),
-        child: IconButton(icon: icon, onPressed: onPressed),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     var messageOutput = ref.watch(messagesProvider);
@@ -71,7 +57,7 @@ class _MessageViewState extends ConsumerState<MessageView> {
     var height = MediaQuery.of(context).size.height;
 
     var currentGuild = ref.watch(currentGuildControllerProvider);
-    var currentChannel =
+    BonfireChannel? currentChannel =
         ref.read(channelControllerProvider.notifier).getChannel();
 
     return Container(
@@ -162,73 +148,104 @@ class _MessageViewState extends ConsumerState<MessageView> {
               },
             ),
           ),
-          Container(
-            height: 60,
-            decoration: BoxDecoration(
-                color: Theme.of(context).custom.colorTheme.foreground,
-                border: Border.symmetric(
-                  horizontal: BorderSide(
-                    color: Theme.of(context).custom.colorTheme.brightestGray,
-                    width: 1,
-                  ),
-                )),
-            child: Row(
-              children: [
-                _messageBarIcon(
-                  const Icon(
-                    Icons.add,
-                    // TODO: This might be bad for light theme.
-                    color: Colors.white,
-                  ),
-                  () => print("add"),
-                ),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).custom.colorTheme.cardSelected,
-                        borderRadius: BorderRadius.circular(36),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 16),
-                        child: TextField(
-                          controller: messageBarController,
-                          decoration: InputDecoration(
-                            hintText:
-                                'Message #${(currentChannel != null) ? currentChannel.name : ""}',
-                            hintStyle: const TextStyle(color: Colors.white),
-                            border: InputBorder.none,
-                          ),
-                          style: Theme.of(context).custom.textTheme.bodyText1,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                _messageBarIcon(
-                  const Icon(
-                    Icons.send,
-                    color: Colors.white,
-                    weight: 10,
-                  ),
-                  () {
-                    print("sending message: ");
-                    print(messageBarController.text);
-                    ref
-                        .read(messagesProvider.notifier)
-                        .sendMessage(messageBarController.text);
-                    messageBarController.text = "";
-                  },
-                  backgroundColor:
-                      Theme.of(context).custom.colorTheme.blurpleColor,
-                ),
-              ],
-            ),
-          ),
           // Container(
           //   height: MediaQuery.of(context).padding.bottom,
           // )
+          MessageBar(currentChannel: currentChannel as BonfireChannel),
+        ],
+      ),
+    );
+  }
+}
+
+class MessageBar extends ConsumerStatefulWidget {
+  late BonfireChannel? currentChannel;
+
+  MessageBar({super.key, required this.currentChannel});
+
+  @override
+  ConsumerState<ConsumerStatefulWidget> createState() => _MessageBarState();
+}
+
+class _MessageBarState extends ConsumerState<MessageBar> {
+  Widget _messageBarIcon(Icon icon, void Function() onPressed,
+      {Color? backgroundColor}) {
+    return Padding(
+      padding: const EdgeInsets.all(8),
+      child: Container(
+        decoration: BoxDecoration(
+          color: backgroundColor ??
+              Theme.of(context).custom.colorTheme.cardSelected,
+          shape: BoxShape.circle,
+        ),
+        child: IconButton(icon: icon, onPressed: onPressed),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return Container(
+      height: 60,
+      decoration: BoxDecoration(
+          color: Theme.of(context).custom.colorTheme.foreground,
+          border: Border.symmetric(
+            horizontal: BorderSide(
+              color: Theme.of(context).custom.colorTheme.brightestGray,
+              width: 1,
+            ),
+          )),
+      child: Row(
+        children: [
+          _messageBarIcon(
+            const Icon(
+              Icons.add,
+              // TODO: This might be bad for light theme.
+              color: Colors.white,
+            ),
+            () => print("add"),
+          ),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Theme.of(context).custom.colorTheme.cardSelected,
+                  borderRadius: BorderRadius.circular(36),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 16),
+                  child: TextField(
+                    controller: messageBarController,
+                    decoration: InputDecoration(
+                      hintText:
+                          'Message #${(widget.currentChannel != null) ? widget.currentChannel!.name : ""}',
+                      hintStyle: const TextStyle(color: Colors.white),
+                      border: InputBorder.none,
+                    ),
+                    style: Theme.of(context).custom.textTheme.bodyText1,
+                  ),
+                ),
+              ),
+            ),
+          ),
+          _messageBarIcon(
+            const Icon(
+              Icons.send,
+              color: Colors.white,
+              weight: 10,
+            ),
+            () {
+              print("sending message: ");
+              print(messageBarController.text);
+              ref
+                  .read(messagesProvider.notifier)
+                  .sendMessage(messageBarController.text);
+              messageBarController.text = "";
+            },
+            backgroundColor: Theme.of(context).custom.colorTheme.blurpleColor,
+          ),
         ],
       ),
     );
