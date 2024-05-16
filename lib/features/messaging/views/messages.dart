@@ -159,9 +159,9 @@ class _MessageViewState extends ConsumerState<MessageView> {
 }
 
 class MessageBar extends ConsumerStatefulWidget {
-  late BonfireChannel? currentChannel;
+  final BonfireChannel? currentChannel;
 
-  MessageBar({super.key, required this.currentChannel});
+  const MessageBar({super.key, required this.currentChannel});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _MessageBarState();
