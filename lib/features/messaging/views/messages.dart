@@ -6,6 +6,7 @@ import 'package:bonfire/features/messaging/views/embed.dart';
 import 'package:bonfire/shared/models/channel.dart';
 import 'package:bonfire/shared/models/message.dart';
 import 'package:bonfire/theme/theme.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -117,35 +118,33 @@ class _MessageViewState extends ConsumerState<MessageView> {
               ),
             ),
           ),
-          SizedBox(
-            height: height -
-                topPadding -
-                MediaQuery.of(context).padding.bottom -
-                110,
-            child: ListView.builder(
-              controller: _scrollController,
-              itemCount: messages.length,
-              reverse: true,
-              itemBuilder: (context, index) {
-                var box = messageWidgets[messages[index].id];
-                bool showAuthor = true;
+          Expanded(
+            child: SizedBox(
+              child: ListView.builder(
+                controller: _scrollController,
+                itemCount: messages.length,
+                reverse: true,
+                itemBuilder: (context, index) {
+                  var box = messageWidgets[messages[index].id];
+                  bool showAuthor = true;
 
-                if (index + 1 < messages.length) {
-                  showAuthor = messages[index + 1].member.id ==
-                      messages[index].member.id;
-                } else {
-                  showAuthor = false;
-                }
+                  if (index + 1 < messages.length) {
+                    showAuthor = messages[index + 1].member.id ==
+                        messages[index].member.id;
+                  } else {
+                    showAuthor = false;
+                  }
 
-                box ??= MessageBox();
+                  box ??= MessageBox();
 
-                (box as MessageBox);
-                box.setMessage(messages[index]);
-                box.setShowSenderInfo(!showAuthor);
-                messageWidgets[messages[index].id] = box;
+                  (box as MessageBox);
+                  box.setMessage(messages[index]);
+                  box.setShowSenderInfo(!showAuthor);
+                  messageWidgets[messages[index].id] = box;
 
-                return box;
-              },
+                  return box;
+                },
+              ),
             ),
           ),
           // Container(
