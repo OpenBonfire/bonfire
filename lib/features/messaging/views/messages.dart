@@ -3,12 +3,14 @@ import 'package:bonfire/features/guild/controllers/current_guild.dart';
 import 'package:bonfire/features/messaging/controllers/message_bar.dart';
 import 'package:bonfire/features/messaging/repositories/messages.dart';
 import 'package:bonfire/features/messaging/views/embed.dart';
+import 'package:bonfire/features/overview/views/overlapping_panels.dart';
 import 'package:bonfire/shared/models/channel.dart';
 import 'package:bonfire/shared/models/message.dart';
 import 'package:bonfire/theme/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter_keyboard_size/screen_height.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_keyboard_size/flutter_keyboard_size.dart' as keyboard_size;
 import 'package:markdown_viewer/markdown_viewer.dart';
 import 'package:flutter_prism/flutter_prism.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -54,7 +56,6 @@ class _MessageViewState extends ConsumerState<MessageView> {
     var messageOutput = ref.watch(messagesProvider);
     var messages = messageOutput.valueOrNull ?? [];
     var topPadding = MediaQuery.of(context).padding.top;
-    var height = MediaQuery.of(context).size.height;
 
     var currentGuild = ref.watch(currentGuildControllerProvider);
     BonfireChannel? currentChannel =
@@ -117,11 +118,7 @@ class _MessageViewState extends ConsumerState<MessageView> {
               ),
             ),
           ),
-          SizedBox(
-            height: height -
-                topPadding -
-                MediaQuery.of(context).padding.bottom -
-                110,
+          Expanded(
             child: ListView.builder(
               controller: _scrollController,
               itemCount: messages.length,
@@ -148,12 +145,34 @@ class _MessageViewState extends ConsumerState<MessageView> {
               },
             ),
           ),
-          // Container(
-          //   height: MediaQuery.of(context).padding.bottom,
-          // )
           MessageBar(currentChannel: currentChannel),
+          SizedBox(
+            height: MediaQuery.of(context).padding.bottom,
+          ),
+          const KeyboardBuffer()
         ],
       ),
+    );
+  }
+}
+
+class KeyboardBuffer extends StatefulWidget {
+  const KeyboardBuffer({super.key});
+
+  @override
+  State<KeyboardBuffer> createState() => _KeyboardBufferState();
+}
+
+class _KeyboardBufferState extends State<KeyboardBuffer> {
+  @override
+  Widget build(BuildContext context) {
+
+    return keyboard_size.Consumer<ScreenHeight>(
+      builder: (context, screenHeight, child) {
+        return SizedBox(
+          height: screenHeight.keyboardHeight,
+        );
+      },
     );
   }
 }

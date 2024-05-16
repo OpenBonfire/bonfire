@@ -3,6 +3,7 @@ import 'package:bonfire/router/controller.dart';
 import 'package:bonfire/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_keyboard_size/flutter_keyboard_size.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:video_player_media_kit/video_player_media_kit.dart';
@@ -47,11 +48,13 @@ class _MainWindowState extends ConsumerState<MainWindow> {
 
     // ref.watch(guildMembersProvider);
 
-    return MaterialApp.router(
-      title: 'Bonfire',
-      theme: ref.read(lightThemeProvider),
-      darkTheme: ref.read(darkThemeProvider),
-      routerConfig: routerController,
+    return KeyboardSizeProvider(
+      child: MaterialApp.router(
+        title: 'Bonfire',
+        theme: ref.read(lightThemeProvider),
+        darkTheme: ref.read(darkThemeProvider),
+        routerConfig: routerController,
+      ),
     );
   }
 }
