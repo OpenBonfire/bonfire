@@ -249,7 +249,7 @@ class _CategoryState extends State<Category> {
             padding: const EdgeInsets.only(left: 12),
             child: SizedBox(
               height: 25,
-              child: Text(widget.category.name,
+              child: Text(widget.category.name.toUpperCase(),
                   style: GoogleFonts.inriaSans(
                     color: const Color.fromARGB(189, 255, 255, 255),
                     fontSize: 16,

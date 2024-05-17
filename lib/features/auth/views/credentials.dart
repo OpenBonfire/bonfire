@@ -41,7 +41,7 @@ class _LoginState extends ConsumerState<CredentialsScreen> {
           Align(
             alignment: Alignment.centerLeft,
             child: Text(
-              loginType == LoginType.username ? "Username" : "Password",
+              loginType == LoginType.username ? "Email" : "Password",
               style: CustomTextTheme().labelLarge.copyWith(
                     color: Theme.of(context).colorScheme.background,
                   ),
