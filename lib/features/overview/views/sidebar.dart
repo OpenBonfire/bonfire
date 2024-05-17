@@ -36,29 +36,38 @@ class _SidebarState extends ConsumerState<Sidebar> {
         error: (data, trace) {},
         loading: () {});
 
-    return SizedBox(
-      width: 60,
-      height: double.infinity,
-      child: Center(
-        child: SizedBox(
+    return Column(
+      children: [
+        Expanded(
+          child: SizedBox(
             width: 60,
-            child: ListView.builder(
-              itemCount: guildList.length,
-              itemBuilder: (context, index) {
-                return Column(
-                  children: [
-                    SidebarIcon(
-                      selected: selectedGuildId == guildList[index].id,
-                      guild: guildList[index],
-                    ),
-                    const SizedBox(
-                      height: 8,
-                    )
-                  ],
-                );
-              },
-            )),
-      ),
+            height: double.infinity,
+            child: Center(
+              child: SizedBox(
+                  width: 60,
+                  child: ListView.builder(
+                    itemCount: guildList.length,
+                    itemBuilder: (context, index) {
+                      return Column(
+                        children: [
+                          SidebarIcon(
+                            selected: selectedGuildId == guildList[index].id,
+                            guild: guildList[index],
+                          ),
+                          const SizedBox(
+                            height: 8,
+                          )
+                        ],
+                      );
+                    },
+                  )),
+            ),
+          ),
+        ),
+        const SizedBox(
+          height: 56,
+        )
+      ],
     );
   }
 }
