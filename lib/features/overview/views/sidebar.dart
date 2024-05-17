@@ -7,6 +7,7 @@ import 'package:bonfire/theme/text_theme.dart';
 import 'package:bonfire/theme/theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -20,7 +21,6 @@ class Sidebar extends ConsumerStatefulWidget {
 }
 
 class _SidebarState extends ConsumerState<Sidebar> {
-  double iconHeight = 8.0;
   int? previousSelectedGuildId;
 
   @override
@@ -65,7 +65,7 @@ class _SidebarState extends ConsumerState<Sidebar> {
           ),
         ),
         const SizedBox(
-          height: 56,
+          height: 53, // icon height: 45 + spacing height: 8
         )
       ],
     );
@@ -89,9 +89,7 @@ class _SidebarIconState extends ConsumerState<SidebarIcon> {
 
   Widget iconBuilder(Guild guild) {
     if (guild.icon != null) {
-      return ClipRRect(
-          borderRadius: const BorderRadius.all(Radius.circular(100)),
-          child: guild.icon!);
+      return guild.icon!;
     } else {
       String iconText = "";
       List<String> words = guild.name.split(" ");
@@ -100,16 +98,17 @@ class _SidebarIconState extends ConsumerState<SidebarIcon> {
         iconText += word[0];
       }
 
-      return Container(
-          decoration: BoxDecoration(
-              color: Theme.of(context).custom.colorTheme.foreground,
-              borderRadius: const BorderRadius.all(Radius.circular(100))),
+      return SizedBox(
           width: 50,
-          height: 47,
-          child: Center(
-              child: Text(iconText,
-                  overflow: TextOverflow.ellipsis,
-                  style: CustomTextTheme().titleSmall.copyWith(fontSize: 12))));
+          height: 45,
+          child: Container(
+            color: Theme.of(context).custom.colorTheme.foreground,
+            child: Center(
+                child: Text(iconText,
+                    overflow: TextOverflow.ellipsis,
+                    style:
+                        CustomTextTheme().titleSmall.copyWith(fontSize: 12))),
+          ));
     }
   }
 
@@ -136,7 +135,12 @@ class _SidebarIconState extends ConsumerState<SidebarIcon> {
                             .read(guildControllerProvider.notifier)
                             .setGuild(widget.guild.id);
                       },
-                      child: iconBuilder(widget.guild))),
+                      child: ClipRRect(
+                        // TODO: Animate border radius change
+                        borderRadius: BorderRadius.all(
+                            Radius.circular(widget.selected ? 15 : 100)),
+                        child: iconBuilder(widget.guild),
+                      ))),
             ),
           ),
           if (widget.selected)
