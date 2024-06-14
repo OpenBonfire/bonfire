@@ -13,7 +13,8 @@ dependencies:
 
   fireview:
     git:
-      url: https://github.com/Bonfire-Development/fireview
+      url: https://github.com/OpenBonfire/fireview.git
+      ref: a537dad4fa77e0ef99bc69c6bb1eeb6bb0aa65e5
   
   google_fonts: ^6.2.1
   flutter_riverpod: ^2.5.1
