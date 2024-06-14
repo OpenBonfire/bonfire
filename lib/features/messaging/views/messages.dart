@@ -128,9 +128,12 @@ class _MessageViewState extends ConsumerState<MessageView> {
           ),
           Expanded(
             child: ListView.builder(
+              key: const Key("message-list"),
               controller: _scrollController,
               itemCount: messages.length,
               reverse: true,
+              shrinkWrap: true,
+              padding: const EdgeInsets.only(bottom: 14),
               itemBuilder: (context, index) {
                 bool showAuthor = true;
 
