@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:bonfire/features/channels/controllers/channel.dart';
 import 'package:bonfire/features/guild/controllers/current_guild.dart';
 import 'package:bonfire/features/messaging/controllers/message_bar.dart';
@@ -143,7 +141,11 @@ class _MessageViewState extends ConsumerState<MessageView> {
                   showAuthor = false;
                 }
 
-                var box = MessageBox();
+                var key = Key(messages[index].id.toString());
+
+                var box = MessageBox(
+                  key: key,
+                );
                 box.setMessage(messages[index]);
                 box.setShowSenderInfo(!showAuthor);
 
@@ -278,7 +280,7 @@ class _MessageBarState extends ConsumerState<MessageBar> {
 class MessageBox extends ConsumerStatefulWidget {
   BonfireMessage? message;
   bool showSenderInfo = true;
-  MessageBox({Key? key}) : super(key: key);
+  MessageBox({super.key});
 
   @override
   ConsumerState<MessageBox> createState() => _MessageBoxState();
@@ -326,12 +328,9 @@ class _MessageBoxState extends ConsumerState<MessageBox>
   }
 
   void launchCustomUrl(Uri uri) async {
-    // Check if the URL can be launched
     if (await canLaunchUrl(uri)) {
-      // Launch the URL
       await launchUrl(uri);
     } else {
-      // Handle the case when the URL can't be launched
       print('Could not launch $uri');
     }
   }
@@ -345,158 +344,168 @@ class _MessageBoxState extends ConsumerState<MessageBox>
     var name =
         widget.message!.member.nickName ?? widget.message!.member.displayName;
 
-    return OutlinedButton(
-      style: OutlinedButton.styleFrom(
-        padding: const EdgeInsets.symmetric(horizontal: 12),
-        side: const BorderSide(
-          color: Color.fromARGB(0, 255, 255, 255),
-          width: 0.5,
+    return Column(
+      children: [
+        SizedBox(
+          height: widget.showSenderInfo ? 14 : 0,
         ),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(0),
-        ),
-      ),
-      onPressed: () {},
-      child: Padding(
-        padding: EdgeInsets.only(top: widget.showSenderInfo ? 8 : 0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            (widget.showSenderInfo == true)
-                ? Padding(
-                    padding: const EdgeInsets.only(right: 8),
-                    child: SizedBox(
+        OutlinedButton(
+          style: OutlinedButton.styleFrom(
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            minimumSize: const Size(0, 0),
+            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+            side: const BorderSide(
+              color: Color.fromARGB(0, 255, 255, 255),
+              width: 0.5,
+            ),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(0),
+            ),
+          ),
+          onPressed: () {},
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              (widget.showSenderInfo == true)
+                  ? Padding(
+                      padding: const EdgeInsets.only(right: 8),
+                      child: SizedBox(
+                          width: 45,
+                          height: 45,
+                          child: ClipRRect(
+                              borderRadius: BorderRadius.circular(100),
+                              child: (widget.message!.member.icon != null)
+                                  ? Image(
+                                      key: Key(
+                                          "${widget.message!.member.id}-icon"),
+                                      image: widget.message!.member.icon!.image)
+                                  : FutureBuilder(
+                                      future: ref
+                                          .read(messagesProvider.notifier)
+                                          .fetchMemberAvatar(
+                                              widget.message!.member),
+                                      builder: (context, snapshot) {
+                                        if (snapshot.connectionState ==
+                                            ConnectionState.done) {
+                                          return Image.memory(snapshot.data!);
+                                        } else {
+                                          return const SizedBox(
+                                            width: 45,
+                                            height: 45,
+                                          );
+                                        }
+                                      }))))
+                  : const Padding(
+                      padding: EdgeInsets.only(right: 8),
+                      child: SizedBox(
                         width: 45,
-                        height: 45,
-                        child: ClipRRect(
-                            borderRadius: BorderRadius.circular(100),
-                            child: (widget.message!.member.icon != null)
-                                ? Image(
-                                    image: widget.message!.member.icon!.image)
-                                : FutureBuilder(
-                                    future: ref
-                                        .read(messagesProvider.notifier)
-                                        .fetchMemberAvatar(
-                                            widget.message!.member),
-                                    builder: (context, snapshot) {
-                                      if (snapshot.connectionState ==
-                                          ConnectionState.done) {
-                                        return Image.memory(snapshot.data!);
-                                      } else {
-                                        return const SizedBox(
-                                          width: 45,
-                                          height: 45,
-                                        );
-                                      }
-                                    }))))
-                : const Padding(
-                    padding: EdgeInsets.only(right: 8),
-                    child: SizedBox(
-                      width: 45,
+                      ),
                     ),
-                  ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                widget.showSenderInfo
-                    ? SizedBox(
-                        width: width - 100,
-                        child: Wrap(
-                          children: [
-                            Padding(
-                                padding: const EdgeInsets.only(left: 6, top: 0),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  widget.showSenderInfo
+                      ? SizedBox(
+                          width: width - 100,
+                          child: Wrap(
+                            children: [
+                              Padding(
+                                  padding: const EdgeInsets.only(left: 6),
+                                  child: Text(
+                                    name,
+                                    textAlign: TextAlign.left,
+                                    style: const TextStyle(
+                                      color: Color.fromARGB(255, 255, 255, 255),
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  )),
+                              Padding(
+                                // I dislike the top padding, should fix alignment
+                                padding: const EdgeInsets.only(left: 6, top: 4),
                                 child: Text(
-                                  name,
+                                  dateTimeFormat(
+                                      widget.message!.timestamp.toLocal()),
                                   textAlign: TextAlign.left,
+                                  softWrap: true,
+                                  overflow: TextOverflow.fade,
                                   style: const TextStyle(
-                                    color: Color.fromARGB(255, 255, 255, 255),
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
+                                    color: Color.fromARGB(189, 255, 255, 255),
+                                    fontSize: 12,
                                   ),
-                                )),
-                            Padding(
-                              // I dislike the top padding, should fix alignment
-                              padding: const EdgeInsets.only(left: 6, top: 4),
-                              child: Text(
-                                dateTimeFormat(
-                                    widget.message!.timestamp.toLocal()),
-                                textAlign: TextAlign.left,
-                                softWrap: true,
-                                overflow: TextOverflow.fade,
-                                style: const TextStyle(
-                                  color: Color.fromARGB(189, 255, 255, 255),
-                                  fontSize: 12,
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                      )
-                    : const SizedBox(),
-                Padding(
-                  padding: const EdgeInsets.only(left: 6, top: 0),
-                  child: SizedBox(
-                    width: width - 105,
-                    child: MarkdownViewer(
-                      widget.message!.content,
-                      enableTaskList: true,
-                      enableSuperscript: false,
-                      enableSubscript: false,
-                      enableFootnote: false,
-                      enableImageSize: false,
-                      selectable: false,
-                      enableKbd: false,
-                      syntaxExtensions: const [],
-                      elementBuilders: const [],
-                      highlightBuilder: (text, language, infoString) {
-                        final prism = Prism(
-                            style:
-                                Theme.of(context).brightness == Brightness.dark
-                                    ? const PrismStyle.dark()
-                                    : const PrismStyle());
+                            ],
+                          ),
+                        )
+                      : const SizedBox(),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 6, top: 0),
+                    child: SizedBox(
+                      width: width - 105,
+                      child: MarkdownViewer(
+                        widget.message!.content,
+                        enableTaskList: true,
+                        enableSuperscript: false,
+                        enableSubscript: false,
+                        enableFootnote: false,
+                        enableImageSize: false,
+                        selectable: false,
+                        enableKbd: false,
+                        syntaxExtensions: const [],
+                        elementBuilders: const [],
+                        highlightBuilder: (text, language, infoString) {
+                          final prism = Prism(
+                              style: Theme.of(context).brightness ==
+                                      Brightness.dark
+                                  ? const PrismStyle.dark()
+                                  : const PrismStyle());
 
-                        try {
-                          var rendered =
-                              prism.render(text, language ?? 'plain');
-                          return rendered;
-                        } catch (e) {
-                          // fixes grammar issue?
-                          return <TextSpan>[TextSpan(text: text)];
-                        }
-                      },
-                      onTapLink: (href, title) {
-                        print("Tapped link: $href");
-                        launchUrl(Uri.parse(href!),
-                            mode: LaunchMode.externalApplication);
-                      },
-                      styleSheet: MarkdownStyle(
-                        paragraph: Theme.of(context).custom.textTheme.bodyText1,
-                        codeBlock: Theme.of(context).custom.textTheme.bodyText1,
-                        codeblockDecoration: BoxDecoration(
-                            color: Theme.of(context)
-                                .custom
-                                .colorTheme
-                                .cardSelected,
-                            borderRadius: BorderRadius.circular(8)),
+                          try {
+                            var rendered =
+                                prism.render(text, language ?? 'plain');
+                            return rendered;
+                          } catch (e) {
+                            // fixes grammar issue?
+                            return <TextSpan>[TextSpan(text: text)];
+                          }
+                        },
+                        onTapLink: (href, title) {
+                          print("Tapped link: $href");
+                          launchUrl(Uri.parse(href!),
+                              mode: LaunchMode.externalApplication);
+                        },
+                        styleSheet: MarkdownStyle(
+                          paragraph:
+                              Theme.of(context).custom.textTheme.bodyText1,
+                          codeBlock:
+                              Theme.of(context).custom.textTheme.bodyText1,
+                          codeblockDecoration: BoxDecoration(
+                              color: Theme.of(context)
+                                  .custom
+                                  .colorTheme
+                                  .cardSelected,
+                              borderRadius: BorderRadius.circular(8)),
+                        ),
                       ),
                     ),
                   ),
-                ),
-                // add per embed
-                for (var embed in embeds)
-                  Padding(
-                    padding: const EdgeInsets.only(left: 8.0),
-                    child: EmbedWidget(
-                      embed: embed,
-                    ),
-                  )
-              ],
-            ),
-          ],
+                  // add per embed
+                  for (var embed in embeds)
+                    Padding(
+                      padding: const EdgeInsets.only(left: 8.0),
+                      child: EmbedWidget(
+                        embed: embed,
+                      ),
+                    )
+                ],
+              ),
+            ],
+          ),
         ),
-      ),
+      ],
     );
   }
 }

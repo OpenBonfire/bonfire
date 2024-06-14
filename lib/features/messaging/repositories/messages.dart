@@ -158,45 +158,45 @@ class Messages extends _$Messages {
         }
 
         List<BonfireEmbed> embeds = [];
-        message.embeds.forEach((embed) {
-          Color? embedColor;
+        // message.embeds.forEach((embed) {
+        //   Color? embedColor;
 
-          if (embed.color != null) {
-            embedColor = Color.fromRGBO(
-              embed.color!.r,
-              embed.color!.g,
-              embed.color!.b,
-              255,
-            );
-          }
+        //   if (embed.color != null) {
+        //     embedColor = Color.fromRGBO(
+        //       embed.color!.r,
+        //       embed.color!.g,
+        //       embed.color!.b,
+        //       255,
+        //     );
+        //   }
 
-          if (embed.video != null) {
-            embeds.add(BonfireEmbed(
-                type: EmbedType.video,
-                thumbnailWidth: embed.thumbnail?.width,
-                thumbnailHeight: embed.thumbnail?.height,
-                thumbnailUrl: embed.thumbnail?.url.toString(),
-                videoUrl: embed.video?.url.toString(),
-                proxiedUrl: embed.video?.proxiedUrl.toString(),
-                title: embed.title,
-                description: embed.description,
-                provider: embed.provider?.name,
-                color: embedColor));
-          } else if (embed.image != null) {
-            // print("image!");
-            embeds.add(BonfireEmbed(
-              type: EmbedType.image,
-              contentWidth: embed.image?.width,
-              contentHeight: embed.image?.height,
-              thumbnailWidth: embed.thumbnail?.width,
-              thumbnailHeight: embed.thumbnail?.height,
-              provider: embed.provider?.name,
-              thumbnailUrl: embed.thumbnail?.url.toString(),
-            ));
-          } else {
-            // print("unknown embed type: ${embed.fields}");
-          }
-        });
+        //   if (embed.video != null) {
+        //     embeds.add(BonfireEmbed(
+        //         type: EmbedType.video,
+        //         thumbnailWidth: embed.thumbnail?.width,
+        //         thumbnailHeight: embed.thumbnail?.height,
+        //         thumbnailUrl: embed.thumbnail?.url.toString(),
+        //         videoUrl: embed.video?.url.toString(),
+        //         proxiedUrl: embed.video?.proxiedUrl.toString(),
+        //         title: embed.title,
+        //         description: embed.description,
+        //         provider: embed.provider?.name,
+        //         color: embedColor));
+        //   } else if (embed.image != null) {
+        //     // print("image!");
+        //     embeds.add(BonfireEmbed(
+        //       type: EmbedType.image,
+        //       contentWidth: embed.image?.width,
+        //       contentHeight: embed.image?.height,
+        //       thumbnailWidth: embed.thumbnail?.width,
+        //       thumbnailHeight: embed.thumbnail?.height,
+        //       provider: embed.provider?.name,
+        //       thumbnailUrl: embed.thumbnail?.url.toString(),
+        //     ));
+        //   } else {
+        //     // print("unknown embed type: ${embed.fields}");
+        //   }
+        // });
 
         Uint8List? memberAvatar =
             memberAvatars.isNotEmpty ? memberAvatars[i] : null;
