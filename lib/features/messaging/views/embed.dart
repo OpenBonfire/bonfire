@@ -44,9 +44,13 @@ class ImageEmbedState extends ConsumerState<ImageEmbed> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: widget.embed.thumbnailWidth?.toDouble(),
-      height: widget.embed.thumbnailHeight?.toDouble(),
-      child: Image.network(widget.embed.imageUrl!),
+      width: min(widget.embed.thumbnailWidth?.toDouble() ?? double.infinity,
+          MediaQuery.of(context).size.width - 90),
+      child: AspectRatio(
+        aspectRatio: (widget.embed.thumbnailWidth ?? 1) /
+            (widget.embed.thumbnailHeight ?? 1),
+        child: Image.network(widget.embed.imageUrl!, fit: BoxFit.cover),
+      ),
     );
   }
 }
@@ -96,8 +100,6 @@ class VideoEmbedState extends ConsumerState<VideoEmbed> {
 
   @override
   Widget build(BuildContext context) {
-    var key = Key(
-        'video-visibility-${widget.embed.videoUrl ?? widget.embed.proxiedUrl ?? widget.embed.thumbnailUrl ?? widget.embed.imageUrl}');
     return _buildVideoWidget();
   }
 
@@ -118,20 +120,26 @@ class VideoEmbedState extends ConsumerState<VideoEmbed> {
     }
 
     return (widget.embed.provider != "Tenor")
-        ? Image.network(
+        ? SizedBox(
             width: min(widget.embed.thumbnailWidth?.toDouble() ?? 200,
                 MediaQuery.of(context).size.width - 90),
-            widget.embed.thumbnailUrl!)
+            child: AspectRatio(
+              aspectRatio: (widget.embed.thumbnailWidth ?? 1) /
+                  (widget.embed.thumbnailHeight ?? 1),
+              child:
+                  Image.network(widget.embed.thumbnailUrl!, fit: BoxFit.cover),
+            ),
+          )
         : Container(
             height: widget.embed.thumbnailHeight!.toDouble(),
             width: min(widget.embed.thumbnailWidth!.toDouble(),
                 MediaQuery.of(context).size.width - 90),
             child: ClipRRect(
-              // widget.embed.videoUrl!
               borderRadius: BorderRadius.circular(12),
               child: (widget.embed.videoUrl != null)
                   ? Video(
                       controller: controller,
+                      fit: BoxFit.cover,
                     )
                   : const Text("URL is null"),
             ),
@@ -185,7 +193,7 @@ class _WebVideoState extends ConsumerState<WebVideo> {
                 });
               });
             },
-            child: Image.network(widget.embed.thumbnailUrl!),
+            child: Image.network(widget.embed.thumbnailUrl!, fit: BoxFit.cover),
           );
   }
 

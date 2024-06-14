@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:bonfire/features/channels/controllers/channel.dart';
 import 'package:bonfire/features/guild/controllers/current_guild.dart';
 import 'package:bonfire/features/messaging/controllers/message_bar.dart';
@@ -10,7 +12,8 @@ import 'package:bonfire/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_size/screen_height.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_keyboard_size/flutter_keyboard_size.dart' as keyboard_size;
+import 'package:flutter_keyboard_size/flutter_keyboard_size.dart'
+    as keyboard_size;
 import 'package:markdown_viewer/markdown_viewer.dart';
 import 'package:flutter_prism/flutter_prism.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -24,7 +27,6 @@ class MessageView extends ConsumerStatefulWidget {
 
 class _MessageViewState extends ConsumerState<MessageView> {
   final ScrollController _scrollController = ScrollController();
-  Map<int, Widget> messageWidgets = {};
 
   @override
   void initState() {
@@ -40,10 +42,18 @@ class _MessageViewState extends ConsumerState<MessageView> {
   }
 
   void _scrollListener() {
+    var lastRequestUnix = 0.0;
+
     if (_scrollController.position.pixels > 100 &&
         _scrollController.position.pixels >=
             _scrollController.position.maxScrollExtent - 10000) {
-      _loadMoreMessages();
+      // get current time in unix
+      if ((DateTime.now().millisecondsSinceEpoch / 1000) - lastRequestUnix >
+          1) {
+        lastRequestUnix = DateTime.now().millisecondsSinceEpoch / 1000;
+        print("loading...");
+        _loadMoreMessages();
+      }
     }
   }
 
@@ -124,7 +134,6 @@ class _MessageViewState extends ConsumerState<MessageView> {
               itemCount: messages.length,
               reverse: true,
               itemBuilder: (context, index) {
-                var box = messageWidgets[messages[index].id];
                 bool showAuthor = true;
 
                 if (index + 1 < messages.length) {
@@ -134,12 +143,9 @@ class _MessageViewState extends ConsumerState<MessageView> {
                   showAuthor = false;
                 }
 
-                box ??= MessageBox();
-
-                (box as MessageBox);
+                var box = MessageBox();
                 box.setMessage(messages[index]);
                 box.setShowSenderInfo(!showAuthor);
-                messageWidgets[messages[index].id] = box;
 
                 return box;
               },
@@ -166,7 +172,6 @@ class KeyboardBuffer extends StatefulWidget {
 class _KeyboardBufferState extends State<KeyboardBuffer> {
   @override
   Widget build(BuildContext context) {
-
     return keyboard_size.Consumer<ScreenHeight>(
       builder: (context, screenHeight, child) {
         return SizedBox(
@@ -204,7 +209,6 @@ class _MessageBarState extends ConsumerState<MessageBar> {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Container(
       height: 60,
       decoration: BoxDecoration(

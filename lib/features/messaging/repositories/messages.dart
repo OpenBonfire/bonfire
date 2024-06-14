@@ -116,7 +116,7 @@ class Messages extends _$Messages {
       print("Loading messages!");
       if (permissions.canReadMessageHistory == false) {
         print(
-           "Error fetching messages in channel ${textChannel.id}, likely do not have access to channel bozo!");
+            "Error fetching messages in channel ${textChannel.id}, likely do not have access to channel bozo!");
         removeLock();
         return;
       }
