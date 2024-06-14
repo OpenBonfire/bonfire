@@ -81,7 +81,6 @@ class VideoEmbedState extends ConsumerState<VideoEmbed> {
     } else {
       print("video url null!");
     }
-    isVisibleThread();
   }
 
   void isVisibleThread() async {
@@ -130,7 +129,7 @@ class VideoEmbedState extends ConsumerState<VideoEmbed> {
                   Image.network(widget.embed.thumbnailUrl!, fit: BoxFit.cover),
             ),
           )
-        : Container(
+        : SizedBox(
             height: widget.embed.thumbnailHeight!.toDouble(),
             width: min(widget.embed.thumbnailWidth!.toDouble(),
                 MediaQuery.of(context).size.width - 90),

@@ -3,7 +3,6 @@ import 'package:bonfire/features/guild/controllers/current_guild.dart';
 import 'package:bonfire/features/messaging/controllers/message_bar.dart';
 import 'package:bonfire/features/messaging/repositories/messages.dart';
 import 'package:bonfire/features/messaging/views/embed.dart';
-import 'package:bonfire/features/overview/views/overlapping_panels.dart';
 import 'package:bonfire/shared/models/channel.dart';
 import 'package:bonfire/shared/models/message.dart';
 import 'package:bonfire/theme/theme.dart';
@@ -40,18 +39,10 @@ class _MessageViewState extends ConsumerState<MessageView> {
   }
 
   void _scrollListener() {
-    var lastRequestUnix = 0.0;
-
     if (_scrollController.position.pixels > 100 &&
         _scrollController.position.pixels >=
             _scrollController.position.maxScrollExtent - 10000) {
-      // get current time in unix
-      if ((DateTime.now().millisecondsSinceEpoch / 1000) - lastRequestUnix >
-          1) {
-        lastRequestUnix = DateTime.now().millisecondsSinceEpoch / 1000;
-        print("loading...");
-        _loadMoreMessages();
-      }
+      _loadMoreMessages();
     }
   }
 

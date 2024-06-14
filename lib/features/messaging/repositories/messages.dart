@@ -122,7 +122,7 @@ class Messages extends _$Messages {
       }
 
       var messages = await textChannel.messages
-          .fetchMany(limit: count ?? 50, before: beforeSnowflake);
+          .fetchMany(limit: count ?? 100, before: beforeSnowflake);
       print("Loaded ${messages.length} messages");
       List<Uint8List> memberAvatars = [];
 
