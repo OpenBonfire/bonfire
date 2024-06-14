@@ -15,6 +15,7 @@ import 'package:firebridge/firebridge.dart' as firebridge;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter/scheduler.dart';
 
 part 'messages.g.dart';
 
@@ -96,11 +97,6 @@ class Messages extends _$Messages {
       var channelGuildId = guildId ??
           ref.read(guildControllerProvider.notifier).currentGuild!.id;
 
-      // don't load messages until this one returns
-      // the lock only applies if the method itself also intends on locking the request
-
-      print("at lock");
-
       if (loadingMessages == true) return;
 
       if (lock == true) enableLock();
@@ -111,9 +107,6 @@ class Messages extends _$Messages {
       var permissions = await (textChannel as firebridge.GuildChannel)
           .computePermissionsFor(selfMember);
 
-      // load 50 messages, could be 100 max but unnecessary
-
-      print("Loading messages!");
       if (permissions.canReadMessageHistory == false) {
         print(
             "Error fetching messages in channel ${textChannel.id}, likely do not have access to channel bozo!");
@@ -144,94 +137,82 @@ class Messages extends _$Messages {
         );
       }
       removeLock();
+
       List<BonfireMessage> channelMessages = [];
-      for (int i = 0; i < messages.length; i++) {
-        var message = messages[i];
-        if (oldestMessage[channelId] == null ||
-            message.timestamp.isBefore(oldestMessage[channelId]!.timestamp)) {
-          oldestMessage[channelId] = message;
+      var completer = Completer<void>();
+
+      int chunkSize = 10;
+      int currentIndex = 0;
+
+      void processChunk() {
+        int endIndex = currentIndex + chunkSize;
+        if (endIndex > messages.length) endIndex = messages.length;
+
+        for (int i = currentIndex; i < endIndex; i++) {
+          var message = messages[i];
+          if (oldestMessage[channelId] == null ||
+              message.timestamp.isBefore(oldestMessage[channelId]!.timestamp)) {
+            oldestMessage[channelId] = message;
+          }
+          var username = message.author.username;
+          if (message.author is firebridge.User) {
+            var user = message.author as firebridge.User;
+            username = user.globalName ?? username;
+          }
+
+          List<BonfireEmbed> embeds = [];
+
+          Uint8List? memberAvatar =
+              memberAvatars.isNotEmpty ? memberAvatars[i] : null;
+
+          var newMessage = BonfireMessage(
+              id: message.id.value,
+              channelId: channelId,
+              content: message.content,
+              timestamp: message.timestamp,
+              member: BonfireGuildMember(
+                id: message.author.id.value,
+                name: message.author.username,
+                iconUrl: message.author.avatar?.url.toString() ?? "",
+                icon:
+                    (memberAvatar != null) ? Image.memory(memberAvatar) : null,
+                displayName: username,
+                guildId: guildId ??
+                    ref.read(guildControllerProvider.notifier).currentGuild!.id,
+              ),
+              embeds: embeds);
+          channelMessages.add(newMessage);
         }
-        var username = message.author.username;
-        if (message.author is firebridge.User) {
-          var user = message.author as firebridge.User;
-          username = user.globalName ?? username;
-        }
 
-        List<BonfireEmbed> embeds = [];
-        // message.embeds.forEach((embed) {
-        //   Color? embedColor;
+        currentIndex = endIndex;
 
-        //   if (embed.color != null) {
-        //     embedColor = Color.fromRGBO(
-        //       embed.color!.r,
-        //       embed.color!.g,
-        //       embed.color!.b,
-        //       255,
-        //     );
-        //   }
+        if (currentIndex < messages.length) {
+          SchedulerBinding.instance?.addPostFrameCallback((_) {
+            processChunk();
+          });
+        } else {
+          if (before == null) {
+            channelMessagesMap[channelId.toString()] = [];
+          }
+          if (channelMessages.isNotEmpty) {
+            channelMessagesMap[channelId.toString()]!.addAll(channelMessages);
 
-        //   if (embed.video != null) {
-        //     embeds.add(BonfireEmbed(
-        //         type: EmbedType.video,
-        //         thumbnailWidth: embed.thumbnail?.width,
-        //         thumbnailHeight: embed.thumbnail?.height,
-        //         thumbnailUrl: embed.thumbnail?.url.toString(),
-        //         videoUrl: embed.video?.url.toString(),
-        //         proxiedUrl: embed.video?.proxiedUrl.toString(),
-        //         title: embed.title,
-        //         description: embed.description,
-        //         provider: embed.provider?.name,
-        //         color: embedColor));
-        //   } else if (embed.image != null) {
-        //     // print("image!");
-        //     embeds.add(BonfireEmbed(
-        //       type: EmbedType.image,
-        //       contentWidth: embed.image?.width,
-        //       contentHeight: embed.image?.height,
-        //       thumbnailWidth: embed.thumbnail?.width,
-        //       thumbnailHeight: embed.thumbnail?.height,
-        //       provider: embed.provider?.name,
-        //       thumbnailUrl: embed.thumbnail?.url.toString(),
-        //     ));
-        //   } else {
-        //     // print("unknown embed type: ${embed.fields}");
-        //   }
-        // });
+            if (before == null) {
+              cacheMessages(channelMessages, channelId.toString());
+            }
+          }
 
-        Uint8List? memberAvatar =
-            memberAvatars.isNotEmpty ? memberAvatars[i] : null;
+          if (channelId == ref.read(channelControllerProvider)) {
+            state = AsyncData(channelMessagesMap[channelId.toString()] ?? []);
+          }
 
-        var newMessage = BonfireMessage(
-            id: message.id.value,
-            channelId: channelId,
-            content: message.content,
-            timestamp: message.timestamp,
-            member: BonfireGuildMember(
-              id: message.author.id.value,
-              name: message.author.username,
-              iconUrl: message.author.avatar?.url.toString() ?? "",
-              icon: (memberAvatar != null) ? Image.memory(memberAvatar) : null,
-              displayName: username,
-              guildId: guildId ??
-                  ref.read(guildControllerProvider.notifier).currentGuild!.id,
-            ),
-            embeds: embeds);
-        channelMessages.add(newMessage);
-      }
-      if (before == null) {
-        channelMessagesMap[channelId.toString()] = [];
-      }
-      if (channelMessages.isNotEmpty) {
-        channelMessagesMap[channelId.toString()]!.addAll(channelMessages);
-
-        if (before == null) {
-          cacheMessages(channelMessages, channelId.toString());
+          completer.complete();
         }
       }
 
-      if (channelId == ref.read(channelControllerProvider)) {
-        state = AsyncData(channelMessagesMap[channelId.toString()] ?? []);
-      }
+      processChunk();
+
+      return completer.future;
     } else {
       print("no auth output");
     }

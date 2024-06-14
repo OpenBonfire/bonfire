@@ -124,7 +124,7 @@ class _MessageViewState extends ConsumerState<MessageView> {
               itemCount: messages.length,
               reverse: true,
               shrinkWrap: true,
-              padding: const EdgeInsets.only(bottom: 14),
+              padding: const EdgeInsets.only(bottom: 24),
               itemBuilder: (context, index) {
                 bool showAuthor = true;
 
@@ -341,7 +341,7 @@ class _MessageBoxState extends ConsumerState<MessageBox>
     return Column(
       children: [
         SizedBox(
-          height: widget.showSenderInfo ? 14 : 0,
+          height: widget.showSenderInfo ? 16 : 0,
         ),
         OutlinedButton(
           style: OutlinedButton.styleFrom(
