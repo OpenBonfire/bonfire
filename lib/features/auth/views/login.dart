@@ -37,7 +37,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       });
     } else if (auth is AuthUser) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        context.go('/home');
+        context.go('/overview/home');
       });
     }
 

@@ -40,7 +40,7 @@ class _BarWidgetState extends ConsumerState<BarWidget> {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   NavigatorIcon(
-                      path: '/home',
+                      path: '/overview/home',
                       icon: SvgPicture.asset(
                         'assets/icons/home.svg',
                         colorFilter: ColorFilter.mode(
@@ -51,7 +51,7 @@ class _BarWidgetState extends ConsumerState<BarWidget> {
                       ),
                       label: 'Home'),
                   NavigatorIcon(
-                      path: '/messages',
+                      path: '/overview/messages',
                       icon: SvgPicture.asset(
                         'assets/icons/messages.svg',
                         colorFilter: ColorFilter.mode(
@@ -62,7 +62,7 @@ class _BarWidgetState extends ConsumerState<BarWidget> {
                       ),
                       label: 'Messages'),
                   NavigatorIcon(
-                      path: '/notifications',
+                      path: '/overview/notifications',
                       icon: SvgPicture.asset(
                         'assets/icons/notifications.svg',
                         colorFilter: ColorFilter.mode(
