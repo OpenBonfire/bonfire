@@ -6,34 +6,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 
-class PopUpNavigationBar extends StatefulWidget {
-  final OverlappingPanels panel;
-  const PopUpNavigationBar({super.key, required this.panel});
-
-  @override
-  _PopUpNavigationBarState createState() => _PopUpNavigationBarState();
-}
-
-class _PopUpNavigationBarState extends State<PopUpNavigationBar> {
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        widget.panel,
-        BarWidget(
-          key: GlobalKey(
-            debugLabel: "navbar",
-          ),
-          panel: widget.panel,
-        )
-      ],
-    );
-  }
-}
-
 class BarWidget extends ConsumerStatefulWidget {
-  final OverlappingPanels panel;
-  const BarWidget({Key? key, required this.panel}) : super(key: key);
+  const BarWidget({super.key});
 
   @override
   ConsumerState<BarWidget> createState() => _BarWidgetState();
@@ -77,7 +51,7 @@ class _BarWidgetState extends ConsumerState<BarWidget> {
                       ),
                       label: 'Home'),
                   NavigatorIcon(
-                      path: '/home/messages',
+                      path: '/messages',
                       icon: SvgPicture.asset(
                         'assets/icons/messages.svg',
                         colorFilter: ColorFilter.mode(
@@ -114,17 +88,7 @@ class _BarWidgetState extends ConsumerState<BarWidget> {
   @override
   Widget build(BuildContext context) {
     var state = ref.watch(navigationBarProvider);
-    bool currentVisibility = visible;
     visible = state == RevealSide.left;
-
-    if (currentVisibility == visible) {
-      return Positioned(
-        bottom: visible ? 0 : -80 - MediaQuery.of(context).padding.bottom,
-        left: 0,
-        right: 0,
-        child: barComponent(),
-      );
-    }
 
     return AnimatedPositioned(
       duration: const Duration(milliseconds: 300),
@@ -162,8 +126,7 @@ class NavigatorIconState extends State<NavigatorIcon> {
   Widget build(BuildContext context) {
     return OutlinedButton(
       onPressed: () {
-        // navigate to /home using go router
-        GoRouter.of(context).go(widget.path);
+        GoRouter.of(context).push(widget.path);
       },
       style: OutlinedButton.styleFrom(
         padding: const EdgeInsets.all(0),

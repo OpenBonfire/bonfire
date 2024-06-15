@@ -15,21 +15,22 @@ class _UserMessagesViewState extends ConsumerState<UserMessagesView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        resizeToAvoidBottomInset: false,
-        body: PopUpNavigationBar(
-            panel: OverlappingPanels(
-                onSideChange: (value) {
-                  // hide keyboard
-                  FocusScope.of(context).unfocus();
-                  ref.read(navigationBarProvider.notifier).onSideChange(value);
-                },
-                left: SizedBox(
-                  width: MediaQuery.of(context).size.width,
-                  child: const Row(
-                    children: [Text("hey there"), Text("why hello there :D")],
-                  ),
-                ),
-                main: const Text("bruh"),
-                right: const Text("moment"))));
+      resizeToAvoidBottomInset: false,
+      // body: PopUpNavigationBar(
+      //     panel: OverlappingPanels(
+      //         onSideChange: (value) {
+      //           // hide keyboard
+      //           FocusScope.of(context).unfocus();
+      //           ref.read(navigationBarProvider.notifier).onSideChange(value);
+      //         },
+      //         left: SizedBox(
+      //           width: MediaQuery.of(context).size.width,
+      //           child: const Row(
+      //             children: [Text("hey there"), Text("why hello there :D")],
+      //           ),
+      //         ),
+      //         main: const Text("bruh"),
+      //         right: const Text("moment")))
+    );
   }
 }

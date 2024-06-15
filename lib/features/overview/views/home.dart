@@ -44,24 +44,26 @@ class _HomeState extends ConsumerState<HomeScreen> {
 
     return Scaffold(
         resizeToAvoidBottomInset: false,
-        body: PopUpNavigationBar(
-            panel: OverlappingPanels(
-          onSideChange: (value) {
-            // hide keyboard
-            FocusScope.of(context).unfocus();
-            ref.read(navigationBarProvider.notifier).onSideChange(value);
-          },
-          left: SizedBox(
-            width: MediaQuery.of(context).size.width,
-            child: const Row(
-              children: [
-                Sidebar(),
-                Expanded(child: Expanded(child: ChannelsList()))
-              ],
+        body: Stack(children: [
+          OverlappingPanels(
+            onSideChange: (value) {
+              // hide keyboard
+              FocusScope.of(context).unfocus();
+              ref.read(navigationBarProvider.notifier).onSideChange(value);
+            },
+            left: SizedBox(
+              width: MediaQuery.of(context).size.width,
+              child: const Row(
+                children: [
+                  Sidebar(),
+                  Expanded(child: Expanded(child: ChannelsList()))
+                ],
+              ),
             ),
+            main: const MessageView(),
+            right: const MemberList(),
           ),
-          main: const MessageView(),
-          right: const MemberList(),
-        )));
+          const BarWidget()
+        ]));
   }
 }
