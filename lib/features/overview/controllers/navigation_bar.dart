@@ -10,12 +10,10 @@ class NavigationBar extends _$NavigationBar {
 
   @override
   RevealSide build() {
-    print("build called");
     return side;
   }
 
   void onSideChange(RevealSide side) {
-    print("side change called");
     this.side = side;
     state = side;
   }

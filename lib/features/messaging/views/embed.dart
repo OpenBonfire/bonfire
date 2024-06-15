@@ -92,8 +92,8 @@ class VideoEmbedState extends ConsumerState<VideoEmbed> {
 
   @override
   void dispose() {
-    print('DISPOSING EMBED!!!');
-    player.dispose();
+    // print('DISPOSING EMBED!!!');
+    // player.dispose();
     super.dispose();
   }
 
