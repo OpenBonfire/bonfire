@@ -8,7 +8,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:media_kit/media_kit.dart';
 import 'package:media_kit_video/media_kit_video.dart';
 import 'package:fireview/webview_all.dart';
-import 'package:visibility_detector/visibility_detector.dart';
 
 class EmbedWidget extends ConsumerStatefulWidget {
   final BonfireEmbed embed;
@@ -83,17 +82,10 @@ class VideoEmbedState extends ConsumerState<VideoEmbed> {
     }
   }
 
-  void isVisibleThread() async {
-    while (true) {
-      await Future.delayed(const Duration(milliseconds: 1000));
-      // if (_isVisible) print("VIDEO VISIBLE!");
-    }
-  }
-
   @override
   void dispose() {
     // print('DISPOSING EMBED!!!');
-    // player.dispose();
+    player.dispose();
     super.dispose();
   }
 
@@ -109,8 +101,7 @@ class VideoEmbedState extends ConsumerState<VideoEmbed> {
 
     if (widget.embed.proxiedUrl != null) {
       player.open(Media(widget.embed.proxiedUrl!));
-      player.pause();
-      // player.setPlaylistMode(PlaylistMode.loop);
+      player.setPlaylistMode(PlaylistMode.loop);
       player.setVolume(100);
     }
 

@@ -24,8 +24,23 @@ class HomeScreen extends ConsumerStatefulWidget {
 }
 
 class _HomeState extends ConsumerState<HomeScreen> {
+  RevealSide selfPanelState = RevealSide.main;
+
   @override
   void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      // TODO: Make this less hacky
+      /*
+        This works because there's a bug on initstate for the panels.
+        When the panels are initialized *at all*, they will return to the
+        `right` state. I think this may break once that is fixed.
+
+        Currently, we don't even need `selfPanelState`, we could actually
+        just guess the `right` state and be correct.
+      */
+      ref.read(navigationBarProvider.notifier).onSideChange(selfPanelState);
+    });
+
     super.initState();
   }
 
@@ -47,8 +62,8 @@ class _HomeState extends ConsumerState<HomeScreen> {
         body: Stack(children: [
           OverlappingPanels(
             onSideChange: (value) {
-              // hide keyboard
               FocusScope.of(context).unfocus();
+              selfPanelState = value;
               ref.read(navigationBarProvider.notifier).onSideChange(value);
             },
             left: SizedBox(

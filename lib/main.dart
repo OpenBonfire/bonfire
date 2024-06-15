@@ -44,8 +44,6 @@ class _MainWindowState extends ConsumerState<MainWindow> {
     ));
 
     // Tree shaker? I hardly know her!
-    // Tree shaking is interesting but super questionable, it breaks eager initialization
-
     // ref.watch(guildMembersProvider);
 
     return KeyboardSizeProvider(
