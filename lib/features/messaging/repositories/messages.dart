@@ -86,6 +86,8 @@ class Messages extends _$Messages {
     bool? lock = true,
     bool? requestAvatar = true,
   }) async {
+    if (loadingMessages == true) return;
+
     if ((authOutput != null) && (authOutput is AuthUser)) {
       print("got auth!");
       user = authOutput;
@@ -97,7 +99,7 @@ class Messages extends _$Messages {
       var channelGuildId = guildId ??
           ref.read(guildControllerProvider.notifier).currentGuild!.id;
 
-      if (loadingMessages == true) return;
+      // if (loadingMessages == true) return;
 
       if (lock == true) enableLock();
 

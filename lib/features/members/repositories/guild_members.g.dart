@@ -6,7 +6,7 @@ part of 'guild_members.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$guildMembersHash() => r'61cc6234df8aff675c03410a9f95d24fe18054f9';
+String _$guildMembersHash() => r'e45bff9ffe72c55dc3e8f12be96a592b67671dd3';
 
 /// See also [GuildMembers].
 @ProviderFor(GuildMembers)

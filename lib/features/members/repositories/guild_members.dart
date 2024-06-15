@@ -49,18 +49,16 @@ class GuildMembers extends _$GuildMembers {
       // print("getting guild...");
       // var guild = await guilds.get(guildSnowflake);
       print("getting members...");
-      var members = user!.client.gateway.listGuildMembers(
-        guildSnowflake,
-        limit: 20
-      );
+      // var members = user!.client.gateway.listGuildMembers(
+      //   guildSnowflake,
+      //   limit: 20
+      // );
 
       print("MEMBERS!");
-      members.listen((member) {
-        print("-- STREAM --");
-        print(member);
-      });
-
-      
+      // members.listen((member) {
+      //   print("-- STREAM --");
+      //   print(member);
+      // });
 
       // print("MEMBERS!");
       // print(members);

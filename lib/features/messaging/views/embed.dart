@@ -18,9 +18,15 @@ class EmbedWidget extends ConsumerStatefulWidget {
 }
 
 class _EmbedWidgetState extends ConsumerState<EmbedWidget> {
+  String? generateEmbedKey() {
+    return widget.embed.thumbnailUrl ??
+        widget.embed.videoUrl ??
+        widget.embed.thumbnailUrl;
+  }
+
   @override
   Widget build(BuildContext context) {
-    Widget embedWidget = Container();
+    Widget embedWidget = Container(key: PageStorageKey(generateEmbedKey()));
     if (widget.embed.type == EmbedType.image) {
       embedWidget = ImageEmbed(embed: widget.embed);
     }

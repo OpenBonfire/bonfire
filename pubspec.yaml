@@ -43,7 +43,7 @@ dependencies:
   visibility_detector: ^0.4.0+2
   url_launcher: ^6.2.6
   sticky_headers: ^0.3.0+2
-  firebridge: ^6.2.7
+  firebridge: ^6.2.8
   firebridge_extensions: ^4.1.0
   flutter_svg: ^2.0.10+1
 
