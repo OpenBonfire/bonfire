@@ -6,7 +6,7 @@ part of 'navigation_bar.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$navigationBarHash() => r'04a40dc6b2a59979dee4759db5125be6106eee24';
+String _$navigationBarHash() => r'ec868e6c4f5a23bd7aa0c5bd15b75ba8608826a9';
 
 /// State notifier to bound to overlapping panels navigation
 ///

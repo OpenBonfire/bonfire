@@ -288,11 +288,7 @@ class MessageBox extends ConsumerStatefulWidget {
   }
 }
 
-class _MessageBoxState extends ConsumerState<MessageBox>
-    with AutomaticKeepAliveClientMixin {
-  @override
-  bool get wantKeepAlive => true;
-
+class _MessageBoxState extends ConsumerState<MessageBox> {
   String dateTimeFormat(DateTime time) {
     String section1;
     String section2;
@@ -331,7 +327,6 @@ class _MessageBoxState extends ConsumerState<MessageBox>
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
     var width = MediaQuery.of(context).size.width;
     var embeds = widget.message!.embeds ?? [];
 

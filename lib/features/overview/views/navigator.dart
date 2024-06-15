@@ -8,7 +8,7 @@ import 'package:go_router/go_router.dart';
 
 class PopUpNavigationBar extends StatefulWidget {
   final OverlappingPanels panel;
-  const PopUpNavigationBar({Key? key, required this.panel}) : super(key: key);
+  const PopUpNavigationBar({super.key, required this.panel});
 
   @override
   _PopUpNavigationBarState createState() => _PopUpNavigationBarState();
@@ -21,6 +21,9 @@ class _PopUpNavigationBarState extends State<PopUpNavigationBar> {
       children: [
         widget.panel,
         BarWidget(
+          key: GlobalKey(
+            debugLabel: "navbar",
+          ),
           panel: widget.panel,
         )
       ],
@@ -44,8 +47,16 @@ class _BarWidgetState extends ConsumerState<BarWidget> {
     super.initState();
   }
 
+  // on dispose
+  @override
+  void dispose() {
+    print("disposing!");
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
+    print("building bar widget");
     var state = ref.watch(navigationBarProvider);
 
     if (state == RevealSide.left) {
@@ -54,7 +65,7 @@ class _BarWidgetState extends ConsumerState<BarWidget> {
       visible = false;
     }
     return AnimatedPositioned(
-      duration: const Duration(milliseconds: 300),
+      duration: const Duration(milliseconds: 0),
       bottom: visible ? 0 : -80 - MediaQuery.of(context).padding.bottom,
       left: 0,
       right: 0,
