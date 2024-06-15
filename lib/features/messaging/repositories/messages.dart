@@ -115,7 +115,7 @@ class Messages extends _$Messages {
       }
 
       var messages = await textChannel.messages
-          .fetchMany(limit: count ?? 100, before: beforeSnowflake);
+          .fetchMany(limit: count ?? 50, before: beforeSnowflake);
       print("Loaded ${messages.length} messages");
       List<Uint8List> memberAvatars = [];
 
@@ -271,9 +271,9 @@ class Messages extends _$Messages {
   }
 
   void fetchMoreMessages() {
-    var delta = DateTime.now().difference(lastFetchTime);
-    if (delta.inMilliseconds < 500) return;
-    lastFetchTime = DateTime.now();
+    // var delta = DateTime.now().difference(lastFetchTime);
+    // if (delta.inMilliseconds < 500) return;
+    // lastFetchTime = DateTime.now();
 
     var authOutput = ref.watch(authProvider.notifier).getAuth();
     var channelId = ref.watch(channelControllerProvider);

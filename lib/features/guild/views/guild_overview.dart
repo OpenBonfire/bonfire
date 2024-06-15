@@ -59,37 +59,40 @@ class _GuildOverviewState extends ConsumerState<GuildOverview> {
                   ],
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(
-                    left: 20, right: 20, top: 8.0, bottom: 8.0),
-                child: TextButton(
-                  onPressed: () {},
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).custom.colorTheme.brightestGray,
-                      borderRadius:
-                          const BorderRadius.all(Radius.circular(100)),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.search,
-                            color:
-                                Theme.of(context).custom.colorTheme.textColor1,
-                          ),
-                          Text(
-                            "Search",
-                            style: CustomTextTheme().bodyText1,
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ),
+              const SizedBox(
+                height: 12,
+              )
+              // Padding(
+              //   padding: const EdgeInsets.only(
+              //       left: 20, right: 20, top: 8.0, bottom: 8.0),
+              //   child: TextButton(
+              //     onPressed: () {},
+              //     child: Container(
+              //       decoration: BoxDecoration(
+              //         color: Theme.of(context).custom.colorTheme.brightestGray,
+              //         borderRadius:
+              //             const BorderRadius.all(Radius.circular(100)),
+              //       ),
+              //       child: Padding(
+              //         padding: const EdgeInsets.all(8.0),
+              //         child: Row(
+              //           mainAxisAlignment: MainAxisAlignment.center,
+              //           children: [
+              //             Icon(
+              //               Icons.search,
+              //               color:
+              //                   Theme.of(context).custom.colorTheme.textColor1,
+              //             ),
+              //             Text(
+              //               "Search",
+              //               style: CustomTextTheme().bodyText1,
+              //             )
+              //           ],
+              //         ),
+              //       ),
+              //     ),
+              //   ),
+              // ),
             ],
           ),
         ));
