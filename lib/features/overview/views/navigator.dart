@@ -88,9 +88,9 @@ class _BarWidgetState extends ConsumerState<BarWidget> {
                       NavigatorIcon(
                           icon: Icons.notifications_rounded,
                           label: 'Notifications'),
-                      NavigatorIcon(
-                          icon: Icons.notifications_rounded,
-                          label: 'Notifications'),
+                      // NavigatorIcon(
+                      //     icon: Icons.notifications_rounded,
+                      //     label: 'Notifications'),
                     ],
                   ),
                 )),
