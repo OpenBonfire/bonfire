@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:bonfire/features/overview/views/overlapping_panels.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 
 class PopUpNavigationBar extends StatefulWidget {
   final OverlappingPanels panel;
@@ -84,6 +85,7 @@ class _BarWidgetState extends ConsumerState<BarWidget> {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       NavigatorIcon(
+                          path: '/home',
                           icon: SvgPicture.asset(
                             'assets/icons/home.svg',
                             colorFilter: ColorFilter.mode(
@@ -97,6 +99,7 @@ class _BarWidgetState extends ConsumerState<BarWidget> {
                           ),
                           label: 'Home'),
                       NavigatorIcon(
+                          path: '/home/messages',
                           icon: SvgPicture.asset(
                             'assets/icons/messages.svg',
                             colorFilter: ColorFilter.mode(
@@ -110,6 +113,7 @@ class _BarWidgetState extends ConsumerState<BarWidget> {
                           ),
                           label: 'Messages'),
                       NavigatorIcon(
+                          path: '/notifications',
                           icon: SvgPicture.asset(
                             'assets/icons/notifications.svg',
                             colorFilter: ColorFilter.mode(
@@ -141,7 +145,9 @@ class _BarWidgetState extends ConsumerState<BarWidget> {
 class NavigatorIcon extends StatefulWidget {
   final SvgPicture icon;
   final String label;
-  const NavigatorIcon({super.key, required this.icon, required this.label});
+  final String path;
+  const NavigatorIcon(
+      {super.key, required this.icon, required this.label, required this.path});
 
   @override
   State<NavigatorIcon> createState() => NavigatorIconState();
@@ -150,19 +156,35 @@ class NavigatorIcon extends StatefulWidget {
 class NavigatorIconState extends State<NavigatorIcon> {
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: 75,
-      child: Column(
-        children: [
-          widget.icon,
-          Text(widget.label,
-              textAlign: TextAlign.center,
-              style: Theme.of(context).custom.textTheme.subtitle2.copyWith(
-                    fontSize: 9,
-                    color:
-                        Theme.of(context).custom.colorTheme.selectedIconColor,
-                  ))
-        ],
+    return OutlinedButton(
+      onPressed: () {
+        // navigate to /home using go router
+        GoRouter.of(context).go(widget.path);
+      },
+      style: OutlinedButton.styleFrom(
+        padding: const EdgeInsets.all(0),
+        side: const BorderSide(
+          color: Color.fromARGB(0, 255, 255, 255),
+          width: 0,
+        ),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(0),
+        ),
+      ),
+      child: SizedBox(
+        width: 75,
+        child: Column(
+          children: [
+            widget.icon,
+            Text(widget.label,
+                textAlign: TextAlign.center,
+                style: Theme.of(context).custom.textTheme.subtitle2.copyWith(
+                      fontSize: 9,
+                      color:
+                          Theme.of(context).custom.colorTheme.selectedIconColor,
+                    ))
+          ],
+        ),
       ),
     );
   }

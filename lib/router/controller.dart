@@ -1,5 +1,6 @@
 import 'package:bonfire/features/auth/views/login.dart';
 import 'package:bonfire/features/auth/views/mfa.dart';
+import 'package:bonfire/features/user/views/messages.dart';
 import 'package:bonfire/features/overview/views/home.dart';
 import 'package:go_router/go_router.dart';
 
@@ -21,8 +22,12 @@ final routerController = GoRouter(
       ],
     ),
     GoRoute(
-      path: '/home',
-      builder: (context, state) => const HomeScreen(),
-    )
+        path: '/home',
+        builder: (context, state) => const HomeScreen(),
+        routes: <RouteBase>[
+          GoRoute(
+              path: 'messages',
+              builder: (context, state) => const UserMessagesView()),
+        ]),
   ],
 );
