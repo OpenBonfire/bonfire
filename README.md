@@ -1,5 +1,6 @@
 # Bonfire
-![bonfire graphic frame](https://github.com/OpenBonfire/bonfire/assets/60072374/21d0155a-9757-4e0d-ac9b-619ee4be7baf)
+![bonfire graphic frame(1)](https://github.com/OpenBonfire/bonfire/assets/60072374/2c406136-9e46-4be7-85bd-b16e829d4b83)
+
 
 ## About
 A modern alternative to the Discord client. Use Discord without ever having to touch the mobile Discord client.
