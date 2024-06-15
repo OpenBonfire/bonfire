@@ -3,6 +3,7 @@ import 'package:bonfire/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:bonfire/features/overview/views/overlapping_panels.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class PopUpNavigationBar extends StatefulWidget {
   final OverlappingPanels panel;
@@ -77,20 +78,50 @@ class _BarWidgetState extends ConsumerState<BarWidget> {
                   )),
                 ),
                 height: 55,
-                child: const Padding(
-                  padding: EdgeInsets.only(top: 10, left: 18, right: 18),
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 10, left: 18, right: 18),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      NavigatorIcon(icon: Icons.home_rounded, label: 'Home'),
                       NavigatorIcon(
-                          icon: Icons.message_rounded, label: 'Messages'),
+                          icon: SvgPicture.asset(
+                            'assets/icons/home.svg',
+                            colorFilter: ColorFilter.mode(
+                              Theme.of(context)
+                                  .custom
+                                  .colorTheme
+                                  .selectedIconColor,
+                              BlendMode.srcIn,
+                            ),
+                            height: 25,
+                          ),
+                          label: 'Home'),
                       NavigatorIcon(
-                          icon: Icons.notifications_rounded,
+                          icon: SvgPicture.asset(
+                            'assets/icons/messages.svg',
+                            colorFilter: ColorFilter.mode(
+                              Theme.of(context)
+                                  .custom
+                                  .colorTheme
+                                  .selectedIconColor,
+                              BlendMode.srcIn,
+                            ),
+                            height: 25,
+                          ),
+                          label: 'Messages'),
+                      NavigatorIcon(
+                          icon: SvgPicture.asset(
+                            'assets/icons/notifications.svg',
+                            colorFilter: ColorFilter.mode(
+                              Theme.of(context)
+                                  .custom
+                                  .colorTheme
+                                  .selectedIconColor,
+                              BlendMode.srcIn,
+                            ),
+                            height: 25,
+                          ),
                           label: 'Notifications'),
-                      // NavigatorIcon(
-                      //     icon: Icons.notifications_rounded,
-                      //     label: 'Notifications'),
                     ],
                   ),
                 )),
@@ -108,7 +139,7 @@ class _BarWidgetState extends ConsumerState<BarWidget> {
 }
 
 class NavigatorIcon extends StatefulWidget {
-  final IconData icon;
+  final SvgPicture icon;
   final String label;
   const NavigatorIcon({super.key, required this.icon, required this.label});
 
@@ -123,13 +154,7 @@ class NavigatorIconState extends State<NavigatorIcon> {
       width: 75,
       child: Column(
         children: [
-          Icon(
-            widget.icon,
-            grade: 50,
-            weight: 50,
-            size: 25,
-            color: Theme.of(context).custom.colorTheme.selectedIconColor,
-          ),
+          widget.icon,
           Text(widget.label,
               textAlign: TextAlign.center,
               style: Theme.of(context).custom.textTheme.subtitle2.copyWith(
