@@ -1,6 +1,6 @@
 {
-    "name": "guildcable",
-    "short_name": "guildcable",
+    "name": "bonfire",
+    "short_name": "bonfire",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.example" "\0"
-            VALUE "FileDescription", "guildcable" "\0"
+            VALUE "FileDescription", "bonfire" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "guildcable" "\0"
+            VALUE "InternalName", "bonfire" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2024 com.example. All rights reserved." "\0"
-            VALUE "OriginalFilename", "guildcable.exe" "\0"
-            VALUE "ProductName", "guildcable" "\0"
+            VALUE "OriginalFilename", "bonfire.exe" "\0"
+            VALUE "ProductName", "bonfire" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

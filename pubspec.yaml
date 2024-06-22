@@ -49,6 +49,7 @@ dependencies:
   firebridge: ^6.2.8
   firebridge_extensions: ^4.1.2
   flutter_svg: ^2.0.10+1
+  flutter_vlc_player: ^7.4.2
 
 dependency_overrides:
   webview_flutter_platform_interface: ^2.4.0

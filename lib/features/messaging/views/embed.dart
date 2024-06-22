@@ -5,8 +5,9 @@ import 'package:bonfire/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:media_kit/media_kit.dart';
-import 'package:media_kit_video/media_kit_video.dart';
+// import 'package:media_kit/media_kit.dart';
+// import 'package:media_kit_video/media_kit_video.dart';
+import 'package:flutter_vlc_player/flutter_vlc_player.dart';
 import 'package:fireview/webview_all.dart';
 
 class EmbedWidget extends ConsumerStatefulWidget {
@@ -69,29 +70,21 @@ class VideoEmbed extends ConsumerStatefulWidget {
 }
 
 class VideoEmbedState extends ConsumerState<VideoEmbed> {
-  // Create a [Player] to control playback.
-  var player = Player();
-  // Create a [VideoController] to handle video output from [Player].
-  late final controller = VideoController(player);
-
-  bool _isVisible = true;
+  VlcPlayerController? _videoPlayerController;
 
   @override
   void initState() {
     super.initState();
-
-    if (widget.embed.proxiedUrl != null) {
-      print("VIDEO URL");
-      print(widget.embed.proxiedUrl);
-    } else {
-      print("video url null!");
-    }
+    _videoPlayerController = VlcPlayerController.network(
+      widget.embed.videoUrl!,
+      hwAcc: HwAcc.full,
+      autoPlay: true,
+      options: VlcPlayerOptions(),
+    );
   }
 
   @override
   void dispose() {
-    // print('DISPOSING EMBED!!!');
-    player.dispose();
     super.dispose();
   }
 
@@ -103,12 +96,6 @@ class VideoEmbedState extends ConsumerState<VideoEmbed> {
   Widget _buildVideoWidget() {
     if (widget.embed.provider == "YouTube") {
       return WebVideo(embed: widget.embed);
-    }
-
-    if (widget.embed.proxiedUrl != null) {
-      player.open(Media(widget.embed.proxiedUrl!));
-      player.setPlaylistMode(PlaylistMode.loop);
-      player.setVolume(100);
     }
 
     if (widget.embed.thumbnailWidth == null) {
@@ -133,9 +120,11 @@ class VideoEmbedState extends ConsumerState<VideoEmbed> {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(12),
               child: (widget.embed.videoUrl != null)
-                  ? Video(
-                      controller: controller,
-                      fit: BoxFit.cover,
+                  ? VlcPlayer(
+                      controller: _videoPlayerController!,
+                      aspectRatio: (widget.embed.thumbnailWidth ?? 1) /
+                  (widget.embed.thumbnailHeight ?? 1),
+                      placeholder: const Center(child: CircularProgressIndicator()),
                     )
                   : const Text("URL is null"),
             ),
