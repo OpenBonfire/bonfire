@@ -6,14 +6,14 @@ part of 'channels.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$channelsHash() => r'ada7854f580dfa898f03ed477ae39d99146a38e2';
+String _$channelsHash() => r'68561d6e6165dca0bbc4c17033030b4fa7678e3e';
 
 /// A riverpod provider that fetches the channels for the current guild.
 ///
 /// Copied from [Channels].
 @ProviderFor(Channels)
 final channelsProvider =
-    AutoDisposeAsyncNotifierProvider<Channels, List<BonfireChannel>>.internal(
+    AutoDisposeAsyncNotifierProvider<Channels, List<Channel>>.internal(
   Channels.new,
   name: r'channelsProvider',
   debugGetCreateSourceHash:
@@ -22,6 +22,6 @@ final channelsProvider =
   allTransitiveDependencies: null,
 );
 
-typedef _$Channels = AutoDisposeAsyncNotifier<List<BonfireChannel>>;
+typedef _$Channels = AutoDisposeAsyncNotifier<List<Channel>>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

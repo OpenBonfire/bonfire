@@ -6,12 +6,12 @@ part of 'realtime_messages.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$realtimeMessagesHash() => r'b0b2d2e685926a231fc4651c548777b9572e3a8a';
+String _$realtimeMessagesHash() => r'7d09a0db90cabe268e8f59e8ab16dbf062fb8535';
 
 /// See also [realtimeMessages].
 @ProviderFor(realtimeMessages)
 final realtimeMessagesProvider =
-    AutoDisposeStreamProvider<List<BonfireMessage>>.internal(
+    AutoDisposeStreamProvider<List<Message>>.internal(
   realtimeMessages,
   name: r'realtimeMessagesProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -21,7 +21,6 @@ final realtimeMessagesProvider =
   allTransitiveDependencies: null,
 );
 
-typedef RealtimeMessagesRef
-    = AutoDisposeStreamProviderRef<List<BonfireMessage>>;
+typedef RealtimeMessagesRef = AutoDisposeStreamProviderRef<List<Message>>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

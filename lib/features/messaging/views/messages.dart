@@ -3,9 +3,8 @@ import 'package:bonfire/features/guild/controllers/current_guild.dart';
 import 'package:bonfire/features/messaging/controllers/message_bar.dart';
 import 'package:bonfire/features/messaging/repositories/messages.dart';
 import 'package:bonfire/features/messaging/views/embed.dart';
-import 'package:bonfire/shared/models/channel.dart';
-import 'package:bonfire/shared/models/message.dart';
 import 'package:bonfire/theme/theme.dart';
+import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_size/screen_height.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -50,6 +49,14 @@ class _MessageViewState extends ConsumerState<MessageView> {
     ref.read(messagesProvider.notifier).fetchMoreMessages();
   }
 
+  String getChannelName(Channel channel) {
+    if (channel.type == ChannelType.guildText) {
+      return (channel as GuildTextChannel).name;
+    } else {
+      return "Name not implemented.";
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     var messageOutput = ref.watch(messagesProvider);
@@ -57,8 +64,13 @@ class _MessageViewState extends ConsumerState<MessageView> {
     var topPadding = MediaQuery.of(context).padding.top;
 
     var currentGuild = ref.watch(currentGuildControllerProvider);
-    BonfireChannel? currentChannel =
+    Channel? currentChannel =
         ref.read(channelControllerProvider.notifier).getChannel();
+
+    String channelName = ""; // getChannelName(currentChannel);
+    if (currentChannel != null) {
+      channelName = getChannelName(currentChannel);
+    }
 
     return Container(
       decoration: BoxDecoration(
@@ -95,7 +107,7 @@ class _MessageViewState extends ConsumerState<MessageView> {
                       Expanded(
                           child: Text(
                               (currentGuild != null && currentChannel != null)
-                                  ? "# ${currentChannel.name}"
+                                  ? "# ${channelName}"
                                   : "",
                               overflow: TextOverflow.ellipsis,
                               maxLines: 1,
@@ -129,8 +141,8 @@ class _MessageViewState extends ConsumerState<MessageView> {
                 bool showAuthor = true;
 
                 if (index + 1 < messages.length) {
-                  showAuthor = messages[index + 1].member.id ==
-                      messages[index].member.id;
+                  showAuthor = messages[index + 1].author.id ==
+                      messages[index].author.id;
                 } else {
                   showAuthor = false;
                 }
@@ -179,13 +191,21 @@ class _KeyboardBufferState extends State<KeyboardBuffer> {
 }
 
 class MessageBar extends ConsumerStatefulWidget {
-  late BonfireChannel? currentChannel;
+  late Channel? currentChannel;
 
   MessageBar({super.key, required this.currentChannel});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _MessageBarState();
 }
+
+  String getChannelName(Channel channel) {
+    if (channel.type == ChannelType.guildText) {
+      return (channel as GuildTextChannel).name;
+    } else {
+      return "Name not implemented.";
+    }
+  }
 
 class _MessageBarState extends ConsumerState<MessageBar> {
   Widget _messageBarIcon(Icon icon, void Function() onPressed,
@@ -202,7 +222,7 @@ class _MessageBarState extends ConsumerState<MessageBar> {
       ),
     );
   }
-
+  
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -236,16 +256,15 @@ class _MessageBarState extends ConsumerState<MessageBar> {
                 child: Padding(
                   padding: const EdgeInsets.only(left: 16),
                   child: TextField(
-                    controller: messageBarController,
-                    decoration: InputDecoration(
-                      hintText:
-                          'Message #${(widget.currentChannel != null) ? widget.currentChannel!.name : ""}',
-                      hintStyle: const TextStyle(color: Colors.white),
-                      border: InputBorder.none,
-                    ),
-                    style: Theme.of(context).custom.textTheme.bodyText1,
-                  ),
-                ),
+                        controller: messageBarController,
+                        decoration: InputDecoration(
+                          hintText:
+                              'Message #${(widget.currentChannel != null) ? getChannelName(widget.currentChannel!): ""}',
+                          hintStyle: const TextStyle(color: Colors.white),
+                          border: InputBorder.none,
+                        ),
+                        style: Theme.of(context).custom.textTheme.bodyText1,
+                      )),
               ),
             ),
           ),
@@ -272,14 +291,14 @@ class _MessageBarState extends ConsumerState<MessageBar> {
 }
 
 class MessageBox extends ConsumerStatefulWidget {
-  BonfireMessage? message;
+  Message? message;
   bool showSenderInfo = true;
   MessageBox({super.key});
 
   @override
   ConsumerState<MessageBox> createState() => _MessageBoxState();
 
-  void setMessage(BonfireMessage message) {
+  void setMessage(Message message) {
     this.message = message;
   }
 
@@ -331,7 +350,7 @@ class _MessageBoxState extends ConsumerState<MessageBox> {
     var embeds = widget.message!.embeds ?? [];
 
     var name =
-        widget.message!.member.nickName ?? widget.message!.member.displayName;
+        widget.message!.author.username;
 
     return Column(
       children: [
@@ -364,16 +383,11 @@ class _MessageBoxState extends ConsumerState<MessageBox> {
                           height: 45,
                           child: ClipRRect(
                               borderRadius: BorderRadius.circular(100),
-                              child: (widget.message!.member.icon != null)
-                                  ? Image(
-                                      key: Key(
-                                          "${widget.message!.member.id}-icon"),
-                                      image: widget.message!.member.icon!.image)
-                                  : FutureBuilder(
+                              child: FutureBuilder(
                                       future: ref
                                           .read(messagesProvider.notifier)
                                           .fetchMemberAvatar(
-                                              widget.message!.member),
+                                              widget.message!.author),
                                       builder: (context, snapshot) {
                                         if (snapshot.connectionState ==
                                             ConnectionState.done) {

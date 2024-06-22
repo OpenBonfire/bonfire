@@ -1,17 +1,17 @@
 import 'package:bonfire/features/guild/repositories/guilds.dart';
-import 'package:bonfire/shared/models/guild.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:collection/collection.dart';
+import 'package:firebridge/firebridge.dart';
 
 part 'guild.g.dart';
 
 @riverpod
 class GuildController extends _$GuildController {
-  int? guildId;
-  List<Guild> guilds = [];
+  UserGuild? guild;
+  List<UserGuild> guilds = [];
 
   @override
-  int? build() {
+  UserGuild? build() {
     var guildOutput = ref.watch(guildsProvider);
     guildOutput.when(
         data: (newGuilds) {
@@ -20,18 +20,17 @@ class GuildController extends _$GuildController {
         error: (data, trace) {},
         loading: () {});
 
-    return guildId;
+    return guild;
   }
 
-  int setGuild(int newGuildId) {
-    guildId = newGuildId;
-    state = guildId!;
+  UserGuild setGuild(UserGuild newGuild) {
+    guild = newGuild;
+    state = guild!;
     return state!;
   }
 
   // get current guild
-  Guild? get currentGuild {
-    // first where nullable
-    return guilds.firstWhereOrNull((element) => element.id == guildId);
+  UserGuild? get currentGuild {
+    return guild;
   }
 }

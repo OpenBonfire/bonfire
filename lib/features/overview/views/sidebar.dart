@@ -2,7 +2,6 @@ import 'dart:math';
 
 import 'package:bonfire/features/guild/controllers/guild.dart';
 import 'package:bonfire/features/guild/repositories/guilds.dart';
-import 'package:bonfire/shared/models/guild.dart';
 import 'package:bonfire/theme/text_theme.dart';
 import 'package:bonfire/theme/theme.dart';
 import 'package:flutter/cupertino.dart';
@@ -11,6 +10,7 @@ import 'package:flutter/painting.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:firebridge/firebridge.dart';
 
 /// Sidebar with icons for each guild
 class Sidebar extends ConsumerStatefulWidget {
@@ -21,14 +21,14 @@ class Sidebar extends ConsumerStatefulWidget {
 }
 
 class _SidebarState extends ConsumerState<Sidebar> {
-  int? previousSelectedGuildId;
+  UserGuild? previousSelectedGuild;
 
   @override
   Widget build(BuildContext context) {
     var guildWatch = ref.watch(guildsProvider);
     var selectedGuildId = ref.watch(guildControllerProvider);
 
-    List<Guild> guildList = [];
+    List<UserGuild> guildList = [];
     guildWatch.when(
         data: (guilds) {
           guildList = guilds;
@@ -51,7 +51,7 @@ class _SidebarState extends ConsumerState<Sidebar> {
                       return Column(
                         children: [
                           SidebarIcon(
-                            selected: selectedGuildId == guildList[index].id,
+                            selected: selectedGuildId == guildList[index],
                             guild: guildList[index],
                           ),
                           const SizedBox(
@@ -75,7 +75,7 @@ class _SidebarState extends ConsumerState<Sidebar> {
 /// Icon for each guild in the sidebar
 class SidebarIcon extends ConsumerStatefulWidget {
   final bool selected;
-  final Guild guild;
+  final UserGuild guild;
 
   const SidebarIcon({Key? key, required this.selected, required this.guild})
       : super(key: key);
@@ -87,9 +87,13 @@ class SidebarIcon extends ConsumerStatefulWidget {
 class _SidebarIconState extends ConsumerState<SidebarIcon> {
   Future<double> get iconHeight => Future<double>.value(40);
 
-  Widget iconBuilder(Guild guild) {
+  Widget iconBuilder(UserGuild guild) {
     if (guild.icon != null) {
-      return guild.icon!;
+      return Image.network(
+        guild.icon!.url.toString(),
+        width: 45,
+        height: 45,
+        fit: BoxFit.cover);
     } else {
       String iconText = "";
       List<String> words = guild.name.split(" ");
@@ -133,7 +137,7 @@ class _SidebarIconState extends ConsumerState<SidebarIcon> {
                       onPressed: () {
                         ref
                             .read(guildControllerProvider.notifier)
-                            .setGuild(widget.guild.id);
+                            .setGuild(widget.guild);
                       },
                       child: ClipRRect(
                         // TODO: Animate border radius change

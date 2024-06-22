@@ -1,10 +1,9 @@
 import 'package:bonfire/features/auth/data/repositories/auth.dart';
 import 'package:bonfire/features/auth/data/repositories/discord_auth.dart';
-import 'package:bonfire/shared/models/guild.dart';
 import 'package:flutter/widgets.dart';
-import 'package:firebridge/firebridge.dart' as firebridge;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import 'package:firebridge/firebridge.dart';
 
 part 'guilds.g.dart';
 
@@ -16,7 +15,7 @@ then setting `state` when the actual value is recieved.
 @riverpod
 class Guilds extends _$Guilds {
   AuthUser? user;
-  List<Guild> guilds = [];
+  List<UserGuild> guilds = [];
 
   final _cacheManager = CacheManager(
     Config(
@@ -27,14 +26,14 @@ class Guilds extends _$Guilds {
   );
 
   @override
-  Future<List<Guild>> build() async {
+  Future<List<UserGuild>> build() async {
     var authOutput = ref.read(authProvider.notifier).getAuth();
 
     if ((authOutput != null) & (authOutput! is AuthUser)) {
       user = authOutput as AuthUser;
 
-      List<firebridge.UserGuild> userGuilds = await user!.client.listGuilds();
-      List<Future<Guild>> guildFutures = userGuilds.map((guild) async {
+      List<UserGuild> userGuilds = await user!.client.listGuilds();
+      List<Future<UserGuild>> guildFutures = userGuilds.map((guild) async {
         // Async icon lookup for speed
         // guild.fetchPreview();
         var iconImage;
@@ -50,15 +49,11 @@ class Guilds extends _$Guilds {
             _cacheManager.putFile(guild.icon!.hash, iconBytes);
           }
         }
-        return Guild(
-          id: guild.id.value,
-          name: guild.name,
-          icon: iconImage,
-        );
+        return guild;
       }).toList();
 
       // Wait for all guilds to be fetched concurrently
-      List<Guild> fetchedGuilds = await Future.wait(guildFutures);
+      List<UserGuild> fetchedGuilds = await Future.wait(guildFutures);
       return fetchedGuilds;
     } else {
       print("Not an auth user. This is probably very bad.");

@@ -1,19 +1,19 @@
-import 'package:bonfire/shared/models/channel.dart';
+import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 class BonfireIcons {
-  static Map<BonfireChannelType, Icon> channelIcons = {
-    BonfireChannelType.guildText: const Icon(Icons.tag),
-    BonfireChannelType.guildVoice: const Icon(Icons.volume_up),
-    BonfireChannelType.guildCategory: const Icon(Icons.category),
-    BonfireChannelType.guildAnnouncement: const Icon(Icons.announcement),
-    BonfireChannelType.announcementThread: const Icon(Icons.announcement),
-    BonfireChannelType.publicThread: const Icon(Icons.announcement),
-    BonfireChannelType.privateThread: const Icon(Icons.announcement),
-    BonfireChannelType.guildStageVoice: const Icon(Icons.interpreter_mode),
-    BonfireChannelType.guildDirectory: const Icon(Icons.folder),
-    BonfireChannelType.guildForum: const Icon(Icons.forum),
-    BonfireChannelType.guildMedia: const Icon(Icons.photo),
+  static Map<ChannelType, Icon> channelIcons = {
+    ChannelType.guildText: const Icon(Icons.tag),
+    ChannelType.guildVoice: const Icon(Icons.volume_up),
+    ChannelType.guildCategory: const Icon(Icons.category),
+    ChannelType.guildAnnouncement: const Icon(Icons.announcement),
+    ChannelType.announcementThread: const Icon(Icons.announcement),
+    ChannelType.publicThread: const Icon(Icons.announcement),
+    ChannelType.privateThread: const Icon(Icons.announcement),
+    ChannelType.guildStageVoice: const Icon(Icons.interpreter_mode),
+    ChannelType.guildDirectory: const Icon(Icons.folder),
+    ChannelType.guildForum: const Icon(Icons.forum),
+    ChannelType.guildMedia: const Icon(Icons.photo),
   };
 }

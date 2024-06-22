@@ -1,7 +1,7 @@
 import 'dart:math';
 
-import 'package:bonfire/shared/models/embed.dart';
 import 'package:bonfire/theme/theme.dart';
+import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -11,7 +11,7 @@ import 'package:flutter_vlc_player/flutter_vlc_player.dart';
 import 'package:fireview/webview_all.dart';
 
 class EmbedWidget extends ConsumerStatefulWidget {
-  final BonfireEmbed embed;
+  final Embed embed;
   const EmbedWidget({super.key, required this.embed});
 
   @override
@@ -20,18 +20,17 @@ class EmbedWidget extends ConsumerStatefulWidget {
 
 class _EmbedWidgetState extends ConsumerState<EmbedWidget> {
   String? generateEmbedKey() {
-    return widget.embed.thumbnailUrl ??
-        widget.embed.videoUrl ??
-        widget.embed.thumbnailUrl;
+    return widget.embed.thumbnail?.url.toString() ??
+        widget.embed.video?.url.toString();
   }
 
   @override
   Widget build(BuildContext context) {
     Widget embedWidget = Container(key: PageStorageKey(generateEmbedKey()));
-    if (widget.embed.type == EmbedType.image) {
+    if (widget.embed.image != null) {
       embedWidget = ImageEmbed(embed: widget.embed);
     }
-    if (widget.embed.type == EmbedType.video) {
+    if (widget.embed.video != null) {
       embedWidget = VideoEmbed(embed: widget.embed);
     }
     return embedWidget;
@@ -39,7 +38,7 @@ class _EmbedWidgetState extends ConsumerState<EmbedWidget> {
 }
 
 class ImageEmbed extends ConsumerStatefulWidget {
-  final BonfireEmbed embed;
+  final Embed embed;
   const ImageEmbed({super.key, required this.embed});
 
   @override
@@ -50,19 +49,19 @@ class ImageEmbedState extends ConsumerState<ImageEmbed> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: min(widget.embed.thumbnailWidth?.toDouble() ?? double.infinity,
+      width: min(widget.embed.thumbnail!.width?.toDouble() ?? double.infinity,
           MediaQuery.of(context).size.width - 90),
       child: AspectRatio(
-        aspectRatio: (widget.embed.thumbnailWidth ?? 1) /
-            (widget.embed.thumbnailHeight ?? 1),
-        child: Image.network(widget.embed.imageUrl!, fit: BoxFit.cover),
+        aspectRatio: (widget.embed.thumbnail!.width?.toDouble() ?? 1) /
+            (widget.embed.thumbnail!.height?.toDouble() ?? 1),
+        child: Image.network(widget.embed.image!.url.toString(), fit: BoxFit.cover),
       ),
     );
   }
 }
 
 class VideoEmbed extends ConsumerStatefulWidget {
-  final BonfireEmbed embed;
+  final Embed embed;
   const VideoEmbed({super.key, required this.embed});
 
   @override
@@ -76,7 +75,7 @@ class VideoEmbedState extends ConsumerState<VideoEmbed> {
   void initState() {
     super.initState();
     _videoPlayerController = VlcPlayerController.network(
-      widget.embed.videoUrl!,
+      widget.embed.video!.url.toString(),
       hwAcc: HwAcc.full,
       autoPlay: true,
       options: VlcPlayerOptions(),
@@ -98,32 +97,32 @@ class VideoEmbedState extends ConsumerState<VideoEmbed> {
       return WebVideo(embed: widget.embed);
     }
 
-    if (widget.embed.thumbnailWidth == null) {
+    if (widget.embed.thumbnail?.width == null) {
       return const SizedBox();
     }
 
-    return (widget.embed.provider != "Tenor")
+    return (widget.embed.provider?.name != "Tenor")
         ? SizedBox(
-            width: min(widget.embed.thumbnailWidth?.toDouble() ?? 200,
+            width: min(widget.embed.thumbnail?.width?.toDouble() ?? 200,
                 MediaQuery.of(context).size.width - 90),
             child: AspectRatio(
-              aspectRatio: (widget.embed.thumbnailWidth ?? 1) /
-                  (widget.embed.thumbnailHeight ?? 1),
+              aspectRatio: (widget.embed.thumbnail?.width ?? 1) /
+                  (widget.embed.thumbnail?.width ?? 1),
               child:
-                  Image.network(widget.embed.thumbnailUrl!, fit: BoxFit.cover),
+                  Image.network(widget.embed.thumbnail!.url.toString(), fit: BoxFit.cover),
             ),
           )
         : SizedBox(
-            height: widget.embed.thumbnailHeight!.toDouble(),
-            width: min(widget.embed.thumbnailWidth!.toDouble(),
+            height: widget.embed.thumbnail?.height?.toDouble(),
+            width: min(widget.embed.thumbnail!.height!.toDouble(),
                 MediaQuery.of(context).size.width - 90),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(12),
-              child: (widget.embed.videoUrl != null)
+              child: (widget.embed.video?.url != null)
                   ? VlcPlayer(
                       controller: _videoPlayerController!,
-                      aspectRatio: (widget.embed.thumbnailWidth ?? 1) /
-                  (widget.embed.thumbnailHeight ?? 1),
+                      aspectRatio: (widget.embed.thumbnail?.width ?? 1) /
+                  (widget.embed.thumbnail?.height ?? 1),
                       placeholder: const Center(child: CircularProgressIndicator()),
                     )
                   : const Text("URL is null"),
@@ -133,7 +132,7 @@ class VideoEmbedState extends ConsumerState<VideoEmbed> {
 }
 
 class WebVideo extends ConsumerStatefulWidget {
-  final BonfireEmbed embed;
+  final Embed embed;
   const WebVideo({super.key, required this.embed});
 
   @override
@@ -148,12 +147,12 @@ class _WebVideoState extends ConsumerState<WebVideo> {
     return _isPlaying
         ? SizedBox(
             width: min(
-                min(widget.embed.thumbnailWidth!.toDouble(),
+                min(widget.embed.thumbnail!.width!.toDouble(),
                     MediaQuery.of(context).size.width - 90),
                 500),
             height: height,
             child: Webview(
-              url: widget.embed.videoUrl!,
+              url: widget.embed.video!.url!.toString(),
             ))
         : OutlinedButton(
             style: OutlinedButton.styleFrom(
@@ -178,15 +177,15 @@ class _WebVideoState extends ConsumerState<WebVideo> {
                 });
               });
             },
-            child: Image.network(widget.embed.thumbnailUrl!, fit: BoxFit.cover),
+            child: Image.network(widget.embed.thumbnail!.url.toString(), fit: BoxFit.cover),
           );
   }
 
   @override
   Widget build(BuildContext context) {
-    var aspect = widget.embed.thumbnailWidth! / widget.embed.thumbnailHeight!;
+    var aspect = widget.embed.thumbnail!.width!.toDouble() / widget.embed.thumbnail!.height!.toDouble();
     double width = min(
-        min(widget.embed.thumbnailWidth!.toDouble(),
+        min(widget.embed.thumbnail!.width!.toDouble(),
             MediaQuery.of(context).size.width - 90),
         500);
 
@@ -214,7 +213,7 @@ class _WebVideoState extends ConsumerState<WebVideo> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(widget.embed.provider ?? "Provider not found",
+                        Text(widget.embed.provider?.name ?? "Provider not found",
                             textAlign: TextAlign.start,
                             style: Theme.of(context)
                                 .custom

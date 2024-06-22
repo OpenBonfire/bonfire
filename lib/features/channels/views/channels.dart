@@ -3,9 +3,10 @@ import 'package:bonfire/features/channels/repositories/channels.dart';
 import 'package:bonfire/features/guild/views/guild_overview.dart';
 // import 'package:bonfire/features/guild/views/guild_overview.dart';
 import 'package:bonfire/features/overview/views/overlapping_panels.dart';
-import 'package:bonfire/shared/models/channel.dart';
 import 'package:bonfire/shared/utils/icons.dart';
 import 'package:bonfire/theme/theme.dart';
+import 'package:firebridge/firebridge.dart' hide Builder;
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -27,30 +28,28 @@ class _ChannelsListState extends ConsumerState<ChannelsList> {
     var topPadding = MediaQuery.of(context).padding.top;
     var channelWatch = ref.watch(channelsProvider);
 
-    var channels = channelWatch.valueOrNull ?? [];
+    var channels = channelWatch.valueOrNull ?? [] ;
 
     if (scrollController.hasClients) scrollController.jumpTo(0.0);
 
     var channelsWithoutParent = channels
         .where((channel) =>
-            (channel.parent == null) &&
-            (channel.type != BonfireChannelType.guildCategory))
+            ((channel as GuildChannel).parent == null) &&
+            (channel.type != ChannelType.guildCategory))
         .toList();
 
-    Map<int, List<BonfireChannel>> categoryMap = {};
+    Map<GuildChannel, List<GuildChannel>> categoryMap = {};
 
     // group channels by category
     channels.forEach((channel) {
-      if (channel.type == BonfireChannelType.guildCategory) {
-        categoryMap[channel.id] = [];
+      if (channel.type == ChannelType.guildCategory) {
+        categoryMap[channel as GuildChannel] = [];
       }
     });
 
     channels.forEach((channel) {
-      if (channel.type != BonfireChannelType.guildCategory) {
-        var parentChannel = categoryMap.keys.firstWhereOrNull(
-          (element) => element == channel.parent?.id,
-        );
+      if (channel.type != ChannelType.guildCategory) {
+        var parentChannel = (channel as GuildChannel).parent;
 
         if (parentChannel != null) {
           categoryMap[parentChannel]!.add(channel);
@@ -61,14 +60,11 @@ class _ChannelsListState extends ConsumerState<ChannelsList> {
     Widget buildChannelButton(int index) {
       if (index < channelsWithoutParent.length) {
         var channel = channelsWithoutParent[index];
-        return ChannelButton(channel: channel);
+        return ChannelButton(channel: channel as GuildChannel);
       } else {
         var categoryIndex = index - channelsWithoutParent.length;
-        var categoryId = categoryMap.keys.elementAt(categoryIndex);
-        var category = channels.firstWhereOrNull(
-          (channel) => channel.id == categoryId,
-        );
-        var children = categoryMap[categoryId] ?? [];
+        var category = categoryMap.keys.elementAt(categoryIndex);
+        var children = categoryMap[category] ?? [];
         if (category != null) {
           return Category(category: category, children: children);
         } else {
@@ -134,7 +130,7 @@ class _ChannelsListState extends ConsumerState<ChannelsList> {
 }
 
 class ChannelButton extends ConsumerStatefulWidget {
-  BonfireChannel channel;
+  GuildChannel channel;
   ChannelButton({super.key, required this.channel});
 
   @override
@@ -159,7 +155,7 @@ class _ChannelButtonState extends ConsumerState<ChannelButton> {
               minimumSize: Size.zero,
               padding: EdgeInsets.zero,
               side: BorderSide(
-                color: (widget.channel.id == channelController)
+                color: (widget.channel == channelController)
                     ? Theme.of(context).custom.colorTheme.brightestGray
                     : Colors.transparent,
                 width: 0.3,
@@ -176,7 +172,7 @@ class _ChannelButtonState extends ConsumerState<ChannelButton> {
           onPressed: () {
             ref
                 .read(channelControllerProvider.notifier)
-                .setChannel(widget.channel.id);
+                .setChannel(widget.channel);
 
             OverlappingPanelsState? overlappingPanelsState =
                 OverlappingPanels.of(context);
@@ -227,8 +223,8 @@ class _ChannelButtonState extends ConsumerState<ChannelButton> {
 }
 
 class Category extends StatefulWidget {
-  final BonfireChannel category;
-  final List<BonfireChannel> children;
+  final GuildChannel category;
+  final List<GuildChannel> children;
 
   const Category({super.key, required this.category, required this.children});
 

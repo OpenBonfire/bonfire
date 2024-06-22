@@ -6,12 +6,10 @@ import 'package:bonfire/features/auth/data/repositories/auth.dart';
 import 'package:bonfire/features/auth/data/repositories/discord_auth.dart';
 import 'package:bonfire/features/channels/controllers/channel.dart';
 import 'package:bonfire/features/guild/controllers/guild.dart';
-import 'package:bonfire/shared/models/embed.dart';
-import 'package:bonfire/shared/models/member.dart';
-import 'package:bonfire/shared/models/message.dart';
 import 'package:firebridge_extensions/firebridge_extensions.dart';
 import 'package:flutter/widgets.dart';
-import 'package:firebridge/firebridge.dart' as firebridge;
+import 'package:firebridge/firebridge.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:http/http.dart' as http;
@@ -24,7 +22,7 @@ part 'messages.g.dart';
 class Messages extends _$Messages {
   AuthUser? user;
   bool listenerRunning = false;
-  Map<int, firebridge.Message?> oldestMessage = {};
+  Map<Channel, Message?> oldestMessage = {};
   DateTime lastFetchTime = DateTime.now();
 
   final _cacheManager = CacheManager(
@@ -34,28 +32,28 @@ class Messages extends _$Messages {
       maxNrOfCacheObjects: 10000,
     ),
   );
-  Map<String, List<BonfireMessage>> channelMessagesMap = {};
+  Map<String, List<Message>> channelMessagesMap = {};
   bool realtimeListernRunning = false;
 
   @override
-  Future<List<BonfireMessage>> build() async {
+  Future<List<Message>> build() async {
     var authOutput = ref.watch(authProvider.notifier).getAuth();
-    var channelId = ref.watch(channelControllerProvider);
+    var channel = ref.watch(channelControllerProvider);
 
-    if (channelId != null) {
-      getMessages(authOutput, channelId);
-      var fromCache = (await getChannelFromCache(channelId))!;
+    if (channel != null) {
+      getMessages(authOutput, channel);
+      var fromCache = (await getChannelFromCache(channel))!;
       return fromCache;
     }
     return [];
   }
 
-  Future<void> runPreCacheRoutine(firebridge.Channel channel) async {
+  Future<void> runPreCacheRoutine(Channel channel) async {
     var authOutput = ref.watch(authProvider.notifier).getAuth();
-    if (authOutput is AuthUser && channel is firebridge.TextChannel) {
+    if (authOutput is AuthUser && channel is TextChannel) {
       var age = await getAgeOfMessageEntry(channel.id.value);
       if (age == null || age.inDays > 1) {
-        getMessages(authOutput, channel.id.value,
+        getMessages(authOutput, channel,
             count: 20, lock: false, requestAvatar: false);
       }
     }
@@ -79,7 +77,7 @@ class Messages extends _$Messages {
 
   Future<void> getMessages(
     authOutput,
-    int channelId, {
+    Channel channel, {
     int? before,
     int? count,
     int? guildId,
@@ -89,24 +87,22 @@ class Messages extends _$Messages {
     if (loadingMessages == true) return;
 
     if ((authOutput != null) && (authOutput is AuthUser)) {
-      print("got auth!");
       user = authOutput;
-      var textChannel = await user!.client.channels
-          .get(firebridge.Snowflake(channelId)) as firebridge.TextChannel;
+      var textChannel = channel as TextChannel;
       var beforeSnowflake =
-          before != null ? firebridge.Snowflake(before) : null;
+          before != null ? Snowflake(before) : null;
 
       var channelGuildId = guildId ??
-          ref.read(guildControllerProvider.notifier).currentGuild!.id;
+          ref.read(guildControllerProvider.notifier).currentGuild!.id.value;
 
       // if (loadingMessages == true) return;
 
       if (lock == true) enableLock();
 
       var selfMember = await user!
-          .client.guilds[firebridge.Snowflake(channelGuildId)].members
+          .client.guilds[Snowflake(channelGuildId)].members
           .get(user!.client.user.id);
-      var permissions = await (textChannel as firebridge.GuildChannel)
+      var permissions = await (textChannel as GuildChannel)
           .computePermissionsFor(selfMember);
 
       if (permissions.canReadMessageHistory == false) {
@@ -119,7 +115,7 @@ class Messages extends _$Messages {
       }
 
       var messages = await textChannel.messages
-          .fetchMany(limit: count ?? 50, before: beforeSnowflake);
+          .fetchMany(limit: count ?? 20, before: beforeSnowflake);
       print("Loaded ${messages.length} messages");
       List<Uint8List> memberAvatars = [];
 
@@ -127,14 +123,7 @@ class Messages extends _$Messages {
         memberAvatars = await Future.wait(
           messages.map((message) async {
             var avatar = await fetchMemberAvatar(
-              BonfireGuildMember(
-                id: message.author.id.value,
-                name: message.author.username,
-                iconUrl: message.author.avatar!.url.toString(),
-                displayName: message.author.username,
-                guildId: guildId ??
-                    ref.read(guildControllerProvider.notifier).currentGuild!.id,
-              ),
+              message.author
             );
             return avatar;
           }),
@@ -142,7 +131,7 @@ class Messages extends _$Messages {
       }
       removeLock();
 
-      List<BonfireMessage> channelMessages = [];
+      List<Message> channelMessages = [];
       var completer = Completer<void>();
 
       int chunkSize = 10;
@@ -154,78 +143,17 @@ class Messages extends _$Messages {
 
         for (int i = currentIndex; i < endIndex; i++) {
           var message = messages[i];
-          if (oldestMessage[channelId] == null ||
-              message.timestamp.isBefore(oldestMessage[channelId]!.timestamp)) {
-            oldestMessage[channelId] = message;
+          if (oldestMessage[channel] == null ||
+              message.timestamp.isBefore(oldestMessage[channel]!.timestamp)) {
+            oldestMessage[channel] = message;
           }
           var username = message.author.username;
-          if (message.author is firebridge.User) {
-            var user = message.author as firebridge.User;
+          if (message.author is User) {
+            var user = message.author as User;
             username = user.globalName ?? username;
           }
 
-          List<BonfireEmbed> embeds = [];
-
-          message.embeds.forEach((embed) {
-            Color? embedColor;
-
-            if (embed.color != null) {
-              embedColor = Color.fromRGBO(
-                embed.color!.r,
-                embed.color!.g,
-                embed.color!.b,
-                255,
-              );
-            }
-
-            if (embed.video != null) {
-              embeds.add(BonfireEmbed(
-                  type: EmbedType.video,
-                  thumbnailWidth: embed.thumbnail?.width,
-                  thumbnailHeight: embed.thumbnail?.height,
-                  thumbnailUrl: embed.thumbnail?.url.toString(),
-                  videoUrl: embed.video?.url.toString(),
-                  proxiedUrl: embed.video?.proxiedUrl.toString(),
-                  title: embed.title,
-                  description: embed.description,
-                  provider: embed.provider?.name,
-                  color: embedColor));
-            } else if (embed.image != null) {
-              // print("image!");
-              embeds.add(BonfireEmbed(
-                type: EmbedType.image,
-                contentWidth: embed.image?.width,
-                contentHeight: embed.image?.height,
-                thumbnailWidth: embed.thumbnail?.width,
-                thumbnailHeight: embed.thumbnail?.height,
-                provider: embed.provider?.name,
-                thumbnailUrl: embed.thumbnail?.url.toString(),
-              ));
-            } else {
-              // print("unknown embed type: ${embed.fields}");
-            }
-          });
-
-          Uint8List? memberAvatar =
-              memberAvatars.isNotEmpty ? memberAvatars[i] : null;
-
-          var newMessage = BonfireMessage(
-              id: message.id.value,
-              channelId: channelId,
-              content: message.content,
-              timestamp: message.timestamp,
-              member: BonfireGuildMember(
-                id: message.author.id.value,
-                name: message.author.username,
-                iconUrl: message.author.avatar?.url.toString() ?? "",
-                icon:
-                    (memberAvatar != null) ? Image.memory(memberAvatar) : null,
-                displayName: username,
-                guildId: guildId ??
-                    ref.read(guildControllerProvider.notifier).currentGuild!.id,
-              ),
-              embeds: embeds);
-          channelMessages.add(newMessage);
+          channelMessages.add(message);
         }
 
         currentIndex = endIndex;
@@ -236,18 +164,18 @@ class Messages extends _$Messages {
           });
         } else {
           if (before == null) {
-            channelMessagesMap[channelId.toString()] = [];
+            channelMessagesMap[channel.toString()] = [];
           }
           if (channelMessages.isNotEmpty) {
-            channelMessagesMap[channelId.toString()]!.addAll(channelMessages);
+            channelMessagesMap[channel.toString()]!.addAll(channelMessages);
 
             if (before == null) {
-              cacheMessages(channelMessages, channelId.toString());
+              cacheMessages(channelMessages, channel.toString());
             }
           }
 
-          if (channelId == ref.read(channelControllerProvider)) {
-            state = AsyncData(channelMessagesMap[channelId.toString()] ?? []);
+          if (channel == ref.read(channelControllerProvider)) {
+            state = AsyncData(channelMessagesMap[channel.toString()] ?? []);
           }
 
           completer.complete();
@@ -262,21 +190,21 @@ class Messages extends _$Messages {
     }
   }
 
-  void processRealtimeMessages(List<BonfireMessage> messages) async {
+  void processRealtimeMessages(List<Message> messages) async {
     if (messages.isNotEmpty) {
       var message = messages.last;
-      var channelId = message.channelId;
-      if (channelMessagesMap[channelId.toString()] == null) {
-        channelMessagesMap[channelId.toString()] = [];
+      var channel = message.channel;
+      if (channelMessagesMap[channel.toString()] == null) {
+        channelMessagesMap[channel.toString()] = [];
       }
-      channelMessagesMap[channelId.toString()]!.insert(0, message);
-      if (channelId == ref.read(channelControllerProvider)) {
+      channelMessagesMap[channel.toString()]!.insert(0, message);
+      if (channel == ref.read(channelControllerProvider)) {
         // TODO: Only take the first message, and append :D
         // you could also take all of them and compare, to ensure we
         // didn't lose anything in a race condition
 
-        var newState = channelMessagesMap[channelId.toString()];
-        var cacheKey = channelId.toString();
+        var newState = channelMessagesMap[channel.toString()];
+        var cacheKey = channel.toString();
 
         cacheMessages(messages, cacheKey);
         state = AsyncData(newState ?? []);
@@ -284,30 +212,30 @@ class Messages extends _$Messages {
     }
   }
 
-  Future<List<BonfireMessage>?> getChannelFromCache(int channelId) async {
-    var cacheData = await _cacheManager.getFileFromCache(channelId.toString());
-    if (cacheData != null) {
-      var cachedMessages =
-          json.decode(utf8.decode(cacheData.file.readAsBytesSync()));
-      var messagesFuture = (cachedMessages as List<dynamic>).map((e) async {
-        var message = BonfireMessage.fromJson(e);
-        var icon = (await fetchMemberAvatarFromCache(message.member.id));
-        if (icon != null) message.member.icon = Image.memory(icon);
+  Future<List<Message>?> getChannelFromCache(Channel channel) async {
+    // var cacheData = await _cacheManager.getFileFromCache(channel.toString());
+    // if (cacheData != null) {
+    //   var cachedMessages =
+    //       json.decode(utf8.decode(cacheData.file.readAsBytesSync()));
+    //   var messagesFuture = (cachedMessages as List<dynamic>).map((e) async {
+    //     var message = BonfireMessage.fromJson(e);
+    //     var icon = (await fetchMemberAvatarFromCache(message.member.id));
+    //     if (icon != null) message.member.icon = Image.memory(icon);
 
-        return message;
-      }).toList();
+    //     return message;
+    //   }).toList();
 
-      print("got ${messagesFuture.length} messages from cache");
+    //   print("got ${messagesFuture.length} messages from cache");
 
-      return await Future.wait(messagesFuture);
-    }
+    //   return await Future.wait(messagesFuture);
+    // }
     // no cache
     return null;
   }
 
-  /// Returns the age of the message entry in the cache from [channelId]
-  Future<Duration?> getAgeOfMessageEntry(int channelId) async {
-    var cacheData = await _cacheManager.getFileFromCache(channelId.toString());
+  /// Returns the age of the message entry in the cache from [channel]
+  Future<Duration?> getAgeOfMessageEntry(int channel) async {
+    var cacheData = await _cacheManager.getFileFromCache(channel.toString());
     if (cacheData == null) return null;
 
     var age = cacheData.file.lastModifiedSync().difference(DateTime.now());
@@ -320,11 +248,11 @@ class Messages extends _$Messages {
     // lastFetchTime = DateTime.now();
 
     var authOutput = ref.watch(authProvider.notifier).getAuth();
-    var channelId = ref.watch(channelControllerProvider);
-    if (channelId != null) {
+    var channel = ref.watch(channelControllerProvider);
+    if (channel != null) {
       print("getting messages...");
-      getMessages(authOutput, channelId,
-          before: oldestMessage[channelId]!.id.value);
+      getMessages(authOutput, channel,
+          before: oldestMessage[channel]!.id.value);
     }
   }
 
@@ -333,12 +261,12 @@ class Messages extends _$Messages {
     return cacheData?.file.readAsBytesSync();
   }
 
-  Future<Uint8List> fetchMemberAvatar(BonfireGuildMember user) async {
+  Future<Uint8List> fetchMemberAvatar(MessageAuthor user) async {
     // var cached = await fetchMemberAvatarFromCache(user.id);
     // if (cached != null) return cached;
     // if (user.avatar != null) return null;
-    var icon_url = user.iconUrl;
-    var fetched = (await http.get(Uri.parse(icon_url))).bodyBytes;
+    var icon_url = user.avatar!.url;
+    var fetched = (await http.get(icon_url)).bodyBytes;
 
     await _cacheManager.putFile(
       user.id.toString(),
@@ -348,33 +276,32 @@ class Messages extends _$Messages {
   }
 
   Future<void> cacheMessages(
-      List<BonfireMessage> messages, String cacheKey) async {
-    print("caching messages using key $cacheKey");
-    var toCache = messages;
-    if (toCache.length >= 21) {
-      toCache = toCache.sublist(0, 20);
-    }
-    await _cacheManager.putFile(
-      cacheKey,
-      utf8.encode(json.encode(toCache.map((e) => e.toJson()).toList())),
-    );
+      List<Message> messages, String cacheKey) async {
+    // print("caching messages using key $cacheKey");
+    // var toCache = messages;
+    // if (toCache.length >= 21) {
+    //   toCache = toCache.sublist(0, 20);
+    // }
+    // await _cacheManager.putFile(
+    //   cacheKey,
+    //   utf8.encode(json.encode(toCache.map((e) => e.toJson()).toList())),
+    // );
   }
 
-  Future<bool> sendMessage(String message, {int? channelId}) async {
+  Future<bool> sendMessage(String message, {Channel? channel}) async {
     var authOutput = ref.watch(authProvider.notifier).getAuth();
-    int? _channelId;
-    if (channelId != null) {
-      _channelId = channelId;
+    Channel? _channel;
+    if (channel != null) {
+      _channel = channel;
     } else {
-      _channelId = ref.watch(channelControllerProvider);
+      _channel = ref.watch(channelControllerProvider);
     }
     if ((authOutput != null) &&
         (authOutput is AuthUser) &&
-        (_channelId != null)) {
+        (_channel != null)) {
       user = authOutput;
-      var textChannel = await user!.client.channels
-          .get(firebridge.Snowflake(_channelId)) as firebridge.TextChannel;
-      await textChannel.sendMessage(firebridge.MessageBuilder(
+      var textChannel = _channel as TextChannel;
+      await textChannel.sendMessage(MessageBuilder(
         content: message,
       ));
       return true;

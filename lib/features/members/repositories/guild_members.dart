@@ -3,10 +3,9 @@ import 'package:bonfire/features/auth/data/repositories/discord_auth.dart';
 import 'package:bonfire/features/auth/models/auth.dart';
 import 'package:bonfire/features/guild/controllers/current_guild.dart';
 import 'package:bonfire/features/guild/repositories/guilds.dart';
-import 'package:bonfire/shared/models/member.dart';
-import 'package:bonfire/shared/models/message.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:firebridge/firebridge.dart';
 
 part 'guild_members.g.dart';
 
@@ -15,15 +14,15 @@ class GuildMembers extends _$GuildMembers {
   AuthUser? user;
 
   @override
-  Future<List<BonfireGuildMember>> build() async {
+  Future<List<Member>> build() async {
     final currentGuild = ref.watch(currentGuildControllerProvider);
     var authOutput = ref.watch(authProvider.notifier).getAuth();
 
-    if (currentGuild != null) {
-      final guildId = currentGuild.id;
-      // todo: add caching for this
-      fetchMembers(authOutput, guildId);
-    }
+    // if (currentGuild != null) {
+    //   final guildId = currentGuild.id;
+    //   // todo: add caching for this
+    //   fetchMembers(authOutput, guildId);
+    // }
 
     return [];
   }

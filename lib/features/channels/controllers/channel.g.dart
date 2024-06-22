@@ -6,12 +6,12 @@ part of 'channel.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$channelControllerHash() => r'f65ca109f0bd099882a16fada3eb4636e7b334ee';
+String _$channelControllerHash() => r'e988464dd71cd44a113d74230e67a9b47f75508b';
 
 /// See also [ChannelController].
 @ProviderFor(ChannelController)
 final channelControllerProvider =
-    AutoDisposeNotifierProvider<ChannelController, int?>.internal(
+    AutoDisposeNotifierProvider<ChannelController, Channel?>.internal(
   ChannelController.new,
   name: r'channelControllerProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -21,6 +21,6 @@ final channelControllerProvider =
   allTransitiveDependencies: null,
 );
 
-typedef _$ChannelController = AutoDisposeNotifier<int?>;
+typedef _$ChannelController = AutoDisposeNotifier<Channel?>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
