@@ -154,7 +154,7 @@ class _GetMemberProviderElement
   Snowflake get memberId => (origin as GetMemberProvider).memberId;
 }
 
-String _$getGuildRolesHash() => r'f26f92c1cb3af1d7308a92aada06ba72777c0113';
+String _$getGuildRolesHash() => r'c2b1fbbdb09f951efae01bb5086f3b14b3e29689';
 
 /// See also [getGuildRoles].
 @ProviderFor(getGuildRoles)

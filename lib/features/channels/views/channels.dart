@@ -59,7 +59,6 @@ class _ChannelsListState extends ConsumerState<ChannelsList> {
     });
 
     Widget buildChannelButton(int index) {
-      print("building button");
       if (index < channelsWithoutParent.length) {
         var channel = channelsWithoutParent[index];
         return ChannelButton(channel: channel as GuildChannel);
@@ -145,7 +144,7 @@ class _ChannelButtonState extends ConsumerState<ChannelButton> {
   @override
   Widget build(BuildContext context) {
     var channelController = ref.watch(channelControllerProvider);
-    bool selected = widget.channel.id == channelController;
+    bool selected = widget.channel == channelController;
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 2, left: 8, right: 10),

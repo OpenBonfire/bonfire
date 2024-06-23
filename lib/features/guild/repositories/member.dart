@@ -18,7 +18,7 @@ Future<Member?> getMember(GetMemberRef ref, Snowflake memberId) async {
 
 @riverpod Future<List<Role?>?> getGuildRoles(GetGuildRolesRef ref) async {
   var authOutput = ref.watch(authProvider.notifier).getAuth();
-  var currentGuild = ref.read(guildControllerProvider);
+  var currentGuild = ref.watch(guildControllerProvider);
 
   if (authOutput is AuthUser) {
     return await authOutput.client.guilds[currentGuild!.id].roles.list();

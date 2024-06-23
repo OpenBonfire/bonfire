@@ -49,7 +49,7 @@ class ImageEmbedState extends ConsumerState<ImageEmbed> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: min(widget.embed.thumbnail!.width?.toDouble() ?? double.infinity,
+      width: min(widget.embed.thumbnail?.width?.toDouble() ?? double.infinity,
           MediaQuery.of(context).size.width - 90),
       child: AspectRatio(
         aspectRatio: (widget.embed.thumbnail!.width?.toDouble() ?? 1) /
