@@ -30,7 +30,8 @@ class _ChannelsListState extends ConsumerState<ChannelsList> {
     var channelWatch = ref.watch(channelsProvider);
 
     var channels = channelWatch.valueOrNull ?? [];
-    var guildBanner = ref.watch(guildBannerProvider).valueOrNull;
+    var guildBannerUrl = ref.watch(guildBannerUrlProvider).valueOrNull;
+    print(guildBannerUrl);
 
     if (scrollController.hasClients) scrollController.jumpTo(0.0);
 
@@ -105,16 +106,7 @@ class _ChannelsListState extends ConsumerState<ChannelsList> {
                   controller: scrollController,
                   padding: EdgeInsets.zero,
                   children: [
-                    // Container(
-                    //   height: 100,
-                    //   decoration: const BoxDecoration(
-                    //     color: Color.fromARGB(255, 68, 69, 74),
-                    //     borderRadius: BorderRadius.only(
-                    //         topLeft: Radius.circular(24),
-                    //         topRight: Radius.circular(12)),
-                    //   ),
-                    // ),
-                    (guildBanner != null) ? Container(
+                    (guildBannerUrl != null) ? Container(
                       height: 150,
                       decoration: const BoxDecoration(
                         color: Color.fromARGB(255, 68, 69, 74),
@@ -122,8 +114,8 @@ class _ChannelsListState extends ConsumerState<ChannelsList> {
                             topLeft: Radius.circular(24),
                             topRight: Radius.circular(12)),
                       ),
-                      child:Image.memory(
-                        guildBanner,
+                      child:Image.network(
+                        "$guildBannerUrl?size=512",
                         fit: BoxFit.cover,  
                       )
                     ): Container(),

@@ -15,7 +15,7 @@ Stream<List<Message>> realtimeMessages(RealtimeMessagesRef ref) async* {
     var client = auth.client;
     await for (final event in client.onMessageCreate) {
       messageQueue.add(event.message);
-      print(event.message.content);
+      // print(event.message.content);
 
       if (messageQueue.length > 30) {
         messageQueue.removeAt(0);
