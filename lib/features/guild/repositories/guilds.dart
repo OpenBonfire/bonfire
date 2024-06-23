@@ -7,11 +7,6 @@ import 'package:firebridge/firebridge.dart';
 
 part 'guilds.g.dart';
 
-/*
-TODO: We can cache each guild by instantly returning the last value,
-then setting `state` when the actual value is recieved.
-*/
-
 @riverpod
 class Guilds extends _$Guilds {
   AuthUser? user;
@@ -34,8 +29,6 @@ class Guilds extends _$Guilds {
 
       List<UserGuild> userGuilds = await user!.client.listGuilds();
       List<Future<UserGuild>> guildFutures = userGuilds.map((guild) async {
-        // Async icon lookup for speed
-        // guild.fetchPreview();
         var iconImage;
         if (guild.icon != null) {
           var cacheData =

@@ -23,6 +23,6 @@ class CurrentGuildController extends _$CurrentGuildController {
       loading: () {},
     );
 
-    return guilds.firstWhereOrNull((element) => element.id == guildController);
+    return guilds.firstWhereOrNull((element) => element == guildController);
   }
 }

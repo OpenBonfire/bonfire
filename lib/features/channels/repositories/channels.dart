@@ -91,12 +91,12 @@ class Channels extends _$Channels {
         // saveToCache(channels);
 
         // ensure guild id is correct
-        // if (ref.read(guildControllerProvider) == lastGuild) {
+        if (ref.read(guildControllerProvider) == lastGuild) {
           state = AsyncValue.data(channels);
-        // } else {
-        //   print(
-        //       "Not updating state! This is because the current guild ID is ${ref.read(guildControllerProvider)} is not the same as the last guild ID $lastGuild.");
-        // }
+        } else {
+          print(
+              "Not updating state! This is because the current guild ID is ${ref.read(guildControllerProvider)} is not the same as the last guild ID $lastGuild.");
+        }
       }
     }
     return channels;

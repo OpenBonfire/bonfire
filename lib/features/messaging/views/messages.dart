@@ -1,7 +1,9 @@
 import 'package:bonfire/features/channels/controllers/channel.dart';
 import 'package:bonfire/features/guild/controllers/current_guild.dart';
+import 'package:bonfire/features/guild/repositories/member.dart';
 import 'package:bonfire/features/messaging/controllers/message_bar.dart';
 import 'package:bonfire/features/messaging/repositories/messages.dart';
+import 'package:bonfire/features/messaging/views/components/avatar.dart';
 import 'package:bonfire/features/messaging/views/embed.dart';
 import 'package:bonfire/theme/theme.dart';
 import 'package:firebridge/firebridge.dart';
@@ -67,7 +69,7 @@ class _MessageViewState extends ConsumerState<MessageView> {
     Channel? currentChannel =
         ref.read(channelControllerProvider.notifier).getChannel();
 
-    String channelName = ""; // getChannelName(currentChannel);
+    String channelName = "";
     if (currentChannel != null) {
       channelName = getChannelName(currentChannel);
     }
@@ -107,7 +109,7 @@ class _MessageViewState extends ConsumerState<MessageView> {
                       Expanded(
                           child: Text(
                               (currentGuild != null && currentChannel != null)
-                                  ? "# ${channelName}"
+                                  ? "# $channelName"
                                   : "",
                               overflow: TextOverflow.ellipsis,
                               maxLines: 1,
@@ -146,8 +148,7 @@ class _MessageViewState extends ConsumerState<MessageView> {
                 } else {
                   showAuthor = false;
                 }
-
-                var key = Key(messages[index].id.toString());
+                var key = Key(messages[index].id.value.toString());
 
                 var box = MessageBox(
                   key: key,
@@ -199,13 +200,13 @@ class MessageBar extends ConsumerStatefulWidget {
   ConsumerState<ConsumerStatefulWidget> createState() => _MessageBarState();
 }
 
-  String getChannelName(Channel channel) {
-    if (channel.type == ChannelType.guildText) {
-      return (channel as GuildTextChannel).name;
-    } else {
-      return "Name not implemented.";
-    }
+String getChannelName(Channel channel) {
+  if (channel.type == ChannelType.guildText) {
+    return (channel as GuildTextChannel).name;
+  } else {
+    return "Name not implemented.";
   }
+}
 
 class _MessageBarState extends ConsumerState<MessageBar> {
   Widget _messageBarIcon(Icon icon, void Function() onPressed,
@@ -222,7 +223,7 @@ class _MessageBarState extends ConsumerState<MessageBar> {
       ),
     );
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -254,17 +255,17 @@ class _MessageBarState extends ConsumerState<MessageBar> {
                   borderRadius: BorderRadius.circular(36),
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.only(left: 16),
-                  child: TextField(
-                        controller: messageBarController,
-                        decoration: InputDecoration(
-                          hintText:
-                              'Message #${(widget.currentChannel != null) ? getChannelName(widget.currentChannel!): ""}',
-                          hintStyle: const TextStyle(color: Colors.white),
-                          border: InputBorder.none,
-                        ),
-                        style: Theme.of(context).custom.textTheme.bodyText1,
-                      )),
+                    padding: const EdgeInsets.only(left: 16),
+                    child: TextField(
+                      controller: messageBarController,
+                      decoration: InputDecoration(
+                        hintText:
+                            'Message #${(widget.currentChannel != null) ? getChannelName(widget.currentChannel!) : ""}',
+                        hintStyle: const TextStyle(color: Colors.white),
+                        border: InputBorder.none,
+                      ),
+                      style: Theme.of(context).custom.textTheme.bodyText1,
+                    )),
               ),
             ),
           ),
@@ -347,10 +348,51 @@ class _MessageBoxState extends ConsumerState<MessageBox> {
   @override
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
-    var embeds = widget.message!.embeds ?? [];
+    var embeds = widget.message!.embeds;
 
-    var name =
-        widget.message!.author.username;
+    String name = widget.message!.author.username;
+
+    Color textColor = Colors.white;
+    String? roleIconUrl;
+
+    var member = ref.watch(fetchMemberProvider(widget.message!.author.id));
+    var roles = ref.watch(getGuildRolesProvider).valueOrNull ?? [];
+
+    member.when(
+      data: (member) {
+        name = member?.nick ?? name;
+        Role? topRole;
+        Role? topEmojiRole;
+        for (PartialRole partialRole in member!.roles) {
+          Role role = roles.firstWhere((role) => partialRole.id == role!.id)!;
+          topRole ??= role;
+  
+
+
+          if (role.icon != null) {
+              topEmojiRole ??= role;
+              if (topEmojiRole.position < role.position) {
+                topEmojiRole = role;
+              }
+          }
+
+          if (topRole.position < role.position) {
+            topRole = role;
+          }
+
+          
+          var tc = topRole.color;
+          roleIconUrl = topEmojiRole?.icon?.url.toString();
+          if (tc.value != 0) textColor = Color.fromRGBO(tc.r, tc.g, tc.b, 1);
+        }
+        
+      },
+      loading: () {
+      },
+      error: (error, stack) {
+      },
+    );
+
 
     return Column(
       children: [
@@ -370,35 +412,15 @@ class _MessageBoxState extends ConsumerState<MessageBox> {
               borderRadius: BorderRadius.circular(0),
             ),
           ),
-          onPressed: () {},
+          onPressed: () {
+            
+          },
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               (widget.showSenderInfo == true)
-                  ? Padding(
-                      padding: const EdgeInsets.only(right: 8),
-                      child: SizedBox(
-                          width: 45,
-                          height: 45,
-                          child: ClipRRect(
-                              borderRadius: BorderRadius.circular(100),
-                              child: FutureBuilder(
-                                      future: ref
-                                          .read(messagesProvider.notifier)
-                                          .fetchMemberAvatar(
-                                              widget.message!.author),
-                                      builder: (context, snapshot) {
-                                        if (snapshot.connectionState ==
-                                            ConnectionState.done) {
-                                          return Image.memory(snapshot.data!);
-                                        } else {
-                                          return const SizedBox(
-                                            width: 45,
-                                            height: 45,
-                                          );
-                                        }
-                                      }))))
+                  ? Avatar(author: widget.message!.author)
                   : const Padding(
                       padding: EdgeInsets.only(right: 8),
                       child: SizedBox(
@@ -419,12 +441,22 @@ class _MessageBoxState extends ConsumerState<MessageBox> {
                                   child: Text(
                                     name,
                                     textAlign: TextAlign.left,
-                                    style: const TextStyle(
-                                      color: Color.fromARGB(255, 255, 255, 255),
+                                    style: TextStyle(
+                                      color: textColor,
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   )),
+                                  // emoji
+                                  if (roleIconUrl != null)
+                                    Padding(
+                                      padding: const EdgeInsets.only(left: 6, top: 2),
+                                      child: Image.network(
+                                        roleIconUrl!,
+                                        width: 22,
+                                        height: 22,
+                                      ),
+                                    ),
                               Padding(
                                 // I dislike the top padding, should fix alignment
                                 padding: const EdgeInsets.only(left: 6, top: 4),

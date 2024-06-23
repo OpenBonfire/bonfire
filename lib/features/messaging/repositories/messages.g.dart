@@ -6,7 +6,7 @@ part of 'messages.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$messagesHash() => r'8301e431bbd6d5ce3ebd69290af6f0d9d60da505';
+String _$messagesHash() => r'42fb813066e3cd84110c91d0976c627815284e02';
 
 /// Message provider for fetching messages from the Discord API
 ///

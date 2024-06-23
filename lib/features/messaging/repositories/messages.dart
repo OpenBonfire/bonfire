@@ -250,7 +250,6 @@ class Messages extends _$Messages {
     var authOutput = ref.watch(authProvider.notifier).getAuth();
     var channel = ref.watch(channelControllerProvider);
     if (channel != null) {
-      print("getting messages...");
       getMessages(authOutput, channel,
           before: oldestMessage[channel]!.id.value);
     }

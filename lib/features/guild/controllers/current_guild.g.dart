@@ -7,7 +7,7 @@ part of 'current_guild.dart';
 // **************************************************************************
 
 String _$currentGuildControllerHash() =>
-    r'104b0e982173318e5a3c97e098b0cf7a0cec05b8';
+    r'f80671db97a3bdb67432dfcf2c40649c42a8aa58';
 
 /// See also [CurrentGuildController].
 @ProviderFor(CurrentGuildController)
