@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-String? _family = GoogleFonts.publicSans().fontFamily;
+String? _family = GoogleFonts.openSans().fontFamily;
 
 class CustomTextTheme {
   final titleLarge = TextStyle(

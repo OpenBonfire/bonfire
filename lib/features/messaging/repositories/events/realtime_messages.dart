@@ -6,7 +6,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'realtime_messages.g.dart';
 
-@riverpod
+@riverpod 
 Stream<List<Message>> realtimeMessages(RealtimeMessagesRef ref) async* {
   var auth = ref.watch(authProvider.notifier).getAuth();
   var messageQueue = <Message>[];
@@ -15,6 +15,7 @@ Stream<List<Message>> realtimeMessages(RealtimeMessagesRef ref) async* {
     var client = auth.client;
     await for (final event in client.onMessageCreate) {
       messageQueue.add(event.message);
+      print(event.message.content);
 
       if (messageQueue.length > 30) {
         messageQueue.removeAt(0);

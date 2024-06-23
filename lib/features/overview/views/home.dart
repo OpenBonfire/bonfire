@@ -3,7 +3,7 @@ import 'package:bonfire/features/guild/repositories/guilds.dart';
 import 'package:bonfire/features/guild/views/guild_overview.dart';
 import 'package:bonfire/features/members/views/member_list.dart';
 import 'package:bonfire/features/messaging/repositories/messages.dart';
-import 'package:bonfire/features/messaging/repositories/realtime_messages.dart';
+import 'package:bonfire/features/messaging/repositories/events/realtime_messages.dart';
 import 'package:bonfire/features/messaging/views/messages.dart';
 import 'package:bonfire/features/overview/controllers/navigation_bar.dart';
 import 'package:bonfire/features/overview/views/navigator.dart';

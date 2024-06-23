@@ -54,7 +54,8 @@ class ImageEmbedState extends ConsumerState<ImageEmbed> {
       child: AspectRatio(
         aspectRatio: (widget.embed.thumbnail!.width?.toDouble() ?? 1) /
             (widget.embed.thumbnail!.height?.toDouble() ?? 1),
-        child: Image.network(widget.embed.image!.url.toString(), fit: BoxFit.cover),
+        child: Image.network(widget.embed.image!.url.toString(),
+            fit: BoxFit.cover),
       ),
     );
   }
@@ -80,11 +81,21 @@ class VideoEmbedState extends ConsumerState<VideoEmbed> {
       autoPlay: true,
       options: VlcPlayerOptions(),
     );
+
+    _videoPlayerController!.addListener(() {
+      if (_videoPlayerController!.value.playingState == PlayingState.ended) {
+        _videoPlayerController!.setMediaFromNetwork(
+            widget.embed.video!.url.toString(),
+            autoPlay: false,
+            hwAcc: HwAcc.auto);
+      }
+    });
   }
 
   @override
   void dispose() {
     super.dispose();
+    _videoPlayerController?.dispose();
   }
 
   @override
@@ -101,32 +112,32 @@ class VideoEmbedState extends ConsumerState<VideoEmbed> {
       return const SizedBox();
     }
 
-    return (widget.embed.provider?.name != "Tenor")
-        ? SizedBox(
-            width: min(widget.embed.thumbnail?.width?.toDouble() ?? 200,
-                MediaQuery.of(context).size.width - 90),
-            child: AspectRatio(
-              aspectRatio: (widget.embed.thumbnail?.width ?? 1) /
-                  (widget.embed.thumbnail?.width ?? 1),
-              child:
-                  Image.network(widget.embed.thumbnail!.url.toString(), fit: BoxFit.cover),
+    if (widget.embed.provider?.name == "Tenor") {
+      return SizedBox(
+        width: min(widget.embed.thumbnail!.width!.toDouble(),
+            MediaQuery.of(context).size.width - 90),
+        child: AspectRatio(
+          aspectRatio: (widget.embed.thumbnail!.width?.toDouble() ?? 1) /
+              (widget.embed.thumbnail!.height?.toDouble() ?? 1),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(16),
+            child: VlcPlayer(
+              controller: _videoPlayerController!,
+              aspectRatio: widget.embed.thumbnail!.width! /
+                  widget.embed.thumbnail!.height!,
+              placeholder: const Center(child: CircularProgressIndicator()),
             ),
-          )
-        : SizedBox(
-            height: widget.embed.thumbnail?.height?.toDouble(),
-            width: min(widget.embed.thumbnail!.height!.toDouble(),
-                MediaQuery.of(context).size.width - 90),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(12),
-              child: (widget.embed.video?.url != null)
-                  ? VlcPlayer(
-                      controller: _videoPlayerController!,
-                      aspectRatio: widget.embed.thumbnail!.width! / widget.embed.thumbnail!.height!,
-                      placeholder: const Center(child: CircularProgressIndicator()),
-                    )
-                  : const Text("URL is null"),
-            ),
-          );
+          ),
+        ),
+      );
+    }
+
+    return AspectRatio(
+      aspectRatio: (widget.embed.thumbnail?.width ?? 1) /
+          (widget.embed.thumbnail?.height ?? 1),
+      child: Image.network(widget.embed.thumbnail!.url.toString(),
+          fit: BoxFit.cover),
+    );
   }
 }
 
@@ -176,13 +187,15 @@ class _WebVideoState extends ConsumerState<WebVideo> {
                 });
               });
             },
-            child: Image.network(widget.embed.thumbnail!.url.toString(), fit: BoxFit.cover),
+            child: Image.network(widget.embed.thumbnail!.url.toString(),
+                fit: BoxFit.cover),
           );
   }
 
   @override
   Widget build(BuildContext context) {
-    var aspect = widget.embed.thumbnail!.width!.toDouble() / widget.embed.thumbnail!.height!.toDouble();
+    var aspect = widget.embed.thumbnail!.width!.toDouble() /
+        widget.embed.thumbnail!.height!.toDouble();
     double width = min(
         min(widget.embed.thumbnail!.width!.toDouble(),
             MediaQuery.of(context).size.width - 90),
@@ -212,7 +225,8 @@ class _WebVideoState extends ConsumerState<WebVideo> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(widget.embed.provider?.name ?? "Provider not found",
+                        Text(
+                            widget.embed.provider?.name ?? "Provider not found",
                             textAlign: TextAlign.start,
                             style: Theme.of(context)
                                 .custom
