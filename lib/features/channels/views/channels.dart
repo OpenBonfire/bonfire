@@ -51,13 +51,15 @@ class _ChannelsListState extends ConsumerState<ChannelsList> {
       if (channel.type != ChannelType.guildCategory) {
         var parentChannel = (channel as GuildChannel).parent;
 
-        if (parentChannel != null) {
+        if (parentChannel != null && categoryMap[parentChannel] != null) {
+          // print(categoryMap[parentChannel]);
           categoryMap[parentChannel]!.add(channel);
         }
       }
     });
 
     Widget buildChannelButton(int index) {
+      print("building button");
       if (index < channelsWithoutParent.length) {
         var channel = channelsWithoutParent[index];
         return ChannelButton(channel: channel as GuildChannel);

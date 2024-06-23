@@ -93,7 +93,7 @@ class VideoEmbedState extends ConsumerState<VideoEmbed> {
   }
 
   Widget _buildVideoWidget() {
-    if (widget.embed.provider == "YouTube") {
+    if (widget.embed.provider?.name == "YouTube") {
       return WebVideo(embed: widget.embed);
     }
 
@@ -121,8 +121,7 @@ class VideoEmbedState extends ConsumerState<VideoEmbed> {
               child: (widget.embed.video?.url != null)
                   ? VlcPlayer(
                       controller: _videoPlayerController!,
-                      aspectRatio: (widget.embed.thumbnail?.width ?? 1) /
-                  (widget.embed.thumbnail?.height ?? 1),
+                      aspectRatio: widget.embed.thumbnail!.width! / widget.embed.thumbnail!.height!,
                       placeholder: const Center(child: CircularProgressIndicator()),
                     )
                   : const Text("URL is null"),

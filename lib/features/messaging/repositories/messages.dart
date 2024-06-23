@@ -255,17 +255,17 @@ class Messages extends _$Messages {
     }
   }
 
-  Future<Uint8List?> fetchMemberAvatarFromCache(int userId) async {
-    var cacheData = await _cacheManager.getFileFromCache(userId.toString());
+  Future<Uint8List?> fetchMemberAvatarFromCache(MessageAuthor user) async {
+    var cacheData = await _cacheManager.getFileFromCache(user.id.value.toString());
     return cacheData?.file.readAsBytesSync();
   }
 
   Future<Uint8List> fetchMemberAvatar(MessageAuthor user) async {
-    // var cached = await fetchMemberAvatarFromCache(user.id);
-    // if (cached != null) return cached;
+    var cached = await fetchMemberAvatarFromCache(user);
+    if (cached != null) return cached;
     // if (user.avatar != null) return null;
-    var icon_url = user.avatar!.url;
-    var fetched = (await http.get(icon_url)).bodyBytes;
+    var iconUrl = user.avatar!.url;
+    var fetched = (await http.get(iconUrl)).bodyBytes;
 
     await _cacheManager.putFile(
       user.id.toString(),

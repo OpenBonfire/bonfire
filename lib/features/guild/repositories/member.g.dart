@@ -6,7 +6,7 @@ part of 'member.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$fetchMemberHash() => r'b62d7d8745b1f29c45f843f22255d81d49952e17';
+String _$getMemberHash() => r'6813731e4f7b5c563bbf1e9bd018345f616c1029';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -29,27 +29,27 @@ class _SystemHash {
   }
 }
 
-/// See also [fetchMember].
-@ProviderFor(fetchMember)
-const fetchMemberProvider = FetchMemberFamily();
+/// See also [getMember].
+@ProviderFor(getMember)
+const getMemberProvider = GetMemberFamily();
 
-/// See also [fetchMember].
-class FetchMemberFamily extends Family<AsyncValue<Member?>> {
-  /// See also [fetchMember].
-  const FetchMemberFamily();
+/// See also [getMember].
+class GetMemberFamily extends Family<AsyncValue<Member?>> {
+  /// See also [getMember].
+  const GetMemberFamily();
 
-  /// See also [fetchMember].
-  FetchMemberProvider call(
+  /// See also [getMember].
+  GetMemberProvider call(
     Snowflake memberId,
   ) {
-    return FetchMemberProvider(
+    return GetMemberProvider(
       memberId,
     );
   }
 
   @override
-  FetchMemberProvider getProviderOverride(
-    covariant FetchMemberProvider provider,
+  GetMemberProvider getProviderOverride(
+    covariant GetMemberProvider provider,
   ) {
     return call(
       provider.memberId,
@@ -68,32 +68,31 @@ class FetchMemberFamily extends Family<AsyncValue<Member?>> {
       _allTransitiveDependencies;
 
   @override
-  String? get name => r'fetchMemberProvider';
+  String? get name => r'getMemberProvider';
 }
 
-/// See also [fetchMember].
-class FetchMemberProvider extends AutoDisposeFutureProvider<Member?> {
-  /// See also [fetchMember].
-  FetchMemberProvider(
+/// See also [getMember].
+class GetMemberProvider extends AutoDisposeFutureProvider<Member?> {
+  /// See also [getMember].
+  GetMemberProvider(
     Snowflake memberId,
   ) : this._internal(
-          (ref) => fetchMember(
-            ref as FetchMemberRef,
+          (ref) => getMember(
+            ref as GetMemberRef,
             memberId,
           ),
-          from: fetchMemberProvider,
-          name: r'fetchMemberProvider',
+          from: getMemberProvider,
+          name: r'getMemberProvider',
           debugGetCreateSourceHash:
               const bool.fromEnvironment('dart.vm.product')
                   ? null
-                  : _$fetchMemberHash,
-          dependencies: FetchMemberFamily._dependencies,
-          allTransitiveDependencies:
-              FetchMemberFamily._allTransitiveDependencies,
+                  : _$getMemberHash,
+          dependencies: GetMemberFamily._dependencies,
+          allTransitiveDependencies: GetMemberFamily._allTransitiveDependencies,
           memberId: memberId,
         );
 
-  FetchMemberProvider._internal(
+  GetMemberProvider._internal(
     super._createNotifier, {
     required super.name,
     required super.dependencies,
@@ -107,12 +106,12 @@ class FetchMemberProvider extends AutoDisposeFutureProvider<Member?> {
 
   @override
   Override overrideWith(
-    FutureOr<Member?> Function(FetchMemberRef provider) create,
+    FutureOr<Member?> Function(GetMemberRef provider) create,
   ) {
     return ProviderOverride(
       origin: this,
-      override: FetchMemberProvider._internal(
-        (ref) => create(ref as FetchMemberRef),
+      override: GetMemberProvider._internal(
+        (ref) => create(ref as GetMemberRef),
         from: from,
         name: null,
         dependencies: null,
@@ -125,12 +124,12 @@ class FetchMemberProvider extends AutoDisposeFutureProvider<Member?> {
 
   @override
   AutoDisposeFutureProviderElement<Member?> createElement() {
-    return _FetchMemberProviderElement(this);
+    return _GetMemberProviderElement(this);
   }
 
   @override
   bool operator ==(Object other) {
-    return other is FetchMemberProvider && other.memberId == memberId;
+    return other is GetMemberProvider && other.memberId == memberId;
   }
 
   @override
@@ -142,17 +141,17 @@ class FetchMemberProvider extends AutoDisposeFutureProvider<Member?> {
   }
 }
 
-mixin FetchMemberRef on AutoDisposeFutureProviderRef<Member?> {
+mixin GetMemberRef on AutoDisposeFutureProviderRef<Member?> {
   /// The parameter `memberId` of this provider.
   Snowflake get memberId;
 }
 
-class _FetchMemberProviderElement
-    extends AutoDisposeFutureProviderElement<Member?> with FetchMemberRef {
-  _FetchMemberProviderElement(super.provider);
+class _GetMemberProviderElement
+    extends AutoDisposeFutureProviderElement<Member?> with GetMemberRef {
+  _GetMemberProviderElement(super.provider);
 
   @override
-  Snowflake get memberId => (origin as FetchMemberProvider).memberId;
+  Snowflake get memberId => (origin as GetMemberProvider).memberId;
 }
 
 String _$getGuildRolesHash() => r'f26f92c1cb3af1d7308a92aada06ba72777c0113';

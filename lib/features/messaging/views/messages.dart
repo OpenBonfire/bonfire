@@ -15,6 +15,7 @@ import 'package:flutter_keyboard_size/flutter_keyboard_size.dart'
 import 'package:markdown_viewer/markdown_viewer.dart';
 import 'package:flutter_prism/flutter_prism.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:collection/collection.dart';
 
 class MessageView extends ConsumerStatefulWidget {
   const MessageView({super.key});
@@ -355,7 +356,7 @@ class _MessageBoxState extends ConsumerState<MessageBox> {
     Color textColor = Colors.white;
     String? roleIconUrl;
 
-    var member = ref.watch(fetchMemberProvider(widget.message!.author.id));
+    var member = ref.watch(getMemberProvider(widget.message!.author.id));
     var roles = ref.watch(getGuildRolesProvider).valueOrNull ?? [];
 
     member.when(
@@ -364,10 +365,11 @@ class _MessageBoxState extends ConsumerState<MessageBox> {
         Role? topRole;
         Role? topEmojiRole;
         for (PartialRole partialRole in member!.roles) {
-          Role role = roles.firstWhere((role) => partialRole.id == role!.id)!;
+          Role? role = roles.firstWhereOrNull((role) => partialRole.id == role!.id);
+          if (role == null) {
+            continue;
+          }
           topRole ??= role;
-  
-
 
           if (role.icon != null) {
               topEmojiRole ??= role;
@@ -420,7 +422,7 @@ class _MessageBoxState extends ConsumerState<MessageBox> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               (widget.showSenderInfo == true)
-                  ? Avatar(author: widget.message!.author)
+                  ? Avatar(key: Key(widget.message!.author.avatarHash ?? ""), author: widget.message!.author)
                   : const Padding(
                       padding: EdgeInsets.only(right: 8),
                       child: SizedBox(
