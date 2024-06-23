@@ -82,7 +82,7 @@ class _ChannelsListState extends ConsumerState<ChannelsList> {
       child: Container(
         height: double.infinity,
         decoration: BoxDecoration(
-          color: Theme.of(context).custom.colorTheme.foreground,
+          color: Theme.of(context).custom.colorTheme.channelListBackground,
           borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(24),
             topRight: Radius.circular(8),
@@ -164,7 +164,7 @@ class _ChannelButtonState extends ConsumerState<ChannelButton> {
               padding: EdgeInsets.zero,
               side: BorderSide(
                 color: (widget.channel == channelController)
-                    ? Theme.of(context).custom.colorTheme.brightestGray
+                    ? Theme.of(context).custom.colorTheme.foreground
                     : Colors.transparent,
                 width: 0.3,
               ),
@@ -172,10 +172,10 @@ class _ChannelButtonState extends ConsumerState<ChannelButton> {
                 borderRadius: BorderRadius.circular(12),
               ),
               foregroundColor: selected
-                  ? Theme.of(context).custom.colorTheme.textColor1
-                  : Theme.of(context).custom.colorTheme.textColor2,
+                  ? Theme.of(context).custom.colorTheme.selectedChannelText
+                  : Theme.of(context).custom.colorTheme.deselectedChannelText,
               backgroundColor: selected
-                  ? Theme.of(context).custom.colorTheme.cardSelected
+                  ? Theme.of(context).custom.colorTheme.foreground
                   : Colors.transparent),
           onPressed: () {
             ref
@@ -210,14 +210,8 @@ class _ChannelButtonState extends ConsumerState<ChannelButton> {
                                 .bodyText1
                                 .copyWith(
                                   color: selected
-                                      ? Theme.of(context)
-                                          .custom
-                                          .colorTheme
-                                          .textColor1
-                                      : Theme.of(context)
-                                          .custom
-                                          .colorTheme
-                                          .textColor2,
+                                      ? Theme.of(context).custom.colorTheme.selectedChannelText
+                                      : Theme.of(context).custom.colorTheme.deselectedChannelText
                                 ))),
                   ],
                 ),

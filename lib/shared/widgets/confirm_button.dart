@@ -20,7 +20,7 @@ class _ConfirmButtonState extends State<ConfirmButton> {
       child: Container(
         height: 60,
         decoration: BoxDecoration(
-          color: Theme.of(context).custom.colorTheme.blurpleColor,
+          color: Theme.of(context).custom.colorTheme.blurple,
           borderRadius: BorderRadius.circular(12),
         ),
         child: Center(

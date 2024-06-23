@@ -209,13 +209,13 @@ class _WebVideoState extends ConsumerState<WebVideo> {
         borderRadius: BorderRadius.circular(8),
         child: Container(
           decoration: BoxDecoration(
-            color: Theme.of(context).custom.colorTheme.redColor,
+            color: Theme.of(context).custom.colorTheme.red,
           ),
           child: Padding(
             padding: const EdgeInsets.only(left: 5),
             child: Container(
               decoration: BoxDecoration(
-                color: Theme.of(context).custom.colorTheme.brightestGray,
+                color: Theme.of(context).custom.colorTheme.embedBackground,
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

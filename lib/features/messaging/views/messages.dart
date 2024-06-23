@@ -77,7 +77,7 @@ class _MessageViewState extends ConsumerState<MessageView> {
 
     return Container(
       decoration: BoxDecoration(
-        color: Theme.of(context).custom.colorTheme.foreground,
+        color: Theme.of(context).custom.colorTheme.messageViewBackground,
         boxShadow: const [
           BoxShadow(
             color: Colors.black,
@@ -91,10 +91,10 @@ class _MessageViewState extends ConsumerState<MessageView> {
           Container(
             height: topPadding + 50,
             decoration: BoxDecoration(
-              color: Theme.of(context).custom.colorTheme.foreground,
+              color: Theme.of(context).custom.colorTheme.messageViewBackground,
               border: Border(
                 bottom: BorderSide(
-                  color: Theme.of(context).custom.colorTheme.brightestGray,
+                  color: Theme.of(context).custom.colorTheme.foreground,
                   width: 1,
                 ),
               ),
@@ -124,7 +124,7 @@ class _MessageViewState extends ConsumerState<MessageView> {
                                     color: Theme.of(context)
                                         .custom
                                         .colorTheme
-                                        .textColor1,
+                                        .channelHeaderText,
                                   ))),
                     ],
                   ),
@@ -217,7 +217,7 @@ class _MessageBarState extends ConsumerState<MessageBar> {
       child: Container(
         decoration: BoxDecoration(
           color: backgroundColor ??
-              Theme.of(context).custom.colorTheme.cardSelected,
+              Theme.of(context).custom.colorTheme.messageBar,
           shape: BoxShape.circle,
         ),
         child: IconButton(icon: icon, onPressed: onPressed),
@@ -230,20 +230,19 @@ class _MessageBarState extends ConsumerState<MessageBar> {
     return Container(
       height: 60,
       decoration: BoxDecoration(
-          color: Theme.of(context).custom.colorTheme.foreground,
+          color: Theme.of(context).custom.colorTheme.messageBarBackground,
           border: Border.symmetric(
             horizontal: BorderSide(
-              color: Theme.of(context).custom.colorTheme.brightestGray,
+              color: Theme.of(context).custom.colorTheme.foreground,
               width: 1,
             ),
           )),
       child: Row(
         children: [
           _messageBarIcon(
-            const Icon(
+            Icon(
               Icons.add,
-              // TODO: This might be bad for light theme.
-              color: Colors.white,
+              color: Theme.of(context).custom.colorTheme.messageBarActivatedIcon,
             ),
             () => print("add"),
           ),
@@ -252,20 +251,24 @@ class _MessageBarState extends ConsumerState<MessageBar> {
               padding: const EdgeInsets.symmetric(vertical: 8),
               child: Container(
                 decoration: BoxDecoration(
-                  color: Theme.of(context).custom.colorTheme.cardSelected,
+                  color: Theme.of(context).custom.colorTheme.messageBar,
                   borderRadius: BorderRadius.circular(36),
                 ),
                 child: Padding(
                     padding: const EdgeInsets.only(left: 16),
-                    child: TextField(
-                      controller: messageBarController,
-                      decoration: InputDecoration(
-                        hintText:
-                            'Message #${(widget.currentChannel != null) ? getChannelName(widget.currentChannel!) : ""}',
-                        hintStyle: const TextStyle(color: Colors.white),
-                        border: InputBorder.none,
+                    child: Center(
+                      child: TextField(
+                        controller: messageBarController,
+                        decoration: InputDecoration(
+                          contentPadding: const EdgeInsets.only(left: 8, bottom: 6),
+                          
+                          hintText:
+                              'Message #${(widget.currentChannel != null) ? getChannelName(widget.currentChannel!) : ""}',
+                          hintStyle: TextStyle(color: Theme.of(context).custom.colorTheme.messageBarHintText),
+                          border: InputBorder.none,
+                        ),
+                        style: Theme.of(context).custom.textTheme.bodyText1,
                       ),
-                      style: Theme.of(context).custom.textTheme.bodyText1,
                     )),
               ),
             ),
@@ -284,7 +287,7 @@ class _MessageBarState extends ConsumerState<MessageBar> {
                   .sendMessage(messageBarController.text);
               messageBarController.text = "";
             },
-            backgroundColor: Theme.of(context).custom.colorTheme.blurpleColor,
+            backgroundColor: Theme.of(context).custom.colorTheme.blurple,
           ),
         ],
       ),
@@ -361,7 +364,7 @@ class _MessageBoxState extends ConsumerState<MessageBox> {
 
     member.when(
       data: (member) {
-        name = member?.nick ?? name;
+        name = member?.nick ?? member?.user?.globalName ?? name;
         Role? topRole;
         Role? topEmojiRole;
         for (PartialRole partialRole in member!.roles) {
@@ -523,7 +526,7 @@ class _MessageBoxState extends ConsumerState<MessageBox> {
                               color: Theme.of(context)
                                   .custom
                                   .colorTheme
-                                  .cardSelected,
+                                  .foreground,
                               borderRadius: BorderRadius.circular(8)),
                         ),
                       ),

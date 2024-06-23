@@ -26,10 +26,10 @@ class _BarWidgetState extends ConsumerState<BarWidget> {
       children: [
         Container(
             decoration: BoxDecoration(
-              color: Theme.of(context).custom.colorTheme.cardSelected,
+              color: Theme.of(context).custom.colorTheme.navbarBackground,
               border: Border(
                   top: BorderSide(
-                color: Theme.of(context).custom.colorTheme.brightestGray,
+                color: Theme.of(context).custom.colorTheme.foreground,
                 width: 1,
               )),
             ),
@@ -44,7 +44,7 @@ class _BarWidgetState extends ConsumerState<BarWidget> {
                       icon: SvgPicture.asset(
                         'assets/icons/home.svg',
                         colorFilter: ColorFilter.mode(
-                          Theme.of(context).custom.colorTheme.selectedIconColor,
+                          Theme.of(context).custom.colorTheme.navbarIconSelected,
                           BlendMode.srcIn,
                         ),
                         height: 25,
@@ -55,7 +55,7 @@ class _BarWidgetState extends ConsumerState<BarWidget> {
                       icon: SvgPicture.asset(
                         'assets/icons/messages.svg',
                         colorFilter: ColorFilter.mode(
-                          Theme.of(context).custom.colorTheme.selectedIconColor,
+                          Theme.of(context).custom.colorTheme.navbarIconSelected,
                           BlendMode.srcIn,
                         ),
                         height: 25,
@@ -66,7 +66,7 @@ class _BarWidgetState extends ConsumerState<BarWidget> {
                       icon: SvgPicture.asset(
                         'assets/icons/notifications.svg',
                         colorFilter: ColorFilter.mode(
-                          Theme.of(context).custom.colorTheme.selectedIconColor,
+                          Theme.of(context).custom.colorTheme.navbarIconSelected,
                           BlendMode.srcIn,
                         ),
                         height: 25,
@@ -77,7 +77,7 @@ class _BarWidgetState extends ConsumerState<BarWidget> {
             )),
         Container(
           decoration: BoxDecoration(
-            color: Theme.of(context).custom.colorTheme.cardSelected,
+            color: Theme.of(context).custom.colorTheme.navbarBackground,
           ),
           height: MediaQuery.of(context).padding.bottom,
         )
@@ -148,7 +148,7 @@ class NavigatorIconState extends State<NavigatorIcon> {
                 style: Theme.of(context).custom.textTheme.subtitle2.copyWith(
                       fontSize: 9,
                       color:
-                          Theme.of(context).custom.colorTheme.selectedIconColor,
+                          Theme.of(context).custom.colorTheme.navbarIconSelected,
                     ))
           ],
         ),

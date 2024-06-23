@@ -25,12 +25,12 @@ class _GuildOverviewState extends ConsumerState<GuildOverview> {
         width: double.infinity,
         child: Container(
           decoration: BoxDecoration(
-              color: Theme.of(context).custom.colorTheme.foreground,
+              color: Theme.of(context).custom.colorTheme.channelListBackground,
               borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(15), topRight: Radius.circular(8)),
               border: Border(
                   bottom: BorderSide(
-                      color: Theme.of(context).custom.colorTheme.brightestGray,
+                      color: Theme.of(context).custom.colorTheme.foreground,
                       width: 1.0))),
           child: Column(
             children: [
