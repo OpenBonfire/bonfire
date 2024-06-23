@@ -18,59 +18,6 @@ class GuildMembers extends _$GuildMembers {
     final currentGuild = ref.watch(currentGuildControllerProvider);
     var authOutput = ref.watch(authProvider.notifier).getAuth();
 
-    // if (currentGuild != null) {
-    //   final guildId = currentGuild.id;
-    //   // todo: add caching for this
-    //   fetchMembers(authOutput, guildId);
-    // }
-
     return [];
-  }
-
-  Future<void> fetchMembers(
-    authOutput,
-    int guildId, {
-    int? before,
-    int? count,
-    bool? lock = true,
-    bool? requestAvatar = true,
-  }) async {
-    if (authOutput != null && authOutput is AuthUser) {
-      user = authOutput;
-
-      print("FETCHING MEMBERS!");
-      var guildSnowflake = Snowflake(guildId);
-      print("getting client...");
-      print(user);
-      // var client = user!.client;
-      // print("getting guilds...");
-      // var guilds = client.guilds;
-      // print("getting guild...");
-      // var guild = await guilds.get(guildSnowflake);
-      print("getting members...");
-      // var members = user!.client.gateway.listGuildMembers(
-      //   guildSnowflake,
-      //   limit: 20
-      // );
-
-      print("MEMBERS!");
-      // members.listen((member) {
-      //   print("-- STREAM --");
-      //   print(member);
-      // });
-
-      // print("MEMBERS!");
-      // print(members);
-      // List<BonfireGuildMember> bonfireMembers = members.map((member) {
-      //   return BonfireGuildMember(
-      //     id: member.id.value,
-      //     guildId: guildId,
-      //     displayName: member.user!.username,
-      //     name: member.user!.username,
-      //     iconUrl: member.user!.avatar.url.toString(),
-      //   );
-      // }).toList();
-      // state = AsyncData(bonfireMembers);
-    }
   }
 }

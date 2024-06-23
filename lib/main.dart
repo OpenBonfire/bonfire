@@ -1,12 +1,18 @@
+import 'dart:io';
+
 import 'package:bonfire/features/members/repositories/guild_members.dart';
 import 'package:bonfire/router/controller.dart';
 import 'package:bonfire/theme/theme.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_keyboard_size/flutter_keyboard_size.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:video_player_media_kit/video_player_media_kit.dart';
+import 'package:bitsdojo_window/bitsdojo_window.dart';
+import 'package:bonfire/features/window/views/window.dart'; // Import the new file
 
 void main() async {
   VideoPlayerMediaKit.ensureInitialized(
@@ -23,6 +29,14 @@ void main() async {
 
   await GetStorage.init();
   runApp(const ProviderScope(child: MaterialApp(home: MainWindow())));
+
+  doWhenWindowReady(() {
+    const initialSize = Size(600, 450);
+    appWindow.minSize = initialSize;
+    appWindow.size = initialSize;
+    appWindow.alignment = Alignment.center;
+    appWindow.show();
+  });
 }
 
 class MainWindow extends ConsumerStatefulWidget {
@@ -46,12 +60,23 @@ class _MainWindowState extends ConsumerState<MainWindow> {
     // Tree shaker? I hardly know her!
     // ref.watch(guildMembersProvider);
 
-    return KeyboardSizeProvider(
-      child: MaterialApp.router(
-        title: 'Bonfire',
-        theme: ref.read(lightThemeProvider),
-        darkTheme: ref.read(darkThemeProvider),
-        routerConfig: routerController,
+    return Scaffold(
+      body: Column(
+        children: [
+          (Platform.isWindows | Platform.isLinux | Platform.isMacOS)
+              ? const WindowTopBar()
+              : Container(), // Use the new WindowTopBar widget
+          Flexible(
+            child: KeyboardSizeProvider(
+              child: MaterialApp.router(
+                title: 'Bonfire',
+                theme: ref.read(lightThemeProvider),
+                darkTheme: ref.read(darkThemeProvider),
+                routerConfig: routerController,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

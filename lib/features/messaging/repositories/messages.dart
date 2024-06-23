@@ -89,8 +89,7 @@ class Messages extends _$Messages {
     if ((authOutput != null) && (authOutput is AuthUser)) {
       user = authOutput;
       var textChannel = channel as TextChannel;
-      var beforeSnowflake =
-          before != null ? Snowflake(before) : null;
+      var beforeSnowflake = before != null ? Snowflake(before) : null;
 
       var channelGuildId = guildId ??
           ref.read(guildControllerProvider.notifier).currentGuild!.id.value;
@@ -102,8 +101,8 @@ class Messages extends _$Messages {
       var selfMember = await user!
           .client.guilds[Snowflake(channelGuildId)].members
           .get(user!.client.user.id);
-      var permissions = await (textChannel as GuildChannel)
-          .computePermissionsFor(selfMember);
+      var permissions =
+          await (textChannel as GuildChannel).computePermissionsFor(selfMember);
 
       if (permissions.canReadMessageHistory == false) {
         // I think there's still another permission we're missing here...
@@ -116,19 +115,7 @@ class Messages extends _$Messages {
 
       var messages = await textChannel.messages
           .fetchMany(limit: count ?? 20, before: beforeSnowflake);
-      print("Loaded ${messages.length} messages");
-      List<Uint8List> memberAvatars = [];
-
-      if (requestAvatar == true) {
-        memberAvatars = await Future.wait(
-          messages.map((message) async {
-            var avatar = await fetchMemberAvatar(
-              message.author
-            );
-            return avatar;
-          }),
-        );
-      }
+      // print("Loaded ${messages.length} messages");
       removeLock();
 
       List<Message> channelMessages = [];
@@ -256,7 +243,8 @@ class Messages extends _$Messages {
   }
 
   Future<Uint8List?> fetchMemberAvatarFromCache(MessageAuthor user) async {
-    var cacheData = await _cacheManager.getFileFromCache(user.id.value.toString());
+    var cacheData =
+        await _cacheManager.getFileFromCache(user.id.value.toString());
     return cacheData?.file.readAsBytesSync();
   }
 
@@ -274,8 +262,7 @@ class Messages extends _$Messages {
     return fetched;
   }
 
-  Future<void> cacheMessages(
-      List<Message> messages, String cacheKey) async {
+  Future<void> cacheMessages(List<Message> messages, String cacheKey) async {
     // print("caching messages using key $cacheKey");
     // var toCache = messages;
     // if (toCache.length >= 21) {
