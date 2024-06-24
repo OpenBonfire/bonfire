@@ -269,7 +269,6 @@ class Messages extends _$Messages {
     //   if (cached != null) return cached;
     // }
     var iconUrl = member.user?.avatar.url;
-    print(iconUrl);
     if (iconUrl == null) return null;
     var fetched = (await http.get(iconUrl)).bodyBytes;
 

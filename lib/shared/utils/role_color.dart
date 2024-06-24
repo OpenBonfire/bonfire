@@ -2,64 +2,70 @@ import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
 import 'package:collection/collection.dart';
 
-Color getRoleColor(Member member, List<Role> roles) {
-  Role? topRole;
-  Role? topEmojiRole;
-  Color textColor = Colors.white;
+class MemberRoleHelper {
+  final Member member;
+  final List<Role> roles;
 
-  for (PartialRole partialRole in member.roles) {
-    Role? role = roles.firstWhereOrNull((role) => partialRole.id == role.id);
-    if (role == null) {
-      continue;
-    }
-    topRole ??= role;
+  MemberRoleHelper(this.member, this.roles);
 
-    if (role.icon != null) {
-      topEmojiRole ??= role;
-      if (topEmojiRole.position < role.position) {
-        topEmojiRole = role;
+  Role? getTopRole() {
+    Role? topRole;
+
+    for (PartialRole partialRole in member.roles) {
+      Role? role = roles.firstWhereOrNull((role) => partialRole.id == role.id);
+      if (role == null) {
+        continue;
+      }
+
+      if (role.color.value == 0) {
+        continue;
+      }
+
+      if (topRole == null || role.position > topRole.position) {
+        topRole = role;
       }
     }
 
-    if (topRole.position < role.position) {
-      topRole = role;
-    }
-
-    var tc = topRole.color;
-    if (tc.value != 0) textColor = Color.fromRGBO(tc.r, tc.g, tc.b, 1);
+    return topRole;
   }
 
-  return textColor;
+  Role? getTopEmojiRole() {
+    Role? topEmojiRole;
+
+    for (PartialRole partialRole in member.roles) {
+      Role? role = roles.firstWhereOrNull((role) => partialRole.id == role.id);
+      if (role == null || role.icon == null) {
+        continue;
+      }
+
+      if (topEmojiRole == null || role.position > topEmojiRole.position) {
+        topEmojiRole = role;
+      }
+    }
+    return topEmojiRole;
+  }
+
+  Color getRoleColor() {
+    Role? topRole = getTopRole();
+    if (topRole != null) {
+      return Color.fromRGBO(
+          topRole.color.r, topRole.color.g, topRole.color.b, 1);
+    }
+    return Colors.white;
+  }
+
+  String? getRoleIconUrl() {
+    Role? topEmojiRole = getTopEmojiRole();
+    return topEmojiRole?.icon?.url.toString();
+  }
+}
+
+Color getRoleColor(Member member, List<Role> roles) {
+  final helper = MemberRoleHelper(member, roles);
+  return helper.getRoleColor();
 }
 
 String? getRoleIconUrl(Member member, List<Role> roles) {
-  Role? topRole;
-  Role? topEmojiRole;
-  String? roleIconUrl;
-  Color textColor = Colors.white;
-
-  for (PartialRole partialRole in member.roles) {
-    Role? role = roles.firstWhereOrNull((role) => partialRole.id == role.id);
-    if (role == null) {
-      continue;
-    }
-    topRole ??= role;
-
-    if (role.icon != null) {
-      topEmojiRole ??= role;
-      if (topEmojiRole.position < role.position) {
-        topEmojiRole = role;
-      }
-    }
-
-    if (topRole.position < role.position) {
-      topRole = role;
-    }
-
-    var tc = topRole.color;
-    roleIconUrl = topEmojiRole?.icon?.url.toString();
-    if (tc.value != 0) textColor = Color.fromRGBO(tc.r, tc.g, tc.b, 1);
-  }
-
-  return roleIconUrl;
+  final helper = MemberRoleHelper(member, roles);
+  return helper.getRoleIconUrl();
 }

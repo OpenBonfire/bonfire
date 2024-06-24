@@ -69,8 +69,10 @@ class Auth extends _$Auth {
   /// Authenticate client with Discord [token]
   Future<AuthResponse> loginWithToken(String token) async {
     var newClient = await Nyxx.connectGateway(token, GatewayIntents.all,
-        options: const GatewayClientOptions(
-            plugins: [/*Logging(logLevel: Level.ALL)*/]));
+        options: GatewayClientOptions(plugins: [
+          /*Logging(logLevel: Level.ALL)*/
+          IgnoreExceptions()
+        ]));
     client = newClient;
 
     // This is how we save login information
