@@ -1,4 +1,6 @@
+import 'package:bonfire/features/guild/repositories/member.dart';
 import 'package:bonfire/features/members/views/components/member_avatar.dart';
+import 'package:bonfire/shared/utils/role_color.dart';
 import 'package:bonfire/theme/theme.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +21,8 @@ class MemberCard extends ConsumerStatefulWidget {
 class _MemberCardState extends ConsumerState<MemberCard> {
   @override
   Widget build(BuildContext context) {
+    var roles = ref.watch(getGuildRolesProvider).valueOrNull ?? [];
+
     return Container(
         height: 55,
         decoration: BoxDecoration(
@@ -39,8 +43,17 @@ class _MemberCardState extends ConsumerState<MemberCard> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    widget.member.user!.username,
-                    style: Theme.of(context).custom.textTheme.subtitle1,
+                    widget.member.nick ??
+                        widget.member.user?.globalName ??
+                        widget.member.user?.username ??
+                        "Unknown",
+                    style: Theme.of(context)
+                        .custom
+                        .textTheme
+                        .subtitle1
+                        .copyWith(
+                            color: getRoleColor(
+                                widget.member, roles as List<Role>)),
                   ),
                   // Text(
                   //   widget.member.status,

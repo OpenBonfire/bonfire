@@ -1,3 +1,4 @@
+import 'package:bonfire/features/channels/controllers/channel.dart';
 import 'package:bonfire/features/guild/controllers/current_guild.dart';
 import 'package:bonfire/features/channels/repositories/channel_members.dart';
 import 'package:bonfire/features/members/views/components/member_card.dart';
@@ -8,15 +9,15 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// List of members in the selected guild (not implemented)
-class MemberList extends StatefulWidget {
+class MemberList extends ConsumerStatefulWidget {
   const MemberList({super.key});
 
   @override
-  State<MemberList> createState() => _MemberListState();
+  ConsumerState<MemberList> createState() => _MemberListState();
 }
 
-class _MemberListState extends State<MemberList> {
-  Widget topBox() {
+class _MemberListState extends ConsumerState<MemberList> {
+  Widget topBox(String channelName, String channelDescription) {
     return Container(
       width: double.infinity,
       height: 150,
@@ -34,11 +35,11 @@ class _MemberListState extends State<MemberList> {
             child: Column(
               children: [
                 Text(
-                  "Channel Name / Icon",
+                  "# $channelName",
                   style: Theme.of(context).custom.textTheme.titleMedium,
                 ),
                 Text(
-                  "Channel Description",
+                  channelDescription,
                   style: Theme.of(context).custom.textTheme.subtitle2,
                 ),
               ],
@@ -47,15 +48,33 @@ class _MemberListState extends State<MemberList> {
     );
   }
 
+  String getChannelName(Channel channel) {
+    return (channel as GuildChannel).name;
+
+    // if (channel.type == ChannelType) {
+    //   return (channel as GuildChannel).name;
+    // } else {
+    //   return "Name not implemented.";
+    // }
+  }
+
   @override
   Widget build(BuildContext context) {
+    var currentChannel = ref.watch(channelControllerProvider);
+
+    String channelName = "Unknown";
+    if (currentChannel != null) channelName = getChannelName(currentChannel);
+
     return SizedBox(
       width: double.infinity,
       height: double.infinity,
       child: Padding(
           padding: const EdgeInsets.only(left: 0), // 40
           child: Column(
-            children: [topBox(), const Expanded(child: MemberScrollView())],
+            children: [
+              topBox(getChannelName(currentChannel!), ""),
+              const Expanded(child: MemberScrollView())
+            ],
           )),
     );
   }
