@@ -1,6 +1,8 @@
 import 'package:bonfire/features/guild/controllers/current_guild.dart';
-import 'package:bonfire/features/members/repositories/guild_members.dart';
+import 'package:bonfire/features/channels/repositories/channel_members.dart';
+import 'package:bonfire/features/members/views/components/member_card.dart';
 import 'package:bonfire/theme/theme.dart';
+import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -17,9 +19,9 @@ class _MemberListState extends State<MemberList> {
   Widget topBox() {
     return Container(
       width: double.infinity,
-      height: 270,
+      height: 150,
       decoration: BoxDecoration(
-        color: Theme.of(context).custom.colorTheme.foreground,
+        color: Theme.of(context).custom.colorTheme.background,
         borderRadius: const BorderRadius.only(
           bottomLeft: Radius.circular(0),
         ),
@@ -53,7 +55,7 @@ class _MemberListState extends State<MemberList> {
       child: Padding(
           padding: const EdgeInsets.only(left: 0), // 40
           child: Column(
-            children: [topBox(), Expanded(child: MemberScrollView())],
+            children: [topBox(), const Expanded(child: MemberScrollView())],
           )),
     );
   }
@@ -71,20 +73,28 @@ class MemberScrollViewState extends ConsumerState<MemberScrollView> {
   Widget build(BuildContext context) {
     var currentGuild = ref.watch(currentGuildControllerProvider);
 
-    // TODO: Handle if current guild is null
-    var memberListProvider =
-        ref.watch(guildMembersProvider); //.fetchMembers(currentGuild!.id);
-    var memberList = memberListProvider.valueOrNull ?? [];
+    var memberList = ref.watch(channelMembersProvider).valueOrNull ?? [];
 
-    // print("LOADED MEMBERS!");
-    // print(memberList);
-
-    return Center(
+    return SizedBox(
       child: ListView.builder(
-          itemCount: memberList.length,
-          itemBuilder: (context, index) {
-            return Text("Member $index");
-          }),
+        itemCount: memberList.length,
+        itemBuilder: (context, index) {
+          if (memberList[index].toString().contains("Member(")) {
+            var members = memberList[index] as List;
+            return Column(
+              children: members.map<Widget>((member) {
+                member = member as Member;
+                return Padding(
+                  padding:
+                      const EdgeInsets.only(left: 32, right: 12, bottom: 8),
+                  child: MemberCard(member: member),
+                );
+              }).toList(),
+            );
+          }
+          return Container(); // Return an empty container if the check fails
+        },
+      ),
     );
   }
 }

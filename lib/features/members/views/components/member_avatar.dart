@@ -5,23 +5,22 @@ import 'package:firebridge/firebridge.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class Avatar extends ConsumerStatefulWidget {
-  final MessageAuthor author;
-  const Avatar({super.key, required this.author});
+class MemberAvatar extends ConsumerStatefulWidget {
+  final Member member;
+  const MemberAvatar({super.key, required this.member});
 
   @override
-  ConsumerState<Avatar> createState() => _AvatarState();
+  ConsumerState<MemberAvatar> createState() => _AvatarState();
 }
 
-class _AvatarState extends ConsumerState<Avatar> {
+class _AvatarState extends ConsumerState<MemberAvatar> {
   late Future<Uint8List?> _avatarFuture;
 
   @override
   void initState() {
     super.initState();
-    _avatarFuture = ref
-        .read(messagesProvider.notifier)
-        .fetchMessageAuthorAvatar(widget.author);
+    _avatarFuture =
+        ref.read(messagesProvider.notifier).fetchMemberAvatar(widget.member);
   }
 
   @override
@@ -29,8 +28,8 @@ class _AvatarState extends ConsumerState<Avatar> {
     return Padding(
       padding: const EdgeInsets.only(right: 8),
       child: SizedBox(
-        width: 45,
-        height: 45,
+        width: 35,
+        height: 35,
         child: ClipRRect(
           borderRadius: BorderRadius.circular(100),
           child: FutureBuilder<Uint8List?>(
@@ -41,14 +40,14 @@ class _AvatarState extends ConsumerState<Avatar> {
                   return Image.memory(snapshot.data!);
                 } else {
                   return const SizedBox(
-                    width: 45,
-                    height: 45,
+                    width: 35,
+                    height: 35,
                   );
                 }
               } else {
                 return const SizedBox(
-                  width: 45,
-                  height: 45,
+                  width: 35,
+                  height: 35,
                 );
               }
             },

@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:bonfire/features/members/repositories/guild_members.dart';
+import 'package:bonfire/features/channels/repositories/channel_members.dart';
 import 'package:bonfire/router/controller.dart';
 import 'package:bonfire/theme/theme.dart';
 import 'package:flutter/cupertino.dart';
@@ -31,8 +31,8 @@ void main() async {
   runApp(const ProviderScope(child: MaterialApp(home: MainWindow())));
 
   doWhenWindowReady(() {
-    const initialSize = Size(600, 450);
-    appWindow.minSize = initialSize;
+    const initialSize = Size(1280, 720);
+    // appWindow.minSize = initialSize;
     appWindow.size = initialSize;
     appWindow.alignment = Alignment.center;
     appWindow.show();

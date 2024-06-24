@@ -46,7 +46,7 @@ dependencies:
   visibility_detector: ^0.4.0+2
   url_launcher: ^6.2.6
   sticky_headers: ^0.3.0+2
-  firebridge: ^6.2.10
+  firebridge: ^6.2.11
   firebridge_extensions: ^4.1.2
   flutter_svg: ^2.0.10+1
   flutter_vlc_player: ^7.4.2

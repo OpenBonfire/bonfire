@@ -27,9 +27,9 @@ To start, lemmie outline a few things.
   
 - Are you a mobile client? Desktop client? Sort of both. Bonfire is a mobile-first client. All of the features we are adding right now are 100% intended for mobile, but because we are using Flutter it's possible to build Bonfire on other platforms. In fact, it currently works just about the same on Windows / MacOS / Linux as it does on mobile (it just needs to be re-themed and re-formatted to look nice). Web is on the radar, but will not work at the current moment.
 
-- Perhaps, extensions? Well yes (in the future). The goal is that Bonfire can be modified to your liking, much like using Vesktop and such. It would work very different from a developer standpoint, but having a built-in plugin marketplace would definitely be cool, although yes, quite difficult. It won't be a focus until the client is at a point I'd consider release-ready.
+- Perhaps, extensions? Well yes (in the future). The goal is that Bonfire can be modified to your liking, much like using Vencord and such. It would work very different from a developer standpoint, but having a built-in plugin marketplace would definitely be cool, although yes, quite difficult. It won't be a focus until the client is at a point I'd consider release-ready.
 
-## Why not the BetterDiscord / Vesktop Approach?
+## Why not the BetterDiscord / Vencord Approach?
 
 Mobile is just a different beast due to the difficult nature of modifying packed binaries. While the Desktop client can be fixed relatively easily because it's possible to inject javascript directly into the application, mobile would require modifying the binary ahead of time to patch in your changes. This is extremely difficult due to the locked-down nature of apps (if you'd like to see an example of this approach, check out ReVanced). Instead of trying to hack together patches for an already broken and slow client, we have decided to tackle creating a full re-implementation of the Discord client using the flutter framework!
 

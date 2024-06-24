@@ -31,7 +31,7 @@ class _EmbedWidgetState extends ConsumerState<EmbedWidget> {
       embedWidget = ImageEmbed(embed: widget.embed);
     }
     if (widget.embed.video != null) {
-      embedWidget = VideoEmbed(embed: widget.embed);
+      // embedWidget = VideoEmbed(embed: widget.embed);
     }
     return embedWidget;
   }
