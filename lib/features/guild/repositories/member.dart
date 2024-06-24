@@ -18,7 +18,7 @@ Future<Member?> getMember(GetMemberRef ref, Snowflake memberId) async {
 }
 
 @riverpod
-Future<List<Role?>?> getGuildRoles(GetGuildRolesRef ref) async {
+Future<List<Role>?> getGuildRoles(GetGuildRolesRef ref) async {
   var authOutput = ref.watch(authProvider.notifier).getAuth();
   var currentGuild = ref.watch(guildControllerProvider);
 
@@ -28,11 +28,13 @@ Future<List<Role?>?> getGuildRoles(GetGuildRolesRef ref) async {
 }
 
 @riverpod
-Future<Role?> getRole(GetRoleRef ref, Snowflake roleId) async {
+Future<Role> getRole(GetRoleRef ref, Snowflake roleId) async {
   var authOutput = ref.watch(authProvider.notifier).getAuth();
   var currentGuild = ref.watch(guildControllerProvider);
 
   if (authOutput is AuthUser) {
     return await authOutput.client.guilds[currentGuild!.id].roles.get(roleId);
+  } else {
+    throw Exception('No auth user');
   }
 }

@@ -26,6 +26,7 @@ class MessageView extends ConsumerStatefulWidget {
 
 class _MessageViewState extends ConsumerState<MessageView> {
   final ScrollController _scrollController = ScrollController();
+  Logger logger = Logger("MessageView");
 
   @override
   void initState() {
@@ -41,9 +42,8 @@ class _MessageViewState extends ConsumerState<MessageView> {
   }
 
   void _scrollListener() {
-    if (_scrollController.position.pixels > 100 &&
-        _scrollController.position.pixels >=
-            _scrollController.position.maxScrollExtent - 10000) {
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent - 1000) {
       _loadMoreMessages();
     }
   }
@@ -151,7 +151,7 @@ class _MessageViewState extends ConsumerState<MessageView> {
                   showAuthor = false;
                 }
                 var key = Key(messages[index].id.value.toString());
-
+                logger.info("Building message with key: ${key.toString()}");
                 var box = MessageBox(
                   key: key,
                 );
@@ -304,6 +304,7 @@ class _MessageBarState extends ConsumerState<MessageBar> {
 class MessageBox extends ConsumerStatefulWidget {
   Message? message;
   bool showSenderInfo = true;
+  Logger logger = Logger("MessageBox");
   MessageBox({super.key});
 
   @override

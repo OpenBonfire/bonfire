@@ -154,11 +154,11 @@ class _GetMemberProviderElement
   Snowflake get memberId => (origin as GetMemberProvider).memberId;
 }
 
-String _$getGuildRolesHash() => r'c2b1fbbdb09f951efae01bb5086f3b14b3e29689';
+String _$getGuildRolesHash() => r'9138b8178b3dc01b322c556184e01ce90aef9651';
 
 /// See also [getGuildRoles].
 @ProviderFor(getGuildRoles)
-final getGuildRolesProvider = AutoDisposeFutureProvider<List<Role?>?>.internal(
+final getGuildRolesProvider = AutoDisposeFutureProvider<List<Role>?>.internal(
   getGuildRoles,
   name: r'getGuildRolesProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -168,15 +168,15 @@ final getGuildRolesProvider = AutoDisposeFutureProvider<List<Role?>?>.internal(
   allTransitiveDependencies: null,
 );
 
-typedef GetGuildRolesRef = AutoDisposeFutureProviderRef<List<Role?>?>;
-String _$getRoleHash() => r'f0f5ff4560751ccd24542b6a5469c6e1c45ff20f';
+typedef GetGuildRolesRef = AutoDisposeFutureProviderRef<List<Role>?>;
+String _$getRoleHash() => r'4b3024638d3be37bbd1ba85bc109b472db86796a';
 
 /// See also [getRole].
 @ProviderFor(getRole)
 const getRoleProvider = GetRoleFamily();
 
 /// See also [getRole].
-class GetRoleFamily extends Family<AsyncValue<Role?>> {
+class GetRoleFamily extends Family<AsyncValue<Role>> {
   /// See also [getRole].
   const GetRoleFamily();
 
@@ -214,7 +214,7 @@ class GetRoleFamily extends Family<AsyncValue<Role?>> {
 }
 
 /// See also [getRole].
-class GetRoleProvider extends AutoDisposeFutureProvider<Role?> {
+class GetRoleProvider extends AutoDisposeFutureProvider<Role> {
   /// See also [getRole].
   GetRoleProvider(
     Snowflake roleId,
@@ -248,7 +248,7 @@ class GetRoleProvider extends AutoDisposeFutureProvider<Role?> {
 
   @override
   Override overrideWith(
-    FutureOr<Role?> Function(GetRoleRef provider) create,
+    FutureOr<Role> Function(GetRoleRef provider) create,
   ) {
     return ProviderOverride(
       origin: this,
@@ -265,7 +265,7 @@ class GetRoleProvider extends AutoDisposeFutureProvider<Role?> {
   }
 
   @override
-  AutoDisposeFutureProviderElement<Role?> createElement() {
+  AutoDisposeFutureProviderElement<Role> createElement() {
     return _GetRoleProviderElement(this);
   }
 
@@ -283,12 +283,12 @@ class GetRoleProvider extends AutoDisposeFutureProvider<Role?> {
   }
 }
 
-mixin GetRoleRef on AutoDisposeFutureProviderRef<Role?> {
+mixin GetRoleRef on AutoDisposeFutureProviderRef<Role> {
   /// The parameter `roleId` of this provider.
   Snowflake get roleId;
 }
 
-class _GetRoleProviderElement extends AutoDisposeFutureProviderElement<Role?>
+class _GetRoleProviderElement extends AutoDisposeFutureProviderElement<Role>
     with GetRoleRef {
   _GetRoleProviderElement(super.provider);
 

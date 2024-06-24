@@ -244,30 +244,41 @@ class Messages extends _$Messages {
     return cacheData?.file.readAsBytesSync();
   }
 
-  Future<Uint8List> fetchMessageAuthorAvatar(MessageAuthor user) async {
-    var cached = await fetchMemberAvatarFromCache(user.avatarHash!);
-    if (cached != null) return cached;
+  Future<Uint8List?> fetchMessageAuthorAvatar(MessageAuthor member) async {
+    String? hash = member.avatarHash;
+    if (hash != null) {
+      var cached = await fetchMemberAvatarFromCache(member.avatarHash!);
+      if (cached != null) return cached;
+    }
     // if (user.avatar != null) return null;
-    var iconUrl = user.avatar!.url;
+    var iconUrl = member.avatar?.url;
+    if (iconUrl == null) return null;
     var fetched = (await http.get(iconUrl)).bodyBytes;
 
     await _cacheManager.putFile(
-      user.avatarHash!,
+      member.avatarHash!,
       fetched,
     );
     return fetched;
   }
 
-  Future<Uint8List> fetchMemberAvatar(Member member) async {
-    var cached = await fetchMemberAvatarFromCache(member.user!.avatarHash!);
-    if (cached != null) return cached;
-    var url = member.user!.avatar.url;
-    var fetched = (await http.get(url)).bodyBytes;
+  Future<Uint8List?> fetchMemberAvatar(Member member) async {
+    String? hash = member.user!.avatarHash;
+    // if (hash != null) {
+    //   var cached = await fetchMemberAvatarFromCache(hash);
+    //   if (cached != null) return cached;
+    // }
+    var iconUrl = member.user?.avatar.url;
+    print(iconUrl);
+    if (iconUrl == null) return null;
+    var fetched = (await http.get(iconUrl)).bodyBytes;
 
-    await _cacheManager.putFile(
-      member.user!.avatarHash!,
-      fetched,
-    );
+    if (hash != null) {
+      await _cacheManager.putFile(
+        hash,
+        fetched,
+      );
+    }
     return fetched;
   }
 

@@ -75,7 +75,9 @@ class _MemberListState extends ConsumerState<MemberList> {
           padding: const EdgeInsets.only(left: 0), // 40
           child: Column(
             children: [
-              topBox(getChannelName(currentChannel!), ""),
+              (currentChannel != null)
+                  ? topBox(getChannelName(currentChannel!), "")
+                  : Container(),
               const Expanded(child: MemberScrollView())
             ],
           )),
@@ -95,11 +97,9 @@ class MemberScrollViewState extends ConsumerState<MemberScrollView> {
   Widget build(BuildContext context) {
     var currentGuild = ref.watch(currentGuildControllerProvider);
 
-    var memberListPair = ref.watch(channelMembersProvider).valueOrNull ?? [];
-    var pair =
-        memberListPair as Pair<List<GuildMemberListGroup>, List<dynamic>>;
-    var groupList = pair.first;
-    var memberList = pair.second;
+    var memberListPair = ref.watch(channelMembersProvider).valueOrNull;
+    var groupList = memberListPair?.first ?? [];
+    var memberList = memberListPair?.second ?? [];
 
     return SizedBox(
       child: ListView.builder(
@@ -118,7 +118,7 @@ class MemberScrollViewState extends ConsumerState<MemberScrollView> {
               }).toList(),
             );
           }
-          print(memberList[index][0]);
+          // print(memberList[index][0]);
           return Padding(
             padding: const EdgeInsets.only(left: 40),
             child: GroupHeader(

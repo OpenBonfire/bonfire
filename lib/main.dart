@@ -30,13 +30,15 @@ void main() async {
   await GetStorage.init();
   runApp(const ProviderScope(child: MaterialApp(home: MainWindow())));
 
-  doWhenWindowReady(() {
-    const initialSize = Size(1280, 720);
-    // appWindow.minSize = initialSize;
-    appWindow.size = initialSize;
-    appWindow.alignment = Alignment.center;
-    appWindow.show();
-  });
+  if (Platform.isWindows | Platform.isLinux | Platform.isMacOS) {
+    doWhenWindowReady(() {
+      const initialSize = Size(1280, 720);
+      // appWindow.minSize = initialSize;
+      appWindow.size = initialSize;
+      appWindow.alignment = Alignment.center;
+      appWindow.show();
+    });
+  }
 }
 
 class MainWindow extends ConsumerStatefulWidget {

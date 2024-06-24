@@ -80,9 +80,7 @@ class Auth extends _$Auth {
     authResponse = AuthUser(token: token, client: client!);
     state = authResponse!;
 
-    client!.onReady.listen((event) {
-      print("User Ready!");
-    });
+    client!.onReady.listen((event) {});
 
     client!.gateway.shards[0].done.then((value) {
       // not sure what to do with this, but it works so yeah

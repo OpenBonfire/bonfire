@@ -17,7 +17,11 @@ class GroupHeader extends ConsumerStatefulWidget {
 class _HeaderCardState extends ConsumerState<GroupHeader> {
   @override
   Widget build(BuildContext context) {
-    var role = ref.watch(getRoleProvider(widget.group.id!)).valueOrNull;
+    Role? role;
+    // TODO: Online members should be in a group...
+    if (widget.group.id != null) {
+      role = ref.watch(getRoleProvider(widget.group.id!)).valueOrNull;
+    }
     int groupCount = 0;
     for (var group in widget.groups) {
       for (var element in widget.groups) {

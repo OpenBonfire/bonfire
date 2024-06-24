@@ -356,10 +356,11 @@ packages:
   firebridge:
     dependency: "direct main"
     description:
-      name: firebridge
-      sha256: "02df4b49fba6ff933af46c7ae12f89e41e8cc2423d423f530a52bf541208b6e2"
-      url: "https://pub.dev"
-    source: hosted
+      path: "."
+      ref: d54c58d777b5720b0459ec446d283d7ab9b99665
+      resolved-ref: d54c58d777b5720b0459ec446d283d7ab9b99665
+      url: "https://github.com/OpenBonfire/firebridge"
+    source: git
     version: "6.2.12"
   firebridge_extensions:
     dependency: "direct main"
@@ -750,6 +751,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.0"
+  logger:
+    dependency: "direct main"
+    description:
+      name: logger
+      sha256: af05cc8714f356fd1f3888fb6741cbe9fbe25cdb6eedbab80e1a6db21047d4a4
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.3.0"
   logging:
     dependency: transitive
     description:

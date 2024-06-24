@@ -51,8 +51,8 @@ class ImageEmbedState extends ConsumerState<ImageEmbed> {
       width: min(widget.embed.thumbnail?.width?.toDouble() ?? double.infinity,
           MediaQuery.of(context).size.width - 90),
       child: AspectRatio(
-        aspectRatio: (widget.embed.thumbnail!.width?.toDouble() ?? 1) /
-            (widget.embed.thumbnail!.height?.toDouble() ?? 1),
+        aspectRatio: (widget.embed.thumbnail?.width?.toDouble() ?? 1) /
+            (widget.embed.thumbnail?.height?.toDouble() ?? 1),
         child: Image.network(widget.embed.image!.url.toString(),
             fit: BoxFit.cover),
       ),
@@ -93,8 +93,8 @@ class VideoEmbedState extends ConsumerState<VideoEmbed> {
 
   @override
   void dispose() {
+    // _videoPlayerController?.dispose();
     super.dispose();
-    _videoPlayerController?.dispose();
   }
 
   @override
@@ -132,8 +132,8 @@ class VideoEmbedState extends ConsumerState<VideoEmbed> {
     }
 
     return AspectRatio(
-      aspectRatio: (widget.embed.thumbnail?.width ?? 1) /
-          (widget.embed.thumbnail?.height ?? 1),
+      aspectRatio:
+          (widget.embed.image?.width ?? 1) / (widget.embed.image?.height ?? 1),
       child: Image.network(widget.embed.thumbnail!.url.toString(),
           fit: BoxFit.cover),
     );

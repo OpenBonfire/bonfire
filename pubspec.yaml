@@ -16,6 +16,11 @@ dependencies:
       url: https://github.com/OpenBonfire/fireview.git
       ref: a537dad4fa77e0ef99bc69c6bb1eeb6bb0aa65e5
 
+  firebridge:
+    git:
+      url: https://github.com/OpenBonfire/firebridge
+      ref: d54c58d777b5720b0459ec446d283d7ab9b99665
+
   markdown_viewer:
     git:
       url: https://github.com/OpenBonfire/markdown_viewer
@@ -46,16 +51,22 @@ dependencies:
   visibility_detector: ^0.4.0+2
   url_launcher: ^6.2.6
   sticky_headers: ^0.3.0+2
-  firebridge: ^6.2.12
+  # firebridge: ^6.2.12
   firebridge_extensions: ^4.1.2
   flutter_svg: ^2.0.10+1
   flutter_vlc_player: ^7.4.2
   bitsdojo_window: ^0.1.6
   collection: ^1.18.0
   http: ^1.2.1
+  logger: ^2.3.0
 
 dependency_overrides:
   webview_flutter_platform_interface: ^2.4.0
+
+  firebridge:
+    git:
+      url: https://github.com/OpenBonfire/firebridge
+      ref: d54c58d777b5720b0459ec446d283d7ab9b99665
 
   media_kit:
     git:

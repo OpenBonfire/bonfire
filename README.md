@@ -67,7 +67,7 @@ I'm pretty new to managing public projects, so you'll have to bear with me here.
   - 🟥 Threads
   - 🟨 Member List
     - 🟩 Base View
-    - 🟨 Networking (handled in firebridge, tricky due to Discord's sharding)
+    - 🟩 Networking (handled in firebridge, tricky due to Discord's sharding)
     - 🟥 Member Search
 - 🟥 Friends
 - 🟨 Guilds
