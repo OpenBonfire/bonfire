@@ -3,7 +3,6 @@ import 'dart:math';
 import 'package:bonfire/theme/theme.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 // import 'package:media_kit/media_kit.dart';
 // import 'package:media_kit_video/media_kit_video.dart';
@@ -31,7 +30,7 @@ class _EmbedWidgetState extends ConsumerState<EmbedWidget> {
       embedWidget = ImageEmbed(embed: widget.embed);
     }
     if (widget.embed.video != null) {
-      // embedWidget = VideoEmbed(embed: widget.embed);
+      embedWidget = VideoEmbed(embed: widget.embed);
     }
     return embedWidget;
   }

@@ -169,5 +169,131 @@ final getGuildRolesProvider = AutoDisposeFutureProvider<List<Role?>?>.internal(
 );
 
 typedef GetGuildRolesRef = AutoDisposeFutureProviderRef<List<Role?>?>;
+String _$getRoleHash() => r'f0f5ff4560751ccd24542b6a5469c6e1c45ff20f';
+
+/// See also [getRole].
+@ProviderFor(getRole)
+const getRoleProvider = GetRoleFamily();
+
+/// See also [getRole].
+class GetRoleFamily extends Family<AsyncValue<Role?>> {
+  /// See also [getRole].
+  const GetRoleFamily();
+
+  /// See also [getRole].
+  GetRoleProvider call(
+    Snowflake roleId,
+  ) {
+    return GetRoleProvider(
+      roleId,
+    );
+  }
+
+  @override
+  GetRoleProvider getProviderOverride(
+    covariant GetRoleProvider provider,
+  ) {
+    return call(
+      provider.roleId,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'getRoleProvider';
+}
+
+/// See also [getRole].
+class GetRoleProvider extends AutoDisposeFutureProvider<Role?> {
+  /// See also [getRole].
+  GetRoleProvider(
+    Snowflake roleId,
+  ) : this._internal(
+          (ref) => getRole(
+            ref as GetRoleRef,
+            roleId,
+          ),
+          from: getRoleProvider,
+          name: r'getRoleProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$getRoleHash,
+          dependencies: GetRoleFamily._dependencies,
+          allTransitiveDependencies: GetRoleFamily._allTransitiveDependencies,
+          roleId: roleId,
+        );
+
+  GetRoleProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.roleId,
+  }) : super.internal();
+
+  final Snowflake roleId;
+
+  @override
+  Override overrideWith(
+    FutureOr<Role?> Function(GetRoleRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: GetRoleProvider._internal(
+        (ref) => create(ref as GetRoleRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        roleId: roleId,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<Role?> createElement() {
+    return _GetRoleProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is GetRoleProvider && other.roleId == roleId;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, roleId.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin GetRoleRef on AutoDisposeFutureProviderRef<Role?> {
+  /// The parameter `roleId` of this provider.
+  Snowflake get roleId;
+}
+
+class _GetRoleProviderElement extends AutoDisposeFutureProviderElement<Role?>
+    with GetRoleRef {
+  _GetRoleProviderElement(super.provider);
+
+  @override
+  Snowflake get roleId => (origin as GetRoleProvider).roleId;
+}
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

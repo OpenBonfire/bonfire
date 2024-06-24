@@ -1,7 +1,10 @@
 import 'package:bonfire/features/channels/controllers/channel.dart';
 import 'package:bonfire/features/guild/controllers/current_guild.dart';
 import 'package:bonfire/features/channels/repositories/channel_members.dart';
+import 'package:bonfire/features/guild/repositories/member.dart';
+import 'package:bonfire/features/members/views/components/group.dart';
 import 'package:bonfire/features/members/views/components/member_card.dart';
+import 'package:bonfire/shared/models/pair.dart';
 import 'package:bonfire/theme/theme.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
@@ -92,7 +95,11 @@ class MemberScrollViewState extends ConsumerState<MemberScrollView> {
   Widget build(BuildContext context) {
     var currentGuild = ref.watch(currentGuildControllerProvider);
 
-    var memberList = ref.watch(channelMembersProvider).valueOrNull ?? [];
+    var memberListPair = ref.watch(channelMembersProvider).valueOrNull ?? [];
+    var pair =
+        memberListPair as Pair<List<GuildMemberListGroup>, List<dynamic>>;
+    var groupList = pair.first;
+    var memberList = pair.second;
 
     return SizedBox(
       child: ListView.builder(
@@ -111,7 +118,13 @@ class MemberScrollViewState extends ConsumerState<MemberScrollView> {
               }).toList(),
             );
           }
-          return Container(); // Return an empty container if the check fails
+          print(memberList[index][0]);
+          return Padding(
+            padding: const EdgeInsets.only(left: 40),
+            child: GroupHeader(
+                groups: groupList,
+                group: memberList[index][0] as GuildMemberListGroup),
+          );
         },
       ),
     );

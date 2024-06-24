@@ -2,6 +2,7 @@ import 'package:bonfire/features/auth/data/repositories/auth.dart';
 import 'package:bonfire/features/auth/data/repositories/discord_auth.dart';
 import 'package:bonfire/features/channels/controllers/channel.dart';
 import 'package:bonfire/features/guild/controllers/current_guild.dart';
+import 'package:bonfire/shared/models/pair.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:firebridge/firebridge.dart';
 
@@ -12,7 +13,7 @@ class ChannelMembers extends _$ChannelMembers {
   AuthUser? user;
 
   @override
-  Future<List<dynamic>?> build() async {
+  Future<Pair<List<GuildMemberListGroup>, List<dynamic>>?> build() async {
     final currentChannel = ref.watch(channelControllerProvider);
     final currentGuild = ref.watch(currentGuildControllerProvider);
 
@@ -40,7 +41,11 @@ class ChannelMembers extends _$ChannelMembers {
 
       authOutput.client.onGuildMemberListUpdate.listen((event) {
         if (event.eventType == MemberListUpdateType.sync) {
-          updateMemberList(event.memberList!);
+          // for some reason I can't directly cast
+          List<GuildMemberListGroup> groupList =
+              List<GuildMemberListGroup>.from(event.groups);
+
+          updateMemberList(event.memberList!, groupList);
         }
       });
     }
@@ -48,7 +53,8 @@ class ChannelMembers extends _$ChannelMembers {
     return null;
   }
 
-  void updateMemberList(List<dynamic> memberList) {
-    state = AsyncValue.data(memberList);
+  void updateMemberList(
+      List<dynamic> memberList, List<GuildMemberListGroup> groups) {
+    state = AsyncValue.data(Pair(groups, memberList));
   }
 }

@@ -4,7 +4,6 @@ import 'package:bonfire/shared/utils/role_color.dart';
 import 'package:bonfire/theme/theme.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class MemberCard extends ConsumerStatefulWidget {
