@@ -129,11 +129,24 @@ class _MessageViewState extends ConsumerState<MessageView> {
               shrinkWrap: true,
               padding: const EdgeInsets.only(bottom: 24),
               itemBuilder: (context, index) {
+                // note: the showAuthor logic is sort of reversed
+                // it works, but the variable name lies
+
                 bool showAuthor = true;
 
                 if (index + 1 < messages.length) {
-                  showAuthor = messages[index + 1].author.id ==
-                      messages[index].author.id;
+                  Message currentMessage = messages[index];
+                  Message lastMessage = messages[index + 1];
+
+                  showAuthor =
+                      lastMessage.author.id == currentMessage.author.id;
+
+                  if (currentMessage.timestamp
+                          .difference(lastMessage.timestamp)
+                          .inMinutes >
+                      5) {
+                    showAuthor = false;
+                  }
                 } else {
                   showAuthor = false;
                 }

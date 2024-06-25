@@ -1,6 +1,5 @@
 import 'package:bonfire/features/messaging/repositories/messages.dart';
 import 'package:bonfire/features/messaging/repositories/events/realtime_messages.dart';
-import 'package:bonfire/features/overview/controllers/navigation_bar.dart';
 import 'package:bonfire/features/overview/views/home_desktop.dart';
 import 'package:bonfire/features/overview/views/home_mobile.dart';
 import 'package:bonfire/features/overview/views/overlapping_panels.dart';
@@ -22,7 +21,6 @@ class _HomeState extends ConsumerState<HomeScreen> {
 
   @override
   void initState() {
-    print("INIT STATE");
     super.initState();
   }
 

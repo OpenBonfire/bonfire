@@ -43,18 +43,13 @@ class _MessageBoxState extends ConsumerState<MessageBox> {
       section1 = '${time.month}/${time.day}/${time.year}';
     }
 
-    var twelveHour = time.hour > 12 ? time.hour - 12 : time.hour;
-    var section3 = time.hour > 12 ? 'PM' : 'AM';
+    int twelveHour = time.hour % 12;
+    twelveHour = twelveHour == 0 ? 12 : twelveHour;
+    String section3 = time.hour >= 12 ? 'PM' : 'AM';
 
-    if (twelveHour == 0) {
-      twelveHour = 12;
-    }
-
-    section2 = ' at $twelveHour:${time.minute} $section3';
-
-    if (time.minute < 10) {
-      section2 = ' at $twelveHour:0${time.minute} $section3';
-    }
+    String formattedMinute =
+        time.minute < 10 ? '0${time.minute}' : '${time.minute}';
+    section2 = ' at $twelveHour:$formattedMinute $section3';
 
     return section1 + section2;
   }

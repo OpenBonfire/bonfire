@@ -1,14 +1,11 @@
 import 'package:bonfire/features/channels/controllers/channel.dart';
 import 'package:bonfire/features/guild/controllers/current_guild.dart';
 import 'package:bonfire/features/channels/repositories/channel_members.dart';
-import 'package:bonfire/features/guild/repositories/member.dart';
 import 'package:bonfire/features/members/views/components/group.dart';
 import 'package:bonfire/features/members/views/components/member_card.dart';
-import 'package:bonfire/shared/models/pair.dart';
 import 'package:bonfire/theme/theme.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// List of members in the selected guild (not implemented)
@@ -31,8 +28,7 @@ class _MemberListState extends ConsumerState<MemberList> {
         ),
       ),
       child: Padding(
-        padding: EdgeInsets.only(
-            left: 40, top: MediaQuery.of(context).padding.top + 20),
+        padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top + 20),
         child: Align(
             alignment: Alignment.topCenter,
             child: Column(
@@ -75,9 +71,7 @@ class _MemberListState extends ConsumerState<MemberList> {
           padding: const EdgeInsets.only(left: 0), // 40
           child: Column(
             children: [
-              (currentChannel != null)
-                  ? topBox(getChannelName(currentChannel!), "")
-                  : Container(),
+              (currentChannel != null) ? topBox(channelName, "") : Container(),
               const Expanded(child: MemberScrollView())
             ],
           )),

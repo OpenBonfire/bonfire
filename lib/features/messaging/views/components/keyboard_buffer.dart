@@ -1,3 +1,4 @@
+import 'package:bonfire/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_size/flutter_keyboard_size.dart'
     as keyboard_size;
@@ -15,7 +16,9 @@ class _KeyboardBufferState extends State<KeyboardBuffer> {
   Widget build(BuildContext context) {
     return keyboard_size.Consumer<ScreenHeight>(
       builder: (context, screenHeight, child) {
-        return SizedBox(
+        return Container(
+          decoration: BoxDecoration(
+              color: Theme.of(context).custom.colorTheme.background),
           height: screenHeight.keyboardHeight,
         );
       },

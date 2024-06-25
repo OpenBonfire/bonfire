@@ -3,7 +3,6 @@ import 'package:bonfire/features/auth/views/mfa.dart';
 import 'package:bonfire/features/overview/views/home.dart';
 import 'package:bonfire/features/overview/views/overview.dart';
 import 'package:bonfire/features/user/views/messages.dart';
-import 'package:bonfire/features/overview/views/home_mobile.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -25,14 +24,6 @@ final routerController = GoRouter(routes: [
         path: 'overview',
         builder: (context, state) => const Overview(childView: HomeScreen()),
         routes: [
-          // GoRoute(
-          //   path: 'home',
-          //   pageBuilder: (context, state) => buildPageWithNoTransition<void>(
-          //     context: context,
-          //     state: state,
-          //     child: const Overview(childView: HomeScreen()),
-          //   ),
-          // ),
           GoRoute(
             path: 'messages',
             pageBuilder: (context, state) => buildPageWithNoTransition<void>(
