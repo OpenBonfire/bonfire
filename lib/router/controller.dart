@@ -23,23 +23,22 @@ final routerController = GoRouter(routes: [
       GoRoute(path: 'mfa', builder: (context, state) => const MFAPage()),
       GoRoute(
         path: 'overview',
-        builder: (context, state) =>
-            Overview(childView: HomeScreen()), // Default view for overview
+        builder: (context, state) => const Overview(childView: HomeScreen()),
         routes: [
-          GoRoute(
-            path: 'home',
-            pageBuilder: (context, state) => buildPageWithNoTransition<void>(
-              context: context,
-              state: state,
-              child: Overview(childView: HomeScreen()),
-            ),
-          ),
+          // GoRoute(
+          //   path: 'home',
+          //   pageBuilder: (context, state) => buildPageWithNoTransition<void>(
+          //     context: context,
+          //     state: state,
+          //     child: const Overview(childView: HomeScreen()),
+          //   ),
+          // ),
           GoRoute(
             path: 'messages',
             pageBuilder: (context, state) => buildPageWithNoTransition<void>(
               context: context,
               state: state,
-              child: Overview(childView: UserMessagesView()),
+              child: const Overview(childView: UserMessagesView()),
             ),
           )
         ],

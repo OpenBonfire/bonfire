@@ -22,19 +22,7 @@ class _HomeState extends ConsumerState<HomeScreen> {
 
   @override
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      // TODO: Make this less hacky
-      /*
-        This works because there's a bug on initstate for the panels.
-        When the panels are initialized *at all*, they will return to the
-        `right` state. I think this may break once that is fixed.
-
-        Currently, we don't even need `selfPanelState`, we could actually
-        just guess the `right` state and be correct.
-      */
-      ref.read(navigationBarProvider.notifier).onSideChange(selfPanelState);
-    });
-
+    print("INIT STATE");
     super.initState();
   }
 
@@ -43,6 +31,7 @@ class _HomeState extends ConsumerState<HomeScreen> {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       ref.watch(realtimeMessagesProvider).when(
           data: (value) {
+            // print(value.last.content);
             ref.read(messagesProvider.notifier).processRealtimeMessages(value);
           },
           loading: () {},
