@@ -2,7 +2,8 @@ import 'dart:io';
 
 import 'package:bonfire/features/guild/repositories/member.dart';
 import 'package:bonfire/features/messaging/views/components/avatar.dart';
-import 'package:bonfire/features/messaging/views/embed.dart';
+import 'package:bonfire/features/messaging/views/components/content/attachment/attachment.dart';
+import 'package:bonfire/features/messaging/views/components/content/embed/embed.dart';
 import 'package:bonfire/shared/utils/role_color.dart';
 import 'package:bonfire/theme/theme.dart';
 import 'package:firebridge/firebridge.dart';
@@ -58,6 +59,7 @@ class _MessageBoxState extends ConsumerState<MessageBox> {
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
     var embeds = widget.message!.embeds;
+    var attachments = widget.message!.attachments;
 
     var widthOffset = 738;
     if (Platform.isAndroid || Platform.isIOS) {
@@ -119,115 +121,119 @@ class _MessageBoxState extends ConsumerState<MessageBox> {
                       ),
                     ),
               Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  widget.showSenderInfo
-                      ? SizedBox(
-                          width: width - widthOffset,
-                          child: Wrap(
-                            children: [
-                              Padding(
-                                  padding: const EdgeInsets.only(left: 6),
-                                  child: Text(
-                                    name,
-                                    textAlign: TextAlign.left,
-                                    style: TextStyle(
-                                      color: textColor,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  )),
-                              // emoji
-                              if (roleIconUrl != null)
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    widget.showSenderInfo
+                        ? SizedBox(
+                            width: width - widthOffset,
+                            child: Wrap(
+                              children: [
                                 Padding(
+                                    padding: const EdgeInsets.only(left: 6),
+                                    child: Text(
+                                      name,
+                                      textAlign: TextAlign.left,
+                                      style: TextStyle(
+                                        color: textColor,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    )),
+                                // emoji
+                                if (roleIconUrl != null)
+                                  Padding(
+                                    padding:
+                                        const EdgeInsets.only(left: 6, top: 2),
+                                    child: Image.network(
+                                      roleIconUrl!,
+                                      width: 22,
+                                      height: 22,
+                                    ),
+                                  ),
+                                Padding(
+                                  // I dislike the top padding, should fix alignment
                                   padding:
-                                      const EdgeInsets.only(left: 6, top: 2),
-                                  child: Image.network(
-                                    roleIconUrl!,
-                                    width: 22,
-                                    height: 22,
+                                      const EdgeInsets.only(left: 6, top: 4),
+                                  child: Text(
+                                    dateTimeFormat(
+                                        widget.message!.timestamp.toLocal()),
+                                    textAlign: TextAlign.left,
+                                    softWrap: true,
+                                    overflow: TextOverflow.fade,
+                                    style: const TextStyle(
+                                      color: Color.fromARGB(189, 255, 255, 255),
+                                      fontSize: 12,
+                                    ),
                                   ),
                                 ),
-                              Padding(
-                                // I dislike the top padding, should fix alignment
-                                padding: const EdgeInsets.only(left: 6, top: 4),
-                                child: Text(
-                                  dateTimeFormat(
-                                      widget.message!.timestamp.toLocal()),
-                                  textAlign: TextAlign.left,
-                                  softWrap: true,
-                                  overflow: TextOverflow.fade,
-                                  style: const TextStyle(
-                                    color: Color.fromARGB(189, 255, 255, 255),
-                                    fontSize: 12,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        )
-                      : const SizedBox(),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 6, top: 0),
-                    child: SizedBox(
-                      width: width - widthOffset - 5,
-                      child: MarkdownViewer(
-                        widget.message!.content,
-                        enableTaskList: true,
-                        enableSuperscript: false,
-                        enableSubscript: false,
-                        enableFootnote: false,
-                        enableImageSize: false,
-                        selectable: false,
-                        enableKbd: false,
-                        syntaxExtensions: const [],
-                        elementBuilders: const [],
-                        highlightBuilder: (text, language, infoString) {
-                          final prism = Prism(
-                              style: Theme.of(context).brightness ==
-                                      Brightness.dark
-                                  ? const PrismStyle.dark()
-                                  : const PrismStyle());
+                              ],
+                            ),
+                          )
+                        : const SizedBox(),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 6, top: 0),
+                      child: SizedBox(
+                        width: width - widthOffset - 5,
+                        child: MarkdownViewer(
+                          widget.message!.content,
+                          enableTaskList: true,
+                          enableSuperscript: false,
+                          enableSubscript: false,
+                          enableFootnote: false,
+                          enableImageSize: false,
+                          selectable: false,
+                          enableKbd: false,
+                          syntaxExtensions: const [],
+                          elementBuilders: const [],
+                          highlightBuilder: (text, language, infoString) {
+                            final prism = Prism(
+                                style: Theme.of(context).brightness ==
+                                        Brightness.dark
+                                    ? const PrismStyle.dark()
+                                    : const PrismStyle());
 
-                          try {
-                            var rendered =
-                                prism.render(text, language ?? 'plain');
-                            return rendered;
-                          } catch (e) {
-                            // fixes grammar issue?
-                            return <TextSpan>[TextSpan(text: text)];
-                          }
-                        },
-                        onTapLink: (href, title) {
-                          launchUrl(Uri.parse(href!),
-                              mode: LaunchMode.externalApplication);
-                        },
-                        styleSheet: MarkdownStyle(
-                          paragraph:
-                              Theme.of(context).custom.textTheme.bodyText1,
-                          codeBlock:
-                              Theme.of(context).custom.textTheme.bodyText1,
-                          codeblockDecoration: BoxDecoration(
-                              color: Theme.of(context)
-                                  .custom
-                                  .colorTheme
-                                  .foreground,
-                              borderRadius: BorderRadius.circular(8)),
+                            try {
+                              var rendered =
+                                  prism.render(text, language ?? 'plain');
+                              return rendered;
+                            } catch (e) {
+                              // fixes grammar issue?
+                              return <TextSpan>[TextSpan(text: text)];
+                            }
+                          },
+                          onTapLink: (href, title) {
+                            launchUrl(Uri.parse(href!),
+                                mode: LaunchMode.externalApplication);
+                          },
+                          styleSheet: MarkdownStyle(
+                            paragraph:
+                                Theme.of(context).custom.textTheme.bodyText1,
+                            codeBlock:
+                                Theme.of(context).custom.textTheme.bodyText1,
+                            codeblockDecoration: BoxDecoration(
+                                color: Theme.of(context)
+                                    .custom
+                                    .colorTheme
+                                    .foreground,
+                                borderRadius: BorderRadius.circular(8)),
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  // add per embed
-                  for (var embed in embeds)
-                    Padding(
-                      padding: const EdgeInsets.only(left: 8.0),
-                      child: EmbedWidget(
-                        embed: embed,
+                    // add per embed
+                    // for (var embed in embeds)
+                    //   Padding(
+                    //     padding: const EdgeInsets.only(left: 8.0),
+                    //     child: EmbedWidget(
+                    //       embed: embed,
+                    //     ),
+                    //   ),
+                    for (var attachment in attachments)
+                      AttachmentWidget(
+                        attachment: attachment,
                       ),
-                    )
-                ],
-              ),
+                  ]),
             ],
           ),
         ),

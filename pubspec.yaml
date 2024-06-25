@@ -59,6 +59,7 @@ dependencies:
   collection: ^1.18.0
   http: ^1.2.1
   logger: ^2.3.0
+  audioplayers: ^6.0.0
 
 dependency_overrides:
   webview_flutter_platform_interface: ^2.4.0
