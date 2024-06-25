@@ -1,20 +1,14 @@
-import 'package:bonfire/features/channels/views/channels.dart';
-import 'package:bonfire/features/guild/repositories/guilds.dart';
-import 'package:bonfire/features/guild/views/guild_overview.dart';
-import 'package:bonfire/features/members/views/member_list.dart';
 import 'package:bonfire/features/messaging/repositories/messages.dart';
 import 'package:bonfire/features/messaging/repositories/events/realtime_messages.dart';
-import 'package:bonfire/features/messaging/views/messages.dart';
 import 'package:bonfire/features/overview/controllers/navigation_bar.dart';
-import 'package:bonfire/features/overview/views/navigator.dart';
+import 'package:bonfire/features/overview/views/home_desktop.dart';
+import 'package:bonfire/features/overview/views/home_mobile.dart';
 import 'package:bonfire/features/overview/views/overlapping_panels.dart';
-import 'package:bonfire/features/overview/views/sidebar.dart';
-import 'package:bonfire/theme/theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'dart:io' show Platform;
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -57,28 +51,8 @@ class _HomeState extends ConsumerState<HomeScreen> {
           });
     });
 
-    return Scaffold(
-        resizeToAvoidBottomInset: false,
-        body: Stack(children: [
-          OverlappingPanels(
-            onSideChange: (value) {
-              FocusScope.of(context).unfocus();
-              selfPanelState = value;
-              ref.read(navigationBarProvider.notifier).onSideChange(value);
-            },
-            left: SizedBox(
-              width: MediaQuery.of(context).size.width,
-              child: const Row(
-                children: [
-                  Sidebar(),
-                  Expanded(child: Expanded(child: ChannelsList()))
-                ],
-              ),
-            ),
-            main: const MessageView(),
-            right: const MemberList(),
-          ),
-          const BarWidget()
-        ]));
+    return (Platform.isAndroid || Platform.isIOS)
+        ? const HomeMobile()
+        : const HomeDesktop();
   }
 }

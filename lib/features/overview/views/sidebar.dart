@@ -1,14 +1,8 @@
-import 'dart:math';
-
 import 'package:bonfire/features/guild/controllers/guild.dart';
 import 'package:bonfire/features/guild/repositories/guilds.dart';
 import 'package:bonfire/theme/text_theme.dart';
 import 'package:bonfire/theme/theme.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebridge/firebridge.dart';
 
@@ -89,11 +83,8 @@ class _SidebarIconState extends ConsumerState<SidebarIcon> {
 
   Widget iconBuilder(UserGuild guild) {
     if (guild.icon != null) {
-      return Image.network(
-        guild.icon!.url.toString(),
-        width: 45,
-        height: 45,
-        fit: BoxFit.cover);
+      return Image.network(guild.icon!.url.toString(),
+          width: 45, height: 45, fit: BoxFit.cover);
     } else {
       String iconText = "";
       List<String> words = guild.name.split(" ");

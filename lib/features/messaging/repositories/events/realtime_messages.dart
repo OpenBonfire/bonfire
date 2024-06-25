@@ -11,7 +11,7 @@ Stream<List<Message>> realtimeMessages(RealtimeMessagesRef ref) async* {
   var auth = ref.watch(authProvider.notifier).getAuth();
   var messageQueue = <Message>[];
 
-  if (auth != null && auth is AuthUser) {
+  if (auth is AuthUser) {
     var client = auth.client;
     await for (final event in client.onMessageCreate) {
       messageQueue.add(event.message);

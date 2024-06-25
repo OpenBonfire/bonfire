@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:bonfire/features/guild/repositories/member.dart';
 import 'package:bonfire/features/messaging/views/components/avatar.dart';
 import 'package:bonfire/features/messaging/views/embed.dart';
@@ -70,6 +72,11 @@ class _MessageBoxState extends ConsumerState<MessageBox> {
     var width = MediaQuery.of(context).size.width;
     var embeds = widget.message!.embeds;
 
+    var widthOffset = 738;
+    if (Platform.isAndroid || Platform.isIOS) {
+      widthOffset = 100;
+    }
+
     String name = widget.message!.author.username;
 
     Color textColor = Colors.white;
@@ -128,7 +135,7 @@ class _MessageBoxState extends ConsumerState<MessageBox> {
                 children: [
                   widget.showSenderInfo
                       ? SizedBox(
-                          width: width - 100,
+                          width: width - widthOffset,
                           child: Wrap(
                             children: [
                               Padding(
@@ -175,7 +182,7 @@ class _MessageBoxState extends ConsumerState<MessageBox> {
                   Padding(
                     padding: const EdgeInsets.only(left: 6, top: 0),
                     child: SizedBox(
-                      width: width - 105,
+                      width: width - widthOffset - 5,
                       child: MarkdownViewer(
                         widget.message!.content,
                         enableTaskList: true,
