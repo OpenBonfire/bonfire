@@ -105,19 +105,23 @@ class _ChannelsListState extends ConsumerState<ChannelsList> {
                   controller: scrollController,
                   padding: EdgeInsets.zero,
                   children: [
-                    (guildBannerUrl != null) ? Container(
-                      height: 150,
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).custom.colorTheme.foreground,
-                        borderRadius: const BorderRadius.only(
-                            topLeft: Radius.circular(24),
-                            topRight: Radius.circular(12)),
-                      ),
-                      child:Image.network(
-                        "$guildBannerUrl?size=512",
-                        fit: BoxFit.cover,  
-                      )
-                    ): Container(),
+                    (guildBannerUrl != null)
+                        ? Container(
+                            height: 150,
+                            decoration: BoxDecoration(
+                              color: Theme.of(context)
+                                  .custom
+                                  .colorTheme
+                                  .foreground,
+                              borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.circular(24),
+                                  topRight: Radius.circular(12)),
+                            ),
+                            child: Image.network(
+                              "$guildBannerUrl?size=512",
+                              fit: BoxFit.cover,
+                            ))
+                        : Container(),
                     StickyHeader(
                       header: const GuildOverview(),
                       content: Padding(
@@ -163,9 +167,9 @@ class _ChannelButtonState extends ConsumerState<ChannelButton> {
               padding: EdgeInsets.zero,
               side: BorderSide(
                 color: (widget.channel == channelController)
-                    ? Theme.of(context).custom.colorTheme.foreground
+                    ? Theme.of(context).custom.colorTheme.deselectedChannelText
                     : Colors.transparent,
-                width: 0.3,
+                width: 0.1,
               ),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
@@ -208,10 +212,15 @@ class _ChannelButtonState extends ConsumerState<ChannelButton> {
                                 .textTheme
                                 .bodyText1
                                 .copyWith(
-                                  color: selected
-                                      ? Theme.of(context).custom.colorTheme.selectedChannelText
-                                      : Theme.of(context).custom.colorTheme.deselectedChannelText
-                                ))),
+                                    color: selected
+                                        ? Theme.of(context)
+                                            .custom
+                                            .colorTheme
+                                            .selectedChannelText
+                                        : Theme.of(context)
+                                            .custom
+                                            .colorTheme
+                                            .deselectedChannelText))),
                   ],
                 ),
               ),

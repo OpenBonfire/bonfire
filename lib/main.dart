@@ -9,7 +9,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:video_player_media_kit/video_player_media_kit.dart';
 import 'package:bitsdojo_window/bitsdojo_window.dart';
-import 'package:bonfire/features/window/views/window.dart'; // Import the new file
+import 'package:bonfire/features/window/views/window.dart';
 
 void main() async {
   VideoPlayerMediaKit.ensureInitialized(
@@ -39,7 +39,7 @@ void main() async {
 }
 
 class MainWindow extends ConsumerStatefulWidget {
-  const MainWindow({Key? key}) : super(key: key);
+  const MainWindow({super.key});
 
   @override
   ConsumerState<MainWindow> createState() => _MainWindowState();

@@ -13,21 +13,13 @@ import 'package:markdown_viewer/markdown_viewer.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class MessageBox extends ConsumerStatefulWidget {
-  Message? message;
-  bool showSenderInfo = true;
-  Logger logger = Logger("MessageBox");
-  MessageBox({super.key});
+  final Message? message;
+  final bool showSenderInfo;
+  final Logger logger = Logger("MessageBox");
+  MessageBox({super.key, required this.message, required this.showSenderInfo});
 
   @override
   ConsumerState<MessageBox> createState() => _MessageBoxState();
-
-  void setMessage(Message message) {
-    this.message = message;
-  }
-
-  void setShowSenderInfo(bool showSenderInfo) {
-    this.showSenderInfo = showSenderInfo;
-  }
 }
 
 class _MessageBoxState extends ConsumerState<MessageBox> {
@@ -84,7 +76,7 @@ class _MessageBoxState extends ConsumerState<MessageBox> {
     member.when(
       data: (member) {
         name = member?.nick ?? member?.user?.globalName ?? name;
-        textColor = getRoleColor(member!, roles as List<Role>);
+        textColor = getRoleColor(member!, roles);
         roleIconUrl = getRoleIconUrl(member, roles);
       },
       loading: () {},
@@ -109,7 +101,9 @@ class _MessageBoxState extends ConsumerState<MessageBox> {
               borderRadius: BorderRadius.circular(0),
             ),
           ),
-          onPressed: () {},
+          onPressed: () {
+            print(widget.message!.author.avatarHash);
+          },
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -206,7 +200,6 @@ class _MessageBoxState extends ConsumerState<MessageBox> {
                           }
                         },
                         onTapLink: (href, title) {
-                          print("Tapped link: $href");
                           launchUrl(Uri.parse(href!),
                               mode: LaunchMode.externalApplication);
                         },

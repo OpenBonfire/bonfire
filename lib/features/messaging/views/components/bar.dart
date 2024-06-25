@@ -7,9 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class MessageBar extends ConsumerStatefulWidget {
-  late Channel? currentChannel;
+  final Channel? currentChannel;
 
-  MessageBar({super.key, required this.currentChannel});
+  const MessageBar({super.key, required this.currentChannel});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _MessageBarState();

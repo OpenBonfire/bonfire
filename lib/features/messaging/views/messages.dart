@@ -23,6 +23,7 @@ class MessageView extends ConsumerStatefulWidget {
 class _MessageViewState extends ConsumerState<MessageView> {
   final ScrollController _scrollController = ScrollController();
   Logger logger = Logger("MessageView");
+  Map<int, MessageBox> boxMap = {};
 
   @override
   void initState() {
@@ -122,15 +123,15 @@ class _MessageViewState extends ConsumerState<MessageView> {
           ),
           Expanded(
             child: ListView.builder(
-              key: const Key("message-list"),
+              // key: const Key("message-list"),
               controller: _scrollController,
               itemCount: messages.length,
               reverse: true,
               shrinkWrap: true,
               padding: const EdgeInsets.only(bottom: 24),
               itemBuilder: (context, index) {
-                // note: the showAuthor logic is sort of reversed
-                // it works, but the variable name lies
+                MessageBox? cachedBox = boxMap[messages[index].id.value];
+                if (cachedBox != null) return cachedBox;
 
                 bool showAuthor = true;
 
@@ -150,13 +151,14 @@ class _MessageViewState extends ConsumerState<MessageView> {
                 } else {
                   showAuthor = false;
                 }
-                var key = Key(messages[index].id.value.toString());
-                logger.info("Building message with key: ${key.toString()}");
-                var box = MessageBox(
-                  key: key,
+
+                MessageBox box = MessageBox(
+                  key: ValueKey(messages[index].id.value.toString()),
+                  message: messages[index],
+                  showSenderInfo: !showAuthor,
                 );
-                box.setMessage(messages[index]);
-                box.setShowSenderInfo(!showAuthor);
+
+                boxMap[messages[index].id.value] = box;
 
                 return box;
               },
