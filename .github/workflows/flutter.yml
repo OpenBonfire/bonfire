@@ -29,10 +29,10 @@ jobs:
       #   run: flutter test
 
       - name: Build Android APK
-        run: flutter build apk
+        run: flutter build apk --no-tree-shake-icons
 
       - name: Build Android App Bundle
-        run: flutter build appbundle
+        run: flutter build appbundle --no-tree-shake-icons
 
   build-windows:
     runs-on: windows-latest
@@ -59,7 +59,7 @@ jobs:
       #   run: flutter test
 
       - name: Build Windows
-        run: flutter build windows
+        run: flutter build windows --no-tree-shake-icons
 
   build-linux:
     runs-on: ubuntu-latest
@@ -88,10 +88,10 @@ jobs:
       - name: Install Linux dependencies
         run: |
           sudo apt-get update -y
-          sudo apt-get install -y ninja-build libgtk-3-dev libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev libunwind-dev
+          sudo apt-get install -y ninja-build libgtk-3-dev libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev libunwind-dev libmpv-dev mpv
 
       - name: Build Linux
-        run: flutter build linux
+        run: flutter build linux --no-tree-shake-icons
 
   build-macos:
     runs-on: macos-latest
@@ -118,4 +118,4 @@ jobs:
       #   run: flutter test
 
       - name: Build macOS
-        run: flutter build macos
+        run: flutter build macos --no-tree-shake-icons
