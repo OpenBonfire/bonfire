@@ -1,5 +1,6 @@
 import 'package:bonfire/features/messaging/views/components/content/attachment/components/audio_player.dart';
 import 'package:bonfire/features/messaging/views/components/content/attachment/components/image.dart';
+import 'package:bonfire/features/messaging/views/components/content/attachment/components/video.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
 
@@ -24,6 +25,10 @@ class _AttachmentWidgetState extends State<AttachmentWidget> {
 
     if (contentType == "image") {
       return ImageAttachment(attachment: widget.attachment);
+    }
+
+    if (contentType == "video") {
+      return VideoAttachment(attachment: widget.attachment);
     }
 
     return Container();

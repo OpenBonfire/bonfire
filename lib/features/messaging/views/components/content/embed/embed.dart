@@ -47,16 +47,19 @@ class ImageEmbed extends ConsumerStatefulWidget {
 class ImageEmbedState extends ConsumerState<ImageEmbed> {
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: min(widget.embed.thumbnail?.width?.toDouble() ?? double.infinity,
-          MediaQuery.of(context).size.width - 90),
-      child: AspectRatio(
-        aspectRatio: (widget.embed.thumbnail?.width?.toDouble() ?? 1) /
-            (widget.embed.thumbnail?.height?.toDouble() ?? 1),
-        child: Image.network(widget.embed.image!.url.toString(),
-            fit: BoxFit.cover),
-      ),
-    );
+    return ClipRRect(
+        borderRadius: BorderRadius.circular(12),
+        child: SizedBox(
+          width: min(
+              widget.embed.thumbnail?.width?.toDouble() ?? double.infinity,
+              MediaQuery.of(context).size.width - 90),
+          child: AspectRatio(
+            aspectRatio: (widget.embed.thumbnail?.width?.toDouble() ?? 1) /
+                (widget.embed.thumbnail?.height?.toDouble() ?? 1),
+            child: Image.network(widget.embed.image!.url.toString(),
+                fit: BoxFit.cover),
+          ),
+        ));
   }
 }
 

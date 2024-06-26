@@ -222,13 +222,13 @@ class _MessageBoxState extends ConsumerState<MessageBox> {
                       ),
                     ),
                     // add per embed
-                    // for (var embed in embeds)
-                    //   Padding(
-                    //     padding: const EdgeInsets.only(left: 8.0),
-                    //     child: EmbedWidget(
-                    //       embed: embed,
-                    //     ),
-                    //   ),
+                    for (var embed in embeds)
+                      Padding(
+                        padding: const EdgeInsets.only(left: 8.0),
+                        child: EmbedWidget(
+                          embed: embed,
+                        ),
+                      ),
                     for (var attachment in attachments)
                       AttachmentWidget(
                         attachment: attachment,

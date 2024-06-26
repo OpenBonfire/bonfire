@@ -12,8 +12,15 @@ class ImageAttachment extends StatelessWidget {
     return ClipRRect(
       borderRadius: BorderRadius.circular(12),
       child: SizedBox(
-        width: min(attachment.width?.toDouble() ?? double.infinity,
-            MediaQuery.of(context).size.width - 90),
+        width: min(
+            700,
+            min(attachment.width?.toDouble() ?? double.infinity,
+                MediaQuery.of(context).size.width - 90)),
+        // todo: maintain aspect ratio
+        height: min(
+            700,
+            min(attachment.height?.toDouble() ?? double.infinity,
+                MediaQuery.of(context).size.height - 90)),
         child: AspectRatio(
           aspectRatio: (attachment.width?.toDouble() ?? 1) /
               (attachment.height?.toDouble() ?? 1),

@@ -58,8 +58,8 @@ class _SidebarState extends ConsumerState<Sidebar> {
             ),
           ),
         ),
-        const SizedBox(
-          height: 53, // icon height: 45 + spacing height: 8
+        SizedBox(
+          height: MediaQuery.of(context).padding.bottom + 50,
         )
       ],
     );
