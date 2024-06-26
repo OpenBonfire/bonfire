@@ -163,7 +163,7 @@ jobs:
 
       - name: Build iOS
         run: |
-          cd ..
+          cd $GITHUB_WORKSPACE
           flutter build ios --release --no-codesign
 
       - name: Upload iOS Archive
@@ -174,7 +174,7 @@ jobs:
 
       - name: Build iOS IPA
         run: |
-          cd build/ios/archive/MyApp.xcarchive
+          cd $GITHUB_WORKSPACE/build/ios/archive/MyApp.xcarchive
           xcodebuild -exportArchive -archivePath MyApp.xcarchive -exportPath . -exportOptionsPlist ExportOptions.plist
 
       - name: Upload iOS IPA
