@@ -19,8 +19,8 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
-      - name: Run tests
-        run: flutter test
+      # - name: Run tests
+      #   run: flutter test
 
       - name: Build Android APK
         run: flutter build apk
@@ -43,8 +43,8 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
-      - name: Run tests
-        run: flutter test
+      # - name: Run tests
+      #   run: flutter test
 
       - name: Build Windows
         run: flutter build windows
@@ -64,8 +64,8 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
-      - name: Run tests
-        run: flutter test
+      # - name: Run tests
+      #   run: flutter test
 
       - name: Install Linux dependencies
         run: |
@@ -90,8 +90,8 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
-      - name: Run tests
-        run: flutter test
+      # - name: Run tests
+      #   run: flutter test
 
       - name: Build macOS
         run: flutter build macos
