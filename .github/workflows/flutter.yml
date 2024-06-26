@@ -156,11 +156,14 @@ jobs:
       - name: Install CocoaPods
         run: sudo gem install cocoapods
 
-      - name: Change to iOS directory
-        run: cd ios
+      - name: List iOS directory contents
+        run: |
+          cd ios
+          ls -la
 
       - name: Install iOS dependencies
         run: |
+          cd ios
           pod install --repo-update
 
       - name: Build iOS
