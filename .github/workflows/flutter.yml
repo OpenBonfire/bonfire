@@ -29,7 +29,7 @@ jobs:
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: android-apk
+          name: bonfire-android
           path: build/app/outputs/flutter-apk/app-release.apk
 
       - name: Build Android App Bundle
@@ -38,7 +38,7 @@ jobs:
       - name: Upload App Bundle
         uses: actions/upload-artifact@v4
         with:
-          name: android-app-bundle
+          name: bonfire-android-bundle
           path: build/app/outputs/bundle/release/app-release.aab
 
   build-windows:
@@ -67,8 +67,8 @@ jobs:
       - name: Upload Windows Executable
         uses: actions/upload-artifact@v4
         with:
-          name: windows-executable
-          path: build/windows/runner/Release/*.exe
+          name: bonfire-windows
+          path: build/windows/x64/runner/Release/
 
   build-linux:
     runs-on: ubuntu-latest
@@ -101,7 +101,7 @@ jobs:
       - name: Upload Linux Executable
         uses: actions/upload-artifact@v4
         with:
-          name: linux-executable
+          name: bonfire-linux
           path: build/linux/x64/release/bundle/*.so
 
   build-macos:
@@ -130,7 +130,7 @@ jobs:
       - name: Upload macOS Application
         uses: actions/upload-artifact@v4
         with:
-          name: macos-application
+          name: bonfire-macos
           path: build/macos/Build/Products/Release/*.app
 
   # build-ios:
