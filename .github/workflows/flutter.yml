@@ -102,7 +102,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: bonfire-linux
-          path: build/linux/x64/release/bundle/*.so
+          path: build/linux/x64/release/bundle/
 
   build-macos:
     runs-on: macos-latest
