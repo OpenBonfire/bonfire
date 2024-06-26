@@ -60,7 +60,7 @@ class _MainWindowState extends ConsumerState<MainWindow> {
     // ref.watch(guildMembersProvider);
 
     return Scaffold(
-      backgroundColor: Theme.of(context).custom.colorTheme.background,
+      backgroundColor: Colors.transparent,
       body: Column(
         children: [
           (Platform.isWindows | Platform.isLinux | Platform.isMacOS)
