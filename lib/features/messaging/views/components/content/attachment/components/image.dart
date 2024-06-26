@@ -17,10 +17,10 @@ class ImageAttachment extends StatelessWidget {
             min(attachment.width?.toDouble() ?? double.infinity,
                 MediaQuery.of(context).size.width - 90)),
         // todo: maintain aspect ratio
-        height: min(
-            700,
-            min(attachment.height?.toDouble() ?? double.infinity,
-                MediaQuery.of(context).size.height - 90)),
+        // height: min(
+        //     700,
+        //     min(attachment.height?.toDouble() ?? double.infinity,
+        //         MediaQuery.of(context).size.height - 90)),
         child: AspectRatio(
           aspectRatio: (attachment.width?.toDouble() ?? 1) /
               (attachment.height?.toDouble() ?? 1),

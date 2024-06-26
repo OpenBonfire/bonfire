@@ -1,17 +1,12 @@
-import 'package:bonfire/features/channels/controllers/channel.dart';
 import 'package:bonfire/features/channels/repositories/channels.dart';
+import 'package:bonfire/features/channels/views/components/button.dart';
+import 'package:bonfire/features/channels/views/components/category.dart';
 import 'package:bonfire/features/guild/repositories/guild.dart';
 import 'package:bonfire/features/guild/views/guild_overview.dart';
-// import 'package:bonfire/features/guild/views/guild_overview.dart';
-import 'package:bonfire/features/overview/views/overlapping_panels.dart';
-import 'package:bonfire/shared/utils/icons.dart';
 import 'package:bonfire/theme/theme.dart';
 import 'package:firebridge/firebridge.dart' hide Builder;
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:collection/collection.dart';
 import 'package:sticky_headers/sticky_headers.dart';
 
 class ChannelsList extends ConsumerStatefulWidget {
@@ -135,142 +130,6 @@ class _ChannelsListState extends ConsumerState<ChannelsList> {
             );
           }),
         ),
-      ),
-    );
-  }
-}
-
-class ChannelButton extends ConsumerStatefulWidget {
-  GuildChannel channel;
-  ChannelButton({super.key, required this.channel});
-
-  @override
-  ConsumerState<ChannelButton> createState() => _ChannelButtonState();
-}
-
-class _ChannelButtonState extends ConsumerState<ChannelButton> {
-  Map<int, Widget> categoryMap = {};
-
-  @override
-  Widget build(BuildContext context) {
-    var channelController = ref.watch(channelControllerProvider);
-    bool selected = widget.channel == channelController;
-
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 2, left: 8, right: 10),
-      child: SizedBox(
-        width: double.infinity,
-        height: 35,
-        child: OutlinedButton(
-          style: OutlinedButton.styleFrom(
-              minimumSize: Size.zero,
-              padding: EdgeInsets.zero,
-              side: BorderSide(
-                color: (widget.channel == channelController)
-                    ? Theme.of(context).custom.colorTheme.deselectedChannelText
-                    : Colors.transparent,
-                width: 0.1,
-              ),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              foregroundColor: selected
-                  ? Theme.of(context).custom.colorTheme.selectedChannelText
-                  : Theme.of(context).custom.colorTheme.deselectedChannelText,
-              backgroundColor: selected
-                  ? Theme.of(context).custom.colorTheme.foreground
-                  : Colors.transparent),
-          onPressed: () {
-            ref
-                .read(channelControllerProvider.notifier)
-                .setChannel(widget.channel);
-
-            OverlappingPanelsState? overlappingPanelsState =
-                OverlappingPanels.of(context);
-            if (overlappingPanelsState != null) {
-              overlappingPanelsState.moveToState(RevealSide.main);
-            }
-          },
-          child: SizedBox(
-            height: 35,
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12),
-                child: Row(
-                  children: [
-                    BonfireIcons.channelIcons[widget.channel.type]!,
-                    const SizedBox(width: 8),
-                    Expanded(
-                        child: Text(widget.channel.name,
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 1,
-                            softWrap: false,
-                            textAlign: TextAlign.left,
-                            style: Theme.of(context)
-                                .custom
-                                .textTheme
-                                .bodyText1
-                                .copyWith(
-                                    color: selected
-                                        ? Theme.of(context)
-                                            .custom
-                                            .colorTheme
-                                            .selectedChannelText
-                                        : Theme.of(context)
-                                            .custom
-                                            .colorTheme
-                                            .deselectedChannelText))),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class Category extends StatefulWidget {
-  final GuildChannel category;
-  final List<GuildChannel> children;
-
-  const Category({super.key, required this.category, required this.children});
-
-  @override
-  State<Category> createState() => _CategoryState();
-}
-
-class _CategoryState extends State<Category> {
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 8, top: 12),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(left: 12),
-            child: SizedBox(
-              height: 25,
-              child: Text(widget.category.name.toUpperCase(),
-                  style: GoogleFonts.inriaSans(
-                    color: const Color.fromARGB(189, 255, 255, 255),
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                  )),
-            ),
-          ),
-          SizedBox(
-            child: Column(
-              children: widget.children
-                  .map((channel) => ChannelButton(channel: channel))
-                  .toList(),
-            ),
-          ),
-        ],
       ),
     );
   }
