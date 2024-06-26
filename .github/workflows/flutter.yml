@@ -164,7 +164,7 @@ jobs:
       - name: Build iOS
         run: |
           cd $GITHUB_WORKSPACE
-          flutter build ios --release --no-codesign
+          flutter build ios --release --no-codesign --no-tree-shake-icons
 
       - name: Upload iOS Archive
         uses: actions/upload-artifact@v4
