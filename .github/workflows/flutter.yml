@@ -156,11 +156,6 @@ jobs:
       - name: Install CocoaPods
         run: sudo gem install cocoapods
 
-      - name: List iOS directory contents
-        run: |
-          cd ios
-          ls -la
-
       - name: Install iOS dependencies
         run: |
           cd ios
@@ -187,3 +182,4 @@ jobs:
         with:
           name: ios-ipa
           path: build/ios/archive/MyApp.ipa
+
