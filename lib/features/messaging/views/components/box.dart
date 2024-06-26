@@ -230,8 +230,11 @@ class _MessageBoxState extends ConsumerState<MessageBox> {
                         ),
                       ),
                     for (var attachment in attachments)
-                      AttachmentWidget(
-                        attachment: attachment,
+                      Padding(
+                        padding: const EdgeInsets.only(left: 8, top: 8),
+                        child: AttachmentWidget(
+                          attachment: attachment,
+                        ),
                       ),
                   ]),
             ],
