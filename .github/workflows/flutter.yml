@@ -1,4 +1,4 @@
-name: Flutter Build
+name: Flutter Build with Artifacts
 
 on: [push, pull_request]
 
@@ -8,7 +8,7 @@ jobs:
 
     steps:
       - name: Clone repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v2
 
       - name: Set up Java 17
         uses: actions/setup-java@v2
@@ -19,103 +19,25 @@ jobs:
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          channel: stable
-          flutter-version: 3.22.2
+          flutter-version: '3.22.2'
 
       - name: Install dependencies
         run: flutter pub get
-
-      # - name: Run tests
-      #   run: flutter test
 
       - name: Build Android APK
-        run: flutter build apk --no-tree-shake-icons
+        run: flutter build apk
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-apk
+          path: build/app/outputs/flutter-apk/app-release.apk
 
       - name: Build Android App Bundle
-        run: flutter build appbundle --no-tree-shake-icons
+        run: flutter build appbundle
 
-  build-windows:
-    runs-on: windows-latest
-
-    steps:
-      - name: Clone repository
-        uses: actions/checkout@v4
-
-      - name: Set up Java 17
-        uses: actions/setup-java@v2
+      - name: Upload App Bundle
+        uses: actions/upload-artifact@v4
         with:
-          java-version: '17'
-          distribution: 'adopt'
-
-      - name: Set up Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          channel: stable
-
-      - name: Install dependencies
-        run: flutter pub get
-
-      # - name: Run tests
-      #   run: flutter test
-
-      - name: Build Windows
-        run: flutter build windows --no-tree-shake-icons
-
-  build-linux:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Clone repository
-        uses: actions/checkout@v4
-
-      - name: Set up Java 17
-        uses: actions/setup-java@v2
-        with:
-          java-version: '17'
-          distribution: 'adopt'
-
-      - name: Set up Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          channel: stable
-
-      - name: Install dependencies
-        run: flutter pub get
-
-      # - name: Run tests
-      #   run: flutter test
-
-      - name: Install Linux dependencies
-        run: |
-          sudo apt-get update -y
-          sudo apt-get install -y ninja-build libgtk-3-dev libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev libunwind-dev libmpv-dev mpv
-
-      - name: Build Linux
-        run: flutter build linux --no-tree-shake-icons
-
-  build-macos:
-    runs-on: macos-latest
-
-    steps:
-      - name: Clone repository
-        uses: actions/checkout@v4
-
-      - name: Set up Java 17
-        uses: actions/setup-java@v2
-        with:
-          java-version: '17'
-          distribution: 'adopt'
-
-      - name: Set up Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          channel: stable
-
-      - name: Install dependencies
-        run: flutter pub get
-
-      # - name: Run tests
-      #   run: flutter test
-
-      - name: Build macOS
-        run: flutter build macos --no-tree-shake-icons
+          name: android-app-bundle
+          path: build/app/outputs/bundle/release/app-release.aab
