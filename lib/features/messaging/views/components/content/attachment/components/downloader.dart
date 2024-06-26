@@ -1,11 +1,12 @@
+import 'dart:io';
 import 'dart:typed_data';
-
-import 'package:bonfire/theme/theme.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
+import 'package:bonfire/theme/theme.dart';
 import 'package:file_icon/file_icon.dart';
 import 'package:internet_file/internet_file.dart';
-import 'package:file_selector/file_selector.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class DownloadAttachment extends StatefulWidget {
   final Attachment attachment;
@@ -19,12 +20,28 @@ class _DownloadAttachmentState extends State<DownloadAttachment> {
   double downloadPercentage = 0;
   double opacity = 1;
 
-  Future<void> saveBytesAsFile(
-      Uint8List bytes, FileSaveLocation location) async {
-    String mimeType = widget.attachment.contentType ?? 'text/plain';
-    final XFile textFile = XFile.fromData(bytes,
-        mimeType: mimeType, name: widget.attachment.fileName);
-    await textFile.saveTo(location.path);
+  Future<void> saveBytesAsFile(Uint8List bytes, String path) async {
+    final File file = File(path);
+    await file.writeAsBytes(bytes);
+  }
+
+  Future<String?> getFilePath(String fileName) async {
+    if (Platform.isAndroid) {
+      var status = await Permission.manageExternalStorage.request();
+
+      if (status.isGranted) {
+        final externalDir = await getExternalStorageDirectory();
+        final downloadDir = '${externalDir?.path.split('Android')[0]}Download';
+        return '$downloadDir/$fileName';
+      }
+    } else if (Platform.isIOS) {
+      final dir = await getApplicationDocumentsDirectory();
+      return '${dir.path}/$fileName';
+    } else {
+      final dir = await getDownloadsDirectory();
+      return dir != null ? '${dir.path}/$fileName' : null;
+    }
+    return null;
   }
 
   @override
@@ -59,30 +76,29 @@ class _DownloadAttachmentState extends State<DownloadAttachment> {
                   IconButton(
                     color: Colors.white,
                     onPressed: () async {
-                      final FileSaveLocation? result = await getSaveLocation(
-                          suggestedName: widget.attachment.fileName);
-                      if (result == null) return;
+                      final String? path =
+                          await getFilePath(widget.attachment.fileName);
+                      if (path == null) return;
                       final Uint8List bytes = await InternetFile.get(
                         widget.attachment.url.toString(),
-                        progress: (receivedLength, contentLength) async {
+                        progress: (receivedLength, contentLength) {
                           setState(() {
                             downloadPercentage = receivedLength / contentLength;
                           });
                           // tween opacity from 1 to 0
-                          await Future.delayed(const Duration(seconds: 2));
-                          if (downloadPercentage == 1) {
-                            for (var i = 0; i < 100; i++) {
-                              await Future.delayed(
-                                  const Duration(milliseconds: 5));
-                              setState(() {
-                                opacity = 1 - i / 100;
-                              });
-                            }
-                          }
                         },
                       );
 
-                      saveBytesAsFile(bytes, result);
+                      if (bytes.isNotEmpty) {
+                        await saveBytesAsFile(bytes, path);
+
+                        for (var i = 0; i < 100; i++) {
+                          await Future.delayed(const Duration(milliseconds: 5));
+                          setState(() {
+                            opacity = 1 - i / 100;
+                          });
+                        }
+                      }
                     },
                     icon: const Icon(Icons.download),
                   ),
@@ -92,16 +108,16 @@ class _DownloadAttachmentState extends State<DownloadAttachment> {
             Positioned(
               bottom: 0,
               child: Container(
-                  width: 300 * downloadPercentage,
-                  height: 8,
-                  decoration: BoxDecoration(
-                      color: Theme.of(context)
-                          .custom
-                          .colorTheme
-                          .blurple
-                          .withOpacity(opacity)
-                      // borderRadius: BorderRadius.circular(12),
-                      )),
+                width: 300 * downloadPercentage,
+                height: 8,
+                decoration: BoxDecoration(
+                  color: Theme.of(context)
+                      .custom
+                      .colorTheme
+                      .blurple
+                      .withOpacity(opacity),
+                ),
+              ),
             )
           ],
         ),
