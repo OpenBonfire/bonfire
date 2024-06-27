@@ -19,11 +19,11 @@ class VoiceMembers extends _$VoiceMembers {
     if (authOutput is AuthUser) {
       user = authOutput;
 
-      print("voice state update!");
+      // print("voice state update!");
 
-      user!.client.onVoiceStateUpdate.listen((event) {
-        print(event.state.member?.user?.username);
-      });
+      // user!.client.onVoiceStateUpdate.listen((event) {
+      //   print(event.state.member?.user?.username);
+      // });
     }
   }
 }

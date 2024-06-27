@@ -5,50 +5,39 @@ import 'package:firebridge/firebridge.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class Avatar extends ConsumerStatefulWidget {
+class Avatar extends ConsumerWidget {
+  final double? width;
+  final double? height;
   final MessageAuthor author;
-  const Avatar({super.key, required this.author});
+  const Avatar({super.key, required this.author, this.width, this.height});
 
   @override
-  ConsumerState<Avatar> createState() => _AvatarState();
-}
-
-class _AvatarState extends ConsumerState<Avatar> {
-  late Future<Uint8List?> _avatarFuture;
-
-  @override
-  void initState() {
-    super.initState();
-    _avatarFuture = ref
-        .read(messagesProvider.notifier)
-        .fetchMessageAuthorAvatar(widget.author);
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    var avatarFuture =
+        ref.read(messagesProvider.notifier).fetchMessageAuthorAvatar(author);
     return Padding(
       padding: const EdgeInsets.only(right: 8),
       child: SizedBox(
-        width: 45,
-        height: 45,
+        width: width ?? 45,
+        height: height ?? 45,
         child: ClipRRect(
           borderRadius: BorderRadius.circular(100),
           child: FutureBuilder<Uint8List?>(
-            future: _avatarFuture,
+            future: avatarFuture,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
                 if (snapshot.hasData && snapshot.data != null) {
                   return Image.memory(snapshot.data!);
                 } else {
-                  return const SizedBox(
-                    width: 45,
-                    height: 45,
+                  return SizedBox(
+                    width: width ?? 45,
+                    height: height ?? 45,
                   );
                 }
               } else {
-                return const SizedBox(
-                  width: 45,
-                  height: 45,
+                return SizedBox(
+                  width: width ?? 45,
+                  height: height ?? 45,
                 );
               }
             },

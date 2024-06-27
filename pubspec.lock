@@ -501,11 +501,11 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "4a2f7fe4bca9329aaad1541d289a55b37c281173"
-      resolved-ref: "4a2f7fe4bca9329aaad1541d289a55b37c281173"
+      ref: "6ab2f8fc60c08bb6bd6aa624af50016da7c1cab2"
+      resolved-ref: "6ab2f8fc60c08bb6bd6aa624af50016da7c1cab2"
       url: "https://github.com/OpenBonfire/firebridge"
     source: git
-    version: "6.2.12"
+    version: "6.2.13"
   firebridge_extensions:
     dependency: "direct main"
     description:
@@ -945,7 +945,7 @@ packages:
     source: hosted
     version: "0.8.0"
   media_kit:
-    dependency: "direct overridden"
+    dependency: "direct main"
     description:
       path: media_kit
       ref: main
@@ -1012,7 +1012,7 @@ packages:
     source: git
     version: "1.0.8"
   media_kit_video:
-    dependency: "direct overridden"
+    dependency: "direct main"
     description:
       path: media_kit_video
       ref: main

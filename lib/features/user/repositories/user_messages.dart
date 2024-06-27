@@ -16,7 +16,7 @@ class UserMessages extends _$UserMessages {
       user = authOutput;
 
       var channels = await user!.client.channels.listDmChannels();
-      print(channels);
+      // print(channels);
     }
   }
 }

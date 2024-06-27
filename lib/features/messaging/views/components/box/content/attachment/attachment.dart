@@ -1,7 +1,7 @@
-import 'package:bonfire/features/messaging/views/components/content/attachment/components/audio_player.dart';
-import 'package:bonfire/features/messaging/views/components/content/attachment/components/downloader.dart';
-import 'package:bonfire/features/messaging/views/components/content/attachment/components/image.dart';
-import 'package:bonfire/features/messaging/views/components/content/attachment/components/video.dart';
+import 'package:bonfire/features/messaging/views/components/box/content/attachment/components/audio_player.dart';
+import 'package:bonfire/features/messaging/views/components/box/content/attachment/components/downloader.dart';
+import 'package:bonfire/features/messaging/views/components/box/content/attachment/components/image.dart';
+import 'package:bonfire/features/messaging/views/components/box/content/attachment/components/video.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
 
@@ -16,7 +16,6 @@ class AttachmentWidget extends StatefulWidget {
 class _AttachmentWidgetState extends State<AttachmentWidget> {
   @override
   Widget build(BuildContext context) {
-    print("attachment!!!");
     // String contentType = widget.attachment.contentType? ?? "other";
     // print(widget.attachment.contentType!.split("/")[0]);
     String contentType = widget.attachment.contentType?.split("/")[0] ?? "";
@@ -32,10 +31,6 @@ class _AttachmentWidgetState extends State<AttachmentWidget> {
       return VideoAttachment(attachment: widget.attachment);
     }
 
-    //if (contentType == "application") {
     return DownloadAttachment(attachment: widget.attachment);
-    //}
-
-    return Container();
   }
 }

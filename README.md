@@ -13,7 +13,7 @@ A modern alternative to the Discord client. Use Discord without ever having to t
 - 🟨 Windows
 - 🟨 MacOS
 - 🟨 Linux
-- 🟥 Web
+- 🟨 Web
 
 Because we are using flutter instead of react native, it's possible to cross-compile to platforms other than mobile! The build currently runs on Windows, MacOS, and Linux, but Web is currently unavailable due to parts of our API framework not fully supporting it (which will change).
 
@@ -57,11 +57,11 @@ I'm pretty new to managing public projects, so you'll have to bear with me here.
   - 🟨 Event Actions (edit, delete, etc)
   - 🟨 Embeds
      - 🟩 Youtube embeds
-     - 🟨 Tenor videos (mostly works, videos aren't automatically played due to performance)
-     - 🟥 Attachments
-        - 🟥 Image Attachments
-        - 🟥 Video Attachments
-        - 🟥 Audio Attachments (with actual mobile playback)
+     - 🟩 Tenor videos
+     - 🟩 Attachments
+        - 🟩 Image Attachments
+        - 🟩 Video Attachments
+        - 🟩 Audio Attachments (with actual mobile playback)
   - 🟥 Offline Message Scheduling
   - 🟥 Unreads
   - 🟥 Threads
@@ -69,7 +69,7 @@ I'm pretty new to managing public projects, so you'll have to bear with me here.
     - 🟩 Base View
     - 🟩 Networking (handled in firebridge, tricky due to Discord's sharding)
     - 🟥 Member Search
-- 🟥 Friends
+- 🟨 Friends
 - 🟨 Guilds
   - 🟩 Guild List
   - 🟩 Guild Networking
