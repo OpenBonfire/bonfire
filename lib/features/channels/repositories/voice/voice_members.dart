@@ -1,7 +1,6 @@
 import 'package:bonfire/features/auth/data/repositories/auth.dart';
 import 'package:bonfire/features/auth/data/repositories/discord_auth.dart';
-import 'package:bonfire/features/channels/controllers/channel.dart';
-import 'package:bonfire/features/guild/controllers/current_guild.dart';
+import 'package:firebridge/firebridge.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'voice_members.g.dart';
@@ -11,9 +10,7 @@ class VoiceMembers extends _$VoiceMembers {
   AuthUser? user;
 
   @override
-  Future<void> build() async {
-    final currentChannel = ref.watch(channelControllerProvider);
-    final currentGuild = ref.watch(currentGuildControllerProvider);
+  Future<void> build(Guild guild, Channel channel) async {
     var authOutput = ref.watch(authProvider.notifier).getAuth();
 
     if (authOutput is AuthUser) {

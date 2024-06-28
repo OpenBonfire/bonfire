@@ -7,7 +7,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class MemberAvatar extends ConsumerStatefulWidget {
   final Member member;
-  const MemberAvatar({super.key, required this.member});
+  final Guild guild;
+  final Channel channel;
+  const MemberAvatar(
+      {super.key,
+      required this.member,
+      required this.guild,
+      required this.channel});
 
   @override
   ConsumerState<MemberAvatar> createState() => _AvatarState();
@@ -19,8 +25,9 @@ class _AvatarState extends ConsumerState<MemberAvatar> {
   @override
   void initState() {
     super.initState();
-    _avatarFuture =
-        ref.read(messagesProvider.notifier).fetchMemberAvatar(widget.member);
+    _avatarFuture = ref
+        .read(messagesProvider(widget.guild, widget.channel).notifier)
+        .fetchMemberAvatar(widget.member);
   }
 
   @override

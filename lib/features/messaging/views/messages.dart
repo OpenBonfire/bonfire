@@ -1,5 +1,5 @@
 import 'package:bonfire/features/channels/controllers/channel.dart';
-import 'package:bonfire/features/guild/controllers/current_guild.dart';
+import 'package:bonfire/features/guild/controllers/guild.dart';
 import 'package:bonfire/features/messaging/repositories/messages.dart';
 import 'package:bonfire/features/messaging/views/components/bar.dart';
 import 'package:bonfire/features/messaging/views/components/box/box.dart';
@@ -14,7 +14,9 @@ String getChannelName(Channel channel) {
 }
 
 class MessageView extends ConsumerStatefulWidget {
-  const MessageView({super.key});
+  final Guild guild;
+  final Channel channel;
+  const MessageView({super.key, required this.guild, required this.channel});
 
   @override
   ConsumerState<MessageView> createState() => _MessageViewState();
@@ -46,23 +48,23 @@ class _MessageViewState extends ConsumerState<MessageView> {
   }
 
   void _loadMoreMessages() {
-    ref.read(messagesProvider.notifier).fetchMoreMessages();
+    ref
+        .read(messagesProvider(widget.guild, widget.channel).notifier)
+        .fetchMoreMessages(
+          widget.guild,
+          widget.channel,
+        );
   }
 
   @override
   Widget build(BuildContext context) {
-    var messageOutput = ref.watch(messagesProvider);
+    var messageOutput =
+        ref.watch(messagesProvider(widget.guild, widget.channel));
     var messages = messageOutput.valueOrNull ?? [];
     var topPadding = MediaQuery.of(context).padding.top;
 
-    var currentGuild = ref.watch(currentGuildControllerProvider);
-    Channel? currentChannel =
-        ref.read(channelControllerProvider.notifier).getChannel();
-
     String channelName = "";
-    if (currentChannel != null) {
-      channelName = getChannelName(currentChannel);
-    }
+    channelName = getChannelName(widget.channel);
 
     return Container(
       decoration: BoxDecoration(
@@ -97,10 +99,7 @@ class _MessageViewState extends ConsumerState<MessageView> {
                   child: Row(
                     children: [
                       Expanded(
-                          child: Text(
-                              (currentGuild != null && currentChannel != null)
-                                  ? "# $channelName"
-                                  : "",
+                          child: Text("# $channelName",
                               overflow: TextOverflow.ellipsis,
                               maxLines: 1,
                               softWrap: false,
@@ -157,6 +156,8 @@ class _MessageViewState extends ConsumerState<MessageView> {
 
                 MessageBox box = MessageBox(
                   key: ValueKey(messages[index].id.value.toString()),
+                  guild: widget.guild,
+                  channel: widget.channel,
                   message: messages[index],
                   showSenderInfo: !showAuthor,
                 );
@@ -167,7 +168,7 @@ class _MessageViewState extends ConsumerState<MessageView> {
               },
             ),
           ),
-          MessageBar(currentChannel: currentChannel),
+          MessageBar(guild: widget.guild, channel: widget.channel),
           SizedBox(
             height: MediaQuery.of(context).padding.bottom,
           ),

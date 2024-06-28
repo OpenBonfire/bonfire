@@ -8,9 +8,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class MemberCard extends ConsumerStatefulWidget {
   final Member member;
+  final Guild guild;
+  final Channel channel;
   const MemberCard({
     super.key,
     required this.member,
+    required this.guild,
+    required this.channel,
   });
 
   @override
@@ -20,7 +24,8 @@ class MemberCard extends ConsumerStatefulWidget {
 class _MemberCardState extends ConsumerState<MemberCard> {
   @override
   Widget build(BuildContext context) {
-    var roles = ref.watch(getGuildRolesProvider).valueOrNull ?? [];
+    var roles =
+        ref.watch(getGuildRolesProvider(widget.guild)).valueOrNull ?? [];
 
     return Container(
         height: 55,
@@ -35,7 +40,10 @@ class _MemberCardState extends ConsumerState<MemberCard> {
           child: Row(
             // widget.member.avatar.url
             children: [
-              MemberAvatar(member: widget.member),
+              MemberAvatar(
+                  guild: widget.guild,
+                  channel: widget.channel,
+                  member: widget.member),
               const SizedBox(width: 8),
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,

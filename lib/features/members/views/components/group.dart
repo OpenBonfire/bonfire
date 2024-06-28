@@ -7,8 +7,13 @@ import 'package:google_fonts/google_fonts.dart';
 
 class GroupHeader extends ConsumerStatefulWidget {
   final GuildMemberListGroup group;
+  final Guild guild;
   final List<GuildMemberListGroup> groups;
-  const GroupHeader({super.key, required this.group, required this.groups});
+  const GroupHeader(
+      {super.key,
+      required this.guild,
+      required this.group,
+      required this.groups});
 
   @override
   ConsumerState<GroupHeader> createState() => _HeaderCardState();
@@ -20,7 +25,9 @@ class _HeaderCardState extends ConsumerState<GroupHeader> {
     Role? role;
     // TODO: Online members should be in a group...
     if (widget.group.id != null) {
-      role = ref.watch(getRoleProvider(widget.group.id!)).valueOrNull;
+      role = ref
+          .watch(getRoleProvider(widget.guild, widget.group.id!))
+          .valueOrNull;
     }
     int groupCount = 0;
     for (var group in widget.groups) {

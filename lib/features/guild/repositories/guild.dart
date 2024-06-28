@@ -9,11 +9,10 @@ import 'package:firebridge/firebridge.dart';
 part 'guild.g.dart';
 
 @riverpod
-Future<Uri?> guildBannerUrl(GuildBannerUrlRef ref) async {
+Future<Uri?> guildBannerUrl(GuildBannerUrlRef ref, Guild guild) async {
   var authOutput = ref.watch(authProvider.notifier).getAuth();
-  var currentGuild = ref.watch(guildControllerProvider);
 
   if (authOutput is AuthUser) {
-    return (await authOutput.client.guilds.get(currentGuild!.id)).banner?.url;
+    return (await authOutput.client.guilds.get(guild.id)).banner?.url;
   }
 }

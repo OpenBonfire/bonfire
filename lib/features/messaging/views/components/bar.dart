@@ -7,9 +7,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class MessageBar extends ConsumerStatefulWidget {
-  final Channel? currentChannel;
+  final Guild guild;
+  final Channel channel;
 
-  const MessageBar({super.key, required this.currentChannel});
+  const MessageBar({super.key, required this.guild, required this.channel});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _MessageBarState();
@@ -69,8 +70,7 @@ class _MessageBarState extends ConsumerState<MessageBar> {
                         decoration: InputDecoration(
                           contentPadding:
                               const EdgeInsets.only(left: 8, bottom: 6),
-                          hintText:
-                              'Message #${(widget.currentChannel != null) ? getChannelName(widget.currentChannel!) : ""}',
+                          hintText: getChannelName(widget.channel),
                           hintStyle: TextStyle(
                               color: Theme.of(context)
                                   .custom
@@ -92,8 +92,8 @@ class _MessageBarState extends ConsumerState<MessageBar> {
             ),
             () {
               ref
-                  .read(messagesProvider.notifier)
-                  .sendMessage(messageBarController.text);
+                  .read(messagesProvider(widget.guild, widget.channel).notifier)
+                  .sendMessage(widget.channel, messageBarController.text);
               messageBarController.text = "";
             },
             backgroundColor: Theme.of(context).custom.colorTheme.blurple,

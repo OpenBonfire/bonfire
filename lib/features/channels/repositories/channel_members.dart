@@ -1,7 +1,6 @@
 import 'package:bonfire/features/auth/data/repositories/auth.dart';
 import 'package:bonfire/features/auth/data/repositories/discord_auth.dart';
 import 'package:bonfire/features/channels/controllers/channel.dart';
-import 'package:bonfire/features/guild/controllers/current_guild.dart';
 import 'package:bonfire/shared/models/pair.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:firebridge/firebridge.dart';
@@ -13,14 +12,10 @@ class ChannelMembers extends _$ChannelMembers {
   AuthUser? user;
 
   @override
-  Future<Pair<List<GuildMemberListGroup>, List<dynamic>>?> build() async {
-    final currentChannel = ref.watch(channelControllerProvider);
-    final currentGuild = ref.watch(currentGuildControllerProvider);
-
+  Future<Pair<List<GuildMemberListGroup>, List<dynamic>>?> build(
+      Guild guild, Channel channel) async {
     var authOutput = ref.watch(authProvider.notifier).getAuth();
-    if (authOutput is AuthUser &&
-        currentChannel != null &&
-        currentGuild != null) {
+    if (authOutput is AuthUser) {
       authOutput.client
           .updateGuildSubscriptionsBulk(GuildSubscriptionsBulkBuilder()
             ..subscriptions = [
@@ -29,14 +24,14 @@ class ChannelMembers extends _$ChannelMembers {
                   memberUpdates: true,
                   channels: [
                     GuildSubscriptionChannel(
-                      channelId: currentChannel.id,
+                      channelId: channel.id,
                       memberRange: GuildMemberRange(
                         lowerMemberBound: 0,
                         upperMemberBound: 99,
                       ),
                     )
                   ],
-                  guildId: currentGuild.id)
+                  guildId: guild.id)
             ]);
 
       authOutput.client.onGuildMemberListUpdate.listen((event) {

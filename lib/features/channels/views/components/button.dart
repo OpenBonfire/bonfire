@@ -6,10 +6,18 @@ import 'package:bonfire/theme/theme.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 class ChannelButton extends ConsumerStatefulWidget {
-  final GuildChannel channel;
-  const ChannelButton({super.key, required this.channel});
+  final Guild currentGuild;
+  final GuildChannel currentChannel;
+  final Channel channel;
+  const ChannelButton({
+    super.key,
+    required this.currentChannel,
+    required this.currentGuild,
+    required this.channel,
+  });
 
   @override
   ConsumerState<ChannelButton> createState() => _ChannelButtonState();
@@ -20,8 +28,7 @@ class _ChannelButtonState extends ConsumerState<ChannelButton> {
 
   @override
   Widget build(BuildContext context) {
-    var channelController = ref.watch(channelControllerProvider);
-    bool selected = widget.channel == channelController;
+    bool selected = widget.channel == widget.currentChannel;
 
     //(widget.channel as GuildVoiceChannel).
 
@@ -37,7 +44,7 @@ class _ChannelButtonState extends ConsumerState<ChannelButton> {
                   minimumSize: Size.zero,
                   padding: EdgeInsets.zero,
                   side: BorderSide(
-                    color: (widget.channel == channelController)
+                    color: (widget.channel == widget.currentChannel)
                         ? Theme.of(context)
                             .custom
                             .colorTheme
@@ -58,9 +65,9 @@ class _ChannelButtonState extends ConsumerState<ChannelButton> {
                       ? Theme.of(context).custom.colorTheme.foreground
                       : Colors.transparent),
               onPressed: () {
-                ref
-                    .read(channelControllerProvider.notifier)
-                    .setChannel(widget.channel);
+                // route to channel
+                GoRouter.of(context).go(
+                    '/channels/${widget.currentGuild.id}/${widget.channel.id}');
 
                 OverlappingPanelsState? overlappingPanelsState =
                     OverlappingPanels.of(context);
@@ -80,7 +87,7 @@ class _ChannelButtonState extends ConsumerState<ChannelButton> {
                         const SizedBox(width: 8),
                         Expanded(
                             child: Text(
-                          widget.channel.name,
+                          (widget.channel as GuildChannel).name,
                           overflow: TextOverflow.ellipsis,
                           maxLines: 1,
                           softWrap: false,

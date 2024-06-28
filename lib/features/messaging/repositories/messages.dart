@@ -15,7 +15,7 @@ import 'package:flutter/scheduler.dart';
 part 'messages.g.dart';
 
 /// Message provider for fetching messages from the Discord API
-@Riverpod(keepAlive: false)
+@riverpod
 class Messages extends _$Messages {
   AuthUser? user;
   bool listenerRunning = false;
@@ -33,25 +33,22 @@ class Messages extends _$Messages {
   bool realtimeListernRunning = false;
 
   @override
-  Future<List<Message>> build() async {
+  Future<List<Message>> build(Guild guild, Channel channel) async {
+    guild = guild;
+    channel = channel;
     var authOutput = ref.watch(authProvider.notifier).getAuth();
-    var channel = ref.watch(channelControllerProvider);
 
-    if (channel != null) {
-      getMessages(authOutput, channel);
-      var fromCache = (await getChannelFromCache(channel))!;
-      return fromCache;
-    }
-    return [];
+    getMessages(authOutput);
+    var fromCache = (await getChannelFromCache(channel))!;
+    return fromCache;
   }
 
-  Future<void> runPreCacheRoutine(Channel channel) async {
+  Future<void> runPreCacheRoutine(Guild guild, Channel channel) async {
     var authOutput = ref.watch(authProvider.notifier).getAuth();
     if (authOutput is AuthUser && channel is TextChannel) {
       var age = await getAgeOfMessageEntry(channel.id.value);
       if (age == null || age.inDays > 1) {
-        getMessages(authOutput, channel,
-            count: 20, lock: false, requestAvatar: false);
+        getMessages(authOutput, count: 20, lock: false, requestAvatar: false);
       }
     }
   }
@@ -73,8 +70,8 @@ class Messages extends _$Messages {
   }
 
   Future<void> getMessages(
-    authOutput,
-    Channel channel, {
+    authOutput, {
+    Channel? channelOverride,
     int? before,
     int? count,
     int? guildId,
@@ -88,16 +85,11 @@ class Messages extends _$Messages {
       var textChannel = channel as TextChannel;
       var beforeSnowflake = before != null ? Snowflake(before) : null;
 
-      var channelGuildId = guildId ??
-          ref.read(guildControllerProvider.notifier).currentGuild!.id.value;
-
       // if (loadingMessages == true) return;
 
       if (lock == true) enableLock();
 
-      var selfMember = await user!
-          .client.guilds[Snowflake(channelGuildId)].members
-          .get(user!.client.user.id);
+      var selfMember = await guild.members.get(user!.client.user.id);
       var permissions =
           await (textChannel as GuildChannel).computePermissionsFor(selfMember);
 
@@ -158,9 +150,10 @@ class Messages extends _$Messages {
             }
           }
 
-          if (channel == ref.read(channelControllerProvider)) {
-            state = AsyncData(channelMessagesMap[channel.toString()] ?? []);
-          }
+          // NOTE: I don't think this will work with the precache!
+          //if (channel == ref.read(channelControllerProvider)) {
+          state = AsyncData(channelMessagesMap[channel.toString()] ?? []);
+          //}
 
           completer.complete();
         }
@@ -174,15 +167,15 @@ class Messages extends _$Messages {
     }
   }
 
-  void processRealtimeMessages(List<Message> messages) async {
+  void processRealtimeMessages(Channel channel, List<Message> messages) async {
     if (messages.isNotEmpty) {
       var message = messages.last;
-      var channel = message.channel;
-      if (channelMessagesMap[channel.toString()] == null) {
-        channelMessagesMap[channel.toString()] = [];
+      var processingChannel = message.channel;
+      if (channelMessagesMap[processingChannel.toString()] == null) {
+        channelMessagesMap[processingChannel.toString()] = [];
       }
-      channelMessagesMap[channel.toString()]!.insert(0, message);
-      if (channel == ref.read(channelControllerProvider)) {
+      channelMessagesMap[processingChannel.toString()]!.insert(0, message);
+      if (processingChannel == channel) {
         // TODO: Only take the first message, and append :D
         // you could also take all of them and compare, to ensure we
         // didn't lose anything in a race condition
@@ -226,17 +219,13 @@ class Messages extends _$Messages {
     return age;
   }
 
-  void fetchMoreMessages() {
+  void fetchMoreMessages(Guild guild, Channel channel) {
     // var delta = DateTime.now().difference(lastFetchTime);
     // if (delta.inMilliseconds < 500) return;
     // lastFetchTime = DateTime.now();
 
     var authOutput = ref.watch(authProvider.notifier).getAuth();
-    var channel = ref.watch(channelControllerProvider);
-    if (channel != null) {
-      getMessages(authOutput, channel,
-          before: oldestMessage[channel]!.id.value);
-    }
+    getMessages(authOutput, before: oldestMessage[channel]!.id.value);
   }
 
   Future<Uint8List?> fetchMemberAvatarFromCache(String hash) async {
@@ -293,19 +282,11 @@ class Messages extends _$Messages {
     // );
   }
 
-  Future<bool> sendMessage(String message, {Channel? channel}) async {
+  Future<bool> sendMessage(Channel channel, String message) async {
     var authOutput = ref.watch(authProvider.notifier).getAuth();
-    Channel? _channel;
-    if (channel != null) {
-      _channel = channel;
-    } else {
-      _channel = ref.watch(channelControllerProvider);
-    }
-    if ((authOutput != null) &&
-        (authOutput is AuthUser) &&
-        (_channel != null)) {
+    if (authOutput is AuthUser) {
       user = authOutput;
-      var textChannel = _channel as TextChannel;
+      var textChannel = channel as TextChannel;
       await textChannel.sendMessage(MessageBuilder(
         content: message,
       ));

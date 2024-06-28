@@ -1,3 +1,5 @@
+import 'package:bonfire/features/channels/controllers/channel.dart';
+import 'package:bonfire/features/guild/controllers/guild.dart';
 import 'package:bonfire/features/messaging/repositories/messages.dart';
 import 'package:bonfire/features/messaging/repositories/events/realtime_messages.dart';
 import 'package:bonfire/features/overview/views/home_desktop.dart';
@@ -9,37 +11,49 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'dart:io' show Platform;
 
-class HomeScreen extends ConsumerStatefulWidget {
-  const HomeScreen({super.key});
+class GuildMessagingOverview extends ConsumerStatefulWidget {
+  final String guildId;
+  final String channelId;
+  const GuildMessagingOverview(
+      {super.key, required this.guildId, required this.channelId});
 
   @override
-  ConsumerState<HomeScreen> createState() => _HomeState();
+  ConsumerState<GuildMessagingOverview> createState() => _HomeState();
 }
 
-class _HomeState extends ConsumerState<HomeScreen> {
-  RevealSide selfPanelState = RevealSide.main;
+class _HomeState extends ConsumerState<GuildMessagingOverview> {
+  RevealSide? selfPanelState;
 
   @override
   void initState() {
     super.initState();
+    selfPanelState = RevealSide.main;
   }
 
   @override
   Widget build(BuildContext context) {
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      ref.watch(realtimeMessagesProvider).when(
-          data: (value) {
-            // print(value.last.content);
-            ref.read(messagesProvider.notifier).processRealtimeMessages(value);
-          },
-          loading: () {},
-          error: (error, stackTrace) {
-            // trust me bro
-          });
-    });
+    // WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+    //   ref.watch(realtimeMessagesProvider).when(
+    //       data: (value) {
+    //         ref.read(messagesProvider.notifier).processRealtimeMessages(value);
+    //       },
+    //       loading: () {},
+    //       error: (error, stackTrace) {
+    //         // trust me bro
+    //       });
+    // });
+
+    var guild = ref.watch(guildControllerProvider(widget.guildId)).value!;
+    var channel = ref.watch(channelControllerProvider(widget.channelId)).value!;
 
     return (Platform.isAndroid || Platform.isIOS)
-        ? const HomeMobile()
-        : const HomeDesktop();
+        ? HomeMobile(
+            guild: guild,
+            channel: channel,
+          )
+        : HomeDesktop(
+            guild: guild,
+            channel: channel,
+          );
   }
 }

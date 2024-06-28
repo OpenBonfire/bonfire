@@ -5,9 +5,16 @@ import 'package:google_fonts/google_fonts.dart';
 
 class Category extends StatefulWidget {
   final GuildChannel category;
+  final Guild guild;
+  final Channel channel;
   final List<GuildChannel> children;
 
-  const Category({super.key, required this.category, required this.children});
+  const Category(
+      {super.key,
+      required this.category,
+      required this.guild,
+      required this.channel,
+      required this.children});
 
   @override
   State<Category> createState() => _CategoryState();
@@ -37,7 +44,11 @@ class _CategoryState extends State<Category> {
           SizedBox(
             child: Column(
               children: widget.children
-                  .map((channel) => ChannelButton(channel: channel))
+                  .map((channel) => ChannelButton(
+                        currentGuild: widget.guild,
+                        currentChannel: widget.channel as GuildChannel,
+                        channel: channel,
+                      ))
                   .toList(),
             ),
           ),

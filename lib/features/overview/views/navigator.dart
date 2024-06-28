@@ -6,14 +6,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 
-class BarWidget extends ConsumerStatefulWidget {
-  const BarWidget({super.key});
+class NavigationBarWidget extends ConsumerStatefulWidget {
+  const NavigationBarWidget({super.key});
 
   @override
-  ConsumerState<BarWidget> createState() => _BarWidgetState();
+  ConsumerState<NavigationBarWidget> createState() => _BarWidgetState();
 }
 
-class _BarWidgetState extends ConsumerState<BarWidget> {
+class _BarWidgetState extends ConsumerState<NavigationBarWidget> {
   bool visible = false;
 
   @override
@@ -44,7 +44,10 @@ class _BarWidgetState extends ConsumerState<BarWidget> {
                       icon: SvgPicture.asset(
                         'assets/icons/home.svg',
                         colorFilter: ColorFilter.mode(
-                          Theme.of(context).custom.colorTheme.navbarIconSelected,
+                          Theme.of(context)
+                              .custom
+                              .colorTheme
+                              .navbarIconSelected,
                           BlendMode.srcIn,
                         ),
                         height: 25,
@@ -55,7 +58,10 @@ class _BarWidgetState extends ConsumerState<BarWidget> {
                       icon: SvgPicture.asset(
                         'assets/icons/messages.svg',
                         colorFilter: ColorFilter.mode(
-                          Theme.of(context).custom.colorTheme.navbarIconSelected,
+                          Theme.of(context)
+                              .custom
+                              .colorTheme
+                              .navbarIconSelected,
                           BlendMode.srcIn,
                         ),
                         height: 25,
@@ -66,7 +72,10 @@ class _BarWidgetState extends ConsumerState<BarWidget> {
                       icon: SvgPicture.asset(
                         'assets/icons/notifications.svg',
                         colorFilter: ColorFilter.mode(
-                          Theme.of(context).custom.colorTheme.navbarIconSelected,
+                          Theme.of(context)
+                              .custom
+                              .colorTheme
+                              .navbarIconSelected,
                           BlendMode.srcIn,
                         ),
                         height: 25,
@@ -147,8 +156,10 @@ class NavigatorIconState extends State<NavigatorIcon> {
                 textAlign: TextAlign.center,
                 style: Theme.of(context).custom.textTheme.subtitle2.copyWith(
                       fontSize: 9,
-                      color:
-                          Theme.of(context).custom.colorTheme.navbarIconSelected,
+                      color: Theme.of(context)
+                          .custom
+                          .colorTheme
+                          .navbarIconSelected,
                     ))
           ],
         ),

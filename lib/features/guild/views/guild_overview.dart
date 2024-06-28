@@ -2,14 +2,15 @@ import 'dart:math';
 
 import 'package:bonfire/theme/text_theme.dart';
 import 'package:bonfire/theme/theme.dart';
+import 'package:firebridge/firebridge.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:bonfire/features/guild/controllers/current_guild.dart';
 
 class GuildOverview extends ConsumerStatefulWidget {
-  const GuildOverview({super.key});
+  final Guild guild;
+  const GuildOverview({super.key, required this.guild});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _GuildOverviewState();
@@ -18,8 +19,7 @@ class GuildOverview extends ConsumerStatefulWidget {
 class _GuildOverviewState extends ConsumerState<GuildOverview> {
   @override
   Widget build(BuildContext context) {
-    var currentGuild = ref.watch(currentGuildControllerProvider);
-    String guildTitle = currentGuild?.name ?? "Not in a server";
+    String guildTitle = widget.guild.name ?? "Not in a server";
 
     return SizedBox(
         width: double.infinity,

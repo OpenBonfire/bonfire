@@ -9,12 +9,22 @@ class Avatar extends ConsumerWidget {
   final double? width;
   final double? height;
   final MessageAuthor author;
-  const Avatar({super.key, required this.author, this.width, this.height});
+  final Guild guild;
+  final Channel channel;
+  const Avatar(
+      {super.key,
+      required this.author,
+      required this.guild,
+      required this.channel,
+      this.width,
+      this.height});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    var avatarFuture =
-        ref.read(messagesProvider.notifier).fetchMessageAuthorAvatar(author);
+    // TODO: This kinda sucks. We should do something else for icons (maybe).
+    var avatarFuture = ref
+        .read(messagesProvider(guild, channel).notifier)
+        .fetchMessageAuthorAvatar(author);
     return Padding(
       padding: const EdgeInsets.only(right: 8),
       child: SizedBox(

@@ -10,7 +10,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sticky_headers/sticky_headers.dart';
 
 class ChannelsList extends ConsumerStatefulWidget {
-  const ChannelsList({super.key});
+  final Guild guild;
+  final Channel channel;
+  const ChannelsList({super.key, required this.guild, required this.channel});
 
   @override
   ConsumerState<ChannelsList> createState() => _ChannelsListState();
@@ -22,10 +24,11 @@ class _ChannelsListState extends ConsumerState<ChannelsList> {
   @override
   Widget build(BuildContext context) {
     var topPadding = MediaQuery.of(context).padding.top;
-    var channelWatch = ref.watch(channelsProvider);
+    var channelWatch = ref.watch(channelsProvider(widget.guild));
 
     var channels = channelWatch.valueOrNull ?? [];
-    var guildBannerUrl = ref.watch(guildBannerUrlProvider).valueOrNull;
+    var guildBannerUrl =
+        ref.watch(guildBannerUrlProvider(widget.guild)).valueOrNull;
 
     if (scrollController.hasClients) scrollController.jumpTo(0.0);
 
@@ -57,14 +60,21 @@ class _ChannelsListState extends ConsumerState<ChannelsList> {
 
     Widget buildChannelButton(int index) {
       if (index < channelsWithoutParent.length) {
-        var channel = channelsWithoutParent[index];
-        return ChannelButton(channel: channel as GuildChannel);
+        var _channel = channelsWithoutParent[index];
+        return ChannelButton(
+            currentChannel: widget.channel as GuildChannel,
+            currentGuild: widget.guild,
+            channel: _channel as GuildChannel);
       } else {
         var categoryIndex = index - channelsWithoutParent.length;
         var category = categoryMap.keys.elementAt(categoryIndex);
         var children = categoryMap[category] ?? [];
         if (category != null) {
-          return Category(category: category, children: children);
+          return Category(
+              guild: widget.guild,
+              channel: widget.channel,
+              category: category,
+              children: children);
         } else {
           return Container();
         }
@@ -118,7 +128,7 @@ class _ChannelsListState extends ConsumerState<ChannelsList> {
                             ))
                         : Container(),
                     StickyHeader(
-                      header: const GuildOverview(),
+                      header: GuildOverview(guild: widget.guild),
                       content: Padding(
                         padding: const EdgeInsets.only(top: 8.0),
                         child: Column(

@@ -1,5 +1,4 @@
 import 'package:bonfire/features/channels/controllers/channel.dart';
-import 'package:bonfire/features/guild/controllers/current_guild.dart';
 import 'package:bonfire/features/channels/repositories/channel_members.dart';
 import 'package:bonfire/features/members/views/components/group.dart';
 import 'package:bonfire/features/members/views/components/member_card.dart';
@@ -8,9 +7,10 @@ import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-/// List of members in the selected guild (not implemented)
 class MemberList extends ConsumerStatefulWidget {
-  const MemberList({super.key});
+  final Guild guild;
+  final Channel channel;
+  const MemberList({super.key, required this.channel, required this.guild});
 
   @override
   ConsumerState<MemberList> createState() => _MemberListState();
@@ -59,10 +59,7 @@ class _MemberListState extends ConsumerState<MemberList> {
 
   @override
   Widget build(BuildContext context) {
-    var currentChannel = ref.watch(channelControllerProvider);
-
-    String channelName = "Unknown";
-    if (currentChannel != null) channelName = getChannelName(currentChannel);
+    String channelName = getChannelName(widget.channel);
 
     return SizedBox(
       width: double.infinity,
@@ -71,8 +68,12 @@ class _MemberListState extends ConsumerState<MemberList> {
           padding: const EdgeInsets.only(left: 0), // 40
           child: Column(
             children: [
-              (currentChannel != null) ? topBox(channelName, "") : Container(),
-              const Expanded(child: MemberScrollView())
+              topBox(channelName, ""),
+              Expanded(
+                  child: MemberScrollView(
+                guild: widget.guild,
+                channel: widget.channel,
+              ))
             ],
           )),
     );
@@ -80,7 +81,10 @@ class _MemberListState extends ConsumerState<MemberList> {
 }
 
 class MemberScrollView extends ConsumerStatefulWidget {
-  const MemberScrollView({super.key});
+  final Guild guild;
+  final Channel channel;
+  const MemberScrollView(
+      {super.key, required this.guild, required this.channel});
 
   @override
   ConsumerState<MemberScrollView> createState() => MemberScrollViewState();
@@ -89,9 +93,9 @@ class MemberScrollView extends ConsumerStatefulWidget {
 class MemberScrollViewState extends ConsumerState<MemberScrollView> {
   @override
   Widget build(BuildContext context) {
-    var currentGuild = ref.watch(currentGuildControllerProvider);
-
-    var memberListPair = ref.watch(channelMembersProvider).valueOrNull;
+    var memberListPair = ref
+        .watch(channelMembersProvider(widget.guild, widget.channel))
+        .valueOrNull;
     var groupList = memberListPair?.first ?? [];
     var memberList = memberListPair?.second ?? [];
 
@@ -107,7 +111,11 @@ class MemberScrollViewState extends ConsumerState<MemberScrollView> {
                 return Padding(
                   padding:
                       const EdgeInsets.only(left: 32, right: 12, bottom: 8),
-                  child: MemberCard(member: member),
+                  child: MemberCard(
+                    member: member,
+                    guild: widget.guild,
+                    channel: widget.channel,
+                  ),
                 );
               }).toList(),
             );
@@ -116,6 +124,7 @@ class MemberScrollViewState extends ConsumerState<MemberScrollView> {
           return Padding(
             padding: const EdgeInsets.only(left: 40),
             child: GroupHeader(
+                guild: widget.guild,
                 groups: groupList,
                 group: memberList[index][0] as GuildMemberListGroup),
           );

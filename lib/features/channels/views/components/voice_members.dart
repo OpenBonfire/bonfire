@@ -13,7 +13,7 @@ class ChannelVoiceMembers extends ConsumerStatefulWidget {
 class _ChannelVoiceMembersState extends ConsumerState<ChannelVoiceMembers> {
   @override
   Widget build(BuildContext context) {
-    var voiceMembers = ref.watch(voiceMembersProvider);
+    // var voiceMembers = ref.watch(voiceMembersProvider);
     return const SizedBox();
   }
 }

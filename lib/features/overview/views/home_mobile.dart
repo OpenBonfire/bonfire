@@ -5,11 +5,14 @@ import 'package:bonfire/features/overview/controllers/navigation_bar.dart';
 import 'package:bonfire/features/overview/views/navigator.dart';
 import 'package:bonfire/features/overview/views/overlapping_panels.dart';
 import 'package:bonfire/features/overview/views/sidebar.dart';
+import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class HomeMobile extends ConsumerStatefulWidget {
-  const HomeMobile({super.key});
+  final Guild guild;
+  final Channel channel;
+  const HomeMobile({super.key, required this.guild, required this.channel});
 
   @override
   ConsumerState<HomeMobile> createState() => _HomeState();
@@ -50,17 +53,31 @@ class _HomeState extends ConsumerState<HomeMobile> {
               },
               left: SizedBox(
                 width: MediaQuery.of(context).size.width,
-                child: const Row(
+                child: Row(
                   children: [
-                    Sidebar(),
-                    Expanded(child: Expanded(child: ChannelsList()))
+                    Sidebar(
+                      key: const Key('sidebar'),
+                      guild: widget.guild,
+                    ),
+                    Expanded(
+                        child: Expanded(
+                            child: ChannelsList(
+                      guild: widget.guild,
+                      channel: widget.channel,
+                    )))
                   ],
                 ),
               ),
-              main: const MessageView(),
-              right: const MemberList(),
+              main: MessageView(
+                guild: widget.guild,
+                channel: widget.channel,
+              ),
+              right: MemberList(
+                guild: widget.guild,
+                channel: widget.channel,
+              ),
             ),
-            const BarWidget()
+            const NavigationBarWidget()
           ],
         ));
   }

@@ -16,8 +16,15 @@ import 'package:url_launcher/url_launcher.dart';
 class MessageBox extends ConsumerStatefulWidget {
   final Message? message;
   final bool showSenderInfo;
-  final Logger logger = Logger("MessageBox");
-  MessageBox({super.key, required this.message, required this.showSenderInfo});
+  final Guild guild;
+  final Channel channel;
+  const MessageBox({
+    required this.guild,
+    required this.channel,
+    super.key,
+    required this.message,
+    required this.showSenderInfo,
+  });
 
   @override
   ConsumerState<MessageBox> createState() => _MessageBoxState();
@@ -70,8 +77,10 @@ class _MessageBoxState extends ConsumerState<MessageBox> {
 
     Color textColor = Colors.white;
 
-    var member = ref.watch(getMemberProvider(widget.message!.author.id));
-    var roles = ref.watch(getGuildRolesProvider).valueOrNull ?? [];
+    var member =
+        ref.watch(getMemberProvider(widget.guild, widget.message!.author.id));
+    var roles =
+        ref.watch(getGuildRolesProvider(widget.guild)).valueOrNull ?? [];
 
     String? roleIconUrl;
 
@@ -95,7 +104,10 @@ class _MessageBoxState extends ConsumerState<MessageBox> {
                 children: [
                   Padding(
                     padding: const EdgeInsets.only(left: 0),
-                    child: MessageReply(parentMessage: widget.message!),
+                    child: MessageReply(
+                        guild: widget.guild,
+                        channel: widget.channel,
+                        parentMessage: widget.message!),
                   ),
                   // Positioned(
                   //   left: 10,
@@ -138,7 +150,10 @@ class _MessageBoxState extends ConsumerState<MessageBox> {
               (widget.showSenderInfo == true)
                   ? Avatar(
                       key: Key(widget.message!.author.avatarHash ?? ""),
-                      author: widget.message!.author)
+                      author: widget.message!.author,
+                      guild: widget.guild,
+                      channel: widget.channel,
+                    )
                   : const Padding(
                       padding: EdgeInsets.only(right: 8),
                       child: SizedBox(

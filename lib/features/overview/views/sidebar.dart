@@ -1,14 +1,15 @@
-import 'package:bonfire/features/guild/controllers/guild.dart';
 import 'package:bonfire/features/guild/repositories/guilds.dart';
 import 'package:bonfire/theme/text_theme.dart';
 import 'package:bonfire/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebridge/firebridge.dart';
+import 'package:go_router/go_router.dart';
 
 /// Sidebar with icons for each guild
 class Sidebar extends ConsumerStatefulWidget {
-  const Sidebar({super.key});
+  final Guild guild;
+  const Sidebar({super.key, required this.guild});
 
   @override
   ConsumerState<Sidebar> createState() => _SidebarState();
@@ -20,7 +21,6 @@ class _SidebarState extends ConsumerState<Sidebar> {
   @override
   Widget build(BuildContext context) {
     var guildWatch = ref.watch(guildsProvider);
-    var selectedGuildId = ref.watch(guildControllerProvider);
 
     List<UserGuild> guildList = [];
     guildWatch.when(
@@ -45,7 +45,7 @@ class _SidebarState extends ConsumerState<Sidebar> {
                       return Column(
                         children: [
                           SidebarIcon(
-                            selected: selectedGuildId == guildList[index],
+                            selected: widget.guild == guildList[index],
                             guild: guildList[index],
                           ),
                           const SizedBox(
@@ -125,10 +125,12 @@ class _SidebarIconState extends ConsumerState<SidebarIcon> {
                         padding: EdgeInsets.zero,
                         minimumSize: const Size(0, 0),
                       ),
-                      onPressed: () {
-                        ref
-                            .read(guildControllerProvider.notifier)
-                            .setGuild(widget.guild);
+                      onPressed: () async {
+                        // go router navigate to guild
+                        (widget.guild.fetchChannels()).then((channels) {
+                          GoRouter.of(context).go(
+                              '/channels/${widget.guild.id}/${channels.first.id.value}');
+                        });
                       },
                       child: ClipRRect(
                         // TODO: Animate border radius change

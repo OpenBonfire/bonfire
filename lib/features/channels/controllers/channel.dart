@@ -1,24 +1,25 @@
+import 'package:bonfire/features/auth/data/repositories/auth.dart';
+import 'package:bonfire/features/auth/data/repositories/discord_auth.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'channel.g.dart';
 
+/// Fetches the current channel from the [channelid].
 @riverpod
 class ChannelController extends _$ChannelController {
   Channel? channel;
 
   @override
-  Channel? build() {
-    return channel;
-  }
+  Future<Channel?> build(String channelId) async {
+    var auth = ref.watch(authProvider.notifier).getAuth();
 
-  Channel setChannel(Channel newChannel) {
-    channel = newChannel;
-    state = channel!;
-    return state!;
-  }
+    Snowflake channel = Snowflake(int.parse(channelId));
 
-  Channel? getChannel() {
-    return state;
+    if (auth is AuthUser) {
+      return await auth.client.channels.get(channel);
+    }
+
+    return null;
   }
 }

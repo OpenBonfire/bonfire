@@ -1,36 +1,36 @@
-import 'package:bonfire/features/guild/repositories/guilds.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:collection/collection.dart';
+import 'package:bonfire/features/auth/data/repositories/auth.dart';
+import 'package:bonfire/features/auth/data/repositories/discord_auth.dart';
 import 'package:firebridge/firebridge.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'guild.g.dart';
 
+/// Fetches the current guild from [guildid].
 @riverpod
 class GuildController extends _$GuildController {
-  UserGuild? guild;
-  List<UserGuild> guilds = [];
+  Guild? guild;
 
   @override
-  UserGuild? build() {
-    var guildOutput = ref.watch(guildsProvider);
-    guildOutput.when(
-        data: (newGuilds) {
-          guilds = newGuilds;
-        },
-        error: (data, trace) {},
-        loading: () {});
+  Future<Guild?> build(guildId) async {
+    var auth = ref.watch(authProvider.notifier).getAuth();
 
-    return guild;
-  }
+    if (guildId == "@me") {
+      /*
+      Not sure if this is the best way to do this
 
-  UserGuild setGuild(UserGuild newGuild) {
-    guild = newGuild;
-    state = guild!;
-    return state!;
-  }
+      If the guild is ever null, I *think* we can assume 100% of the time to
+      assume we are in the user profile. Please inform me if you find any 
+      exceptions to this assumption.
+      */
+      return null;
+    }
 
-  // get current guild
-  UserGuild? get currentGuild {
-    return guild;
+    Snowflake guild = Snowflake(int.parse(guildId));
+
+    if (auth is AuthUser) {
+      return await auth.client.guilds.get(guild);
+    }
+
+    return null;
   }
 }

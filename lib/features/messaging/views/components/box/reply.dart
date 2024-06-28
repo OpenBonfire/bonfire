@@ -8,13 +8,19 @@ import 'package:google_fonts/google_fonts.dart';
 
 class MessageReply extends ConsumerWidget {
   final Message parentMessage;
-  const MessageReply({super.key, required this.parentMessage});
+  final Guild guild;
+  final Channel channel;
+  const MessageReply(
+      {super.key,
+      required this.parentMessage,
+      required this.guild,
+      required this.channel});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     var author = parentMessage.referencedMessage!.author;
-    var member = ref.watch(getMemberProvider(author.id));
-    var roles = ref.watch(getGuildRolesProvider).valueOrNull ?? [];
+    var member = ref.watch(getMemberProvider(guild, author.id));
+    var roles = ref.watch(getGuildRolesProvider(guild)).valueOrNull ?? [];
 
     String name = author.username;
     Color textColor = Colors.white;
@@ -38,6 +44,8 @@ class MessageReply extends ConsumerWidget {
             children: [
               Avatar(
                   author: parentMessage.referencedMessage!.author,
+                  guild: guild,
+                  channel: channel,
                   width: 15,
                   height: 15),
               Text(
