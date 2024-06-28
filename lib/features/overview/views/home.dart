@@ -43,8 +43,10 @@ class _HomeState extends ConsumerState<GuildMessagingOverview> {
     //       });
     // });
 
-    var guild = ref.watch(guildControllerProvider(widget.guildId)).value!;
-    var channel = ref.watch(channelControllerProvider(widget.channelId)).value!;
+    var guild = ref.watch(guildControllerProvider(widget.guildId)).value;
+    var channel = ref.watch(channelControllerProvider(widget.channelId)).value;
+
+    if (guild == null || channel == null) return Container();
 
     return (Platform.isAndroid || Platform.isIOS)
         ? HomeMobile(

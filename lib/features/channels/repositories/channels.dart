@@ -64,7 +64,7 @@ class Channels extends _$Channels {
         }
       }
 
-      runPrecache(guildChannels);
+      // runPrecache(guildChannels);
 
       // first load categories, so we can parent channels later
       for (var channel in guildChannels) {
@@ -87,7 +87,7 @@ class Channels extends _$Channels {
             .compareTo((b as GuildChannel).position);
       });
       channels = _channels;
-      // saveToCache(channels);
+      saveToCache(channels);
       state = AsyncValue.data(channels);
     }
 
@@ -95,31 +95,26 @@ class Channels extends _$Channels {
   }
 
   Future<void> saveToCache(List<Channel> channels) async {
-    // UserGuild? guildId = ref.read(guildControllerProvider);
-    // if (guildId != null) {
-    //   var cacheKey = "channels_$guildId";
-    //   await _cacheManager.putFile(
-    //     cacheKey,
-    //     utf8.encode(json.encode(channels.map((e) => e.toJson()).toList())),
-    //   );
-    // }
+    var cacheKey = "channels_${guild.id.value}";
+    await _cacheManager.putFile(
+      cacheKey,
+      utf8.encode(json.encode(channels.map((e) => e.json).toList())),
+    );
   }
 
   Future<List<Channel>?> fetchFromCache() async {
-    // UserGuild? guildId = ref.read(guildControllerProvider);
-    // print(guildId);
-    // if (guildId != null) {
-    //   var cacheKey = "channels_$guildId";
-    //   var cacheData = await _cacheManager.getFileFromCache(cacheKey);
-    //   if (cacheData != null) {
-    //     var decoded =
-    //         json.decode(utf8.decode(cacheData.file.readAsBytesSync()));
+    var cacheKey = "channels_${guild.id.value}";
+    var cacheData = await _cacheManager.getFileFromCache(cacheKey);
+    if (cacheData != null) {
+      print("cache hit!");
+      var decoded = json.decode(utf8.decode(cacheData.file.readAsBytesSync()));
 
-    //     var mapped = (decoded.map((e) => BonfireChannel.fromJson(e)).toList());
+      var mapped =
+          (decoded.map((e) => guild.manager.client.channels.parse(e)).toList());
 
-    //     return List<BonfireChannel>.from(mapped);
-    //   }
-    // }
+      return List<Channel>.from(mapped);
+    }
+
     return null;
   }
 

@@ -104,6 +104,7 @@ class Messages extends _$Messages {
 
       var messages = await textChannel.messages
           .fetchMany(limit: count ?? 20, before: beforeSnowflake);
+
       // print("Loaded ${messages.length} messages");
       removeLock();
 
