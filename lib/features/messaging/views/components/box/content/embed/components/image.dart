@@ -2,20 +2,20 @@ import 'package:bonfire/features/messaging/views/components/box/content/attachme
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
 
-class ImageAttachment extends StatelessWidget {
-  final Attachment attachment;
-  const ImageAttachment({super.key, required this.attachment});
+class ImageEmbed extends StatelessWidget {
+  final Embed embed;
+  const ImageEmbed({super.key, required this.embed});
 
   @override
   Widget build(BuildContext context) {
-    double aspectRatio = (attachment.width?.toDouble() ?? 1) /
-        (attachment.height?.toDouble() ?? 1);
+    double aspectRatio = (embed.thumbnail?.width?.toDouble() ?? 1) /
+        (embed.thumbnail?.height?.toDouble() ?? 1);
 
     return ClipRRect(
         borderRadius: BorderRadius.circular(12),
         child: BoundedContent(
           aspectRatio: aspectRatio,
-          child: Image.network(attachment.url.toString(), fit: BoxFit.cover),
+          child: Image.network(embed.url.toString(), fit: BoxFit.cover),
         ));
   }
 }

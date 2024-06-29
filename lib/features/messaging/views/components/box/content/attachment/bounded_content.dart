@@ -1,8 +1,6 @@
 import 'dart:math';
 
-import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
-import 'package:dynamic_height_grid_view/dynamic_height_grid_view.dart';
 
 class BoundedContent extends StatelessWidget {
   final Widget child;
