@@ -28,7 +28,7 @@ class _AttachmentWidgetState extends State<AttachmentWidget> {
     }
 
     if (contentType == "video") {
-      return VideoAttachment(attachment: widget.attachment);
+      // return VideoAttachment(attachment: widget.attachment);
     }
 
     return DownloadAttachment(attachment: widget.attachment);

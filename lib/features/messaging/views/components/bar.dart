@@ -1,10 +1,10 @@
-import 'package:bonfire/features/messaging/controllers/message_bar.dart';
 import 'package:bonfire/features/messaging/repositories/messages.dart';
 import 'package:bonfire/features/messaging/views/messages.dart';
 import 'package:bonfire/theme/theme.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:universal_platform/universal_platform.dart';
 
 class MessageBar extends ConsumerStatefulWidget {
   final Guild guild;
@@ -17,6 +17,9 @@ class MessageBar extends ConsumerStatefulWidget {
 }
 
 class _MessageBarState extends ConsumerState<MessageBar> {
+  TextEditingController messageBarController = TextEditingController();
+  FocusNode messageBarFocusNode = FocusNode();
+
   Widget _messageBarIcon(Icon icon, void Function() onPressed,
       {Color? backgroundColor}) {
     return Padding(
@@ -30,6 +33,21 @@ class _MessageBarState extends ConsumerState<MessageBar> {
         child: IconButton(icon: icon, onPressed: onPressed),
       ),
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  _sendMessage() {
+    ref
+        .read(messagesProvider(widget.guild.id, widget.channel.id).notifier)
+        .sendMessage(widget.channel, messageBarController.text);
+    messageBarController.text = "";
+
+    // only required on desktop because onSubmit
+    messageBarFocusNode.requestFocus();
   }
 
   @override
@@ -66,7 +84,11 @@ class _MessageBarState extends ConsumerState<MessageBar> {
                     padding: const EdgeInsets.only(left: 16),
                     child: Center(
                       child: TextField(
+                        focusNode: messageBarFocusNode,
                         controller: messageBarController,
+                        onSubmitted: (_) {
+                          if (UniversalPlatform.isDesktopOrWeb) _sendMessage();
+                        },
                         decoration: InputDecoration(
                           contentPadding:
                               const EdgeInsets.only(left: 8, bottom: 6),
@@ -84,21 +106,17 @@ class _MessageBarState extends ConsumerState<MessageBar> {
               ),
             ),
           ),
-          _messageBarIcon(
-            const Icon(
-              Icons.send,
-              color: Colors.white,
-              weight: 10,
-            ),
-            () {
-              ref
-                  .read(messagesProvider(widget.guild.id, widget.channel.id)
-                      .notifier)
-                  .sendMessage(widget.channel, messageBarController.text);
-              messageBarController.text = "";
-            },
-            backgroundColor: Theme.of(context).custom.colorTheme.blurple,
-          ),
+          (UniversalPlatform.isMobile)
+              ? _messageBarIcon(
+                  const Icon(
+                    Icons.send,
+                    color: Colors.white,
+                    weight: 10,
+                  ),
+                  _sendMessage,
+                  backgroundColor: Theme.of(context).custom.colorTheme.blurple,
+                )
+              : const SizedBox(),
         ],
       ),
     );
