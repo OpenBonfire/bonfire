@@ -6,7 +6,7 @@ part of 'guild.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$guildBannerUrlHash() => r'71a7e64a1a52f9673dc1d323edddb7ec337cedde';
+String _$guildBannerUrlHash() => r'fac25c7c8aecffc3605702a90fb138777b5cb1af';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -153,6 +153,133 @@ class _GuildBannerUrlProviderElement extends FutureProviderElement<Uri?>
 
   @override
   Snowflake get guildId => (origin as GuildBannerUrlProvider).guildId;
+}
+
+String _$guildIconHash() => r'065d2098a446d3fd9e8aa193f9873ad33da0e621';
+
+/// See also [guildIcon].
+@ProviderFor(guildIcon)
+const guildIconProvider = GuildIconFamily();
+
+/// See also [guildIcon].
+class GuildIconFamily extends Family<AsyncValue<Image?>> {
+  /// See also [guildIcon].
+  const GuildIconFamily();
+
+  /// See also [guildIcon].
+  GuildIconProvider call(
+    Snowflake guildId,
+  ) {
+    return GuildIconProvider(
+      guildId,
+    );
+  }
+
+  @override
+  GuildIconProvider getProviderOverride(
+    covariant GuildIconProvider provider,
+  ) {
+    return call(
+      provider.guildId,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'guildIconProvider';
+}
+
+/// See also [guildIcon].
+class GuildIconProvider extends FutureProvider<Image?> {
+  /// See also [guildIcon].
+  GuildIconProvider(
+    Snowflake guildId,
+  ) : this._internal(
+          (ref) => guildIcon(
+            ref as GuildIconRef,
+            guildId,
+          ),
+          from: guildIconProvider,
+          name: r'guildIconProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$guildIconHash,
+          dependencies: GuildIconFamily._dependencies,
+          allTransitiveDependencies: GuildIconFamily._allTransitiveDependencies,
+          guildId: guildId,
+        );
+
+  GuildIconProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.guildId,
+  }) : super.internal();
+
+  final Snowflake guildId;
+
+  @override
+  Override overrideWith(
+    FutureOr<Image?> Function(GuildIconRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: GuildIconProvider._internal(
+        (ref) => create(ref as GuildIconRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        guildId: guildId,
+      ),
+    );
+  }
+
+  @override
+  FutureProviderElement<Image?> createElement() {
+    return _GuildIconProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is GuildIconProvider && other.guildId == guildId;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, guildId.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin GuildIconRef on FutureProviderRef<Image?> {
+  /// The parameter `guildId` of this provider.
+  Snowflake get guildId;
+}
+
+class _GuildIconProviderElement extends FutureProviderElement<Image?>
+    with GuildIconRef {
+  _GuildIconProviderElement(super.provider);
+
+  @override
+  Snowflake get guildId => (origin as GuildIconProvider).guildId;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

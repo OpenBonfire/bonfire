@@ -54,17 +54,8 @@ class _MessageBoxState extends ConsumerState<MessageBox> {
     return section1 + section2;
   }
 
-  void launchCustomUrl(Uri uri) async {
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri);
-    } else {
-      print('Could not launch $uri');
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    var width = MediaQuery.of(context).size.width;
     var embeds = widget.message!.embeds;
     var attachments = widget.message!.attachments;
 
@@ -105,25 +96,11 @@ class _MessageBoxState extends ConsumerState<MessageBox> {
                   Padding(
                     padding: const EdgeInsets.only(left: 0),
                     child: MessageReply(
-                        guild: widget.guild,
-                        channel: widget.channel,
-                        parentMessage: widget.message!),
+                      guild: widget.guild,
+                      channel: widget.channel,
+                      parentMessage: widget.message!,
+                    ),
                   ),
-                  // Positioned(
-                  //   left: 10,
-                  //   top: 16,
-                  //   child: CustomPaint(
-                  //     size: const Size(60, 30),
-                  //     painter: CurvedLinePainter(
-                  //       isLast: true,
-                  //       padding: const EdgeInsets.only(left: 2, top: 8),
-                  //       avatarRoot: const Size(45, 45),
-                  //       avatarChild: const Size(45, 45),
-                  //       pathColor: Colors.grey,
-                  //       strokeWidth: 2.0,
-                  //     ),
-                  //   ),
-                  // ),
                 ],
               )
             : const SizedBox(),
@@ -160,67 +137,61 @@ class _MessageBoxState extends ConsumerState<MessageBox> {
                         width: 45,
                       ),
                     ),
-              Column(
+              Expanded(
+                child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     widget.showSenderInfo
-                        ? SizedBox(
-                            width: width - widthOffset,
-                            child: Wrap(
-                              children: [
-                                Padding(
-                                    padding: const EdgeInsets.only(left: 6),
-                                    child: Text(
-                                      name,
-                                      textAlign: TextAlign.left,
-                                      style: TextStyle(
-                                        color: textColor,
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    )),
-                                // emoji
-                                if (roleIconUrl != null)
-                                  Padding(
-                                    padding:
-                                        const EdgeInsets.only(left: 6, top: 2),
-                                    child: Image.network(
-                                      roleIconUrl!,
-                                      width: 22,
-                                      height: 22,
-                                    ),
-                                  ),
-                                Padding(
-                                  // I dislike the top padding, should fix alignment
-                                  padding:
-                                      const EdgeInsets.only(left: 6, top: 4),
-                                  child: Text(
-                                    dateTimeFormat(
-                                        widget.message!.timestamp.toLocal()),
-                                    textAlign: TextAlign.left,
-                                    softWrap: true,
-                                    overflow: TextOverflow.fade,
-                                    style: const TextStyle(
-                                      color: Color.fromARGB(189, 255, 255, 255),
-                                      fontSize: 12,
-                                    ),
+                        ? Wrap(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(left: 6),
+                                child: Text(
+                                  name,
+                                  textAlign: TextAlign.left,
+                                  style: TextStyle(
+                                    color: textColor,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                              ],
-                            ),
+                              ),
+                              if (roleIconUrl != null)
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.only(left: 6, top: 2),
+                                  child: Image.network(
+                                    roleIconUrl!,
+                                    width: 22,
+                                    height: 22,
+                                  ),
+                                ),
+                              Padding(
+                                padding: const EdgeInsets.only(left: 6, top: 4),
+                                child: Text(
+                                  dateTimeFormat(
+                                      widget.message!.timestamp.toLocal()),
+                                  textAlign: TextAlign.left,
+                                  softWrap: true,
+                                  overflow: TextOverflow.fade,
+                                  style: const TextStyle(
+                                    color: Color.fromARGB(189, 255, 255, 255),
+                                    fontSize: 12,
+                                  ),
+                                ),
+                              ),
+                            ],
                           )
                         : const SizedBox(),
                     Padding(
                       padding: const EdgeInsets.only(left: 6, top: 0),
                       child: SizedBox(
-                        width: width - widthOffset - 5,
                         child: MarkdownBox(
                           message: widget.message,
                         ),
                       ),
                     ),
-                    // add per embed
                     for (var embed in embeds)
                       Padding(
                         padding: const EdgeInsets.only(left: 8, top: 8),
@@ -235,7 +206,9 @@ class _MessageBoxState extends ConsumerState<MessageBox> {
                           attachment: attachment,
                         ),
                       ),
-                  ]),
+                  ],
+                ),
+              ),
             ],
           ),
         ),

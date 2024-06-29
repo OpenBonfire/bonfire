@@ -169,7 +169,7 @@ class _MessageViewState extends ConsumerState<MessageView> {
 
                 MessageBox box = MessageBox(
                   key: ValueKey(messages[index].id.value.toString()),
-                  guild: guild!,
+                  guild: guild,
                   channel: channel,
                   message: messages[index],
                   showSenderInfo: !showAuthor,

@@ -1,3 +1,4 @@
+import 'package:bonfire/features/guild/repositories/guild.dart';
 import 'package:bonfire/features/guild/repositories/guilds.dart';
 import 'package:bonfire/theme/text_theme.dart';
 import 'package:bonfire/theme/theme.dart';
@@ -71,8 +72,7 @@ class SidebarIcon extends ConsumerStatefulWidget {
   final bool selected;
   final UserGuild guild;
 
-  const SidebarIcon({Key? key, required this.selected, required this.guild})
-      : super(key: key);
+  const SidebarIcon({super.key, required this.selected, required this.guild});
 
   @override
   ConsumerState<SidebarIcon> createState() => _SidebarIconState();
@@ -81,10 +81,11 @@ class SidebarIcon extends ConsumerStatefulWidget {
 class _SidebarIconState extends ConsumerState<SidebarIcon> {
   Future<double> get iconHeight => Future<double>.value(40);
 
-  Widget iconBuilder(UserGuild guild) {
-    if (guild.icon != null) {
-      return Image.network(guild.icon!.url.toString(),
-          width: 45, height: 45, fit: BoxFit.cover);
+  Widget iconBuilder(UserGuild guild, Image? guildIcon) {
+    if (guildIcon != null) {
+      // return Image.network(guild.icon!.url.toString(),
+      //     width: 45, height: 45, fit: BoxFit.cover);
+      return guildIcon;
     } else {
       String iconText = "";
       List<String> words = guild.name.split(" ");
@@ -109,6 +110,8 @@ class _SidebarIconState extends ConsumerState<SidebarIcon> {
 
   @override
   Widget build(BuildContext context) {
+    Image? guildIcon =
+        ref.watch(guildIconProvider(widget.guild.id)).valueOrNull;
     return SizedBox(
       width: 60,
       child: Stack(
@@ -125,18 +128,19 @@ class _SidebarIconState extends ConsumerState<SidebarIcon> {
                         padding: EdgeInsets.zero,
                         minimumSize: const Size(0, 0),
                       ),
-                      onPressed: () async {
-                        // go router navigate to guild
-                        (widget.guild.fetchChannels()).then((channels) {
+                      onPressed: () {
+                        widget.guild.manager
+                            .get(widget.guild.id)
+                            .then((Guild guild) async {
                           GoRouter.of(context).go(
-                              '/channels/${widget.guild.id}/${channels.first.id.value}');
+                              '/channels/${widget.guild.id}/${guild.rulesChannelId ?? (await guild.fetchChannels()).first.id.value}');
                         });
                       },
                       child: ClipRRect(
                         // TODO: Animate border radius change
                         borderRadius: BorderRadius.all(
                             Radius.circular(widget.selected ? 15 : 100)),
-                        child: iconBuilder(widget.guild),
+                        child: iconBuilder(widget.guild, guildIcon),
                       ))),
             ),
           ),
