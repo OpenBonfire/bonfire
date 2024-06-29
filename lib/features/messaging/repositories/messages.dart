@@ -34,7 +34,6 @@ class Messages extends _$Messages {
 
   @override
   Future<List<Message>> build(Snowflake guildId, Snowflake channelId) async {
-    var guild = ref.watch(guildControllerProvider(guildId)).value!;
     var channel = ref.watch(channelControllerProvider(channelId)).value!;
 
     var authOutput = ref.watch(authProvider.notifier).getAuth();
@@ -83,8 +82,8 @@ class Messages extends _$Messages {
     if ((authOutput != null) && (authOutput is AuthUser)) {
       user = authOutput;
 
-      var channel =
-          ref.watch(channelControllerProvider(channelId)).value! as TextChannel;
+      var channel = ref.watch(channelControllerProvider(channelId)).value!
+          as GuildChannel;
       var guild = ref.watch(guildControllerProvider(guildId)).value!;
 
       var beforeSnowflake = before != null ? Snowflake(before) : null;
@@ -94,8 +93,7 @@ class Messages extends _$Messages {
       if (lock == true) enableLock();
 
       var selfMember = await guild.members.get(user!.client.user.id);
-      var permissions =
-          await (channel as GuildChannel).computePermissionsFor(selfMember);
+      var permissions = await channel.computePermissionsFor(selfMember);
 
       if (permissions.canReadMessageHistory == false) {
         // I think there's still another permission we're missing here...
@@ -106,7 +104,15 @@ class Messages extends _$Messages {
         return;
       }
 
-      var messages = await channel.messages
+      if (channel is! TextChannel) {
+        print(
+            "Error fetching messages in channel ${channel.id}, not a text channel");
+        removeLock();
+        return;
+      }
+
+      var messages = await (channel as TextChannel)
+          .messages
           .fetchMany(limit: count ?? 20, before: beforeSnowflake);
 
       // print("Loaded ${messages.length} messages");
@@ -140,7 +146,7 @@ class Messages extends _$Messages {
         currentIndex = endIndex;
 
         if (currentIndex < messages.length) {
-          SchedulerBinding.instance?.addPostFrameCallback((_) {
+          SchedulerBinding.instance.addPostFrameCallback((_) {
             processChunk();
           });
         } else {
@@ -172,7 +178,10 @@ class Messages extends _$Messages {
     }
   }
 
-  void processRealtimeMessages(Channel channel, List<Message> messages) async {
+  void processRealtimeMessages(
+      Snowflake channelId, List<Message> messages) async {
+    Channel? channel =
+        ref.watch(channelControllerProvider(channelId)).valueOrNull;
     if (messages.isNotEmpty) {
       var message = messages.last;
       var processingChannel = message.channel;

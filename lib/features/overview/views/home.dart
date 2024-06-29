@@ -33,18 +33,19 @@ class _HomeState extends ConsumerState<GuildMessagingOverview> {
 
   @override
   Widget build(BuildContext context) {
-    // WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-    //   ref.watch(realtimeMessagesProvider).when(
-    //       data: (value) {
-    //         ref.read(messagesProvider.notifier).processRealtimeMessages(value);
-    //       },
-    //       loading: () {},
-    //       error: (error, stackTrace) {
-    //         // trust me bro
-    //       });
-    // });
-
-    // if (guild == null || channel == null) return Container();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      ref.watch(realtimeMessagesProvider).when(
+          data: (value) {
+            ref
+                .read(
+                    messagesProvider(widget.guildId, widget.channelId).notifier)
+                .processRealtimeMessages(widget.channelId, value);
+          },
+          loading: () {},
+          error: (error, stackTrace) {
+            // trust me bro
+          });
+    });
 
     return (Platform.isAndroid || Platform.isIOS)
         ? HomeMobile(

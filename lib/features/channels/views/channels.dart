@@ -1,8 +1,6 @@
-import 'package:bonfire/features/channels/controllers/channel.dart';
 import 'package:bonfire/features/channels/repositories/channels.dart';
 import 'package:bonfire/features/channels/views/components/button.dart';
 import 'package:bonfire/features/channels/views/components/category.dart';
-import 'package:bonfire/features/guild/controllers/guild.dart';
 import 'package:bonfire/features/guild/repositories/guild.dart';
 import 'package:bonfire/features/guild/views/guild_overview.dart';
 import 'package:bonfire/theme/theme.dart';
@@ -28,21 +26,12 @@ class _ChannelsListState extends ConsumerState<ChannelsList> {
   Widget build(BuildContext context) {
     var topPadding = MediaQuery.of(context).padding.top;
     var channelWatch = ref.watch(channelsProvider(widget.guildId));
-    // var guild = ref.watch(guildControllerProvider(widget.guildId)).valueOrNull;
-    // var channel =
-    //     ref.watch(channelControllerProvider(widget.channelId)).valueOrNull;
-
-    // if (guild == null || channel == null) {
-    //   return const Center(
-    //     child: CircularProgressIndicator(),
-    //   );
-    // }
 
     var channels = channelWatch.valueOrNull ?? [];
     var guildBannerUrl =
         ref.watch(guildBannerUrlProvider(widget.guildId)).valueOrNull;
 
-    if (scrollController.hasClients) scrollController.jumpTo(0.0);
+    // if (scrollController.hasClients) scrollController.jumpTo(0.0);
 
     var channelsWithoutParent = channels
         .where((channel) =>
