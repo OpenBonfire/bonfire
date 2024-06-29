@@ -21,13 +21,22 @@ class VideoEmbedState extends State<MobileVideoPlayer> {
 
   @override
   void initState() {
-    super.initState();
     _videoPlayerController = VlcPlayerController.network(
       widget.url.toString(),
       hwAcc: HwAcc.full,
       autoPlay: true,
       options: VlcPlayerOptions(),
     );
+
+    _videoPlayerController!.addListener(() {
+      if (_videoPlayerController!.value.playingState == PlayingState.ended) {
+        // if video has ended
+        _videoPlayerController!.stop().then((_) => _videoPlayerController!
+            .play()); // stop (reset) the video and play again after stop completed
+      }
+    });
+
+    super.initState();
   }
 
   @override
@@ -38,12 +47,15 @@ class VideoEmbedState extends State<MobileVideoPlayer> {
 
   @override
   Widget build(BuildContext context) {
-    return BoundedContent(
-      aspectRatio: widget.width / widget.height,
-      child: VlcPlayer(
-        controller: _videoPlayerController!,
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(12),
+      child: BoundedContent(
         aspectRatio: widget.width / widget.height,
-        placeholder: const Center(child: CircularProgressIndicator()),
+        child: VlcPlayer(
+          controller: _videoPlayerController!,
+          aspectRatio: widget.width / widget.height,
+          placeholder: const Center(child: CircularProgressIndicator()),
+        ),
       ),
     );
   }

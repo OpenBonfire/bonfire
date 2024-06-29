@@ -34,7 +34,7 @@ class _AttachmentWidgetState extends State<AttachmentWidget> {
       if (UniversalPlatform.isDesktopOrWeb) {
         return DesktopVideoAttachment(attachment: widget.attachment);
       } else {
-        return MobileVideoAttachment(attachment: widget.attachment);
+        return DesktopVideoAttachment(attachment: widget.attachment);
       }
     }
 

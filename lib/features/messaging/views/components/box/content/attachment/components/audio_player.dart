@@ -73,6 +73,7 @@ class _AudioAttachmentState extends State<AudioAttachment> {
     _positionSubscription?.cancel();
     _playerCompleteSubscription?.cancel();
     _playerStateChangeSubscription?.cancel();
+    player?.dispose();
     super.dispose();
   }
 

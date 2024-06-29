@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:bonfire/features/messaging/views/components/box/content/attachment/bounded_content.dart';
 import 'package:flutter/material.dart';
 import 'package:media_kit/media_kit.dart';
 import 'package:media_kit_video/media_kit_video.dart';
@@ -19,37 +20,35 @@ class DesktopVideoPlayer extends StatefulWidget {
 }
 
 class VideoAttachmentState extends State<DesktopVideoPlayer> {
-  var player = Player();
-  late final controller = VideoController(player);
+  Player? player;
+  VideoController? controller;
 
   @override
   void initState() {
+    player = Player();
+    player!.open(Media(widget.url.toString()));
+    controller = VideoController(player!);
     super.initState();
-    player.open(Media(widget.url.toString()));
   }
 
   @override
   void dispose() {
-    player.dispose();
+    player?.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return _buildVideoWidget();
-  }
-
-  Widget _buildVideoWidget() {
-    return SizedBox(
-      height: min(widget.height.toDouble(), 400),
-      width: min(700,
-          min(widget.width.toDouble(), MediaQuery.of(context).size.width - 90)),
-      child: ClipRRect(
-          borderRadius: BorderRadius.circular(12),
-          child: Video(
-            controller: controller,
-            fit: BoxFit.cover,
-          )),
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(12),
+      child: BoundedContent(
+        aspectRatio: widget.width / widget.height,
+        minWidth: 300,
+        child: Video(
+          controller: controller!,
+          fit: BoxFit.cover,
+        ),
+      ),
     );
   }
 }

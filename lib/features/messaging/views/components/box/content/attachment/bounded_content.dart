@@ -5,8 +5,12 @@ import 'package:flutter/material.dart';
 class BoundedContent extends StatelessWidget {
   final Widget child;
   final double aspectRatio;
+  final double? minWidth;
   const BoundedContent(
-      {super.key, required this.child, required this.aspectRatio});
+      {super.key,
+      required this.child,
+      required this.aspectRatio,
+      this.minWidth});
 
   @override
   Widget build(BuildContext context) {
@@ -20,6 +24,11 @@ class BoundedContent extends StatelessWidget {
 
         if (width > maxWidth) {
           width = maxWidth;
+          height = width / aspectRatio;
+        }
+
+        if (minWidth != null && width < minWidth!) {
+          width = minWidth!;
           height = width / aspectRatio;
         }
 
