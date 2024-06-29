@@ -5,15 +5,15 @@ import 'package:google_fonts/google_fonts.dart';
 
 class Category extends StatefulWidget {
   final GuildChannel category;
-  final Guild guild;
-  final Channel channel;
+  final Snowflake guildId;
+  final Snowflake channelId;
   final List<GuildChannel> children;
 
   const Category(
       {super.key,
       required this.category,
-      required this.guild,
-      required this.channel,
+      required this.guildId,
+      required this.channelId,
       required this.children});
 
   @override
@@ -45,8 +45,8 @@ class _CategoryState extends State<Category> {
             child: Column(
               children: widget.children
                   .map((channel) => ChannelButton(
-                        currentGuildId: widget.guild.id,
-                        currentChannelId: widget.channel.id,
+                        currentGuildId: widget.guildId,
+                        currentChannelId: widget.channelId,
                         channel: channel,
                       ))
                   .toList(),

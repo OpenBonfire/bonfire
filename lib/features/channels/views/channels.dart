@@ -28,15 +28,15 @@ class _ChannelsListState extends ConsumerState<ChannelsList> {
   Widget build(BuildContext context) {
     var topPadding = MediaQuery.of(context).padding.top;
     var channelWatch = ref.watch(channelsProvider(widget.guildId));
-    var guild = ref.watch(guildControllerProvider(widget.guildId)).valueOrNull;
-    var channel =
-        ref.watch(channelControllerProvider(widget.channelId)).valueOrNull;
+    // var guild = ref.watch(guildControllerProvider(widget.guildId)).valueOrNull;
+    // var channel =
+    //     ref.watch(channelControllerProvider(widget.channelId)).valueOrNull;
 
-    if (guild == null || channel == null) {
-      return const Center(
-        child: CircularProgressIndicator(),
-      );
-    }
+    // if (guild == null || channel == null) {
+    //   return const Center(
+    //     child: CircularProgressIndicator(),
+    //   );
+    // }
 
     var channels = channelWatch.valueOrNull ?? [];
     var guildBannerUrl =
@@ -81,15 +81,11 @@ class _ChannelsListState extends ConsumerState<ChannelsList> {
         var categoryIndex = index - channelsWithoutParent.length;
         var category = categoryMap.keys.elementAt(categoryIndex);
         var children = categoryMap[category] ?? [];
-        if (category != null) {
-          return Category(
-              guild: guild!,
-              channel: channel!,
-              category: category,
-              children: children);
-        } else {
-          return Container();
-        }
+        return Category(
+            guildId: widget.guildId,
+            channelId: widget.channelId,
+            category: category,
+            children: children);
       }
     }
 
