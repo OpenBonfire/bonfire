@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:bonfire/features/messaging/views/components/box/content/attachment/bounded_content.dart';
 import 'package:bonfire/theme/theme.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
@@ -36,26 +37,21 @@ class _EmbedWidgetState extends ConsumerState<EmbedWidget> {
   }
 }
 
-class ImageEmbed extends ConsumerStatefulWidget {
+class ImageEmbed extends StatelessWidget {
   final Embed embed;
   const ImageEmbed({super.key, required this.embed});
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => ImageEmbedState();
-}
-
-class ImageEmbedState extends ConsumerState<ImageEmbed> {
-  @override
   Widget build(BuildContext context) {
+    double aspectRatio = (embed.thumbnail?.width?.toDouble() ?? 1) /
+        (embed.thumbnail?.height?.toDouble() ?? 1);
+
     return ClipRRect(
-      borderRadius: BorderRadius.circular(12),
-      child: AspectRatio(
-        aspectRatio: (widget.embed.thumbnail?.width?.toDouble() ?? 1) /
-            (widget.embed.thumbnail?.height?.toDouble() ?? 1),
-        child: Image.network(widget.embed.image!.url.toString(),
-            fit: BoxFit.cover),
-      ),
-    );
+        borderRadius: BorderRadius.circular(12),
+        child: BoundedContent(
+          aspectRatio: aspectRatio,
+          child: Image.network(embed.url.toString(), fit: BoxFit.cover),
+        ));
   }
 }
 
