@@ -34,10 +34,10 @@ class _CategoryState extends State<Category> {
             child: SizedBox(
               height: 25,
               child: Text(widget.category.name.toUpperCase(),
-                  style: GoogleFonts.inriaSans(
+                  style: GoogleFonts.publicSans(
                     color: const Color.fromARGB(189, 255, 255, 255),
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
+                    fontSize: 15,
+                    fontWeight: FontWeight.w400,
                   )),
             ),
           ),

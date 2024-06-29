@@ -37,36 +37,36 @@ class MessageReply extends ConsumerWidget {
     return Padding(
       padding: const EdgeInsets.only(left: 72, bottom: 8),
       child: Row(
-        // align to top
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: [
-              Avatar(
-                  author: parentMessage.referencedMessage!.author,
-                  guild: guild,
-                  channel: channel,
-                  width: 15,
-                  height: 15),
-              Text(
-                name,
-                style: GoogleFonts.openSans(
-                  color: textColor,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 12,
-                ),
-              ),
-              const SizedBox(
-                width: 6,
-              ),
-            ],
+          Avatar(
+            author: parentMessage.referencedMessage!.author,
+            guild: guild,
+            channel: channel,
+            width: 15,
+            height: 15,
           ),
+          const SizedBox(width: 6),
           Flexible(
-            child: Text(
-              parentMessage.referencedMessage!.content,
-              style: GoogleFonts.openSans(
-                color: Colors.white,
-                fontSize: 12,
+            child: RichText(
+              text: TextSpan(
+                children: [
+                  TextSpan(
+                    text: '$name ',
+                    style: GoogleFonts.publicSans(
+                      color: textColor,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 12,
+                    ),
+                  ),
+                  TextSpan(
+                    text: parentMessage.referencedMessage!.content,
+                    style: GoogleFonts.publicSans(
+                      color: Colors.white,
+                      fontSize: 12,
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
