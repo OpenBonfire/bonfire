@@ -6,13 +6,13 @@ part of 'auth.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$authHash() => r'9e3f26a313d757314878453c16a7be8174426394';
+String _$authHash() => r'b6bdcbd7ccb3f6dadbd4b032f0f1009e61b6dca8';
 
 /// A riverpod provider that handles authentication with Discord.
 ///
 /// Copied from [Auth].
 @ProviderFor(Auth)
-final authProvider = AutoDisposeNotifierProvider<Auth, AuthResponse?>.internal(
+final authProvider = NotifierProvider<Auth, AuthResponse?>.internal(
   Auth.new,
   name: r'authProvider',
   debugGetCreateSourceHash:
@@ -21,6 +21,6 @@ final authProvider = AutoDisposeNotifierProvider<Auth, AuthResponse?>.internal(
   allTransitiveDependencies: null,
 );
 
-typedef _$Auth = AutoDisposeNotifier<AuthResponse?>;
+typedef _$Auth = Notifier<AuthResponse?>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

@@ -8,11 +8,11 @@ import 'package:firebridge/firebridge.dart';
 
 part 'guild.g.dart';
 
-@riverpod
-Future<Uri?> guildBannerUrl(GuildBannerUrlRef ref, Guild guild) async {
+@Riverpod(keepAlive: true)
+Future<Uri?> guildBannerUrl(GuildBannerUrlRef ref, Snowflake guildId) async {
   var authOutput = ref.watch(authProvider.notifier).getAuth();
 
   if (authOutput is AuthUser) {
-    return (await authOutput.client.guilds.get(guild.id)).banner?.url;
+    return (await authOutput.client.guilds.get(guildId)).banner?.url;
   }
 }

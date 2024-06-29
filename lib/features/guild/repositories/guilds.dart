@@ -7,7 +7,7 @@ import 'package:firebridge/firebridge.dart';
 
 part 'guilds.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: true)
 class Guilds extends _$Guilds {
   AuthUser? user;
   List<UserGuild> guilds = [];

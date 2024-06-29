@@ -6,12 +6,11 @@ part of 'guilds.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$guildsHash() => r'932eacebeabd5efb99e96e9a9a636accef316894';
+String _$guildsHash() => r'79cc6615daa4bfa95adcb6cf484253a27355651d';
 
 /// See also [Guilds].
 @ProviderFor(Guilds)
-final guildsProvider =
-    AutoDisposeAsyncNotifierProvider<Guilds, List<UserGuild>>.internal(
+final guildsProvider = AsyncNotifierProvider<Guilds, List<UserGuild>>.internal(
   Guilds.new,
   name: r'guildsProvider',
   debugGetCreateSourceHash:
@@ -20,6 +19,6 @@ final guildsProvider =
   allTransitiveDependencies: null,
 );
 
-typedef _$Guilds = AutoDisposeAsyncNotifier<List<UserGuild>>;
+typedef _$Guilds = AsyncNotifier<List<UserGuild>>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

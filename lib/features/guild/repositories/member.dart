@@ -6,7 +6,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'member.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: true)
 Future<Member?> getMember(
     GetMemberRef ref, Guild guild, Snowflake memberId) async {
   var authOutput = ref.watch(authProvider.notifier).getAuth();

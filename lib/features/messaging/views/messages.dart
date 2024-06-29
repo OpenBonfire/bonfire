@@ -14,9 +14,10 @@ String getChannelName(Channel channel) {
 }
 
 class MessageView extends ConsumerStatefulWidget {
-  final Guild guild;
-  final Channel channel;
-  const MessageView({super.key, required this.guild, required this.channel});
+  final Snowflake guildId;
+  final Snowflake channelId;
+  const MessageView(
+      {super.key, required this.guildId, required this.channelId});
 
   @override
   ConsumerState<MessageView> createState() => _MessageViewState();
@@ -49,22 +50,34 @@ class _MessageViewState extends ConsumerState<MessageView> {
 
   void _loadMoreMessages() {
     ref
-        .read(messagesProvider(widget.guild, widget.channel).notifier)
+        .read(messagesProvider(widget.guildId, widget.channelId).notifier)
         .fetchMoreMessages(
-          widget.guild,
-          widget.channel,
-        );
+            // widget.guild,
+            // widget.channel,
+            );
   }
 
   @override
   Widget build(BuildContext context) {
     var messageOutput =
-        ref.watch(messagesProvider(widget.guild, widget.channel));
+        ref.watch(messagesProvider(widget.guildId, widget.channelId));
     var messages = messageOutput.valueOrNull ?? [];
     var topPadding = MediaQuery.of(context).padding.top;
 
     String channelName = "";
-    channelName = getChannelName(widget.channel);
+    Channel? channel =
+        ref.watch(channelControllerProvider(widget.channelId)).valueOrNull;
+
+    Guild? guild =
+        ref.watch(guildControllerProvider(widget.guildId)).valueOrNull;
+
+    if (channel == null || guild == null) {
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
+    }
+
+    channelName = getChannelName(channel);
 
     return Container(
       decoration: BoxDecoration(
@@ -156,8 +169,8 @@ class _MessageViewState extends ConsumerState<MessageView> {
 
                 MessageBox box = MessageBox(
                   key: ValueKey(messages[index].id.value.toString()),
-                  guild: widget.guild,
-                  channel: widget.channel,
+                  guild: guild!,
+                  channel: channel,
                   message: messages[index],
                   showSenderInfo: !showAuthor,
                 );
@@ -168,7 +181,7 @@ class _MessageViewState extends ConsumerState<MessageView> {
               },
             ),
           ),
-          MessageBar(guild: widget.guild, channel: widget.channel),
+          MessageBar(guild: guild!, channel: channel),
           SizedBox(
             height: MediaQuery.of(context).padding.bottom,
           ),

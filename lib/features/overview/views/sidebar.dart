@@ -8,8 +8,8 @@ import 'package:go_router/go_router.dart';
 
 /// Sidebar with icons for each guild
 class Sidebar extends ConsumerStatefulWidget {
-  final Guild guild;
-  const Sidebar({super.key, required this.guild});
+  final Snowflake guildId;
+  const Sidebar({super.key, required this.guildId});
 
   @override
   ConsumerState<Sidebar> createState() => _SidebarState();
@@ -45,7 +45,7 @@ class _SidebarState extends ConsumerState<Sidebar> {
                       return Column(
                         children: [
                           SidebarIcon(
-                            selected: widget.guild == guildList[index],
+                            selected: widget.guildId == guildList[index].id,
                             guild: guildList[index],
                           ),
                           const SizedBox(

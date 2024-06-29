@@ -6,7 +6,7 @@ part of 'channels.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$channelsHash() => r'6ea92f315d706f1240f15f2736a1671491436a07';
+String _$channelsHash() => r'7a78dc8ad29598575c9d5ef1328925749659cc39';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -29,12 +29,11 @@ class _SystemHash {
   }
 }
 
-abstract class _$Channels
-    extends BuildlessAutoDisposeAsyncNotifier<List<Channel>> {
-  late final Guild guild;
+abstract class _$Channels extends BuildlessAsyncNotifier<List<Channel>> {
+  late final Snowflake guildId;
 
   FutureOr<List<Channel>> build(
-    Guild guild,
+    Snowflake guildId,
   );
 }
 
@@ -57,10 +56,10 @@ class ChannelsFamily extends Family<AsyncValue<List<Channel>>> {
   ///
   /// Copied from [Channels].
   ChannelsProvider call(
-    Guild guild,
+    Snowflake guildId,
   ) {
     return ChannelsProvider(
-      guild,
+      guildId,
     );
   }
 
@@ -69,7 +68,7 @@ class ChannelsFamily extends Family<AsyncValue<List<Channel>>> {
     covariant ChannelsProvider provider,
   ) {
     return call(
-      provider.guild,
+      provider.guildId,
     );
   }
 
@@ -92,14 +91,14 @@ class ChannelsFamily extends Family<AsyncValue<List<Channel>>> {
 ///
 /// Copied from [Channels].
 class ChannelsProvider
-    extends AutoDisposeAsyncNotifierProviderImpl<Channels, List<Channel>> {
+    extends AsyncNotifierProviderImpl<Channels, List<Channel>> {
   /// A riverpod provider that fetches the channels for the current guild.
   ///
   /// Copied from [Channels].
   ChannelsProvider(
-    Guild guild,
+    Snowflake guildId,
   ) : this._internal(
-          () => Channels()..guild = guild,
+          () => Channels()..guildId = guildId,
           from: channelsProvider,
           name: r'channelsProvider',
           debugGetCreateSourceHash:
@@ -108,7 +107,7 @@ class ChannelsProvider
                   : _$channelsHash,
           dependencies: ChannelsFamily._dependencies,
           allTransitiveDependencies: ChannelsFamily._allTransitiveDependencies,
-          guild: guild,
+          guildId: guildId,
         );
 
   ChannelsProvider._internal(
@@ -118,17 +117,17 @@ class ChannelsProvider
     required super.allTransitiveDependencies,
     required super.debugGetCreateSourceHash,
     required super.from,
-    required this.guild,
+    required this.guildId,
   }) : super.internal();
 
-  final Guild guild;
+  final Snowflake guildId;
 
   @override
   FutureOr<List<Channel>> runNotifierBuild(
     covariant Channels notifier,
   ) {
     return notifier.build(
-      guild,
+      guildId,
     );
   }
 
@@ -137,49 +136,48 @@ class ChannelsProvider
     return ProviderOverride(
       origin: this,
       override: ChannelsProvider._internal(
-        () => create()..guild = guild,
+        () => create()..guildId = guildId,
         from: from,
         name: null,
         dependencies: null,
         allTransitiveDependencies: null,
         debugGetCreateSourceHash: null,
-        guild: guild,
+        guildId: guildId,
       ),
     );
   }
 
   @override
-  AutoDisposeAsyncNotifierProviderElement<Channels, List<Channel>>
-      createElement() {
+  AsyncNotifierProviderElement<Channels, List<Channel>> createElement() {
     return _ChannelsProviderElement(this);
   }
 
   @override
   bool operator ==(Object other) {
-    return other is ChannelsProvider && other.guild == guild;
+    return other is ChannelsProvider && other.guildId == guildId;
   }
 
   @override
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, guild.hashCode);
+    hash = _SystemHash.combine(hash, guildId.hashCode);
 
     return _SystemHash.finish(hash);
   }
 }
 
-mixin ChannelsRef on AutoDisposeAsyncNotifierProviderRef<List<Channel>> {
-  /// The parameter `guild` of this provider.
-  Guild get guild;
+mixin ChannelsRef on AsyncNotifierProviderRef<List<Channel>> {
+  /// The parameter `guildId` of this provider.
+  Snowflake get guildId;
 }
 
 class _ChannelsProviderElement
-    extends AutoDisposeAsyncNotifierProviderElement<Channels, List<Channel>>
+    extends AsyncNotifierProviderElement<Channels, List<Channel>>
     with ChannelsRef {
   _ChannelsProviderElement(super.provider);
 
   @override
-  Guild get guild => (origin as ChannelsProvider).guild;
+  Snowflake get guildId => (origin as ChannelsProvider).guildId;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

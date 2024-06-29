@@ -11,7 +11,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'auth.g.dart';
 
 /// A riverpod provider that handles authentication with Discord.
-@riverpod
+@Riverpod(keepAlive: true)
 class Auth extends _$Auth {
   NyxxGateway? client;
   AuthResponse? authResponse;

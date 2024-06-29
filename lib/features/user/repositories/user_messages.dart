@@ -5,7 +5,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'user_messages.g.dart';
 
 /// Message provider for fetching user messages from the Discord API
-@Riverpod()
+@Riverpod(keepAlive: true)
 class UserMessages extends _$UserMessages {
   AuthUser? user;
 

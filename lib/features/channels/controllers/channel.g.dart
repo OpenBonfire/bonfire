@@ -6,7 +6,7 @@ part of 'channel.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$channelControllerHash() => r'1d5f6f3b9b446afdab96896cdc9e17b8f2106ea4';
+String _$channelControllerHash() => r'bf2bb8b73807e9a0bba3cb27842e8ef6d70e03ba';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -29,12 +29,11 @@ class _SystemHash {
   }
 }
 
-abstract class _$ChannelController
-    extends BuildlessAutoDisposeAsyncNotifier<Channel?> {
-  late final String channelId;
+abstract class _$ChannelController extends BuildlessAsyncNotifier<Channel?> {
+  late final Snowflake channelId;
 
   FutureOr<Channel?> build(
-    String channelId,
+    Snowflake channelId,
   );
 }
 
@@ -57,7 +56,7 @@ class ChannelControllerFamily extends Family<AsyncValue<Channel?>> {
   ///
   /// Copied from [ChannelController].
   ChannelControllerProvider call(
-    String channelId,
+    Snowflake channelId,
   ) {
     return ChannelControllerProvider(
       channelId,
@@ -92,12 +91,12 @@ class ChannelControllerFamily extends Family<AsyncValue<Channel?>> {
 ///
 /// Copied from [ChannelController].
 class ChannelControllerProvider
-    extends AutoDisposeAsyncNotifierProviderImpl<ChannelController, Channel?> {
+    extends AsyncNotifierProviderImpl<ChannelController, Channel?> {
   /// Fetches the current channel from the [channelid].
   ///
   /// Copied from [ChannelController].
   ChannelControllerProvider(
-    String channelId,
+    Snowflake channelId,
   ) : this._internal(
           () => ChannelController()..channelId = channelId,
           from: channelControllerProvider,
@@ -122,7 +121,7 @@ class ChannelControllerProvider
     required this.channelId,
   }) : super.internal();
 
-  final String channelId;
+  final Snowflake channelId;
 
   @override
   FutureOr<Channel?> runNotifierBuild(
@@ -150,8 +149,7 @@ class ChannelControllerProvider
   }
 
   @override
-  AutoDisposeAsyncNotifierProviderElement<ChannelController, Channel?>
-      createElement() {
+  AsyncNotifierProviderElement<ChannelController, Channel?> createElement() {
     return _ChannelControllerProviderElement(this);
   }
 
@@ -169,18 +167,18 @@ class ChannelControllerProvider
   }
 }
 
-mixin ChannelControllerRef on AutoDisposeAsyncNotifierProviderRef<Channel?> {
+mixin ChannelControllerRef on AsyncNotifierProviderRef<Channel?> {
   /// The parameter `channelId` of this provider.
-  String get channelId;
+  Snowflake get channelId;
 }
 
 class _ChannelControllerProviderElement
-    extends AutoDisposeAsyncNotifierProviderElement<ChannelController, Channel?>
+    extends AsyncNotifierProviderElement<ChannelController, Channel?>
     with ChannelControllerRef {
   _ChannelControllerProviderElement(super.provider);
 
   @override
-  String get channelId => (origin as ChannelControllerProvider).channelId;
+  Snowflake get channelId => (origin as ChannelControllerProvider).channelId;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

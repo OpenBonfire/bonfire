@@ -6,7 +6,7 @@ part of 'guild.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$guildControllerHash() => r'2c17663c8ff0b3e36792c1110090eb57113dfaa1';
+String _$guildControllerHash() => r'b224ba30c8acbe62e0e650a83bd6b718b2ad101c';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -29,12 +29,11 @@ class _SystemHash {
   }
 }
 
-abstract class _$GuildController
-    extends BuildlessAutoDisposeAsyncNotifier<Guild?> {
-  late final dynamic guildId;
+abstract class _$GuildController extends BuildlessAsyncNotifier<Guild?> {
+  late final Snowflake guildId;
 
   FutureOr<Guild?> build(
-    dynamic guildId,
+    Snowflake guildId,
   );
 }
 
@@ -57,7 +56,7 @@ class GuildControllerFamily extends Family<AsyncValue<Guild?>> {
   ///
   /// Copied from [GuildController].
   GuildControllerProvider call(
-    dynamic guildId,
+    Snowflake guildId,
   ) {
     return GuildControllerProvider(
       guildId,
@@ -92,12 +91,12 @@ class GuildControllerFamily extends Family<AsyncValue<Guild?>> {
 ///
 /// Copied from [GuildController].
 class GuildControllerProvider
-    extends AutoDisposeAsyncNotifierProviderImpl<GuildController, Guild?> {
+    extends AsyncNotifierProviderImpl<GuildController, Guild?> {
   /// Fetches the current guild from [guildid].
   ///
   /// Copied from [GuildController].
   GuildControllerProvider(
-    dynamic guildId,
+    Snowflake guildId,
   ) : this._internal(
           () => GuildController()..guildId = guildId,
           from: guildControllerProvider,
@@ -122,7 +121,7 @@ class GuildControllerProvider
     required this.guildId,
   }) : super.internal();
 
-  final dynamic guildId;
+  final Snowflake guildId;
 
   @override
   FutureOr<Guild?> runNotifierBuild(
@@ -150,8 +149,7 @@ class GuildControllerProvider
   }
 
   @override
-  AutoDisposeAsyncNotifierProviderElement<GuildController, Guild?>
-      createElement() {
+  AsyncNotifierProviderElement<GuildController, Guild?> createElement() {
     return _GuildControllerProviderElement(this);
   }
 
@@ -169,18 +167,18 @@ class GuildControllerProvider
   }
 }
 
-mixin GuildControllerRef on AutoDisposeAsyncNotifierProviderRef<Guild?> {
+mixin GuildControllerRef on AsyncNotifierProviderRef<Guild?> {
   /// The parameter `guildId` of this provider.
-  dynamic get guildId;
+  Snowflake get guildId;
 }
 
 class _GuildControllerProviderElement
-    extends AutoDisposeAsyncNotifierProviderElement<GuildController, Guild?>
+    extends AsyncNotifierProviderElement<GuildController, Guild?>
     with GuildControllerRef {
   _GuildControllerProviderElement(super.provider);
 
   @override
-  dynamic get guildId => (origin as GuildControllerProvider).guildId;
+  Snowflake get guildId => (origin as GuildControllerProvider).guildId;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

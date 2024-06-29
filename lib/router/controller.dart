@@ -1,3 +1,4 @@
+import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:bonfire/features/auth/views/login.dart';
@@ -43,8 +44,8 @@ final routerController = GoRouter(
                 final guildId = state.pathParameters['guildId'] ?? '@me';
                 final channelId = state.pathParameters['channelId']!;
                 return GuildMessagingOverview(
-                  guildId: guildId,
-                  channelId: channelId,
+                  guildId: Snowflake.parse(guildId),
+                  channelId: Snowflake.parse(channelId),
                 );
               },
             ),

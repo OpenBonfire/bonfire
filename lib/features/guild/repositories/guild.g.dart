@@ -6,7 +6,7 @@ part of 'guild.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$guildBannerUrlHash() => r'9e167e4f6fcf91304307e45593d8eeea81103013';
+String _$guildBannerUrlHash() => r'71a7e64a1a52f9673dc1d323edddb7ec337cedde';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -40,10 +40,10 @@ class GuildBannerUrlFamily extends Family<AsyncValue<Uri?>> {
 
   /// See also [guildBannerUrl].
   GuildBannerUrlProvider call(
-    Guild guild,
+    Snowflake guildId,
   ) {
     return GuildBannerUrlProvider(
-      guild,
+      guildId,
     );
   }
 
@@ -52,7 +52,7 @@ class GuildBannerUrlFamily extends Family<AsyncValue<Uri?>> {
     covariant GuildBannerUrlProvider provider,
   ) {
     return call(
-      provider.guild,
+      provider.guildId,
     );
   }
 
@@ -72,14 +72,14 @@ class GuildBannerUrlFamily extends Family<AsyncValue<Uri?>> {
 }
 
 /// See also [guildBannerUrl].
-class GuildBannerUrlProvider extends AutoDisposeFutureProvider<Uri?> {
+class GuildBannerUrlProvider extends FutureProvider<Uri?> {
   /// See also [guildBannerUrl].
   GuildBannerUrlProvider(
-    Guild guild,
+    Snowflake guildId,
   ) : this._internal(
           (ref) => guildBannerUrl(
             ref as GuildBannerUrlRef,
-            guild,
+            guildId,
           ),
           from: guildBannerUrlProvider,
           name: r'guildBannerUrlProvider',
@@ -90,7 +90,7 @@ class GuildBannerUrlProvider extends AutoDisposeFutureProvider<Uri?> {
           dependencies: GuildBannerUrlFamily._dependencies,
           allTransitiveDependencies:
               GuildBannerUrlFamily._allTransitiveDependencies,
-          guild: guild,
+          guildId: guildId,
         );
 
   GuildBannerUrlProvider._internal(
@@ -100,10 +100,10 @@ class GuildBannerUrlProvider extends AutoDisposeFutureProvider<Uri?> {
     required super.allTransitiveDependencies,
     required super.debugGetCreateSourceHash,
     required super.from,
-    required this.guild,
+    required this.guildId,
   }) : super.internal();
 
-  final Guild guild;
+  final Snowflake guildId;
 
   @override
   Override overrideWith(
@@ -118,41 +118,41 @@ class GuildBannerUrlProvider extends AutoDisposeFutureProvider<Uri?> {
         dependencies: null,
         allTransitiveDependencies: null,
         debugGetCreateSourceHash: null,
-        guild: guild,
+        guildId: guildId,
       ),
     );
   }
 
   @override
-  AutoDisposeFutureProviderElement<Uri?> createElement() {
+  FutureProviderElement<Uri?> createElement() {
     return _GuildBannerUrlProviderElement(this);
   }
 
   @override
   bool operator ==(Object other) {
-    return other is GuildBannerUrlProvider && other.guild == guild;
+    return other is GuildBannerUrlProvider && other.guildId == guildId;
   }
 
   @override
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, guild.hashCode);
+    hash = _SystemHash.combine(hash, guildId.hashCode);
 
     return _SystemHash.finish(hash);
   }
 }
 
-mixin GuildBannerUrlRef on AutoDisposeFutureProviderRef<Uri?> {
-  /// The parameter `guild` of this provider.
-  Guild get guild;
+mixin GuildBannerUrlRef on FutureProviderRef<Uri?> {
+  /// The parameter `guildId` of this provider.
+  Snowflake get guildId;
 }
 
-class _GuildBannerUrlProviderElement
-    extends AutoDisposeFutureProviderElement<Uri?> with GuildBannerUrlRef {
+class _GuildBannerUrlProviderElement extends FutureProviderElement<Uri?>
+    with GuildBannerUrlRef {
   _GuildBannerUrlProviderElement(super.provider);
 
   @override
-  Guild get guild => (origin as GuildBannerUrlProvider).guild;
+  Snowflake get guildId => (origin as GuildBannerUrlProvider).guildId;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

@@ -8,9 +8,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class HomeDesktop extends ConsumerStatefulWidget {
-  final Guild guild;
-  final Channel channel;
-  const HomeDesktop({super.key, required this.guild, required this.channel});
+  final Snowflake guildId;
+  final Snowflake channelId;
+  const HomeDesktop(
+      {super.key, required this.guildId, required this.channelId});
 
   @override
   ConsumerState<HomeDesktop> createState() => _HomeState();
@@ -32,28 +33,28 @@ class _HomeState extends ConsumerState<HomeDesktop> {
           children: [
             Sidebar(
               key: const Key('sidebar'),
-              guild: widget.guild,
+              guildId: widget.guildId,
             ),
             SizedBox(
-              key: Key('channels-${widget.guild}'),
+              key: Key('channels-${widget.guildId}'),
               width: 300,
               child: ChannelsList(
-                guild: widget.guild,
-                channel: widget.channel,
+                guildId: widget.guildId,
+                channelId: widget.channelId,
               ),
             ),
             Flexible(
               child: MessageView(
-                key: Key('messages-${widget.guild}'),
-                guild: widget.guild,
-                channel: widget.channel,
+                key: Key('messages-${widget.guildId}'),
+                guildId: widget.guildId,
+                channelId: widget.channelId,
               ),
             ),
             SizedBox(
               width: 300,
               child: MemberList(
-                guild: widget.guild,
-                channel: widget.channel,
+                guildId: widget.guildId,
+                channelId: widget.channelId,
               ),
             )
           ],

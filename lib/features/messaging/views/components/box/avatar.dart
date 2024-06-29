@@ -23,7 +23,7 @@ class Avatar extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     // TODO: This kinda sucks. We should do something else for icons (maybe).
     var avatarFuture = ref
-        .read(messagesProvider(guild, channel).notifier)
+        .read(messagesProvider(guild.id, channel.id).notifier)
         .fetchMessageAuthorAvatar(author);
     return Padding(
       padding: const EdgeInsets.only(right: 8),

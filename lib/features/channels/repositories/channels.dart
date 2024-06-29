@@ -16,7 +16,7 @@ import 'package:firebridge/firebridge.dart';
 part 'channels.g.dart';
 
 /// A riverpod provider that fetches the channels for the current guild.
-@riverpod
+@Riverpod(keepAlive: true)
 class Channels extends _$Channels {
   List<Channel> channels = [];
   Map<UserGuild, Member> selfMembers = {};
@@ -29,9 +29,10 @@ class Channels extends _$Channels {
   );
 
   @override
-  Future<List<Channel>> build(Guild guild) async {
+  Future<List<Channel>> build(Snowflake guildId) async {
     var lastGuild;
     var auth = ref.watch(authProvider.notifier).getAuth();
+    Guild guild = ref.watch(guildControllerProvider(guildId)).valueOrNull!;
 
     List<Channel> _channels = [];
     var cachedChannels = (await fetchFromCache());
@@ -95,6 +96,7 @@ class Channels extends _$Channels {
   }
 
   Future<void> saveToCache(List<Channel> channels) async {
+    Guild guild = ref.watch(guildControllerProvider(guildId)).valueOrNull!;
     var cacheKey = "channels_${guild.id.value}";
     await _cacheManager.putFile(
       cacheKey,
@@ -103,8 +105,9 @@ class Channels extends _$Channels {
   }
 
   Future<List<Channel>?> fetchFromCache() async {
-    var cacheKey = "channels_${guild.id.value}";
+    var cacheKey = "channels_${guildId.value}";
     var cacheData = await _cacheManager.getFileFromCache(cacheKey);
+    Guild guild = ref.watch(guildControllerProvider(guildId)).valueOrNull!;
     if (cacheData != null) {
       print("cache hit!");
       var decoded = json.decode(utf8.decode(cacheData.file.readAsBytesSync()));

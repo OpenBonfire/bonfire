@@ -1,5 +1,6 @@
 import 'package:bonfire/features/channels/controllers/channel.dart';
 import 'package:bonfire/features/channels/repositories/channel_members.dart';
+import 'package:bonfire/features/guild/controllers/guild.dart';
 import 'package:bonfire/features/members/views/components/group.dart';
 import 'package:bonfire/features/members/views/components/member_card.dart';
 import 'package:bonfire/theme/theme.dart';
@@ -8,9 +9,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class MemberList extends ConsumerStatefulWidget {
-  final Guild guild;
-  final Channel channel;
-  const MemberList({super.key, required this.channel, required this.guild});
+  final Snowflake guildId;
+  final Snowflake channelId;
+  const MemberList({super.key, required this.guildId, required this.channelId});
 
   @override
   ConsumerState<MemberList> createState() => _MemberListState();
@@ -59,7 +60,18 @@ class _MemberListState extends ConsumerState<MemberList> {
 
   @override
   Widget build(BuildContext context) {
-    String channelName = getChannelName(widget.channel);
+    Channel? channel =
+        ref.watch(channelControllerProvider(widget.channelId)).valueOrNull;
+    Guild? guild =
+        ref.watch(guildControllerProvider(widget.guildId)).valueOrNull;
+
+    if (channel == null || guild == null) {
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
+    }
+
+    String channelName = getChannelName(channel);
 
     return SizedBox(
       width: double.infinity,
@@ -71,8 +83,8 @@ class _MemberListState extends ConsumerState<MemberList> {
               topBox(channelName, ""),
               Expanded(
                   child: MemberScrollView(
-                guild: widget.guild,
-                channel: widget.channel,
+                guild: guild,
+                channel: channel,
               ))
             ],
           )),
@@ -94,7 +106,7 @@ class MemberScrollViewState extends ConsumerState<MemberScrollView> {
   @override
   Widget build(BuildContext context) {
     var memberListPair = ref
-        .watch(channelMembersProvider(widget.guild, widget.channel))
+        .watch(channelMembersProvider(widget.guild.id, widget.channel.id))
         .valueOrNull;
     var groupList = memberListPair?.first ?? [];
     var memberList = memberListPair?.second ?? [];

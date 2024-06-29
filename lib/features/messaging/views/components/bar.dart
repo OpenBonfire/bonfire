@@ -92,7 +92,8 @@ class _MessageBarState extends ConsumerState<MessageBar> {
             ),
             () {
               ref
-                  .read(messagesProvider(widget.guild, widget.channel).notifier)
+                  .read(messagesProvider(widget.guild.id, widget.channel.id)
+                      .notifier)
                   .sendMessage(widget.channel, messageBarController.text);
               messageBarController.text = "";
             },

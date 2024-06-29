@@ -15,7 +15,7 @@ import 'package:flutter/scheduler.dart';
 part 'messages.g.dart';
 
 /// Message provider for fetching messages from the Discord API
-@riverpod
+@Riverpod(keepAlive: true)
 class Messages extends _$Messages {
   AuthUser? user;
   bool listenerRunning = false;
@@ -33,9 +33,10 @@ class Messages extends _$Messages {
   bool realtimeListernRunning = false;
 
   @override
-  Future<List<Message>> build(Guild guild, Channel channel) async {
-    guild = guild;
-    channel = channel;
+  Future<List<Message>> build(Snowflake guildId, Snowflake channelId) async {
+    var guild = ref.watch(guildControllerProvider(guildId)).value!;
+    var channel = ref.watch(channelControllerProvider(channelId)).value!;
+
     var authOutput = ref.watch(authProvider.notifier).getAuth();
 
     getMessages(authOutput);
@@ -74,7 +75,6 @@ class Messages extends _$Messages {
     Channel? channelOverride,
     int? before,
     int? count,
-    int? guildId,
     bool? lock = true,
     bool? requestAvatar = true,
   }) async {
@@ -82,7 +82,11 @@ class Messages extends _$Messages {
 
     if ((authOutput != null) && (authOutput is AuthUser)) {
       user = authOutput;
-      var textChannel = channel as TextChannel;
+
+      var channel =
+          ref.watch(channelControllerProvider(channelId)).value! as TextChannel;
+      var guild = ref.watch(guildControllerProvider(guildId)).value!;
+
       var beforeSnowflake = before != null ? Snowflake(before) : null;
 
       // if (loadingMessages == true) return;
@@ -91,18 +95,18 @@ class Messages extends _$Messages {
 
       var selfMember = await guild.members.get(user!.client.user.id);
       var permissions =
-          await (textChannel as GuildChannel).computePermissionsFor(selfMember);
+          await (channel as GuildChannel).computePermissionsFor(selfMember);
 
       if (permissions.canReadMessageHistory == false) {
         // I think there's still another permission we're missing here...
         // It ocassionally still errors
         print(
-            "Error fetching messages in channel ${textChannel.id}, likely do not have access to channel bozo!");
+            "Error fetching messages in channel ${channel.id}, likely do not have access to channel bozo!");
         removeLock();
         return;
       }
 
-      var messages = await textChannel.messages
+      var messages = await channel.messages
           .fetchMany(limit: count ?? 20, before: beforeSnowflake);
 
       // print("Loaded ${messages.length} messages");
@@ -220,10 +224,13 @@ class Messages extends _$Messages {
     return age;
   }
 
-  void fetchMoreMessages(Guild guild, Channel channel) {
+  void fetchMoreMessages() {
     // var delta = DateTime.now().difference(lastFetchTime);
     // if (delta.inMilliseconds < 500) return;
     // lastFetchTime = DateTime.now();
+    Channel channel =
+        ref.watch(channelControllerProvider(channelId)).valueOrNull!;
+    Guild guild = ref.watch(guildControllerProvider(guildId)).valueOrNull!;
 
     var authOutput = ref.watch(authProvider.notifier).getAuth();
     getMessages(authOutput, before: oldestMessage[channel]!.id.value);

@@ -1,21 +1,26 @@
 import 'package:bonfire/features/auth/data/repositories/auth.dart';
 import 'package:bonfire/features/auth/data/repositories/discord_auth.dart';
 import 'package:bonfire/features/channels/controllers/channel.dart';
+import 'package:bonfire/features/guild/controllers/guild.dart';
 import 'package:bonfire/shared/models/pair.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:firebridge/firebridge.dart';
 
 part 'channel_members.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: true)
 class ChannelMembers extends _$ChannelMembers {
   AuthUser? user;
 
   @override
   Future<Pair<List<GuildMemberListGroup>, List<dynamic>>?> build(
-      Guild guild, Channel channel) async {
+      Snowflake guildId, Snowflake channelId) async {
+    final guild = await ref.watch(guildControllerProvider(guildId).future);
+    final channel =
+        await ref.watch(channelControllerProvider(channelId).future);
+
     var authOutput = ref.watch(authProvider.notifier).getAuth();
-    if (authOutput is AuthUser) {
+    if (authOutput is AuthUser && channel != null && guild != null) {
       authOutput.client
           .updateGuildSubscriptionsBulk(GuildSubscriptionsBulkBuilder()
             ..subscriptions = [

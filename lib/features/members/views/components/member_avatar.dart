@@ -26,7 +26,7 @@ class _AvatarState extends ConsumerState<MemberAvatar> {
   void initState() {
     super.initState();
     _avatarFuture = ref
-        .read(messagesProvider(widget.guild, widget.channel).notifier)
+        .read(messagesProvider(widget.guild.id, widget.channel.id).notifier)
         .fetchMemberAvatar(widget.member);
   }
 

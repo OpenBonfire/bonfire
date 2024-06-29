@@ -6,7 +6,7 @@ part of 'channel_members.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$channelMembersHash() => r'6a39b71847a0a6d299414462a521ee6e62bf343e';
+String _$channelMembersHash() => r'bcd14b12a6039ab41fe89982f6619e2bb0c0bf65';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -29,14 +29,14 @@ class _SystemHash {
   }
 }
 
-abstract class _$ChannelMembers extends BuildlessAutoDisposeAsyncNotifier<
+abstract class _$ChannelMembers extends BuildlessAsyncNotifier<
     Pair<List<GuildMemberListGroup>, List<dynamic>>?> {
-  late final Guild guild;
-  late final Channel channel;
+  late final Snowflake guildId;
+  late final Snowflake channelId;
 
   FutureOr<Pair<List<GuildMemberListGroup>, List<dynamic>>?> build(
-    Guild guild,
-    Channel channel,
+    Snowflake guildId,
+    Snowflake channelId,
   );
 }
 
@@ -52,12 +52,12 @@ class ChannelMembersFamily extends Family<
 
   /// See also [ChannelMembers].
   ChannelMembersProvider call(
-    Guild guild,
-    Channel channel,
+    Snowflake guildId,
+    Snowflake channelId,
   ) {
     return ChannelMembersProvider(
-      guild,
-      channel,
+      guildId,
+      channelId,
     );
   }
 
@@ -66,8 +66,8 @@ class ChannelMembersFamily extends Family<
     covariant ChannelMembersProvider provider,
   ) {
     return call(
-      provider.guild,
-      provider.channel,
+      provider.guildId,
+      provider.channelId,
     );
   }
 
@@ -87,16 +87,16 @@ class ChannelMembersFamily extends Family<
 }
 
 /// See also [ChannelMembers].
-class ChannelMembersProvider extends AutoDisposeAsyncNotifierProviderImpl<
-    ChannelMembers, Pair<List<GuildMemberListGroup>, List<dynamic>>?> {
+class ChannelMembersProvider extends AsyncNotifierProviderImpl<ChannelMembers,
+    Pair<List<GuildMemberListGroup>, List<dynamic>>?> {
   /// See also [ChannelMembers].
   ChannelMembersProvider(
-    Guild guild,
-    Channel channel,
+    Snowflake guildId,
+    Snowflake channelId,
   ) : this._internal(
           () => ChannelMembers()
-            ..guild = guild
-            ..channel = channel,
+            ..guildId = guildId
+            ..channelId = channelId,
           from: channelMembersProvider,
           name: r'channelMembersProvider',
           debugGetCreateSourceHash:
@@ -106,8 +106,8 @@ class ChannelMembersProvider extends AutoDisposeAsyncNotifierProviderImpl<
           dependencies: ChannelMembersFamily._dependencies,
           allTransitiveDependencies:
               ChannelMembersFamily._allTransitiveDependencies,
-          guild: guild,
-          channel: channel,
+          guildId: guildId,
+          channelId: channelId,
         );
 
   ChannelMembersProvider._internal(
@@ -117,20 +117,20 @@ class ChannelMembersProvider extends AutoDisposeAsyncNotifierProviderImpl<
     required super.allTransitiveDependencies,
     required super.debugGetCreateSourceHash,
     required super.from,
-    required this.guild,
-    required this.channel,
+    required this.guildId,
+    required this.channelId,
   }) : super.internal();
 
-  final Guild guild;
-  final Channel channel;
+  final Snowflake guildId;
+  final Snowflake channelId;
 
   @override
   FutureOr<Pair<List<GuildMemberListGroup>, List<dynamic>>?> runNotifierBuild(
     covariant ChannelMembers notifier,
   ) {
     return notifier.build(
-      guild,
-      channel,
+      guildId,
+      channelId,
     );
   }
 
@@ -140,21 +140,21 @@ class ChannelMembersProvider extends AutoDisposeAsyncNotifierProviderImpl<
       origin: this,
       override: ChannelMembersProvider._internal(
         () => create()
-          ..guild = guild
-          ..channel = channel,
+          ..guildId = guildId
+          ..channelId = channelId,
         from: from,
         name: null,
         dependencies: null,
         allTransitiveDependencies: null,
         debugGetCreateSourceHash: null,
-        guild: guild,
-        channel: channel,
+        guildId: guildId,
+        channelId: channelId,
       ),
     );
   }
 
   @override
-  AutoDisposeAsyncNotifierProviderElement<ChannelMembers,
+  AsyncNotifierProviderElement<ChannelMembers,
       Pair<List<GuildMemberListGroup>, List<dynamic>>?> createElement() {
     return _ChannelMembersProviderElement(this);
   }
@@ -162,39 +162,38 @@ class ChannelMembersProvider extends AutoDisposeAsyncNotifierProviderImpl<
   @override
   bool operator ==(Object other) {
     return other is ChannelMembersProvider &&
-        other.guild == guild &&
-        other.channel == channel;
+        other.guildId == guildId &&
+        other.channelId == channelId;
   }
 
   @override
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, guild.hashCode);
-    hash = _SystemHash.combine(hash, channel.hashCode);
+    hash = _SystemHash.combine(hash, guildId.hashCode);
+    hash = _SystemHash.combine(hash, channelId.hashCode);
 
     return _SystemHash.finish(hash);
   }
 }
 
-mixin ChannelMembersRef on AutoDisposeAsyncNotifierProviderRef<
+mixin ChannelMembersRef on AsyncNotifierProviderRef<
     Pair<List<GuildMemberListGroup>, List<dynamic>>?> {
-  /// The parameter `guild` of this provider.
-  Guild get guild;
+  /// The parameter `guildId` of this provider.
+  Snowflake get guildId;
 
-  /// The parameter `channel` of this provider.
-  Channel get channel;
+  /// The parameter `channelId` of this provider.
+  Snowflake get channelId;
 }
 
-class _ChannelMembersProviderElement
-    extends AutoDisposeAsyncNotifierProviderElement<ChannelMembers,
-        Pair<List<GuildMemberListGroup>, List<dynamic>>?>
-    with ChannelMembersRef {
+class _ChannelMembersProviderElement extends AsyncNotifierProviderElement<
+    ChannelMembers,
+    Pair<List<GuildMemberListGroup>, List<dynamic>>?> with ChannelMembersRef {
   _ChannelMembersProviderElement(super.provider);
 
   @override
-  Guild get guild => (origin as ChannelMembersProvider).guild;
+  Snowflake get guildId => (origin as ChannelMembersProvider).guildId;
   @override
-  Channel get channel => (origin as ChannelMembersProvider).channel;
+  Snowflake get channelId => (origin as ChannelMembersProvider).channelId;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

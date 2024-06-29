@@ -1,6 +1,8 @@
+import 'package:bonfire/features/channels/controllers/channel.dart';
 import 'package:bonfire/features/channels/repositories/channels.dart';
 import 'package:bonfire/features/channels/views/components/button.dart';
 import 'package:bonfire/features/channels/views/components/category.dart';
+import 'package:bonfire/features/guild/controllers/guild.dart';
 import 'package:bonfire/features/guild/repositories/guild.dart';
 import 'package:bonfire/features/guild/views/guild_overview.dart';
 import 'package:bonfire/theme/theme.dart';
@@ -10,9 +12,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sticky_headers/sticky_headers.dart';
 
 class ChannelsList extends ConsumerStatefulWidget {
-  final Guild guild;
-  final Channel channel;
-  const ChannelsList({super.key, required this.guild, required this.channel});
+  final Snowflake guildId;
+  final Snowflake channelId;
+  const ChannelsList(
+      {super.key, required this.guildId, required this.channelId});
 
   @override
   ConsumerState<ChannelsList> createState() => _ChannelsListState();
@@ -24,11 +27,20 @@ class _ChannelsListState extends ConsumerState<ChannelsList> {
   @override
   Widget build(BuildContext context) {
     var topPadding = MediaQuery.of(context).padding.top;
-    var channelWatch = ref.watch(channelsProvider(widget.guild));
+    var channelWatch = ref.watch(channelsProvider(widget.guildId));
+    var guild = ref.watch(guildControllerProvider(widget.guildId)).valueOrNull;
+    var channel =
+        ref.watch(channelControllerProvider(widget.channelId)).valueOrNull;
+
+    if (guild == null || channel == null) {
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
+    }
 
     var channels = channelWatch.valueOrNull ?? [];
     var guildBannerUrl =
-        ref.watch(guildBannerUrlProvider(widget.guild)).valueOrNull;
+        ref.watch(guildBannerUrlProvider(widget.guildId)).valueOrNull;
 
     if (scrollController.hasClients) scrollController.jumpTo(0.0);
 
@@ -62,8 +74,8 @@ class _ChannelsListState extends ConsumerState<ChannelsList> {
       if (index < channelsWithoutParent.length) {
         var _channel = channelsWithoutParent[index];
         return ChannelButton(
-            currentChannel: widget.channel as GuildChannel,
-            currentGuild: widget.guild,
+            currentChannelId: widget.channelId,
+            currentGuildId: widget.guildId,
             channel: _channel as GuildChannel);
       } else {
         var categoryIndex = index - channelsWithoutParent.length;
@@ -71,8 +83,8 @@ class _ChannelsListState extends ConsumerState<ChannelsList> {
         var children = categoryMap[category] ?? [];
         if (category != null) {
           return Category(
-              guild: widget.guild,
-              channel: widget.channel,
+              guild: guild!,
+              channel: channel!,
               category: category,
               children: children);
         } else {
@@ -128,7 +140,7 @@ class _ChannelsListState extends ConsumerState<ChannelsList> {
                             ))
                         : Container(),
                     StickyHeader(
-                      header: GuildOverview(guild: widget.guild),
+                      header: GuildOverview(guildId: widget.guildId),
                       content: Padding(
                         padding: const EdgeInsets.only(top: 8.0),
                         child: Column(

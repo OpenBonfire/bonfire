@@ -5,6 +5,7 @@ import 'package:bonfire/features/messaging/repositories/events/realtime_messages
 import 'package:bonfire/features/overview/views/home_desktop.dart';
 import 'package:bonfire/features/overview/views/home_mobile.dart';
 import 'package:bonfire/features/overview/views/overlapping_panels.dart';
+import 'package:firebridge/firebridge.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -12,8 +13,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'dart:io' show Platform;
 
 class GuildMessagingOverview extends ConsumerStatefulWidget {
-  final String guildId;
-  final String channelId;
+  final Snowflake guildId;
+  final Snowflake channelId;
   const GuildMessagingOverview(
       {super.key, required this.guildId, required this.channelId});
 
@@ -43,19 +44,16 @@ class _HomeState extends ConsumerState<GuildMessagingOverview> {
     //       });
     // });
 
-    var guild = ref.watch(guildControllerProvider(widget.guildId)).value;
-    var channel = ref.watch(channelControllerProvider(widget.channelId)).value;
-
-    if (guild == null || channel == null) return Container();
+    // if (guild == null || channel == null) return Container();
 
     return (Platform.isAndroid || Platform.isIOS)
         ? HomeMobile(
-            guild: guild,
-            channel: channel,
+            guildId: widget.guildId,
+            channelId: widget.channelId,
           )
         : HomeDesktop(
-            guild: guild,
-            channel: channel,
+            guildId: widget.guildId,
+            channelId: widget.channelId,
           );
   }
 }

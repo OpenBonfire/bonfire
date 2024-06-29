@@ -1,4 +1,6 @@
+import 'package:bonfire/features/channels/controllers/channel.dart';
 import 'package:bonfire/features/channels/views/channels.dart';
+import 'package:bonfire/features/guild/controllers/guild.dart';
 import 'package:bonfire/features/members/views/member_list.dart';
 import 'package:bonfire/features/messaging/views/messages.dart';
 import 'package:bonfire/features/overview/controllers/navigation_bar.dart';
@@ -10,9 +12,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class HomeMobile extends ConsumerStatefulWidget {
-  final Guild guild;
-  final Channel channel;
-  const HomeMobile({super.key, required this.guild, required this.channel});
+  final Snowflake guildId;
+  final Snowflake channelId;
+  const HomeMobile({super.key, required this.guildId, required this.channelId});
 
   @override
   ConsumerState<HomeMobile> createState() => _HomeState();
@@ -57,24 +59,24 @@ class _HomeState extends ConsumerState<HomeMobile> {
                   children: [
                     Sidebar(
                       key: const Key('sidebar'),
-                      guild: widget.guild,
+                      guildId: widget.guildId,
                     ),
                     Expanded(
                         child: Expanded(
                             child: ChannelsList(
-                      guild: widget.guild,
-                      channel: widget.channel,
+                      guildId: widget.guildId,
+                      channelId: widget.channelId,
                     )))
                   ],
                 ),
               ),
               main: MessageView(
-                guild: widget.guild,
-                channel: widget.channel,
+                guildId: widget.guildId,
+                channelId: widget.channelId,
               ),
               right: MemberList(
-                guild: widget.guild,
-                channel: widget.channel,
+                guildId: widget.guildId,
+                channelId: widget.channelId,
               ),
             ),
             const NavigationBarWidget()

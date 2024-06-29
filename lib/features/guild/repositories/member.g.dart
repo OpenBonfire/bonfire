@@ -6,7 +6,7 @@ part of 'member.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$getMemberHash() => r'7c4b7c23646053723b24fae579473f9f57cea768';
+String _$getMemberHash() => r'7358205b585544a021a79aabad4a3ab3b75f4306';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -75,7 +75,7 @@ class GetMemberFamily extends Family<AsyncValue<Member?>> {
 }
 
 /// See also [getMember].
-class GetMemberProvider extends AutoDisposeFutureProvider<Member?> {
+class GetMemberProvider extends FutureProvider<Member?> {
   /// See also [getMember].
   GetMemberProvider(
     Guild guild,
@@ -132,7 +132,7 @@ class GetMemberProvider extends AutoDisposeFutureProvider<Member?> {
   }
 
   @override
-  AutoDisposeFutureProviderElement<Member?> createElement() {
+  FutureProviderElement<Member?> createElement() {
     return _GetMemberProviderElement(this);
   }
 
@@ -153,7 +153,7 @@ class GetMemberProvider extends AutoDisposeFutureProvider<Member?> {
   }
 }
 
-mixin GetMemberRef on AutoDisposeFutureProviderRef<Member?> {
+mixin GetMemberRef on FutureProviderRef<Member?> {
   /// The parameter `guild` of this provider.
   Guild get guild;
 
@@ -161,8 +161,8 @@ mixin GetMemberRef on AutoDisposeFutureProviderRef<Member?> {
   Snowflake get memberId;
 }
 
-class _GetMemberProviderElement
-    extends AutoDisposeFutureProviderElement<Member?> with GetMemberRef {
+class _GetMemberProviderElement extends FutureProviderElement<Member?>
+    with GetMemberRef {
   _GetMemberProviderElement(super.provider);
 
   @override

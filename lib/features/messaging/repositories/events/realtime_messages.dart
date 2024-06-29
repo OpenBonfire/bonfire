@@ -6,7 +6,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'realtime_messages.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: true)
 Stream<List<Message>> realtimeMessages(RealtimeMessagesRef ref) async* {
   var auth = ref.watch(authProvider.notifier).getAuth();
   var messageQueue = <Message>[];

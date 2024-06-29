@@ -45,8 +45,8 @@ class _CategoryState extends State<Category> {
             child: Column(
               children: widget.children
                   .map((channel) => ChannelButton(
-                        currentGuild: widget.guild,
-                        currentChannel: widget.channel as GuildChannel,
+                        currentGuildId: widget.guild.id,
+                        currentChannelId: widget.channel.id,
                         channel: channel,
                       ))
                   .toList(),

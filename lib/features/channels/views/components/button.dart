@@ -9,13 +9,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 class ChannelButton extends ConsumerStatefulWidget {
-  final Guild currentGuild;
-  final GuildChannel currentChannel;
+  final Snowflake currentGuildId;
+  final Snowflake currentChannelId;
   final Channel channel;
   const ChannelButton({
     super.key,
-    required this.currentChannel,
-    required this.currentGuild,
+    required this.currentGuildId,
+    required this.currentChannelId,
     required this.channel,
   });
 
@@ -28,7 +28,7 @@ class _ChannelButtonState extends ConsumerState<ChannelButton> {
 
   @override
   Widget build(BuildContext context) {
-    bool selected = widget.channel == widget.currentChannel;
+    bool selected = widget.channel.id == widget.currentChannelId;
 
     //(widget.channel as GuildVoiceChannel).
 
@@ -44,7 +44,7 @@ class _ChannelButtonState extends ConsumerState<ChannelButton> {
                   minimumSize: Size.zero,
                   padding: EdgeInsets.zero,
                   side: BorderSide(
-                    color: (widget.channel == widget.currentChannel)
+                    color: (widget.channel.id == widget.currentChannelId)
                         ? Theme.of(context)
                             .custom
                             .colorTheme
@@ -67,7 +67,7 @@ class _ChannelButtonState extends ConsumerState<ChannelButton> {
               onPressed: () {
                 // route to channel
                 GoRouter.of(context).go(
-                    '/channels/${widget.currentGuild.id}/${widget.channel.id}');
+                    '/channels/${widget.currentGuildId}/${widget.channel.id}');
 
                 OverlappingPanelsState? overlappingPanelsState =
                     OverlappingPanels.of(context);

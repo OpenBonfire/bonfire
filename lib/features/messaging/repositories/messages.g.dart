@@ -6,7 +6,7 @@ part of 'messages.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$messagesHash() => r'9490b5b276e8cdb2b09283bcaaa03157c19848a9';
+String _$messagesHash() => r'b1648b22027538e3b30bae2a229ade9bd1050e01';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -29,14 +29,13 @@ class _SystemHash {
   }
 }
 
-abstract class _$Messages
-    extends BuildlessAutoDisposeAsyncNotifier<List<Message>> {
-  late final Guild guild;
-  late final Channel channel;
+abstract class _$Messages extends BuildlessAsyncNotifier<List<Message>> {
+  late final Snowflake guildId;
+  late final Snowflake channelId;
 
   FutureOr<List<Message>> build(
-    Guild guild,
-    Channel channel,
+    Snowflake guildId,
+    Snowflake channelId,
   );
 }
 
@@ -59,12 +58,12 @@ class MessagesFamily extends Family<AsyncValue<List<Message>>> {
   ///
   /// Copied from [Messages].
   MessagesProvider call(
-    Guild guild,
-    Channel channel,
+    Snowflake guildId,
+    Snowflake channelId,
   ) {
     return MessagesProvider(
-      guild,
-      channel,
+      guildId,
+      channelId,
     );
   }
 
@@ -73,8 +72,8 @@ class MessagesFamily extends Family<AsyncValue<List<Message>>> {
     covariant MessagesProvider provider,
   ) {
     return call(
-      provider.guild,
-      provider.channel,
+      provider.guildId,
+      provider.channelId,
     );
   }
 
@@ -97,17 +96,17 @@ class MessagesFamily extends Family<AsyncValue<List<Message>>> {
 ///
 /// Copied from [Messages].
 class MessagesProvider
-    extends AutoDisposeAsyncNotifierProviderImpl<Messages, List<Message>> {
+    extends AsyncNotifierProviderImpl<Messages, List<Message>> {
   /// Message provider for fetching messages from the Discord API
   ///
   /// Copied from [Messages].
   MessagesProvider(
-    Guild guild,
-    Channel channel,
+    Snowflake guildId,
+    Snowflake channelId,
   ) : this._internal(
           () => Messages()
-            ..guild = guild
-            ..channel = channel,
+            ..guildId = guildId
+            ..channelId = channelId,
           from: messagesProvider,
           name: r'messagesProvider',
           debugGetCreateSourceHash:
@@ -116,8 +115,8 @@ class MessagesProvider
                   : _$messagesHash,
           dependencies: MessagesFamily._dependencies,
           allTransitiveDependencies: MessagesFamily._allTransitiveDependencies,
-          guild: guild,
-          channel: channel,
+          guildId: guildId,
+          channelId: channelId,
         );
 
   MessagesProvider._internal(
@@ -127,20 +126,20 @@ class MessagesProvider
     required super.allTransitiveDependencies,
     required super.debugGetCreateSourceHash,
     required super.from,
-    required this.guild,
-    required this.channel,
+    required this.guildId,
+    required this.channelId,
   }) : super.internal();
 
-  final Guild guild;
-  final Channel channel;
+  final Snowflake guildId;
+  final Snowflake channelId;
 
   @override
   FutureOr<List<Message>> runNotifierBuild(
     covariant Messages notifier,
   ) {
     return notifier.build(
-      guild,
-      channel,
+      guildId,
+      channelId,
     );
   }
 
@@ -150,59 +149,58 @@ class MessagesProvider
       origin: this,
       override: MessagesProvider._internal(
         () => create()
-          ..guild = guild
-          ..channel = channel,
+          ..guildId = guildId
+          ..channelId = channelId,
         from: from,
         name: null,
         dependencies: null,
         allTransitiveDependencies: null,
         debugGetCreateSourceHash: null,
-        guild: guild,
-        channel: channel,
+        guildId: guildId,
+        channelId: channelId,
       ),
     );
   }
 
   @override
-  AutoDisposeAsyncNotifierProviderElement<Messages, List<Message>>
-      createElement() {
+  AsyncNotifierProviderElement<Messages, List<Message>> createElement() {
     return _MessagesProviderElement(this);
   }
 
   @override
   bool operator ==(Object other) {
     return other is MessagesProvider &&
-        other.guild == guild &&
-        other.channel == channel;
+        other.guildId == guildId &&
+        other.channelId == channelId;
   }
 
   @override
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, guild.hashCode);
-    hash = _SystemHash.combine(hash, channel.hashCode);
+    hash = _SystemHash.combine(hash, guildId.hashCode);
+    hash = _SystemHash.combine(hash, channelId.hashCode);
 
     return _SystemHash.finish(hash);
   }
 }
 
-mixin MessagesRef on AutoDisposeAsyncNotifierProviderRef<List<Message>> {
-  /// The parameter `guild` of this provider.
-  Guild get guild;
+mixin MessagesRef on AsyncNotifierProviderRef<List<Message>> {
+  /// The parameter `guildId` of this provider.
+  Snowflake get guildId;
 
-  /// The parameter `channel` of this provider.
-  Channel get channel;
+  /// The parameter `channelId` of this provider.
+  Snowflake get channelId;
 }
 
 class _MessagesProviderElement
-    extends AutoDisposeAsyncNotifierProviderElement<Messages, List<Message>>
+    extends AsyncNotifierProviderElement<Messages, List<Message>>
     with MessagesRef {
   _MessagesProviderElement(super.provider);
 
   @override
-  Guild get guild => (origin as MessagesProvider).guild;
+  Snowflake get guildId => (origin as MessagesProvider).guildId;
   @override
-  Channel get channel => (origin as MessagesProvider).channel;
+  Snowflake get channelId => (origin as MessagesProvider).channelId;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

@@ -6,29 +6,21 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'guild.g.dart';
 
 /// Fetches the current guild from [guildid].
-@riverpod
+@Riverpod(keepAlive: true)
 class GuildController extends _$GuildController {
   Guild? guild;
 
   @override
-  Future<Guild?> build(guildId) async {
+  Future<Guild?> build(Snowflake guildId) async {
     var auth = ref.watch(authProvider.notifier).getAuth();
 
-    if (guildId == "@me") {
-      /*
-      Not sure if this is the best way to do this
-
-      If the guild is ever null, I *think* we can assume 100% of the time to
-      assume we are in the user profile. Please inform me if you find any 
-      exceptions to this assumption.
-      */
+    if (guildId.isZero) {
+      // If the guildId is zero, we are at @me (probably, idk if there's a better way to do this)
       return null;
     }
 
-    Snowflake guild = Snowflake(int.parse(guildId));
-
     if (auth is AuthUser) {
-      return await auth.client.guilds.get(guild);
+      return await auth.client.guilds.get(guildId);
     }
 
     return null;
