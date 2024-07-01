@@ -39,7 +39,7 @@ class _HomeState extends ConsumerState<GuildMessagingOverview> {
             ref
                 .read(
                     messagesProvider(widget.guildId, widget.channelId).notifier)
-                .processRealtimeMessages(widget.channelId, value);
+                .processRealtimeMessages(value);
           },
           loading: () {},
           error: (error, stackTrace) {

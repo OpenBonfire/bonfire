@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bonfire/features/channels/controllers/channel.dart';
 import 'package:bonfire/features/guild/controllers/guild.dart';
 import 'package:bonfire/features/messaging/repositories/messages.dart';
@@ -25,8 +27,11 @@ class MessageView extends ConsumerStatefulWidget {
 
 class _MessageViewState extends ConsumerState<MessageView> {
   final ScrollController _scrollController = ScrollController();
+  List<Message> loadedMessages = [];
+  Message? lastScrollMessage;
+  Message? firstBatchLastMessage;
   Logger logger = Logger("MessageView");
-  Map<int, MessageBox> boxMap = {};
+  bool _isLoadingMore = false;
 
   @override
   void initState() {
@@ -42,26 +47,50 @@ class _MessageViewState extends ConsumerState<MessageView> {
   }
 
   void _scrollListener() {
-    if (_scrollController.position.pixels >=
-        _scrollController.position.maxScrollExtent - 1000) {
+    if (!_isLoadingMore &&
+        _scrollController.position.pixels >=
+            _scrollController.position.maxScrollExtent - 2000) {
       _loadMoreMessages();
     }
   }
 
-  void _loadMoreMessages() {
-    ref
+  Future<void> _loadMoreMessages() async {
+    if (firstBatchLastMessage == null) return;
+    if (_isLoadingMore) return;
+
+    setState(() {
+      _isLoadingMore = true;
+    });
+
+    lastScrollMessage = lastScrollMessage ?? firstBatchLastMessage!;
+    List<Message>? recents = await ref
         .read(messagesProvider(widget.guildId, widget.channelId).notifier)
-        .fetchMoreMessages(
-            // widget.guild,
-            // widget.channel,
-            );
+        .fetchMessagesBefore(lastScrollMessage!);
+
+    if (recents.isNotEmpty) {
+      if (lastScrollMessage?.id != recents.last.id) {
+        setState(() {
+          lastScrollMessage = recents.last;
+        });
+      }
+    }
+    _isLoadingMore = false;
   }
 
   @override
   Widget build(BuildContext context) {
     var messageOutput =
         ref.watch(messagesProvider(widget.guildId, widget.channelId));
-    var messages = messageOutput.valueOrNull ?? [];
+
+    messageOutput.whenData(
+      (data) {
+        if (data.isNotEmpty) {
+          // lastMessage = data.last;
+          loadedMessages = data;
+        }
+      },
+    );
+
     var topPadding = MediaQuery.of(context).padding.top;
 
     String channelName = "";
@@ -137,19 +166,16 @@ class _MessageViewState extends ConsumerState<MessageView> {
             child: ListView.builder(
               // key: const Key("message-list"),
               controller: _scrollController,
-              itemCount: messages.length,
+              itemCount: loadedMessages.length,
               reverse: true,
               shrinkWrap: true,
               padding: const EdgeInsets.only(bottom: 24),
               itemBuilder: (context, index) {
-                MessageBox? cachedBox = boxMap[messages[index].id.value];
-                if (cachedBox != null) return cachedBox;
-
                 bool showAuthor = true;
 
-                if (index + 1 < messages.length) {
-                  Message currentMessage = messages[index];
-                  Message lastMessage = messages[index + 1];
+                if (index + 1 < loadedMessages.length) {
+                  Message currentMessage = loadedMessages[index];
+                  Message lastMessage = loadedMessages[index + 1];
 
                   showAuthor =
                       lastMessage.author.id == currentMessage.author.id;
@@ -168,20 +194,27 @@ class _MessageViewState extends ConsumerState<MessageView> {
                 }
 
                 MessageBox box = MessageBox(
-                  key: ValueKey(messages[index].id.value.toString()),
+                  key: ValueKey(loadedMessages[index].id.value.toString()),
                   guild: guild,
                   channel: channel,
-                  message: messages[index],
+                  message: loadedMessages[index],
                   showSenderInfo: !showAuthor,
                 );
 
-                boxMap[messages[index].id.value] = box;
+                if (index == loadedMessages.length - 1 &&
+                    lastScrollMessage == null) {
+                  firstBatchLastMessage = loadedMessages[index];
+                  // lastScrollMessage = loadedMessages[index];
+                }
+
+                // lastMessage = loadedMessages[index];
+                // print(lastMessage!.content);
 
                 return box;
               },
             ),
           ),
-          MessageBar(guild: guild!, channel: channel),
+          MessageBar(guild: guild, channel: channel),
           SizedBox(
             height: MediaQuery.of(context).padding.bottom,
           ),

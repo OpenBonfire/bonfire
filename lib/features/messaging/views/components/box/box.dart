@@ -55,6 +55,12 @@ class _MessageBoxState extends ConsumerState<MessageBox> {
   }
 
   @override
+  void initState() {
+    print("BOX INIT");
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     var embeds = widget.message!.embeds;
     var attachments = widget.message!.attachments;
@@ -126,10 +132,10 @@ class _MessageBoxState extends ConsumerState<MessageBox> {
             children: [
               (widget.showSenderInfo == true)
                   ? Avatar(
-                      key: Key(widget.message!.author.avatarHash ?? ""),
+                      // key: Key(widget.message!.author.avatarHash ?? ""),
                       author: widget.message!.author,
-                      guild: widget.guild,
-                      channel: widget.channel,
+                      guildId: widget.guild.id,
+                      channelId: widget.channel.id,
                     )
                   : const Padding(
                       padding: EdgeInsets.only(right: 8),

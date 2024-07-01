@@ -1,7 +1,5 @@
 import 'dart:io';
 
-import 'package:bonfire/features/messaging/repositories/events/realtime_messages.dart';
-import 'package:bonfire/features/messaging/repositories/messages.dart';
 import 'package:bonfire/router/controller.dart';
 import 'package:bonfire/theme/theme.dart';
 import 'package:flutter/material.dart';

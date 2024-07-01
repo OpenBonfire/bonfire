@@ -6,7 +6,7 @@ part of 'auth.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$authHash() => r'b6bdcbd7ccb3f6dadbd4b032f0f1009e61b6dca8';
+String _$authHash() => r'66066fd70f5ff86a4e5ee0f2845efa09bb9f02b4';
 
 /// A riverpod provider that handles authentication with Discord.
 ///

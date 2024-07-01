@@ -45,6 +45,7 @@ class _WebVideoState extends ConsumerState<WebVideo> {
                 _isPlaying = true;
                 // force a second state update
                 // pretty ugly solution, but reliable
+                // this is actually a fireview issue
                 Future.delayed(const Duration(milliseconds: 200), () {
                   setState(() {
                     _isPlaying = true;

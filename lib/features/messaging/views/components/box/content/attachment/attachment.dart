@@ -1,8 +1,8 @@
-import 'package:bonfire/features/messaging/views/components/box/content/attachment/components/audio_player.dart';
-import 'package:bonfire/features/messaging/views/components/box/content/attachment/components/downloader.dart';
-import 'package:bonfire/features/messaging/views/components/box/content/attachment/components/image.dart';
-import 'package:bonfire/features/messaging/views/components/box/content/attachment/components/desktop_video.dart';
-import 'package:bonfire/features/messaging/views/components/box/content/attachment/components/mobile_video.dart';
+import './components/audio_player.dart';
+import './components/downloader.dart';
+import './components/image.dart';
+import './components/desktop_video.dart';
+import './components/mobile_video.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
 import 'package:universal_platform/universal_platform.dart';

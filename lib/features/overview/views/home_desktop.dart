@@ -45,7 +45,7 @@ class _HomeState extends ConsumerState<HomeDesktop> {
             ),
             Flexible(
               child: MessageView(
-                key: Key('messages-${widget.guildId}'),
+                // key: Key('messages-${widget.guildId}'),
                 guildId: widget.guildId,
                 channelId: widget.channelId,
               ),

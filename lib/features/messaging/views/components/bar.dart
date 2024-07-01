@@ -92,7 +92,8 @@ class _MessageBarState extends ConsumerState<MessageBar> {
                         decoration: InputDecoration(
                           contentPadding:
                               const EdgeInsets.only(left: 8, bottom: 6),
-                          hintText: getChannelName(widget.channel),
+                          hintText:
+                              "Message #${getChannelName(widget.channel)}",
                           hintStyle: TextStyle(
                               color: Theme.of(context)
                                   .custom

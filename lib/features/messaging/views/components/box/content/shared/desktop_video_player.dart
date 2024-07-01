@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:bonfire/features/messaging/views/components/box/content/attachment/bounded_content.dart';
 import 'package:flutter/material.dart';
 import 'package:media_kit/media_kit.dart';
@@ -27,6 +25,7 @@ class VideoAttachmentState extends State<DesktopVideoPlayer> {
   void initState() {
     player = Player();
     player!.open(Media(widget.url.toString()));
+    player!.pause();
     controller = VideoController(player!);
     super.initState();
   }

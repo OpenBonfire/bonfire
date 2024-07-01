@@ -41,8 +41,8 @@ class MessageReply extends ConsumerWidget {
         children: [
           Avatar(
             author: parentMessage.referencedMessage!.author,
-            guild: guild,
-            channel: channel,
+            guildId: guild.id,
+            channelId: channel.id,
             width: 15,
             height: 15,
           ),

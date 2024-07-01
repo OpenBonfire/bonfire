@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:bonfire/features/auth/data/repositories/auth.dart';
@@ -10,7 +11,6 @@ import 'package:firebridge/firebridge.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:http/http.dart' as http;
-import 'package:flutter/scheduler.dart';
 
 part 'messages.g.dart';
 
@@ -19,8 +19,8 @@ part 'messages.g.dart';
 class Messages extends _$Messages {
   AuthUser? user;
   bool listenerRunning = false;
-  Map<Channel, Message?> oldestMessage = {};
   DateTime lastFetchTime = DateTime.now();
+  Map<Snowflake, List<Message>> messageCache = {};
 
   final _cacheManager = CacheManager(
     Config(
@@ -29,68 +29,34 @@ class Messages extends _$Messages {
       maxNrOfCacheObjects: 10000,
     ),
   );
-  Map<String, List<Message>> channelMessagesMap = {};
+
   bool realtimeListernRunning = false;
 
   @override
   Future<List<Message>> build(Snowflake guildId, Snowflake channelId) async {
-    var channel = ref.watch(channelControllerProvider(channelId)).value!;
+    var auth = ref.watch(authProvider.notifier).getAuth();
 
-    var authOutput = ref.watch(authProvider.notifier).getAuth();
-
-    getMessages(authOutput);
-    var fromCache = (await getChannelFromCache(channel))!;
-    return fromCache;
-  }
-
-  Future<void> runPreCacheRoutine(Guild guild, Channel channel) async {
-    var authOutput = ref.watch(authProvider.notifier).getAuth();
-    if (authOutput is AuthUser && channel is TextChannel) {
-      var age = await getAgeOfMessageEntry(channel.id.value);
-      if (age == null || age.inDays > 1) {
-        getMessages(authOutput, count: 20, lock: false, requestAvatar: false);
-      }
+    if (auth is! AuthUser) {
+      print("bad auth!");
     }
+
+    user = auth as AuthUser;
+    var messages = await getMessages();
+    return messages;
   }
 
-  bool loadingMessages = false;
   Timer lockTimer = Timer(Duration.zero, () {});
 
-  void enableLock() {
-    if (loadingMessages) return;
-    loadingMessages = true;
-    lockTimer = Timer(const Duration(seconds: 1), () {
-      loadingMessages = false;
-    });
-  }
-
-  void removeLock() {
-    loadingMessages = false;
-    lockTimer.cancel();
-  }
-
-  Future<void> getMessages(
-    authOutput, {
+  Future<List<Message>> getMessages({
     Channel? channelOverride,
-    int? before,
+    Snowflake? before,
     int? count,
-    bool? lock = true,
-    bool? requestAvatar = true,
   }) async {
-    if (loadingMessages == true) return;
+    if (user is AuthUser) {
+      var channel =
+          ref.watch(channelControllerProvider(channelId)).value as GuildChannel;
 
-    if ((authOutput != null) && (authOutput is AuthUser)) {
-      user = authOutput;
-
-      var channel = ref.watch(channelControllerProvider(channelId)).value!
-          as GuildChannel;
       var guild = ref.watch(guildControllerProvider(guildId)).value!;
-
-      var beforeSnowflake = before != null ? Snowflake(before) : null;
-
-      // if (loadingMessages == true) return;
-
-      if (lock == true) enableLock();
 
       var selfMember = await guild.members.get(user!.client.user.id);
       var permissions = await channel.computePermissionsFor(selfMember);
@@ -100,126 +66,65 @@ class Messages extends _$Messages {
         // It ocassionally still errors
         print(
             "Error fetching messages in channel ${channel.id}, likely do not have access to channel bozo!");
-        removeLock();
-        return;
+
+        return [];
       }
 
       if (channel is! TextChannel) {
         print(
             "Error fetching messages in channel ${channel.id}, not a text channel");
-        removeLock();
-        return;
+
+        return [];
       }
 
       var messages = await (channel as TextChannel)
           .messages
-          .fetchMany(limit: count ?? 20, before: beforeSnowflake);
+          .fetchMany(limit: count ?? 100, before: before);
 
-      // print("Loaded ${messages.length} messages");
-      removeLock();
-
-      List<Message> channelMessages = [];
-      var completer = Completer<void>();
-
-      int chunkSize = 10;
-      int currentIndex = 0;
-
-      void processChunk() {
-        int endIndex = currentIndex + chunkSize;
-        if (endIndex > messages.length) endIndex = messages.length;
-
-        for (int i = currentIndex; i < endIndex; i++) {
-          var message = messages[i];
-          if (oldestMessage[channel] == null ||
-              message.timestamp.isBefore(oldestMessage[channel]!.timestamp)) {
-            oldestMessage[channel] = message;
-          }
-          var username = message.author.username;
-          if (message.author is User) {
-            var user = message.author as User;
-            username = user.globalName ?? username;
-          }
-
-          channelMessages.add(message);
-        }
-
-        currentIndex = endIndex;
-
-        if (currentIndex < messages.length) {
-          SchedulerBinding.instance.addPostFrameCallback((_) {
-            processChunk();
-          });
-        } else {
-          if (before == null) {
-            channelMessagesMap[channel.toString()] = [];
-          }
-          if (channelMessages.isNotEmpty) {
-            channelMessagesMap[channel.toString()]!.addAll(channelMessages);
-
-            if (before == null) {
-              cacheMessages(channelMessages, channel.toString());
-            }
-          }
-
-          // NOTE: I don't think this will work with the precache!
-          //if (channel == ref.read(channelControllerProvider)) {
-          state = AsyncData(channelMessagesMap[channel.toString()] ?? []);
-          //}
-
-          completer.complete();
-        }
+      if (before == null) {
+        messageCache[channel.id] = messages.toList();
+      } else {
+        messageCache[channel.id]!.addAll(messages);
       }
 
-      processChunk();
-
-      return completer.future;
+      return messages;
     } else {
-      print("no auth output");
+      return [];
     }
   }
 
-  void processRealtimeMessages(
-      Snowflake channelId, List<Message> messages) async {
+  void processRealtimeMessages(List<Message> messages) async {
+    // Ensure we have a valid channel to work with
     Channel? channel =
         ref.watch(channelControllerProvider(channelId)).valueOrNull;
-    if (messages.isNotEmpty) {
-      var message = messages.last;
-      var processingChannel = message.channel;
-      if (channelMessagesMap[processingChannel.toString()] == null) {
-        channelMessagesMap[processingChannel.toString()] = [];
-      }
-      channelMessagesMap[processingChannel.toString()]!.insert(0, message);
-      if (processingChannel == channel) {
-        // TODO: Only take the first message, and append :D
-        // you could also take all of them and compare, to ensure we
-        // didn't lose anything in a race condition
 
-        var newState = channelMessagesMap[channel.toString()];
-        var cacheKey = channel.toString();
+    if (channel == null || messages.isEmpty) {
+      return;
+    }
 
-        cacheMessages(messages, cacheKey);
-        state = AsyncData(newState ?? []);
-      }
+    // If the channel has a way to update its state or notify listeners, do it here
+    // Since there's no explicit state management mentioned, we print the new messages for debugging
+    List<Message> channelMessages = messageCache[channel.id] ?? [];
+
+    Message message = messages.last;
+    if (message.channel.id == channel.id) {
+      channelMessages.insert(0, message);
+      state = AsyncValue.data(channelMessages);
     }
   }
 
   Future<List<Message>?> getChannelFromCache(Channel channel) async {
-    // var cacheData = await _cacheManager.getFileFromCache(channel.toString());
-    // if (cacheData != null) {
-    //   var cachedMessages =
-    //       json.decode(utf8.decode(cacheData.file.readAsBytesSync()));
-    //   var messagesFuture = (cachedMessages as List<dynamic>).map((e) async {
-    //     var message = BonfireMessage.fromJson(e);
-    //     var icon = (await fetchMemberAvatarFromCache(message.member.id));
-    //     if (icon != null) message.member.icon = Image.memory(icon);
+    var cacheData = await _cacheManager.getFileFromCache(channel.id.toString());
+    if (cacheData != null) {
+      var cachedMessages =
+          json.decode(utf8.decode(cacheData.file.readAsBytesSync()));
+      var messagesFuture = (cachedMessages as List<dynamic>).map((e) async {
+        var message = channel.manager.parse(e) as Message;
 
-    //     return message;
-    //   }).toList();
-
-    //   print("got ${messagesFuture.length} messages from cache");
-
-    //   return await Future.wait(messagesFuture);
-    // }
+        return message;
+      }).toList();
+      return await Future.wait(messagesFuture);
+    }
     // no cache
     return null;
   }
@@ -233,16 +138,22 @@ class Messages extends _$Messages {
     return age;
   }
 
-  void fetchMoreMessages() {
+  Future<List<Message>> fetchMessagesBefore(Message message) async {
     // var delta = DateTime.now().difference(lastFetchTime);
     // if (delta.inMilliseconds < 500) return;
     // lastFetchTime = DateTime.now();
     Channel channel =
         ref.watch(channelControllerProvider(channelId)).valueOrNull!;
-    Guild guild = ref.watch(guildControllerProvider(guildId)).valueOrNull!;
+    List<Message> messages = [];
 
-    var authOutput = ref.watch(authProvider.notifier).getAuth();
-    getMessages(authOutput, before: oldestMessage[channel]!.id.value);
+    messages.addAll(messageCache[channel.id]!);
+    messages.addAll(await getMessages(before: message.id));
+
+    if (message.channel.id == channel.id) {
+      state = AsyncValue.data(messages);
+    }
+
+    return messages;
   }
 
   Future<Uint8List?> fetchMemberAvatarFromCache(String hash) async {
