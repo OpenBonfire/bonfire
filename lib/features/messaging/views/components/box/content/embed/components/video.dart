@@ -29,7 +29,7 @@ class VideoEmbed extends StatelessWidget {
               width: embed.thumbnail!.width!.toDouble(),
               height: embed.thumbnail!.height!.toDouble(),
               url: embed.video!.url!)
-          : MobileVideoPlayer(
+          : DesktopVideoPlayer(
               width: embed.thumbnail!.width!.toDouble(),
               height: embed.thumbnail!.height!.toDouble(),
               url: embed.video!.url!);

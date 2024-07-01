@@ -46,10 +46,11 @@ Future<Image?> guildIcon(GuildIconRef ref, Snowflake guildId) async {
     }
 
     // not a fan of this UI / repo mingling
+    // also it's literally just not required
     return Image.memory(
       await iconAsset.fetch(),
-      width: 45,
-      height: 45,
+      width: 47,
+      height: 47,
       fit: BoxFit.cover,
     );
   }

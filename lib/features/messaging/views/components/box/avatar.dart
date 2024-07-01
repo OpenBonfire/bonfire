@@ -23,20 +23,7 @@ class Avatar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // TODO: This kinda sucks. We should do something else for icons (maybe).
     var avatar = ref.watch(messageAuthorAvatarProvider(author));
-
-    // avatarFuture.when(
-    //   data: (data) {
-    //     print("Avatar loaded");
-    //   },
-    //   loading: () {
-    //     print("Avatar loading");
-    //   },
-    //   error: (error, stack) {
-    //     print("Avatar error");
-    //   },
-    // );
 
     return Padding(
       padding: const EdgeInsets.only(right: 8),
@@ -45,19 +32,30 @@ class Avatar extends ConsumerWidget {
         height: height ?? 45,
         child: ClipRRect(
           borderRadius: BorderRadius.circular(100),
-          child: avatar.when(
-            data: (data) {
-              return Image.memory(data!);
-            },
-            loading: () {
-              return const CupertinoActivityIndicator();
-            },
-            error: (error, stack) {
-              return const Icon(Icons.error);
-            },
+          child: AnimatedSwitcher(
+            duration: const Duration(milliseconds: 300),
+            child: avatar.when(
+              data: (data) {
+                return _buildAvatarImage(data);
+              },
+              loading: () {
+                return const SizedBox();
+              },
+              error: (error, stack) {
+                return const Icon(Icons.error);
+              },
+            ),
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildAvatarImage(Uint8List? data) {
+    return AnimatedOpacity(
+      opacity: data != null ? 1.0 : 0.0,
+      duration: const Duration(seconds: 1),
+      child: data != null ? Image.memory(data) : Container(),
     );
   }
 }

@@ -79,7 +79,7 @@ class Messages extends _$Messages {
 
       var messages = await (channel as TextChannel)
           .messages
-          .fetchMany(limit: count ?? 100, before: before);
+          .fetchMany(limit: count ?? 50, before: before);
 
       if (before == null) {
         messageCache[channel.id] = messages.toList();

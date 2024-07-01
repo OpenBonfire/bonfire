@@ -155,7 +155,7 @@ class _GuildBannerUrlProviderElement extends FutureProviderElement<Uri?>
   Snowflake get guildId => (origin as GuildBannerUrlProvider).guildId;
 }
 
-String _$guildIconHash() => r'065d2098a446d3fd9e8aa193f9873ad33da0e621';
+String _$guildIconHash() => r'6f8bca1b9e524f10e2a49339799f0d54b1d71846';
 
 /// See also [guildIcon].
 @ProviderFor(guildIcon)

@@ -55,20 +55,9 @@ class _MessageBoxState extends ConsumerState<MessageBox> {
   }
 
   @override
-  void initState() {
-    print("BOX INIT");
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     var embeds = widget.message!.embeds;
     var attachments = widget.message!.attachments;
-
-    var widthOffset = 738;
-    if (Platform.isAndroid || Platform.isIOS) {
-      widthOffset = 100;
-    }
 
     String name = widget.message!.author.username;
 

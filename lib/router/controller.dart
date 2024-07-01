@@ -32,6 +32,13 @@ final routerController = GoRouter(
               redirect: (context, state) => 'channels/@me',
             ),
             GoRoute(
+              path: 'channels/@me',
+              builder: (context, state) {
+                // return messages (todo)
+                return const Text("This is the base of messages!");
+              },
+            ),
+            GoRoute(
               path: 'channels/@me/:channelId',
               builder: (context, state) {
                 // return messages (todo)

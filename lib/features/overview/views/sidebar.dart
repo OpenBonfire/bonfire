@@ -35,7 +35,7 @@ class _SidebarState extends ConsumerState<Sidebar> {
       children: [
         Expanded(
           child: SizedBox(
-            width: 60,
+            width: 70,
             height: double.infinity,
             child: Center(
               child: SizedBox(
@@ -83,8 +83,6 @@ class _SidebarIconState extends ConsumerState<SidebarIcon> {
 
   Widget iconBuilder(UserGuild guild, Image? guildIcon) {
     if (guildIcon != null) {
-      // return Image.network(guild.icon!.url.toString(),
-      //     width: 45, height: 45, fit: BoxFit.cover);
       return guildIcon;
     } else {
       String iconText = "";
@@ -95,8 +93,8 @@ class _SidebarIconState extends ConsumerState<SidebarIcon> {
       }
 
       return SizedBox(
-          width: 50,
-          height: 45,
+          width: 70,
+          height: 60,
           child: Container(
             color: Theme.of(context).custom.colorTheme.foreground,
             child: Center(
@@ -113,14 +111,14 @@ class _SidebarIconState extends ConsumerState<SidebarIcon> {
     Image? guildIcon =
         ref.watch(guildIconProvider(widget.guild.id)).valueOrNull;
     return SizedBox(
-      width: 60,
+      width: 70,
       child: Stack(
         alignment: Alignment.centerLeft,
         children: [
           Center(
             child: SizedBox(
-              width: 45,
-              height: 45,
+              width: 47,
+              height: 47,
               child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 0),
                   child: TextButton(
