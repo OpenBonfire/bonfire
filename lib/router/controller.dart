@@ -1,3 +1,4 @@
+import 'package:bonfire/features/me/views/message_overview.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -35,7 +36,7 @@ final routerController = GoRouter(
               path: 'channels/@me',
               builder: (context, state) {
                 // return messages (todo)
-                return const Text("This is the base of messages!");
+                return const MessageOverview();
               },
             ),
             GoRoute(

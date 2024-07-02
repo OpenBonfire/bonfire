@@ -112,9 +112,7 @@ class _MessageBoxState extends ConsumerState<MessageBox> {
               borderRadius: BorderRadius.circular(0),
             ),
           ),
-          onPressed: () {
-            print(widget.message!.author.avatarHash);
-          },
+          onPressed: () {},
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,

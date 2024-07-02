@@ -56,9 +56,6 @@ class _MainWindowState extends ConsumerState<MainWindow> {
       systemNavigationBarContrastEnforced: false,
     ));
 
-    // Tree shaker? I hardly know her!
-    // ref.watch(guildMembersProvider);
-
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: Column(

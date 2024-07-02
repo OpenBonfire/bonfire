@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:bonfire/features/auth/data/headers.dart';
 import 'package:bonfire/features/auth/data/repositories/discord_auth.dart';
 import 'package:bonfire/features/auth/models/auth.dart';
+import 'package:bonfire/features/me/repositories/private_message_history.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:firebridge/firebridge.dart';
@@ -80,7 +81,11 @@ class Auth extends _$Auth {
     authResponse = AuthUser(token: token, client: client!);
     state = authResponse!;
 
-    client!.onReady.listen((event) {});
+    client!.onReady.listen((event) {
+      ref
+          .read(privateMessageHistoryProvider.notifier)
+          .setMessageHistory(event.privateChannels);
+    });
 
     client!.gateway.shards[0].done.then((value) {
       // not sure what to do with this, but it works so yeah

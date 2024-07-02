@@ -13,6 +13,7 @@ Stream<List<Message>> realtimeMessages(RealtimeMessagesRef ref) async* {
 
   if (auth is AuthUser) {
     var client = auth.client;
+
     await for (final event in client.onMessageCreate) {
       messageQueue.add(event.message);
       // print(event.message.content);
