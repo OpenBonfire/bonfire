@@ -89,6 +89,10 @@ class Auth extends _$Auth {
       ref
           .read(guildFoldersProvider.notifier)
           .setGuildFolders(event.userSettings.guildFolders);
+
+      ref
+          .read(channelReadStateProvider.notifier)
+          .setReadStates(event.readStates);
     });
 
     client!.gateway.shards[0].done.then((value) {

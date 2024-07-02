@@ -32,3 +32,19 @@ class GuildFolders extends _$GuildFolders {
     state = folders;
   }
 }
+
+@Riverpod(keepAlive: true)
+class ChannelReadState extends _$ChannelReadState {
+  AuthUser? user;
+
+  @override
+  Map<Snowflake, ReadState>? build() {
+    return null;
+  }
+
+  void setReadStates(List<ReadState> readStates) async {
+    state = readStates
+        .asMap()
+        .map((key, value) => MapEntry(value.partialChannel.id, value));
+  }
+}

@@ -38,5 +38,21 @@ final guildFoldersProvider =
 );
 
 typedef _$GuildFolders = Notifier<List<GuildFolder>?>;
+String _$channelReadStateHash() => r'79e53110fa491c507f7b17038fb9b5ae7bd6592b';
+
+/// See also [ChannelReadState].
+@ProviderFor(ChannelReadState)
+final channelReadStateProvider =
+    NotifierProvider<ChannelReadState, Map<Snowflake, ReadState>?>.internal(
+  ChannelReadState.new,
+  name: r'channelReadStateProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$channelReadStateHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef _$ChannelReadState = Notifier<Map<Snowflake, ReadState>?>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

@@ -1,5 +1,6 @@
 import 'package:bonfire/features/channels/controllers/channel.dart';
 import 'package:bonfire/features/channels/views/components/voice_members.dart';
+import 'package:bonfire/features/me/controllers/settings.dart';
 import 'package:bonfire/features/overview/views/overlapping_panels.dart';
 import 'package:bonfire/shared/utils/icons.dart';
 import 'package:bonfire/theme/theme.dart';
@@ -29,8 +30,16 @@ class _ChannelButtonState extends ConsumerState<ChannelButton> {
   @override
   Widget build(BuildContext context) {
     bool selected = widget.channel.id == widget.currentChannelId;
+    var readState = ref.watch(channelReadStateProvider);
+    // bool hasUnreads = (readState?[widget.channel.id]?.flags == 0);
+    // print(readState?[widget.channel.id]?.flags);
 
-    //(widget.channel as GuildVoiceChannel).
+    bool hasUnreads = false;
+    // readState![widget.channel.id]?.lastPartialMessage?.get().then((value) {
+    //   value.timestamp.
+    // });
+
+    // (widget.channel as GuildVoiceChannel).
 
     return Column(
       children: [
@@ -97,7 +106,7 @@ class _ChannelButtonState extends ConsumerState<ChannelButton> {
                               .textTheme
                               .bodyText1
                               .copyWith(
-                                  color: selected
+                                  color: (selected || hasUnreads)
                                       ? Theme.of(context)
                                           .custom
                                           .colorTheme
