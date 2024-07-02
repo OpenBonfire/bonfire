@@ -19,7 +19,7 @@ dependencies:
   firebridge:
     git:
       url: https://github.com/OpenBonfire/firebridge
-      ref: 53ed79b159a9aed493467292960a54f1b0753efb
+      ref: 468e9fede2d918f82bdcd25961a2c3733b657514
 
   markdown_viewer:
     git:
@@ -75,11 +75,12 @@ dependencies:
 dependency_overrides:
   webview_flutter_platform_interface: ^2.4.0
   http: ^1.2.1
+  meta: ^1.12.0
 
   firebridge:
     git:
       url: https://github.com/OpenBonfire/firebridge
-      ref: 93783eb16a012aa32caaab45830c556563963124
+      ref: 468e9fede2d918f82bdcd25961a2c3733b657514
 
   media_kit:
     git:
