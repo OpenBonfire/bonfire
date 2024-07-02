@@ -109,7 +109,6 @@ class Channels extends _$Channels {
     var cacheData = await _cacheManager.getFileFromCache(cacheKey);
     Guild guild = ref.watch(guildControllerProvider(guildId)).valueOrNull!;
     if (cacheData != null) {
-      print("cache hit!");
       var decoded = json.decode(utf8.decode(cacheData.file.readAsBytesSync()));
 
       var mapped =

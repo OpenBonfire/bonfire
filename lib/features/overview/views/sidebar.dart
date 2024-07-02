@@ -131,7 +131,7 @@ class _GuildFolderWidgetState extends State<GuildFolderWidget>
     // If there's only one guild in the folder, treat it as a regular server icon
     if (folderGuilds.length == 1) {
       return Padding(
-        padding: const EdgeInsets.symmetric(vertical: 4),
+        padding: const EdgeInsets.symmetric(vertical: 2),
         child: SidebarIcon(
           selected: widget.selectedGuildId == folderGuilds[0].id,
           guild: folderGuilds[0],
@@ -140,104 +140,107 @@ class _GuildFolderWidgetState extends State<GuildFolderWidget>
       );
     }
 
-    return Column(
-      children: [
-        MouseRegion(
-          cursor: SystemMouseCursors.click,
-          child: GestureDetector(
-            onTap: () {
-              setState(() {
-                _isExpanded = !_isExpanded;
-                if (_isExpanded) {
-                  _controller.forward();
-                } else {
-                  _controller.reverse();
-                }
-              });
-            },
-            child: AnimatedBuilder(
-              animation: _expandAnimation,
-              builder: (context, child) {
-                return Column(
-                  children: [
-                    if (_expandAnimation.value > 0)
-                      Opacity(
-                        opacity: _expandAnimation.value,
-                        child: Center(
-                          child: FolderIcon(
-                            color: Color(widget.guildFolder.color ??
-                                Theme.of(context)
+    return Padding(
+      padding: const EdgeInsets.only(top: 2),
+      child: Column(
+        children: [
+          MouseRegion(
+            cursor: SystemMouseCursors.click,
+            child: GestureDetector(
+              onTap: () {
+                setState(() {
+                  _isExpanded = !_isExpanded;
+                  if (_isExpanded) {
+                    _controller.forward();
+                  } else {
+                    _controller.reverse();
+                  }
+                });
+              },
+              child: AnimatedBuilder(
+                animation: _expandAnimation,
+                builder: (context, child) {
+                  return Column(
+                    children: [
+                      if (_expandAnimation.value > 0)
+                        Opacity(
+                          opacity: _expandAnimation.value,
+                          child: Center(
+                            child: FolderIcon(
+                              color: Color(widget.guildFolder.color ??
+                                  Theme.of(context)
+                                      .custom
+                                      .colorTheme
+                                      .blurple
+                                      .value),
+                            ),
+                          ),
+                        ),
+                      if (_expandAnimation.value < 1)
+                        Opacity(
+                          opacity: 1 - _expandAnimation.value,
+                          child: Center(
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Theme.of(context)
                                     .custom
                                     .colorTheme
                                     .blurple
-                                    .value),
-                          ),
-                        ),
-                      ),
-                    if (_expandAnimation.value < 1)
-                      Opacity(
-                        opacity: 1 - _expandAnimation.value,
-                        child: Center(
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: Theme.of(context)
-                                  .custom
-                                  .colorTheme
-                                  .blurple
-                                  .withOpacity(0.5),
-                              borderRadius: BorderRadius.circular(16),
-                            ),
-                            width: 50,
-                            height: 50,
-                            child: Padding(
-                              padding: const EdgeInsets.all(4),
-                              child: GridView.count(
-                                // disable scroll
-                                physics: const NeverScrollableScrollPhysics(),
-                                crossAxisCount: 2,
-                                children: folderGuilds.take(4).map((guild) {
-                                  return Center(
-                                    child: SidebarIcon(
-                                      selected:
-                                          widget.selectedGuildId == guild.id,
-                                      guild: guild,
-                                      mini: true,
-                                      isClickable: false,
-                                    ),
-                                  );
-                                }).toList(),
+                                    .withOpacity(0.5),
+                                borderRadius: BorderRadius.circular(16),
+                              ),
+                              width: 50,
+                              height: 50,
+                              child: Padding(
+                                padding: const EdgeInsets.all(4),
+                                child: GridView.count(
+                                  // disable scroll
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  crossAxisCount: 2,
+                                  children: folderGuilds.take(4).map((guild) {
+                                    return Center(
+                                      child: SidebarIcon(
+                                        selected:
+                                            widget.selectedGuildId == guild.id,
+                                        guild: guild,
+                                        mini: true,
+                                        isClickable: false,
+                                      ),
+                                    );
+                                  }).toList(),
+                                ),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                    SizeTransition(
-                      sizeFactor: _expandAnimation,
-                      child: Column(
-                        children: folderGuilds
-                            .map((guild) => Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 4),
-                                  child: Center(
-                                    child: SidebarIcon(
-                                      selected:
-                                          widget.selectedGuildId == guild.id,
-                                      guild: guild,
-                                      isClickable: true,
+                      SizeTransition(
+                        sizeFactor: _expandAnimation,
+                        child: Column(
+                          children: folderGuilds
+                              .map((guild) => Padding(
+                                    padding:
+                                        const EdgeInsets.symmetric(vertical: 2),
+                                    child: Center(
+                                      child: SidebarIcon(
+                                        selected:
+                                            widget.selectedGuildId == guild.id,
+                                        guild: guild,
+                                        isClickable: true,
+                                      ),
                                     ),
-                                  ),
-                                ))
-                            .toList(),
+                                  ))
+                              .toList(),
+                        ),
                       ),
-                    ),
-                  ],
-                );
-              },
+                    ],
+                  );
+                },
+              ),
             ),
           ),
-        ),
-        SizedBox(height: _isExpanded ? 0 : 4),
-      ],
+          SizedBox(height: _isExpanded ? 0 : 4),
+        ],
+      ),
     );
   }
 }
