@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:bonfire/features/auth/data/headers.dart';
 import 'package:bonfire/features/auth/data/repositories/discord_auth.dart';
 import 'package:bonfire/features/auth/models/auth.dart';
-import 'package:bonfire/features/me/repositories/private_message_history.dart';
+import 'package:bonfire/features/me/controllers/settings.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:firebridge/firebridge.dart';
@@ -85,6 +85,10 @@ class Auth extends _$Auth {
       ref
           .read(privateMessageHistoryProvider.notifier)
           .setMessageHistory(event.privateChannels);
+
+      ref
+          .read(guildFoldersProvider.notifier)
+          .setGuildFolders(event.userSettings.guildFolders);
     });
 
     client!.gateway.shards[0].done.then((value) {

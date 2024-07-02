@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'private_message_history.dart';
+part of 'settings.dart';
 
 // **************************************************************************
 // RiverpodGenerator
@@ -23,5 +23,20 @@ final privateMessageHistoryProvider =
 );
 
 typedef _$PrivateMessageHistory = Notifier<List<PrivateChannel>>;
+String _$guildFoldersHash() => r'7e8b9a3c50d1bbd5abf6f23f04c46b6a2ff674b3';
+
+/// See also [GuildFolders].
+@ProviderFor(GuildFolders)
+final guildFoldersProvider =
+    NotifierProvider<GuildFolders, List<GuildFolder>?>.internal(
+  GuildFolders.new,
+  name: r'guildFoldersProvider',
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product') ? null : _$guildFoldersHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef _$GuildFolders = Notifier<List<GuildFolder>?>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

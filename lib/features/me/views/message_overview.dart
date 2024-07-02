@@ -1,4 +1,4 @@
-import 'package:bonfire/features/me/repositories/private_message_history.dart';
+import 'package:bonfire/features/me/controllers/settings.dart';
 import 'package:bonfire/features/me/views/components/member_card.dart';
 import 'package:bonfire/features/me/views/components/overview_card.dart';
 import 'package:bonfire/features/members/views/components/member_card.dart';
