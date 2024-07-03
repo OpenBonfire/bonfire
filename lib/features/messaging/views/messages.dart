@@ -80,7 +80,7 @@ class _MessageViewState extends ConsumerState<MessageView> {
   @override
   Widget build(BuildContext context) {
     var messageOutput =
-        ref.watch(messagesProvider(widget.guildId, widget.channelId));
+        ref.read(messagesProvider(widget.guildId, widget.channelId));
 
     messageOutput.whenData(
       (data) {

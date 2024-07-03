@@ -30,12 +30,29 @@ class _ChannelButtonState extends ConsumerState<ChannelButton> {
   var lastGuildChannels = Hive.box("last-guild-channels");
   Map<int, Widget> categoryMap = {};
 
+  Widget mentionBubble(int count) {
+    return Container(
+        width: 18,
+        height: 18,
+        decoration: BoxDecoration(
+          color: Theme.of(context).custom.colorTheme.red,
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Text(
+          count.toString(),
+          style: Theme.of(context).custom.textTheme.bodyText1.copyWith(
+                fontSize: 11,
+                color: Colors.white,
+              ),
+          textAlign: TextAlign.center,
+        ));
+  }
+
   @override
   Widget build(BuildContext context) {
     bool selected = widget.channel.id == widget.currentChannelId;
     var readState = ref.watch(channelReadStateProvider);
-    // bool hasUnreads = (readState?[widget.channel.id]?.flags == 0);
-    // print(readState?[widget.channel.id]?.flags);
+    int mentionCount = readState?[widget.channel.id]?.mentionCount ?? 0;
 
     bool hasUnreads = false;
     // readState![widget.channel.id]?.lastPartialMessage?.get().then((value) {
@@ -101,26 +118,32 @@ class _ChannelButtonState extends ConsumerState<ChannelButton> {
                         BonfireIcons.channelIcons[widget.channel.type]!,
                         const SizedBox(width: 8),
                         Expanded(
-                            child: Text(
-                          (widget.channel as GuildChannel).name,
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 1,
-                          softWrap: false,
-                          textAlign: TextAlign.left,
-                          style: Theme.of(context)
-                              .custom
-                              .textTheme
-                              .bodyText1
-                              .copyWith(
-                                  color: (selected || hasUnreads)
-                                      ? Theme.of(context)
-                                          .custom
-                                          .colorTheme
-                                          .selectedChannelText
-                                      : Theme.of(context)
-                                          .custom
-                                          .colorTheme
-                                          .deselectedChannelText),
+                            child: Row(
+                          children: [
+                            Text(
+                              (widget.channel as GuildChannel).name,
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                              softWrap: false,
+                              textAlign: TextAlign.left,
+                              style: Theme.of(context)
+                                  .custom
+                                  .textTheme
+                                  .bodyText1
+                                  .copyWith(
+                                      color: (selected || hasUnreads)
+                                          ? Theme.of(context)
+                                              .custom
+                                              .colorTheme
+                                              .selectedChannelText
+                                          : Theme.of(context)
+                                              .custom
+                                              .colorTheme
+                                              .deselectedChannelText),
+                            ),
+                            const Spacer(),
+                            if (mentionCount > 0) mentionBubble(mentionCount),
+                          ],
                         )),
                       ],
                     ),
