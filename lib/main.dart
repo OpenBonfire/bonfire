@@ -1,15 +1,16 @@
-import 'dart:io';
-
 import 'package:bonfire/router/controller.dart';
 import 'package:bonfire/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_keyboard_size/flutter_keyboard_size.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:video_player_media_kit/video_player_media_kit.dart';
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:bonfire/features/window/views/window.dart';
+import 'package:universal_platform/universal_platform.dart';
+import 'package:hive/hive.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:universal_io/io.dart';
 
 void main() async {
   VideoPlayerMediaKit.ensureInitialized(
@@ -19,15 +20,26 @@ void main() async {
     windows: true,
     linux: true,
   );
-
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge,
       overlays: [SystemUiOverlay.top]);
 
-  await GetStorage.init();
+  final appDocumentDir = await getApplicationDocumentsDirectory();
+  final dataDir = Directory('${appDocumentDir.path}/bonfire/data');
+
+  if (!await dataDir.exists()) {
+    await dataDir.create(recursive: true);
+  }
+
+  Hive.init(dataDir.path);
+
+  await Hive.openBox("auth");
+  await Hive.openBox("last-location");
+  await Hive.openBox("last-guild-channels");
+
   runApp(const ProviderScope(child: MaterialApp(home: MainWindow())));
 
-  if (Platform.isWindows | Platform.isLinux | Platform.isMacOS) {
+  if (UniversalPlatform.isDesktop) {
     doWhenWindowReady(() {
       const initialSize = Size(1280, 720);
       // appWindow.minSize = initialSize;
@@ -60,9 +72,7 @@ class _MainWindowState extends ConsumerState<MainWindow> {
       backgroundColor: Colors.transparent,
       body: Column(
         children: [
-          (Platform.isWindows | Platform.isLinux | Platform.isMacOS)
-              ? const WindowTopBar()
-              : Container(), // Use the new WindowTopBar widget
+          (UniversalPlatform.isDesktop) ? const WindowTopBar() : Container(),
           Flexible(
             child: KeyboardSizeProvider(
               child: MaterialApp.router(

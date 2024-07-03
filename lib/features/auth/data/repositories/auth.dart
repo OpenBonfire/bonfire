@@ -4,10 +4,10 @@ import 'package:bonfire/features/auth/data/headers.dart';
 import 'package:bonfire/features/auth/data/repositories/discord_auth.dart';
 import 'package:bonfire/features/auth/models/auth.dart';
 import 'package:bonfire/features/me/controllers/settings.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:firebridge/firebridge.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:hive/hive.dart';
 
 part 'auth.g.dart';
 
@@ -69,13 +69,28 @@ class Auth extends _$Auth {
 
   /// Authenticate client with Discord [token]
   Future<AuthResponse> loginWithToken(String token) async {
+    AuthResponse? response;
+
+    // client = await Nyxx.connectGateway(
+    //   token,
+    //   GatewayIntents.all,
+    //   // options: GatewayClientOptions(
+    //   //     //   plugins: [
+    //   //     //   Logging(logLevel: Level.OFF), /*IgnoreExceptions()*/
+    //   //     // ]
+    //   //     ),
+    // );
+    // print("logging in");
     var newClient = await Nyxx.connectGateway(token, GatewayIntents.all,
-        options: GatewayClientOptions(
-            plugins: [Logging(logLevel: Level.SEVERE), IgnoreExceptions()]));
+        options: GatewayClientOptions(plugins: [
+          Logging(logLevel: Level.OFF), /*IgnoreExceptions()*/
+        ]));
+
     client = newClient;
 
     // This is how we save login information
-    GetStorage().write('token', token);
+    var box = await Hive.openBox('auth');
+    box.put('token', token);
 
     // Save and notify state
     authResponse = AuthUser(token: token, client: client!);
@@ -95,14 +110,9 @@ class Auth extends _$Auth {
           .setReadStates(event.readStates);
     });
 
-    client!.gateway.shards[0].done.then((value) {
-      // not sure what to do with this, but it works so yeah
-      // essentially, it signals shard disconnect
-      print("Shard 0 done!");
-      state = authResponse;
-    });
+    response = authResponse;
 
-    return authResponse!;
+    return response!;
   }
 
   /// Submit captcha with [captchaKey] and [captchaToken]

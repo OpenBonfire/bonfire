@@ -4,8 +4,8 @@ import 'package:bonfire/features/auth/models/auth.dart';
 import 'package:bonfire/features/auth/views/credentials.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hive/hive.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
@@ -18,13 +18,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   @override
   void initState() {
     super.initState();
-    String? token = GetStorage().read('token');
-    if (token != null) {
-      print("reading token...");
-      ref.read(authProvider.notifier).loginWithToken(token);
-    } else {
-      print("no token found");
-    }
+    var auth = Hive.openBox('auth');
+
+    auth.then((value) {
+      var token = value.get('token');
+      if (token != null) {
+        ref.read(authProvider.notifier).loginWithToken(token);
+      }
+    });
   }
 
   @override
@@ -36,8 +37,13 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         context.go('/mfa');
       });
     } else if (auth is AuthUser) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        context.go('/channels/137425738524524555/151897362472763392');
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
+        // yep, I did this.
+        var lastLocation = Hive.box("last-location");
+        String? guildId = lastLocation.get("guildId");
+        String? channelId = lastLocation.get("channelId");
+
+        context.go('/channels/${guildId ?? 0}/${channelId ?? 0}');
       });
     }
 

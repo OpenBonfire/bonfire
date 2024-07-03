@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hive/hive.dart';
 
 class Sidebar extends ConsumerStatefulWidget {
   final Snowflake guildId;
@@ -325,8 +326,14 @@ class _SidebarIconState extends ConsumerState<SidebarIcon> {
                       widget.guild.manager
                           .get(widget.guild.id)
                           .then((Guild guild) async {
-                        GoRouter.of(context).go(
-                            '/channels/${widget.guild.id}/${guild.rulesChannelId ?? (await guild.fetchChannels()).first.id.value}');
+                        var lastGuildChannels = Hive.box("last-guild-channels");
+                        var channelId =
+                            lastGuildChannels.get(guild.id.value.toString()) ??
+                                guild.rulesChannelId ??
+                                (await guild.fetchChannels()).first.id.value;
+
+                        GoRouter.of(context)
+                            .go('/channels/${widget.guild.id}/$channelId');
                       });
                     },
                     // stupid splash disable thing

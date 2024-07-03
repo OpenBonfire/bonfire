@@ -19,7 +19,7 @@ dependencies:
   firebridge:
     git:
       url: https://github.com/OpenBonfire/firebridge
-      ref: aacc30096d1bbc23e9b1c0db1cab16e07d0f965c
+      ref: d89b36305d2eae08dfb10b4aaae7bfd192d27743
 
   markdown_viewer:
     git:
@@ -29,7 +29,6 @@ dependencies:
   google_fonts: ^6.2.1
   flutter_riverpod: ^2.5.1
   riverpod_annotation: ^2.3.5
-  get_storage: ^2.1.1
   signals: ^5.0.0
 
   flutter_cache_manager: ^3.3.1
@@ -71,6 +70,8 @@ dependencies:
   universal_platform: ^1.1.0
   dynamic_height_grid_view: ^0.0.4
   loading_animation_widget: ^1.2.1
+  hive: ^2.2.3
+  universal_io: ^2.2.2
 
 dependency_overrides:
   webview_flutter_platform_interface: ^2.4.0
@@ -80,7 +81,7 @@ dependency_overrides:
   firebridge:
     git:
       url: https://github.com/OpenBonfire/firebridge
-      ref: aacc30096d1bbc23e9b1c0db1cab16e07d0f965c
+      ref: d89b36305d2eae08dfb10b4aaae7bfd192d27743
 
   media_kit:
     git:

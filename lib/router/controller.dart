@@ -6,6 +6,7 @@ import 'package:bonfire/features/auth/views/login.dart';
 import 'package:bonfire/features/auth/views/mfa.dart';
 import 'package:bonfire/features/overview/views/navigation_frame.dart';
 import 'package:bonfire/features/overview/views/home.dart';
+import 'package:hive/hive.dart';
 
 final routerController = GoRouter(
   routes: [
@@ -51,6 +52,9 @@ final routerController = GoRouter(
               builder: (context, state) {
                 final guildId = state.pathParameters['guildId'] ?? '@me';
                 final channelId = state.pathParameters['channelId']!;
+                var lastLocation = Hive.box("last-location");
+                lastLocation.put("guildId", guildId);
+                lastLocation.put("channelId", channelId);
                 return GuildMessagingOverview(
                   guildId: Snowflake.parse(guildId),
                   channelId: Snowflake.parse(channelId),

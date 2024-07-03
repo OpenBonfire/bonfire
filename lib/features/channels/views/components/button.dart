@@ -8,6 +8,7 @@ import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hive/hive.dart';
 
 class ChannelButton extends ConsumerStatefulWidget {
   final Snowflake currentGuildId;
@@ -25,6 +26,7 @@ class ChannelButton extends ConsumerStatefulWidget {
 }
 
 class _ChannelButtonState extends ConsumerState<ChannelButton> {
+  var lastGuildChannels = Hive.box("last-guild-channels");
   Map<int, Widget> categoryMap = {};
 
   @override
@@ -75,6 +77,9 @@ class _ChannelButtonState extends ConsumerState<ChannelButton> {
                       : Colors.transparent),
               onPressed: () {
                 // route to channel
+
+                lastGuildChannels.put(widget.currentGuildId.toString(),
+                    widget.channel.id.toString());
                 GoRouter.of(context).go(
                     '/channels/${widget.currentGuildId}/${widget.channel.id}');
 
