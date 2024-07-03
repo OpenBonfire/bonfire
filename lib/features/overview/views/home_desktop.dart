@@ -32,11 +32,9 @@ class _HomeState extends ConsumerState<HomeDesktop> {
         body: Row(
           children: [
             Sidebar(
-              key: const Key('sidebar'),
               guildId: widget.guildId,
             ),
             SizedBox(
-              key: Key('channels-${widget.guildId}'),
               width: 300,
               child: ChannelsList(
                 guildId: widget.guildId,
@@ -45,7 +43,6 @@ class _HomeState extends ConsumerState<HomeDesktop> {
             ),
             Flexible(
               child: MessageView(
-                // key: Key('messages-${widget.guildId}'),
                 guildId: widget.guildId,
                 channelId: widget.channelId,
               ),

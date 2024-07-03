@@ -52,6 +52,7 @@ class Messages extends _$Messages {
     Snowflake? before,
     int? count,
   }) async {
+
     if (user is AuthUser) {
       var channel =
           ref.watch(channelControllerProvider(channelId)).value as GuildChannel;
@@ -84,7 +85,7 @@ class Messages extends _$Messages {
       if (before == null) {
         messageCache[channel.id] = messages.toList();
       } else {
-        messageCache[channel.id]!.addAll(messages);
+        messageCache[channel.id]!.addAll(messages.toList());
       }
 
       return messages;

@@ -58,7 +58,6 @@ class _HomeState extends ConsumerState<HomeMobile> {
                 child: Row(
                   children: [
                     Sidebar(
-                      key: const Key('sidebar'),
                       guildId: widget.guildId,
                     ),
                     Expanded(

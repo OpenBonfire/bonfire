@@ -72,6 +72,7 @@ dependencies:
   loading_animation_widget: ^1.2.1
   hive: ^2.2.3
   universal_io: ^2.2.2
+  routemaster: ^1.0.1
 
 dependency_overrides:
   webview_flutter_platform_interface: ^2.4.0

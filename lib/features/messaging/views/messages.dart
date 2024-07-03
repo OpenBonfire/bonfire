@@ -10,6 +10,7 @@ import 'package:bonfire/theme/theme.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 String getChannelName(Channel channel) {
   return (channel as GuildChannel).name;
@@ -33,10 +34,16 @@ class _MessageViewState extends ConsumerState<MessageView> {
   Logger logger = Logger("MessageView");
   bool _isLoadingMore = false;
 
+  void _routeListener() {
+    // if you want to listen to the route for whatever reason.
+    // ref.invalidate(messagesProvider(widget.guildId, widget.channelId));
+  }
+
   @override
   void initState() {
     super.initState();
     _scrollController.addListener(_scrollListener);
+    // GoRouter.of(context).routerDelegate.addListener(_routeListener);
   }
 
   @override
@@ -80,12 +87,14 @@ class _MessageViewState extends ConsumerState<MessageView> {
   @override
   Widget build(BuildContext context) {
     var messageOutput =
-        ref.read(messagesProvider(widget.guildId, widget.channelId));
+        ref.watch(messagesProvider(widget.guildId, widget.channelId));
 
     messageOutput.whenData(
       (data) {
         if (data.isNotEmpty) {
           // lastMessage = data.last;
+          // print("NEW OUTPUT:");
+          // print(data.first.content);
           loadedMessages = data;
         }
       },

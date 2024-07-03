@@ -3,10 +3,12 @@ import 'package:bonfire/features/channels/repositories/channel_members.dart';
 import 'package:bonfire/features/guild/controllers/guild.dart';
 import 'package:bonfire/features/members/views/components/group.dart';
 import 'package:bonfire/features/members/views/components/member_card.dart';
+import 'package:bonfire/shared/models/pair.dart';
 import 'package:bonfire/theme/theme.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 class MemberList extends ConsumerStatefulWidget {
   final Snowflake guildId;
@@ -104,17 +106,33 @@ class MemberScrollView extends ConsumerStatefulWidget {
 
 class MemberScrollViewState extends ConsumerState<MemberScrollView> {
   @override
+  void initState() {
+    super.initState();
+    ref.read(channelMembersProvider.notifier).setRoute(
+        widget.guild.id, widget.channel.id);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+
+
     var memberListPair = ref
-        .watch(channelMembersProvider(widget.guild.id, widget.channel.id))
+        .watch(channelMembersProvider)
         .valueOrNull;
-    var groupList = memberListPair?.first ?? [];
+
+    var groupList = memberListPair?.first  ?? [];
     var memberList = memberListPair?.second ?? [];
 
     return SizedBox(
       child: ListView.builder(
         itemCount: memberList.length,
         itemBuilder: (context, index) {
+          // I'm so sorry
           if (memberList[index].toString().contains("Member(")) {
             var members = memberList[index] as List;
             return Column(
