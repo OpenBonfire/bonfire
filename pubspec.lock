@@ -485,11 +485,11 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: d89b36305d2eae08dfb10b4aaae7bfd192d27743
-      resolved-ref: d89b36305d2eae08dfb10b4aaae7bfd192d27743
+      ref: a35289d13598f8f7dad73d4f21261e0a94873bec
+      resolved-ref: a35289d13598f8f7dad73d4f21261e0a94873bec
       url: "https://github.com/OpenBonfire/firebridge"
     source: git
-    version: "6.2.13"
+    version: "6.2.14"
   firebridge_extensions:
     dependency: "direct main"
     description:

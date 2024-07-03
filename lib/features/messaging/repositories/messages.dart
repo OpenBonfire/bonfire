@@ -140,14 +140,11 @@ class Messages extends _$Messages {
   }
 
   Future<List<Message>> fetchMessagesBefore(Message message) async {
-    // var delta = DateTime.now().difference(lastFetchTime);
-    // if (delta.inMilliseconds < 500) return;
-    // lastFetchTime = DateTime.now();
     Channel channel =
         ref.watch(channelControllerProvider(channelId)).valueOrNull!;
     List<Message> messages = [];
 
-    messages.addAll(messageCache[channel.id]!);
+    messages.addAll(messageCache[channel.id] ?? []);
     messages.addAll(await getMessages(before: message.id));
 
     if (message.channel.id == channel.id) {
