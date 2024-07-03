@@ -8,6 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hive/hive.dart';
+import 'package:flutter/services.dart';
 
 class Sidebar extends ConsumerStatefulWidget {
   final Snowflake guildId;
@@ -149,6 +150,8 @@ class _GuildFolderWidgetState extends State<GuildFolderWidget>
             cursor: SystemMouseCursors.click,
             child: GestureDetector(
               onTap: () {
+                HapticFeedback.mediumImpact();
+
                 setState(() {
                   _isExpanded = !_isExpanded;
                   if (_isExpanded) {
@@ -323,6 +326,7 @@ class _SidebarIconState extends ConsumerState<SidebarIcon> {
             child: widget.isClickable
                 ? InkWell(
                     onTap: () {
+                      HapticFeedback.mediumImpact();
                       widget.guild.manager
                           .get(widget.guild.id)
                           .then((Guild guild) async {

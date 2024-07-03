@@ -15,7 +15,7 @@ import 'package:http/http.dart' as http;
 part 'messages.g.dart';
 
 /// Message provider for fetching messages from the Discord API
-@Riverpod(keepAlive: true)
+@Riverpod(keepAlive: false)
 class Messages extends _$Messages {
   AuthUser? user;
   bool listenerRunning = false;
