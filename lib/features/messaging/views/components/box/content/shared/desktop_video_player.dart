@@ -45,6 +45,7 @@ class VideoAttachmentState extends State<DesktopVideoPlayer> {
         minWidth: 300,
         child: Video(
           controller: controller!,
+          // controls: CupertinoVideoControls,
           fit: BoxFit.cover,
         ),
       ),
