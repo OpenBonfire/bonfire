@@ -1,4 +1,3 @@
-import 'package:bonfire/features/auth/data/repositories/auth.dart';
 import 'package:bonfire/features/channels/repositories/channels.dart';
 import 'package:bonfire/features/channels/views/components/button.dart';
 import 'package:bonfire/features/channels/views/components/category.dart';

@@ -35,29 +35,39 @@ final routerController = GoRouter(
             ),
             GoRoute(
               path: 'channels/@me',
-              builder: (context, state) {
-                // return messages (todo)
-                return const MessageOverview();
+              pageBuilder: (context, state) {
+                return buildPageWithNoTransition(
+                  context: context,
+                  state: state,
+                  child: const MessageOverview(),
+                );
               },
             ),
             GoRoute(
               path: 'channels/@me/:channelId',
-              builder: (context, state) {
-                // return messages (todo)
-                return const Placeholder();
+              pageBuilder: (context, state) {
+                return buildPageWithNoTransition(
+                  context: context,
+                  state: state,
+                  child: const Placeholder(),
+                );
               },
             ),
             GoRoute(
               path: 'channels/:guildId/:channelId',
-              builder: (context, state) {
+              pageBuilder: (context, state) {
                 final guildId = state.pathParameters['guildId'] ?? '@me';
                 final channelId = state.pathParameters['channelId']!;
                 var lastLocation = Hive.box("last-location");
                 lastLocation.put("guildId", guildId);
                 lastLocation.put("channelId", channelId);
-                return GuildMessagingOverview(
-                  guildId: Snowflake.parse(guildId),
-                  channelId: Snowflake.parse(channelId),
+                return buildPageWithNoTransition(
+                  context: context,
+                  state: state,
+                  child: GuildMessagingOverview(
+                    guildId: Snowflake.parse(guildId),
+                    channelId: Snowflake.parse(channelId),
+                  ),
                 );
               },
             ),

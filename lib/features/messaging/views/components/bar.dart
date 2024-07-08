@@ -4,6 +4,7 @@ import 'package:bonfire/theme/theme.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:universal_platform/universal_platform.dart';
 
 class MessageBar extends ConsumerStatefulWidget {
@@ -20,7 +21,7 @@ class _MessageBarState extends ConsumerState<MessageBar> {
   TextEditingController messageBarController = TextEditingController();
   FocusNode messageBarFocusNode = FocusNode();
 
-  Widget _messageBarIcon(Icon icon, void Function() onPressed,
+  Widget _messageBarIcon(SvgPicture icon, void Function() onPressed,
       {Color? backgroundColor}) {
     return Padding(
       padding: const EdgeInsets.all(8),
@@ -65,10 +66,10 @@ class _MessageBarState extends ConsumerState<MessageBar> {
       child: Row(
         children: [
           _messageBarIcon(
-            Icon(
-              Icons.add,
-              color:
-                  Theme.of(context).custom.colorTheme.messageBarActivatedIcon,
+            SvgPicture.asset(
+              "assets/icons/add.svg",
+              width: 24,
+              height: 24,
             ),
             () => print("add"),
           ),
@@ -109,10 +110,10 @@ class _MessageBarState extends ConsumerState<MessageBar> {
           ),
           (UniversalPlatform.isMobile)
               ? _messageBarIcon(
-                  const Icon(
-                    Icons.send,
-                    color: Colors.white,
-                    weight: 10,
+                  SvgPicture.asset(
+                    "assets/icons/send.svg",
+                    width: 24,
+                    height: 24,
                   ),
                   _sendMessage,
                   backgroundColor: Theme.of(context).custom.colorTheme.blurple,

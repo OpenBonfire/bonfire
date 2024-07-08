@@ -5,6 +5,7 @@ import 'package:bonfire/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebridge/firebridge.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hive/hive.dart';
 import 'package:flutter/services.dart';
@@ -58,19 +59,25 @@ class _SidebarState extends ConsumerState<Sidebar> {
                   if (!_scrollController.hasClients) return;
                   _scrollController.position.context.setIgnorePointer(true);
                 },
-                child: (guildFolders != null)
-                    ? ListView.builder(
-                        controller: _scrollController,
-                        itemCount: guildFolders.length,
-                        itemBuilder: (context, index) {
-                          return GuildFolderWidget(
-                            guildFolder: guildFolders[index],
+                child: ListView(
+                  controller: _scrollController,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 2),
+                      child: MessagesIcon(
+                        selected: widget.guildId ==
+                            Snowflake
+                                .zero, // Assuming Snowflake.zero represents the messages view
+                      ),
+                    ),
+                    if (guildFolders != null)
+                      ...guildFolders.map((folder) => GuildFolderWidget(
+                            guildFolder: folder,
                             guildList: guildList,
                             selectedGuildId: widget.guildId,
-                          );
-                        },
-                      )
-                    : const SizedBox(),
+                          )),
+                  ],
+                ),
               ),
             ),
           ),
@@ -272,7 +279,61 @@ class FolderIcon extends StatelessWidget {
   }
 }
 
-// keepalive
+class MessagesIcon extends StatelessWidget {
+  final bool selected;
+
+  const MessagesIcon({super.key, this.selected = false});
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        Center(
+          child: SizedBox(
+            width: 47,
+            height: 47,
+            child: InkWell(
+              onTap: () {
+                HapticFeedback.mediumImpact();
+                GoRouter.of(context).go('/channels/@me');
+              },
+              splashFactory: NoSplash.splashFactory,
+              splashColor: Colors.transparent,
+              highlightColor: Colors.transparent,
+              child: ClipRRect(
+                borderRadius:
+                    BorderRadius.all(Radius.circular(selected ? 15 : 100)),
+                child: Transform.scale(
+                  scale: 0.4,
+                  child: SvgPicture.asset(
+                    'assets/icons/dms.svg',
+                    fit: BoxFit.contain,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+        if (selected)
+          Positioned(
+            left: 0,
+            child: Container(
+              width: 4,
+              height: 40,
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                  bottomRight: Radius.circular(8),
+                  topRight: Radius.circular(8),
+                ),
+              ),
+            ),
+          )
+      ],
+    );
+  }
+}
 
 class SidebarIcon extends ConsumerStatefulWidget {
   final bool selected;
