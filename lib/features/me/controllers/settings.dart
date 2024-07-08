@@ -62,3 +62,17 @@ class UserStatusState extends _$UserStatusState {
     state = userStatus;
   }
 }
+
+@Riverpod(keepAlive: true)
+class CustomStatusState extends _$CustomStatusState {
+  AuthUser? user;
+
+  @override
+  CustomStatus? build() {
+    return null;
+  }
+
+  void setCustomStatus(CustomStatus userStatus) {
+    state = userStatus;
+  }
+}

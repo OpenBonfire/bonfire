@@ -70,5 +70,21 @@ final userStatusStateProvider =
 );
 
 typedef _$UserStatusState = Notifier<UserStatus?>;
+String _$customStatusStateHash() => r'0714d50f94a66471c2715255ae77ebef99bc1641';
+
+/// See also [CustomStatusState].
+@ProviderFor(CustomStatusState)
+final customStatusStateProvider =
+    NotifierProvider<CustomStatusState, CustomStatus?>.internal(
+  CustomStatusState.new,
+  name: r'customStatusStateProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$customStatusStateHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef _$CustomStatusState = Notifier<CustomStatus?>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

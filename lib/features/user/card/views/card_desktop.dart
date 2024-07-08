@@ -22,6 +22,7 @@ class SelfUserCardState extends ConsumerState<UserCard> {
   Widget build(BuildContext context) {
     User? user = ref.watch(selfUserProvider).valueOrNull;
     UserStatus? status = ref.watch(userStatusStateProvider);
+    CustomStatus? customStatus = ref.watch(customStatusStateProvider);
 
     Uint8List? avatar;
     String name = "";
@@ -83,7 +84,7 @@ class SelfUserCardState extends ConsumerState<UserCard> {
                     ),
                   ),
                   Text(
-                    "Status placeholder :D",
+                    customStatus?.text ?? status?.value ?? "Offline",
                     style: GoogleFonts.publicSans(
                       color: Theme.of(context)
                           .custom

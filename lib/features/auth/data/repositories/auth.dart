@@ -99,6 +99,12 @@ class Auth extends _$Auth {
       ref
           .read(userStatusStateProvider.notifier)
           .setUserStatus(event.userSettings.status);
+
+      if (event.userSettings.customStatus != null) {
+        ref
+            .read(customStatusStateProvider.notifier)
+            .setCustomStatus(event.userSettings.customStatus!);
+      }
     });
 
     response = authResponse;
