@@ -8,10 +8,10 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:universal_platform/universal_platform.dart';
 
 class MessageBar extends ConsumerStatefulWidget {
-  final Guild guild;
+  final Snowflake guildId;
   final Channel channel;
 
-  const MessageBar({super.key, required this.guild, required this.channel});
+  const MessageBar({super.key, required this.guildId, required this.channel});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _MessageBarState();
@@ -43,7 +43,7 @@ class _MessageBarState extends ConsumerState<MessageBar> {
 
   _sendMessage() {
     ref
-        .read(messagesProvider(widget.guild.id, widget.channel.id).notifier)
+        .read(messagesProvider(widget.guildId, widget.channel.id).notifier)
         .sendMessage(widget.channel, messageBarController.text);
     messageBarController.text = "";
 

@@ -8,20 +8,21 @@ part 'member.g.dart';
 
 @Riverpod(keepAlive: true)
 Future<Member?> getMember(
-    GetMemberRef ref, Guild guild, Snowflake memberId) async {
+    GetMemberRef ref, Snowflake guildId, Snowflake memberId) async {
   var authOutput = ref.watch(authProvider.notifier).getAuth();
 
   if (authOutput is AuthUser) {
-    return await authOutput.client.guilds[guild.id].members.get(memberId);
+    return await authOutput.client.guilds[guildId].members.get(memberId);
   }
 }
 
 @riverpod
-Future<List<Role>?> getGuildRoles(GetGuildRolesRef ref, Guild guild) async {
+Future<List<Role>?> getGuildRoles(
+    GetGuildRolesRef ref, Snowflake guildId) async {
   var authOutput = ref.watch(authProvider.notifier).getAuth();
 
   if (authOutput is AuthUser) {
-    return await authOutput.client.guilds[guild.id].roles.list();
+    return await authOutput.client.guilds[guildId].roles.list();
   }
 }
 

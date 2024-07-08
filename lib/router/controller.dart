@@ -46,10 +46,15 @@ final routerController = GoRouter(
             GoRoute(
               path: 'channels/@me/:channelId',
               pageBuilder: (context, state) {
+                Snowflake? channelId;
+                if (state.pathParameters['channelId'] != null) {
+                  channelId =
+                      Snowflake.parse(state.pathParameters['channelId']!);
+                }
                 return buildPageWithNoTransition(
                   context: context,
                   state: state,
-                  child: const Placeholder(),
+                  child: MessageOverview(channelId: channelId),
                 );
               },
             ),

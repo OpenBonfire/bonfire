@@ -6,7 +6,7 @@ part of 'member.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$getMemberHash() => r'7358205b585544a021a79aabad4a3ab3b75f4306';
+String _$getMemberHash() => r'872a632ee1cfc42f846999ae07dd364106002113';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -40,11 +40,11 @@ class GetMemberFamily extends Family<AsyncValue<Member?>> {
 
   /// See also [getMember].
   GetMemberProvider call(
-    Guild guild,
+    Snowflake guildId,
     Snowflake memberId,
   ) {
     return GetMemberProvider(
-      guild,
+      guildId,
       memberId,
     );
   }
@@ -54,7 +54,7 @@ class GetMemberFamily extends Family<AsyncValue<Member?>> {
     covariant GetMemberProvider provider,
   ) {
     return call(
-      provider.guild,
+      provider.guildId,
       provider.memberId,
     );
   }
@@ -78,12 +78,12 @@ class GetMemberFamily extends Family<AsyncValue<Member?>> {
 class GetMemberProvider extends FutureProvider<Member?> {
   /// See also [getMember].
   GetMemberProvider(
-    Guild guild,
+    Snowflake guildId,
     Snowflake memberId,
   ) : this._internal(
           (ref) => getMember(
             ref as GetMemberRef,
-            guild,
+            guildId,
             memberId,
           ),
           from: getMemberProvider,
@@ -94,7 +94,7 @@ class GetMemberProvider extends FutureProvider<Member?> {
                   : _$getMemberHash,
           dependencies: GetMemberFamily._dependencies,
           allTransitiveDependencies: GetMemberFamily._allTransitiveDependencies,
-          guild: guild,
+          guildId: guildId,
           memberId: memberId,
         );
 
@@ -105,11 +105,11 @@ class GetMemberProvider extends FutureProvider<Member?> {
     required super.allTransitiveDependencies,
     required super.debugGetCreateSourceHash,
     required super.from,
-    required this.guild,
+    required this.guildId,
     required this.memberId,
   }) : super.internal();
 
-  final Guild guild;
+  final Snowflake guildId;
   final Snowflake memberId;
 
   @override
@@ -125,7 +125,7 @@ class GetMemberProvider extends FutureProvider<Member?> {
         dependencies: null,
         allTransitiveDependencies: null,
         debugGetCreateSourceHash: null,
-        guild: guild,
+        guildId: guildId,
         memberId: memberId,
       ),
     );
@@ -139,14 +139,14 @@ class GetMemberProvider extends FutureProvider<Member?> {
   @override
   bool operator ==(Object other) {
     return other is GetMemberProvider &&
-        other.guild == guild &&
+        other.guildId == guildId &&
         other.memberId == memberId;
   }
 
   @override
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, guild.hashCode);
+    hash = _SystemHash.combine(hash, guildId.hashCode);
     hash = _SystemHash.combine(hash, memberId.hashCode);
 
     return _SystemHash.finish(hash);
@@ -154,8 +154,8 @@ class GetMemberProvider extends FutureProvider<Member?> {
 }
 
 mixin GetMemberRef on FutureProviderRef<Member?> {
-  /// The parameter `guild` of this provider.
-  Guild get guild;
+  /// The parameter `guildId` of this provider.
+  Snowflake get guildId;
 
   /// The parameter `memberId` of this provider.
   Snowflake get memberId;
@@ -166,12 +166,12 @@ class _GetMemberProviderElement extends FutureProviderElement<Member?>
   _GetMemberProviderElement(super.provider);
 
   @override
-  Guild get guild => (origin as GetMemberProvider).guild;
+  Snowflake get guildId => (origin as GetMemberProvider).guildId;
   @override
   Snowflake get memberId => (origin as GetMemberProvider).memberId;
 }
 
-String _$getGuildRolesHash() => r'a39e000952a51c3092a73682e60a28e05941573d';
+String _$getGuildRolesHash() => r'02f52758380d342befe92d584d3d78f250552951';
 
 /// See also [getGuildRoles].
 @ProviderFor(getGuildRoles)
@@ -184,10 +184,10 @@ class GetGuildRolesFamily extends Family<AsyncValue<List<Role>?>> {
 
   /// See also [getGuildRoles].
   GetGuildRolesProvider call(
-    Guild guild,
+    Snowflake guildId,
   ) {
     return GetGuildRolesProvider(
-      guild,
+      guildId,
     );
   }
 
@@ -196,7 +196,7 @@ class GetGuildRolesFamily extends Family<AsyncValue<List<Role>?>> {
     covariant GetGuildRolesProvider provider,
   ) {
     return call(
-      provider.guild,
+      provider.guildId,
     );
   }
 
@@ -219,11 +219,11 @@ class GetGuildRolesFamily extends Family<AsyncValue<List<Role>?>> {
 class GetGuildRolesProvider extends AutoDisposeFutureProvider<List<Role>?> {
   /// See also [getGuildRoles].
   GetGuildRolesProvider(
-    Guild guild,
+    Snowflake guildId,
   ) : this._internal(
           (ref) => getGuildRoles(
             ref as GetGuildRolesRef,
-            guild,
+            guildId,
           ),
           from: getGuildRolesProvider,
           name: r'getGuildRolesProvider',
@@ -234,7 +234,7 @@ class GetGuildRolesProvider extends AutoDisposeFutureProvider<List<Role>?> {
           dependencies: GetGuildRolesFamily._dependencies,
           allTransitiveDependencies:
               GetGuildRolesFamily._allTransitiveDependencies,
-          guild: guild,
+          guildId: guildId,
         );
 
   GetGuildRolesProvider._internal(
@@ -244,10 +244,10 @@ class GetGuildRolesProvider extends AutoDisposeFutureProvider<List<Role>?> {
     required super.allTransitiveDependencies,
     required super.debugGetCreateSourceHash,
     required super.from,
-    required this.guild,
+    required this.guildId,
   }) : super.internal();
 
-  final Guild guild;
+  final Snowflake guildId;
 
   @override
   Override overrideWith(
@@ -262,7 +262,7 @@ class GetGuildRolesProvider extends AutoDisposeFutureProvider<List<Role>?> {
         dependencies: null,
         allTransitiveDependencies: null,
         debugGetCreateSourceHash: null,
-        guild: guild,
+        guildId: guildId,
       ),
     );
   }
@@ -274,21 +274,21 @@ class GetGuildRolesProvider extends AutoDisposeFutureProvider<List<Role>?> {
 
   @override
   bool operator ==(Object other) {
-    return other is GetGuildRolesProvider && other.guild == guild;
+    return other is GetGuildRolesProvider && other.guildId == guildId;
   }
 
   @override
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, guild.hashCode);
+    hash = _SystemHash.combine(hash, guildId.hashCode);
 
     return _SystemHash.finish(hash);
   }
 }
 
 mixin GetGuildRolesRef on AutoDisposeFutureProviderRef<List<Role>?> {
-  /// The parameter `guild` of this provider.
-  Guild get guild;
+  /// The parameter `guildId` of this provider.
+  Snowflake get guildId;
 }
 
 class _GetGuildRolesProviderElement
@@ -297,7 +297,7 @@ class _GetGuildRolesProviderElement
   _GetGuildRolesProviderElement(super.provider);
 
   @override
-  Guild get guild => (origin as GetGuildRolesProvider).guild;
+  Snowflake get guildId => (origin as GetGuildRolesProvider).guildId;
 }
 
 String _$getRoleHash() => r'28dd347c073d347d6584ca45169117daa0a7075f';

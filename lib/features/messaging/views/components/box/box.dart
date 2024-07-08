@@ -16,10 +16,10 @@ import 'package:url_launcher/url_launcher.dart';
 class MessageBox extends ConsumerStatefulWidget {
   final Message? message;
   final bool showSenderInfo;
-  final Guild guild;
+  final Snowflake guildId;
   final Channel channel;
   const MessageBox({
-    required this.guild,
+    required this.guildId,
     required this.channel,
     super.key,
     required this.message,
@@ -64,9 +64,9 @@ class _MessageBoxState extends ConsumerState<MessageBox> {
     Color textColor = Colors.white;
 
     var member =
-        ref.watch(getMemberProvider(widget.guild, widget.message!.author.id));
+        ref.watch(getMemberProvider(widget.guildId, widget.message!.author.id));
     var roles =
-        ref.watch(getGuildRolesProvider(widget.guild)).valueOrNull ?? [];
+        ref.watch(getGuildRolesProvider(widget.guildId)).valueOrNull ?? [];
 
     String? roleIconUrl;
 
@@ -91,7 +91,7 @@ class _MessageBoxState extends ConsumerState<MessageBox> {
                   Padding(
                     padding: const EdgeInsets.only(left: 0),
                     child: MessageReply(
-                      guild: widget.guild,
+                      guildId: widget.guildId,
                       channel: widget.channel,
                       parentMessage: widget.message!,
                     ),
@@ -121,7 +121,7 @@ class _MessageBoxState extends ConsumerState<MessageBox> {
                   ? Avatar(
                       // key: Key(widget.message!.author.avatarHash ?? ""),
                       author: widget.message!.author,
-                      guildId: widget.guild.id,
+                      guildId: widget.guildId,
                       channelId: widget.channel.id,
                     )
                   : const Padding(

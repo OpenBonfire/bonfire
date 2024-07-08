@@ -46,11 +46,15 @@ class _BarWidgetState extends ConsumerState<NavigationBarWidget> {
     String guildId = lastLocation.get("guildId") ?? '0';
     String channelId = lastLocation.get("channelId") ?? '0';
 
-    var _seg = _selectedPath!.pathSegments;
+    var _seg = _selectedPath?.pathSegments;
 
-    bool isHome = (_seg[0] == 'channels') && (_seg[1] != '@me');
-    bool isMessages = _seg[0] == 'channels' && _seg[1] == '@me';
-    bool isNotifications = _seg[0] == 'overview' && _seg[1] == 'notifications';
+    bool? isHome;
+    bool? isMessages;
+    bool? isNotifications;
+
+    isHome = (_seg?[0] == 'channels') && (_seg?[1] != '@me');
+    isMessages = _seg?[0] == 'channels' && _seg?[1] == '@me';
+    isNotifications = _seg?[0] == 'overview' && _seg?[1] == 'notifications';
 
     return Column(
       children: [

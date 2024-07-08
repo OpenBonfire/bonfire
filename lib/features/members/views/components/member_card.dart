@@ -25,7 +25,7 @@ class _MemberCardState extends ConsumerState<MemberCard> {
   @override
   Widget build(BuildContext context) {
     var roles =
-        ref.watch(getGuildRolesProvider(widget.guild)).valueOrNull ?? [];
+        ref.watch(getGuildRolesProvider(widget.guild.id)).valueOrNull ?? [];
 
     return Container(
         height: 55,

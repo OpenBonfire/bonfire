@@ -25,52 +25,45 @@ class _MessageOverviewState extends ConsumerState<PrivateMessages> {
     var dms = ref.watch(privateMessageHistoryProvider).reversed.toList();
 
     return Scaffold(
-      body: Row(
-        children: [
-          const Sidebar(guildId: Snowflake.zero),
-          Expanded(
-            child: Padding(
-                padding: EdgeInsets.only(
-                    left: 8, top: topPadding, bottom: bottomPadding),
-                child: SizedBox(
-                    width: double.infinity,
-                    child: Container(
-                        decoration: BoxDecoration(
-                            color: Theme.of(context)
-                                .custom
-                                .colorTheme
-                                .channelListBackground,
-                            borderRadius: const BorderRadius.only(
-                              topLeft: Radius.circular(24),
-                              topRight: Radius.circular(8),
-                              bottomLeft: Radius.circular(24),
-                            ),
-                            border: Border(
-                                bottom: BorderSide(
-                                    color: Theme.of(context)
-                                        .custom
-                                        .colorTheme
-                                        .foreground,
-                                    width: 1.0))),
-                        child: Column(
-                          children: [
-                            const OverviewCard(),
-                            Expanded(
-                              child: ListView.builder(
-                                padding: EdgeInsets.zero,
-                                itemCount: dms.length,
-                                itemBuilder: (context, index) {
-                                  return DirectMessageMember(
-                                    privateChannel: dms[index],
-                                  );
-                                },
-                              ),
-                            ),
-                          ],
-                        )))),
-          ),
-        ],
-      ),
+      body: Padding(
+          padding:
+              EdgeInsets.only(left: 8, top: topPadding, bottom: bottomPadding),
+          child: SizedBox(
+              width: double.infinity,
+              child: Container(
+                  decoration: BoxDecoration(
+                      color: Theme.of(context)
+                          .custom
+                          .colorTheme
+                          .channelListBackground,
+                      borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(24),
+                        topRight: Radius.circular(8),
+                        bottomLeft: Radius.circular(24),
+                      ),
+                      border: Border(
+                          bottom: BorderSide(
+                              color: Theme.of(context)
+                                  .custom
+                                  .colorTheme
+                                  .foreground,
+                              width: 1.0))),
+                  child: Column(
+                    children: [
+                      const OverviewCard(),
+                      Expanded(
+                        child: ListView.builder(
+                          padding: EdgeInsets.zero,
+                          itemCount: dms.length,
+                          itemBuilder: (context, index) {
+                            return DirectMessageMember(
+                              privateChannel: dms[index],
+                            );
+                          },
+                        ),
+                      ),
+                    ],
+                  )))),
     );
   }
 }

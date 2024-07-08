@@ -10,9 +10,11 @@ import 'package:bonfire/theme/theme.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 
 String getChannelName(Channel channel) {
+  if (channel is DmChannel) {
+    return "placeholder name";
+  }
   return (channel as GuildChannel).name;
 }
 
@@ -89,14 +91,21 @@ class _MessageViewState extends ConsumerState<MessageView> {
     var messageOutput =
         ref.watch(messagesProvider(widget.guildId, widget.channelId));
 
-    messageOutput.whenData(
-      (data) {
-        if (data.isNotEmpty) {
-          // lastMessage = data.last;
-          // print("NEW OUTPUT:");
-          // print(data.first.content);
-          loadedMessages = data;
+    messageOutput.when(
+      data: (messages) {
+        if (messages.isNotEmpty) {
+          loadedMessages = messages;
         }
+      },
+      loading: () {
+        loadedMessages = [];
+      },
+      error: (error, stack) {
+        print("errored!");
+        print(stack);
+        print(error);
+
+        loadedMessages = [];
       },
     );
 
@@ -109,10 +118,13 @@ class _MessageViewState extends ConsumerState<MessageView> {
     Guild? guild =
         ref.watch(guildControllerProvider(widget.guildId)).valueOrNull;
 
-    if (channel == null || guild == null) {
+    if (channel == null) {
+      // if (guild == null && (channel is! DmChannel)) {
+      //   print("nullity...");
       return const Center(
         child: CircularProgressIndicator(),
       );
+      // }
     }
 
     channelName = getChannelName(channel);
@@ -204,7 +216,7 @@ class _MessageViewState extends ConsumerState<MessageView> {
 
                 MessageBox box = MessageBox(
                   key: ValueKey(loadedMessages[index].id.value.toString()),
-                  guild: guild,
+                  guildId: guild?.id ?? Snowflake.zero,
                   channel: channel,
                   message: loadedMessages[index],
                   showSenderInfo: !showAuthor,
@@ -223,7 +235,7 @@ class _MessageViewState extends ConsumerState<MessageView> {
               },
             ),
           ),
-          MessageBar(guild: guild, channel: channel),
+          MessageBar(guildId: guild?.id ?? Snowflake.zero, channel: channel),
           SizedBox(
             height: MediaQuery.of(context).padding.bottom,
           ),

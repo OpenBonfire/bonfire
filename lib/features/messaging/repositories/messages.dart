@@ -52,30 +52,33 @@ class Messages extends _$Messages {
     Snowflake? before,
     int? count,
   }) async {
-
     if (user is AuthUser) {
       var channel =
-          ref.watch(channelControllerProvider(channelId)).value as GuildChannel;
+          ref.watch(channelControllerProvider(channelId)).value as Channel;
 
-      var guild = ref.watch(guildControllerProvider(guildId)).value!;
+      Guild? guild;
+      Member? selfMember;
 
-      var selfMember = await guild.members.get(user!.client.user.id);
-      var permissions = await channel.computePermissionsFor(selfMember);
+      if (channel is GuildChannel) {
+        guild = ref.watch(guildControllerProvider(guildId)).value;
+        selfMember = await guild!.members.get(user!.client.user.id);
+        var permissions = await channel.computePermissionsFor(selfMember);
 
-      if (permissions.canReadMessageHistory == false) {
-        // I think there's still another permission we're missing here...
-        // It ocassionally still errors
-        print(
-            "Error fetching messages in channel ${channel.id}, likely do not have access to channel bozo!");
+        if (permissions.canReadMessageHistory == false) {
+          // I think there's still another permission we're missing here...
+          // It ocassionally still errors
+          print(
+              "Error fetching messages in channel ${channel.id}, likely do not have access to channel bozo!");
 
-        return [];
-      }
+          return [];
+        }
 
-      if (channel is! TextChannel) {
-        print(
-            "Error fetching messages in channel ${channel.id}, not a text channel");
+        if (channel is! TextChannel) {
+          print(
+              "Error fetching messages in channel ${channel.id}, not a text channel");
 
-        return [];
+          return [];
+        }
       }
 
       var messages = await (channel as TextChannel)
