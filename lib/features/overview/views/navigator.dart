@@ -5,6 +5,7 @@ import 'package:bonfire/features/overview/views/overlapping_panels.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hive/hive.dart';
 
 class NavigationBarWidget extends ConsumerStatefulWidget {
   const NavigationBarWidget({super.key});
@@ -15,75 +16,83 @@ class NavigationBarWidget extends ConsumerStatefulWidget {
 
 class _BarWidgetState extends ConsumerState<NavigationBarWidget> {
   bool visible = false;
+  Uri? _selectedPath;
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _updateSelectedPath();
+      GoRouter.of(context).routerDelegate.addListener(_updateSelectedPath);
+    });
+  }
+
+  @override
+  void dispose() {
+    GoRouter.of(context).routerDelegate.removeListener(_updateSelectedPath);
+    super.dispose();
+  }
+
+  void _updateSelectedPath() {
+    final Uri currentLocation =
+        GoRouter.of(context).routeInformationProvider.value.uri;
+    setState(() {
+      _selectedPath = currentLocation;
+    });
   }
 
   Widget barComponent() {
+    var lastLocation = Hive.box("last-location");
+    String guildId = lastLocation.get("guildId") ?? '0';
+    String channelId = lastLocation.get("channelId") ?? '0';
+
+    var _seg = _selectedPath!.pathSegments;
+
+    bool isHome = (_seg[0] == 'channels') && (_seg[1] != '@me');
+    bool isMessages = _seg[0] == 'channels' && _seg[1] == '@me';
+    bool isNotifications = _seg[0] == 'overview' && _seg[1] == 'notifications';
+
     return Column(
       children: [
         Container(
-            decoration: BoxDecoration(
-              color: Theme.of(context).custom.colorTheme.navbarBackground,
-              border: Border(
-                  top: BorderSide(
+          decoration: BoxDecoration(
+            color: Theme.of(context).custom.colorTheme.navbarBackground,
+            border: Border(
+              top: BorderSide(
                 color: Theme.of(context).custom.colorTheme.foreground,
                 width: 1,
-              )),
-            ),
-            height: 55,
-            child: Padding(
-              padding: const EdgeInsets.only(top: 10, left: 18, right: 18),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  NavigatorIcon(
-                      path: '/channels',
-                      icon: SvgPicture.asset(
-                        'assets/icons/home.svg',
-                        colorFilter: ColorFilter.mode(
-                          Theme.of(context)
-                              .custom
-                              .colorTheme
-                              .navbarIconSelected,
-                          BlendMode.srcIn,
-                        ),
-                        height: 25,
-                      ),
-                      label: 'Home'),
-                  NavigatorIcon(
-                      path: '/channels/@me',
-                      icon: SvgPicture.asset(
-                        'assets/icons/messages.svg',
-                        colorFilter: ColorFilter.mode(
-                          Theme.of(context)
-                              .custom
-                              .colorTheme
-                              .navbarIconSelected,
-                          BlendMode.srcIn,
-                        ),
-                        height: 25,
-                      ),
-                      label: 'Messages'),
-                  NavigatorIcon(
-                      path: '/overview/notifications',
-                      icon: SvgPicture.asset(
-                        'assets/icons/notifications.svg',
-                        colorFilter: ColorFilter.mode(
-                          Theme.of(context)
-                              .custom
-                              .colorTheme
-                              .navbarIconSelected,
-                          BlendMode.srcIn,
-                        ),
-                        height: 25,
-                      ),
-                      label: 'Notifications'),
-                ],
               ),
-            )),
+            ),
+          ),
+          height: 55,
+          child: Padding(
+            padding: const EdgeInsets.only(top: 10, left: 18, right: 18),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                NavigatorIcon(
+                  path: '/channels/$guildId/$channelId',
+                  iconAsset: 'assets/icons/home.svg',
+                  label: 'Home',
+                  selected: isHome,
+                ),
+                NavigatorIcon(
+                  path: '/channels/@me',
+                  iconAsset: 'assets/icons/messages.svg',
+                  label: 'Messages',
+                  selected: isMessages,
+                ),
+                NavigatorIcon(
+                  path: '/overview/notifications',
+                  iconAsset: 'assets/icons/notifications.svg',
+                  label: 'Notifications',
+                  selected:
+                      isNotifications, // This is never selected in the current setup
+                ),
+              ],
+            ),
+          ),
+        ),
         Container(
           decoration: BoxDecoration(
             color: Theme.of(context).custom.colorTheme.navbarBackground,
@@ -119,48 +128,56 @@ class _BarWidgetState extends ConsumerState<NavigationBarWidget> {
   }
 }
 
-class NavigatorIcon extends StatefulWidget {
-  final SvgPicture icon;
+class NavigatorIcon extends StatelessWidget {
+  final String iconAsset;
   final String label;
   final String path;
-  const NavigatorIcon(
-      {super.key, required this.icon, required this.label, required this.path});
+  final bool selected;
 
-  @override
-  State<NavigatorIcon> createState() => NavigatorIconState();
-}
+  const NavigatorIcon({
+    super.key,
+    required this.iconAsset,
+    required this.label,
+    required this.path,
+    required this.selected,
+  });
 
-class NavigatorIconState extends State<NavigatorIcon> {
   @override
   Widget build(BuildContext context) {
-    return OutlinedButton(
-      onPressed: () {
-        GoRouter.of(context).push(widget.path);
+    final color = selected
+        ? Theme.of(context).custom.colorTheme.navbarIconSelected
+        : Theme.of(context).custom.colorTheme.navbarIconDeselected;
+
+    return InkWell(
+      onTap: () {
+        GoRouter.of(context).push(path);
       },
-      style: OutlinedButton.styleFrom(
-        padding: const EdgeInsets.all(0),
-        side: const BorderSide(
-          color: Color.fromARGB(0, 255, 255, 255),
-          width: 0,
-        ),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(0),
-        ),
-      ),
+      splashFactory: NoSplash.splashFactory,
+      splashColor: Colors.transparent,
+      highlightColor: Colors.transparent,
       child: SizedBox(
         width: 75,
         child: Column(
           children: [
-            widget.icon,
-            Text(widget.label,
+            SvgPicture.asset(
+              iconAsset,
+              colorFilter: ColorFilter.mode(color, BlendMode.srcIn),
+              height: 25,
+            ),
+            DefaultTextStyle(
+              style: Theme.of(context).custom.textTheme.subtitle2.copyWith(
+                    fontSize: 9,
+                    color: color,
+                  ),
+              child: Text(
+                label,
                 textAlign: TextAlign.center,
                 style: Theme.of(context).custom.textTheme.subtitle2.copyWith(
                       fontSize: 9,
-                      color: Theme.of(context)
-                          .custom
-                          .colorTheme
-                          .navbarIconSelected,
-                    ))
+                      color: color,
+                    ),
+              ),
+            )
           ],
         ),
       ),
