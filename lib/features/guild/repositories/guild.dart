@@ -27,32 +27,25 @@ Future<Uri?> guildBannerUrl(GuildBannerUrlRef ref, Snowflake guildId) async {
 }
 
 @Riverpod(keepAlive: true)
-Future<Image?> guildIcon(GuildIconRef ref, Snowflake guildId) async {
+Future<Uint8List?> guildIcon(GuildIconRef ref, Snowflake guildId) async {
   var authOutput = ref.watch(authProvider.notifier).getAuth();
   if (authOutput is AuthUser) {
     CdnAsset? iconAsset = (await authOutput.client.guilds.get(guildId)).icon;
     if (iconAsset == null) return null;
 
-    FileInfo? fromCache =
-        await _guildIconCache.getFileFromCache(iconAsset.hash);
+    // FileInfo? fromCache =
+    //     await _guildIconCache.getFileFromCache(iconAsset.hash);
 
     Uint8List? bytes;
 
-    if (fromCache != null) {
-      bytes = await fromCache.file.readAsBytes();
-    } else {
-      bytes = await iconAsset.fetch();
-      _guildIconCache.putFile(iconAsset.hash, bytes);
-    }
+    // if (fromCache != null) {
+    //   bytes = await fromCache.file.readAsBytes();
+    // } else {
+    bytes = await iconAsset.fetch();
+    _guildIconCache.putFile(iconAsset.hash, bytes);
+    // }
 
-    // not a fan of this UI / repo mingling
-    // also it's literally just not required
-    return Image.memory(
-      await iconAsset.fetch(),
-      width: 47,
-      height: 47,
-      fit: BoxFit.cover,
-    );
+    return bytes;
   }
 
   return null;

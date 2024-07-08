@@ -155,14 +155,14 @@ class _GuildBannerUrlProviderElement extends FutureProviderElement<Uri?>
   Snowflake get guildId => (origin as GuildBannerUrlProvider).guildId;
 }
 
-String _$guildIconHash() => r'6f8bca1b9e524f10e2a49339799f0d54b1d71846';
+String _$guildIconHash() => r'7c41d81c56578b120bbe14e1eee032e21d0d05ae';
 
 /// See also [guildIcon].
 @ProviderFor(guildIcon)
 const guildIconProvider = GuildIconFamily();
 
 /// See also [guildIcon].
-class GuildIconFamily extends Family<AsyncValue<Image?>> {
+class GuildIconFamily extends Family<AsyncValue<Uint8List?>> {
   /// See also [guildIcon].
   const GuildIconFamily();
 
@@ -200,7 +200,7 @@ class GuildIconFamily extends Family<AsyncValue<Image?>> {
 }
 
 /// See also [guildIcon].
-class GuildIconProvider extends FutureProvider<Image?> {
+class GuildIconProvider extends FutureProvider<Uint8List?> {
   /// See also [guildIcon].
   GuildIconProvider(
     Snowflake guildId,
@@ -234,7 +234,7 @@ class GuildIconProvider extends FutureProvider<Image?> {
 
   @override
   Override overrideWith(
-    FutureOr<Image?> Function(GuildIconRef provider) create,
+    FutureOr<Uint8List?> Function(GuildIconRef provider) create,
   ) {
     return ProviderOverride(
       origin: this,
@@ -251,7 +251,7 @@ class GuildIconProvider extends FutureProvider<Image?> {
   }
 
   @override
-  FutureProviderElement<Image?> createElement() {
+  FutureProviderElement<Uint8List?> createElement() {
     return _GuildIconProviderElement(this);
   }
 
@@ -269,12 +269,12 @@ class GuildIconProvider extends FutureProvider<Image?> {
   }
 }
 
-mixin GuildIconRef on FutureProviderRef<Image?> {
+mixin GuildIconRef on FutureProviderRef<Uint8List?> {
   /// The parameter `guildId` of this provider.
   Snowflake get guildId;
 }
 
-class _GuildIconProviderElement extends FutureProviderElement<Image?>
+class _GuildIconProviderElement extends FutureProviderElement<Uint8List?>
     with GuildIconRef {
   _GuildIconProviderElement(super.provider);
 
