@@ -71,22 +71,9 @@ class Auth extends _$Auth {
   Future<AuthResponse> loginWithToken(String token) async {
     AuthResponse? response;
 
-    // client = await Nyxx.connectGateway(
-    //   token,
-    //   GatewayIntents.all,
-    //   // options: GatewayClientOptions(
-    //   //     //   plugins: [
-    //   //     //   Logging(logLevel: Level.OFF), /*IgnoreExceptions()*/
-    //   //     // ]
-    //   //     ),
-    // );
-    // print("logging in");
-    var newClient = await Nyxx.connectGateway(token, GatewayIntents.all,
-        options: GatewayClientOptions(plugins: [
-          Logging(logLevel: Level.OFF), /*IgnoreExceptions()*/
-        ]));
-
-    client = newClient;
+    var client = await Nyxx.connectGateway(token, GatewayIntents.all,
+        options: GatewayClientOptions(
+            plugins: [Logging(logLevel: Level.OFF), IgnoreExceptions()]));
 
     // This is how we save login information
     var box = await Hive.openBox('auth');
@@ -96,7 +83,7 @@ class Auth extends _$Auth {
     authResponse = AuthUser(token: token, client: client!);
     state = authResponse!;
 
-    client!.onReady.listen((event) {
+    client.onReady.listen((event) {
       ref
           .read(privateMessageHistoryProvider.notifier)
           .setMessageHistory(event.privateChannels);
@@ -108,6 +95,10 @@ class Auth extends _$Auth {
       ref
           .read(channelReadStateProvider.notifier)
           .setReadStates(event.readStates);
+
+      ref
+          .read(userStatusStateProvider.notifier)
+          .setUserStatus(event.userSettings.status);
     });
 
     response = authResponse;

@@ -1,0 +1,22 @@
+import 'package:bonfire/features/auth/data/repositories/auth.dart';
+import 'package:bonfire/features/auth/data/repositories/discord_auth.dart';
+import 'package:firebridge/firebridge.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+part 'self_user.g.dart';
+
+/// Message provider for fetching user messages from the Discord API
+@Riverpod(keepAlive: true)
+class SelfUser extends _$SelfUser {
+  AuthUser? user;
+
+  @override
+  Future<User?> build() async {
+    var authOutput = ref.watch(authProvider.notifier).getAuth();
+    if (authOutput is AuthUser) {
+      user = authOutput;
+
+      return await user!.client.user.get();
+    }
+  }
+}

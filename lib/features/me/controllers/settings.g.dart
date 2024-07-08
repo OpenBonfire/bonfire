@@ -54,5 +54,21 @@ final channelReadStateProvider =
 );
 
 typedef _$ChannelReadState = Notifier<Map<Snowflake, ReadState>?>;
+String _$userStatusStateHash() => r'dbf8e807d098cd9848dbdedba472d42243d1d490';
+
+/// See also [UserStatusState].
+@ProviderFor(UserStatusState)
+final userStatusStateProvider =
+    NotifierProvider<UserStatusState, UserStatus?>.internal(
+  UserStatusState.new,
+  name: r'userStatusStateProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$userStatusStateHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef _$UserStatusState = Notifier<UserStatus?>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

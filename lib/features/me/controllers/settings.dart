@@ -48,3 +48,17 @@ class ChannelReadState extends _$ChannelReadState {
         .map((key, value) => MapEntry(value.partialChannel.id, value));
   }
 }
+
+@Riverpod(keepAlive: true)
+class UserStatusState extends _$UserStatusState {
+  AuthUser? user;
+
+  @override
+  UserStatus? build() {
+    return null;
+  }
+
+  void setUserStatus(UserStatus userStatus) {
+    state = userStatus;
+  }
+}

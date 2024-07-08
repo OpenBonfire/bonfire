@@ -7,8 +7,6 @@ import 'package:flutter/cupertino.dart';
 
 class Utils {
   static Image imageFromJson(String base64String) {
-    print("DECODING: ");
-    print(base64String);
     Uint8List bytes = base64.decode(base64String);
     return Image.memory(bytes);
   }

@@ -1,26 +1,26 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'auth.dart';
+part of 'self_user.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$authHash() => r'5cf6ce9d957ccf71e610eee8e6add0bfdc26259d';
+String _$selfUserHash() => r'8dd9915ef7591aaa0e4a9be8db10415d02a4f463';
 
-/// A riverpod provider that handles authentication with Discord.
+/// Message provider for fetching user messages from the Discord API
 ///
-/// Copied from [Auth].
-@ProviderFor(Auth)
-final authProvider = NotifierProvider<Auth, AuthResponse?>.internal(
-  Auth.new,
-  name: r'authProvider',
+/// Copied from [SelfUser].
+@ProviderFor(SelfUser)
+final selfUserProvider = AsyncNotifierProvider<SelfUser, User?>.internal(
+  SelfUser.new,
+  name: r'selfUserProvider',
   debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$authHash,
+      const bool.fromEnvironment('dart.vm.product') ? null : _$selfUserHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$Auth = Notifier<AuthResponse?>;
+typedef _$SelfUser = AsyncNotifier<User?>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

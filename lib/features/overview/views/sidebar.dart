@@ -9,6 +9,7 @@ import 'package:firebridge/firebridge.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hive/hive.dart';
 import 'package:flutter/services.dart';
+import 'package:universal_platform/universal_platform.dart';
 
 class Sidebar extends ConsumerStatefulWidget {
   final Snowflake guildId;
@@ -75,9 +76,11 @@ class _SidebarState extends ConsumerState<Sidebar> {
             ),
           ),
         ),
-        SizedBox(
-          height: MediaQuery.of(context).padding.bottom + 50,
-        )
+        UniversalPlatform.isMobile
+            ? SizedBox(
+                height: MediaQuery.of(context).padding.bottom + 50,
+              )
+            : const SizedBox(),
       ],
     );
   }

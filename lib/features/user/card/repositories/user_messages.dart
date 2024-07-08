@@ -12,10 +12,20 @@ class UserMessages extends _$UserMessages {
   @override
   Future<void> build() async {
     var authOutput = ref.watch(authProvider.notifier).getAuth();
-    if ((authOutput != null) && (authOutput is AuthUser)) {
+    if (authOutput is AuthUser) {
       user = authOutput;
+      // print("LISTING CHANNELS!");
 
-      var channels = await user!.client.channels.listDmChannels();
+      // try {
+      //   var channels = await user!.client.channels.listDmChannels();
+      //   print("GOT CHANNNELS");
+      //   print(channels);
+      // } catch (e) {
+      //   print("ERROR GETTING CHANNELS");
+      //   print(e);
+      // }
+
+      // print("GOT CHANNNELS1");
       // print(channels);
     }
   }
