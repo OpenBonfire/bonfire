@@ -1,7 +1,5 @@
-import 'package:bonfire/features/channels/controllers/channel.dart';
 import 'package:bonfire/features/channels/repositories/has_unreads.dart';
 import 'package:bonfire/features/me/controllers/settings.dart';
-import 'package:firebridge_extensions/firebridge_extensions.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:firebridge/firebridge.dart';
 
