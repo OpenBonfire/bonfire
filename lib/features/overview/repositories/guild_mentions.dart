@@ -1,9 +1,7 @@
 import 'package:bonfire/features/auth/data/repositories/auth.dart';
 import 'package:bonfire/features/auth/data/repositories/discord_auth.dart';
-import 'package:bonfire/features/guild/controllers/guild.dart';
 import 'package:bonfire/features/me/controllers/settings.dart';
 import 'package:collection/collection.dart';
-import 'package:firebridge_extensions/firebridge_extensions.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:firebridge/firebridge.dart';
 

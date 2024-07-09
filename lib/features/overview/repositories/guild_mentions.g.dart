@@ -6,7 +6,7 @@ part of 'guild_mentions.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$guildMentionsHash() => r'f9d5a73d3f5bae236669f6f09067b0062950d359';
+String _$guildMentionsHash() => r'4736b138253e35e4eeb642e0a04d4a55710338da';
 
 /// Copied from Dart SDK
 class _SystemHash {

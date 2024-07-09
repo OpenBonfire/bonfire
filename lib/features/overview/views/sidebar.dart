@@ -536,10 +536,21 @@ class _SidebarIconState extends ConsumerState<SidebarIcon> {
                     splashFactory: NoSplash.splashFactory,
                     splashColor: Colors.transparent,
                     highlightColor: Colors.transparent,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.all(
-                          Radius.circular(widget.selected ? 15 : 100)),
-                      child: iconBuilder(widget.guild),
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.all(
+                              Radius.circular(widget.selected ? 15 : 100)),
+                          child: iconBuilder(widget.guild),
+                        ),
+                        if (mentions > 0 && !widget.mini)
+                          Positioned(
+                            right: 0,
+                            bottom: 0,
+                            child: mentionBubble(mentions),
+                          ),
+                      ],
                     ),
                   )
                 : ClipRRect(
@@ -565,12 +576,6 @@ class _SidebarIconState extends ConsumerState<SidebarIcon> {
                 ),
               ),
             ),
-          ),
-        if (mentions > 0 && !widget.mini)
-          Positioned(
-            right: 10,
-            bottom: 0,
-            child: mentionBubble(mentions),
           ),
       ],
     );

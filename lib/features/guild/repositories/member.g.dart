@@ -171,6 +171,134 @@ class _GetMemberProviderElement extends FutureProviderElement<Member?>
   Snowflake get memberId => (origin as GetMemberProvider).memberId;
 }
 
+String _$getSelfMemberHash() => r'387044745401e1670ea0a43dcfd1d829bdcddbb4';
+
+/// See also [getSelfMember].
+@ProviderFor(getSelfMember)
+const getSelfMemberProvider = GetSelfMemberFamily();
+
+/// See also [getSelfMember].
+class GetSelfMemberFamily extends Family<AsyncValue<Member?>> {
+  /// See also [getSelfMember].
+  const GetSelfMemberFamily();
+
+  /// See also [getSelfMember].
+  GetSelfMemberProvider call(
+    Snowflake guildId,
+  ) {
+    return GetSelfMemberProvider(
+      guildId,
+    );
+  }
+
+  @override
+  GetSelfMemberProvider getProviderOverride(
+    covariant GetSelfMemberProvider provider,
+  ) {
+    return call(
+      provider.guildId,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'getSelfMemberProvider';
+}
+
+/// See also [getSelfMember].
+class GetSelfMemberProvider extends FutureProvider<Member?> {
+  /// See also [getSelfMember].
+  GetSelfMemberProvider(
+    Snowflake guildId,
+  ) : this._internal(
+          (ref) => getSelfMember(
+            ref as GetSelfMemberRef,
+            guildId,
+          ),
+          from: getSelfMemberProvider,
+          name: r'getSelfMemberProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$getSelfMemberHash,
+          dependencies: GetSelfMemberFamily._dependencies,
+          allTransitiveDependencies:
+              GetSelfMemberFamily._allTransitiveDependencies,
+          guildId: guildId,
+        );
+
+  GetSelfMemberProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.guildId,
+  }) : super.internal();
+
+  final Snowflake guildId;
+
+  @override
+  Override overrideWith(
+    FutureOr<Member?> Function(GetSelfMemberRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: GetSelfMemberProvider._internal(
+        (ref) => create(ref as GetSelfMemberRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        guildId: guildId,
+      ),
+    );
+  }
+
+  @override
+  FutureProviderElement<Member?> createElement() {
+    return _GetSelfMemberProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is GetSelfMemberProvider && other.guildId == guildId;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, guildId.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin GetSelfMemberRef on FutureProviderRef<Member?> {
+  /// The parameter `guildId` of this provider.
+  Snowflake get guildId;
+}
+
+class _GetSelfMemberProviderElement extends FutureProviderElement<Member?>
+    with GetSelfMemberRef {
+  _GetSelfMemberProviderElement(super.provider);
+
+  @override
+  Snowflake get guildId => (origin as GetSelfMemberProvider).guildId;
+}
+
 String _$getGuildRolesHash() => r'02f52758380d342befe92d584d3d78f250552951';
 
 /// See also [getGuildRoles].
