@@ -125,6 +125,15 @@ class _GuildFolderWidgetState extends ConsumerState<GuildFolderWidget>
     return false;
   }
 
+  int _getTotalMentionsInFolder(List<UserGuild> folderGuilds, WidgetRef ref) {
+    int totalMentions = 0;
+    for (var guild in folderGuilds) {
+      totalMentions +=
+          ref.read(guildMentionsProvider(guild.id)).valueOrNull ?? 0;
+    }
+    return totalMentions;
+  }
+
   @override
   void initState() {
     super.initState();
@@ -142,6 +151,44 @@ class _GuildFolderWidgetState extends ConsumerState<GuildFolderWidget>
   void dispose() {
     _controller.dispose();
     super.dispose();
+  }
+
+  Widget _buildMentionBubble(int count) {
+    return Container(
+      width: 23,
+      height: 23,
+      decoration: BoxDecoration(
+        color: Theme.of(context).custom.colorTheme.background,
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Stack(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(3),
+            child: Container(
+              decoration: BoxDecoration(
+                color: Theme.of(context).custom.colorTheme.red,
+                borderRadius: BorderRadius.circular(20),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 2),
+            child: Center(
+              child: Text(
+                count.toString(),
+                style: Theme.of(context).custom.textTheme.bodyText1.copyWith(
+                      fontSize: 11,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white,
+                    ),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          )
+        ],
+      ),
+    );
   }
 
   @override
@@ -163,6 +210,7 @@ class _GuildFolderWidgetState extends ConsumerState<GuildFolderWidget>
     }
 
     bool hasUnreadsInFolder = _hasUnreadsInFolder(folderGuilds, ref);
+    int totalMentions = _getTotalMentionsInFolder(folderGuilds, ref);
 
     setState(() {
       if (hasUnreadsInFolder && !_isExpanded) {
@@ -249,6 +297,12 @@ class _GuildFolderWidgetState extends ConsumerState<GuildFolderWidget>
                                   ),
                                 ),
                               ),
+                              if (totalMentions > 0 && !_isExpanded)
+                                Positioned(
+                                  right: 8,
+                                  bottom: -3,
+                                  child: _buildMentionBubble(totalMentions),
+                                ),
                             ],
                           ),
                           SizeTransition(
@@ -282,9 +336,8 @@ class _GuildFolderWidgetState extends ConsumerState<GuildFolderWidget>
           if (!_isExpanded || hasUnreadsInFolder)
             Positioned(
               left: 0,
-              top: 2, // Adjust this value to match the top padding
-              bottom:
-                  4, // Adjust this value to match the bottom padding/SizedBox height
+              top: 2,
+              bottom: 4,
               child: Center(
                 child: AnimatedContainer(
                   duration: const Duration(milliseconds: 200),
@@ -546,8 +599,8 @@ class _SidebarIconState extends ConsumerState<SidebarIcon> {
                         ),
                         if (mentions > 0 && !widget.mini)
                           Positioned(
-                            right: 0,
-                            bottom: 0,
+                            right: -3,
+                            bottom: -3,
                             child: mentionBubble(mentions),
                           ),
                       ],
