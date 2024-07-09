@@ -8,14 +8,11 @@ part 'has_unreads.g.dart';
 @Riverpod(keepAlive: true)
 class HasUnreads extends _$HasUnreads {
   @override
-  Future<bool> build(Snowflake channelId) async {
-    Channel? channel =
-        (ref.watch(channelControllerProvider(channelId)).valueOrNull);
-
+  Future<bool> build(Channel channel) async {
     if (channel is! GuildTextChannel) return false;
 
     var readState = ref.watch(channelReadStateProvider);
-    var lastReadMessage = readState?[channelId]?.lastPartialMessage;
+    var lastReadMessage = readState?[channel.id]?.lastPartialMessage;
     var lastChannelMessageId = channel.lastMessageId;
 
     if (lastChannelMessageId == null) return false;

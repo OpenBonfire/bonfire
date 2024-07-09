@@ -6,7 +6,7 @@ part of 'has_unreads.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$hasUnreadsHash() => r'fa62b13990e288498303ea5190ffeb9ee0e634ec';
+String _$hasUnreadsHash() => r'd85c5a9db0cb730e8f5c42fe2a4b6d62967dc119';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -30,10 +30,10 @@ class _SystemHash {
 }
 
 abstract class _$HasUnreads extends BuildlessAsyncNotifier<bool> {
-  late final Snowflake channelId;
+  late final Channel channel;
 
   FutureOr<bool> build(
-    Snowflake channelId,
+    Channel channel,
   );
 }
 
@@ -48,10 +48,10 @@ class HasUnreadsFamily extends Family<AsyncValue<bool>> {
 
   /// See also [HasUnreads].
   HasUnreadsProvider call(
-    Snowflake channelId,
+    Channel channel,
   ) {
     return HasUnreadsProvider(
-      channelId,
+      channel,
     );
   }
 
@@ -60,7 +60,7 @@ class HasUnreadsFamily extends Family<AsyncValue<bool>> {
     covariant HasUnreadsProvider provider,
   ) {
     return call(
-      provider.channelId,
+      provider.channel,
     );
   }
 
@@ -83,9 +83,9 @@ class HasUnreadsFamily extends Family<AsyncValue<bool>> {
 class HasUnreadsProvider extends AsyncNotifierProviderImpl<HasUnreads, bool> {
   /// See also [HasUnreads].
   HasUnreadsProvider(
-    Snowflake channelId,
+    Channel channel,
   ) : this._internal(
-          () => HasUnreads()..channelId = channelId,
+          () => HasUnreads()..channel = channel,
           from: hasUnreadsProvider,
           name: r'hasUnreadsProvider',
           debugGetCreateSourceHash:
@@ -95,7 +95,7 @@ class HasUnreadsProvider extends AsyncNotifierProviderImpl<HasUnreads, bool> {
           dependencies: HasUnreadsFamily._dependencies,
           allTransitiveDependencies:
               HasUnreadsFamily._allTransitiveDependencies,
-          channelId: channelId,
+          channel: channel,
         );
 
   HasUnreadsProvider._internal(
@@ -105,17 +105,17 @@ class HasUnreadsProvider extends AsyncNotifierProviderImpl<HasUnreads, bool> {
     required super.allTransitiveDependencies,
     required super.debugGetCreateSourceHash,
     required super.from,
-    required this.channelId,
+    required this.channel,
   }) : super.internal();
 
-  final Snowflake channelId;
+  final Channel channel;
 
   @override
   FutureOr<bool> runNotifierBuild(
     covariant HasUnreads notifier,
   ) {
     return notifier.build(
-      channelId,
+      channel,
     );
   }
 
@@ -124,13 +124,13 @@ class HasUnreadsProvider extends AsyncNotifierProviderImpl<HasUnreads, bool> {
     return ProviderOverride(
       origin: this,
       override: HasUnreadsProvider._internal(
-        () => create()..channelId = channelId,
+        () => create()..channel = channel,
         from: from,
         name: null,
         dependencies: null,
         allTransitiveDependencies: null,
         debugGetCreateSourceHash: null,
-        channelId: channelId,
+        channel: channel,
       ),
     );
   }
@@ -142,21 +142,21 @@ class HasUnreadsProvider extends AsyncNotifierProviderImpl<HasUnreads, bool> {
 
   @override
   bool operator ==(Object other) {
-    return other is HasUnreadsProvider && other.channelId == channelId;
+    return other is HasUnreadsProvider && other.channel == channel;
   }
 
   @override
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, channelId.hashCode);
+    hash = _SystemHash.combine(hash, channel.hashCode);
 
     return _SystemHash.finish(hash);
   }
 }
 
 mixin HasUnreadsRef on AsyncNotifierProviderRef<bool> {
-  /// The parameter `channelId` of this provider.
-  Snowflake get channelId;
+  /// The parameter `channel` of this provider.
+  Channel get channel;
 }
 
 class _HasUnreadsProviderElement
@@ -164,7 +164,7 @@ class _HasUnreadsProviderElement
   _HasUnreadsProviderElement(super.provider);
 
   @override
-  Snowflake get channelId => (origin as HasUnreadsProvider).channelId;
+  Channel get channel => (origin as HasUnreadsProvider).channel;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
