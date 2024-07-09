@@ -9,8 +9,9 @@ part 'calculate_unreads.g.dart';
 class HasUnreads extends _$HasUnreads {
   @override
   Future<bool> build(Snowflake channelId) async {
-    Channel channel =
-        (ref.watch(channelControllerProvider(channelId)).valueOrNull!);
+    Channel? channel =
+        (ref.watch(channelControllerProvider(channelId)).valueOrNull);
+
     if (channel is! GuildTextChannel) return false;
 
     var readState = ref.watch(channelReadStateProvider);

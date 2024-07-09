@@ -66,101 +66,132 @@ class _ChannelButtonState extends ConsumerState<ChannelButton> {
       return false;
     });
 
-    //asdf!
-
-    // (widget.channel as GuildVoiceChannel).
-
     return Column(
       children: [
-        Padding(
-          padding: const EdgeInsets.only(bottom: 2, left: 8, right: 10),
-          child: SizedBox(
-            width: double.infinity,
-            height: 35,
-            child: OutlinedButton(
-              style: OutlinedButton.styleFrom(
-                  minimumSize: Size.zero,
-                  padding: EdgeInsets.zero,
-                  side: BorderSide(
-                    color: (widget.channel.id == widget.currentChannelId)
-                        ? Theme.of(context)
-                            .custom
-                            .colorTheme
-                            .deselectedChannelText
-                        : Colors.transparent,
-                    width: 0.1,
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  foregroundColor: selected
-                      ? Theme.of(context).custom.colorTheme.selectedChannelText
-                      : Theme.of(context)
-                          .custom
-                          .colorTheme
-                          .deselectedChannelText,
-                  backgroundColor: selected
-                      ? Theme.of(context).custom.colorTheme.foreground
-                      : Colors.transparent),
-              onPressed: () {
-                // route to channel
-                HapticFeedback.selectionClick();
-                lastGuildChannels.put(widget.currentGuildId.toString(),
-                    widget.channel.id.toString());
-                GoRouter.of(context).go(
-                    '/channels/${widget.currentGuildId}/${widget.channel.id}');
-
-                OverlappingPanelsState? overlappingPanelsState =
-                    OverlappingPanels.of(context);
-                if (overlappingPanelsState != null) {
-                  overlappingPanelsState.moveToState(RevealSide.main);
-                }
-              },
-              child: SizedBox(
-                height: 35,
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 12),
-                    child: Row(
-                      children: [
-                        BonfireIcons.channelIcons[widget.channel.type]!,
-                        const SizedBox(width: 8),
-                        Expanded(
-                            child: Row(
-                          children: [
-                            Text(
-                              (widget.channel as GuildChannel).name,
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 1,
-                              softWrap: false,
-                              textAlign: TextAlign.left,
-                              style: Theme.of(context)
+        Row(
+          children: [
+            (hasUnreads == true)
+                ? Container(
+                    width: 4,
+                    height: 8,
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.only(
+                          topRight: Radius.circular(20),
+                          bottomRight: Radius.circular(20)),
+                    ),
+                  )
+                : const SizedBox(),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 2, left: 2, right: 10),
+                child: SizedBox(
+                  width: double.infinity,
+                  height: 35,
+                  child: OutlinedButton(
+                    style: OutlinedButton.styleFrom(
+                        minimumSize: Size.zero,
+                        padding: EdgeInsets.zero,
+                        side: BorderSide(
+                          color: (widget.channel.id == widget.currentChannelId)
+                              ? Theme.of(context)
                                   .custom
-                                  .textTheme
-                                  .bodyText1
-                                  .copyWith(
-                                      color: (selected || hasUnreads)
-                                          ? Theme.of(context)
-                                              .custom
-                                              .colorTheme
-                                              .selectedChannelText
-                                          : Theme.of(context)
-                                              .custom
-                                              .colorTheme
-                                              .deselectedChannelText),
-                            ),
-                            const Spacer(),
-                            if (mentionCount > 0) mentionBubble(mentionCount),
-                          ],
-                        )),
-                      ],
+                                  .colorTheme
+                                  .deselectedChannelText
+                              : Colors.transparent,
+                          width: 0.1,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        foregroundColor: selected
+                            ? Theme.of(context)
+                                .custom
+                                .colorTheme
+                                .selectedChannelText
+                            : Theme.of(context)
+                                .custom
+                                .colorTheme
+                                .deselectedChannelText,
+                        backgroundColor: selected
+                            ? Theme.of(context).custom.colorTheme.foreground
+                            : Colors.transparent),
+                    onPressed: () {
+                      // route to channel
+                      HapticFeedback.selectionClick();
+                      lastGuildChannels.put(widget.currentGuildId.toString(),
+                          widget.channel.id.toString());
+                      GoRouter.of(context).go(
+                          '/channels/${widget.currentGuildId}/${widget.channel.id}');
+
+                      OverlappingPanelsState? overlappingPanelsState =
+                          OverlappingPanels.of(context);
+                      if (overlappingPanelsState != null) {
+                        overlappingPanelsState.moveToState(RevealSide.main);
+                      }
+                    },
+                    child: SizedBox(
+                      height: 35,
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 12),
+                          child: Row(
+                            children: [
+                              Icon(
+                                BonfireIcons
+                                    .channelIcons[widget.channel.type]!.icon,
+                                color: (selected || hasUnreads)
+                                    ? Theme.of(context)
+                                        .custom
+                                        .colorTheme
+                                        .selectedChannelText
+                                    : Theme.of(context)
+                                        .custom
+                                        .colorTheme
+                                        .deselectedChannelText,
+                                size: 20,
+                              ),
+                              const SizedBox(width: 8),
+                              Expanded(
+                                  child: Row(
+                                children: [
+                                  Text(
+                                    (widget.channel as GuildChannel).name,
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 1,
+                                    softWrap: false,
+                                    textAlign: TextAlign.left,
+                                    style: Theme.of(context)
+                                        .custom
+                                        .textTheme
+                                        .bodyText1
+                                        .copyWith(
+                                            color: (selected || hasUnreads)
+                                                ? Theme.of(context)
+                                                    .custom
+                                                    .colorTheme
+                                                    .selectedChannelText
+                                                : Theme.of(context)
+                                                    .custom
+                                                    .colorTheme
+                                                    .deselectedChannelText),
+                                  ),
+                                  const Spacer(),
+                                  if (mentionCount > 0)
+                                    mentionBubble(mentionCount),
+                                ],
+                              )),
+                            ],
+                          ),
+                        ),
+                      ),
                     ),
                   ),
                 ),
               ),
             ),
-          ),
+          ],
         ),
         (widget.channel is GuildVoiceChannel)
             ? const ChannelVoiceMembers()
