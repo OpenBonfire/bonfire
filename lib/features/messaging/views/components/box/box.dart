@@ -150,7 +150,7 @@ class _MessageBoxState extends ConsumerState<MessageBox> {
                   ),
                 ),
               Padding(
-                padding: const EdgeInsets.only(left: 16, right: 4),
+                padding: const EdgeInsets.only(left: 16, right: 16),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
