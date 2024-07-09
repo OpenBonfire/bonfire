@@ -10,7 +10,8 @@ class ImageAttachment extends StatelessWidget {
   Widget build(BuildContext context) {
     double aspectRatio = (attachment.width?.toDouble() ?? 1) /
         (attachment.height?.toDouble() ?? 1);
-
+    // print("ADDING ATACHMENT");
+    // print(attachment.url.toString());
     return ClipRRect(
         borderRadius: BorderRadius.circular(12),
         child: BoundedContent(

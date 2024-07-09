@@ -86,5 +86,20 @@ final customStatusStateProvider =
 );
 
 typedef _$CustomStatusState = Notifier<CustomStatus?>;
+String _$guildsStateHash() => r'cc23fc227059af452ebb927ee332ec09c10595a0';
+
+/// See also [GuildsState].
+@ProviderFor(GuildsState)
+final guildsStateProvider =
+    NotifierProvider<GuildsState, List<Guild>?>.internal(
+  GuildsState.new,
+  name: r'guildsStateProvider',
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product') ? null : _$guildsStateHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef _$GuildsState = Notifier<List<Guild>?>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

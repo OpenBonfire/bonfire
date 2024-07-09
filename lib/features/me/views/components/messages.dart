@@ -22,7 +22,16 @@ class _MessageOverviewState extends ConsumerState<PrivateMessages> {
     double bottomPadding = UniversalPlatform.isMobile
         ? MediaQuery.of(context).padding.bottom + 68
         : 0;
-    var dms = ref.watch(privateMessageHistoryProvider).reversed.toList();
+    var dms = ref.watch(privateMessageHistoryProvider).toList();
+    var readStates = ref.watch(channelReadStateProvider) ?? {};
+    // print(readStates[dms[0].id]?.lastViewed);
+
+    // this is wrong, but until I figure out read states it's what it is.
+    dms.sort((a, b) {
+      var aReadState = readStates[a.id]?.lastViewed ?? 0;
+      var bReadState = readStates[b.id]?.lastViewed ?? 0;
+      return -aReadState.compareTo(bReadState);
+    });
 
     return Scaffold(
       body: Padding(
@@ -38,7 +47,6 @@ class _MessageOverviewState extends ConsumerState<PrivateMessages> {
                           .channelListBackground,
                       borderRadius: const BorderRadius.only(
                         topLeft: Radius.circular(24),
-                        topRight: Radius.circular(8),
                         bottomLeft: Radius.circular(24),
                       ),
                       border: Border(

@@ -65,9 +65,7 @@ class _SidebarState extends ConsumerState<Sidebar> {
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 2),
                       child: MessagesIcon(
-                        selected: widget.guildId ==
-                            Snowflake
-                                .zero, // Assuming Snowflake.zero represents the messages view
+                        selected: widget.guildId == Snowflake.zero,
                       ),
                     ),
                     if (guildFolders != null)

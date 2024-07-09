@@ -53,15 +53,17 @@ class Messages extends _$Messages {
     int? count,
   }) async {
     if (user is AuthUser) {
-      var channel =
-          ref.watch(channelControllerProvider(channelId)).value as Channel;
+      var channel = ref.watch(channelControllerProvider(channelId)).value;
+
+      if (channel == null) return [];
 
       Guild? guild;
       Member? selfMember;
 
       if (channel is GuildChannel) {
         guild = ref.watch(guildControllerProvider(guildId)).value;
-        selfMember = await guild!.members.get(user!.client.user.id);
+        if (guild == null) return [];
+        selfMember = await guild.members.get(user!.client.user.id);
         var permissions = await channel.computePermissionsFor(selfMember);
 
         if (permissions.canReadMessageHistory == false) {

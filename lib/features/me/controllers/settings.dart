@@ -76,3 +76,17 @@ class CustomStatusState extends _$CustomStatusState {
     state = userStatus;
   }
 }
+
+@Riverpod(keepAlive: true)
+class GuildsState extends _$GuildsState {
+  AuthUser? user;
+
+  @override
+  List<Guild>? build() {
+    return null;
+  }
+
+  void setGuilds(List<Guild> guilds) {
+    state = guilds;
+  }
+}

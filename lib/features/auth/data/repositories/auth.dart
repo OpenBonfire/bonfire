@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:bonfire/features/auth/data/headers.dart';
 import 'package:bonfire/features/auth/data/repositories/discord_auth.dart';
 import 'package:bonfire/features/auth/models/auth.dart';
+import 'package:bonfire/features/guild/repositories/guilds.dart';
 import 'package:bonfire/features/me/controllers/settings.dart';
 import 'package:http/http.dart' as http;
 import 'package:firebridge/firebridge.dart';
@@ -99,6 +100,8 @@ class Auth extends _$Auth {
       ref
           .read(userStatusStateProvider.notifier)
           .setUserStatus(event.userSettings.status);
+
+      ref.read(guildsStateProvider.notifier).setGuilds(event.guilds);
 
       if (event.userSettings.customStatus != null) {
         ref

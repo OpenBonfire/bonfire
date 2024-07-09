@@ -1,4 +1,5 @@
 import 'package:bonfire/features/channels/controllers/channel.dart';
+import 'package:bonfire/features/channels/repositories/calculate_unreads.dart';
 import 'package:bonfire/features/channels/views/components/voice_members.dart';
 import 'package:bonfire/features/me/controllers/settings.dart';
 import 'package:bonfire/features/overview/views/overlapping_panels.dart';
@@ -54,10 +55,18 @@ class _ChannelButtonState extends ConsumerState<ChannelButton> {
     var readState = ref.watch(channelReadStateProvider);
     int mentionCount = readState?[widget.channel.id]?.mentionCount ?? 0;
 
-    bool hasUnreads = false;
-    // readState![widget.channel.id]?.lastPartialMessage?.get().then((value) {
-    //   value.timestamp.
-    // });
+    bool hasUnreads =
+        ref.watch(hasUnreadsProvider(widget.channel.id)).when(data: (data) {
+      return data;
+    }, loading: () {
+      return false;
+    }, error: (error, stack) {
+      print(stack);
+      print("Error: $error");
+      return false;
+    });
+
+    //asdf!
 
     // (widget.channel as GuildVoiceChannel).
 

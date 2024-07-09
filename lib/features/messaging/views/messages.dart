@@ -13,7 +13,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 String getChannelName(Channel channel) {
   if (channel is DmChannel) {
-    return "placeholder name";
+    String name = "";
+    for (var recipient in channel.recipients) {
+      name += "${recipient.globalName ?? recipient.username}, ";
+    }
+
+    return name.substring(0, name.length - 2);
   }
   return (channel as GuildChannel).name;
 }
@@ -133,11 +138,11 @@ class _MessageViewState extends ConsumerState<MessageView> {
       decoration: BoxDecoration(
         color: Theme.of(context).custom.colorTheme.messageViewBackground,
         boxShadow: const [
-          BoxShadow(
-            color: Colors.black,
-            offset: Offset(0, -1),
-            blurRadius: 10,
-          ),
+          // BoxShadow(
+          //   color: Colors.black,
+          //   offset: Offset(0, -1),
+          //   blurRadius: 10,
+          // ),
         ],
       ),
       child: Column(
