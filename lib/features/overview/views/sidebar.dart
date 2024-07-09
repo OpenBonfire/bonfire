@@ -1,5 +1,8 @@
+import 'package:bonfire/features/channels/repositories/channels.dart';
+import 'package:bonfire/features/channels/repositories/has_unreads.dart';
 import 'package:bonfire/features/guild/repositories/guilds.dart';
 import 'package:bonfire/features/me/controllers/settings.dart';
+import 'package:bonfire/features/overview/repositories/guild_unreads.dart';
 import 'package:bonfire/theme/text_theme.dart';
 import 'package:bonfire/theme/theme.dart';
 import 'package:flutter/material.dart';
@@ -90,7 +93,7 @@ class _SidebarState extends ConsumerState<Sidebar> {
   }
 }
 
-class GuildFolderWidget extends StatefulWidget {
+class GuildFolderWidget extends ConsumerStatefulWidget {
   final GuildFolder guildFolder;
   final List<UserGuild> guildList;
   final Snowflake selectedGuildId;
@@ -106,11 +109,21 @@ class GuildFolderWidget extends StatefulWidget {
   _GuildFolderWidgetState createState() => _GuildFolderWidgetState();
 }
 
-class _GuildFolderWidgetState extends State<GuildFolderWidget>
+class _GuildFolderWidgetState extends ConsumerState<GuildFolderWidget>
     with SingleTickerProviderStateMixin {
   bool _isExpanded = false;
   late AnimationController _controller;
   late Animation<double> _expandAnimation;
+  double _iconHeight = 8;
+
+  bool _hasUnreadsInFolder(List<UserGuild> folderGuilds, WidgetRef ref) {
+    for (var guild in folderGuilds) {
+      if (ref.read(guildUnreadsProvider(guild.id)).valueOrNull ?? false) {
+        return true;
+      }
+    }
+    return false;
+  }
 
   @override
   void initState() {
@@ -149,109 +162,145 @@ class _GuildFolderWidgetState extends State<GuildFolderWidget>
       );
     }
 
+    bool hasUnreadsInFolder = _hasUnreadsInFolder(folderGuilds, ref);
+
+    setState(() {
+      if (hasUnreadsInFolder && !_isExpanded) {
+        _iconHeight = 8;
+      }
+    });
+
     return Padding(
       padding: const EdgeInsets.only(top: 2),
-      child: Column(
+      child: Stack(
         children: [
-          MouseRegion(
-            cursor: SystemMouseCursors.click,
-            child: GestureDetector(
-              onTap: () {
-                HapticFeedback.mediumImpact();
-                setState(() {
-                  _isExpanded = !_isExpanded;
-                  if (_isExpanded) {
-                    _controller.forward();
-                  } else {
-                    _controller.reverse();
-                  }
-                });
-              },
-              child: AnimatedBuilder(
-                animation: _expandAnimation,
-                builder: (context, child) {
-                  return Column(
-                    children: [
-                      Stack(
-                        alignment: Alignment.center,
+          Column(
+            children: [
+              MouseRegion(
+                cursor: SystemMouseCursors.click,
+                child: GestureDetector(
+                  onTap: () {
+                    HapticFeedback.mediumImpact();
+                    setState(() {
+                      _isExpanded = !_isExpanded;
+                      if (_isExpanded) {
+                        _controller.forward();
+                      } else {
+                        _controller.reverse();
+                      }
+                    });
+                  },
+                  child: AnimatedBuilder(
+                    animation: _expandAnimation,
+                    builder: (context, child) {
+                      return Column(
                         children: [
-                          Opacity(
-                            opacity: 1 - _expandAnimation.value,
-                            child: Center(
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  color: Theme.of(context)
-                                      .custom
-                                      .colorTheme
-                                      .blurple
-                                      .withOpacity(0.5),
-                                  borderRadius: BorderRadius.circular(16),
-                                ),
-                                width: 50,
-                                height: 50,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(4),
-                                  child: GridView.count(
-                                    physics:
-                                        const NeverScrollableScrollPhysics(),
-                                    crossAxisCount: 2,
-                                    children: folderGuilds.take(4).map((guild) {
-                                      return Center(
-                                        child: SidebarIcon(
-                                          selected: widget.selectedGuildId ==
-                                              guild.id,
-                                          guild: guild,
-                                          mini: true,
-                                          isClickable: false,
-                                        ),
-                                      );
-                                    }).toList(),
+                          Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              Opacity(
+                                opacity: 1 - _expandAnimation.value,
+                                child: Center(
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: Theme.of(context)
+                                          .custom
+                                          .colorTheme
+                                          .blurple
+                                          .withOpacity(0.5),
+                                      borderRadius: BorderRadius.circular(16),
+                                    ),
+                                    width: 50,
+                                    height: 50,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(4),
+                                      child: GridView.count(
+                                        physics:
+                                            const NeverScrollableScrollPhysics(),
+                                        crossAxisCount: 2,
+                                        children:
+                                            folderGuilds.take(4).map((guild) {
+                                          return Center(
+                                            child: SidebarIcon(
+                                              selected:
+                                                  widget.selectedGuildId ==
+                                                      guild.id,
+                                              guild: guild,
+                                              mini: true,
+                                              isClickable: false,
+                                            ),
+                                          );
+                                        }).toList(),
+                                      ),
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                          ),
-                          Opacity(
-                            opacity: _expandAnimation.value,
-                            child: Center(
-                              child: FolderIcon(
-                                color: Color(widget.guildFolder.color ??
-                                    Theme.of(context)
-                                        .custom
-                                        .colorTheme
-                                        .blurple
-                                        .value),
+                              Opacity(
+                                opacity: _expandAnimation.value,
+                                child: Center(
+                                  child: FolderIcon(
+                                    color: Color(widget.guildFolder.color ??
+                                        Theme.of(context)
+                                            .custom
+                                            .colorTheme
+                                            .blurple
+                                            .value),
+                                  ),
+                                ),
                               ),
+                            ],
+                          ),
+                          SizeTransition(
+                            sizeFactor: _expandAnimation,
+                            child: Column(
+                              children: folderGuilds
+                                  .map((guild) => Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 2),
+                                        child: Center(
+                                          child: SidebarIcon(
+                                            selected: widget.selectedGuildId ==
+                                                guild.id,
+                                            guild: guild,
+                                            isClickable: true,
+                                          ),
+                                        ),
+                                      ))
+                                  .toList(),
                             ),
                           ),
                         ],
-                      ),
-                      SizeTransition(
-                        sizeFactor: _expandAnimation,
-                        child: Column(
-                          children: folderGuilds
-                              .map((guild) => Padding(
-                                    padding:
-                                        const EdgeInsets.symmetric(vertical: 2),
-                                    child: Center(
-                                      child: SidebarIcon(
-                                        selected:
-                                            widget.selectedGuildId == guild.id,
-                                        guild: guild,
-                                        isClickable: true,
-                                      ),
-                                    ),
-                                  ))
-                              .toList(),
-                        ),
-                      ),
-                    ],
-                  );
-                },
+                      );
+                    },
+                  ),
+                ),
+              ),
+              SizedBox(height: _isExpanded ? 0 : 4),
+            ],
+          ),
+          if (!_isExpanded || hasUnreadsInFolder)
+            Positioned(
+              left: 0,
+              top: 2, // Adjust this value to match the top padding
+              bottom:
+                  4, // Adjust this value to match the bottom padding/SizedBox height
+              child: Center(
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 200),
+                  curve: Curves.easeInOutExpo,
+                  width: 4,
+                  height: _iconHeight,
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.only(
+                      bottomRight: Radius.circular(8),
+                      topRight: Radius.circular(8),
+                    ),
+                  ),
+                ),
               ),
             ),
-          ),
-          SizedBox(height: _isExpanded ? 0 : 4),
         ],
       ),
     );
@@ -338,6 +387,7 @@ class SidebarIcon extends ConsumerStatefulWidget {
   final UserGuild guild;
   final bool mini;
   final bool isClickable;
+  final bool isInFolder;
 
   const SidebarIcon({
     super.key,
@@ -345,6 +395,7 @@ class SidebarIcon extends ConsumerStatefulWidget {
     required this.guild,
     this.mini = false,
     this.isClickable = true,
+    this.isInFolder = false,
   });
 
   @override
@@ -352,7 +403,31 @@ class SidebarIcon extends ConsumerStatefulWidget {
 }
 
 class _SidebarIconState extends ConsumerState<SidebarIcon> {
-  Future<double> get iconHeight => Future<double>.value(40);
+  double _iconHeight = 40;
+
+  @override
+  void initState() {
+    super.initState();
+    _updateIconHeight();
+  }
+
+  @override
+  void didUpdateWidget(SidebarIcon oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    _updateIconHeight();
+  }
+
+  void _updateIconHeight() {
+    var hasUnreads =
+        ref.read(guildUnreadsProvider(widget.guild.id)).valueOrNull ?? false;
+    setState(() {
+      if (hasUnreads && !widget.selected) {
+        _iconHeight = 8;
+      } else {
+        _iconHeight = 40;
+      }
+    });
+  }
 
   Widget iconBuilder(UserGuild guild) {
     if (guild.icon != null) {
@@ -379,6 +454,16 @@ class _SidebarIconState extends ConsumerState<SidebarIcon> {
 
   @override
   Widget build(BuildContext context) {
+    var hasUnreads =
+        ref.watch(guildUnreadsProvider(widget.guild.id)).valueOrNull ?? false;
+
+    _updateIconHeight();
+
+    bool showIndicator = (widget.selected || hasUnreads) && !widget.mini;
+    if (widget.isInFolder && !widget.selected) {
+      showIndicator = false;
+    }
+
     return Stack(
       alignment: Alignment.center,
       children: [
@@ -403,7 +488,6 @@ class _SidebarIconState extends ConsumerState<SidebarIcon> {
                             .go('/channels/${widget.guild.id}/$channelId');
                       });
                     },
-                    // stupid splash disable thing
                     splashFactory: NoSplash.splashFactory,
                     splashColor: Colors.transparent,
                     highlightColor: Colors.transparent,
@@ -420,25 +504,21 @@ class _SidebarIconState extends ConsumerState<SidebarIcon> {
                   ),
           ),
         ),
-        if (widget.selected && !widget.mini)
+        if (showIndicator)
           Positioned(
             left: 0,
-            child: FutureBuilder<double>(
-              future: iconHeight,
-              builder: (context, snapshot) {
-                return AnimatedContainer(
-                  duration: const Duration(milliseconds: 200),
-                  curve: Curves.easeInOutExpo,
-                  width: 4,
-                  height: snapshot.data ?? 8,
-                  decoration: const BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.only(
-                        bottomRight: Radius.circular(8),
-                        topRight: Radius.circular(8),
-                      )),
-                );
-              },
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 200),
+              curve: Curves.easeInOutExpo,
+              width: 4,
+              height: _iconHeight,
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                  bottomRight: Radius.circular(8),
+                  topRight: Radius.circular(8),
+                ),
+              ),
             ),
           )
       ],

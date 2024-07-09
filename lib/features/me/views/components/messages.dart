@@ -1,9 +1,7 @@
 import 'package:bonfire/features/me/controllers/settings.dart';
 import 'package:bonfire/features/me/views/components/member_card.dart';
 import 'package:bonfire/features/me/views/components/overview_card.dart';
-import 'package:bonfire/features/overview/views/sidebar.dart';
 import 'package:bonfire/theme/theme.dart';
-import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:universal_platform/universal_platform.dart';
@@ -23,14 +21,14 @@ class _MessageOverviewState extends ConsumerState<PrivateMessages> {
         ? MediaQuery.of(context).padding.bottom + 68
         : 0;
     var dms = ref.watch(privateMessageHistoryProvider).toList();
-    var readStates = ref.watch(channelReadStateProvider) ?? {};
+    // var readStates = ref.watch(channelReadStateProvider) ?? {};
     // print(readStates[dms[0].id]?.lastViewed);
 
-    // this is wrong, but until I figure out read states it's what it is.
+    // sort by numerical ids
     dms.sort((a, b) {
-      var aReadState = readStates[a.id]?.lastViewed ?? 0;
-      var bReadState = readStates[b.id]?.lastViewed ?? 0;
-      return -aReadState.compareTo(bReadState);
+      int aLastMessageId = a.lastMessageId?.value ?? 0;
+      var bLastMessageId = b.lastMessageId?.value ?? 0;
+      return bLastMessageId.compareTo(aLastMessageId);
     });
 
     return Scaffold(

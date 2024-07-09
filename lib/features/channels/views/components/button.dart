@@ -1,4 +1,3 @@
-import 'package:bonfire/features/channels/controllers/channel.dart';
 import 'package:bonfire/features/channels/repositories/has_unreads.dart';
 import 'package:bonfire/features/channels/views/components/voice_members.dart';
 import 'package:bonfire/features/me/controllers/settings.dart';
