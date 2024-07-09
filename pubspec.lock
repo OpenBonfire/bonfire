@@ -517,8 +517,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "090f1e9812746dd0ff9029c0927461b00ef621d0"
-      resolved-ref: "090f1e9812746dd0ff9029c0927461b00ef621d0"
+      ref: "4e16fad3f2d308d48c6661ead86d6b3764ab9412"
+      resolved-ref: "4e16fad3f2d308d48c6661ead86d6b3764ab9412"
       url: "https://github.com/OpenBonfire/firebridge"
     source: git
     version: "6.2.14"

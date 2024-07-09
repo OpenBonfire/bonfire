@@ -50,6 +50,7 @@ class _MessageViewState extends ConsumerState<MessageView> {
   void initState() {
     super.initState();
     _scrollController.addListener(_scrollListener);
+
     // GoRouter.of(context).routerDelegate.addListener(_routeListener);
   }
 
@@ -61,6 +62,9 @@ class _MessageViewState extends ConsumerState<MessageView> {
   }
 
   void _scrollListener() {
+    if (_scrollController.position.pixels == 0) {
+      loadedMessages.first.manager.acknowledge(loadedMessages.first.id);
+    }
     if (!_isLoadingMore &&
         _scrollController.position.pixels >=
             _scrollController.position.maxScrollExtent - 2000) {

@@ -17,6 +17,8 @@ class GuildMentions extends _$GuildMentions {
     List<Guild> guilds = ref.watch(guildsStateProvider) ?? [];
     var readStateProvider = ref.watch(channelReadStateProvider);
 
+    // we want to retrieve the guild from settings as it
+    // has all of the channels
     var currentGuild = guilds.firstWhereOrNull((g) => g.id == guildId);
     var channels = currentGuild?.channels ?? [];
 

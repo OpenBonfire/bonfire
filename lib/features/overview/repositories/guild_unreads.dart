@@ -16,9 +16,7 @@ class GuildUnreads extends _$GuildUnreads {
     for (var channel in channels) {
       if (channel is GuildTextChannel) {
         var unread = await ref.watch(hasUnreadsProvider(channel).future);
-        if (unread) {
-          return true;
-        }
+        if (unread) return true;
       }
     }
 
