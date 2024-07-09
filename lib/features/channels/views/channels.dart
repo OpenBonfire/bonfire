@@ -138,6 +138,13 @@ class _ChannelsListState extends ConsumerState<ChannelsList> {
                               ),
                             ),
                           ),
+                          UniversalPlatform.isMobile
+                              ? SizedBox(
+                                  height:
+                                      MediaQuery.of(context).padding.bottom +
+                                          50,
+                                )
+                              : const SizedBox(),
                         ]),
                   );
                 }),
