@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'calculate_unreads.dart';
+part of 'has_unreads.dart';
 
 // **************************************************************************
 // RiverpodGenerator
