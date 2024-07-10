@@ -6,7 +6,7 @@ part of 'member.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$getMemberHash() => r'872a632ee1cfc42f846999ae07dd364106002113';
+String _$getMemberHash() => r'03cecb3067a14691f3a19d2a9c87ede369f182a7';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -171,7 +171,7 @@ class _GetMemberProviderElement extends FutureProviderElement<Member?>
   Snowflake get memberId => (origin as GetMemberProvider).memberId;
 }
 
-String _$getSelfMemberHash() => r'387044745401e1670ea0a43dcfd1d829bdcddbb4';
+String _$getSelfMemberHash() => r'19ca6c5cc07cc99f1aeb53772b51dd11ef18e165';
 
 /// See also [getSelfMember].
 @ProviderFor(getSelfMember)
@@ -299,7 +299,7 @@ class _GetSelfMemberProviderElement extends FutureProviderElement<Member?>
   Snowflake get guildId => (origin as GetSelfMemberProvider).guildId;
 }
 
-String _$getGuildRolesHash() => r'02f52758380d342befe92d584d3d78f250552951';
+String _$getGuildRolesHash() => r'e7e541411138c1eca7a39a0e08717656e09ac27d';
 
 /// See also [getGuildRoles].
 @ProviderFor(getGuildRoles)

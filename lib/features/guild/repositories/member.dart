@@ -1,6 +1,5 @@
 import 'package:bonfire/features/auth/data/repositories/auth.dart';
 import 'package:bonfire/features/auth/data/repositories/discord_auth.dart';
-import 'package:bonfire/features/guild/controllers/guild.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -14,6 +13,7 @@ Future<Member?> getMember(
   if (authOutput is AuthUser) {
     return await authOutput.client.guilds[guildId].members.get(memberId);
   }
+  return null;
 }
 
 @Riverpod(keepAlive: true)
@@ -27,6 +27,7 @@ Future<Member?> getSelfMember(
     return await authOutput.client.guilds[guildId].members
         .get(authOutput.client.user.id);
   }
+  return null;
 }
 
 @riverpod
@@ -37,6 +38,7 @@ Future<List<Role>?> getGuildRoles(
   if (authOutput is AuthUser) {
     return await authOutput.client.guilds[guildId].roles.list();
   }
+  return null;
 }
 
 @riverpod

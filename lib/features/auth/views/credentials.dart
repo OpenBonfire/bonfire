@@ -5,7 +5,6 @@ import 'package:bonfire/shared/widgets/confirm_button.dart';
 import 'package:bonfire/theme/text_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 
 class CredentialsScreen extends ConsumerStatefulWidget {
   const CredentialsScreen({super.key});

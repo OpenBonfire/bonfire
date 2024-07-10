@@ -1,6 +1,5 @@
 import 'package:bonfire/features/auth/data/repositories/auth.dart';
 import 'package:bonfire/features/auth/data/repositories/discord_auth.dart';
-import 'package:flutter/widgets.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:firebridge/firebridge.dart';
@@ -29,16 +28,12 @@ class Guilds extends _$Guilds {
 
       List<UserGuild> userGuilds = await user!.client.listGuilds();
       List<Future<UserGuild>> guildFutures = userGuilds.map((guild) async {
-        var iconImage;
         if (guild.icon != null) {
           var cacheData =
               await _cacheManager.getFileFromCache(guild.icon!.hash);
           if (cacheData != null) {
-            var iconBytes = cacheData.file.readAsBytesSync();
-            iconImage = Image.memory(iconBytes);
           } else {
             var iconBytes = await guild.icon!.fetch();
-            iconImage = Image.memory(iconBytes);
             _cacheManager.putFile(guild.icon!.hash, iconBytes);
           }
         }
