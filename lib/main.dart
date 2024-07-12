@@ -36,6 +36,7 @@ void main() async {
   await Hive.openBox("auth");
   await Hive.openBox("last-location");
   await Hive.openBox("last-guild-channels");
+  await Hive.openBox("added-accounts");
 
   runApp(const ProviderScope(child: MaterialApp(home: MainWindow())));
 

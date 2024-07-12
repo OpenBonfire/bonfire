@@ -1,4 +1,5 @@
 import 'package:bonfire/features/auth/data/repositories/auth.dart';
+import 'package:bonfire/features/auth/models/auth.dart';
 import 'package:bonfire/shared/widgets/confirm_button.dart';
 import 'package:bonfire/theme/text_theme.dart';
 import 'package:flutter/cupertino.dart';
@@ -69,6 +70,9 @@ class _MFAPageState extends ConsumerState<MFAPage> {
     resp.then((value) {
       print("GOT MFA RESP!");
       print(value.toString());
+      if (value is MFAInvalidError) {
+        print((value.error));
+      }
     });
   }
 

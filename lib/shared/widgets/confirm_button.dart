@@ -1,6 +1,7 @@
 import 'package:bonfire/theme/theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class ConfirmButton extends StatefulWidget {
   final String text;
@@ -19,6 +20,7 @@ class _ConfirmButtonState extends State<ConfirmButton> {
       onPressed: widget.onPressed,
       child: Container(
         height: 60,
+        width: 400,
         decoration: BoxDecoration(
           color: Theme.of(context).custom.colorTheme.blurple,
           borderRadius: BorderRadius.circular(12),
@@ -26,9 +28,10 @@ class _ConfirmButtonState extends State<ConfirmButton> {
         child: Center(
           child: Text(
             widget.text,
-            style: const TextStyle(
-              color: Color.fromARGB(255, 255, 255, 255),
+            style: GoogleFonts.publicSans(
+              color: const Color.fromARGB(255, 255, 255, 255),
               fontSize: 16,
+              fontWeight: FontWeight.w600,
             ),
           ),
         ),

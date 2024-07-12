@@ -24,7 +24,7 @@ class Auth extends _$Auth {
 
   /// Authenticate client with Discord [username] and [password]
   Future<AuthResponse> loginWithCredentials(
-      String username, String password) async {
+      String username, String password, bool store) async {
     Map<String, Object?> body = {
       'gift_code_sku_id': null,
       'login': username,
@@ -59,7 +59,16 @@ class Auth extends _$Auth {
         'INVALID_LOGIN') {
       authResponse =
           FailedAuth(error: json['errors']['login']['_errors'][0]['message']);
-      state = authResponse;
+      if (store == false) {
+        state = authResponse;
+      } else {
+        // store in hive
+        if (authResponse is AuthUser) {
+          var box = await Hive.openBox('added-accounts');
+          box.put('username', username);
+          box.put('token', authResponse.token);
+        }
+      }
     } else {
       throw Exception('Unknown response');
     }
@@ -90,7 +99,7 @@ class Auth extends _$Auth {
 
       ref
           .read(guildFoldersProvider.notifier)
-          .setGuildFolders(event.userSettings.guildFolders);
+          .setGuildFolders(event.userSettings.guildFolders!);
 
       ref
           .read(channelReadStateProvider.notifier)
@@ -98,7 +107,7 @@ class Auth extends _$Auth {
 
       ref
           .read(userStatusStateProvider.notifier)
-          .setUserStatus(event.userSettings.status);
+          .setUserStatus(event.userSettings.status!);
 
       ref.read(guildsStateProvider.notifier).setGuilds(event.guilds);
 

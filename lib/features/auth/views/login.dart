@@ -38,7 +38,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       });
     } else if (auth is AuthUser) {
       WidgetsBinding.instance.addPostFrameCallback((_) async {
-        // yep, I did this.
         var lastLocation = Hive.box("last-location");
         String? guildId = lastLocation.get("guildId");
         String? channelId = lastLocation.get("channelId");
@@ -47,6 +46,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       });
     }
 
-    return const CredentialsScreen();
+    return const CredentialsScreen(
+      storeCredentials: false,
+    );
   }
 }

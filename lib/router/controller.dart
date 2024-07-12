@@ -1,3 +1,4 @@
+import 'package:bonfire/features/auth/views/switcher.dart';
 import 'package:bonfire/features/me/views/message_overview.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +18,10 @@ final routerController = GoRouter(
         GoRoute(
           path: 'login',
           builder: (context, state) => const LoginScreen(),
+        ),
+        GoRoute(
+          path: 'switcher',
+          builder: (context, state) => const AccountSwitcher(),
         ),
         GoRoute(
           path: 'register',

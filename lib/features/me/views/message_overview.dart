@@ -1,5 +1,7 @@
 import 'package:bonfire/features/me/views/components/messages.dart';
 import 'package:bonfire/features/members/views/member_list.dart';
+import 'package:bonfire/features/messaging/repositories/events/realtime_messages.dart';
+import 'package:bonfire/features/messaging/repositories/messages.dart';
 import 'package:bonfire/features/messaging/views/messages.dart';
 import 'package:bonfire/features/overview/controllers/navigation_bar.dart';
 import 'package:bonfire/features/overview/views/overlapping_panels.dart';
@@ -22,6 +24,22 @@ class _MessageOverviewState extends ConsumerState<MessageOverview> {
 
   @override
   Widget build(BuildContext context) {
+    if (widget.channelId != null) {
+      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+        ref.watch(realtimeMessagesProvider).when(
+            data: (value) {
+              ref
+                  .read(messagesProvider(Snowflake.zero, widget.channelId!)
+                      .notifier)
+                  .processRealtimeMessages(value);
+            },
+            loading: () {},
+            error: (error, stackTrace) {
+              // trust me bro
+            });
+      });
+    }
+
     return Scaffold(
       body: Builder(
         builder: (context) {

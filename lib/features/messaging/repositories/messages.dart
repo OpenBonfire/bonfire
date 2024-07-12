@@ -60,19 +60,21 @@ class Messages extends _$Messages {
       Guild? guild;
       Member? selfMember;
 
-      if (channel is GuildChannel) {
-        guild = ref.watch(guildControllerProvider(guildId)).value;
-        if (guild == null) return [];
-        selfMember = await guild.members.get(user!.client.user.id);
-        var permissions = await channel.computePermissionsFor(selfMember);
+      if (channel is GuildChannel || channel is DmChannel) {
+        if (channel is GuildChannel) {
+          guild = ref.watch(guildControllerProvider(guildId)).value;
+          if (guild == null) return [];
+          selfMember = await guild.members.get(user!.client.user.id);
+          var permissions = await channel.computePermissionsFor(selfMember);
 
-        if (permissions.canReadMessageHistory == false) {
-          // I think there's still another permission we're missing here...
-          // It ocassionally still errors
-          print(
-              "Error fetching messages in channel ${channel.id}, likely do not have access to channel bozo!");
+          if (permissions.canReadMessageHistory == false) {
+            // I think there's still another permission we're missing here...
+            // It ocassionally still errors
+            print(
+                "Error fetching messages in channel ${channel.id}, likely do not have access to channel bozo!");
 
-          return [];
+            return [];
+          }
         }
 
         if (channel is! TextChannel) {
@@ -100,7 +102,6 @@ class Messages extends _$Messages {
   }
 
   void processRealtimeMessages(List<Message> messages) async {
-    // Ensure we have a valid channel to work with
     Channel? channel =
         ref.watch(channelControllerProvider(channelId)).valueOrNull;
 

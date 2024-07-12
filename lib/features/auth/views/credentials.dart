@@ -1,13 +1,14 @@
-import 'package:bonfire/features/auth/controllers/text.dart';
 import 'package:bonfire/features/auth/data/repositories/auth.dart';
 import 'package:bonfire/features/auth/models/auth.dart';
 import 'package:bonfire/shared/widgets/confirm_button.dart';
 import 'package:bonfire/theme/text_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hive/hive.dart';
 
 class CredentialsScreen extends ConsumerStatefulWidget {
-  const CredentialsScreen({super.key});
+  final bool storeCredentials;
+  const CredentialsScreen({super.key, required this.storeCredentials});
 
   @override
   ConsumerState<CredentialsScreen> createState() => _LoginState();
@@ -16,10 +17,11 @@ class CredentialsScreen extends ConsumerStatefulWidget {
 enum LoginType { username, password }
 
 class _LoginState extends ConsumerState<CredentialsScreen> {
+  final TextEditingController usernameController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+
   @override
   void dispose() {
-    usernameController.dispose();
-    passwordController.dispose();
     super.dispose();
   }
 
@@ -87,7 +89,7 @@ class _LoginState extends ConsumerState<CredentialsScreen> {
     String password = passwordController.text;
     return await ref
         .read(authProvider.notifier)
-        .loginWithCredentials(username, password);
+        .loginWithCredentials(username, password, widget.storeCredentials);
   }
 
   @override
@@ -139,11 +141,7 @@ class _LoginState extends ConsumerState<CredentialsScreen> {
               const Expanded(
                 child: SizedBox(),
               ),
-              ConfirmButton(
-                  text: "Confirm",
-                  onPressed: () {
-                    submitCredentials();
-                  })
+              ConfirmButton(text: "CONFIRM", onPressed: submitCredentials)
             ],
           ),
         ),

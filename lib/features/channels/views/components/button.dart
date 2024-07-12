@@ -1,6 +1,8 @@
 import 'package:bonfire/features/channels/repositories/has_unreads.dart';
 import 'package:bonfire/features/channels/views/components/voice_members.dart';
 import 'package:bonfire/features/me/controllers/settings.dart';
+import 'package:bonfire/features/me/repositories/event_binds.dart';
+import 'package:bonfire/features/me/repositories/unread_listener.dart';
 import 'package:bonfire/features/overview/views/overlapping_panels.dart';
 import 'package:bonfire/shared/utils/icons.dart';
 import 'package:bonfire/theme/theme.dart';
@@ -51,6 +53,7 @@ class _ChannelButtonState extends ConsumerState<ChannelButton> {
   @override
   Widget build(BuildContext context) {
     bool selected = widget.channel.id == widget.currentChannelId;
+    var asd = ref.watch(unreadListenerProvider(widget.channel.id));
     var readState = ref.watch(channelReadStateProvider);
     int mentionCount = readState?[widget.channel.id]?.mentionCount ?? 0;
 
@@ -80,7 +83,7 @@ class _ChannelButtonState extends ConsumerState<ChannelButton> {
                           bottomRight: Radius.circular(20)),
                     ),
                   )
-                : const SizedBox(),
+                : const SizedBox(width: 4),
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.only(bottom: 2, left: 2, right: 10),
