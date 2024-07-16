@@ -37,12 +37,11 @@ class _HeaderCardState extends ConsumerState<GroupHeader> {
         }
       }
     }
-    return Container(
-      child: Text("${role?.name} - $groupCount",
-          style: GoogleFonts.publicSans(
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
-              color: Theme.of(context).custom.colorTheme.buttonIcon1)),
-    );
+
+    return Text("${role?.name ?? widget.group.name} - $groupCount",
+        style: GoogleFonts.publicSans(
+            fontSize: 14,
+            fontWeight: FontWeight.w600,
+            color: Theme.of(context).custom.colorTheme.buttonIcon1));
   }
 }
