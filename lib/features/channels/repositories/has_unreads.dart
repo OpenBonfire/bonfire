@@ -30,10 +30,16 @@ class HasUnreads extends _$HasUnreads {
     // command. I think it's a bug with application parsing (or something, unsure)
     // Validate to make sure that this is reproducable as I say it is.
 
+    // update: I don't think that's true. Some channels with 1 message also don't work correctly.
+
     if (lastChannelMessageId == null) return false;
     if (lastReadMessage == null) return true;
 
-    return lastChannelMessageId > lastReadMessage.id ||
-        lastChannelMessageId != lastReadMessage.id;
+    // print("computing using comparison");
+    // print(lastChannelMessageId);
+    // print(lastReadMessage.id);
+
+    return (lastChannelMessageId > lastReadMessage.id) &&
+        lastReadMessage.id != lastChannelMessageId;
   }
 }

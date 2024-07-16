@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bonfire/features/channels/controllers/channel.dart';
+import 'package:bonfire/features/channels/repositories/typing.dart';
 import 'package:bonfire/features/guild/controllers/guild.dart';
 import 'package:bonfire/features/messaging/repositories/messages.dart';
 import 'package:bonfire/features/messaging/views/components/bar.dart';
@@ -197,7 +198,7 @@ class _MessageViewState extends ConsumerState<MessageView> {
               itemCount: loadedMessages.length,
               reverse: true,
               shrinkWrap: true,
-              padding: const EdgeInsets.only(bottom: 24),
+              padding: const EdgeInsets.only(bottom: 12),
               itemBuilder: (context, index) {
                 bool showAuthor = true;
 

@@ -1,12 +1,12 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'unread_listener.dart';
+part of 'typing.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$unreadListenerHash() => r'ee5fccd3760b53e38ae2f84b5bc768ac3b8ba63b';
+String _$typingHash() => r'2d5d4ec1099828d30ebe8cb7f8dcd9d2f05b79bb';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -29,35 +29,36 @@ class _SystemHash {
   }
 }
 
-abstract class _$UnreadListener extends BuildlessAutoDisposeNotifier<bool> {
+abstract class _$Typing
+    extends BuildlessAutoDisposeAsyncNotifier<List<Member>> {
   late final Snowflake channelId;
 
-  bool build(
+  FutureOr<List<Member>> build(
     Snowflake channelId,
   );
 }
 
-/// See also [UnreadListener].
-@ProviderFor(UnreadListener)
-const unreadListenerProvider = UnreadListenerFamily();
+/// See also [Typing].
+@ProviderFor(Typing)
+const typingProvider = TypingFamily();
 
-/// See also [UnreadListener].
-class UnreadListenerFamily extends Family<bool> {
-  /// See also [UnreadListener].
-  const UnreadListenerFamily();
+/// See also [Typing].
+class TypingFamily extends Family<AsyncValue<List<Member>>> {
+  /// See also [Typing].
+  const TypingFamily();
 
-  /// See also [UnreadListener].
-  UnreadListenerProvider call(
+  /// See also [Typing].
+  TypingProvider call(
     Snowflake channelId,
   ) {
-    return UnreadListenerProvider(
+    return TypingProvider(
       channelId,
     );
   }
 
   @override
-  UnreadListenerProvider getProviderOverride(
-    covariant UnreadListenerProvider provider,
+  TypingProvider getProviderOverride(
+    covariant TypingProvider provider,
   ) {
     return call(
       provider.channelId,
@@ -76,30 +77,29 @@ class UnreadListenerFamily extends Family<bool> {
       _allTransitiveDependencies;
 
   @override
-  String? get name => r'unreadListenerProvider';
+  String? get name => r'typingProvider';
 }
 
-/// See also [UnreadListener].
-class UnreadListenerProvider
-    extends AutoDisposeNotifierProviderImpl<UnreadListener, bool> {
-  /// See also [UnreadListener].
-  UnreadListenerProvider(
+/// See also [Typing].
+class TypingProvider
+    extends AutoDisposeAsyncNotifierProviderImpl<Typing, List<Member>> {
+  /// See also [Typing].
+  TypingProvider(
     Snowflake channelId,
   ) : this._internal(
-          () => UnreadListener()..channelId = channelId,
-          from: unreadListenerProvider,
-          name: r'unreadListenerProvider',
+          () => Typing()..channelId = channelId,
+          from: typingProvider,
+          name: r'typingProvider',
           debugGetCreateSourceHash:
               const bool.fromEnvironment('dart.vm.product')
                   ? null
-                  : _$unreadListenerHash,
-          dependencies: UnreadListenerFamily._dependencies,
-          allTransitiveDependencies:
-              UnreadListenerFamily._allTransitiveDependencies,
+                  : _$typingHash,
+          dependencies: TypingFamily._dependencies,
+          allTransitiveDependencies: TypingFamily._allTransitiveDependencies,
           channelId: channelId,
         );
 
-  UnreadListenerProvider._internal(
+  TypingProvider._internal(
     super._createNotifier, {
     required super.name,
     required super.dependencies,
@@ -112,8 +112,8 @@ class UnreadListenerProvider
   final Snowflake channelId;
 
   @override
-  bool runNotifierBuild(
-    covariant UnreadListener notifier,
+  FutureOr<List<Member>> runNotifierBuild(
+    covariant Typing notifier,
   ) {
     return notifier.build(
       channelId,
@@ -121,10 +121,10 @@ class UnreadListenerProvider
   }
 
   @override
-  Override overrideWith(UnreadListener Function() create) {
+  Override overrideWith(Typing Function() create) {
     return ProviderOverride(
       origin: this,
-      override: UnreadListenerProvider._internal(
+      override: TypingProvider._internal(
         () => create()..channelId = channelId,
         from: from,
         name: null,
@@ -137,13 +137,14 @@ class UnreadListenerProvider
   }
 
   @override
-  AutoDisposeNotifierProviderElement<UnreadListener, bool> createElement() {
-    return _UnreadListenerProviderElement(this);
+  AutoDisposeAsyncNotifierProviderElement<Typing, List<Member>>
+      createElement() {
+    return _TypingProviderElement(this);
   }
 
   @override
   bool operator ==(Object other) {
-    return other is UnreadListenerProvider && other.channelId == channelId;
+    return other is TypingProvider && other.channelId == channelId;
   }
 
   @override
@@ -155,18 +156,18 @@ class UnreadListenerProvider
   }
 }
 
-mixin UnreadListenerRef on AutoDisposeNotifierProviderRef<bool> {
+mixin TypingRef on AutoDisposeAsyncNotifierProviderRef<List<Member>> {
   /// The parameter `channelId` of this provider.
   Snowflake get channelId;
 }
 
-class _UnreadListenerProviderElement
-    extends AutoDisposeNotifierProviderElement<UnreadListener, bool>
-    with UnreadListenerRef {
-  _UnreadListenerProviderElement(super.provider);
+class _TypingProviderElement
+    extends AutoDisposeAsyncNotifierProviderElement<Typing, List<Member>>
+    with TypingRef {
+  _TypingProviderElement(super.provider);
 
   @override
-  Snowflake get channelId => (origin as UnreadListenerProvider).channelId;
+  Snowflake get channelId => (origin as TypingProvider).channelId;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

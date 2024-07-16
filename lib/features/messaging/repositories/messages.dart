@@ -5,6 +5,7 @@ import 'dart:typed_data';
 import 'package:bonfire/features/auth/data/repositories/auth.dart';
 import 'package:bonfire/features/auth/data/repositories/discord_auth.dart';
 import 'package:bonfire/features/channels/controllers/channel.dart';
+import 'package:bonfire/features/channels/repositories/typing.dart';
 import 'package:bonfire/features/guild/controllers/guild.dart';
 import 'package:firebridge_extensions/firebridge_extensions.dart';
 import 'package:firebridge/firebridge.dart';
@@ -122,6 +123,9 @@ class Messages extends _$Messages {
 
     Message message = messages.last;
     if (message.channel.id == channel.id) {
+      ref
+          .read(typingProvider(channel.id).notifier)
+          .cancelTyping(channelId, message.author.id);
       channelMessages.insert(0, message);
       state = AsyncValue.data(channelMessages);
     }
