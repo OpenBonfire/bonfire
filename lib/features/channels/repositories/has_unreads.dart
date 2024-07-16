@@ -26,9 +26,14 @@ class HasUnreads extends _$HasUnreads {
     var lastReadMessage = readState?.lastMessage;
     var lastChannelMessageId = lastMessageId;
 
+    // TODO: lastChannelMessageId is null *if* the last message is an application
+    // command. I think it's a bug with application parsing (or something, unsure)
+    // Validate to make sure that this is reproducable as I say it is.
+
     if (lastChannelMessageId == null) return false;
     if (lastReadMessage == null) return true;
 
-    return lastChannelMessageId > lastReadMessage.id;
+    return lastChannelMessageId > lastReadMessage.id ||
+        lastChannelMessageId != lastReadMessage.id;
   }
 }
