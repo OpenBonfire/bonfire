@@ -51,6 +51,7 @@ class Messages extends _$Messages {
     Channel? channelOverride,
     Snowflake? before,
     int? count,
+    bool disableAck = false,
   }) async {
     if (user is AuthUser) {
       var channel = ref.watch(channelControllerProvider(channelId)).value;
@@ -93,6 +94,12 @@ class Messages extends _$Messages {
         messageCache[channel.id] = messages.toList();
       } else {
         messageCache[channel.id]!.addAll(messages.toList());
+      }
+
+      if (before == null && (!disableAck == true)) {
+        if (messages.isNotEmpty) {
+          await messages.first.manager.acknowledge(messages.first.id);
+        }
       }
 
       return messages;

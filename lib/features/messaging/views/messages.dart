@@ -10,6 +10,7 @@ import 'package:bonfire/theme/theme.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 String getChannelName(Channel channel) {
   if (channel is DmChannel) {
@@ -40,11 +41,9 @@ class _MessageViewState extends ConsumerState<MessageView> {
   Message? firstBatchLastMessage;
   Logger logger = Logger("MessageView");
   bool _isLoadingMore = false;
+  bool sentInitialAck = false;
 
-  void _routeListener() {
-    // if you want to listen to the route for whatever reason.
-    // ref.invalidate(messagesProvider(widget.guildId, widget.channelId));
-  }
+  void _routeListener() {}
 
   @override
   void initState() {
@@ -194,7 +193,6 @@ class _MessageViewState extends ConsumerState<MessageView> {
           ),
           Expanded(
             child: ListView.builder(
-              // key: const Key("message-list"),
               controller: _scrollController,
               itemCount: loadedMessages.length,
               reverse: true,
