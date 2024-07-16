@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:bonfire/features/channels/controllers/channel.dart';
-import 'package:bonfire/features/channels/repositories/typing.dart';
 import 'package:bonfire/features/guild/controllers/guild.dart';
 import 'package:bonfire/features/messaging/repositories/messages.dart';
 import 'package:bonfire/features/messaging/views/components/bar.dart';
@@ -11,7 +10,6 @@ import 'package:bonfire/theme/theme.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 
 String getChannelName(Channel channel) {
   if (channel is DmChannel) {

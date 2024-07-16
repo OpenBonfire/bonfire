@@ -62,22 +62,26 @@ class _SidebarState extends ConsumerState<Sidebar> {
                   if (!_scrollController.hasClients) return;
                   _scrollController.position.context.setIgnorePointer(true);
                 },
-                child: ListView(
-                  controller: _scrollController,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 2),
-                      child: MessagesIcon(
-                        selected: widget.guildId == Snowflake.zero,
+                child: ScrollConfiguration(
+                  behavior: ScrollConfiguration.of(context)
+                      .copyWith(scrollbars: false),
+                  child: ListView(
+                    controller: _scrollController,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 2),
+                        child: MessagesIcon(
+                          selected: widget.guildId == Snowflake.zero,
+                        ),
                       ),
-                    ),
-                    if (guildFolders != null)
-                      ...guildFolders.map((folder) => GuildFolderWidget(
-                            guildFolder: folder,
-                            guildList: guildList,
-                            selectedGuildId: widget.guildId,
-                          )),
-                  ],
+                      if (guildFolders != null)
+                        ...guildFolders.map((folder) => GuildFolderWidget(
+                              guildFolder: folder,
+                              guildList: guildList,
+                              selectedGuildId: widget.guildId,
+                            )),
+                    ],
+                  ),
                 ),
               ),
             ),
