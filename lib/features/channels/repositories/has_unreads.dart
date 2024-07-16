@@ -29,6 +29,6 @@ class HasUnreads extends _$HasUnreads {
     if (lastChannelMessageId == null) return false;
     if (lastReadMessage == null) return true;
 
-    return lastChannelMessageId != lastReadMessage.id;
+    return lastChannelMessageId > lastReadMessage.id;
   }
 }
