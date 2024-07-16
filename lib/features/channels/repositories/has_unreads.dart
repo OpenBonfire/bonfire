@@ -22,8 +22,8 @@ class HasUnreads extends _$HasUnreads {
       return false;
     }
 
-    var readState = ref.watch(channelReadStateProvider);
-    var lastReadMessage = readState?[channel.id]?.lastPartialMessage;
+    var readState = ref.watch(channelReadStateProvider(channel.id));
+    var lastReadMessage = readState?.lastMessage;
     var lastChannelMessageId = lastMessageId;
 
     if (lastChannelMessageId == null) return false;

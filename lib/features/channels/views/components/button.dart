@@ -54,8 +54,8 @@ class _ChannelButtonState extends ConsumerState<ChannelButton> {
   Widget build(BuildContext context) {
     bool selected = widget.channel.id == widget.currentChannelId;
     var asd = ref.watch(unreadListenerProvider(widget.channel.id));
-    var readState = ref.watch(channelReadStateProvider);
-    int mentionCount = readState?[widget.channel.id]?.mentionCount ?? 0;
+    var readState = ref.watch(channelReadStateProvider(widget.channel.id));
+    int mentionCount = readState?.mentionCount ?? 0;
 
     bool hasUnreads =
         ref.watch(hasUnreadsProvider(widget.channel)).when(data: (data) {

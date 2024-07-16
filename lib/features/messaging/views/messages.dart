@@ -234,11 +234,7 @@ class _MessageViewState extends ConsumerState<MessageView> {
                 if (index == loadedMessages.length - 1 &&
                     lastScrollMessage == null) {
                   firstBatchLastMessage = loadedMessages[index];
-                  // lastScrollMessage = loadedMessages[index];
                 }
-
-                // lastMessage = loadedMessages[index];
-                // print(lastMessage!.content);
 
                 return box;
               },

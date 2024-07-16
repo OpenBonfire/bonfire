@@ -5,7 +5,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'self_user.g.dart';
 
-/// Message provider for fetching user messages from the Discord API
+/// Get the current user
 @Riverpod(keepAlive: true)
 class SelfUser extends _$SelfUser {
   AuthUser? user;

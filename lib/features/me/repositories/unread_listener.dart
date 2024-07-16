@@ -12,9 +12,10 @@ class UnreadListener extends _$UnreadListener {
     var auth = ref.watch(authProvider.notifier).getAuth();
     if (auth is AuthUser) {
       auth.client.onChannelUnread.listen((event) async {
-        if (event.channelUnreadUpdates.first.id == channelId) {
-          var channelObj = await auth
-              .client.channels[event.channelUnreadUpdates.first.id]
+        if (event.channelUnreadUpdates.first.readState.channel.id ==
+            channelId) {
+          var channelObj = await auth.client
+              .channels[event.channelUnreadUpdates.first.readState.channel.id]
               .get() as GuildChannel;
           state = true;
           print(channelObj.name);

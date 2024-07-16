@@ -6,7 +6,7 @@ part of 'has_unreads.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$hasUnreadsHash() => r'c03a036793cf06a012d08b2c74889bdced796247';
+String _$hasUnreadsHash() => r'c2672eb45c9aae07a573019b76236154571e542d';
 
 /// Copied from Dart SDK
 class _SystemHash {

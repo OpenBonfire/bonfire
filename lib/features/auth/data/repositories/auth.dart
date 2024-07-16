@@ -64,6 +64,7 @@ class Auth extends _$Auth {
       } else {
         // store in hive
         if (authResponse is AuthUser) {
+          print("SAVING AUTH");
           var box = await Hive.openBox('added-accounts');
           box.put('username', username);
           box.put('token', authResponse.token);
@@ -101,9 +102,11 @@ class Auth extends _$Auth {
           .read(guildFoldersProvider.notifier)
           .setGuildFolders(event.userSettings.guildFolders!);
 
-      ref
-          .read(channelReadStateProvider.notifier)
-          .setReadStates(event.readStates);
+      for (var readState in event.readStates) {
+        ref
+            .read(channelReadStateProvider(readState.channel.id).notifier)
+            .setReadState(readState);
+      }
 
       ref
           .read(userStatusStateProvider.notifier)
@@ -116,6 +119,21 @@ class Auth extends _$Auth {
             .read(customStatusStateProvider.notifier)
             .setCustomStatus(event.userSettings.customStatus!);
       }
+
+      client.onChannelUnread.listen((event) {
+        for (var element in event.channelUnreadUpdates) {
+          ref
+              .read(channelReadStateProvider(element.readState.channel.id)
+                  .notifier)
+              .setReadState(element.readState);
+        }
+      });
+
+      client.onMessageAck.listen((event) {
+        ref
+            .read(channelReadStateProvider(event.readState.channel.id).notifier)
+            .setReadState(event.readState);
+      });
     });
 
     response = authResponse;

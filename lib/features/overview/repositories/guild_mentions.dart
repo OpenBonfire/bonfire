@@ -15,7 +15,6 @@ class GuildMentions extends _$GuildMentions {
     if (user is! AuthUser) return 0;
 
     List<Guild> guilds = ref.watch(guildsStateProvider) ?? [];
-    var readStateProvider = ref.watch(channelReadStateProvider);
 
     // we want to retrieve the guild from settings as it
     // has all of the channels
@@ -28,13 +27,14 @@ class GuildMentions extends _$GuildMentions {
     // var selfMember = await user.client.guilds[currentGuild.id].members
     //     .get(user.client.user.id);
     for (var channel in channels) {
+      var readStateProvider = ref.watch(channelReadStateProvider(channel.id));
       // if (channel is! GuildTextChannel) continue;
       try {
         // if (channel is GuildTextChannel) {
-        ReadState? readState = readStateProvider?[channel.id];
+        ReadState? readState = readStateProvider;
         if (readState == null) continue;
 
-        mentions += readState.mentionCount;
+        mentions += readState.mentionCount ?? 0;
         // }
       } catch (err, stacktrace) {
         print(stacktrace);

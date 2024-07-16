@@ -22,23 +22,6 @@ class _LoginScreenState extends ConsumerState<AccountSwitcher> {
 
   @override
   Widget build(BuildContext context) {
-    // var auth = ref.watch(authProvider);
-
-    // if (auth is MFARequired) {
-    //   WidgetsBinding.instance.addPostFrameCallback((_) {
-    //     context.go('/mfa');
-    //   });
-    // } else if (auth is AuthUser) {
-    //   WidgetsBinding.instance.addPostFrameCallback((_) async {
-    //     // yep, I did this.
-    //     var lastLocation = Hive.box("last-location");
-    //     String? guildId = lastLocation.get("guildId");
-    //     String? channelId = lastLocation.get("channelId");
-
-    //     context.go('/channels/${guildId ?? 0}/${channelId ?? 0}');
-    //   });
-    // }
-
     return const CredentialsScreen(
       storeCredentials: true,
     );

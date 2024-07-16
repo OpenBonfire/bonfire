@@ -37,14 +37,12 @@ class ChannelReadState extends _$ChannelReadState {
   AuthUser? user;
 
   @override
-  Map<Snowflake, ReadState>? build() {
+  ReadState? build(Snowflake channelId) {
     return null;
   }
 
-  void setReadStates(List<ReadState> readStates) async {
-    state = readStates
-        .asMap()
-        .map((key, value) => MapEntry(value.partialChannel.id, value));
+  void setReadState(ReadState readState) async {
+    state = readState;
   }
 }
 

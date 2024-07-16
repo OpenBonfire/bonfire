@@ -8,7 +8,7 @@ part of 'self_user.dart';
 
 String _$selfUserHash() => r'8dd9915ef7591aaa0e4a9be8db10415d02a4f463';
 
-/// Message provider for fetching user messages from the Discord API
+/// Get the current user
 ///
 /// Copied from [SelfUser].
 @ProviderFor(SelfUser)

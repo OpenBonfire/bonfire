@@ -7,11 +7,12 @@ import 'package:bonfire/features/messaging/views/components/box/content/embed/em
 import 'package:bonfire/features/messaging/views/components/box/curved_line_painter.dart';
 import 'package:bonfire/features/messaging/views/components/box/markdown_box.dart';
 import 'package:bonfire/features/messaging/views/components/box/reply.dart';
+import 'package:bonfire/features/user/card/repositories/self_user.dart';
 import 'package:bonfire/shared/utils/role_color.dart';
+import 'package:collection/collection.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class MessageBox extends ConsumerStatefulWidget {
   final Message? message;
@@ -80,6 +81,18 @@ class _MessageBoxState extends ConsumerState<MessageBox> {
     var attachments = widget.message!.attachments;
 
     String name = widget.message!.author.username;
+    if (widget.guildId == Snowflake.zero) {
+      User? author = (widget.channel as DmChannel).recipients.firstWhereOrNull(
+            (element) => element.id == widget.message!.author.id,
+          );
+      if (author == null) {
+        // assume it's ourselves
+        User me = ref.read(selfUserProvider).valueOrNull!;
+        name = me.globalName ?? name;
+      } else {
+        name = author.globalName ?? name;
+      }
+    }
 
     Color textColor = Colors.white;
 
