@@ -1,6 +1,4 @@
-import 'dart:typed_data';
-
-import 'package:bonfire/features/messaging/repositories/messages.dart';
+import 'package:bonfire/features/messaging/repositories/avatar.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -20,47 +18,23 @@ class MemberAvatar extends ConsumerStatefulWidget {
 }
 
 class _AvatarState extends ConsumerState<MemberAvatar> {
-  late Future<Uint8List?> _avatarFuture;
-
   @override
   void initState() {
     super.initState();
-    _avatarFuture = ref
-        .read(messagesProvider(widget.guild.id, widget.channel.id).notifier)
-        .fetchMemberAvatar(widget.member);
   }
 
   @override
   Widget build(BuildContext context) {
+    var avatar = ref.watch(memberAvatarProvider(widget.member)).valueOrNull;
     return Padding(
       padding: const EdgeInsets.only(right: 8),
       child: SizedBox(
-        width: 35,
-        height: 35,
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(100),
-          child: FutureBuilder<Uint8List?>(
-            future: _avatarFuture,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.done) {
-                if (snapshot.hasData && snapshot.data != null) {
-                  return Image.memory(snapshot.data!);
-                } else {
-                  return const SizedBox(
-                    width: 35,
-                    height: 35,
-                  );
-                }
-              } else {
-                return const SizedBox(
-                  width: 35,
-                  height: 35,
-                );
-              }
-            },
-          ),
-        ),
-      ),
+          width: 35,
+          height: 35,
+          child: ClipRRect(
+              borderRadius: BorderRadius.circular(100),
+              child:
+                  (avatar != null) ? Image.memory(avatar) : const SizedBox())),
     );
   }
 }

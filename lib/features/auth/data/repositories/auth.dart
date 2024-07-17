@@ -94,6 +94,7 @@ class Auth extends _$Auth {
     state = authResponse!;
 
     client.onReady.listen((event) {
+      print("READY!");
       ref
           .read(privateMessageHistoryProvider.notifier)
           .setMessageHistory(event.privateChannels);

@@ -6,7 +6,7 @@ part of 'typing.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$typingHash() => r'2d5d4ec1099828d30ebe8cb7f8dcd9d2f05b79bb';
+String _$typingHash() => r'87b0870da475990f0fc8a44b67e0069f2b4e19a7';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -30,10 +30,10 @@ class _SystemHash {
 }
 
 abstract class _$Typing
-    extends BuildlessAutoDisposeAsyncNotifier<List<Member>> {
+    extends BuildlessAutoDisposeAsyncNotifier<List<dynamic>> {
   late final Snowflake channelId;
 
-  FutureOr<List<Member>> build(
+  FutureOr<List<dynamic>> build(
     Snowflake channelId,
   );
 }
@@ -43,7 +43,7 @@ abstract class _$Typing
 const typingProvider = TypingFamily();
 
 /// See also [Typing].
-class TypingFamily extends Family<AsyncValue<List<Member>>> {
+class TypingFamily extends Family<AsyncValue<List<dynamic>>> {
   /// See also [Typing].
   const TypingFamily();
 
@@ -82,7 +82,7 @@ class TypingFamily extends Family<AsyncValue<List<Member>>> {
 
 /// See also [Typing].
 class TypingProvider
-    extends AutoDisposeAsyncNotifierProviderImpl<Typing, List<Member>> {
+    extends AutoDisposeAsyncNotifierProviderImpl<Typing, List<dynamic>> {
   /// See also [Typing].
   TypingProvider(
     Snowflake channelId,
@@ -112,7 +112,7 @@ class TypingProvider
   final Snowflake channelId;
 
   @override
-  FutureOr<List<Member>> runNotifierBuild(
+  FutureOr<List<dynamic>> runNotifierBuild(
     covariant Typing notifier,
   ) {
     return notifier.build(
@@ -137,7 +137,7 @@ class TypingProvider
   }
 
   @override
-  AutoDisposeAsyncNotifierProviderElement<Typing, List<Member>>
+  AutoDisposeAsyncNotifierProviderElement<Typing, List<dynamic>>
       createElement() {
     return _TypingProviderElement(this);
   }
@@ -156,13 +156,13 @@ class TypingProvider
   }
 }
 
-mixin TypingRef on AutoDisposeAsyncNotifierProviderRef<List<Member>> {
+mixin TypingRef on AutoDisposeAsyncNotifierProviderRef<List<dynamic>> {
   /// The parameter `channelId` of this provider.
   Snowflake get channelId;
 }
 
 class _TypingProviderElement
-    extends AutoDisposeAsyncNotifierProviderElement<Typing, List<Member>>
+    extends AutoDisposeAsyncNotifierProviderElement<Typing, List<dynamic>>
     with TypingRef {
   _TypingProviderElement(super.provider);
 

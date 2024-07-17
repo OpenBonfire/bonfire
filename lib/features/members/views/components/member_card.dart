@@ -58,9 +58,7 @@ class _MemberCardState extends ConsumerState<MemberCard> {
                         .custom
                         .textTheme
                         .subtitle1
-                        .copyWith(
-                            color: getRoleColor(
-                                widget.member, roles as List<Role>)),
+                        .copyWith(color: getRoleColor(widget.member, roles)),
                   ),
                   // Text(
                   //   widget.member.status,

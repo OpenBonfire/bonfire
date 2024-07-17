@@ -16,7 +16,7 @@ class TypingView extends ConsumerStatefulWidget {
 class _TypingViewState extends ConsumerState<TypingView> {
   @override
   Widget build(BuildContext context) {
-    List<Member> typingOutput =
+    List<dynamic> typingOutput =
         ref.watch(typingProvider(widget.channelId)).value ?? [];
     return SizedBox(
         height: typingOutput.isNotEmpty ? 20 : 0,
@@ -26,6 +26,13 @@ class _TypingViewState extends ConsumerState<TypingView> {
           }
 
           List<Widget> children = typingOutput.map((e) {
+            String? name;
+            if (e is Member) {
+              name = e.nick ?? e.user!.globalName ?? e.user!.username;
+            } else if (e is User) {
+              name = e.globalName ?? e.username;
+            }
+
             String sep = ", ";
             if (typingOutput.length == 1) {
               sep = "";
@@ -44,7 +51,7 @@ class _TypingViewState extends ConsumerState<TypingView> {
                 text: TextSpan(
                   children: [
                     TextSpan(
-                      text: (e.nick ?? e.user!.globalName ?? e.user!.username),
+                      text: name,
                       style: GoogleFonts.publicSans(
                         fontSize: 13,
                         color: Colors.white,
