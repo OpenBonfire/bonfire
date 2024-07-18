@@ -3,14 +3,10 @@ import 'dart:convert';
 import 'package:bonfire/features/auth/data/repositories/auth.dart';
 import 'package:bonfire/features/auth/data/repositories/discord_auth.dart';
 import 'package:bonfire/features/guild/controllers/guild.dart';
-import 'package:bonfire/features/guild/repositories/guilds.dart';
-import 'package:bonfire/features/messaging/repositories/messages.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:firebridge_extensions/firebridge_extensions.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:collection/collection.dart';
-import 'package:firebridge/firebridge.dart';
 
 part 'channels.g.dart';
 
@@ -29,7 +25,6 @@ class Channels extends _$Channels {
 
   @override
   Future<List<Channel>> build(Snowflake guildId) async {
-    var lastGuild;
     var auth = ref.watch(authProvider.notifier).getAuth();
     Guild guild = ref.watch(guildControllerProvider(guildId)).valueOrNull!;
 
@@ -38,7 +33,6 @@ class Channels extends _$Channels {
     if (cachedChannels != null) {
       if (cachedChannels.isNotEmpty) {
         channels = cachedChannels;
-        lastGuild = guild;
         state = AsyncValue.data(channels);
       }
     }

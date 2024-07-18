@@ -1,14 +1,12 @@
 import 'package:bonfire/features/channels/controllers/channel.dart';
-import 'package:bonfire/features/channels/repositories/channel_members.dart';
+import 'package:bonfire/features/voice/repositories/channel_members.dart';
 import 'package:bonfire/features/guild/controllers/guild.dart';
 import 'package:bonfire/features/members/views/components/group.dart';
 import 'package:bonfire/features/members/views/components/member_card.dart';
-import 'package:bonfire/shared/models/pair.dart';
 import 'package:bonfire/theme/theme.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 
 class MemberList extends ConsumerStatefulWidget {
   final Snowflake guildId;
@@ -108,8 +106,9 @@ class MemberScrollViewState extends ConsumerState<MemberScrollView> {
   @override
   void initState() {
     super.initState();
-    ref.read(channelMembersProvider.notifier).setRoute(
-        widget.guild.id, widget.channel.id);
+    ref
+        .read(channelMembersProvider.notifier)
+        .setRoute(widget.guild.id, widget.channel.id);
   }
 
   @override
@@ -119,13 +118,9 @@ class MemberScrollViewState extends ConsumerState<MemberScrollView> {
 
   @override
   Widget build(BuildContext context) {
+    var memberListPair = ref.watch(channelMembersProvider).valueOrNull;
 
-
-    var memberListPair = ref
-        .watch(channelMembersProvider)
-        .valueOrNull;
-
-    var groupList = memberListPair?.first  ?? [];
+    var groupList = memberListPair?.first ?? [];
     var memberList = memberListPair?.second ?? [];
 
     return SizedBox(

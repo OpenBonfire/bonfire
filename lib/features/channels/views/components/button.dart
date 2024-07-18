@@ -1,5 +1,5 @@
 import 'package:bonfire/features/channels/repositories/has_unreads.dart';
-import 'package:bonfire/features/channels/views/components/voice_members.dart';
+import 'package:bonfire/features/voice/views/voice_members.dart';
 import 'package:bonfire/features/me/controllers/settings.dart';
 import 'package:bonfire/features/overview/views/overlapping_panels.dart';
 import 'package:bonfire/shared/utils/icons.dart';

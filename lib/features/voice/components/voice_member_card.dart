@@ -1,45 +1,8 @@
-import 'package:bonfire/features/channels/repositories/voice/voice_members.dart';
 import 'package:bonfire/features/user/card/repositories/user.dart';
 import 'package:bonfire/theme/theme.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-class ChannelVoiceMembers extends ConsumerStatefulWidget {
-  final Snowflake guildId;
-  final Snowflake channelId;
-  const ChannelVoiceMembers({
-    super.key,
-    required this.guildId,
-    required this.channelId,
-  });
-
-  @override
-  ConsumerState<ChannelVoiceMembers> createState() =>
-      _ChannelVoiceMembersState();
-}
-
-class _ChannelVoiceMembersState extends ConsumerState<ChannelVoiceMembers> {
-  @override
-  Widget build(BuildContext context) {
-    List<MapEntry<Snowflake, VoiceState>>? voiceMembers = ref
-        .watch(voiceMembersProvider(
-          widget.guildId,
-          channelId: widget.channelId,
-        ))
-        .valueOrNull;
-
-    return (voiceMembers != null)
-        ? Row(
-            children: [
-              for (var voiceMember in voiceMembers)
-                Expanded(
-                    child: VoiceMemberCard(userId: voiceMember.value.userId)),
-            ],
-          )
-        : const SizedBox();
-  }
-}
 
 class VoiceMemberCard extends ConsumerStatefulWidget {
   final Snowflake userId;
