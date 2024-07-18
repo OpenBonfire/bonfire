@@ -6,7 +6,7 @@ part of 'user_avatar.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$userAvatarHash() => r'5272410566cda05626f6859e84baacec304354c2';
+String _$userAvatarHash() => r'3e41a6eb1dbc4e13024ac46f0347f3d05074036b';
 
 /// Copied from Dart SDK
 class _SystemHash {

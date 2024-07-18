@@ -10,11 +10,12 @@ class MessageReply extends ConsumerWidget {
   final Message parentMessage;
   final Snowflake guildId;
   final Channel channel;
-  const MessageReply(
-      {super.key,
-      required this.parentMessage,
-      required this.guildId,
-      required this.channel});
+  const MessageReply({
+    super.key,
+    required this.parentMessage,
+    required this.guildId,
+    required this.channel,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -49,6 +50,8 @@ class MessageReply extends ConsumerWidget {
           const SizedBox(width: 6),
           Flexible(
             child: RichText(
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
               text: TextSpan(
                 children: [
                   TextSpan(

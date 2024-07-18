@@ -1,16 +1,12 @@
-import 'dart:io';
-
 import 'package:bonfire/features/guild/repositories/member.dart';
 import 'package:bonfire/features/messaging/views/components/box/avatar.dart';
 import 'package:bonfire/features/messaging/views/components/box/content/attachment/attachment.dart';
 import 'package:bonfire/features/messaging/views/components/box/content/embed/embed.dart';
-import 'package:bonfire/features/messaging/views/components/box/curved_line_painter.dart';
 import 'package:bonfire/features/messaging/views/components/box/markdown_box.dart';
 import 'package:bonfire/features/messaging/views/components/box/popout.dart';
 import 'package:bonfire/features/messaging/views/components/box/reply.dart';
 import 'package:bonfire/features/user/card/repositories/self_user.dart';
 import 'package:bonfire/shared/utils/role_color.dart';
-import 'package:bonfire/theme/theme.dart';
 import 'package:collection/collection.dart';
 import 'package:firebridge/firebridge.dart' hide ButtonStyle;
 import 'package:flutter/material.dart';

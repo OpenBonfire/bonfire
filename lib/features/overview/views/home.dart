@@ -1,5 +1,3 @@
-import 'package:bonfire/features/channels/controllers/channel.dart';
-import 'package:bonfire/features/guild/controllers/guild.dart';
 import 'package:bonfire/features/messaging/repositories/messages.dart';
 import 'package:bonfire/features/messaging/repositories/events/realtime_messages.dart';
 import 'package:bonfire/features/overview/views/home_desktop.dart';

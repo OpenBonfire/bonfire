@@ -1,9 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:bonfire/features/members/repositories/avatar.dart';
-import 'package:bonfire/features/messaging/repositories/messages.dart';
 import 'package:firebridge/firebridge.dart' hide Builder;
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

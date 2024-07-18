@@ -47,47 +47,49 @@ class _VoiceMemberCardState extends ConsumerState<VoiceMemberCard> {
               alignment: Alignment.centerLeft,
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 12),
-                child: Row(
-                  children: [
-                    SizedBox(
-                      width: 24,
-                      height: 24,
-                      child: icon != null
-                          ? ClipRRect(
-                              borderRadius: BorderRadius.circular(36),
-                              child: Image.memory(
-                                icon,
-                                fit: BoxFit.cover,
+                child: user != null
+                    ? Row(
+                        children: [
+                          SizedBox(
+                            width: 24,
+                            height: 24,
+                            child: icon != null
+                                ? ClipRRect(
+                                    borderRadius: BorderRadius.circular(36),
+                                    child: Image.memory(
+                                      icon,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  )
+                                : const SizedBox(),
+                          ),
+                          const SizedBox(width: 8),
+                          Expanded(
+                              child: Row(
+                            children: [
+                              Text(
+                                // todo: I need to get the member for nickname
+                                user.globalName ?? user.username,
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                                softWrap: false,
+                                textAlign: TextAlign.left,
+                                style: Theme.of(context)
+                                    .custom
+                                    .textTheme
+                                    .bodyText1
+                                    .copyWith(
+                                        color: Theme.of(context)
+                                            .custom
+                                            .colorTheme
+                                            .deselectedChannelText),
                               ),
-                            )
-                          : const SizedBox(),
-                    ),
-                    const SizedBox(width: 8),
-                    Expanded(
-                        child: Row(
-                      children: [
-                        Text(
-                          // todo: I need to get the member for nickname
-                          user!.globalName ?? user.username,
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 1,
-                          softWrap: false,
-                          textAlign: TextAlign.left,
-                          style: Theme.of(context)
-                              .custom
-                              .textTheme
-                              .bodyText1
-                              .copyWith(
-                                  color: Theme.of(context)
-                                      .custom
-                                      .colorTheme
-                                      .deselectedChannelText),
-                        ),
-                        const Spacer(),
-                      ],
-                    )),
-                  ],
-                ),
+                              const Spacer(),
+                            ],
+                          )),
+                        ],
+                      )
+                    : const SizedBox(),
               ),
             ),
           ),

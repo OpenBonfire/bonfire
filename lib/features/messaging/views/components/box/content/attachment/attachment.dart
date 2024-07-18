@@ -2,7 +2,6 @@ import './components/audio_player.dart';
 import './components/downloader.dart';
 import './components/image.dart';
 import './components/desktop_video.dart';
-import './components/mobile_video.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
 import 'package:universal_platform/universal_platform.dart';

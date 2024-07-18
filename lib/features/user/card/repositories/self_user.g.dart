@@ -6,7 +6,7 @@ part of 'self_user.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$selfUserHash() => r'8dd9915ef7591aaa0e4a9be8db10415d02a4f463';
+String _$selfUserHash() => r'11f98cb16059c0445cf24c36d7e40b7bd037b488';
 
 /// Get the current user
 ///

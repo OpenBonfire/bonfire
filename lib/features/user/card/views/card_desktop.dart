@@ -1,6 +1,5 @@
 import 'dart:typed_data';
 
-import 'package:bonfire/features/auth/views/switcher.dart';
 import 'package:bonfire/features/me/controllers/settings.dart';
 import 'package:bonfire/features/user/card/repositories/self_user.dart';
 import 'package:bonfire/features/user/card/repositories/user_avatar.dart';

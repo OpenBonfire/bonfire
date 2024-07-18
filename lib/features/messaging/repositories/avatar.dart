@@ -8,7 +8,7 @@ part 'avatar.g.dart';
 
 @Riverpod(keepAlive: true)
 Future<Uint8List?> memberAvatar(MemberAvatarRef ref, Member member) async {
-  String? hash = member.user!.avatarHash;
+  // String? hash = member.user!.avatarHash;
   // if (hash != null) {
   //   var cached = await fetchMemberAvatarFromCache(hash);
   //   if (cached != null) return cached;

@@ -7,7 +7,7 @@ part of 'avatar.dart';
 // **************************************************************************
 
 String _$messageAuthorAvatarHash() =>
-    r'da68b1a5da1f73a4d2bb6e732e3fb328bdd99961';
+    r'f7137171fba75b801285cc42ceb220f1dc053363';
 
 /// Copied from Dart SDK
 class _SystemHash {

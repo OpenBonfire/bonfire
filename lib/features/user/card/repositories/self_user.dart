@@ -18,5 +18,6 @@ class SelfUser extends _$SelfUser {
 
       return await user!.client.user.get();
     }
+    return null;
   }
 }
