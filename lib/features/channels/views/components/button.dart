@@ -193,7 +193,10 @@ class _ChannelButtonState extends ConsumerState<ChannelButton> {
           ],
         ),
         (widget.channel is GuildVoiceChannel)
-            ? const ChannelVoiceMembers()
+            ? ChannelVoiceMembers(
+                guildId: widget.currentGuildId,
+                channelId: widget.channel.id,
+              )
             : const SizedBox(),
       ],
     );

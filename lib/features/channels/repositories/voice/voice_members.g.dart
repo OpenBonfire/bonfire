@@ -6,7 +6,7 @@ part of 'voice_members.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$voiceMembersHash() => r'8e2604549a48c79d14a1b05f886505a98a39cdb2';
+String _$voiceMembersHash() => r'360d3a04a56a1bc5fda4139e08be93b4f003bf90';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -29,14 +29,15 @@ class _SystemHash {
   }
 }
 
-abstract class _$VoiceMembers extends BuildlessAutoDisposeAsyncNotifier<void> {
-  late final Guild guild;
-  late final Channel channel;
+abstract class _$VoiceMembers
+    extends BuildlessAsyncNotifier<List<MapEntry<Snowflake, VoiceState>>?> {
+  late final Snowflake guildId;
+  late final Snowflake? channelId;
 
-  FutureOr<void> build(
-    Guild guild,
-    Channel channel,
-  );
+  FutureOr<List<MapEntry<Snowflake, VoiceState>>?> build(
+    Snowflake guildId, {
+    Snowflake? channelId,
+  });
 }
 
 /// See also [VoiceMembers].
@@ -44,18 +45,19 @@ abstract class _$VoiceMembers extends BuildlessAutoDisposeAsyncNotifier<void> {
 const voiceMembersProvider = VoiceMembersFamily();
 
 /// See also [VoiceMembers].
-class VoiceMembersFamily extends Family<AsyncValue<void>> {
+class VoiceMembersFamily
+    extends Family<AsyncValue<List<MapEntry<Snowflake, VoiceState>>?>> {
   /// See also [VoiceMembers].
   const VoiceMembersFamily();
 
   /// See also [VoiceMembers].
   VoiceMembersProvider call(
-    Guild guild,
-    Channel channel,
-  ) {
+    Snowflake guildId, {
+    Snowflake? channelId,
+  }) {
     return VoiceMembersProvider(
-      guild,
-      channel,
+      guildId,
+      channelId: channelId,
     );
   }
 
@@ -64,8 +66,8 @@ class VoiceMembersFamily extends Family<AsyncValue<void>> {
     covariant VoiceMembersProvider provider,
   ) {
     return call(
-      provider.guild,
-      provider.channel,
+      provider.guildId,
+      channelId: provider.channelId,
     );
   }
 
@@ -85,16 +87,16 @@ class VoiceMembersFamily extends Family<AsyncValue<void>> {
 }
 
 /// See also [VoiceMembers].
-class VoiceMembersProvider
-    extends AutoDisposeAsyncNotifierProviderImpl<VoiceMembers, void> {
+class VoiceMembersProvider extends AsyncNotifierProviderImpl<VoiceMembers,
+    List<MapEntry<Snowflake, VoiceState>>?> {
   /// See also [VoiceMembers].
   VoiceMembersProvider(
-    Guild guild,
-    Channel channel,
-  ) : this._internal(
+    Snowflake guildId, {
+    Snowflake? channelId,
+  }) : this._internal(
           () => VoiceMembers()
-            ..guild = guild
-            ..channel = channel,
+            ..guildId = guildId
+            ..channelId = channelId,
           from: voiceMembersProvider,
           name: r'voiceMembersProvider',
           debugGetCreateSourceHash:
@@ -104,8 +106,8 @@ class VoiceMembersProvider
           dependencies: VoiceMembersFamily._dependencies,
           allTransitiveDependencies:
               VoiceMembersFamily._allTransitiveDependencies,
-          guild: guild,
-          channel: channel,
+          guildId: guildId,
+          channelId: channelId,
         );
 
   VoiceMembersProvider._internal(
@@ -115,20 +117,20 @@ class VoiceMembersProvider
     required super.allTransitiveDependencies,
     required super.debugGetCreateSourceHash,
     required super.from,
-    required this.guild,
-    required this.channel,
+    required this.guildId,
+    required this.channelId,
   }) : super.internal();
 
-  final Guild guild;
-  final Channel channel;
+  final Snowflake guildId;
+  final Snowflake? channelId;
 
   @override
-  FutureOr<void> runNotifierBuild(
+  FutureOr<List<MapEntry<Snowflake, VoiceState>>?> runNotifierBuild(
     covariant VoiceMembers notifier,
   ) {
     return notifier.build(
-      guild,
-      channel,
+      guildId,
+      channelId: channelId,
     );
   }
 
@@ -138,58 +140,59 @@ class VoiceMembersProvider
       origin: this,
       override: VoiceMembersProvider._internal(
         () => create()
-          ..guild = guild
-          ..channel = channel,
+          ..guildId = guildId
+          ..channelId = channelId,
         from: from,
         name: null,
         dependencies: null,
         allTransitiveDependencies: null,
         debugGetCreateSourceHash: null,
-        guild: guild,
-        channel: channel,
+        guildId: guildId,
+        channelId: channelId,
       ),
     );
   }
 
   @override
-  AutoDisposeAsyncNotifierProviderElement<VoiceMembers, void> createElement() {
+  AsyncNotifierProviderElement<VoiceMembers,
+      List<MapEntry<Snowflake, VoiceState>>?> createElement() {
     return _VoiceMembersProviderElement(this);
   }
 
   @override
   bool operator ==(Object other) {
     return other is VoiceMembersProvider &&
-        other.guild == guild &&
-        other.channel == channel;
+        other.guildId == guildId &&
+        other.channelId == channelId;
   }
 
   @override
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, guild.hashCode);
-    hash = _SystemHash.combine(hash, channel.hashCode);
+    hash = _SystemHash.combine(hash, guildId.hashCode);
+    hash = _SystemHash.combine(hash, channelId.hashCode);
 
     return _SystemHash.finish(hash);
   }
 }
 
-mixin VoiceMembersRef on AutoDisposeAsyncNotifierProviderRef<void> {
-  /// The parameter `guild` of this provider.
-  Guild get guild;
+mixin VoiceMembersRef
+    on AsyncNotifierProviderRef<List<MapEntry<Snowflake, VoiceState>>?> {
+  /// The parameter `guildId` of this provider.
+  Snowflake get guildId;
 
-  /// The parameter `channel` of this provider.
-  Channel get channel;
+  /// The parameter `channelId` of this provider.
+  Snowflake? get channelId;
 }
 
-class _VoiceMembersProviderElement
-    extends AutoDisposeAsyncNotifierProviderElement<VoiceMembers, void>
-    with VoiceMembersRef {
+class _VoiceMembersProviderElement extends AsyncNotifierProviderElement<
+    VoiceMembers, List<MapEntry<Snowflake, VoiceState>>?> with VoiceMembersRef {
   _VoiceMembersProviderElement(super.provider);
 
   @override
-  Guild get guild => (origin as VoiceMembersProvider).guild;
+  Snowflake get guildId => (origin as VoiceMembersProvider).guildId;
   @override
-  Channel get channel => (origin as VoiceMembersProvider).channel;
+  Snowflake? get channelId => (origin as VoiceMembersProvider).channelId;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

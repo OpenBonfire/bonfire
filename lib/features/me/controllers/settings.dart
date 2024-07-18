@@ -87,3 +87,15 @@ class GuildsState extends _$GuildsState {
     state = guilds;
   }
 }
+
+// @Riverpod(keepAlive: true)
+// class VoiceStates extends _$VoiceStates {
+//   @override
+//   List<MapEntry<Snowflake, VoiceState>>? build(Snowflake guildId) {
+//     return null;
+//   }
+
+//   void setVoiceStates(List<MapEntry<Snowflake, VoiceState>> voiceStates) {
+//     state = voiceStates;
+//   }
+// }

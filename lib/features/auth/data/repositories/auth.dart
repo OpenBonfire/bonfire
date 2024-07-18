@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:bonfire/features/auth/data/headers.dart';
 import 'package:bonfire/features/auth/data/repositories/discord_auth.dart';
 import 'package:bonfire/features/auth/models/auth.dart';
+import 'package:bonfire/features/channels/repositories/voice/voice_members.dart';
 import 'package:bonfire/features/me/controllers/settings.dart';
 import 'package:http/http.dart' as http;
 import 'package:firebridge/firebridge.dart';
@@ -94,7 +95,6 @@ class Auth extends _$Auth {
     state = authResponse!;
 
     client.onReady.listen((event) {
-      print("READY!");
       ref
           .read(privateMessageHistoryProvider.notifier)
           .setMessageHistory(event.privateChannels);
@@ -134,6 +134,12 @@ class Auth extends _$Auth {
         ref
             .read(channelReadStateProvider(event.readState.channel.id).notifier)
             .setReadState(event.readState);
+      });
+
+      client.onVoiceStateUpdate.listen((event) {
+        ref
+            .read(voiceMembersProvider(event.state.guildId!).notifier)
+            .processVoiceStateUpdate(event);
       });
     });
 

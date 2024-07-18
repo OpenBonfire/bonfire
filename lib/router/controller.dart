@@ -21,7 +21,11 @@ final routerController = GoRouter(
         ),
         GoRoute(
           path: 'switcher',
-          builder: (context, state) => const AccountSwitcher(),
+          builder: (context, state) => const AccountSwitcherScreen(),
+        ),
+        GoRoute(
+          path: 'switcher/model',
+          builder: (context, state) => const AccountSwitcherModel(),
         ),
         GoRoute(
           path: 'register',

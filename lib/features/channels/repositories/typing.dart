@@ -17,10 +17,7 @@ class Typing extends _$Typing {
     var auth = ref.watch(authProvider.notifier).getAuth();
     if (auth is AuthUser) {
       auth.client.onTypingStart.listen((event) async {
-        event.member;
         if (event.channelId == channelId) {
-          print("Guild = ${event.guildId}");
-          print(event.user.id);
           if (timers.containsKey(event.member?.id ?? event.user.id)) {
             timers[event.member?.id ?? event.user.id]!.cancel();
             timers[event.member?.id ?? event.user.id] =

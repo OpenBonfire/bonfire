@@ -7,7 +7,6 @@ import 'package:bonfire/features/auth/data/repositories/discord_auth.dart';
 import 'package:bonfire/features/channels/controllers/channel.dart';
 import 'package:bonfire/features/channels/repositories/typing.dart';
 import 'package:bonfire/features/guild/controllers/guild.dart';
-import 'package:bonfire/features/members/views/components/member_avatar.dart';
 import 'package:firebridge_extensions/firebridge_extensions.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';

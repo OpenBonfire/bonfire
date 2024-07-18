@@ -23,14 +23,14 @@ class _HeaderCardState extends ConsumerState<GroupHeader> {
   @override
   Widget build(BuildContext context) {
     Role? role;
-    // TODO: Online members should be in a group...
+
     if (widget.group.id != null) {
       role = ref
           .watch(getRoleProvider(widget.guild, widget.group.id!))
           .valueOrNull;
     }
     int groupCount = 0;
-    for (var group in widget.groups) {
+    for (var _ in widget.groups) {
       for (var element in widget.groups) {
         if (element.id == widget.group.id) {
           groupCount = element.count!;

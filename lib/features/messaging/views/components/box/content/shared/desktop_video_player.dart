@@ -14,10 +14,10 @@ class DesktopVideoPlayer extends StatefulWidget {
       required this.url});
 
   @override
-  State<StatefulWidget> createState() => VideoAttachmentState();
+  State<StatefulWidget> createState() => DesktopVideoPlayerState();
 }
 
-class VideoAttachmentState extends State<DesktopVideoPlayer> {
+class DesktopVideoPlayerState extends State<DesktopVideoPlayer> {
   Player? player;
   VideoController? controller;
 

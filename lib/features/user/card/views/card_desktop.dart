@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:bonfire/features/auth/views/switcher.dart';
 import 'package:bonfire/features/me/controllers/settings.dart';
 import 'package:bonfire/features/user/card/repositories/self_user.dart';
 import 'package:bonfire/features/user/card/repositories/user_avatar.dart';
@@ -38,8 +39,9 @@ class SelfUserCardState extends ConsumerState<UserCard> {
         padding: WidgetStateProperty.all(EdgeInsets.zero),
       ),
       onPressed: () {
-        // route to login
-        GoRouter.of(context).go("/switcher");
+        // push "AccountSwitcherModel" on top of the current view
+        // GoRouter.of(context).pushNamed('/switcher/model');
+        GoRouter.of(context).go("/switcher/model");
       },
       child: Container(
           height: 60,
