@@ -2,6 +2,7 @@ import 'package:bonfire/features/auth/data/repositories/auth.dart';
 import 'package:bonfire/features/auth/data/repositories/discord_auth.dart';
 import 'package:bonfire/features/guild/controllers/guild.dart';
 import 'package:bonfire/features/me/controllers/settings.dart';
+import 'package:collection/collection.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -17,41 +18,49 @@ class VoiceMembers extends _$VoiceMembers {
     Snowflake? channelId,
   }) async {
     var authOutput = ref.watch(authProvider.notifier).getAuth();
-
     if (authOutput is AuthUser) {
       user = authOutput;
       Guild voiceGuild = ref
           .watch(guildsStateProvider)!
           .firstWhere((element) => element.id == guildId);
 
-      // print("voice state update!");
-
-      // user!.client.onVoiceStateUpdate.listen((event) {
-      //   print(event.state.member?.user?.username);
-      // });
+      var allStates = voiceGuild.voiceStates.entries.toList();
 
       if (channelId != null) {
-        return voiceGuild.voiceStates.entries
+        var filteredStates = allStates
             .where((element) => element.value.channelId == channelId)
             .toList();
+        state = AsyncData(filteredStates);
+        return filteredStates;
+      } else {
+        state = AsyncData(allStates);
+        return allStates;
       }
-      return voiceGuild.voiceStates.entries.toList();
     }
-
     return null;
   }
 
   void processVoiceStateUpdate(VoiceStateUpdateEvent event) {
-    // the cache *should* update automatically for the guild, so modifying the
-    // data based on the event shouldn't be necessary
     Guild? voiceGuild = ref.watch(guildControllerProvider(guildId)).valueOrNull;
     if (voiceGuild == null) {
       print("bad guild");
       return;
     }
 
-    var currentProviderState = state;
+    VoiceState currentState = event.state;
+    VoiceState? lastState = event.oldState;
 
-    state = AsyncValue.data(voiceGuild.voiceStates.entries.toList());
+    List<MapEntry<Snowflake, VoiceState>>? currentStates = state.asData?.value;
+    if (currentStates == null) return;
+
+    test(element) => element.key == currentState.userId;
+    currentStates.removeWhere(test);
+
+    if (currentState.channelId != null) {
+      currentStates.add(MapEntry(currentState.userId, currentState));
+    }
+    if ((lastState?.channelId == channelId)) {
+      state = AsyncData(currentStates);
+    }
   }
 }
