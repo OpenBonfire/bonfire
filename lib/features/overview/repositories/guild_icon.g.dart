@@ -1,12 +1,12 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'guild.dart';
+part of 'guild_icon.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$guildBannerUrlHash() => r'fac25c7c8aecffc3605702a90fb138777b5cb1af';
+String _$guildIconHash() => r'1d860c4dd8f1360ad85474695b3519e4458fd16b';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -29,27 +29,27 @@ class _SystemHash {
   }
 }
 
-/// See also [guildBannerUrl].
-@ProviderFor(guildBannerUrl)
-const guildBannerUrlProvider = GuildBannerUrlFamily();
+/// See also [guildIcon].
+@ProviderFor(guildIcon)
+const guildIconProvider = GuildIconFamily();
 
-/// See also [guildBannerUrl].
-class GuildBannerUrlFamily extends Family<AsyncValue<Uri?>> {
-  /// See also [guildBannerUrl].
-  const GuildBannerUrlFamily();
+/// See also [guildIcon].
+class GuildIconFamily extends Family<AsyncValue<Uint8List?>> {
+  /// See also [guildIcon].
+  const GuildIconFamily();
 
-  /// See also [guildBannerUrl].
-  GuildBannerUrlProvider call(
+  /// See also [guildIcon].
+  GuildIconProvider call(
     Snowflake guildId,
   ) {
-    return GuildBannerUrlProvider(
+    return GuildIconProvider(
       guildId,
     );
   }
 
   @override
-  GuildBannerUrlProvider getProviderOverride(
-    covariant GuildBannerUrlProvider provider,
+  GuildIconProvider getProviderOverride(
+    covariant GuildIconProvider provider,
   ) {
     return call(
       provider.guildId,
@@ -68,32 +68,31 @@ class GuildBannerUrlFamily extends Family<AsyncValue<Uri?>> {
       _allTransitiveDependencies;
 
   @override
-  String? get name => r'guildBannerUrlProvider';
+  String? get name => r'guildIconProvider';
 }
 
-/// See also [guildBannerUrl].
-class GuildBannerUrlProvider extends FutureProvider<Uri?> {
-  /// See also [guildBannerUrl].
-  GuildBannerUrlProvider(
+/// See also [guildIcon].
+class GuildIconProvider extends FutureProvider<Uint8List?> {
+  /// See also [guildIcon].
+  GuildIconProvider(
     Snowflake guildId,
   ) : this._internal(
-          (ref) => guildBannerUrl(
-            ref as GuildBannerUrlRef,
+          (ref) => guildIcon(
+            ref as GuildIconRef,
             guildId,
           ),
-          from: guildBannerUrlProvider,
-          name: r'guildBannerUrlProvider',
+          from: guildIconProvider,
+          name: r'guildIconProvider',
           debugGetCreateSourceHash:
               const bool.fromEnvironment('dart.vm.product')
                   ? null
-                  : _$guildBannerUrlHash,
-          dependencies: GuildBannerUrlFamily._dependencies,
-          allTransitiveDependencies:
-              GuildBannerUrlFamily._allTransitiveDependencies,
+                  : _$guildIconHash,
+          dependencies: GuildIconFamily._dependencies,
+          allTransitiveDependencies: GuildIconFamily._allTransitiveDependencies,
           guildId: guildId,
         );
 
-  GuildBannerUrlProvider._internal(
+  GuildIconProvider._internal(
     super._createNotifier, {
     required super.name,
     required super.dependencies,
@@ -107,12 +106,12 @@ class GuildBannerUrlProvider extends FutureProvider<Uri?> {
 
   @override
   Override overrideWith(
-    FutureOr<Uri?> Function(GuildBannerUrlRef provider) create,
+    FutureOr<Uint8List?> Function(GuildIconRef provider) create,
   ) {
     return ProviderOverride(
       origin: this,
-      override: GuildBannerUrlProvider._internal(
-        (ref) => create(ref as GuildBannerUrlRef),
+      override: GuildIconProvider._internal(
+        (ref) => create(ref as GuildIconRef),
         from: from,
         name: null,
         dependencies: null,
@@ -124,13 +123,13 @@ class GuildBannerUrlProvider extends FutureProvider<Uri?> {
   }
 
   @override
-  FutureProviderElement<Uri?> createElement() {
-    return _GuildBannerUrlProviderElement(this);
+  FutureProviderElement<Uint8List?> createElement() {
+    return _GuildIconProviderElement(this);
   }
 
   @override
   bool operator ==(Object other) {
-    return other is GuildBannerUrlProvider && other.guildId == guildId;
+    return other is GuildIconProvider && other.guildId == guildId;
   }
 
   @override
@@ -142,17 +141,17 @@ class GuildBannerUrlProvider extends FutureProvider<Uri?> {
   }
 }
 
-mixin GuildBannerUrlRef on FutureProviderRef<Uri?> {
+mixin GuildIconRef on FutureProviderRef<Uint8List?> {
   /// The parameter `guildId` of this provider.
   Snowflake get guildId;
 }
 
-class _GuildBannerUrlProviderElement extends FutureProviderElement<Uri?>
-    with GuildBannerUrlRef {
-  _GuildBannerUrlProviderElement(super.provider);
+class _GuildIconProviderElement extends FutureProviderElement<Uint8List?>
+    with GuildIconRef {
+  _GuildIconProviderElement(super.provider);
 
   @override
-  Snowflake get guildId => (origin as GuildBannerUrlProvider).guildId;
+  Snowflake get guildId => (origin as GuildIconProvider).guildId;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

@@ -29,18 +29,6 @@ class _ChannelVoiceMembersState extends ConsumerState<ChannelVoiceMembers> {
         ))
         .valueOrNull;
 
-    // print(voiceMember.value.member);
-
-    // List<User> users = [];
-    // if (voiceMembers != null) {
-    //   for (var voiceMember in voiceMembers) {
-    //     User? user = ref
-    //         .watch(getUserFromIdProvider(voiceMember.value.user.id))
-    //         .valueOrNull;
-    //     if (user != null) users.add(user);
-    //   }
-    // }
-
     return (voiceMembers != null)
         ? Row(
             children: [

@@ -1,5 +1,6 @@
+import 'package:bonfire/features/guild/repositories/guild.dart';
+import 'package:bonfire/features/overview/repositories/guild_icon.dart';
 import 'package:bonfire/features/overview/repositories/guild_mentions.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:bonfire/features/guild/repositories/guilds.dart';
 import 'package:bonfire/features/me/controllers/settings.dart';
 import 'package:bonfire/features/overview/repositories/guild_unreads.dart';
@@ -487,16 +488,9 @@ class _SidebarIconState extends ConsumerState<SidebarIcon> {
   }
 
   Widget iconBuilder(UserGuild guild) {
-    if (guild.icon != null) {
-      return CachedNetworkImage(
-        imageUrl: guild.icon!.url.toString(),
-        progressIndicatorBuilder: (context, url, downloadProgress) =>
-            CircularProgressIndicator(
-          value: downloadProgress.progress,
-          color: Theme.of(context).custom.colorTheme.blurple,
-        ),
-        errorWidget: (context, url, error) => const Icon(Icons.error),
-      );
+    var icon = ref.watch(guildIconProvider(guild.id)).valueOrNull;
+    if (icon != null) {
+      return Image.memory(icon);
     } else {
       String iconText = "";
       List<String> words = guild.name.split(" ");
