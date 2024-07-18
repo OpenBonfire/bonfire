@@ -5,7 +5,7 @@ import 'package:bonfire/features/messaging/repositories/messages.dart';
 import 'package:bonfire/features/messaging/views/messages.dart';
 import 'package:bonfire/features/overview/controllers/navigation_bar.dart';
 import 'package:bonfire/features/overview/views/overlapping_panels.dart';
-import 'package:bonfire/features/overview/views/sidebar.dart';
+import 'package:bonfire/features/sidebar/views/sidebar.dart';
 import 'package:firebridge/firebridge.dart' hide Builder;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
