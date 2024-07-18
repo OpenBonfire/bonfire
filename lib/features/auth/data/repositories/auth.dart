@@ -141,10 +141,12 @@ class Auth extends _$Auth {
             .read(voiceMembersProvider(event.state.guildId!).notifier)
             .processVoiceStateUpdate(event);
         ref
-            .read(voiceMembersProvider(event.state.guildId!,
-                    channelId:
-                        event.state.channelId ?? event.oldState?.channelId)
-                .notifier)
+            .read(
+              voiceMembersProvider(
+                event.state.guildId!,
+                channelId: event.state.channelId ?? event.oldState?.channelId,
+              ).notifier,
+            )
             .processVoiceStateUpdate(event);
       });
     });

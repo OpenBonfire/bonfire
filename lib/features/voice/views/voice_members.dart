@@ -29,11 +29,10 @@ class _ChannelVoiceMembersState extends ConsumerState<ChannelVoiceMembers> {
         .valueOrNull;
 
     return (voiceMembers != null)
-        ? Row(
+        ? Column(
             children: [
               for (var voiceMember in voiceMembers)
-                Expanded(
-                    child: VoiceMemberCard(userId: voiceMember.value.userId)),
+                VoiceMemberCard(userId: voiceMember.value.userId),
             ],
           )
         : const SizedBox();
