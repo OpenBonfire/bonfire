@@ -32,7 +32,11 @@ class _ChannelVoiceMembersState extends ConsumerState<ChannelVoiceMembers> {
         ? Column(
             children: [
               for (var voiceMember in voiceMembers)
-                VoiceMemberCard(userId: voiceMember.value.userId),
+                VoiceMemberCard(
+                  userId: voiceMember.value.userId,
+                  guildId: widget.guildId,
+                  channelId: widget.channelId,
+                ),
             ],
           )
         : const SizedBox();

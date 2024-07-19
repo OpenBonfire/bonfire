@@ -1,4 +1,5 @@
 import 'package:bonfire/features/channels/repositories/has_unreads.dart';
+import 'package:bonfire/features/voice/repositories/join.dart';
 import 'package:bonfire/features/voice/views/voice_members.dart';
 import 'package:bonfire/features/me/controllers/settings.dart';
 import 'package:bonfire/features/overview/views/overlapping_panels.dart';
@@ -116,17 +117,24 @@ class _ChannelButtonState extends ConsumerState<ChannelButton> {
                             ? Theme.of(context).custom.colorTheme.foreground
                             : Colors.transparent),
                     onPressed: () {
-                      // route to channel
-                      HapticFeedback.selectionClick();
-                      lastGuildChannels.put(widget.currentGuildId.toString(),
-                          widget.channel.id.toString());
-                      GoRouter.of(context).go(
-                          '/channels/${widget.currentGuildId}/${widget.channel.id}');
+                      if (widget.channel is GuildVoiceChannel) {
+                        ref
+                            .read(voiceChannelControllerProvider.notifier)
+                            .joinVoiceChannel(
+                                widget.currentGuildId, widget.channel.id);
+                      } else {
+                        // route to channel
+                        HapticFeedback.selectionClick();
+                        lastGuildChannels.put(widget.currentGuildId.toString(),
+                            widget.channel.id.toString());
+                        GoRouter.of(context).go(
+                            '/channels/${widget.currentGuildId}/${widget.channel.id}');
 
-                      OverlappingPanelsState? overlappingPanelsState =
-                          OverlappingPanels.of(context);
-                      if (overlappingPanelsState != null) {
-                        overlappingPanelsState.moveToState(RevealSide.main);
+                        OverlappingPanelsState? overlappingPanelsState =
+                            OverlappingPanels.of(context);
+                        if (overlappingPanelsState != null) {
+                          overlappingPanelsState.moveToState(RevealSide.main);
+                        }
                       }
                     },
                     child: SizedBox(

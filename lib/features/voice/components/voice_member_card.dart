@@ -9,7 +9,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class VoiceMemberCard extends ConsumerStatefulWidget {
   final Snowflake userId;
-  const VoiceMemberCard({super.key, required this.userId});
+  final Snowflake guildId;
+  final Snowflake channelId;
+  const VoiceMemberCard({
+    super.key,
+    required this.userId,
+    required this.guildId,
+    required this.channelId,
+  });
 
   @override
   ConsumerState<VoiceMemberCard> createState() => _VoiceMemberCardState();
