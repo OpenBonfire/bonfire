@@ -19,7 +19,7 @@ class ChannelMembers extends _$ChannelMembers {
     if (authOutput is AuthUser) {
       user = authOutput;
     }
-    
+
     user!.client.onGuildMemberListUpdate.listen((event) {
       if (event.eventType == MemberListUpdateType.sync) {
         // for some reason I can't directly cast
@@ -35,23 +35,22 @@ class ChannelMembers extends _$ChannelMembers {
 
   void setRoute(Snowflake guildId, Snowflake channelId) async {
     if (user is AuthUser) {
-      user!.client
-          .updateGuildSubscriptionsBulk(GuildSubscriptionsBulkBuilder()
-            ..subscriptions = [
-              GuildSubscription(
-                  typing: true,
-                  memberUpdates: true,
-                  channels: [
-                    GuildSubscriptionChannel(
-                      channelId: channelId,
-                      memberRange: GuildMemberRange(
-                        lowerMemberBound: 0,
-                        upperMemberBound: 99,
-                      ),
-                    )
-                  ],
-                  guildId: guildId)
-            ]);
+      user!.client.updateGuildSubscriptionsBulk(GuildSubscriptionsBulkBuilder()
+        ..subscriptions = [
+          GuildSubscription(
+              typing: true,
+              memberUpdates: true,
+              channels: [
+                GuildSubscriptionChannel(
+                  channelId: channelId,
+                  memberRange: GuildMemberRange(
+                    lowerMemberBound: 0,
+                    upperMemberBound: 99,
+                  ),
+                )
+              ],
+              guildId: guildId)
+        ]);
     }
   }
 

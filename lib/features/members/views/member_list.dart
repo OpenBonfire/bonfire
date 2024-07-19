@@ -1,5 +1,5 @@
 import 'package:bonfire/features/channels/controllers/channel.dart';
-import 'package:bonfire/features/voice/repositories/channel_members.dart';
+import 'package:bonfire/features/channels/repositories/channel_members.dart';
 import 'package:bonfire/features/guild/controllers/guild.dart';
 import 'package:bonfire/features/members/views/components/group.dart';
 import 'package:bonfire/features/members/views/components/member_card.dart';
