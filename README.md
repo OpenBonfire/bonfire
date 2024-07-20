@@ -1,3 +1,8 @@
+# Usage
+We now offer nightly builds! Please check out the [github actions](https://github.com/OpenBonfire/bonfire/actions) for the latest builds. _You must be logged into to GitHub to view these builds_.
+
+**NOTE**: Bonfire is in it's very early stages of development. It is absolutely NOT ready for regular usage.
+
 # Bonfire
 ![bonfire graphic frame(1)](https://github.com/OpenBonfire/bonfire/assets/60072374/2c406136-9e46-4be7-85bd-b16e829d4b83)
 
@@ -5,14 +10,12 @@
 ## About
 A modern alternative to the Discord client. Use Discord without ever having to touch the mobile Discord client.
 
-**NOTE**: Bonfire is in it's very early stages of development. It is absolutely NOT ready for regular usage.
-
 ## Platform Targets
 - 🟩 Android
 - 🟩 iOS
-- 🟨 Windows
-- 🟨 MacOS
-- 🟨 Linux
+- 🟩 Windows
+- 🟩 MacOS
+- 🟩 Linux
 - 🟨 Web
 
 Because we are using flutter instead of react native, it's possible to cross-compile to platforms other than mobile! The build currently runs on Windows, MacOS, and Linux, but Web is currently unavailable due to parts of our API framework not fully supporting it (which will change).
