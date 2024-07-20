@@ -1865,14 +1865,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.1.0"
-  wear:
-    dependency: "direct main"
-    description:
-      name: wear
-      sha256: b8aa77aff3351d301561a665d94416ed929dfa69ab898c5255d19f4a478eb27a
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.1.0"
   web:
     dependency: transitive
     description:
