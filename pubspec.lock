@@ -361,6 +361,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.3.6"
+  dart_webrtc:
+    dependency: transitive
+    description:
+      name: dart_webrtc
+      sha256: ac7ef077084b3e54004716f1d736fcd839e1b60bc3f21f4122a35a9bb5ca2e47
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.4.8"
   dbus:
     dependency: transitive
     description:
@@ -493,8 +501,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "62e9c4b1abf8bc2dbdae73a3f16ed6d3015800b6"
-      resolved-ref: "62e9c4b1abf8bc2dbdae73a3f16ed6d3015800b6"
+      ref: "11d675ff7d40eb82526fdc0791c2f999ea569243"
+      resolved-ref: "11d675ff7d40eb82526fdc0791c2f999ea569243"
       url: "https://github.com/OpenBonfire/firebridge"
     source: git
     version: "6.2.14"
@@ -679,6 +687,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_webrtc:
+    dependency: "direct main"
+    description:
+      name: flutter_webrtc
+      sha256: "994abcb8d919c03302e05b9402e7578562548ac92b65d65d498889b2765a034e"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.11.3"
   freezed:
     dependency: "direct dev"
     description:
@@ -799,6 +815,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.2.0"
+  inject_js:
+    dependency: transitive
+    description:
+      name: inject_js
+      sha256: "3ab213e2c76375a611f57eb0044d32c6e18c5091d52510e7fe9f88f6bee83d19"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.0"
   internet_file:
     dependency: "direct main"
     description:
@@ -1036,6 +1060,54 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.2"
+  opus_flutter:
+    dependency: "direct main"
+    description:
+      name: opus_flutter
+      sha256: b7ce2396758578ef091d8388debe98e00e16c311e6c330301c448b5f4c09c27b
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.2"
+  opus_flutter_android:
+    dependency: transitive
+    description:
+      name: opus_flutter_android
+      sha256: "9e5b71f5d959e1ee3b5faf7e1e893aabe7955d3a234c83f02462d801a5218497"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.1"
+  opus_flutter_ios:
+    dependency: transitive
+    description:
+      name: opus_flutter_ios
+      sha256: "6f6d8379009c4959b738128102d67e491da8ce80394473d8e49663d31d551a41"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.0"
+  opus_flutter_platform_interface:
+    dependency: transitive
+    description:
+      name: opus_flutter_platform_interface
+      sha256: "41180b74f1dacc131270d49815fd4eb46bd7cc5ad57aac84eab748d08de59138"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.0"
+  opus_flutter_web:
+    dependency: transitive
+    description:
+      name: opus_flutter_web
+      sha256: "037a4cdb27c3a1c05c85aed3dbe0a4b8c2f49ccce33cef259ef34f1815af6785"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.3"
+  opus_flutter_windows:
+    dependency: transitive
+    description:
+      name: opus_flutter_windows
+      sha256: "6a26862dd331c9c4b5e4c805efe3dd4e4a049e4a18bee230d994c25d72928a3b"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.0"
   package_config:
     dependency: transitive
     description:
@@ -1188,6 +1260,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.1.5"
+  platform_detect:
+    dependency: transitive
+    description:
+      name: platform_detect
+      sha256: a62f99417fc4fa2d099ce0ccdbb1bd3977920f2a64292c326271f049d4bc3a4f
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.1.0"
   plugin_platform_interface:
     dependency: transitive
     description:
@@ -1409,6 +1489,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.99"
+  sodium:
+    dependency: "direct main"
+    description:
+      name: sodium
+      sha256: d9830a388e37c82891888e64cfd4c6764fa3ac716bed80ac6eab89ee42c3cd76
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.3.1+1"
   source_gen:
     dependency: transitive
     description:
@@ -1785,6 +1873,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.5.1"
+  web_ffi:
+    dependency: transitive
+    description:
+      name: web_ffi
+      sha256: "48ef8037f7bc051d11b88d0f2903e02bec21092c51833d37c3361c36e3edc4f7"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.7.2"
   web_socket_channel:
     dependency: transitive
     description:
@@ -1793,6 +1889,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.4.5"
+  webrtc_interface:
+    dependency: transitive
+    description:
+      name: webrtc_interface
+      sha256: abec3ab7956bd5ac539cf34a42fa0c82ea26675847c0966bb85160400eea9388
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.2.0"
   webview_flutter:
     dependency: transitive
     description:

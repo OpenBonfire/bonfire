@@ -3,6 +3,8 @@ import 'dart:typed_data';
 import 'package:bonfire/features/auth/data/repositories/auth.dart';
 import 'package:bonfire/features/auth/data/repositories/discord_auth.dart';
 import 'package:bonfire/features/guild/controllers/guild.dart';
+import 'package:bonfire/features/me/controllers/settings.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:firebridge/firebridge.dart';
@@ -22,7 +24,9 @@ Future<Uint8List?> guildIcon(GuildIconRef ref, Snowflake guildId) async {
   var user = ref.watch(authProvider.notifier).getAuth();
   if (user is! AuthUser) return Uint8List(0);
 
-  Guild guild = ref.watch(guildControllerProvider(guildId)).valueOrNull!;
+  Guild guild = ref.watch(guildsStateProvider)!.firstWhereOrNull(
+        (element) => element.id == guildId,
+      )!;
 
   if (guild.icon == null) return null;
   Uint8List? fromCache =
@@ -31,6 +35,7 @@ Future<Uint8List?> guildIcon(GuildIconRef ref, Snowflake guildId) async {
           .readAsBytes();
 
   if (fromCache != null) {
+    print("from cache!");
     return fromCache;
   }
 

@@ -149,6 +149,22 @@ class Auth extends _$Auth {
             )
             .processVoiceStateUpdate(event);
       });
+
+      // TESTING FOR VC
+
+      // client.onVoiceServerUpdate.listen((event) async {
+      //   // print("GOT VOICE SERVER UPDATE!");
+      //   token = event.token;
+      //   print(event.endpoint);
+      //   if (token != null && sessionId != null) sendIdentify();
+      // });
+
+      // client.onVoiceStateUpdate.listen((event) async {
+      //   // print("GOT VOICE STATE UPDATE!");
+      //   sessionId = event.state.sessionId;
+
+      //   if (token != null && sessionId != null) sendIdentify();
+      // });
     });
 
     response = authResponse;
