@@ -1,3 +1,5 @@
+You can find us on Discord: https://discord.gg/QafRarw25u
+
 # Usage
 We now offer nightly builds! Please check out the [github actions](https://github.com/OpenBonfire/bonfire/actions) for the latest builds. _You must be logged into to GitHub to view these builds_.
 
