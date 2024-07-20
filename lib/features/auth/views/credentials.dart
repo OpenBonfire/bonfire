@@ -4,6 +4,7 @@ import 'package:bonfire/shared/widgets/confirm_button.dart';
 import 'package:bonfire/theme/text_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:wear/wear.dart';
 
 class CredentialsScreen extends ConsumerStatefulWidget {
   final bool storeCredentials;
@@ -109,11 +110,11 @@ class _LoginState extends ConsumerState<CredentialsScreen> {
         ),
         Padding(
           padding: EdgeInsets.only(top: topPadding, bottom: bottomPadding),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
+          child: ListView(
             children: [
               Center(
                   child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(
                     "Welcome Back!",
