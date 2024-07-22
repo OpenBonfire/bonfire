@@ -1,5 +1,5 @@
 import 'package:bonfire/features/me/views/components/messages.dart';
-import 'package:bonfire/features/members/views/member_list.dart';
+import 'package:bonfire/features/member/views/member_list.dart';
 import 'package:bonfire/features/messaging/repositories/events/realtime_messages.dart';
 import 'package:bonfire/features/messaging/repositories/messages.dart';
 import 'package:bonfire/features/messaging/views/messages.dart';

@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 
-import 'package:bonfire/features/members/repositories/avatar.dart';
+import 'package:bonfire/features/member/repositories/avatar.dart';
 import 'package:firebridge/firebridge.dart' hide Builder;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

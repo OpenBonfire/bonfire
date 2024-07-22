@@ -1,13 +1,14 @@
+import 'dart:typed_data';
+
 import 'package:bonfire/features/guild/repositories/member.dart';
+import 'package:bonfire/features/messaging/repositories/name.dart';
+import 'package:bonfire/features/messaging/repositories/role_icon.dart';
 import 'package:bonfire/features/messaging/views/components/box/avatar.dart';
 import 'package:bonfire/features/messaging/views/components/box/content/attachment/attachment.dart';
 import 'package:bonfire/features/messaging/views/components/box/content/embed/embed.dart';
 import 'package:bonfire/features/messaging/views/components/box/markdown_box.dart';
 import 'package:bonfire/features/messaging/views/components/box/popout.dart';
 import 'package:bonfire/features/messaging/views/components/box/reply.dart';
-import 'package:bonfire/features/user/card/repositories/self_user.dart';
-import 'package:bonfire/shared/utils/role_color.dart';
-import 'package:collection/collection.dart';
 import 'package:firebridge/firebridge.dart' hide ButtonStyle;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -79,38 +80,32 @@ class _MessageBoxState extends ConsumerState<MessageBox> {
     var embeds = widget.message!.embeds;
     var attachments = widget.message!.attachments;
 
-    String name = widget.message!.author.username;
-    if (widget.guildId == Snowflake.zero) {
-      User? author = (widget.channel as DmChannel).recipients.firstWhereOrNull(
-            (element) => element.id == widget.message!.author.id,
-          );
-      if (author == null) {
-        // assume it's ourselves
-        User me = ref.read(selfUserProvider).valueOrNull!;
-        name = me.globalName ?? name;
-      } else {
-        name = author.globalName ?? name;
-      }
-    }
+    String? name = ref
+            .watch(messageAuthorNameProvider(
+                widget.guildId, widget.channel, widget.message!.author))
+            .valueOrNull ??
+        widget.message!.author.username;
 
-    Color textColor = Colors.white;
+    var member = ref
+        .watch(getMemberProvider(widget.guildId, widget.message!.author.id))
+        .valueOrNull;
 
-    var member =
-        ref.watch(getMemberProvider(widget.guildId, widget.message!.author.id));
-    var roles =
-        ref.watch(getGuildRolesProvider(widget.guildId)).valueOrNull ?? [];
+    var roleIconRef = ref.watch(roleIconProvider(
+      widget.guildId,
+      widget.message!.author.id,
+    ));
 
-    String? roleIconUrl;
+    Color textColor = ref
+            .watch(roleColorProvider(
+              widget.guildId,
+              widget.message!.author.id,
+            ))
+            .valueOrNull ??
+        Colors.white;
 
-    member.when(
-      data: (member) {
-        name = member?.nick ?? member?.user?.globalName ?? name;
-        textColor = getRoleColor(member!, roles);
-        roleIconUrl = getRoleIconUrl(member, roles);
-      },
-      loading: () {},
-      error: (error, stack) {},
-    );
+    Uint8List? roleIcon = roleIconRef.valueOrNull;
+
+    name = member?.nick ?? member?.user?.globalName ?? name;
 
     bool mentioned = mentionsSelf();
 
@@ -203,12 +198,12 @@ class _MessageBoxState extends ConsumerState<MessageBox> {
                                           ),
                                         ),
                                       ),
-                                      if (roleIconUrl != null)
+                                      if (roleIcon != null)
                                         Padding(
                                           padding: const EdgeInsets.only(
                                               left: 6, top: 2),
-                                          child: Image.network(
-                                            roleIconUrl!,
+                                          child: Image.memory(
+                                            roleIcon,
                                             width: 22,
                                             height: 22,
                                           ),
@@ -234,7 +229,7 @@ class _MessageBoxState extends ConsumerState<MessageBox> {
                                   )
                                 : const SizedBox(),
                             Padding(
-                              padding: const EdgeInsets.only(left: 6, top: 0),
+                              padding: const EdgeInsets.only(left: 6),
                               child: SizedBox(
                                 child: MarkdownBox(
                                   message: widget.message,

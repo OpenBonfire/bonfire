@@ -1,8 +1,8 @@
 import 'package:bonfire/features/channels/controllers/channel.dart';
 import 'package:bonfire/features/channels/repositories/channel_members.dart';
 import 'package:bonfire/features/guild/controllers/guild.dart';
-import 'package:bonfire/features/members/views/components/group.dart';
-import 'package:bonfire/features/members/views/components/member_card.dart';
+import 'package:bonfire/features/member/views/components/group.dart';
+import 'package:bonfire/features/member/views/components/member_card.dart';
 import 'package:bonfire/theme/theme.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
@@ -158,7 +158,7 @@ class MemberScrollViewState extends ConsumerState<MemberScrollView> {
           }
           // print(memberList[index][0]);
           return Padding(
-            padding: const EdgeInsets.only(left: 40),
+            padding: const EdgeInsets.only(left: 34, top: 10, bottom: 4),
             child: GroupHeader(
               guild: widget.guild,
               groups: groupList,
