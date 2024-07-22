@@ -72,7 +72,7 @@ class _ChannelButtonState extends ConsumerState<ChannelButton> {
           children: [
             (hasUnreads == true)
                 ? Container(
-                    width: 4,
+                    width: 3,
                     height: 8,
                     decoration: const BoxDecoration(
                       color: Colors.white,
@@ -81,7 +81,7 @@ class _ChannelButtonState extends ConsumerState<ChannelButton> {
                           bottomRight: Radius.circular(20)),
                     ),
                   )
-                : const SizedBox(width: 4),
+                : const SizedBox(width: 3),
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.only(bottom: 2, left: 0, right: 10),

@@ -55,6 +55,7 @@ class Messages extends _$Messages {
     bool disableAck = false,
   }) async {
     if (user is AuthUser) {
+      if (channelId == Snowflake.zero) return [];
       var channel = ref.watch(channelControllerProvider(channelId)).value;
 
       if (channel == null) return [];

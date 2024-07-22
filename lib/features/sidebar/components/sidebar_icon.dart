@@ -141,6 +141,9 @@ class _SidebarIconState extends ConsumerState<SidebarIcon> {
                 ? InkWell(
                     onTap: () {
                       HapticFeedback.mediumImpact();
+
+                      GoRouter.of(context)
+                          .go('/channels/${widget.guild.id}/${Snowflake.zero}');
                       widget.guild.manager
                           .get(widget.guild.id)
                           .then((Guild guild) async {
