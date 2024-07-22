@@ -35,7 +35,6 @@ Future<Uint8List?> guildIcon(GuildIconRef ref, Snowflake guildId) async {
           .readAsBytes();
 
   if (fromCache != null) {
-    print("from cache!");
     return fromCache;
   }
 
