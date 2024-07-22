@@ -18,15 +18,14 @@ class Typing extends _$Typing {
     if (auth is AuthUser) {
       auth.client.onTypingStart.listen((event) async {
         if (event.channelId == channelId) {
-          if (timers.containsKey(event.member?.id ?? event.user.id)) {
-            timers[event.member?.id ?? event.user.id]!.cancel();
-            timers[event.member?.id ?? event.user.id] =
-                Timer(const Duration(seconds: 10), () {
+          var key = event.member?.id ?? event.user.id;
+          if (timers.containsKey(key)) {
+            timers[key]!.cancel();
+            timers[key] = Timer(const Duration(seconds: 10), () {
               users.remove(event.member!);
               state = AsyncValue.data(users);
             });
           } else {
-            print("Channel ID; $channelId");
             users.add(event.member ?? await event.user.get());
             timers.putIfAbsent(event.member?.id ?? event.user.id, () {
               return Timer(const Duration(seconds: 10), () async {

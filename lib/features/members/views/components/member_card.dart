@@ -10,11 +10,15 @@ class MemberCard extends ConsumerStatefulWidget {
   final Member member;
   final Guild guild;
   final Channel channel;
+  final bool roundTop;
+  final bool roundBottom;
   const MemberCard({
     super.key,
     required this.member,
     required this.guild,
     required this.channel,
+    required this.roundTop,
+    required this.roundBottom,
   });
 
   @override
@@ -27,13 +31,18 @@ class _MemberCardState extends ConsumerState<MemberCard> {
     var roles =
         ref.watch(getGuildRolesProvider(widget.guild.id)).valueOrNull ?? [];
 
+    double borderRadiusTop = widget.roundTop ? 8 : 0;
+    double borderRadiusBottom = widget.roundBottom ? 8 : 0;
+
     return Container(
         height: 55,
         decoration: BoxDecoration(
           color: Theme.of(context).custom.colorTheme.messageBar,
-          borderRadius: const BorderRadius.all(
-            Radius.circular(18),
-          ),
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(borderRadiusTop),
+              topRight: Radius.circular(borderRadiusTop),
+              bottomLeft: Radius.circular(borderRadiusBottom),
+              bottomRight: Radius.circular(borderRadiusBottom)),
         ),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8),

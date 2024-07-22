@@ -87,14 +87,15 @@ class _MessageBarState extends ConsumerState<MessageBar> {
                         borderRadius: BorderRadius.circular(36),
                       ),
                       child: Padding(
-                          padding: const EdgeInsets.only(left: 16),
+                          padding: const EdgeInsets.only(left: 8),
                           child: Center(
                             child: TextField(
                               focusNode: messageBarFocusNode,
                               controller: messageBarController,
                               onSubmitted: (_) {
-                                if (UniversalPlatform.isDesktopOrWeb)
+                                if (UniversalPlatform.isDesktopOrWeb) {
                                   _sendMessage();
+                                }
                               },
                               decoration: InputDecoration(
                                 contentPadding:

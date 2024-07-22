@@ -21,7 +21,7 @@ class _MemberListState extends ConsumerState<MemberList> {
   Widget topBox(String channelName, String channelDescription) {
     return Container(
       width: double.infinity,
-      height: 150,
+      // height: 150,
       decoration: BoxDecoration(
         color: Theme.of(context).custom.colorTheme.background,
         borderRadius: const BorderRadius.only(
@@ -36,7 +36,7 @@ class _MemberListState extends ConsumerState<MemberList> {
               children: [
                 Text(
                   "# $channelName",
-                  style: Theme.of(context).custom.textTheme.titleMedium,
+                  style: Theme.of(context).custom.textTheme.titleSmall,
                 ),
                 Text(
                   channelDescription,
@@ -116,6 +116,10 @@ class MemberScrollViewState extends ConsumerState<MemberScrollView> {
     super.dispose();
   }
 
+  bool isMember(dynamic item) {
+    return item.toString().contains("Member(");
+  }
+
   @override
   Widget build(BuildContext context) {
     var memberListPair = ref.watch(channelMembersProvider).valueOrNull;
@@ -128,18 +132,25 @@ class MemberScrollViewState extends ConsumerState<MemberScrollView> {
         itemCount: memberList.length,
         itemBuilder: (context, index) {
           // I'm so sorry
-          if (memberList[index].toString().contains("Member(")) {
+          // this absolutely needs to be refactored
+          // I probably just make a new object with a 'type' parameter
+          if (isMember(memberList[index])) {
             var members = memberList[index] as List;
             return Column(
               children: members.map<Widget>((member) {
                 member = member as Member;
+                bool shouldRoundBottom = (index == memberList.length - 1) ||
+                    (!isMember(memberList[index + 1]));
                 return Padding(
-                  padding:
-                      const EdgeInsets.only(left: 32, right: 12, bottom: 8),
+                  padding: EdgeInsets.only(
+                      left: 32, right: 12, bottom: shouldRoundBottom ? 8 : 0),
                   child: MemberCard(
                     member: member,
                     guild: widget.guild,
                     channel: widget.channel,
+                    roundTop:
+                        (index == 0) || (!isMember(memberList[index - 1])),
+                    roundBottom: shouldRoundBottom,
                   ),
                 );
               }).toList(),
@@ -149,9 +160,10 @@ class MemberScrollViewState extends ConsumerState<MemberScrollView> {
           return Padding(
             padding: const EdgeInsets.only(left: 40),
             child: GroupHeader(
-                guild: widget.guild,
-                groups: groupList,
-                group: memberList[index][0] as GuildMemberListGroup),
+              guild: widget.guild,
+              groups: groupList,
+              group: memberList[index][0] as GuildMemberListGroup,
+            ),
           );
         },
       ),

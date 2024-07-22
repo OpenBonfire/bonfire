@@ -163,28 +163,30 @@ class _ChannelButtonState extends ConsumerState<ChannelButton> {
                               Expanded(
                                   child: Row(
                                 children: [
-                                  Text(
-                                    (widget.channel as GuildChannel).name,
-                                    overflow: TextOverflow.ellipsis,
-                                    maxLines: 1,
-                                    softWrap: false,
-                                    textAlign: TextAlign.left,
-                                    style: Theme.of(context)
-                                        .custom
-                                        .textTheme
-                                        .bodyText1
-                                        .copyWith(
-                                            color: (selected || hasUnreads)
-                                                ? Theme.of(context)
-                                                    .custom
-                                                    .colorTheme
-                                                    .selectedChannelText
-                                                : Theme.of(context)
-                                                    .custom
-                                                    .colorTheme
-                                                    .deselectedChannelText),
+                                  Expanded(
+                                    child: Text(
+                                      (widget.channel as GuildChannel).name,
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 1,
+                                      softWrap: false,
+                                      textAlign: TextAlign.left,
+                                      style: Theme.of(context)
+                                          .custom
+                                          .textTheme
+                                          .bodyText1
+                                          .copyWith(
+                                              color: (selected || hasUnreads)
+                                                  ? Theme.of(context)
+                                                      .custom
+                                                      .colorTheme
+                                                      .selectedChannelText
+                                                  : Theme.of(context)
+                                                      .custom
+                                                      .colorTheme
+                                                      .deselectedChannelText),
+                                    ),
                                   ),
-                                  const Spacer(),
+                                  // const Spacer(),
                                   if (mentionCount > 0)
                                     mentionBubble(mentionCount),
                                 ],
