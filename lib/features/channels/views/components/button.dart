@@ -84,7 +84,7 @@ class _ChannelButtonState extends ConsumerState<ChannelButton> {
                 : const SizedBox(width: 4),
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.only(bottom: 2, left: 2, right: 10),
+                padding: const EdgeInsets.only(bottom: 2, left: 0, right: 10),
                 child: SizedBox(
                   width: double.infinity,
                   height: 35,
@@ -142,7 +142,7 @@ class _ChannelButtonState extends ConsumerState<ChannelButton> {
                       child: Align(
                         alignment: Alignment.centerLeft,
                         child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 12),
+                          padding: const EdgeInsets.symmetric(horizontal: 8),
                           child: Row(
                             children: [
                               Icon(

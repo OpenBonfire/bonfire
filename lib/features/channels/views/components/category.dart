@@ -2,7 +2,6 @@ import 'package:bonfire/features/channels/views/components/button.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:hive/hive.dart';
 
 class Category extends StatefulWidget {
   final GuildChannel category;
