@@ -13,7 +13,6 @@ part 'guild_icon.g.dart';
 final iconCache = CacheManager(
   Config(
     'guild_icons',
-    // stalePeriod: const Duration(days: 7),
     maxNrOfCacheObjects: 200,
   ),
 );

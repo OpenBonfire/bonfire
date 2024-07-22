@@ -5,13 +5,12 @@ import 'package:bonfire/features/guild/repositories/guild_unreads.dart';
 import 'package:bonfire/features/sidebar/components/folder_icon.dart';
 import 'package:bonfire/features/sidebar/components/messages_icon.dart';
 import 'package:bonfire/features/sidebar/components/sidebar_icon.dart';
-
+import 'package:universal_platform/universal_platform.dart';
 import 'package:bonfire/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter/services.dart';
-import 'package:universal_platform/universal_platform.dart';
 
 class Sidebar extends ConsumerStatefulWidget {
   final Snowflake guildId;
@@ -66,6 +65,11 @@ class _SidebarState extends ConsumerState<Sidebar> {
                       .copyWith(scrollbars: false),
                   child: ListView(
                     controller: _scrollController,
+                    padding: EdgeInsets.only(
+                      bottom: UniversalPlatform.isMobile
+                          ? MediaQuery.of(context).padding.bottom + 50
+                          : 0,
+                    ),
                     children: [
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 2),

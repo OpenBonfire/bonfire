@@ -6,7 +6,7 @@ part of 'voice_members.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$voiceMembersHash() => r'e5505b54d998aa138b914c234ff17167c54abc90';
+String _$voiceMembersHash() => r'e92b9f4d1dec55b6fada7acf1a71135268cd12ca';
 
 /// Copied from Dart SDK
 class _SystemHash {

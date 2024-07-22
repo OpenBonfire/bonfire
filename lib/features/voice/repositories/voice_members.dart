@@ -42,7 +42,7 @@ class VoiceMembers extends _$VoiceMembers {
   void processVoiceStateUpdate(VoiceStateUpdateEvent event) {
     Guild? voiceGuild = ref.watch(guildControllerProvider(guildId)).valueOrNull;
     if (voiceGuild == null) {
-      print("bad guild");
+      print("bad guild ($guildId), cannot process voice state update");
       return;
     }
 
