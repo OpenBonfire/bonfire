@@ -336,7 +336,7 @@ class GuildFolderWidgetState extends ConsumerState<GuildFolderWidget>
               SizedBox(height: _isExpanded ? 0 : 4),
             ],
           ),
-          if (!_isExpanded || hasUnreadsInFolder)
+          if (!_isExpanded && hasUnreadsInFolder)
             Positioned(
               left: 0,
               top: 2,
