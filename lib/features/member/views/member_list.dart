@@ -118,6 +118,9 @@ class MemberScrollViewState extends ConsumerState<MemberScrollView> {
   }
 
   bool isMember(dynamic item) {
+    // I'm so sorry
+    // this absolutely needs to be refactored
+    // I probably just make a new object with a 'type' parameter
     return item.toString().contains("Member(");
   }
 
@@ -132,9 +135,6 @@ class MemberScrollViewState extends ConsumerState<MemberScrollView> {
       child: ListView.builder(
         itemCount: memberList.length,
         itemBuilder: (context, index) {
-          // I'm so sorry
-          // this absolutely needs to be refactored
-          // I probably just make a new object with a 'type' parameter
           if (isMember(memberList[index])) {
             var members = memberList[index] as List;
             return Column(

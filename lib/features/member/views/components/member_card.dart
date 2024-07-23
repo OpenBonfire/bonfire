@@ -32,8 +32,8 @@ class _MemberCardState extends ConsumerState<MemberCard> {
     var roles =
         ref.watch(getGuildRolesProvider(widget.guild.id)).valueOrNull ?? [];
 
-    double borderRadiusTop = widget.roundTop ? 8 : 0;
-    double borderRadiusBottom = widget.roundBottom ? 8 : 0;
+    double borderRadiusTop = widget.roundTop ? 24 : 0;
+    double borderRadiusBottom = widget.roundBottom ? 24 : 0;
 
     return Stack(
       children: [
