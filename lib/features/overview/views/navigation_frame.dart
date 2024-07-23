@@ -1,6 +1,7 @@
 import 'package:bonfire/features/overview/views/navigator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:bonfire/shared/utils/platform.dart';
 
 class NavigationFrame extends ConsumerStatefulWidget {
   final Widget child;
@@ -16,7 +17,7 @@ class _OverviewState extends ConsumerState<NavigationFrame> {
     return Stack(
       children: [
         widget.child,
-        const NavigationBarWidget(),
+        if (!isSmartwatch(context)) const NavigationBarWidget()
       ],
     );
   }

@@ -7,6 +7,7 @@ import 'package:bonfire/theme/theme.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:bonfire/shared/utils/platform.dart';
 
 class MemberList extends ConsumerStatefulWidget {
   final Snowflake guildId;
@@ -77,10 +78,10 @@ class _MemberListState extends ConsumerState<MemberList> {
       width: double.infinity,
       height: double.infinity,
       child: Padding(
-          padding: const EdgeInsets.only(left: 0), // 40
+          padding: const EdgeInsets.only(left: 0),
           child: Column(
             children: [
-              topBox(channelName, ""),
+              if (!isSmartwatch(context)) topBox(channelName, ""),
               Expanded(
                   child: MemberScrollView(
                 guild: guild,

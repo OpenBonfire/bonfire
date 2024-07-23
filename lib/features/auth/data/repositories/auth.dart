@@ -84,7 +84,7 @@ class Auth extends _$Auth {
 
     var client = await Nyxx.connectGateway(token, GatewayIntents.all,
         options: GatewayClientOptions(
-            plugins: [Logging(logLevel: Level.OFF), IgnoreExceptions()]));
+            plugins: [Logging(logLevel: Level.WARNING), IgnoreExceptions()]));
 
     // This is how we save login information
     var box = await Hive.openBox('auth');

@@ -8,6 +8,7 @@ import 'package:bonfire/features/sidebar/views/sidebar.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:bonfire/shared/utils/platform.dart';
 
 class HomeMobile extends ConsumerStatefulWidget {
   final Snowflake guildId;
@@ -75,8 +76,9 @@ class _HomeState extends ConsumerState<HomeMobile> {
                 guildId: widget.guildId,
                 channelId: widget.channelId,
               ),
+              restWidth: isSmartwatch(context) ? 0.0 : 24,
             ),
-            const NavigationBarWidget()
+            if (!isSmartwatch(context)) const NavigationBarWidget()
           ],
         ));
   }

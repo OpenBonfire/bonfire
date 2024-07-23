@@ -90,11 +90,6 @@ class _SidebarState extends ConsumerState<Sidebar> {
             ),
           ),
         ),
-        UniversalPlatform.isMobile
-            ? SizedBox(
-                height: MediaQuery.of(context).padding.bottom + 50,
-              )
-            : const SizedBox(),
       ],
     );
   }

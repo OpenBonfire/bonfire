@@ -26,7 +26,7 @@ if (flutterVersionName == null) {
 android {
     compileSdkVersion 33
     packagingOptions {
-       // Fixes duplicate libraries build issue, 
+       // Fixes duplicate libraries build issue,
        // when your project uses more than one plugin that depend on C++ libs.
         pickFirst 'lib/**/libc++_shared.so'
     }
@@ -45,7 +45,7 @@ android {
         applicationId = "com.example.bonfire"
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
-        minSdk = 21
+        minSdk = 23
         targetSdk = flutter.targetSdkVersion
         versionCode = flutterVersionCode.toInteger()
         versionName = flutterVersionName

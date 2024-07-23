@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sticky_headers/sticky_headers.dart';
 import 'package:universal_platform/universal_platform.dart';
+import 'package:bonfire/shared/utils/platform.dart';
 
 class ChannelsList extends ConsumerStatefulWidget {
   final Snowflake guildId;
@@ -81,7 +82,8 @@ class _ChannelsListState extends ConsumerState<ChannelsList> {
     }
 
     return Padding(
-      padding: EdgeInsets.only(top: topPadding, right: 30),
+      padding: EdgeInsets.only(
+          top: topPadding, right: isSmartwatch(context) ? 0 : 30),
       child: Container(
         height: double.infinity,
         decoration: BoxDecoration(

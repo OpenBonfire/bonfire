@@ -11,6 +11,8 @@ import 'package:universal_platform/universal_platform.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:universal_io/io.dart';
+import 'package:wear_plus/wear_plus.dart';
+import 'package:bonfire/shared/utils/platform.dart';
 
 void main() async {
   VideoPlayerMediaKit.ensureInitialized(
@@ -73,16 +75,21 @@ class _MainWindowState extends ConsumerState<MainWindow> {
       backgroundColor: Colors.transparent,
       body: Column(
         children: [
-          (UniversalPlatform.isDesktop) ? const WindowTopBar() : Container(),
+          (UniversalPlatform.isDesktop)
+              ? const WindowTopBar()
+              : const SizedBox(),
           Flexible(
-            child: KeyboardSizeProvider(
-              child: MaterialApp.router(
-                title: 'Bonfire',
-                theme: ref.read(lightThemeProvider),
-                darkTheme: ref.read(darkThemeProvider),
-                routerConfig: routerController,
-              ),
-            ),
+            child: WatchShape(builder: (context, shape, child) {
+              // print("Is a watch? = ${isSmartwatch(context)}");
+              return KeyboardSizeProvider(
+                child: MaterialApp.router(
+                  title: 'Bonfire',
+                  theme: ref.read(lightThemeProvider),
+                  darkTheme: ref.read(darkThemeProvider),
+                  routerConfig: routerController,
+                ),
+              );
+            }),
           ),
         ],
       ),

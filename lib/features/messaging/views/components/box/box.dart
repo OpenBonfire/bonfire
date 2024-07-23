@@ -11,6 +11,7 @@ import 'package:bonfire/features/messaging/views/components/box/popout.dart';
 import 'package:bonfire/features/messaging/views/components/box/reply.dart';
 import 'package:firebridge/firebridge.dart' hide ButtonStyle;
 import 'package:flutter/material.dart';
+import 'package:bonfire/shared/utils/platform.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class MessageBox extends ConsumerStatefulWidget {
@@ -32,6 +33,7 @@ class MessageBox extends ConsumerStatefulWidget {
 
 class _MessageBoxState extends ConsumerState<MessageBox> {
   bool _isHovering = false;
+
   String dateTimeFormat(DateTime time) {
     String section1;
     String section2;
@@ -77,9 +79,6 @@ class _MessageBoxState extends ConsumerState<MessageBox> {
 
   @override
   Widget build(BuildContext context) {
-    var embeds = widget.message!.embeds;
-    var attachments = widget.message!.attachments;
-
     String? name = ref
             .watch(messageAuthorNameProvider(
                 widget.guildId, widget.channel, widget.message!.author))
@@ -114,35 +113,22 @@ class _MessageBoxState extends ConsumerState<MessageBox> {
       onExit: (_) => setState(() => _isHovering = false),
       child: Column(
         children: [
-          SizedBox(
-            height: widget.showSenderInfo ? 16 : 0,
-          ),
-          (widget.message!.referencedMessage != null)
-              ? Stack(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 0),
-                      child: MessageReply(
-                        guildId: widget.guildId,
-                        channel: widget.channel,
-                        parentMessage: widget.message!,
-                      ),
-                    ),
-                  ],
-                )
-              : const SizedBox(),
+          SizedBox(height: widget.showSenderInfo ? 16 : 0),
+          if (widget.message!.referencedMessage != null)
+            MessageReply(
+              guildId: widget.guildId,
+              channel: widget.channel,
+              parentMessage: widget.message!,
+            ),
           OutlinedButton(
             style: OutlinedButton.styleFrom(
-              padding: const EdgeInsets.symmetric(horizontal: 0),
+              padding: EdgeInsets.zero,
               backgroundColor: mentioned
                   ? Colors.yellow.withOpacity(0.1)
                   : Colors.transparent,
-              minimumSize: const Size(0, 0),
+              minimumSize: Size.zero,
               tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-              side: const BorderSide(
-                color: Color.fromARGB(0, 255, 255, 255),
-                width: 0.5,
-              ),
+              side: BorderSide.none,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(0),
               ),
@@ -161,100 +147,12 @@ class _MessageBoxState extends ConsumerState<MessageBox> {
                     ),
                   ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 16, right: 16),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      (widget.showSenderInfo == true)
-                          ? Avatar(
-                              author: widget.message!.author,
-                              guildId: widget.guildId,
-                              channelId: widget.channel.id,
-                            )
-                          : const Padding(
-                              padding: EdgeInsets.only(right: 8),
-                              child: SizedBox(
-                                width: 45,
-                              ),
-                            ),
-                      Expanded(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            widget.showSenderInfo
-                                ? Wrap(
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.only(left: 6),
-                                        child: Text(
-                                          name,
-                                          textAlign: TextAlign.left,
-                                          style: TextStyle(
-                                            color: textColor,
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                      ),
-                                      if (roleIcon != null)
-                                        Padding(
-                                          padding: const EdgeInsets.only(
-                                              left: 6, top: 2),
-                                          child: Image.memory(
-                                            roleIcon,
-                                            width: 22,
-                                            height: 22,
-                                          ),
-                                        ),
-                                      Padding(
-                                        padding: const EdgeInsets.only(
-                                            left: 6, top: 4),
-                                        child: Text(
-                                          dateTimeFormat(widget
-                                              .message!.timestamp
-                                              .toLocal()),
-                                          textAlign: TextAlign.left,
-                                          softWrap: true,
-                                          overflow: TextOverflow.fade,
-                                          style: const TextStyle(
-                                            color: Color.fromARGB(
-                                                189, 255, 255, 255),
-                                            fontSize: 12,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  )
-                                : const SizedBox(),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 6),
-                              child: SizedBox(
-                                child: MarkdownBox(
-                                  message: widget.message,
-                                ),
-                              ),
-                            ),
-                            for (var embed in embeds)
-                              Padding(
-                                padding: const EdgeInsets.only(left: 8, top: 8),
-                                child: EmbedWidget(
-                                  embed: embed,
-                                ),
-                              ),
-                            for (var attachment in attachments)
-                              Padding(
-                                padding: const EdgeInsets.only(left: 8, top: 8),
-                                child: AttachmentWidget(
-                                  attachment: attachment,
-                                ),
-                              ),
-                          ],
-                        ),
-                      ),
-                    ],
+                  padding: EdgeInsets.only(
+                    left: mentioned ? 2 : 0,
+                    right: 16,
                   ),
+                  child:
+                      _buildMessageLayout(context, name, textColor, roleIcon),
                 ),
                 if (_isHovering)
                   Positioned(
@@ -270,6 +168,85 @@ class _MessageBoxState extends ConsumerState<MessageBox> {
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildMessageLayout(
+      BuildContext context, String name, Color textColor, Uint8List? roleIcon) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        if (widget.showSenderInfo)
+          Avatar(
+            author: widget.message!.author,
+            guildId: widget.guildId,
+            channelId: widget.channel.id,
+          )
+        else
+          const SizedBox(width: 53),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (widget.showSenderInfo)
+                _buildMessageHeader(name, textColor, roleIcon),
+              _buildMessageContent(),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildMessageHeader(
+      String name, Color textColor, Uint8List? roleIcon) {
+    return Wrap(
+      children: [
+        Text(
+          name,
+          style: TextStyle(
+            color: textColor,
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        if (roleIcon != null)
+          Padding(
+            padding: const EdgeInsets.only(left: 6, top: 2),
+            child: Image.memory(
+              roleIcon,
+              width: 22,
+              height: 22,
+            ),
+          ),
+        Padding(
+          padding: const EdgeInsets.only(left: 6, top: 4),
+          child: Text(
+            dateTimeFormat(widget.message!.timestamp.toLocal()),
+            style: const TextStyle(
+              color: Color.fromARGB(189, 255, 255, 255),
+              fontSize: 12,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildMessageContent() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        MarkdownBox(message: widget.message),
+        ...widget.message!.embeds.map((embed) => Padding(
+              padding: const EdgeInsets.only(top: 8),
+              child: EmbedWidget(embed: embed),
+            )),
+        ...widget.message!.attachments.map((attachment) => Padding(
+              padding: const EdgeInsets.only(top: 8),
+              child: AttachmentWidget(attachment: attachment),
+            )),
+      ],
     );
   }
 }

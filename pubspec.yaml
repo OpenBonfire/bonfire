@@ -78,6 +78,8 @@ dependencies:
   flutter_webrtc: ^0.11.3
   flutter_blurhash: ^0.8.2
   blurhash_dart: ^1.2.1
+  wear_plus: ^1.2.0
+  flutter_circular_text: ^0.3.1
 
 dependency_overrides:
   webview_flutter_platform_interface: ^2.4.0
