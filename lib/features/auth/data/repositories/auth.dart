@@ -82,9 +82,11 @@ class Auth extends _$Auth {
   Future<AuthResponse> loginWithToken(String token) async {
     AuthResponse? response;
 
+    print("gateway connect...");
     var client = await Nyxx.connectGateway(token, GatewayIntents.all,
-        options: GatewayClientOptions(
-            plugins: [Logging(logLevel: Level.WARNING), IgnoreExceptions()]));
+        // Logging(logLevel: Level.ALL)
+        options: GatewayClientOptions());
+    print("connected to gateway!");
 
     // This is how we save login information
     var box = await Hive.openBox('auth');
@@ -95,6 +97,7 @@ class Auth extends _$Auth {
     state = authResponse!;
 
     client.onReady.listen((event) {
+      print("READY!");
       ref
           .read(privateMessageHistoryProvider.notifier)
           .setMessageHistory(event.privateChannels);
@@ -120,7 +123,8 @@ class Auth extends _$Auth {
             .read(customStatusStateProvider.notifier)
             .setCustomStatus(event.userSettings.customStatus!);
       }
-
+      // WARNING: THIS MIGHT CAUSE DUPLICATE EVENTS!
+      // We may have to move this out of onReady
       client.onChannelUnread.listen((event) {
         for (var element in event.channelUnreadUpdates) {
           ref

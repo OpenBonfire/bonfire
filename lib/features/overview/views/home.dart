@@ -8,7 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'dart:io' show Platform;
+import 'package:universal_platform/universal_platform.dart';
 
 class GuildMessagingOverview extends ConsumerStatefulWidget {
   final Snowflake guildId;
@@ -45,7 +45,7 @@ class _HomeState extends ConsumerState<GuildMessagingOverview> {
           });
     });
 
-    return (Platform.isAndroid || Platform.isIOS)
+    return (UniversalPlatform.isMobile)
         ? HomeMobile(
             guildId: widget.guildId,
             channelId: widget.channelId,

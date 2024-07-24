@@ -21,12 +21,9 @@ class _LoginState extends ConsumerState<CredentialsScreen> {
 
   @override
   void dispose() {
+    usernameController.dispose();
+    passwordController.dispose();
     super.dispose();
-  }
-
-  @override
-  void initState() {
-    super.initState();
   }
 
   Widget loginBox(LoginType loginType) {
@@ -37,16 +34,13 @@ class _LoginState extends ConsumerState<CredentialsScreen> {
     return SizedBox(
       width: 400,
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Text(
-              loginType == LoginType.username ? "Email" : "Password",
-              style: CustomTextTheme().labelLarge.copyWith(
-                    color: Theme.of(context).colorScheme.background,
-                  ),
-              textAlign: TextAlign.start,
-            ),
+          Text(
+            loginType == LoginType.username ? "Email" : "Password",
+            style: CustomTextTheme().labelLarge.copyWith(
+                  color: Theme.of(context).colorScheme.background,
+                ),
           ),
           Container(
             height: 60,
@@ -54,28 +48,21 @@ class _LoginState extends ConsumerState<CredentialsScreen> {
               color: const Color.fromARGB(255, 22, 20, 20),
               borderRadius: BorderRadius.circular(0),
             ),
-            child: Row(
-              children: [
-                const SizedBox(width: 20),
-                Expanded(
-                  child: TextFormField(
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    style: CustomTextTheme().bodyText1,
-                    controller: controller,
-                    obscureText: loginType == LoginType.password,
-                    autofillHints: loginType == LoginType.username
-                        ? [AutofillHints.username]
-                        : [AutofillHints.password],
-                    autocorrect: true,
-                    decoration: const InputDecoration(
-                      hintText: '',
-                      hintStyle:
-                          TextStyle(color: Color.fromARGB(255, 255, 255, 255)),
-                      border: InputBorder.none,
-                    ),
-                  ),
-                ),
-              ],
+            child: TextFormField(
+              autovalidateMode: AutovalidateMode.onUserInteraction,
+              style: CustomTextTheme().bodyText1,
+              controller: controller,
+              obscureText: loginType == LoginType.password,
+              autofillHints: loginType == LoginType.username
+                  ? [AutofillHints.username]
+                  : [AutofillHints.password],
+              autocorrect: loginType == LoginType.username,
+              decoration: const InputDecoration(
+                hintText: '',
+                hintStyle: TextStyle(color: Color.fromARGB(255, 255, 255, 255)),
+                border: InputBorder.none,
+                contentPadding: EdgeInsets.symmetric(horizontal: 20),
+              ),
             ),
           ),
         ],
@@ -93,28 +80,23 @@ class _LoginState extends ConsumerState<CredentialsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var topPadding = MediaQuery.of(context).viewPadding.top;
-    var bottomPadding = MediaQuery.of(context).viewPadding.bottom;
-
     return Scaffold(
-        body: Stack(
-      children: [
-        SizedBox(
-          width: double.infinity,
-          height: double.infinity,
-          child: Image.asset(
+      // body: SafeArea(
+      body: Stack(
+        children: [
+          Image.asset(
             'assets/images/login_background.png',
             fit: BoxFit.cover,
+            width: double.infinity,
+            height: double.infinity,
           ),
-        ),
-        Padding(
-          padding: EdgeInsets.only(top: topPadding, bottom: bottomPadding),
-          child: ListView(
-            children: [
-              Center(
-                  child: Column(
+          SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
+                  const SizedBox(height: 40),
                   Text(
                     "Welcome Back!",
                     style: CustomTextTheme().titleLarge,
@@ -126,25 +108,27 @@ class _LoginState extends ConsumerState<CredentialsScreen> {
                         ),
                   ),
                   const SizedBox(height: 80),
+                  Form(
+                    child: AutofillGroup(
+                      child: Column(
+                        children: [
+                          loginBox(LoginType.username),
+                          const SizedBox(height: 20),
+                          loginBox(LoginType.password),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 40),
+                  ConfirmButton(text: "CONFIRM", onPressed: submitCredentials),
+                  const SizedBox(height: 20),
                 ],
-              )),
-              Form(
-                child: AutofillGroup(
-                  child: Column(children: [
-                    Center(child: loginBox(LoginType.username)),
-                    const SizedBox(height: 20),
-                    Center(child: loginBox(LoginType.password)),
-                  ]),
-                ),
               ),
-              const Expanded(
-                child: SizedBox(),
-              ),
-              ConfirmButton(text: "CONFIRM", onPressed: submitCredentials)
-            ],
+            ),
           ),
-        ),
-      ],
-    ));
+        ],
+      ),
+      //),
+    );
   }
 }

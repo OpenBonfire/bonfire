@@ -11,10 +11,9 @@ import 'package:universal_platform/universal_platform.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:universal_io/io.dart';
-import 'package:wear_plus/wear_plus.dart';
-import 'package:bonfire/shared/utils/platform.dart';
 
 void main() async {
+  print("main!");
   VideoPlayerMediaKit.ensureInitialized(
     android: true,
     iOS: true,
@@ -26,19 +25,21 @@ void main() async {
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge,
       overlays: [SystemUiOverlay.top]);
 
-  final appDocumentDir = await getApplicationDocumentsDirectory();
-  final dataDir = Directory('${appDocumentDir.path}/bonfire/data');
-
-  if (!await dataDir.exists()) {
-    await dataDir.create(recursive: true);
+  if (!UniversalPlatform.isWeb) {
+    final appDocumentDir = await getApplicationDocumentsDirectory();
+    final dataDir = Directory('${appDocumentDir.path}/bonfire/data');
+    if (!dataDir.existsSync()) {
+      dataDir.createSync(recursive: true);
+    }
+    Hive.init(dataDir.path);
   }
-
-  Hive.init(dataDir.path);
 
   await Hive.openBox("auth");
   await Hive.openBox("last-location");
   await Hive.openBox("last-guild-channels");
   await Hive.openBox("added-accounts");
+
+  print("run app!");
 
   runApp(const ProviderScope(child: MaterialApp(home: MainWindow())));
 
@@ -79,18 +80,14 @@ class _MainWindowState extends ConsumerState<MainWindow> {
               ? const WindowTopBar()
               : const SizedBox(),
           Flexible(
-            child: WatchShape(builder: (context, shape, child) {
-              // print("Is a watch? = ${isSmartwatch(context)}");
-              return KeyboardSizeProvider(
-                child: MaterialApp.router(
-                  title: 'Bonfire',
-                  theme: ref.read(lightThemeProvider),
-                  darkTheme: ref.read(darkThemeProvider),
-                  routerConfig: routerController,
-                ),
-              );
-            }),
-          ),
+              child: KeyboardSizeProvider(
+            child: MaterialApp.router(
+              title: 'Bonfire',
+              theme: ref.read(lightThemeProvider),
+              darkTheme: ref.read(darkThemeProvider),
+              routerConfig: routerController,
+            ),
+          )),
         ],
       ),
     );

@@ -21,7 +21,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     var auth = Hive.openBox('auth');
 
     auth.then((value) {
+      print("getting token...");
       var token = value.get('token');
+
       if (token != null) {
         ref.read(authProvider.notifier).loginWithToken(token);
       }

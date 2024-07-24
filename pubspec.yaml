@@ -1,6 +1,6 @@
 name: bonfire
 description: "A modern take on the Discord Client"
-publish_to: 'none'
+publish_to: "none"
 
 version: 1.0.0+1
 
@@ -19,7 +19,7 @@ dependencies:
   firebridge:
     git:
       url: https://github.com/OpenBonfire/firebridge
-      ref: fd6bbf6d4e1dd54d452e163ddad8397015c9ba00
+      ref: a565aec44d8f2c7a85571980203cda75beb7b0a3
 
   markdown_viewer:
     git:
@@ -41,7 +41,7 @@ dependencies:
   go_router: ^13.2.4
   flutter_background_service: ^5.0.5
   flutter_prism: ^0.2.2
-  
+
   video_player_media_kit: ^1.0.5
   media_kit_libs_android_video: any
   media_kit_libs_ios_video: any
@@ -80,6 +80,7 @@ dependencies:
   blurhash_dart: ^1.2.1
   wear_plus: ^1.2.0
   flutter_circular_text: ^0.3.1
+  worker_manager: ^7.0.3
 
 dependency_overrides:
   webview_flutter_platform_interface: ^2.4.0
@@ -89,7 +90,7 @@ dependency_overrides:
   firebridge:
     git:
       url: https://github.com/OpenBonfire/firebridge
-      ref: fd6bbf6d4e1dd54d452e163ddad8397015c9ba00
+      ref: a565aec44d8f2c7a85571980203cda75beb7b0a3
 
   media_kit:
     git:

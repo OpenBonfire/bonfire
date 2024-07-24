@@ -509,8 +509,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: fd6bbf6d4e1dd54d452e163ddad8397015c9ba00
-      resolved-ref: fd6bbf6d4e1dd54d452e163ddad8397015c9ba00
+      ref: a565aec44d8f2c7a85571980203cda75beb7b0a3
+      resolved-ref: a565aec44d8f2c7a85571980203cda75beb7b0a3
       url: "https://github.com/OpenBonfire/firebridge"
     source: git
     version: "6.2.14"
@@ -1993,6 +1993,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "5.5.0"
+  worker_manager:
+    dependency: "direct main"
+    description:
+      name: worker_manager
+      sha256: "8de97b794040a988b41f475ab0efa03015cc8dff8e130fa3606043572abb4a2c"
+      url: "https://pub.dev"
+    source: hosted
+    version: "7.0.3"
   xdg_directories:
     dependency: transitive
     description:
