@@ -31,41 +31,44 @@ class _LoginState extends ConsumerState<CredentialsScreen> {
         ? usernameController
         : passwordController;
 
-    return SizedBox(
-      width: 400,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            loginType == LoginType.username ? "Email" : "Password",
-            style: CustomTextTheme().labelLarge.copyWith(
-                  color: Theme.of(context).colorScheme.background,
-                ),
-          ),
-          Container(
-            height: 60,
-            decoration: BoxDecoration(
-              color: const Color.fromARGB(255, 22, 20, 20),
-              borderRadius: BorderRadius.circular(0),
+    return Center(
+      child: SizedBox(
+        width: 400,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              loginType == LoginType.username ? "Email" : "Password",
+              style: CustomTextTheme().labelLarge.copyWith(
+                    color: Theme.of(context).colorScheme.background,
+                  ),
             ),
-            child: TextFormField(
-              autovalidateMode: AutovalidateMode.onUserInteraction,
-              style: CustomTextTheme().bodyText1,
-              controller: controller,
-              obscureText: loginType == LoginType.password,
-              autofillHints: loginType == LoginType.username
-                  ? [AutofillHints.username]
-                  : [AutofillHints.password],
-              autocorrect: loginType == LoginType.username,
-              decoration: const InputDecoration(
-                hintText: '',
-                hintStyle: TextStyle(color: Color.fromARGB(255, 255, 255, 255)),
-                border: InputBorder.none,
-                contentPadding: EdgeInsets.symmetric(horizontal: 20),
+            Container(
+              height: 60,
+              decoration: BoxDecoration(
+                color: const Color.fromARGB(255, 22, 20, 20),
+                borderRadius: BorderRadius.circular(0),
+              ),
+              child: TextFormField(
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                style: CustomTextTheme().bodyText1,
+                controller: controller,
+                obscureText: loginType == LoginType.password,
+                autofillHints: loginType == LoginType.username
+                    ? [AutofillHints.username]
+                    : [AutofillHints.password],
+                autocorrect: loginType == LoginType.username,
+                decoration: const InputDecoration(
+                  hintText: '',
+                  hintStyle:
+                      TextStyle(color: Color.fromARGB(255, 255, 255, 255)),
+                  border: InputBorder.none,
+                  contentPadding: EdgeInsets.symmetric(horizontal: 20),
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -81,7 +84,6 @@ class _LoginState extends ConsumerState<CredentialsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // body: SafeArea(
       body: Stack(
         children: [
           Image.asset(
@@ -128,7 +130,6 @@ class _LoginState extends ConsumerState<CredentialsScreen> {
           ),
         ],
       ),
-      //),
     );
   }
 }
