@@ -66,12 +66,11 @@ class _MemberCardState extends ConsumerState<MemberCard> {
 
   Widget getStatusIcon(ClientStatus? clientStatus, UserStatus overallStatus) {
     const double iconSize = 16;
-    const double containerSize = 20;
     Color statusColor;
     IconData statusIcon;
     ShapeBorder containerShape;
+    EdgeInsetsGeometry padding = const EdgeInsets.all(1);
 
-    // Determine the color based on the overall status
     switch (overallStatus) {
       case UserStatus.online:
         statusColor = Theme.of(context).custom.colorTheme.green;
@@ -87,46 +86,37 @@ class _MemberCardState extends ConsumerState<MemberCard> {
         statusColor = Theme.of(context).custom.colorTheme.foreground;
     }
 
-    // Determine the icon and shape based on the client status
     if (clientStatus?.mobile == overallStatus) {
       statusIcon = Icons.phone_android;
       containerShape = RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(5), // Increased border radius
+        borderRadius: BorderRadius.circular(5),
       );
+      padding = const EdgeInsets.symmetric(horizontal: 0, vertical: 1);
     } else if (clientStatus?.desktop == overallStatus) {
       statusIcon = Icons.desktop_windows;
       containerShape = RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(5), // Increased border radius
+        borderRadius: BorderRadius.circular(5),
       );
     } else if (clientStatus?.web == overallStatus) {
       statusIcon = Icons.language;
       containerShape = const CircleBorder();
     } else {
-      // Default to circle if no specific client matches or clientStatus is null
       statusIcon = Icons.circle;
       containerShape = const CircleBorder();
     }
 
-    return SizedBox(
-      width: containerSize,
-      height: containerSize,
-      child: Stack(
-        alignment: AlignmentDirectional.center,
-        children: [
-          Container(
-            width: containerSize,
-            height: containerSize,
-            decoration: ShapeDecoration(
-              color: Theme.of(context).custom.colorTheme.background,
-              shape: containerShape,
-            ),
-          ),
-          Icon(
-            statusIcon,
-            size: iconSize,
-            color: statusColor,
-          ),
-        ],
+    return Container(
+      decoration: ShapeDecoration(
+        color: Theme.of(context).custom.colorTheme.background,
+        shape: containerShape,
+      ),
+      child: Padding(
+        padding: padding,
+        child: Icon(
+          statusIcon,
+          size: iconSize,
+          color: statusColor,
+        ),
       ),
     );
   }

@@ -86,7 +86,8 @@ class _MemberListState extends ConsumerState<MemberList> {
         Expanded(
             child: Padding(
           padding: EdgeInsets.only(
-            left: UniversalPlatform.isMobile ? 32 : 0,
+            left:
+                (UniversalPlatform.isMobile && !isSmartwatch(context)) ? 32 : 0,
           ),
           child: MemberScrollView(
             guild: guild,
@@ -164,7 +165,8 @@ class MemberScrollViewState extends ConsumerState<MemberScrollView> {
           }
           // print(memberList[index][0]);
           return Padding(
-            padding: const EdgeInsets.only(left: 2, top: 10, bottom: 4),
+            padding: EdgeInsets.only(
+                left: isSmartwatch(context) ? 34 : 2, top: 10, bottom: 4),
             child: GroupHeader(
               guild: widget.guild,
               groups: groupList,

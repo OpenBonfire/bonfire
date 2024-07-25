@@ -18,6 +18,7 @@ A modern alternative to the Discord client. Use Discord without ever having to t
 - 🟩 Windows
 - 🟩 MacOS
 - 🟩 Linux
+- 🟩 WearOS (All major android smartwatches)
 - 🟨 Web
 
 Because we are using flutter instead of react native, it's possible to cross-compile to platforms other than mobile! The build currently runs on Windows, MacOS, and Linux, but Web is currently unavailable due to parts of our API framework not fully supporting it (which will change).
@@ -25,11 +26,11 @@ Because we are using flutter instead of react native, it's possible to cross-com
 ## General Goals / Ethic
 To start, lemmie outline a few things.
 - This is not a seperate platform. You login with Discord, you are using all of Discord's features, but through the interface we've made instead of through Discord's.
-  
+
 - **This is against TOS**. Don't do use this unless you have some risk tolerance. *I have never gotten banned in the development of Bonfire, but that isn't to say it can't happen*.
-  
+
 - Our goal here isn't to undermine Discord's monetization- we understand that Discord is a company with bills to pay and employees to feed. Our goal is to create a client that just doesn't suck. It's easy to take a platform like Discord for granted. Yes it has it's problems (I know that more than anyone), but they really have created a cool product, and it's something I'd like to improve as a user.
-  
+
 - Are you a mobile client? Desktop client? Sort of both. Bonfire is a mobile-first client. All of the features we are adding right now are 100% intended for mobile, but because we are using Flutter it's possible to build Bonfire on other platforms. In fact, it currently works just about the same on Windows / MacOS / Linux as it does on mobile (it just needs to be re-themed and re-formatted to look nice). Web is on the radar, but will not work at the current moment.
 
 - Perhaps, extensions? Well yes (in the future). The goal is that Bonfire can be modified to your liking, much like using Vencord and such. It would work very different from a developer standpoint, but having a built-in plugin marketplace would definitely be cool, although yes, quite difficult. It won't be a focus until the client is at a point I'd consider release-ready.
@@ -78,10 +79,10 @@ I'm pretty new to managing public projects, so you'll have to bear with me here.
 - 🟨 Guilds
   - 🟩 Guild List
   - 🟩 Guild Networking
-  - 🟥 Guild Organization
-    - 🟥 Guild Order
-    - 🟥 Guild Names
-    - 🟥 Guild Folders
+  - 🟩 Guild Organization
+    - 🟩 Guild Order
+    - 🟩 Guild Names
+    - 🟩 Guild Folders
 - 🟥 Voice Chat
 - 🟥 Camera Chat
 - 🟥 Screen Sharing
@@ -98,4 +99,3 @@ Don't forget to run `dart run build_runner watch` before developing! This is req
 We are looking for contributors! I would absolutely love to get this project completed, but it's pretty difficult time-wise. The pacing when I have time to work on it goes pretty fast though, so more people pitching in would be fantastic!
 
 Some of my code might not be great. This is the largest Flutter app I've made by far, so you'll have to bear with me here. Some of the code (looking at you `repositories/messages.dart`) may not be the best. I am absolutely not opposed to full restructuring if it's reasonable, just bring it up with me first.
-

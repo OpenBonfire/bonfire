@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter/services.dart';
+import 'package:bonfire/shared/utils/platform.dart';
 
 class Sidebar extends ConsumerStatefulWidget {
   final Snowflake guildId;
@@ -69,6 +70,7 @@ class _SidebarState extends ConsumerState<Sidebar> {
                   child: ListView(
                     controller: _scrollController,
                     children: [
+                      if (isSmartwatch(context)) const SizedBox(height: 36),
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 2),
                         child: MessagesIcon(

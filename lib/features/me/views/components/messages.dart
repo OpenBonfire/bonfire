@@ -33,8 +33,7 @@ class _MessageOverviewState extends ConsumerState<PrivateMessages> {
 
     return Scaffold(
       body: Padding(
-          padding:
-              EdgeInsets.only(left: 8, top: topPadding, bottom: bottomPadding),
+          padding: EdgeInsets.only(left: 8, top: topPadding, bottom: 0),
           child: SizedBox(
               width: double.infinity,
               child: Container(
@@ -59,7 +58,7 @@ class _MessageOverviewState extends ConsumerState<PrivateMessages> {
                       const OverviewCard(),
                       Expanded(
                         child: ListView.builder(
-                          padding: EdgeInsets.zero,
+                          padding: EdgeInsets.only(bottom: bottomPadding),
                           itemCount: dms.length,
                           itemBuilder: (context, index) {
                             return DirectMessageMember(

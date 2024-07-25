@@ -207,34 +207,39 @@ class _MessageBoxState extends ConsumerState<MessageBox> {
   Widget _buildMessageHeader(
       String name, Color textColor, Uint8List? roleIcon) {
     return Wrap(
+      crossAxisAlignment: WrapCrossAlignment.center,
       children: [
-        Text(
-          name,
-          style: TextStyle(
-            color: textColor,
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
+        RichText(
+          text: TextSpan(
+            children: [
+              TextSpan(
+                text: name,
+                style: TextStyle(
+                  color: textColor,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const TextSpan(text: ' '),
+              TextSpan(
+                text: dateTimeFormat(widget.message!.timestamp.toLocal()),
+                style: const TextStyle(
+                  color: Color.fromARGB(189, 255, 255, 255),
+                  fontSize: 12,
+                ),
+              ),
+            ],
           ),
         ),
         if (roleIcon != null)
           Padding(
-            padding: const EdgeInsets.only(left: 6, top: 2),
+            padding: const EdgeInsets.only(left: 6),
             child: Image.memory(
               roleIcon,
               width: 22,
               height: 22,
             ),
           ),
-        Padding(
-          padding: const EdgeInsets.only(left: 6, top: 4),
-          child: Text(
-            dateTimeFormat(widget.message!.timestamp.toLocal()),
-            style: const TextStyle(
-              color: Color.fromARGB(189, 255, 255, 255),
-              fontSize: 12,
-            ),
-          ),
-        ),
       ],
     );
   }
