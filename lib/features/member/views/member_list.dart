@@ -8,6 +8,7 @@ import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:bonfire/shared/utils/platform.dart';
+import 'package:universal_platform/universal_platform.dart';
 
 class MemberList extends ConsumerStatefulWidget {
   final Snowflake guildId;
@@ -74,21 +75,25 @@ class _MemberListState extends ConsumerState<MemberList> {
 
     String channelName = getChannelName(channel);
 
-    return SizedBox(
-      width: double.infinity,
-      height: double.infinity,
-      child: Padding(
-          padding: const EdgeInsets.only(left: 0),
-          child: Column(
-            children: [
-              if (!isSmartwatch(context)) topBox(channelName, ""),
-              Expanded(
-                  child: MemberScrollView(
-                guild: guild,
-                channel: channel,
-              ))
-            ],
-          )),
+    return Column(
+      children: [
+        if (!isSmartwatch(context))
+          Padding(
+            padding:
+                EdgeInsets.only(left: UniversalPlatform.isDesktop ? 8.0 : 0),
+            child: topBox(channelName, ""),
+          ),
+        Expanded(
+            child: Padding(
+          padding: EdgeInsets.only(
+            left: UniversalPlatform.isMobile ? 32 : 0,
+          ),
+          child: MemberScrollView(
+            guild: guild,
+            channel: channel,
+          ),
+        ))
+      ],
     );
   }
 }
@@ -120,7 +125,7 @@ class MemberScrollViewState extends ConsumerState<MemberScrollView> {
   bool isMember(dynamic item) {
     // I'm so sorry
     // this absolutely needs to be refactored
-    // I probably just make a new object with a 'type' parameter
+    // I should probably just make a new object with a 'type' parameter
     return item.toString().contains("Member(");
   }
 
@@ -144,7 +149,7 @@ class MemberScrollViewState extends ConsumerState<MemberScrollView> {
                     (!isMember(memberList[index + 1]));
                 return Padding(
                   padding: EdgeInsets.only(
-                      left: 32, right: 12, bottom: shouldRoundBottom ? 8 : 0),
+                      right: 12, bottom: shouldRoundBottom ? 8 : 0),
                   child: MemberCard(
                     member: member,
                     guild: widget.guild,
@@ -159,7 +164,7 @@ class MemberScrollViewState extends ConsumerState<MemberScrollView> {
           }
           // print(memberList[index][0]);
           return Padding(
-            padding: const EdgeInsets.only(left: 34, top: 10, bottom: 4),
+            padding: const EdgeInsets.only(left: 2, top: 10, bottom: 4),
             child: GroupHeader(
               guild: widget.guild,
               groups: groupList,

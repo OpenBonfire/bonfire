@@ -201,22 +201,306 @@ class _ChannelReadStateProviderElement
   Snowflake get channelId => (origin as ChannelReadStateProvider).channelId;
 }
 
-String _$userStatusStateHash() => r'dbf8e807d098cd9848dbdedba472d42243d1d490';
+String _$selfStatusStateHash() => r'642153c17c0cbf0edd6896182602bc8f1812aa55';
 
-/// See also [UserStatusState].
-@ProviderFor(UserStatusState)
-final userStatusStateProvider =
-    NotifierProvider<UserStatusState, UserStatus?>.internal(
-  UserStatusState.new,
-  name: r'userStatusStateProvider',
+/// See also [SelfStatusState].
+@ProviderFor(SelfStatusState)
+final selfStatusStateProvider =
+    NotifierProvider<SelfStatusState, UserStatus?>.internal(
+  SelfStatusState.new,
+  name: r'selfStatusStateProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$userStatusStateHash,
+      : _$selfStatusStateHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$UserStatusState = Notifier<UserStatus?>;
+typedef _$SelfStatusState = Notifier<UserStatus?>;
+String _$userStatusStateHash() => r'1b0f5660c34b3cf5b0e754ef98f9f6285a4f4431';
+
+abstract class _$UserStatusState extends BuildlessNotifier<UserStatus?> {
+  late final Snowflake userId;
+
+  UserStatus? build(
+    Snowflake userId,
+  );
+}
+
+/// See also [UserStatusState].
+@ProviderFor(UserStatusState)
+const userStatusStateProvider = UserStatusStateFamily();
+
+/// See also [UserStatusState].
+class UserStatusStateFamily extends Family<UserStatus?> {
+  /// See also [UserStatusState].
+  const UserStatusStateFamily();
+
+  /// See also [UserStatusState].
+  UserStatusStateProvider call(
+    Snowflake userId,
+  ) {
+    return UserStatusStateProvider(
+      userId,
+    );
+  }
+
+  @override
+  UserStatusStateProvider getProviderOverride(
+    covariant UserStatusStateProvider provider,
+  ) {
+    return call(
+      provider.userId,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'userStatusStateProvider';
+}
+
+/// See also [UserStatusState].
+class UserStatusStateProvider
+    extends NotifierProviderImpl<UserStatusState, UserStatus?> {
+  /// See also [UserStatusState].
+  UserStatusStateProvider(
+    Snowflake userId,
+  ) : this._internal(
+          () => UserStatusState()..userId = userId,
+          from: userStatusStateProvider,
+          name: r'userStatusStateProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$userStatusStateHash,
+          dependencies: UserStatusStateFamily._dependencies,
+          allTransitiveDependencies:
+              UserStatusStateFamily._allTransitiveDependencies,
+          userId: userId,
+        );
+
+  UserStatusStateProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.userId,
+  }) : super.internal();
+
+  final Snowflake userId;
+
+  @override
+  UserStatus? runNotifierBuild(
+    covariant UserStatusState notifier,
+  ) {
+    return notifier.build(
+      userId,
+    );
+  }
+
+  @override
+  Override overrideWith(UserStatusState Function() create) {
+    return ProviderOverride(
+      origin: this,
+      override: UserStatusStateProvider._internal(
+        () => create()..userId = userId,
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        userId: userId,
+      ),
+    );
+  }
+
+  @override
+  NotifierProviderElement<UserStatusState, UserStatus?> createElement() {
+    return _UserStatusStateProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is UserStatusStateProvider && other.userId == userId;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, userId.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin UserStatusStateRef on NotifierProviderRef<UserStatus?> {
+  /// The parameter `userId` of this provider.
+  Snowflake get userId;
+}
+
+class _UserStatusStateProviderElement
+    extends NotifierProviderElement<UserStatusState, UserStatus?>
+    with UserStatusStateRef {
+  _UserStatusStateProviderElement(super.provider);
+
+  @override
+  Snowflake get userId => (origin as UserStatusStateProvider).userId;
+}
+
+String _$userActivityStateHash() => r'3433c5a0f492a7ca3104bda404168b080c3d339e';
+
+abstract class _$UserActivityState extends BuildlessNotifier<List<Activity>?> {
+  late final Snowflake userId;
+
+  List<Activity>? build(
+    Snowflake userId,
+  );
+}
+
+/// See also [UserActivityState].
+@ProviderFor(UserActivityState)
+const userActivityStateProvider = UserActivityStateFamily();
+
+/// See also [UserActivityState].
+class UserActivityStateFamily extends Family<List<Activity>?> {
+  /// See also [UserActivityState].
+  const UserActivityStateFamily();
+
+  /// See also [UserActivityState].
+  UserActivityStateProvider call(
+    Snowflake userId,
+  ) {
+    return UserActivityStateProvider(
+      userId,
+    );
+  }
+
+  @override
+  UserActivityStateProvider getProviderOverride(
+    covariant UserActivityStateProvider provider,
+  ) {
+    return call(
+      provider.userId,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'userActivityStateProvider';
+}
+
+/// See also [UserActivityState].
+class UserActivityStateProvider
+    extends NotifierProviderImpl<UserActivityState, List<Activity>?> {
+  /// See also [UserActivityState].
+  UserActivityStateProvider(
+    Snowflake userId,
+  ) : this._internal(
+          () => UserActivityState()..userId = userId,
+          from: userActivityStateProvider,
+          name: r'userActivityStateProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$userActivityStateHash,
+          dependencies: UserActivityStateFamily._dependencies,
+          allTransitiveDependencies:
+              UserActivityStateFamily._allTransitiveDependencies,
+          userId: userId,
+        );
+
+  UserActivityStateProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.userId,
+  }) : super.internal();
+
+  final Snowflake userId;
+
+  @override
+  List<Activity>? runNotifierBuild(
+    covariant UserActivityState notifier,
+  ) {
+    return notifier.build(
+      userId,
+    );
+  }
+
+  @override
+  Override overrideWith(UserActivityState Function() create) {
+    return ProviderOverride(
+      origin: this,
+      override: UserActivityStateProvider._internal(
+        () => create()..userId = userId,
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        userId: userId,
+      ),
+    );
+  }
+
+  @override
+  NotifierProviderElement<UserActivityState, List<Activity>?> createElement() {
+    return _UserActivityStateProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is UserActivityStateProvider && other.userId == userId;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, userId.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin UserActivityStateRef on NotifierProviderRef<List<Activity>?> {
+  /// The parameter `userId` of this provider.
+  Snowflake get userId;
+}
+
+class _UserActivityStateProviderElement
+    extends NotifierProviderElement<UserActivityState, List<Activity>?>
+    with UserActivityStateRef {
+  _UserActivityStateProviderElement(super.provider);
+
+  @override
+  Snowflake get userId => (origin as UserActivityStateProvider).userId;
+}
+
 String _$customStatusStateHash() => r'0714d50f94a66471c2715255ae77ebef99bc1641';
 
 /// See also [CustomStatusState].

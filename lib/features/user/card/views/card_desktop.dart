@@ -24,7 +24,7 @@ class SelfUserCardState extends ConsumerState<UserCard> {
   @override
   Widget build(BuildContext context) {
     User? user = ref.watch(selfUserProvider).valueOrNull;
-    UserStatus? status = ref.watch(userStatusStateProvider);
+    UserStatus? status = ref.watch(selfStatusStateProvider);
     CustomStatus? customStatus = ref.watch(customStatusStateProvider);
     bool inVC = ref.watch(voiceChannelControllerProvider);
 

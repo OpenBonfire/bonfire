@@ -5,7 +5,7 @@ publish_to: "none"
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.19.0 <3.0.0"
+  sdk: ">=3.0.0 <3.22.3"
 
 dependencies:
   flutter:
@@ -19,7 +19,7 @@ dependencies:
   firebridge:
     git:
       url: https://github.com/OpenBonfire/firebridge
-      ref: a565aec44d8f2c7a85571980203cda75beb7b0a3
+      ref: e6e9b2a049c97db5ca49c62f0748cf97a97e7343
 
   markdown_viewer:
     git:
@@ -90,7 +90,7 @@ dependency_overrides:
   firebridge:
     git:
       url: https://github.com/OpenBonfire/firebridge
-      ref: a565aec44d8f2c7a85571980203cda75beb7b0a3
+      ref: e6e9b2a049c97db5ca49c62f0748cf97a97e7343
 
   media_kit:
     git:

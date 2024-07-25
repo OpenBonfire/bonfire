@@ -47,7 +47,7 @@ class ChannelReadState extends _$ChannelReadState {
 }
 
 @Riverpod(keepAlive: true)
-class UserStatusState extends _$UserStatusState {
+class SelfStatusState extends _$SelfStatusState {
   AuthUser? user;
 
   @override
@@ -55,8 +55,36 @@ class UserStatusState extends _$UserStatusState {
     return null;
   }
 
+  void setSelfStatus(UserStatus userStatus) {
+    state = userStatus;
+  }
+}
+
+@Riverpod(keepAlive: true)
+class UserStatusState extends _$UserStatusState {
+  AuthUser? user;
+
+  @override
+  UserStatus? build(Snowflake userId) {
+    return null;
+  }
+
   void setUserStatus(UserStatus userStatus) {
     state = userStatus;
+  }
+}
+
+@Riverpod(keepAlive: true)
+class UserActivityState extends _$UserActivityState {
+  AuthUser? user;
+
+  @override
+  List<Activity>? build(Snowflake userId) {
+    return null;
+  }
+
+  void setUserActivity(List<Activity> activities) {
+    state = activities;
   }
 }
 

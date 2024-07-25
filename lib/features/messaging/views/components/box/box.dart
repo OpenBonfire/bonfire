@@ -12,6 +12,7 @@ import 'package:bonfire/features/messaging/views/components/box/reply.dart';
 import 'package:firebridge/firebridge.dart' hide ButtonStyle;
 import 'package:flutter/material.dart';
 import 'package:bonfire/shared/utils/platform.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class MessageBox extends ConsumerStatefulWidget {
@@ -176,14 +177,19 @@ class _MessageBoxState extends ConsumerState<MessageBox> {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        const SizedBox(width: 8.0),
         if (widget.showSenderInfo)
-          Avatar(
-            author: widget.message!.author,
-            guildId: widget.guildId,
-            channelId: widget.channel.id,
+          Padding(
+            padding: const EdgeInsets.only(top: 2),
+            child: Avatar(
+              author: widget.message!.author,
+              guildId: widget.guildId,
+              channelId: widget.channel.id,
+            ),
           )
         else
-          const SizedBox(width: 53),
+          const SizedBox(width: 40),
+        const SizedBox(width: 8.0),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

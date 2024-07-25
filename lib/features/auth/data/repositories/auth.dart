@@ -82,11 +82,12 @@ class Auth extends _$Auth {
   Future<AuthResponse> loginWithToken(String token) async {
     AuthResponse? response;
 
-    print("gateway connect...");
     var client = await Nyxx.connectGateway(token, GatewayIntents.all,
-        // Logging(logLevel: Level.ALL)
-        options: GatewayClientOptions());
-    print("connected to gateway!");
+        options: GatewayClientOptions(
+          plugins: [
+            Logging(logLevel: Level.OFF),
+          ],
+        ));
 
     // This is how we save login information
     var box = await Hive.openBox('auth');
@@ -113,8 +114,8 @@ class Auth extends _$Auth {
       }
 
       ref
-          .read(userStatusStateProvider.notifier)
-          .setUserStatus(event.userSettings.status!);
+          .read(selfStatusStateProvider.notifier)
+          .setSelfStatus(event.userSettings.status!);
 
       ref.read(guildsStateProvider.notifier).setGuilds(event.guilds);
 
@@ -123,55 +124,49 @@ class Auth extends _$Auth {
             .read(customStatusStateProvider.notifier)
             .setCustomStatus(event.userSettings.customStatus!);
       }
-      // WARNING: THIS MIGHT CAUSE DUPLICATE EVENTS!
-      // We may have to move this out of onReady
-      client.onChannelUnread.listen((event) {
-        for (var element in event.channelUnreadUpdates) {
-          ref
-              .read(channelReadStateProvider(element.readState.channel.id)
-                  .notifier)
-              .setReadState(element.readState);
-        }
-      });
-
-      client.onMessageAck.listen((event) {
-        ref
-            .read(channelReadStateProvider(event.readState.channel.id).notifier)
-            .setReadState(event.readState);
-      });
-
-      client.onVoiceStateUpdate.listen((event) {
-        ref
-            .read(voiceMembersProvider(event.state.guildId!).notifier)
-            .processVoiceStateUpdate(event);
-        ref
-            .read(
-              voiceMembersProvider(
-                event.state.guildId!,
-                channelId: event.state.channelId ?? event.oldState?.channelId,
-              ).notifier,
-            )
-            .processVoiceStateUpdate(event);
-      });
-
-      // TESTING FOR VC
-
-      // client.onVoiceServerUpdate.listen((event) async {
-      //   // print("GOT VOICE SERVER UPDATE!");
-      //   token = event.token;
-      //   print(event.endpoint);
-      //   if (token != null && sessionId != null) sendIdentify();
-      // });
-
-      // client.onVoiceStateUpdate.listen((event) async {
-      //   // print("GOT VOICE STATE UPDATE!");
-      //   sessionId = event.state.sessionId;
-
-      //   if (token != null && sessionId != null) sendIdentify();
-      // });
     });
 
-    response = authResponse;
+    client.onChannelUnread.listen((event) {
+      for (var element in event.channelUnreadUpdates) {
+        ref
+            .read(
+                channelReadStateProvider(element.readState.channel.id).notifier)
+            .setReadState(element.readState);
+      }
+    });
+
+    client.onMessageAck.listen((event) {
+      ref
+          .read(channelReadStateProvider(event.readState.channel.id).notifier)
+          .setReadState(event.readState);
+    });
+
+    client.onVoiceStateUpdate.listen((event) {
+      ref
+          .read(voiceMembersProvider(event.state.guildId!).notifier)
+          .processVoiceStateUpdate(event);
+      ref
+          .read(
+            voiceMembersProvider(
+              event.state.guildId!,
+              channelId: event.state.channelId ?? event.oldState?.channelId,
+            ).notifier,
+          )
+          .processVoiceStateUpdate(event);
+    });
+
+    client.onPresenceUpdate.listen((event) {
+      if (event.status != null) {
+        ref
+            .read(UserStatusStateProvider(event.user!.id).notifier)
+            .setUserStatus(event.status!);
+      }
+      if (event.activities != null) {
+        ref
+            .read(UserActivityStateProvider(event.user!.id).notifier)
+            .setUserActivity(event.activities!);
+      }
+    });
 
     return response!;
   }
