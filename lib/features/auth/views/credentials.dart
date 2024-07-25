@@ -36,6 +36,7 @@ class _LoginState extends ConsumerState<CredentialsScreen> {
         width: 400,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
               loginType == LoginType.username ? "Email" : "Password",
@@ -49,21 +50,23 @@ class _LoginState extends ConsumerState<CredentialsScreen> {
                 color: const Color.fromARGB(255, 22, 20, 20),
                 borderRadius: BorderRadius.circular(0),
               ),
-              child: TextFormField(
-                autovalidateMode: AutovalidateMode.onUserInteraction,
-                style: CustomTextTheme().bodyText1,
-                controller: controller,
-                obscureText: loginType == LoginType.password,
-                autofillHints: loginType == LoginType.username
-                    ? [AutofillHints.username]
-                    : [AutofillHints.password],
-                autocorrect: loginType == LoginType.username,
-                decoration: const InputDecoration(
-                  hintText: '',
-                  hintStyle:
-                      TextStyle(color: Color.fromARGB(255, 255, 255, 255)),
-                  border: InputBorder.none,
-                  contentPadding: EdgeInsets.symmetric(horizontal: 20),
+              child: Center(
+                child: TextFormField(
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  style: CustomTextTheme().bodyText1,
+                  controller: controller,
+                  obscureText: loginType == LoginType.password,
+                  autofillHints: loginType == LoginType.username
+                      ? [AutofillHints.username]
+                      : [AutofillHints.password],
+                  autocorrect: loginType == LoginType.username,
+                  decoration: const InputDecoration(
+                    hintText: '',
+                    hintStyle:
+                        TextStyle(color: Color.fromARGB(255, 255, 255, 255)),
+                    border: InputBorder.none,
+                    contentPadding: EdgeInsets.symmetric(horizontal: 20),
+                  ),
                 ),
               ),
             ),
@@ -96,6 +99,7 @@ class _LoginState extends ConsumerState<CredentialsScreen> {
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   const SizedBox(height: 40),
@@ -113,6 +117,8 @@ class _LoginState extends ConsumerState<CredentialsScreen> {
                   Form(
                     child: AutofillGroup(
                       child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           loginBox(LoginType.username),
                           const SizedBox(height: 20),

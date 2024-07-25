@@ -35,6 +35,9 @@ class _SidebarState extends ConsumerState<Sidebar> {
     var guildWatch = ref.watch(guildsProvider);
     var guildFoldersWatch = ref.watch(guildFoldersProvider);
 
+    double bottomPadding = MediaQuery.of(context).padding.bottom;
+    double navbarHeight = 40;
+
     List<UserGuild> guildList = [];
     guildWatch.when(
         data: (guilds) {
@@ -65,16 +68,21 @@ class _SidebarState extends ConsumerState<Sidebar> {
                       .copyWith(scrollbars: false),
                   child: ListView(
                     controller: _scrollController,
-                    padding: EdgeInsets.only(
-                      bottom: UniversalPlatform.isMobile
-                          ? MediaQuery.of(context).padding.bottom + 50
-                          : 0,
-                    ),
                     children: [
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 2),
                         child: MessagesIcon(
                           selected: widget.guildId == Snowflake.zero,
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 8,
+                        ),
+                        child: Container(
+                          height: 2,
+                          color: Theme.of(context).custom.colorTheme.foreground,
                         ),
                       ),
                       if (guildFolders != null)
@@ -83,6 +91,7 @@ class _SidebarState extends ConsumerState<Sidebar> {
                               guildList: guildList,
                               selectedGuildId: widget.guildId,
                             )),
+                      SizedBox(height: bottomPadding + navbarHeight)
                     ],
                   ),
                 ),

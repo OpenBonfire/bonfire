@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/services.dart';
+import 'package:bonfire/theme/theme.dart';
 
 class MessagesIcon extends StatelessWidget {
   final bool selected;
@@ -15,9 +16,15 @@ class MessagesIcon extends StatelessWidget {
       alignment: Alignment.center,
       children: [
         Center(
-          child: SizedBox(
+          child: Container(
             width: 47,
             height: 47,
+            decoration: BoxDecoration(
+              color: selected
+                  ? Theme.of(context).custom.colorTheme.blurple
+                  : Theme.of(context).custom.colorTheme.foreground,
+              shape: BoxShape.circle,
+            ),
             child: InkWell(
               onTap: () {
                 HapticFeedback.mediumImpact();

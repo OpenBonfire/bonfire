@@ -13,22 +13,25 @@ class MFAPage extends ConsumerStatefulWidget {
 }
 
 class _MFAPageState extends ConsumerState<MFAPage> {
-  TextEditingController controller = TextEditingController();
+  final TextEditingController controller = TextEditingController();
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
 
   Widget mfaBox() {
     return SizedBox(
       width: 400,
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Text(
-              "MULTI FACTOR CODE",
-              style: CustomTextTheme().labelLarge.copyWith(
-                    color: Theme.of(context).colorScheme.background,
-                  ),
-              textAlign: TextAlign.start,
-            ),
+          Text(
+            "MULTI FACTOR CODE",
+            style: CustomTextTheme().labelLarge.copyWith(
+                  color: Theme.of(context).colorScheme.background,
+                ),
           ),
           Container(
             height: 60,
@@ -36,26 +39,23 @@ class _MFAPageState extends ConsumerState<MFAPage> {
               color: const Color.fromARGB(255, 22, 20, 20),
               borderRadius: BorderRadius.circular(0),
             ),
-            child: Row(
-              children: [
-                const SizedBox(width: 20),
-                Expanded(
-                  child: TextFormField(
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    style: CustomTextTheme().bodyText1,
-                    controller: controller,
-                    autofillHints: const [AutofillHints.oneTimeCode],
-                    autocorrect: true,
-                    textAlign: TextAlign.center,
-                    decoration: const InputDecoration(
-                      hintText: '',
-                      hintStyle:
-                          TextStyle(color: Color.fromARGB(255, 255, 255, 255)),
-                      border: InputBorder.none,
-                    ),
-                  ),
+            child: Center(
+              child: TextFormField(
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                style: CustomTextTheme().bodyText1,
+                controller: controller,
+                autofillHints: const [AutofillHints.oneTimeCode],
+                autocorrect: false,
+                textAlign: TextAlign.center,
+                keyboardType: TextInputType.number,
+                decoration: const InputDecoration(
+                  hintText: '',
+                  hintStyle:
+                      TextStyle(color: Color.fromARGB(255, 255, 255, 255)),
+                  border: InputBorder.none,
+                  contentPadding: EdgeInsets.symmetric(horizontal: 20),
                 ),
-              ],
+              ),
             ),
           ),
         ],
@@ -63,70 +63,68 @@ class _MFAPageState extends ConsumerState<MFAPage> {
     );
   }
 
-  submitMFA() async {
-    var resp = ref.read(authProvider.notifier).submitMfa(controller.text);
-
-    resp.then((value) {
-      print("GOT MFA RESP!");
-      print(value.toString());
-      if (value is MFAInvalidError) {
-        print((value.error));
+  Future<void> submitMFA() async {
+    try {
+      final resp =
+          await ref.read(authProvider.notifier).submitMfa(controller.text);
+      if (resp is MFAInvalidError) {
+        // Handle invalid MFA error
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(resp.error)),
+        );
+      } else {
+        // Handle successful MFA submission
+        // Navigate to next screen or show success message
       }
-    });
+    } catch (e) {
+      // Handle any unexpected errors
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("An unexpected error occurred")),
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    var topPadding = MediaQuery.of(context).viewPadding.top;
-    var bottomPadding = MediaQuery.of(context).viewPadding.bottom;
-
     return Scaffold(
-      backgroundColor: Colors.transparent,
       body: Stack(
         children: [
-          SizedBox(
+          Image.asset(
+            'assets/images/login_background.png',
+            fit: BoxFit.cover,
             width: double.infinity,
             height: double.infinity,
-            child: Image.asset(
-              'assets/images/login_background.png',
-              fit: BoxFit.cover,
-            ),
           ),
-          Padding(
-            padding: EdgeInsets.only(
-              top: topPadding,
-              bottom: bottomPadding,
-            ),
-            child: ListView(
-              children: [
-                Text(
-                  "Multi Factor Authentication",
-                  style: CustomTextTheme().titleLarge,
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 30),
-                Center(
-                  child: Text(
+          SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    "Multi Factor Authentication",
+                    style: CustomTextTheme().titleLarge,
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 30),
+                  Text(
                     "Enter your second factor code. This can be found in your authenticator app.",
                     style: CustomTextTheme().subtitle1.copyWith(
                           color: Theme.of(context).colorScheme.background,
                         ),
                     textAlign: TextAlign.center,
                   ),
-                ),
-                const SizedBox(height: 30),
-                Center(child: mfaBox()),
-                const Expanded(
-                  child: SizedBox(),
-                ),
-                ConfirmButton(
+                  const SizedBox(height: 30),
+                  mfaBox(),
+                  const SizedBox(height: 40),
+                  ConfirmButton(
                     text: "Sign In",
-                    onPressed: () async {
-                      print(await submitMFA());
-                    })
-              ],
+                    onPressed: submitMFA,
+                  ),
+                ],
+              ),
             ),
-          )
+          ),
         ],
       ),
     );
