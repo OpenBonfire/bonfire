@@ -27,14 +27,30 @@ class OverlappingPanels extends StatefulWidget {
   /// A callback to notify when a panel reveal has completed.
   final ValueChanged<RevealSide>? onSideChange;
 
-  OverlappingPanels(
-      {this.left,
-      required this.main,
-      this.right,
-      this.restWidth = 25,
-      this.onSideChange,
-      Key? key})
-      : super(key: key);
+  /// The duration of the reveal animation
+  final Duration revealDuration;
+
+  /// The curve of the reveal animation
+  final Curve revealCurve;
+
+  /// The duration of the snap-back animation
+  final Duration snapBackDuration;
+
+  /// The curve of the snap-back animation
+  final Curve snapBackCurve;
+
+  const OverlappingPanels({
+    super.key,
+    this.left,
+    required this.main,
+    this.right,
+    this.restWidth = 25,
+    this.onSideChange,
+    this.revealDuration = const Duration(milliseconds: 300),
+    this.revealCurve = Curves.easeOutCubic,
+    this.snapBackDuration = const Duration(milliseconds: 250),
+    this.snapBackCurve = Curves.easeOutCubic,
+  });
 
   static OverlappingPanelsState? of(BuildContext context) {
     return context.findAncestorStateOfType<OverlappingPanelsState>();
@@ -48,9 +64,38 @@ class OverlappingPanels extends StatefulWidget {
 
 class OverlappingPanelsState extends State<OverlappingPanels>
     with TickerProviderStateMixin {
-  AnimationController? controller;
-  double translate = 0;
-  int lastDelta = 0;
+  late AnimationController _animationController;
+  late Animation<double> _animation;
+  double _translate = 0;
+  int _lastDelta = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _animationController = AnimationController(
+      vsync: this,
+      duration: widget.revealDuration,
+    );
+    _animation = Tween<double>(begin: 0, end: 0).animate(
+      CurvedAnimation(
+        parent: _animationController,
+        curve: widget.revealCurve,
+      ),
+    );
+    _animation.addListener(_updateTranslate);
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  void _updateTranslate() {
+    setState(() {
+      _translate = _animation.value;
+    });
+  }
 
   void moveToState(RevealSide side) {
     final mediaWidth = MediaQuery.of(context).size.width;
@@ -69,36 +114,7 @@ class OverlappingPanelsState extends State<OverlappingPanels>
         break;
     }
 
-    final animationController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 150),
-    );
-
-    final animation = Tween<double>(
-      begin: translate,
-      end: goal,
-    ).animate(animationController);
-
-    animation.addListener(() {
-      setState(() {
-        translate = animation.value;
-      });
-    });
-
-    animation.addStatusListener((status) {
-      if (status == AnimationStatus.completed) {
-        if (widget.onSideChange != null) {
-          widget.onSideChange!(
-            translate == 0
-                ? RevealSide.main
-                : (translate > 0 ? RevealSide.left : RevealSide.right),
-          );
-        }
-        animationController.dispose();
-      }
-    });
-
-    animationController.forward();
+    _animateToPosition(goal, widget.revealDuration, widget.revealCurve);
   }
 
   double _calculateGoal(double width, int multiplier) {
@@ -108,94 +124,66 @@ class OverlappingPanelsState extends State<OverlappingPanels>
   void _onApplyTranslation() {
     final mediaWidth = MediaQuery.of(context).size.width;
 
-    final animationController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 80),
-    );
-
     var goal = 0.0;
-    if (lastDelta > 0) {
+    if (_lastDelta > 0) {
       goal = _calculateGoal(mediaWidth, 1);
     }
 
-    if (lastDelta < 0) {
+    if (_lastDelta < 0) {
       goal = _calculateGoal(mediaWidth, -1);
     }
 
-    if (lastDelta > 0 && translate < 0) {
+    if (_lastDelta > 0 && _translate < 0) {
       goal = 0;
     }
 
-    if (lastDelta < 0 && translate > 0) {
+    if (_lastDelta < 0 && _translate > 0) {
       goal = 0;
     }
 
-    final animation = Tween<double>(
-      begin: translate,
-      end: goal.toDouble(),
-    ).animate(animationController);
+    _animateToPosition(goal, widget.snapBackDuration, widget.snapBackCurve);
+  }
 
-    animation.addListener(() {
-      setState(() {
-        translate = animation.value;
-      });
-    });
+  void _animateToPosition(double goal, Duration duration, Curve curve) {
+    _animationController.stop();
+    _animationController.duration = duration;
+    _animation = Tween<double>(
+      begin: _translate,
+      end: goal,
+    ).animate(CurvedAnimation(
+      parent: _animationController,
+      curve: curve,
+    ));
+    _animation.addStatusListener(_onAnimationComplete);
+    _animationController.forward(from: 0);
+  }
 
-    animation.addStatusListener((status) {
-      if (status == AnimationStatus.completed) {
-        if (widget.onSideChange != null) {
-          widget.onSideChange!(
-            translate == 0
-                ? RevealSide.main
-                : (translate > 0 ? RevealSide.left : RevealSide.right),
-          );
-        }
-        animationController.dispose();
+  void _onAnimationComplete(AnimationStatus status) {
+    if (status == AnimationStatus.completed) {
+      _animation.removeStatusListener(_onAnimationComplete);
+      if (widget.onSideChange != null) {
+        widget.onSideChange!(
+          _translate == 0
+              ? RevealSide.main
+              : (_translate > 0 ? RevealSide.left : RevealSide.right),
+        );
       }
-    });
-
-    animationController.forward();
+    }
   }
 
   void reveal(RevealSide direction) {
-    // can only reveal when showing main
-    if (translate != 0) {
-      return;
-    }
-
     final mediaWidth = MediaQuery.of(context).size.width;
-
     final multiplier = (direction == RevealSide.left ? 1 : -1);
     final goal = _calculateGoal(mediaWidth, multiplier);
-
-    final animationController = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 200));
-
-    animationController.addStatusListener((status) {
-      if (status == AnimationStatus.completed) {
-        _onApplyTranslation();
-        animationController.dispose();
-      }
-    });
-
-    final animation =
-        Tween<double>(begin: translate, end: goal).animate(animationController);
-
-    animation.addListener(() {
-      setState(() {
-        translate = animation.value;
-      });
-    });
-
-    animationController.forward();
+    _animateToPosition(goal, widget.revealDuration, widget.revealCurve);
   }
 
   void onTranslate(double delta) {
     setState(() {
-      final translate = this.translate + delta;
-      if (translate < 0 && widget.right != null ||
-          translate > 0 && widget.left != null) {
-        this.translate = translate;
+      final newTranslate = _translate + delta;
+      if (newTranslate < 0 && widget.right != null ||
+          newTranslate > 0 && widget.left != null) {
+        _translate = newTranslate;
       }
     });
   }
@@ -204,21 +192,21 @@ class OverlappingPanelsState extends State<OverlappingPanels>
   Widget build(BuildContext context) {
     return Stack(children: [
       Offstage(
-        offstage: translate < 0,
+        offstage: _translate < 0,
         child: widget.left,
       ),
       Offstage(
-        offstage: translate > 0,
+        offstage: _translate > 0,
         child: widget.right,
       ),
       Transform.translate(
-        offset: Offset(translate, 0),
+        offset: Offset(_translate, 0),
         child: widget.main,
       ),
       GestureDetector(
         behavior: HitTestBehavior.translucent,
         onHorizontalDragUpdate: (details) {
-          lastDelta = details.delta.dx.toInt();
+          _lastDelta = details.delta.dx.toInt();
           onTranslate(details.delta.dx);
         },
         onHorizontalDragEnd: (details) {

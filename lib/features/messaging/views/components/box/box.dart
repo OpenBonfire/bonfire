@@ -11,8 +11,6 @@ import 'package:bonfire/features/messaging/views/components/box/popout.dart';
 import 'package:bonfire/features/messaging/views/components/box/reply.dart';
 import 'package:firebridge/firebridge.dart' hide ButtonStyle;
 import 'package:flutter/material.dart';
-import 'package:bonfire/shared/utils/platform.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class MessageBox extends ConsumerStatefulWidget {
@@ -34,6 +32,12 @@ class MessageBox extends ConsumerStatefulWidget {
 
 class _MessageBoxState extends ConsumerState<MessageBox> {
   bool _isHovering = false;
+
+  @override
+  void initState() {
+    // print("box init!");
+    super.initState();
+  }
 
   String dateTimeFormat(DateTime time) {
     String section1;
@@ -174,33 +178,36 @@ class _MessageBoxState extends ConsumerState<MessageBox> {
 
   Widget _buildMessageLayout(
       BuildContext context, String name, Color textColor, Uint8List? roleIcon) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const SizedBox(width: 8.0),
-        if (widget.showSenderInfo)
-          Padding(
-            padding: const EdgeInsets.only(top: 2),
-            child: Avatar(
-              author: widget.message!.author,
-              guildId: widget.guildId,
-              channelId: widget.channel.id,
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 12),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // const SizedBox(width: 8.0),
+          if (widget.showSenderInfo)
+            Padding(
+              padding: const EdgeInsets.only(top: 2),
+              child: Avatar(
+                author: widget.message!.author,
+                guildId: widget.guildId,
+                channelId: widget.channel.id,
+              ),
+            )
+          else
+            const SizedBox(width: 40),
+          const SizedBox(width: 8.0),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (widget.showSenderInfo)
+                  _buildMessageHeader(name, textColor, roleIcon),
+                _buildMessageContent(),
+              ],
             ),
-          )
-        else
-          const SizedBox(width: 40),
-        const SizedBox(width: 8.0),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              if (widget.showSenderInfo)
-                _buildMessageHeader(name, textColor, roleIcon),
-              _buildMessageContent(),
-            ],
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
@@ -220,7 +227,7 @@ class _MessageBoxState extends ConsumerState<MessageBox> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              const TextSpan(text: ' '),
+              const TextSpan(text: '  '),
               TextSpan(
                 text: dateTimeFormat(widget.message!.timestamp.toLocal()),
                 style: const TextStyle(
@@ -248,14 +255,18 @@ class _MessageBoxState extends ConsumerState<MessageBox> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        MarkdownBox(message: widget.message),
+        MarkdownBox(message: widget.message!),
         ...widget.message!.embeds.map((embed) => Padding(
               padding: const EdgeInsets.only(top: 8),
-              child: EmbedWidget(embed: embed),
+              child: EmbedWidget(
+                embed: embed,
+              ),
             )),
         ...widget.message!.attachments.map((attachment) => Padding(
               padding: const EdgeInsets.only(top: 8),
-              child: AttachmentWidget(attachment: attachment),
+              child: AttachmentWidget(
+                attachment: attachment,
+              ),
             )),
       ],
     );

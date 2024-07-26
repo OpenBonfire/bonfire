@@ -19,7 +19,7 @@ class _TypingViewState extends ConsumerState<TypingView> {
     List<dynamic> typingOutput =
         ref.watch(typingProvider(widget.channelId)).value ?? [];
     return SizedBox(
-        height: typingOutput.isNotEmpty ? 20 : 0,
+        height: typingOutput.isNotEmpty ? 30 : 0,
         child: Builder(builder: (context) {
           if (typingOutput.isEmpty) {
             return Container();

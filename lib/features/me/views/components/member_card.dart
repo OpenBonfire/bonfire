@@ -1,13 +1,21 @@
+import 'package:bonfire/features/overview/views/overlapping_panels.dart';
 import 'package:bonfire/theme/theme.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hive/hive.dart';
 
 class DirectMessageMember extends ConsumerStatefulWidget {
   final PrivateChannel privateChannel;
-  const DirectMessageMember({super.key, required this.privateChannel});
+  final Snowflake currentChannelId;
+  const DirectMessageMember({
+    super.key,
+    required this.privateChannel,
+    required this.currentChannelId,
+  });
 
   @override
   ConsumerState<DirectMessageMember> createState() =>
@@ -15,8 +23,12 @@ class DirectMessageMember extends ConsumerStatefulWidget {
 }
 
 class _DirectMessageMemberState extends ConsumerState<DirectMessageMember> {
+  var lastGuildChannels = Hive.box("last-guild-channels");
+  var lastLocation = Hive.box("last-location");
+
   @override
   Widget build(BuildContext context) {
+    bool selected = widget.privateChannel.id == widget.currentChannelId;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8),
       child: SizedBox(
@@ -27,24 +39,38 @@ class _DirectMessageMemberState extends ConsumerState<DirectMessageMember> {
               minimumSize: Size.zero,
               padding: EdgeInsets.zero,
               side: BorderSide(
-                color: Theme.of(context).custom.colorTheme.foreground,
-                // color: (widget.channel.id == widget.currentChannelId)
-                //     ? Theme.of(context).custom.colorTheme.deselectedChannelText
-                //     : Colors.transparent,
-
+                color: selected
+                    ? Theme.of(context).custom.colorTheme.deselectedChannelText
+                    : Colors.transparent,
                 width: 0.1,
               ),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
               ),
-              foregroundColor:
-                  Theme.of(context).custom.colorTheme.deselectedChannelText,
-              backgroundColor: Colors.transparent,
+              foregroundColor: selected
+                  ? Theme.of(context).custom.colorTheme.selectedChannelText
+                  : Theme.of(context).custom.colorTheme.deselectedChannelText,
+              backgroundColor: selected
+                  ? Theme.of(context).custom.colorTheme.foreground
+                  : Colors.transparent,
             ),
             onPressed: () {
-              print("navigating!");
+              HapticFeedback.selectionClick();
+              lastGuildChannels.put(Snowflake.zero.toString(),
+                  widget.privateChannel.id.toString());
+
+              lastLocation.put("guildId", "@me");
+              lastLocation.put(
+                  "channelId", widget.privateChannel.id.toString());
+
               GoRouter.of(context)
                   .go('/channels/@me/${widget.privateChannel.id}');
+
+              OverlappingPanelsState? overlappingPanelsState =
+                  OverlappingPanels.of(context);
+              if (overlappingPanelsState != null) {
+                overlappingPanelsState.moveToState(RevealSide.main);
+              }
             },
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -54,39 +80,43 @@ class _DirectMessageMemberState extends ConsumerState<DirectMessageMember> {
                 ClipRRect(
                   borderRadius: BorderRadius.circular(48),
                   child: Image.network(
-                    widget.privateChannel.recipients.first.avatar.url
-                        .toString(),
+                    widget.privateChannel.recipients.firstOrNull?.avatar.url
+                            .toString() ??
+                        "",
                     width: 35,
                     height: 35,
                   ),
                 ),
                 const SizedBox(width: 8),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      widget.privateChannel.recipients
-                          .map((e) => e.globalName ?? e.username)
-                          .join(', '),
-                      style: GoogleFonts.publicSans(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w500,
-                        fontSize: 14,
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        widget.privateChannel.recipients
+                            .map((e) => e.globalName ?? e.username)
+                            .join(', '),
+                        style: GoogleFonts.publicSans(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 14,
+                        ),
+                        overflow: TextOverflow.ellipsis,
                       ),
-                    ),
-                    Text(
-                      "Status placeholder",
-                      style: GoogleFonts.publicSans(
-                        color: Theme.of(context)
-                            .custom
-                            .colorTheme
-                            .deselectedChannelText,
-                        fontWeight: FontWeight.w400,
-                        fontSize: 12,
-                      ),
-                    ),
-                  ],
+                      // Text(
+                      //   "Status placeholder",
+                      //   style: GoogleFonts.publicSans(
+                      //     color: Theme.of(context)
+                      //         .custom
+                      //         .colorTheme
+                      //         .deselectedChannelText,
+                      //     fontWeight: FontWeight.w400,
+                      //     fontSize: 12,
+                      //   ),
+                      // ),
+                    ],
+                  ),
                 ),
               ],
             )),

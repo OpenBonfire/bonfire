@@ -85,7 +85,7 @@ class Auth extends _$Auth {
     var client = await Nyxx.connectGateway(token, GatewayIntents.all,
         options: GatewayClientOptions(
           plugins: [
-            Logging(logLevel: Level.OFF),
+            Logging(logLevel: Level.SEVERE),
           ],
         ));
 

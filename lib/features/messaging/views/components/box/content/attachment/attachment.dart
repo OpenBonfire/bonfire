@@ -31,7 +31,9 @@ class _AttachmentWidgetState extends State<AttachmentWidget> {
     // it's wayyy too laggy on mobile for some reason
     if (contentType == "video") {
       if (UniversalPlatform.isDesktopOrWeb) {
-        return DesktopVideoAttachment(attachment: widget.attachment);
+        return DesktopVideoAttachment(
+          attachment: widget.attachment,
+        );
       } else {
         return DesktopVideoAttachment(attachment: widget.attachment);
       }

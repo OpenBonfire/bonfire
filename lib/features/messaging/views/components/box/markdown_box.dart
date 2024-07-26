@@ -2,17 +2,18 @@ import 'package:bonfire/theme/theme.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_prism/flutter_prism.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:markdown_viewer/markdown_viewer.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class MarkdownBox extends StatelessWidget {
-  final Message? message;
+  final Message message;
   const MarkdownBox({super.key, required this.message});
 
   @override
   Widget build(BuildContext context) {
     return MarkdownViewer(
-      message!.content,
+      message.content,
       enableTaskList: true,
       enableSuperscript: false,
       enableSubscript: false,
@@ -41,10 +42,16 @@ class MarkdownBox extends StatelessWidget {
       },
       styleSheet: MarkdownStyle(
         paragraph: Theme.of(context).custom.textTheme.bodyText1,
-        codeBlock: Theme.of(context).custom.textTheme.bodyText1,
+        codeBlock: GoogleFonts.jetBrainsMono(
+          fontSize: 14,
+        ),
         codeblockDecoration: BoxDecoration(
             color: Theme.of(context).custom.colorTheme.foreground,
             borderRadius: BorderRadius.circular(8)),
+        codeSpan: GoogleFonts.jetBrainsMono(
+          backgroundColor: Theme.of(context).custom.colorTheme.foreground,
+          fontSize: 14,
+        ),
       ),
     );
   }

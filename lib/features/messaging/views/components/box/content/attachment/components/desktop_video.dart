@@ -2,15 +2,20 @@ import 'package:bonfire/features/messaging/views/components/box/content/shared/d
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
 
-class DesktopVideoAttachment extends StatelessWidget {
+class DesktopVideoAttachment extends StatefulWidget {
   final Attachment attachment;
   const DesktopVideoAttachment({super.key, required this.attachment});
 
   @override
+  State<DesktopVideoAttachment> createState() => _DesktopVideoAttachmentState();
+}
+
+class _DesktopVideoAttachmentState extends State<DesktopVideoAttachment> {
+  @override
   Widget build(BuildContext context) {
     return DesktopVideoPlayer(
-        width: attachment.width!.toDouble(),
-        height: attachment.height!.toDouble(),
-        url: attachment.url);
+        width: widget.attachment.width!.toDouble(),
+        height: widget.attachment.height!.toDouble(),
+        url: widget.attachment.url);
   }
 }

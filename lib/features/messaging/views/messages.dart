@@ -231,22 +231,18 @@ class _MessageViewState extends ConsumerState<MessageView> {
                     } else {
                       showAuthor = true;
                     }
-
-                    MessageBox box = MessageBox(
-                      key: ValueKey(
-                          loadedMessages[messageIndex].id.value.toString()),
-                      guildId: guild?.id ?? Snowflake.zero,
-                      channel: channel,
-                      message: loadedMessages[messageIndex],
-                      showSenderInfo: showAuthor,
-                    );
-
                     if (messageIndex == loadedMessages.length - 1 &&
                         lastScrollMessage == null) {
                       firstBatchLastMessage = loadedMessages[messageIndex];
                     }
 
-                    return box;
+                    return MessageBox(
+                      key: ValueKey(loadedMessages[messageIndex].id.value),
+                      guildId: guild?.id ?? Snowflake.zero,
+                      channel: channel,
+                      message: loadedMessages[messageIndex],
+                      showSenderInfo: showAuthor,
+                    );
                   },
                 ),
               ),

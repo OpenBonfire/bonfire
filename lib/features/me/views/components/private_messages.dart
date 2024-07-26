@@ -2,12 +2,17 @@ import 'package:bonfire/features/me/controllers/settings.dart';
 import 'package:bonfire/features/me/views/components/member_card.dart';
 import 'package:bonfire/features/me/views/components/overview_card.dart';
 import 'package:bonfire/theme/theme.dart';
+import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:universal_platform/universal_platform.dart';
 
 class PrivateMessages extends ConsumerStatefulWidget {
-  const PrivateMessages({super.key});
+  final Snowflake channelId;
+  const PrivateMessages({
+    super.key,
+    required this.channelId,
+  });
 
   @override
   ConsumerState<PrivateMessages> createState() => _MessageOverviewState();
@@ -21,8 +26,6 @@ class _MessageOverviewState extends ConsumerState<PrivateMessages> {
         ? MediaQuery.of(context).padding.bottom + 68
         : 0;
     var dms = ref.watch(privateMessageHistoryProvider).toList();
-    // var readStates = ref.watch(channelReadStateProvider) ?? {};
-    // print(readStates[dms[0].id]?.lastViewed);
 
     // sort by numerical ids
     dms.sort((a, b) {
@@ -63,6 +66,7 @@ class _MessageOverviewState extends ConsumerState<PrivateMessages> {
                           itemBuilder: (context, index) {
                             return DirectMessageMember(
                               privateChannel: dms[index],
+                              currentChannelId: widget.channelId,
                             );
                           },
                         ),

@@ -1,4 +1,4 @@
-import 'package:bonfire/features/me/views/components/messages.dart';
+import 'package:bonfire/features/me/views/components/private_messages.dart';
 import 'package:bonfire/features/member/views/member_list.dart';
 import 'package:bonfire/features/messaging/repositories/events/realtime_messages.dart';
 import 'package:bonfire/features/messaging/repositories/messages.dart';
@@ -47,10 +47,12 @@ class _MessageOverviewState extends ConsumerState<MessageOverview> {
             return Row(
               children: [
                 const Sidebar(guildId: Snowflake.zero),
-                const SizedBox(
+                SizedBox(
                   width: 300,
                   child: Expanded(
-                    child: PrivateMessages(),
+                    child: PrivateMessages(
+                      channelId: widget.channelId ?? Snowflake.zero,
+                    ),
                   ),
                 ),
                 (widget.channelId != null)
@@ -72,12 +74,17 @@ class _MessageOverviewState extends ConsumerState<MessageOverview> {
               },
               left: SizedBox(
                 width: MediaQuery.of(context).size.width,
-                child: const Row(
+                child: Row(
                   children: [
-                    Sidebar(
+                    const Sidebar(
                       guildId: Snowflake.zero,
                     ),
-                    Expanded(child: Expanded(child: PrivateMessages()))
+                    Expanded(
+                        child: Expanded(
+                      child: PrivateMessages(
+                        channelId: widget.channelId ?? Snowflake.zero,
+                      ),
+                    ))
                   ],
                 ),
               ),

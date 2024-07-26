@@ -74,10 +74,11 @@ class _ChannelsListState extends ConsumerState<ChannelsList> {
         var category = categoryMap.keys.elementAt(categoryIndex);
         var children = categoryMap[category] ?? [];
         return Category(
-            guildId: widget.guildId,
-            channelId: widget.channelId,
-            category: category,
-            children: children);
+          guildId: widget.guildId,
+          channelId: widget.channelId,
+          category: category,
+          children: children,
+        );
       }
     }
 
