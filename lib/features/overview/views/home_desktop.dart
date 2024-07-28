@@ -1,6 +1,7 @@
 import 'package:bonfire/features/channels/views/channels.dart';
 import 'package:bonfire/features/member/views/member_list.dart';
 import 'package:bonfire/features/messaging/views/messages.dart';
+import 'package:bonfire/features/overview/controllers/member_list.dart';
 import 'package:bonfire/features/overview/views/overlapping_panels.dart';
 import 'package:bonfire/features/sidebar/views/sidebar.dart';
 import 'package:firebridge/firebridge.dart';
@@ -27,6 +28,8 @@ class _HomeState extends ConsumerState<HomeDesktop> {
 
   @override
   Widget build(BuildContext context) {
+    bool isVisible = ref.watch(memberListVisibilityProvider);
+
     return Scaffold(
         resizeToAvoidBottomInset: false,
         body: Row(
@@ -47,13 +50,14 @@ class _HomeState extends ConsumerState<HomeDesktop> {
                 channelId: widget.channelId,
               ),
             ),
-            SizedBox(
-              width: 300,
-              child: MemberList(
-                guildId: widget.guildId,
-                channelId: widget.channelId,
-              ),
-            )
+            if (isVisible)
+              SizedBox(
+                width: 300,
+                child: MemberList(
+                  guildId: widget.guildId,
+                  channelId: widget.channelId,
+                ),
+              )
           ],
         ));
   }

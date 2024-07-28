@@ -1,4 +1,5 @@
 import 'package:bonfire/features/overview/controllers/navigation_bar.dart';
+import 'package:bonfire/shared/utils/platform.dart';
 import 'package:bonfire/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:bonfire/features/overview/views/overlapping_panels.dart';
@@ -55,6 +56,8 @@ class _BarWidgetState extends ConsumerState<NavigationBarWidget> {
     isHome = (_seg?[0] == 'channels') && (_seg?[1] != '@me');
     isMessages = _seg?[0] == 'channels' && _seg?[1] == '@me';
     isNotifications = _seg?[0] == 'overview' && _seg?[1] == 'notifications';
+
+    if (shouldUseDesktopLayout(context)) return Container();
 
     return Column(
       children: [

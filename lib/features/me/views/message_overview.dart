@@ -6,6 +6,7 @@ import 'package:bonfire/features/messaging/views/messages.dart';
 import 'package:bonfire/features/overview/controllers/navigation_bar.dart';
 import 'package:bonfire/features/overview/views/overlapping_panels.dart';
 import 'package:bonfire/features/sidebar/views/sidebar.dart';
+import 'package:bonfire/shared/utils/platform.dart';
 import 'package:firebridge/firebridge.dart' hide Builder;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -43,7 +44,7 @@ class _MessageOverviewState extends ConsumerState<MessageOverview> {
     return Scaffold(
       body: Builder(
         builder: (context) {
-          if (UniversalPlatform.isDesktop) {
+          if (shouldUseDesktopLayout(context)) {
             return Row(
               children: [
                 const Sidebar(guildId: Snowflake.zero),

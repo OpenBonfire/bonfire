@@ -3,6 +3,7 @@ import 'package:bonfire/features/messaging/repositories/events/realtime_messages
 import 'package:bonfire/features/overview/views/home_desktop.dart';
 import 'package:bonfire/features/overview/views/home_mobile.dart';
 import 'package:bonfire/features/overview/views/overlapping_panels.dart';
+import 'package:bonfire/shared/utils/platform.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -45,7 +46,7 @@ class _HomeState extends ConsumerState<GuildMessagingOverview> {
           });
     });
 
-    return (UniversalPlatform.isMobile)
+    return (shouldUseMobileLayout(context))
         ? HomeMobile(
             guildId: widget.guildId,
             channelId: widget.channelId,

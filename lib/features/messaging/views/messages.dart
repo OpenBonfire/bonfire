@@ -6,6 +6,7 @@ import 'package:bonfire/features/messaging/repositories/messages.dart';
 import 'package:bonfire/features/messaging/views/components/bar.dart';
 import 'package:bonfire/features/messaging/views/components/box/box.dart';
 import 'package:bonfire/features/messaging/views/components/keyboard_buffer.dart';
+import 'package:bonfire/features/overview/controllers/member_list.dart';
 import 'package:bonfire/theme/theme.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
@@ -140,124 +141,139 @@ class _MessageViewState extends ConsumerState<MessageView> {
         color: Theme.of(context).custom.colorTheme.messageViewBackground,
         boxShadow: const [],
       ),
-      child: Stack(
+      child: Column(
         children: [
-          Column(
-            children: [
-              if (!isSmartwatch(context))
-                Container(
-                  height: topPadding + 50,
-                  decoration: BoxDecoration(
-                    color: Theme.of(context)
-                        .custom
-                        .colorTheme
-                        .messageViewBackground,
-                    border: Border(
-                      bottom: BorderSide(
-                        color: Theme.of(context).custom.colorTheme.foreground,
-                        width: 1,
-                      ),
-                    ),
+          if (!isSmartwatch(context))
+            Container(
+              height: topPadding + 50,
+              decoration: BoxDecoration(
+                color:
+                    Theme.of(context).custom.colorTheme.messageViewBackground,
+                border: Border(
+                  bottom: BorderSide(
+                    color: Theme.of(context).custom.colorTheme.foreground,
+                    width: 1,
                   ),
-                  child: Align(
-                    alignment: Alignment.bottomLeft,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: Padding(
-                        padding: const EdgeInsets.all(12),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: Text(
-                                "# $channelName",
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 1,
-                                softWrap: false,
-                                textAlign: TextAlign.left,
-                                style: Theme.of(context)
+                ),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Expanded(
+                      child: Align(
+                        alignment: Alignment.bottomLeft,
+                        child: Text(
+                          "# $channelName",
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                          softWrap: false,
+                          style: Theme.of(context)
+                              .custom
+                              .textTheme
+                              .titleSmall
+                              .copyWith(
+                                color: Theme.of(context)
                                     .custom
-                                    .textTheme
-                                    .titleSmall
-                                    .copyWith(
-                                      color: Theme.of(context)
-                                          .custom
-                                          .colorTheme
-                                          .channelHeaderText,
-                                    ),
+                                    .colorTheme
+                                    .channelHeaderText,
                               ),
-                            ),
-                          ],
                         ),
                       ),
                     ),
-                  ),
-                ),
-              Expanded(
-                child: ListView.builder(
-                  controller: _scrollController,
-                  itemCount:
-                      loadedMessages.length + (isSmartwatch(context) ? 1 : 0),
-                  reverse: true,
-                  shrinkWrap: true,
-                  padding: const EdgeInsets.only(bottom: 12),
-                  itemBuilder: (context, index) {
-                    if (isSmartwatch(context) && index == 0) {
-                      return MessageBar(
-                        guildId: guild?.id ?? Snowflake.zero,
-                        channel: channel,
-                      );
-                    }
-
-                    final messageIndex =
-                        isSmartwatch(context) ? index - 1 : index;
-                    bool showAuthor = true;
-
-                    if (messageIndex + 1 < loadedMessages.length) {
-                      Message currentMessage = loadedMessages[messageIndex];
-                      Message lastMessage = loadedMessages[messageIndex + 1];
-
-                      showAuthor =
-                          lastMessage.author.id != currentMessage.author.id;
-
-                      if (currentMessage.timestamp
-                              .difference(lastMessage.timestamp)
-                              .inMinutes >
-                          5) {
-                        showAuthor = true;
-                      }
-                      if (currentMessage.referencedMessage != null) {
-                        showAuthor = true;
-                      }
-                    } else {
-                      showAuthor = true;
-                    }
-                    if (messageIndex == loadedMessages.length - 1 &&
-                        lastScrollMessage == null) {
-                      firstBatchLastMessage = loadedMessages[messageIndex];
-                    }
-
-                    return MessageBox(
-                      key: ValueKey(loadedMessages[messageIndex].id.value),
-                      guildId: guild?.id ?? Snowflake.zero,
-                      channel: channel,
-                      message: loadedMessages[messageIndex],
-                      showSenderInfo: showAuthor,
-                    );
-                  },
+                    if (shouldUseDesktopLayout(context))
+                      Padding(
+                        // TODO: padding does nothing, the button has that dumb padding
+                        padding: const EdgeInsets.only(top: 20),
+                        child: Align(
+                          alignment: Alignment.bottomRight,
+                          child: IconButton(
+                            icon: const Icon(Icons.group_rounded),
+                            onPressed: () {
+                              ref
+                                  .read(memberListVisibilityProvider.notifier)
+                                  .toggleVisibility();
+                              print("E");
+                              // showSearch(
+                              //   context: context,
+                              //   delegate: MessageSearchDelegate(
+                              //     guildId: widget.guildId,
+                              //     channelId: widget.channelId,
+                              //   ),
+                              // );
+                            },
+                          ),
+                        ),
+                      ),
+                  ],
                 ),
               ),
-              if (!isSmartwatch(context))
-                MessageBar(
+            ),
+          Expanded(
+            child: ListView.builder(
+              controller: _scrollController,
+              itemCount:
+                  loadedMessages.length + (isSmartwatch(context) ? 1 : 0),
+              reverse: true,
+              shrinkWrap: true,
+              padding: const EdgeInsets.only(bottom: 12),
+              itemBuilder: (context, index) {
+                if (isSmartwatch(context) && index == 0) {
+                  return MessageBar(
+                    guildId: guild?.id ?? Snowflake.zero,
+                    channel: channel,
+                  );
+                }
+
+                final messageIndex = isSmartwatch(context) ? index - 1 : index;
+                bool showAuthor = true;
+
+                if (messageIndex + 1 < loadedMessages.length) {
+                  Message currentMessage = loadedMessages[messageIndex];
+                  Message lastMessage = loadedMessages[messageIndex + 1];
+
+                  showAuthor =
+                      lastMessage.author.id != currentMessage.author.id;
+
+                  if (currentMessage.timestamp
+                          .difference(lastMessage.timestamp)
+                          .inMinutes >
+                      5) {
+                    showAuthor = true;
+                  }
+                  if (currentMessage.referencedMessage != null) {
+                    showAuthor = true;
+                  }
+                } else {
+                  showAuthor = true;
+                }
+                if (messageIndex == loadedMessages.length - 1 &&
+                    lastScrollMessage == null) {
+                  firstBatchLastMessage = loadedMessages[messageIndex];
+                }
+
+                return MessageBox(
+                  key: ValueKey(loadedMessages[messageIndex].id.value),
                   guildId: guild?.id ?? Snowflake.zero,
                   channel: channel,
-                ),
-              if (!isSmartwatch(context))
-                SizedBox(
-                  height: MediaQuery.of(context).padding.bottom,
-                ),
-              if (!isSmartwatch(context)) const KeyboardBuffer()
-            ],
+                  message: loadedMessages[messageIndex],
+                  showSenderInfo: showAuthor,
+                );
+              },
+            ),
           ),
+          if (!isSmartwatch(context))
+            MessageBar(
+              guildId: guild?.id ?? Snowflake.zero,
+              channel: channel,
+            ),
+          if (!isSmartwatch(context))
+            SizedBox(
+              height: MediaQuery.of(context).padding.bottom,
+            ),
+          if (!isSmartwatch(context)) const KeyboardBuffer()
         ],
       ),
     );

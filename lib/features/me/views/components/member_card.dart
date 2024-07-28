@@ -87,7 +87,7 @@ class _DirectMessageMemberState extends ConsumerState<DirectMessageMember> {
                     height: 35,
                   ),
                 ),
-                const SizedBox(width: 8),
+                const SizedBox(width: 12),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -97,11 +97,7 @@ class _DirectMessageMemberState extends ConsumerState<DirectMessageMember> {
                         widget.privateChannel.recipients
                             .map((e) => e.globalName ?? e.username)
                             .join(', '),
-                        style: GoogleFonts.publicSans(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w500,
-                          fontSize: 14,
-                        ),
+                        style: Theme.of(context).custom.textTheme.subtitle1,
                         overflow: TextOverflow.ellipsis,
                       ),
                       // Text(
