@@ -110,6 +110,15 @@ class VoiceChannelController extends _$VoiceChannelController {
 
     _peerConnection!.onConnectionState = (RTCPeerConnectionState state) {
       print('Connection state change: $state');
+      if (state == RTCPeerConnectionState.RTCPeerConnectionStateFailed) {}
+    };
+
+    _peerConnection!.onRenegotiationNeeded = () {
+      print("Renegotiation needed");
+    };
+
+    _peerConnection!.onSignalingState = (RTCSignalingState state) {
+      print('Signaling state change: $state');
     };
 
     _localStream = await navigator.mediaDevices.getUserMedia({'audio': true});
@@ -117,13 +126,25 @@ class VoiceChannelController extends _$VoiceChannelController {
       _peerConnection!.addTrack(track, _localStream!);
     });
 
-    RTCSessionDescription offer = await _peerConnection!.createOffer();
-    await _peerConnection!.setLocalDescription(offer);
+    RTCSessionDescription offer = await _peerConnection!.createOffer({
+      'offerToReceiveAudio': true,
+      'offerToReceiveVideo': false,
+    });
+
+    String sdp = offer.sdp!;
+    sdp = sdp.replaceAll('UDP/TLS/RTP/SAVPF', 'UDP/TLS/RTP/SAVP');
+
+    RTCSessionDescription modifiedOffer =
+        RTCSessionDescription(sdp, offer.type);
+    await _peerConnection!.setLocalDescription(modifiedOffer);
+
+    print("Created offer:");
+    print(sdp);
 
     _voiceClient!.sendVoiceSelectProtocol(
       VoiceSelectProtocolBuilder(
         protocol: "webrtc",
-        data: offer.sdp!,
+        data: sdp,
       ),
     );
   }
@@ -136,12 +157,66 @@ class VoiceChannelController extends _$VoiceChannelController {
     print("Received SDP from Discord:");
     print(remoteSdp);
 
-    await _peerConnection!.setRemoteDescription(
-      RTCSessionDescription(remoteSdp, 'answer'),
-    );
+    // this is stupid
+    final lines = remoteSdp.split('\n');
+    String? fingerprint;
+    String? iceUfrag;
+    String? icePwd;
+    String? candidate;
+    String? ip;
+    String? port;
 
-    print("(did not) set remote description set successfully");
-    // state = VoiceReadyEvent(/* populate with necessary data */);
+    for (var line in lines) {
+      if (line.startsWith('a=fingerprint:')) {
+        fingerprint = line.split(' ')[1];
+      } else if (line.startsWith('a=ice-ufrag:')) {
+        iceUfrag = line.split(':')[1];
+      } else if (line.startsWith('a=ice-pwd:')) {
+        icePwd = line.split(':')[1];
+      } else if (line.startsWith('a=candidate:')) {
+        candidate = line.substring(2);
+        var parts = candidate.split(' ');
+        ip = parts[4];
+        port = parts[5];
+      } else if (line.startsWith('c=IN IP4')) {
+        ip = line.split(' ')[2];
+      } else if (line.startsWith('m=audio')) {
+        port = line.split(' ')[1];
+      }
+    }
+
+    // this is less stupid, but still stupid
+    String sdpAnswer = """
+v=0
+o=- ${DateTime.now().millisecondsSinceEpoch} 2 IN IP4 127.0.0.1
+s=-
+t=0 0
+m=audio $port UDP/TLS/RTP/SAVP 111
+c=IN IP4 $ip
+a=rtcp:$port IN IP4 $ip
+a=ice-ufrag:$iceUfrag
+a=ice-pwd:$icePwd
+a=fingerprint:sha-256 $fingerprint
+a=setup:active
+a=mid:0
+a=sendrecv
+a=rtcp-mux
+a=rtpmap:111 opus/48000/2
+a=fmtp:111 minptime=10;useinbandfec=1
+a=candidate:$candidate
+a=end-of-candidates
+""";
+
+    try {
+      await _peerConnection!.setRemoteDescription(
+        RTCSessionDescription(sdpAnswer, 'answer'),
+      );
+      print("Remote description set successfully");
+    } catch (e) {
+      print("Error setting remote description: $e");
+      print("Attempted SDP answer:");
+      print(sdpAnswer);
+    }
   }
 
   void leaveVoiceChannel() {
