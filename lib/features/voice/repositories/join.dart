@@ -96,9 +96,9 @@ class VoiceChannelController extends _$VoiceChannelController {
 
   Future<void> _initializeWebRTC(VoiceReadyEvent event) async {
     final configuration = <String, dynamic>{
-      'iceServers': [
-        {'urls': 'stun:stun.l.google.com:19302'},
-      ]
+      // 'iceServers': [],
+      'sdpSemantics': 'unified-plan',
+      'bundlePolicy': 'max-bundle',
     };
 
     _peerConnection = await createPeerConnection(configuration);
@@ -108,13 +108,16 @@ class VoiceChannelController extends _$VoiceChannelController {
       // TODO: Implement sending ICE candidate to Discord
     };
 
-    _peerConnection!.onConnectionState = (RTCPeerConnectionState state) {
-      print('Connection state change: $state');
-      if (state == RTCPeerConnectionState.RTCPeerConnectionStateFailed) {}
+    _peerConnection!.onIceConnectionState = (state) {
+      print("ICE connection state: $state");
     };
 
-    _peerConnection!.onRenegotiationNeeded = () {
-      print("Renegotiation needed");
+    _peerConnection!.onIceGatheringState = (state) {
+      print("ICE gathering state: $state");
+    };
+
+    _peerConnection!.onConnectionState = (RTCPeerConnectionState state) {
+      print('Connection state change: $state');
     };
 
     _peerConnection!.onSignalingState = (RTCSignalingState state) {
@@ -128,25 +131,83 @@ class VoiceChannelController extends _$VoiceChannelController {
 
     RTCSessionDescription offer = await _peerConnection!.createOffer({
       'offerToReceiveAudio': true,
-      'offerToReceiveVideo': false,
+      'offerToReceiveVideo': true,
     });
 
-    String sdp = offer.sdp!;
-    sdp = sdp.replaceAll('UDP/TLS/RTP/SAVPF', 'UDP/TLS/RTP/SAVP');
+    String modifiedSdp = _modifySdp(offer.sdp!);
 
-    RTCSessionDescription modifiedOffer =
-        RTCSessionDescription(sdp, offer.type);
-    await _peerConnection!.setLocalDescription(modifiedOffer);
+    // Set the local description with the original offer
+    await _peerConnection!.setLocalDescription(offer);
 
-    print("Created offer:");
-    print(sdp);
+    // Extract relevant SDP info from the modified SDP
+    final relevantSdpInfo =
+        _extractRelevantSdpInfo(RTCSessionDescription(modifiedSdp, 'offer'));
 
     _voiceClient!.sendVoiceSelectProtocol(
       VoiceSelectProtocolBuilder(
         protocol: "webrtc",
-        data: sdp,
+        data: relevantSdpInfo,
       ),
     );
+  }
+
+  String _modifySdp(String sdp) {
+    final lines = sdp.split('\r\n');
+    final modifiedLines = lines
+        .map((line) {
+          if (line.startsWith('m=audio')) {
+            return line.replaceFirst(
+                RegExp(r'UDP/TLS/RTP/SAVPF'), 'UDP/TLS/RTP/SAVP');
+          } else if (line.startsWith('a=rtpmap:') && line.contains('opus')) {
+            return 'a=rtpmap:109 opus/48000/2';
+          } else if (line.startsWith('a=fmtp:') && line.contains('opus')) {
+            return 'a=fmtp:109 minptime=10;useinbandfec=1;usedtx=1';
+          } else if (line.startsWith('a=rtpmap:') && line.contains('VP8')) {
+            return 'a=rtpmap:120 VP8/90000';
+          } else if (line.startsWith('a=rtpmap:') && line.contains('rtx')) {
+            return 'a=rtpmap:124 rtx/90000';
+          } else if (line.startsWith('a=fmtp:') && line.contains('120')) {
+            return 'a=fmtp:120 x-google-max-bitrate=2500';
+          } else if (line.startsWith('a=fmtp:') && line.contains('124')) {
+            return 'a=fmtp:124 apt=120';
+          } else if (line.startsWith('a=extmap:')) {
+            // Keep only the extmaps that Discord uses
+            if (line.contains('urn:ietf:params:rtp-hdrext:ssrc-audio-level') ||
+                line.contains(
+                    'http://www.webrtc.org/experiments/rtp-hdrext/abs-send-time') ||
+                line.contains('urn:ietf:params:rtp-hdrext:toffset') ||
+                line.contains(
+                    'http://www.webrtc.org/experiments/rtp-hdrext/playout-delay') ||
+                line.contains(
+                    'http://www.ietf.org/id/draft-holmer-rmcat-transport-wide-cc-extensions-01')) {
+              return line;
+            } else {
+              return '';
+            }
+          }
+          return line;
+        })
+        .where((line) => line.isNotEmpty)
+        .toList();
+
+    return modifiedLines.join('\r\n');
+  }
+
+  String _extractRelevantSdpInfo(RTCSessionDescription description) {
+    final sdp = description.sdp!;
+    final lines = sdp.split('\r\n');
+    final relevantLines = lines
+        .where((line) =>
+            line.startsWith('m=audio') ||
+            line.startsWith('a=fingerprint:') ||
+            line.startsWith('c=IN IP4') ||
+            line.startsWith('a=rtcp:') ||
+            line.startsWith('a=ice-ufrag:') ||
+            line.startsWith('a=ice-pwd:') ||
+            line.startsWith('a=candidate:'))
+        .toList();
+
+    return relevantLines.join('\r\n');
   }
 
   Future<void> _handleRemoteSdp(String remoteSdp) async {
@@ -154,10 +215,9 @@ class VoiceChannelController extends _$VoiceChannelController {
       throw Exception("Peer connection not initialized");
     }
 
-    print("Received SDP from Discord:");
-    print(remoteSdp);
+    // print("Received SDP from Discord:");
+    // print(remoteSdp);
 
-    // this is stupid
     final lines = remoteSdp.split('\n');
     String? fingerprint;
     String? iceUfrag;
@@ -185,24 +245,28 @@ class VoiceChannelController extends _$VoiceChannelController {
       }
     }
 
-    // this is less stupid, but still stupid
     String sdpAnswer = """
 v=0
 o=- ${DateTime.now().millisecondsSinceEpoch} 2 IN IP4 127.0.0.1
 s=-
 t=0 0
-m=audio $port UDP/TLS/RTP/SAVP 111
+a=group:BUNDLE 0
+a=msid-semantic: WMS
+m=audio $port UDP/TLS/RTP/SAVPF 111
 c=IN IP4 $ip
 a=rtcp:$port IN IP4 $ip
 a=ice-ufrag:$iceUfrag
 a=ice-pwd:$icePwd
+a=ice-options:trickle
 a=fingerprint:sha-256 $fingerprint
 a=setup:active
 a=mid:0
+a=extmap:1 urn:ietf:params:rtp-hdrext:ssrc-audio-level
 a=sendrecv
 a=rtcp-mux
 a=rtpmap:111 opus/48000/2
 a=fmtp:111 minptime=10;useinbandfec=1
+a=ssrc:1001 cname:discord-${DateTime.now().millisecondsSinceEpoch}
 a=candidate:$candidate
 a=end-of-candidates
 """;
