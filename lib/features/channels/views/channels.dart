@@ -156,7 +156,10 @@ class _ChannelsListState extends ConsumerState<ChannelsList> {
                   ? const Padding(
                       padding:
                           EdgeInsets.only(left: 8.0, right: 8.0, bottom: 8.0),
-                      child: UserCard(),
+                      child: UserCard(
+                          // guildId: widget.guildId,
+                          // channelId: widget.channelId,
+                          ),
                     )
                   : const SizedBox(),
             ],

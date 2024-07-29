@@ -7,12 +7,12 @@ part of 'join.dart';
 // **************************************************************************
 
 String _$voiceChannelControllerHash() =>
-    r'18d90131e26516dde2d29742f6bc843b4851dc84';
+    r'11365226233de978547d3e640d383c4932f9f381';
 
 /// See also [VoiceChannelController].
 @ProviderFor(VoiceChannelController)
-final voiceChannelControllerProvider =
-    AutoDisposeNotifierProvider<VoiceChannelController, bool>.internal(
+final voiceChannelControllerProvider = AutoDisposeNotifierProvider<
+    VoiceChannelController, VoiceReadyEvent?>.internal(
   VoiceChannelController.new,
   name: r'voiceChannelControllerProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -22,6 +22,6 @@ final voiceChannelControllerProvider =
   allTransitiveDependencies: null,
 );
 
-typedef _$VoiceChannelController = AutoDisposeNotifier<bool>;
+typedef _$VoiceChannelController = AutoDisposeNotifier<VoiceReadyEvent?>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
