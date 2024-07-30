@@ -83,7 +83,7 @@ class _MainWindowState extends ConsumerState<MainWindow> {
               child: KeyboardSizeProvider(
             child: MaterialApp.router(
               title: 'Bonfire',
-              theme: ref.read(lightThemeProvider),
+              theme: ref.read(darkThemeProvider),
               darkTheme: ref.read(darkThemeProvider),
               routerConfig: routerController,
             ),

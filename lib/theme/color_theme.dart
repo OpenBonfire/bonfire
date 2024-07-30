@@ -7,7 +7,7 @@ class AppColorsDark {
   static const selectedChannelText = Color(0xFFE4E5E8);
   static const deselectedChannelText = Color(0xFF818491);
   static const channelCategory = Color(0xFFa2a4ae);
-  
+
   static const channelListBackground = Color(0xFF0f1014);
   static const navbarIconSelected = Color(0xFFE4E5E8);
   static const navbarIconDeselected = Color(0xFF6f7076);
@@ -49,7 +49,7 @@ class AppColorsLight {
   static const selectedChannelText = Color(0xFFE4E5E8);
   static const deselectedChannelText = Color(0xFF818491);
   static const channelCategory = Color(0xFFa2a4ae);
-  
+
   static const channelListBackground = Color(0xFF0f1014);
   static const navbarIconSelected = Color(0xFFE4E5E8);
   static const navbarIconDeselected = Color(0xFF6f7076);
@@ -69,7 +69,7 @@ class AppColorsLight {
   static const messageBarActivatedIcon = Color(0xFFdddee1);
   static const messageBarDeactivatedIcon = Color(0xFF5b5e6a);
 
-  static const messageViewBackground = Color(0xFF1C1D22);
+  static const messageViewBackground = Color(0xFF000000);
 
   static const darkButtonBackground = Color(0xFF0f1015);
   static const messageStatusBarText = Color(0xFFaaaaaf);

@@ -95,33 +95,37 @@ class _MFAPageState extends ConsumerState<MFAPage> {
             width: double.infinity,
             height: double.infinity,
           ),
-          SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                    "Multi Factor Authentication",
-                    style: CustomTextTheme().titleLarge,
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 30),
-                  Text(
-                    "Enter your second factor code. This can be found in your authenticator app.",
-                    style: CustomTextTheme().subtitle1.copyWith(
-                          color: Theme.of(context).colorScheme.background,
-                        ),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 30),
-                  mfaBox(),
-                  const SizedBox(height: 40),
-                  ConfirmButton(
-                    text: "Sign In",
-                    onPressed: submitMFA,
-                  ),
-                ],
+          Center(
+            child: SingleChildScrollView(
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Multi Factor Authentication",
+                      style: CustomTextTheme().titleLarge,
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 30),
+                    Text(
+                      "Enter your second factor code. This can be found in your authenticator app.",
+                      style: CustomTextTheme().subtitle1.copyWith(
+                            color: Theme.of(context).colorScheme.background,
+                          ),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 30),
+                    mfaBox(),
+                    const SizedBox(height: 40),
+                    ConfirmButton(
+                      text: "Sign In",
+                      onPressed: submitMFA,
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

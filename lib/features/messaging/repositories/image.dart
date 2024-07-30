@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 
 part 'image.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: true)
 Future<Uint8List?> attachedImage(
     AttachedImageRef ref, Attachment attachment) async {
   return (await http.get(attachment.url)).bodyBytes;

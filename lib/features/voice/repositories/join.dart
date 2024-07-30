@@ -96,7 +96,7 @@ class VoiceChannelController extends _$VoiceChannelController {
 
   Future<void> _initializeWebRTC(VoiceReadyEvent event) async {
     final configuration = <String, dynamic>{
-      // 'iceServers': [],
+      //'iceServers': [],
       'sdpSemantics': 'unified-plan',
       'bundlePolicy': 'max-bundle',
     };
@@ -124,10 +124,18 @@ class VoiceChannelController extends _$VoiceChannelController {
       print('Signaling state change: $state');
     };
 
+    _peerConnection!.onAddStream = (MediaStream stream) {
+      print('Stream added: $stream');
+    };
+
     _localStream = await navigator.mediaDevices.getUserMedia({'audio': true});
     _localStream!.getTracks().forEach((track) {
       _peerConnection!.addTrack(track, _localStream!);
     });
+
+    _peerConnection!.onTrack = (event) {
+      print("Received remote track: ${event.track}");
+    };
 
     RTCSessionDescription offer = await _peerConnection!.createOffer({
       'offerToReceiveAudio': true,

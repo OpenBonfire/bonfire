@@ -6,7 +6,7 @@ part of 'image.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$attachedImageHash() => r'1f4c101415b9359de1299727f9b60b6d77514dfa';
+String _$attachedImageHash() => r'b60e7477de6e6dd4c2c4454462db11192edcada1';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -72,7 +72,7 @@ class AttachedImageFamily extends Family<AsyncValue<Uint8List?>> {
 }
 
 /// See also [attachedImage].
-class AttachedImageProvider extends AutoDisposeFutureProvider<Uint8List?> {
+class AttachedImageProvider extends FutureProvider<Uint8List?> {
   /// See also [attachedImage].
   AttachedImageProvider(
     Attachment attachment,
@@ -124,7 +124,7 @@ class AttachedImageProvider extends AutoDisposeFutureProvider<Uint8List?> {
   }
 
   @override
-  AutoDisposeFutureProviderElement<Uint8List?> createElement() {
+  FutureProviderElement<Uint8List?> createElement() {
     return _AttachedImageProviderElement(this);
   }
 
@@ -142,13 +142,13 @@ class AttachedImageProvider extends AutoDisposeFutureProvider<Uint8List?> {
   }
 }
 
-mixin AttachedImageRef on AutoDisposeFutureProviderRef<Uint8List?> {
+mixin AttachedImageRef on FutureProviderRef<Uint8List?> {
   /// The parameter `attachment` of this provider.
   Attachment get attachment;
 }
 
-class _AttachedImageProviderElement
-    extends AutoDisposeFutureProviderElement<Uint8List?> with AttachedImageRef {
+class _AttachedImageProviderElement extends FutureProviderElement<Uint8List?>
+    with AttachedImageRef {
   _AttachedImageProviderElement(super.provider);
 
   @override
