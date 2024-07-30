@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:bonfire/features/auth/data/headers.dart';
 import 'package:bonfire/features/auth/data/repositories/discord_auth.dart';
 import 'package:bonfire/features/auth/models/auth.dart';
+import 'package:bonfire/features/messaging/repositories/events/realtime_messages.dart';
+import 'package:bonfire/features/messaging/repositories/messages.dart';
 import 'package:bonfire/features/voice/repositories/voice_members.dart';
 import 'package:bonfire/features/me/controllers/settings.dart';
 import 'package:http/http.dart' as http;
@@ -125,6 +127,12 @@ class Auth extends _$Auth {
             .setCustomStatus(event.userSettings.customStatus!);
       }
     });
+
+    client.onMessageCreate.listen((event) => ref
+        .read(messagesProvider(
+                event.guildId ?? Snowflake.zero, event.message.channelId)
+            .notifier)
+        .processMessage(event.message));
 
     client.onChannelUnread.listen((event) {
       for (var element in event.channelUnreadUpdates) {

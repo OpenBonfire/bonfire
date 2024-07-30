@@ -12,7 +12,6 @@ import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:bonfire/shared/utils/platform.dart';
-import 'package:flutter_circular_text/circular_text.dart';
 
 String getChannelName(Channel channel) {
   if (channel is DmChannel) {
@@ -103,9 +102,7 @@ class _MessageViewState extends ConsumerState<MessageView> {
 
     messageOutput.when(
       data: (messages) {
-        if (messages.isNotEmpty) {
-          loadedMessages = messages;
-        }
+        if (messages != null) loadedMessages = messages;
       },
       loading: () {
         loadedMessages = [];

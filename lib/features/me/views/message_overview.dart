@@ -25,21 +25,21 @@ class _MessageOverviewState extends ConsumerState<MessageOverview> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.channelId != null) {
-      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-        ref.watch(realtimeMessagesProvider).when(
-            data: (value) {
-              ref
-                  .read(messagesProvider(Snowflake.zero, widget.channelId!)
-                      .notifier)
-                  .processRealtimeMessages(value);
-            },
-            loading: () {},
-            error: (error, stackTrace) {
-              // trust me bro
-            });
-      });
-    }
+    // if (widget.channelId != null) {
+    //   WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+    //     ref.watch(realtimeMessagesProvider).when(
+    //         data: (value) {
+    //           ref
+    //               .read(messagesProvider(Snowflake.zero, widget.channelId!)
+    //                   .notifier)
+    //               .processRealtimeMessages(value);
+    //         },
+    //         loading: () {},
+    //         error: (error, stackTrace) {
+    //           // trust me bro
+    //         });
+    //   });
+    // }
 
     return Scaffold(
       body: Builder(

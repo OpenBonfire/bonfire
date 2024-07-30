@@ -76,12 +76,8 @@ dependencies:
   sodium: ^2.3.1+1
   opus_flutter: ^3.0.2
   flutter_webrtc: ^0.11.3
-  flutter_blurhash: ^0.8.2
-  blurhash_dart: ^1.2.1
   wear_plus: ^1.2.0
   flutter_circular_text: ^0.3.1
-  worker_manager: ^7.0.3
-  thumbhash: ^0.1.0+1
   flutter_thumbhash: ^0.1.0+1
 
 dependency_overrides:

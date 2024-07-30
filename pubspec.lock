@@ -153,14 +153,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.1.6"
-  blurhash_dart:
-    dependency: "direct main"
-    description:
-      name: blurhash_dart
-      sha256: "43955b6c2e30a7d440028d1af0fa185852f3534b795cc6eb81fbf397b464409f"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.2.1"
   boolean_selector:
     dependency: transitive
     description:
@@ -576,14 +568,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "5.1.0"
-  flutter_blurhash:
-    dependency: "direct main"
-    description:
-      name: flutter_blurhash
-      sha256: "5e67678e479ac639069d7af1e133f4a4702311491188ff3e0227486430db0c06"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.8.2"
   flutter_cache_manager:
     dependency: "direct main"
     description:
@@ -1650,7 +1634,7 @@ packages:
     source: hosted
     version: "0.7.0"
   thumbhash:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: thumbhash
       sha256: "5f6d31c5279ca0b5caa81ec10aae8dcaab098d82cb699ea66ada4ed09c794a37"
@@ -2017,14 +2001,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "5.5.0"
-  worker_manager:
-    dependency: "direct main"
-    description:
-      name: worker_manager
-      sha256: "8de97b794040a988b41f475ab0efa03015cc8dff8e130fa3606043572abb4a2c"
-      url: "https://pub.dev"
-    source: hosted
-    version: "7.0.3"
   xdg_directories:
     dependency: transitive
     description:

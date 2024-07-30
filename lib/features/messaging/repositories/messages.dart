@@ -21,7 +21,7 @@ class Messages extends _$Messages {
   AuthUser? user;
   bool listenerRunning = false;
   DateTime lastFetchTime = DateTime.now();
-  Map<Snowflake, List<Message>> messageCache = {};
+  Map<Snowflake, List<Message>> loadedMessages = {};
 
   final _cacheManager = CacheManager(
     Config(
@@ -34,7 +34,7 @@ class Messages extends _$Messages {
   bool realtimeListernRunning = false;
 
   @override
-  Future<List<Message>> build(Snowflake guildId, Snowflake channelId) async {
+  Future<List<Message>?> build(Snowflake guildId, Snowflake channelId) async {
     var auth = ref.watch(authProvider.notifier).getAuth();
 
     if (auth is! AuthUser) {
@@ -42,14 +42,12 @@ class Messages extends _$Messages {
     }
 
     user = auth as AuthUser;
-    var messages = await getMessages();
-    return messages;
+    return await getMessages();
   }
 
   Timer lockTimer = Timer(Duration.zero, () {});
 
-  Future<List<Message>> getMessages({
-    Channel? channelOverride,
+  Future<List<Message>?> getMessages({
     Snowflake? before,
     int? count,
     bool disableAck = false,
@@ -93,9 +91,9 @@ class Messages extends _$Messages {
           .fetchMany(limit: count ?? 50, before: before);
 
       if (before == null) {
-        messageCache[channel.id] = messages.toList();
+        loadedMessages[channel.id] = messages.toList();
       } else {
-        messageCache[channel.id]!.addAll(messages.toList());
+        loadedMessages[channel.id]!.addAll(messages.toList());
       }
 
       if (before == null && (!disableAck == true)) {
@@ -106,23 +104,20 @@ class Messages extends _$Messages {
 
       return messages;
     } else {
-      return [];
+      return null;
     }
   }
 
-  void processRealtimeMessages(List<Message> messages) async {
+  void processMessage(Message message) async {
     Channel? channel =
         ref.watch(channelControllerProvider(channelId)).valueOrNull;
 
-    if (channel == null || messages.isEmpty) {
+    if (channel == null) {
       return;
     }
 
-    // If the channel has a way to update its state or notify listeners, do it here
-    // Since there's no explicit state management mentioned, we print the new messages for debugging
-    List<Message> channelMessages = messageCache[channel.id] ?? [];
+    List<Message> channelMessages = loadedMessages[channel.id] ?? [];
 
-    Message message = messages.last;
     if (message.channel.id == channel.id) {
       ref
           .read(typingProvider(channel.id).notifier)
@@ -162,8 +157,8 @@ class Messages extends _$Messages {
         ref.watch(channelControllerProvider(channelId)).valueOrNull!;
     List<Message> messages = [];
 
-    messages.addAll(messageCache[channel.id] ?? []);
-    messages.addAll(await getMessages(before: message.id));
+    messages.addAll(loadedMessages[channel.id] ?? []);
+    messages.addAll(await getMessages(before: message.id) ?? []);
 
     if (message.channel.id == channel.id) {
       state = AsyncValue.data(messages);

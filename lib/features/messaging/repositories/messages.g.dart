@@ -6,7 +6,7 @@ part of 'messages.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$messagesHash() => r'a7381ccb03373de73ba68774e03b026080ecbef0';
+String _$messagesHash() => r'd090386fedfe2c1e43e6b6f4bc04eec0faa2e1b6';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -30,11 +30,11 @@ class _SystemHash {
 }
 
 abstract class _$Messages
-    extends BuildlessAutoDisposeAsyncNotifier<List<Message>> {
+    extends BuildlessAutoDisposeAsyncNotifier<List<Message>?> {
   late final Snowflake guildId;
   late final Snowflake channelId;
 
-  FutureOr<List<Message>> build(
+  FutureOr<List<Message>?> build(
     Snowflake guildId,
     Snowflake channelId,
   );
@@ -49,7 +49,7 @@ const messagesProvider = MessagesFamily();
 /// Message provider for fetching messages from the Discord API
 ///
 /// Copied from [Messages].
-class MessagesFamily extends Family<AsyncValue<List<Message>>> {
+class MessagesFamily extends Family<AsyncValue<List<Message>?>> {
   /// Message provider for fetching messages from the Discord API
   ///
   /// Copied from [Messages].
@@ -97,7 +97,7 @@ class MessagesFamily extends Family<AsyncValue<List<Message>>> {
 ///
 /// Copied from [Messages].
 class MessagesProvider
-    extends AutoDisposeAsyncNotifierProviderImpl<Messages, List<Message>> {
+    extends AutoDisposeAsyncNotifierProviderImpl<Messages, List<Message>?> {
   /// Message provider for fetching messages from the Discord API
   ///
   /// Copied from [Messages].
@@ -135,7 +135,7 @@ class MessagesProvider
   final Snowflake channelId;
 
   @override
-  FutureOr<List<Message>> runNotifierBuild(
+  FutureOr<List<Message>?> runNotifierBuild(
     covariant Messages notifier,
   ) {
     return notifier.build(
@@ -164,7 +164,7 @@ class MessagesProvider
   }
 
   @override
-  AutoDisposeAsyncNotifierProviderElement<Messages, List<Message>>
+  AutoDisposeAsyncNotifierProviderElement<Messages, List<Message>?>
       createElement() {
     return _MessagesProviderElement(this);
   }
@@ -186,7 +186,7 @@ class MessagesProvider
   }
 }
 
-mixin MessagesRef on AutoDisposeAsyncNotifierProviderRef<List<Message>> {
+mixin MessagesRef on AutoDisposeAsyncNotifierProviderRef<List<Message>?> {
   /// The parameter `guildId` of this provider.
   Snowflake get guildId;
 
@@ -195,7 +195,7 @@ mixin MessagesRef on AutoDisposeAsyncNotifierProviderRef<List<Message>> {
 }
 
 class _MessagesProviderElement
-    extends AutoDisposeAsyncNotifierProviderElement<Messages, List<Message>>
+    extends AutoDisposeAsyncNotifierProviderElement<Messages, List<Message>?>
     with MessagesRef {
   _MessagesProviderElement(super.provider);
 
