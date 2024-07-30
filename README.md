@@ -6,7 +6,7 @@ We now offer nightly builds! Please check out the [github actions](https://githu
 **NOTE**: Bonfire is in it's very early stages of development. It is absolutely NOT ready for regular usage.
 
 # Bonfire
-![bonfire graphic frame(1)](https://github.com/OpenBonfire/bonfire/assets/60072374/2c406136-9e46-4be7-85bd-b16e829d4b83)
+![bonfire graphic frame(2)](https://github.com/user-attachments/assets/ee6ae271-5ad7-4613-a1e8-f4a1f2aaa186)
 
 
 ## About
