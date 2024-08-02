@@ -1,5 +1,3 @@
-import 'package:bonfire/features/messaging/repositories/messages.dart';
-import 'package:bonfire/features/messaging/repositories/events/realtime_messages.dart';
 import 'package:bonfire/features/overview/views/home_desktop.dart';
 import 'package:bonfire/features/overview/views/home_mobile.dart';
 import 'package:bonfire/features/overview/views/overlapping_panels.dart';
@@ -31,10 +29,6 @@ class _HomeState extends ConsumerState<GuildMessagingOverview> {
 
   @override
   Widget build(BuildContext context) {
-    // WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-
-    // });
-
     return (shouldUseMobileLayout(context))
         ? HomeMobile(
             guildId: widget.guildId,

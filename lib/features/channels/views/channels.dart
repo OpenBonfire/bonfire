@@ -9,8 +9,8 @@ import 'package:firebridge/firebridge.dart' hide Builder;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sticky_headers/sticky_headers.dart';
-import 'package:universal_platform/universal_platform.dart';
 import 'package:bonfire/shared/utils/platform.dart';
+import 'package:universal_platform/universal_platform.dart';
 
 class ChannelsList extends ConsumerStatefulWidget {
   final Snowflake guildId;
@@ -27,7 +27,9 @@ class _ChannelsListState extends ConsumerState<ChannelsList> {
 
   @override
   Widget build(BuildContext context) {
-    var topPadding = MediaQuery.of(context).padding.top;
+    var topPadding = (MediaQuery.of(context).padding.top) +
+        (UniversalPlatform.isDesktop ? 8 : 0);
+
     var channelWatch = ref.watch(channelsProvider(widget.guildId));
 
     var channels = channelWatch.valueOrNull ?? [];
@@ -95,7 +97,7 @@ class _ChannelsListState extends ConsumerState<ChannelsList> {
           ),
         ),
         child: Padding(
-          padding: const EdgeInsets.only(top: 0),
+          padding: EdgeInsets.only(top: UniversalPlatform.isDesktop ? 8 : 0),
           child: Column(
             children: [
               Expanded(

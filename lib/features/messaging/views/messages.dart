@@ -154,7 +154,7 @@ class _MessageViewState extends ConsumerState<MessageView> {
                 ),
               ),
               child: Padding(
-                padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
+                padding: const EdgeInsets.only(left: 16, right: 16),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   crossAxisAlignment: CrossAxisAlignment.end,
@@ -162,47 +162,35 @@ class _MessageViewState extends ConsumerState<MessageView> {
                     Expanded(
                       child: Align(
                         alignment: Alignment.bottomLeft,
-                        child: Text(
-                          "# $channelName",
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 1,
-                          softWrap: false,
-                          style: Theme.of(context)
-                              .custom
-                              .textTheme
-                              .titleSmall
-                              .copyWith(
-                                color: Theme.of(context)
-                                    .custom
-                                    .colorTheme
-                                    .channelHeaderText,
-                              ),
+                        child: Padding(
+                          padding: const EdgeInsets.only(bottom: 8),
+                          child: Text(
+                            "# $channelName",
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
+                            softWrap: false,
+                            style: Theme.of(context)
+                                .custom
+                                .textTheme
+                                .titleSmall
+                                .copyWith(
+                                  color: Theme.of(context)
+                                      .custom
+                                      .colorTheme
+                                      .channelHeaderText,
+                                ),
+                          ),
                         ),
                       ),
                     ),
                     if (shouldUseDesktopLayout(context))
-                      Padding(
-                        // TODO: padding does nothing, the button has that dumb padding
-                        padding: const EdgeInsets.only(top: 20),
-                        child: Align(
-                          alignment: Alignment.bottomRight,
-                          child: IconButton(
-                            icon: const Icon(Icons.group_rounded),
-                            onPressed: () {
-                              ref
-                                  .read(memberListVisibilityProvider.notifier)
-                                  .toggleVisibility();
-                              print("E");
-                              // showSearch(
-                              //   context: context,
-                              //   delegate: MessageSearchDelegate(
-                              //     guildId: widget.guildId,
-                              //     channelId: widget.channelId,
-                              //   ),
-                              // );
-                            },
-                          ),
-                        ),
+                      IconButton(
+                        icon: const Icon(Icons.group_rounded),
+                        onPressed: () {
+                          ref
+                              .read(memberListVisibilityProvider.notifier)
+                              .toggleVisibility();
+                        },
                       ),
                   ],
                 ),

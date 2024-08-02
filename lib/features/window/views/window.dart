@@ -4,7 +4,7 @@ import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class WindowTopBar extends StatelessWidget {
-  const WindowTopBar({Key? key}) : super(key: key);
+  const WindowTopBar({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -35,19 +35,6 @@ class WindowTopBar extends StatelessWidget {
               ),
               Expanded(child: MoveWindow()),
               const WindowButtons(),
-            ],
-          ),
-        ),
-        Container(
-          height: 10,
-          decoration: const BoxDecoration(
-            color: Color.fromARGB(255, 0, 0, 0),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black26,
-                blurRadius: 4,
-                offset: Offset(0, 2),
-              ),
             ],
           ),
         ),

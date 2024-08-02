@@ -17,8 +17,6 @@ class AttachmentWidget extends StatefulWidget {
 class _AttachmentWidgetState extends State<AttachmentWidget> {
   @override
   Widget build(BuildContext context) {
-    // String contentType = widget.attachment.contentType? ?? "other";
-    // print(widget.attachment.contentType!.split("/")[0]);
     String contentType = widget.attachment.contentType?.split("/")[0] ?? "";
     if (contentType == "audio") {
       return AudioAttachment(attachment: widget.attachment);
@@ -28,7 +26,6 @@ class _AttachmentWidgetState extends State<AttachmentWidget> {
       return ImageAttachment(attachment: widget.attachment);
     }
 
-    // it's wayyy too laggy on mobile for some reason
     if (contentType == "video") {
       if (UniversalPlatform.isDesktopOrWeb) {
         return DesktopVideoAttachment(

@@ -12,6 +12,7 @@ class ChannelMembers extends _$ChannelMembers {
   Snowflake guildId = Snowflake.zero;
   Snowflake channelId = Snowflake.zero;
   Pair<List<GuildMemberListGroup>, List<dynamic>>? lastPair;
+  List<GuildSubscriptionChannel> currentSubscriptions = [];
 
   @override
   Future<Pair<List<GuildMemberListGroup>, List<dynamic>>?> build() async {
@@ -22,7 +23,6 @@ class ChannelMembers extends _$ChannelMembers {
 
     user!.client.onGuildMemberListUpdate.listen((event) {
       if (event.eventType == MemberListUpdateType.sync) {
-        // for some reason I can't directly cast
         List<GuildMemberListGroup> groupList =
             List<GuildMemberListGroup>.from(event.groups);
 
@@ -34,21 +34,59 @@ class ChannelMembers extends _$ChannelMembers {
   }
 
   void setRoute(Snowflake guildId, Snowflake channelId) async {
+    this.guildId = guildId;
+    this.channelId = channelId;
+    currentSubscriptions = [
+      GuildSubscriptionChannel(
+        channelId: channelId,
+        memberRange: GuildMemberRange(
+          lowerMemberBound: 0,
+          upperMemberBound: 99,
+        ),
+      )
+    ];
+    _updateSubscriptions();
+  }
+
+  void loadMemberRange(int lowerBound, int upperBound) {
+    currentSubscriptions.add(GuildSubscriptionChannel(
+      channelId: channelId,
+      memberRange: GuildMemberRange(
+        lowerMemberBound: lowerBound,
+        upperMemberBound: upperBound,
+      ),
+    ));
+    _updateSubscriptions();
+  }
+
+  void unloadMemberRange(int lowerBound, int upperBound) {
+    currentSubscriptions.removeWhere((sub) =>
+        sub.memberRange.lowerMemberBound == lowerBound &&
+        sub.memberRange.upperMemberBound == upperBound);
+    _updateSubscriptions();
+
+    // Remove the unloaded members from the local state
+    if (lastPair != null) {
+      var updatedMemberList = lastPair!.second.where((member) {
+        if (member is Member) {
+          int index = lastPair!.second.indexOf(member);
+          return index < lowerBound || index > upperBound;
+        }
+        return true;
+      }).toList();
+
+      state = AsyncValue.data(Pair(lastPair!.first, updatedMemberList));
+    }
+  }
+
+  void _updateSubscriptions() {
     if (user is AuthUser) {
       user!.client.updateGuildSubscriptionsBulk(GuildSubscriptionsBulkBuilder()
         ..subscriptions = [
           GuildSubscription(
               typing: true,
               memberUpdates: true,
-              channels: [
-                GuildSubscriptionChannel(
-                  channelId: channelId,
-                  memberRange: GuildMemberRange(
-                    lowerMemberBound: 0,
-                    upperMemberBound: 99,
-                  ),
-                )
-              ],
+              channels: currentSubscriptions,
               guildId: guildId)
         ]);
     }
@@ -56,6 +94,7 @@ class ChannelMembers extends _$ChannelMembers {
 
   void updateMemberList(
       List<dynamic> memberList, List<GuildMemberListGroup> groups) {
-    state = AsyncValue.data(Pair(groups, memberList));
+    lastPair = Pair(groups, memberList);
+    state = AsyncValue.data(lastPair!);
   }
 }

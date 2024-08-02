@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:bonfire/features/auth/data/headers.dart';
 import 'package:bonfire/features/auth/data/repositories/discord_auth.dart';
 import 'package:bonfire/features/auth/models/auth.dart';
-import 'package:bonfire/features/messaging/repositories/events/realtime_messages.dart';
 import 'package:bonfire/features/messaging/repositories/messages.dart';
 import 'package:bonfire/features/voice/repositories/voice_members.dart';
 import 'package:bonfire/features/me/controllers/settings.dart';

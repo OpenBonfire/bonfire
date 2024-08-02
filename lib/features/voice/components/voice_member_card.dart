@@ -6,7 +6,6 @@ import 'package:bonfire/theme/theme.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_webrtc/flutter_webrtc.dart';
 
 class VoiceMemberCard extends ConsumerStatefulWidget {
   final Snowflake userId;
