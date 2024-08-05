@@ -112,6 +112,10 @@ class GuildsState extends _$GuildsState {
   }
 
   void setGuilds(List<Guild> guilds) {
+    if (guilds.isEmpty) {
+      print("Guilds are empty, ignoring state update!!!");
+      return;
+    }
     state = guilds;
   }
 }

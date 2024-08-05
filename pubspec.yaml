@@ -79,6 +79,7 @@ dependencies:
   wear_plus: ^1.2.0
   flutter_circular_text: ^0.3.1
   flutter_thumbhash: ^0.1.0+1
+  video_thumbnail_imageview: ^0.0.6
 
 dependency_overrides:
   webview_flutter_platform_interface: ^2.4.0

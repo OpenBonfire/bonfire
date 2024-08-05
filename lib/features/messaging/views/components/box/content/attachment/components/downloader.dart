@@ -65,14 +65,17 @@ class _DownloadAttachmentState extends State<DownloadAttachment> {
                     size: 32,
                   ),
                   const SizedBox(width: 8),
-                  Text(
-                    widget.attachment.fileName,
-                    style: const TextStyle(
+                  Expanded(
+                    child: Text(
+                      widget.attachment.fileName,
+                      style: const TextStyle(
                         fontSize: 16.0,
                         color: Colors.white,
-                        fontWeight: FontWeight.w600),
+                        fontWeight: FontWeight.w600,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
-                  const Spacer(),
                   IconButton(
                     color: Colors.white,
                     onPressed: () async {

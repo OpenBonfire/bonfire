@@ -14,8 +14,11 @@ class _DesktopVideoAttachmentState extends State<DesktopVideoAttachment> {
   @override
   Widget build(BuildContext context) {
     return DesktopVideoPlayer(
-        width: widget.attachment.width!.toDouble(),
-        height: widget.attachment.height!.toDouble(),
-        url: widget.attachment.url);
+      width: widget.attachment.width!.toDouble(),
+      height: widget.attachment.height!.toDouble(),
+      url: widget.attachment.url,
+      thumbnailUrl: widget.attachment.proxiedUrl,
+      placeholder: widget.attachment.placeholder!,
+    );
   }
 }

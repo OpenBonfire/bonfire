@@ -1841,6 +1841,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.3.1"
+  video_thumbnail_imageview:
+    dependency: "direct main"
+    description:
+      name: video_thumbnail_imageview
+      sha256: "1aa3a30be9fde58abdf977a134d4afc1c0b40a0225c3b05cc71a6927157a97cc"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.6"
   visibility_detector:
     dependency: "direct main"
     description:
