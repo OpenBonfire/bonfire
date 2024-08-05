@@ -127,11 +127,11 @@ class Auth extends _$Auth {
       }
     });
 
-    client.onMessageCreate.listen((event) => ref
-        .read(messagesProvider(
-                event.guildId ?? Snowflake.zero, event.message.channelId)
-            .notifier)
-        .processMessage(event.message));
+    // client.onMessageCreate.listen((event) => ref
+    //     .read(messagesProvider(
+    //             event.guildId ?? Snowflake.zero, event.message.channelId)
+    //         .notifier)
+    //     .processMessage(event.message));
 
     client.onChannelUnread.listen((event) {
       for (var element in event.channelUnreadUpdates) {

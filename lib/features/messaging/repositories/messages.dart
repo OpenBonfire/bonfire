@@ -21,7 +21,8 @@ class Messages extends _$Messages {
   AuthUser? user;
   bool listenerRunning = false;
   DateTime lastFetchTime = DateTime.now();
-  Map<Snowflake, List<Message>> loadedMessages = {};
+  List<Message> loadedMessages = [];
+  bool subscribed = false;
 
   final _cacheManager = CacheManager(
     Config(
@@ -34,15 +35,29 @@ class Messages extends _$Messages {
   bool realtimeListernRunning = false;
 
   @override
-  Future<List<Message>?> build(Snowflake guildId, Snowflake channelId) async {
+  Future<List<Message>?> build(Snowflake channelId) async {
     var auth = ref.watch(authProvider.notifier).getAuth();
 
     if (auth is! AuthUser) {
       print("bad auth!");
+      return null;
     }
 
-    user = auth as AuthUser;
+    user = auth;
+    if (!subscribed) {
+      _subscribeToMessages(auth, channelId);
+      subscribed = true;
+    }
+
     return await getMessages();
+  }
+
+  void _subscribeToMessages(AuthUser auth, Snowflake channelId) {
+    auth.client.onMessageCreate.listen((event) {
+      if (event.message.channelId == channelId) {
+        processMessage(event.message);
+      }
+    });
   }
 
   Timer lockTimer = Timer(Duration.zero, () {});
@@ -63,7 +78,7 @@ class Messages extends _$Messages {
 
       if (channel is GuildChannel || channel is DmChannel) {
         if (channel is GuildChannel) {
-          guild = ref.watch(guildControllerProvider(guildId)).value;
+          guild = ref.watch(guildControllerProvider(channel.guildId)).value;
           if (guild == null) return [];
           selfMember = await guild.members.get(user!.client.user.id);
           var permissions = await channel.computePermissionsFor(selfMember);
@@ -91,9 +106,9 @@ class Messages extends _$Messages {
           .fetchMany(limit: count ?? 50, before: before);
 
       if (before == null) {
-        loadedMessages[channel.id] = messages.toList();
+        loadedMessages = messages.toList();
       } else {
-        loadedMessages[channel.id]!.addAll(messages.toList());
+        loadedMessages.addAll(messages.toList());
       }
 
       if (before == null && (!disableAck == true)) {
@@ -108,22 +123,36 @@ class Messages extends _$Messages {
     }
   }
 
+  Future<List<Message>> fetchMessages({Message? before, int? limit}) async {
+    Channel channel =
+        ref.watch(channelControllerProvider(channelId)).valueOrNull!;
+    List<Message> messages = [];
+
+    messages.addAll(loadedMessages);
+    messages.addAll(await getMessages(
+          before: before?.id,
+          count: limit,
+        ) ??
+        []);
+
+    if (before?.channel.id == channel.id) {
+      state = AsyncValue.data(messages);
+    }
+
+    return messages;
+  }
+
   void processMessage(Message message) async {
     Channel? channel =
         ref.watch(channelControllerProvider(channelId)).valueOrNull;
-
-    if (channel == null) {
-      return;
-    }
-
-    List<Message> channelMessages = loadedMessages[channel.id] ?? [];
+    if (channel == null) return;
 
     if (message.channel.id == channel.id) {
       ref
           .read(typingProvider(channel.id).notifier)
           .cancelTyping(channelId, message.author.id);
-      channelMessages.insert(0, message);
-      state = AsyncValue.data(channelMessages);
+
+      state = AsyncValue.data([message, ...loadedMessages]);
     }
   }
 
@@ -150,21 +179,6 @@ class Messages extends _$Messages {
 
     var age = cacheData.file.lastModifiedSync().difference(DateTime.now());
     return age;
-  }
-
-  Future<List<Message>> fetchMessagesBefore(Message message) async {
-    Channel channel =
-        ref.watch(channelControllerProvider(channelId)).valueOrNull!;
-    List<Message> messages = [];
-
-    messages.addAll(loadedMessages[channel.id] ?? []);
-    messages.addAll(await getMessages(before: message.id) ?? []);
-
-    if (message.channel.id == channel.id) {
-      state = AsyncValue.data(messages);
-    }
-
-    return messages;
   }
 
   Future<Uint8List?> fetchMemberAvatarFromCache(String hash) async {

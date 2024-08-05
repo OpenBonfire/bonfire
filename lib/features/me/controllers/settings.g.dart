@@ -517,7 +517,7 @@ final customStatusStateProvider =
 );
 
 typedef _$CustomStatusState = Notifier<CustomStatus?>;
-String _$guildsStateHash() => r'cc23fc227059af452ebb927ee332ec09c10595a0';
+String _$guildsStateHash() => r'af3c2d1b33d5e94f1e5f6e79d639322fd4a6ddb4';
 
 /// See also [GuildsState].
 @ProviderFor(GuildsState)

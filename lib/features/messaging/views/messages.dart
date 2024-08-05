@@ -67,7 +67,7 @@ class _MessageViewState extends ConsumerState<MessageView> {
     }
     if (!_isLoadingMore &&
         _scrollController.position.pixels >=
-            _scrollController.position.maxScrollExtent - 2000) {
+            _scrollController.position.maxScrollExtent - 1) {
       _loadMoreMessages();
     }
   }
@@ -82,8 +82,8 @@ class _MessageViewState extends ConsumerState<MessageView> {
 
     lastScrollMessage = lastScrollMessage ?? firstBatchLastMessage!;
     List<Message>? recents = await ref
-        .read(messagesProvider(widget.guildId, widget.channelId).notifier)
-        .fetchMessagesBefore(lastScrollMessage!);
+        .read(messagesProvider(widget.channelId).notifier)
+        .fetchMessages(before: lastScrollMessage!, limit: 5);
 
     if (recents.isNotEmpty) {
       if (lastScrollMessage?.id != recents.last.id) {
@@ -97,15 +97,15 @@ class _MessageViewState extends ConsumerState<MessageView> {
 
   @override
   Widget build(BuildContext context) {
-    var messageOutput =
-        ref.watch(messagesProvider(widget.guildId, widget.channelId));
+    var messageOutput = ref.watch(messagesProvider(widget.channelId));
 
     messageOutput.when(
       data: (messages) {
-        if (messages != null) loadedMessages = messages;
+        print("SETTING DATA!");
+        loadedMessages = messages ?? [];
       },
       loading: () {
-        loadedMessages = [];
+        // loadedMessages = [];
       },
       error: (error, stack) {
         print("errored!");
@@ -197,56 +197,64 @@ class _MessageViewState extends ConsumerState<MessageView> {
               ),
             ),
           Expanded(
-            child: ListView.builder(
+            child: ListView.custom(
               controller: _scrollController,
-              itemCount:
-                  loadedMessages.length + (isSmartwatch(context) ? 1 : 0),
               reverse: true,
               shrinkWrap: true,
               padding: const EdgeInsets.only(bottom: 12),
-              itemBuilder: (context, index) {
-                if (isSmartwatch(context) && index == 0) {
-                  return MessageBar(
+              childrenDelegate: SliverChildBuilderDelegate(
+                childCount:
+                    loadedMessages.length + (isSmartwatch(context) ? 1 : 0),
+                findChildIndexCallback: (Key key) {
+                  final ValueKey<int> valueKey = key as ValueKey<int>;
+                  return loadedMessages.indexWhere(
+                      (message) => message.id.value == valueKey.value);
+                },
+                (context, index) {
+                  if (isSmartwatch(context) && index == 0) {
+                    return MessageBar(
+                      guildId: guild?.id ?? Snowflake.zero,
+                      channel: channel,
+                    );
+                  }
+
+                  final messageIndex =
+                      isSmartwatch(context) ? index - 1 : index;
+                  bool showAuthor = true;
+
+                  if (messageIndex + 1 < loadedMessages.length) {
+                    Message currentMessage = loadedMessages[messageIndex];
+                    Message lastMessage = loadedMessages[messageIndex + 1];
+
+                    showAuthor =
+                        lastMessage.author.id != currentMessage.author.id;
+
+                    if (currentMessage.timestamp
+                            .difference(lastMessage.timestamp)
+                            .inMinutes >
+                        5) {
+                      showAuthor = true;
+                    }
+                    if (currentMessage.referencedMessage != null) {
+                      showAuthor = true;
+                    }
+                  } else {
+                    showAuthor = true;
+                  }
+                  if (messageIndex == loadedMessages.length - 1 &&
+                      lastScrollMessage == null) {
+                    firstBatchLastMessage = loadedMessages[messageIndex];
+                  }
+
+                  return MessageBox(
+                    key: ValueKey(loadedMessages[messageIndex].id.value),
                     guildId: guild?.id ?? Snowflake.zero,
                     channel: channel,
+                    message: loadedMessages[messageIndex],
+                    showSenderInfo: showAuthor,
                   );
-                }
-
-                final messageIndex = isSmartwatch(context) ? index - 1 : index;
-                bool showAuthor = true;
-
-                if (messageIndex + 1 < loadedMessages.length) {
-                  Message currentMessage = loadedMessages[messageIndex];
-                  Message lastMessage = loadedMessages[messageIndex + 1];
-
-                  showAuthor =
-                      lastMessage.author.id != currentMessage.author.id;
-
-                  if (currentMessage.timestamp
-                          .difference(lastMessage.timestamp)
-                          .inMinutes >
-                      5) {
-                    showAuthor = true;
-                  }
-                  if (currentMessage.referencedMessage != null) {
-                    showAuthor = true;
-                  }
-                } else {
-                  showAuthor = true;
-                }
-                if (messageIndex == loadedMessages.length - 1 &&
-                    lastScrollMessage == null) {
-                  firstBatchLastMessage = loadedMessages[messageIndex];
-                }
-
-                return MessageBox(
-                  key: ValueKey(loadedMessages[messageIndex].id.value),
-                  guildId: guild?.id ?? Snowflake.zero,
-                  channel: channel,
-                  message: loadedMessages[messageIndex],
-                  showSenderInfo: showAuthor,
-                );
-              },
+                },
+              ),
             ),
           ),
           if (!isSmartwatch(context))

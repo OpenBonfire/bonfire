@@ -112,8 +112,8 @@ class GuildsState extends _$GuildsState {
   }
 
   void setGuilds(List<Guild> guilds) {
-    if (guilds.isEmpty) {
-      print("Guilds are empty, ignoring state update!!!");
+    if (guilds.length == state?.length) {
+      print("Guild sizes are identical, ignoring state update!!!");
       return;
     }
     state = guilds;

@@ -6,7 +6,7 @@ part of 'messages.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$messagesHash() => r'270727322b47fee77f7c28ebef6907610843a6c2';
+String _$messagesHash() => r'16748f93a3ac2ffe610a4956e065d59d846ffe82';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -30,11 +30,9 @@ class _SystemHash {
 }
 
 abstract class _$Messages extends BuildlessAsyncNotifier<List<Message>?> {
-  late final Snowflake guildId;
   late final Snowflake channelId;
 
   FutureOr<List<Message>?> build(
-    Snowflake guildId,
     Snowflake channelId,
   );
 }
@@ -58,11 +56,9 @@ class MessagesFamily extends Family<AsyncValue<List<Message>?>> {
   ///
   /// Copied from [Messages].
   MessagesProvider call(
-    Snowflake guildId,
     Snowflake channelId,
   ) {
     return MessagesProvider(
-      guildId,
       channelId,
     );
   }
@@ -72,7 +68,6 @@ class MessagesFamily extends Family<AsyncValue<List<Message>?>> {
     covariant MessagesProvider provider,
   ) {
     return call(
-      provider.guildId,
       provider.channelId,
     );
   }
@@ -101,12 +96,9 @@ class MessagesProvider
   ///
   /// Copied from [Messages].
   MessagesProvider(
-    Snowflake guildId,
     Snowflake channelId,
   ) : this._internal(
-          () => Messages()
-            ..guildId = guildId
-            ..channelId = channelId,
+          () => Messages()..channelId = channelId,
           from: messagesProvider,
           name: r'messagesProvider',
           debugGetCreateSourceHash:
@@ -115,7 +107,6 @@ class MessagesProvider
                   : _$messagesHash,
           dependencies: MessagesFamily._dependencies,
           allTransitiveDependencies: MessagesFamily._allTransitiveDependencies,
-          guildId: guildId,
           channelId: channelId,
         );
 
@@ -126,11 +117,9 @@ class MessagesProvider
     required super.allTransitiveDependencies,
     required super.debugGetCreateSourceHash,
     required super.from,
-    required this.guildId,
     required this.channelId,
   }) : super.internal();
 
-  final Snowflake guildId;
   final Snowflake channelId;
 
   @override
@@ -138,7 +127,6 @@ class MessagesProvider
     covariant Messages notifier,
   ) {
     return notifier.build(
-      guildId,
       channelId,
     );
   }
@@ -148,15 +136,12 @@ class MessagesProvider
     return ProviderOverride(
       origin: this,
       override: MessagesProvider._internal(
-        () => create()
-          ..guildId = guildId
-          ..channelId = channelId,
+        () => create()..channelId = channelId,
         from: from,
         name: null,
         dependencies: null,
         allTransitiveDependencies: null,
         debugGetCreateSourceHash: null,
-        guildId: guildId,
         channelId: channelId,
       ),
     );
@@ -169,15 +154,12 @@ class MessagesProvider
 
   @override
   bool operator ==(Object other) {
-    return other is MessagesProvider &&
-        other.guildId == guildId &&
-        other.channelId == channelId;
+    return other is MessagesProvider && other.channelId == channelId;
   }
 
   @override
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, guildId.hashCode);
     hash = _SystemHash.combine(hash, channelId.hashCode);
 
     return _SystemHash.finish(hash);
@@ -185,9 +167,6 @@ class MessagesProvider
 }
 
 mixin MessagesRef on AsyncNotifierProviderRef<List<Message>?> {
-  /// The parameter `guildId` of this provider.
-  Snowflake get guildId;
-
   /// The parameter `channelId` of this provider.
   Snowflake get channelId;
 }
@@ -197,8 +176,6 @@ class _MessagesProviderElement
     with MessagesRef {
   _MessagesProviderElement(super.provider);
 
-  @override
-  Snowflake get guildId => (origin as MessagesProvider).guildId;
   @override
   Snowflake get channelId => (origin as MessagesProvider).channelId;
 }
