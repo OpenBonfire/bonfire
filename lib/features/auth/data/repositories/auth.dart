@@ -100,8 +100,8 @@ class Auth extends _$Auth {
     state = authResponse!;
 
     client.onReady.listen((event) {
-      if (hasSentInit) return;
-      hasSentInit = true;
+      // if (hasSentInit) return;
+      // hasSentInit = true;
       print("READY!");
       ref
           .read(privateMessageHistoryProvider.notifier)
