@@ -67,7 +67,7 @@ class _MessageViewState extends ConsumerState<MessageView> {
     }
     if (!_isLoadingMore &&
         _scrollController.position.pixels >=
-            _scrollController.position.maxScrollExtent - 1) {
+            _scrollController.position.maxScrollExtent - 2000) {
       _loadMoreMessages();
     }
   }
@@ -83,7 +83,7 @@ class _MessageViewState extends ConsumerState<MessageView> {
     lastScrollMessage = lastScrollMessage ?? firstBatchLastMessage!;
     List<Message>? recents = await ref
         .read(messagesProvider(widget.channelId).notifier)
-        .fetchMessages(before: lastScrollMessage!, limit: 5);
+        .fetchMessages(before: lastScrollMessage!, limit: 50);
 
     if (recents.isNotEmpty) {
       if (lastScrollMessage?.id != recents.last.id) {
@@ -101,7 +101,6 @@ class _MessageViewState extends ConsumerState<MessageView> {
 
     messageOutput.when(
       data: (messages) {
-        print("SETTING DATA!");
         loadedMessages = messages ?? [];
       },
       loading: () {

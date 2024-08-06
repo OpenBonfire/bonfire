@@ -151,8 +151,9 @@ class Messages extends _$Messages {
       ref
           .read(typingProvider(channel.id).notifier)
           .cancelTyping(channelId, message.author.id);
+      loadedMessages.insert(0, message);
 
-      state = AsyncValue.data([message, ...loadedMessages]);
+      state = AsyncValue.data(loadedMessages);
     }
   }
 

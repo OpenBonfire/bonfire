@@ -18,6 +18,7 @@ part 'auth.g.dart';
 class Auth extends _$Auth {
   NyxxGateway? client;
   AuthResponse? authResponse;
+  bool hasSentInit = false;
 
   @override
   AuthResponse? build() {
@@ -81,7 +82,7 @@ class Auth extends _$Auth {
 
   /// Authenticate client with Discord [token]
   Future<AuthResponse> loginWithToken(String token) async {
-    AuthResponse? response;
+    AuthResponse response = AuthNotStarted();
 
     var client = await Nyxx.connectGateway(token, GatewayIntents.all,
         options: GatewayClientOptions(
@@ -99,6 +100,8 @@ class Auth extends _$Auth {
     state = authResponse!;
 
     client.onReady.listen((event) {
+      if (hasSentInit) return;
+      hasSentInit = true;
       print("READY!");
       ref
           .read(privateMessageHistoryProvider.notifier)

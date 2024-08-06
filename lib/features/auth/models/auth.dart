@@ -7,6 +7,8 @@ part 'auth.g.dart';
 @sealed
 abstract class AuthResponse {}
 
+class AuthNotStarted extends AuthResponse {}
+
 /// Successful authentication response with [token] and [user_settings]
 @freezed
 class AuthSuccess extends AuthResponse with _$AuthSuccess {

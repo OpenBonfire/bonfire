@@ -32,10 +32,6 @@ class DesktopVideoPlayerState extends ConsumerState<DesktopVideoPlayer> {
 
   @override
   void initState() {
-    // print("initialized video player");
-    player = Player();
-    player!.open(Media(widget.url.toString()), play: true);
-    controller = VideoController(player!);
     super.initState();
   }
 
@@ -92,6 +88,10 @@ class DesktopVideoPlayerState extends ConsumerState<DesktopVideoPlayer> {
                         ),
                         onPressed: () {
                           setState(() {
+                            player = Player();
+                            player!
+                                .open(Media(widget.url.toString()), play: true);
+                            controller = VideoController(player!);
                             shouldLoadVideo = true;
                           });
                         },
