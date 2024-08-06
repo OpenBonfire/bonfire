@@ -10,6 +10,7 @@ import 'package:http/http.dart' as http;
 import 'package:firebridge/firebridge.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:hive/hive.dart';
+import 'package:universal_platform/universal_platform.dart';
 
 part 'auth.g.dart';
 
@@ -36,8 +37,13 @@ class Auth extends _$Auth {
       'undelete': false,
     };
 
+    Uri loginUrl = UniversalPlatform.isWeb
+        ? Uri.https("cors-proxy.mylo-fawcett.workers.dev", "/",
+            {'url': Uri.https("discord.com", '/api/v9/auth/login').toString()})
+        : Uri.https("discord.com", '/api/v9/auth/login');
+
     final response = await http.post(
-      Uri.https("discord.com", '/api/v9/auth/login'),
+      loginUrl, //Uri.https("discord.com", '/api/v9/auth/login'),
       headers: Headers.getHeaders(),
       body: jsonEncode(body),
     );
@@ -84,8 +90,13 @@ class Auth extends _$Auth {
   Future<AuthResponse> loginWithToken(String token) async {
     AuthResponse response = AuthNotStarted();
 
-    var client = await Nyxx.connectGateway(token, GatewayIntents.all,
-        options: GatewayClientOptions(
+    var client = await Nyxx.connectGatewayWithOptions(
+        GatewayApiOptions(
+          token: token,
+          intents: GatewayIntents.all,
+          compression: GatewayCompression.none,
+        ),
+        GatewayClientOptions(
           plugins: [
             Logging(logLevel: Level.SEVERE),
           ],

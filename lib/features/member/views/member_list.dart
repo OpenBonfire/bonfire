@@ -77,16 +77,18 @@ class _MemberListState extends ConsumerState<MemberList> {
             child: topBox(channelName, ""),
           ),
         Expanded(
-            child: Padding(
-          padding: EdgeInsets.only(
-            left:
-                (UniversalPlatform.isMobile && !isSmartwatch(context)) ? 32 : 8,
+          child: Padding(
+            padding: EdgeInsets.only(
+              left: (shouldUseMobileLayout(context) && !isSmartwatch(context))
+                  ? 32
+                  : 8,
+            ),
+            child: MemberScrollView(
+              guild: guild,
+              channel: channel,
+            ),
           ),
-          child: MemberScrollView(
-            guild: guild,
-            channel: channel,
-          ),
-        ))
+        )
       ],
     );
   }
@@ -123,38 +125,14 @@ class MemberScrollViewState extends ConsumerState<MemberScrollView> {
   }
 
   void _onScroll() {
-    if (_scrollController.position.pixels ==
-        _scrollController.position.maxScrollExtent) {
-      _loadMoreData();
-    }
-  }
-
-  void _loadMoreData() {
-    if (loadedChunks.length < 3) {
-      int nextChunk = loadedChunks.last + 1;
-      loadedChunks.add(nextChunk);
-      int lowerBound = nextChunk * 100;
-      int upperBound = lowerBound + 99;
-
-      print("Loading $lowerBound - $upperBound");
-      ref
-          .read(channelMembersProvider.notifier)
-          .loadMemberRange(lowerBound, upperBound);
-    }
-
-    if (loadedChunks.length > 3) {
-      // Remove the second chunk (index 1) if we have more than 3 chunks
-      int chunkToRemove = loadedChunks.removeAt(1);
-      int lowerBound = chunkToRemove * 100;
-      int upperBound = lowerBound + 99;
-      ref
-          .read(channelMembersProvider.notifier)
-          .unloadMemberRange(lowerBound, upperBound);
-    }
+    // if (_scrollController.position.pixels ==
+    //     _scrollController.position.maxScrollExtent) {
+    //   _loadMoreData();
+    // }
   }
 
   bool isMember(dynamic item) {
-    return item.toString().contains("Member(");
+    return item[0] is Member;
   }
 
   @override
@@ -189,13 +167,19 @@ class MemberScrollViewState extends ConsumerState<MemberScrollView> {
             }).toList(),
           );
         }
+        // return Text((memberList[index] as List<dynamic>).length.toString());
+        if ((memberList[index] as List<dynamic>).isEmpty) {
+          return Container();
+        }
+        var headerGroup = memberList[index][0] as GuildMemberListGroup;
+
         return Padding(
           padding: EdgeInsets.only(
               left: isSmartwatch(context) ? 34 : 2, top: 10, bottom: 4),
           child: GroupHeader(
             guild: widget.guild,
             groups: groupList,
-            group: memberList[index][0] as GuildMemberListGroup,
+            group: headerGroup,
           ),
         );
       },

@@ -205,7 +205,7 @@ class _MessageViewState extends ConsumerState<MessageView> {
                 childCount:
                     loadedMessages.length + (isSmartwatch(context) ? 1 : 0),
                 findChildIndexCallback: (Key key) {
-                  final ValueKey<int> valueKey = key as ValueKey<int>;
+                  final ValueKey<BigInt> valueKey = key as ValueKey<BigInt>;
                   var idx = loadedMessages.indexWhere(
                       (message) => message.id.value == valueKey.value);
                   if (idx == -1) return null;

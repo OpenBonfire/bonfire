@@ -10,7 +10,6 @@ import 'package:bonfire/features/guild/controllers/guild.dart';
 import 'package:firebridge_extensions/firebridge_extensions.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:http/http.dart' as http;
 
 part 'messages.g.dart';
@@ -24,13 +23,13 @@ class Messages extends _$Messages {
   List<Message> loadedMessages = [];
   bool subscribed = false;
 
-  final _cacheManager = CacheManager(
-    Config(
-      'messages',
-      stalePeriod: const Duration(days: 7),
-      maxNrOfCacheObjects: 10000,
-    ),
-  );
+  // final _cacheManager = CacheManager(
+  //   Config(
+  //     'messages',
+  //     stalePeriod: const Duration(days: 7),
+  //     maxNrOfCacheObjects: 10000,
+  //   ),
+  // );
 
   bool realtimeListernRunning = false;
 
@@ -157,51 +156,51 @@ class Messages extends _$Messages {
     }
   }
 
-  Future<List<Message>?> getChannelFromCache(Channel channel) async {
-    var cacheData = await _cacheManager.getFileFromCache(channel.id.toString());
-    if (cacheData != null) {
-      var cachedMessages =
-          json.decode(utf8.decode(cacheData.file.readAsBytesSync()));
-      var messagesFuture = (cachedMessages as List<dynamic>).map((e) async {
-        var message = channel.manager.parse(e) as Message;
+  // Future<List<Message>?> getChannelFromCache(Channel channel) async {
+  //   var cacheData = await _cacheManager.getFileFromCache(channel.id.toString());
+  //   if (cacheData != null) {
+  //     var cachedMessages =
+  //         json.decode(utf8.decode(cacheData.file.readAsBytesSync()));
+  //     var messagesFuture = (cachedMessages as List<dynamic>).map((e) async {
+  //       var message = channel.manager.parse(e) as Message;
 
-        return message;
-      }).toList();
-      return await Future.wait(messagesFuture);
-    }
-    // no cache
-    return null;
-  }
+  //       return message;
+  //     }).toList();
+  //     return await Future.wait(messagesFuture);
+  //   }
+  //   // no cache
+  //   return null;
+  // }
 
   /// Returns the age of the message entry in the cache from [channel]
-  Future<Duration?> getAgeOfMessageEntry(int channel) async {
-    var cacheData = await _cacheManager.getFileFromCache(channel.toString());
-    if (cacheData == null) return null;
+  // Future<Duration?> getAgeOfMessageEntry(int channel) async {
+  //   var cacheData = await _cacheManager.getFileFromCache(channel.toString());
+  //   if (cacheData == null) return null;
 
-    var age = cacheData.file.lastModifiedSync().difference(DateTime.now());
-    return age;
-  }
+  //   var age = cacheData.file.lastModifiedSync().difference(DateTime.now());
+  //   return age;
+  // }
 
-  Future<Uint8List?> fetchMemberAvatarFromCache(String hash) async {
-    var cacheData = await _cacheManager.getFileFromCache(hash);
-    return cacheData?.file.readAsBytesSync();
-  }
+  // Future<Uint8List?> fetchMemberAvatarFromCache(String hash) async {
+  //   var cacheData = await _cacheManager.getFileFromCache(hash);
+  //   return cacheData?.file.readAsBytesSync();
+  // }
 
   Future<Uint8List?> fetchMessageAuthorAvatar(MessageAuthor member) async {
     String? hash = member.avatarHash;
-    if (hash != null) {
-      var cached = await fetchMemberAvatarFromCache(member.avatarHash!);
-      if (cached != null) return cached;
-    }
+    // if (hash != null) {
+    //   var cached = await fetchMemberAvatarFromCache(member.avatarHash!);
+    //   if (cached != null) return cached;
+    // }
     // if (user.avatar != null) return null;
     var iconUrl = member.avatar?.url;
     if (iconUrl == null) return null;
     var fetched = (await http.get(iconUrl)).bodyBytes;
 
-    await _cacheManager.putFile(
-      member.avatarHash!,
-      fetched,
-    );
+    // await _cacheManager.putFile(
+    //   member.avatarHash!,
+    //   fetched,
+    // );
     return fetched;
   }
 

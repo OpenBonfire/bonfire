@@ -33,6 +33,17 @@ class _ChannelsListState extends ConsumerState<ChannelsList> {
     var channelWatch = ref.watch(channelsProvider(widget.guildId));
 
     var channels = channelWatch.valueOrNull ?? [];
+
+    channelWatch.when(
+      error: (error, stackTrace) {
+        print("ERROR");
+        print(error);
+        print(stackTrace);
+      },
+      loading: () {},
+      data: (data) {},
+    );
+
     var guildBannerUrl =
         ref.watch(guildBannerUrlProvider(widget.guildId)).valueOrNull;
 

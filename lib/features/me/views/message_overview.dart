@@ -28,7 +28,7 @@ class _MessageOverviewState extends ConsumerState<MessageOverview> {
           if (shouldUseDesktopLayout(context)) {
             return Row(
               children: [
-                const Sidebar(guildId: Snowflake.zero),
+                Sidebar(guildId: Snowflake.zero),
                 SizedBox(
                   width: 300,
                   child: Expanded(
@@ -58,7 +58,7 @@ class _MessageOverviewState extends ConsumerState<MessageOverview> {
                 width: MediaQuery.of(context).size.width,
                 child: Row(
                   children: [
-                    const Sidebar(
+                    Sidebar(
                       guildId: Snowflake.zero,
                     ),
                     Expanded(

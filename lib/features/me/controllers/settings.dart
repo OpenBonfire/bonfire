@@ -112,10 +112,10 @@ class GuildsState extends _$GuildsState {
   }
 
   void setGuilds(List<Guild> guilds) {
-    if (guilds.length == state?.length) {
-      print("Guild sizes are identical, ignoring state update!!!");
-      return;
-    }
+    // if (guilds.length == state?.length) {
+    //   print("Guild sizes are identical, ignoring state update!!!");
+    //   return;
+    // }
     state = guilds;
   }
 }

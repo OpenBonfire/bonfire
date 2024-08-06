@@ -38,13 +38,14 @@ class _SidebarState extends ConsumerState<Sidebar> {
     List<UserGuild> guildList = [];
     guildWatch.when(
         data: (guilds) {
-          guildList = guilds;
+          guildList = guilds ?? [];
         },
-        error: (data, trace) {},
+        error: (data, trace) {
+          print("ERROR11111111111");
+        },
         loading: () {});
 
     List<GuildFolder>? guildFolders = guildFoldersWatch;
-
     return Column(
       children: [
         Expanded(

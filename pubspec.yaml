@@ -19,7 +19,7 @@ dependencies:
   firebridge:
     git:
       url: https://github.com/OpenBonfire/firebridge
-      ref: 4f4221ac2019b42cae9fc9a7e27c94b736fd3879
+      ref: 68fe30e92e5b9aa8d62d03ee65df7c909304285a 
 
   markdown_viewer:
     git:
@@ -31,7 +31,7 @@ dependencies:
   riverpod_annotation: ^2.3.5
   signals: ^5.0.0
 
-  flutter_cache_manager: ^3.3.1
+  # flutter_cache_manager: ^3.3.1
   flutter_keyboard_visibility: ^6.0.0
   flutter_keyboard_size: ^1.0.1
   relative_time: ^5.0.0
@@ -81,6 +81,7 @@ dependencies:
   flutter_thumbhash: ^0.1.0+1
   video_thumbnail_imageview: ^0.0.6
   infinite_scroll_pagination: ^4.0.0
+  flutter_cache_manager: ^3.4.0
 
 dependency_overrides:
   webview_flutter_platform_interface: ^2.4.0
@@ -90,7 +91,7 @@ dependency_overrides:
   firebridge:
     git:
       url: https://github.com/OpenBonfire/firebridge
-      ref: 4f4221ac2019b42cae9fc9a7e27c94b736fd3879
+      ref: 68fe30e92e5b9aa8d62d03ee65df7c909304285a
 
   media_kit:
     git:

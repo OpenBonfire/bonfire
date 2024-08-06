@@ -501,8 +501,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "4f4221ac2019b42cae9fc9a7e27c94b736fd3879"
-      resolved-ref: "4f4221ac2019b42cae9fc9a7e27c94b736fd3879"
+      ref: "68fe30e92e5b9aa8d62d03ee65df7c909304285a"
+      resolved-ref: "68fe30e92e5b9aa8d62d03ee65df7c909304285a"
       url: "https://github.com/OpenBonfire/firebridge"
     source: git
     version: "6.2.14"
@@ -572,10 +572,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_cache_manager
-      sha256: "395d6b7831f21f3b989ebedbb785545932adb9afe2622c1ffacf7f4b53a7e544"
+      sha256: a77f77806a790eb9ba0118a5a3a936e81c4fea2b61533033b2b0c3d50bbde5ea
       url: "https://pub.dev"
     source: hosted
-    version: "3.3.2"
+    version: "3.4.0"
   flutter_circular_text:
     dependency: "direct main"
     description:
@@ -1969,6 +1969,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.0"
+  websocket_universal:
+    dependency: transitive
+    description:
+      name: websocket_universal
+      sha256: "8e50d8238a26147fed64512e7af200ef9ab73fab51ab56010f7a54f94a0bb480"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.2.5"
   webview_flutter:
     dependency: transitive
     description:
