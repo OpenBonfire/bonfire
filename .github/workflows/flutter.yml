@@ -15,7 +15,7 @@ jobs:
       - uses: bluefireteam/flutter-gh-pages@v7
         with:
           baseHref: /registration-desk/
-          buildFlags: --no-tree-shake-icons
+          customArgs: --no-tree-shake-icons
   build-android:
     runs-on: ubuntu-latest
     steps:
