@@ -107,76 +107,72 @@ class _ChannelsListState extends ConsumerState<ChannelsList> {
             topRight: Radius.circular(8),
           ),
         ),
-        child: Padding(
-          padding: EdgeInsets.only(top: UniversalPlatform.isDesktop ? 8 : 0),
-          child: Column(
-            children: [
-              Expanded(
-                child: Builder(builder: (context) {
-                  var colItems = <Widget>[];
-                  for (var i = 0;
-                      i < channelsWithoutParent.length + categoryMap.length;
-                      i++) {
-                    colItems.add(buildChannelButton(i));
-                  }
-                  return ClipRRect(
-                    borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(24),
-                      topRight: Radius.circular(8),
-                    ),
-                    child: ListView(
-                        controller: scrollController,
-                        padding: EdgeInsets.zero,
-                        children: [
-                          (guildBannerUrl != null)
-                              ? Container(
-                                  height: 150,
-                                  decoration: BoxDecoration(
-                                    color: Theme.of(context)
-                                        .custom
-                                        .colorTheme
-                                        .foreground,
-                                    borderRadius: const BorderRadius.only(
-                                        topLeft: Radius.circular(24),
-                                        topRight: Radius.circular(12)),
-                                  ),
-                                  child: Image.network(
-                                    "$guildBannerUrl?size=512",
-                                    fit: BoxFit.cover,
-                                  ))
-                              : Container(),
-                          StickyHeader(
-                            header: GuildOverview(guildId: widget.guildId),
-                            content: Padding(
-                              padding: const EdgeInsets.only(top: 8.0),
-                              child: Column(
-                                children: colItems,
-                              ),
+        child: Column(
+          children: [
+            Expanded(
+              child: Builder(builder: (context) {
+                var colItems = <Widget>[];
+                for (var i = 0;
+                    i < channelsWithoutParent.length + categoryMap.length;
+                    i++) {
+                  colItems.add(buildChannelButton(i));
+                }
+                return ClipRRect(
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(24),
+                    topRight: Radius.circular(8),
+                  ),
+                  child: ListView(
+                      controller: scrollController,
+                      padding: EdgeInsets.zero,
+                      children: [
+                        (guildBannerUrl != null)
+                            ? Container(
+                                height: 150,
+                                decoration: BoxDecoration(
+                                  color: Theme.of(context)
+                                      .custom
+                                      .colorTheme
+                                      .foreground,
+                                  borderRadius: const BorderRadius.only(
+                                      topLeft: Radius.circular(24),
+                                      topRight: Radius.circular(12)),
+                                ),
+                                child: Image.network(
+                                  "$guildBannerUrl?size=512",
+                                  fit: BoxFit.cover,
+                                ))
+                            : Container(),
+                        StickyHeader(
+                          header: GuildOverview(guildId: widget.guildId),
+                          content: Padding(
+                            padding: const EdgeInsets.only(top: 8.0),
+                            child: Column(
+                              children: colItems,
                             ),
                           ),
-                          shouldUseMobileLayout(context)
-                              ? SizedBox(
-                                  height:
-                                      MediaQuery.of(context).padding.bottom +
-                                          50,
-                                )
-                              : const SizedBox(),
-                        ]),
-                  );
-                }),
-              ),
-              shouldUseDesktopLayout(context)
-                  ? const Padding(
-                      padding:
-                          EdgeInsets.only(left: 8.0, right: 8.0, bottom: 8.0),
-                      child: UserCard(
-                          // guildId: widget.guildId,
-                          // channelId: widget.channelId,
-                          ),
-                    )
-                  : const SizedBox(),
-            ],
-          ),
+                        ),
+                        shouldUseMobileLayout(context)
+                            ? SizedBox(
+                                height:
+                                    MediaQuery.of(context).padding.bottom + 50,
+                              )
+                            : const SizedBox(),
+                      ]),
+                );
+              }),
+            ),
+            shouldUseDesktopLayout(context)
+                ? const Padding(
+                    padding:
+                        EdgeInsets.only(left: 8.0, right: 8.0, bottom: 8.0),
+                    child: UserCard(
+                        // guildId: widget.guildId,
+                        // channelId: widget.channelId,
+                        ),
+                  )
+                : const SizedBox(),
+          ],
         ),
       ),
     );
