@@ -33,7 +33,7 @@ class _SidebarState extends ConsumerState<Sidebar> {
     var guildFoldersWatch = ref.watch(guildFoldersProvider);
 
     double bottomPadding = MediaQuery.of(context).padding.bottom;
-    double navbarHeight = 40;
+    double navbarHeight = shouldUseMobileLayout(context) ? 40 : 0;
 
     List<UserGuild> guildList = [];
     guildWatch.when(
@@ -68,7 +68,7 @@ class _SidebarState extends ConsumerState<Sidebar> {
                     controller: _scrollController,
                     children: [
                       if (isSmartwatch(context)) const SizedBox(height: 36),
-                      if (UniversalPlatform.isDesktop)
+                      if (UniversalPlatform.isDesktopOrWeb)
                         const SizedBox(height: 8),
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 2),

@@ -21,7 +21,8 @@ class PrivateMessages extends ConsumerStatefulWidget {
 class _MessageOverviewState extends ConsumerState<PrivateMessages> {
   @override
   Widget build(BuildContext context) {
-    var topPadding = MediaQuery.of(context).padding.top;
+    var topPadding = MediaQuery.of(context).padding.top +
+        (UniversalPlatform.isDesktopOrWeb ? 8 : 0);
     double bottomPadding = UniversalPlatform.isMobile
         ? MediaQuery.of(context).padding.bottom + 68
         : 0;
