@@ -19,9 +19,9 @@ A modern alternative to the Discord client. Use Discord without ever having to t
 - 🟩 MacOS
 - 🟩 Linux
 - 🟩 WearOS (All major android smartwatches)
-- 🟨 Web
+- 🟩 Web
 
-Because we are using flutter instead of react native, it's possible to cross-compile to platforms other than mobile! The build currently runs on Windows, MacOS, and Linux, but Web is currently unavailable due to parts of our API framework not fully supporting it (which will change).
+Because we are using flutter instead of react native, it's possible to cross-compile to platforms other than mobile! The build currently runs on Windows, MacOS, Android, Linux, and now Web! I am unable to test on MacOS and iOS, so consider those builds very experimental.
 
 ## General Goals / Ethic
 To start, lemmie outline a few things.
@@ -31,7 +31,7 @@ To start, lemmie outline a few things.
 
 - Our goal here isn't to undermine Discord's monetization- we understand that Discord is a company with bills to pay and employees to feed. Our goal is to create a client that just doesn't suck. It's easy to take a platform like Discord for granted. Yes it has it's problems (I know that more than anyone), but they really have created a cool product, and it's something I'd like to improve as a user.
 
-- Are you a mobile client? Desktop client? Sort of both. Bonfire is a mobile-first client. All of the features we are adding right now are 100% intended for mobile, but because we are using Flutter it's possible to build Bonfire on other platforms. In fact, it currently works just about the same on Windows / MacOS / Linux as it does on mobile (it just needs to be re-themed and re-formatted to look nice). Web is on the radar, but will not work at the current moment.
+- Are you a mobile client? Desktop client? Sort of both. Bonfire is a mobile-first client. All of the features we are adding right now are 100% intended for mobile, but because we are using Flutter it's possible to build Bonfire on other platforms. In fact, it currently works just about the same on Windows / MacOS / Linux / Web as it does on mobile (it just needs to be re-themed and re-formatted to look nice).
 
 - Perhaps, extensions? Well yes (in the future). The goal is that Bonfire can be modified to your liking, much like using Vencord and such. It would work very different from a developer standpoint, but having a built-in plugin marketplace would definitely be cool, although yes, quite difficult. It won't be a focus until the client is at a point I'd consider release-ready.
 
