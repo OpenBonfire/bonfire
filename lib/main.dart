@@ -41,7 +41,11 @@ void main() async {
 
   print("run app!");
 
-  runApp(const ProviderScope(child: MaterialApp(home: MainWindow())));
+  runApp(const ProviderScope(
+    child: MaterialApp(
+      home: MainWindow(),
+    ),
+  ));
 
   if (UniversalPlatform.isDesktop) {
     doWhenWindowReady(() {
