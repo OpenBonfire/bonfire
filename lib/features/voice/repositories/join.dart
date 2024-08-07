@@ -96,7 +96,7 @@ class VoiceChannelController extends _$VoiceChannelController {
 
   Future<void> _initializeWebRTC(VoiceReadyEvent event) async {
     final configuration = <String, dynamic>{
-      //'iceServers': [],
+      // 'iceServers': [],
       'sdpSemantics': 'unified-plan',
       'bundlePolicy': 'max-bundle',
     };
@@ -104,8 +104,8 @@ class VoiceChannelController extends _$VoiceChannelController {
     _peerConnection = await createPeerConnection(configuration);
 
     _peerConnection!.onIceCandidate = (RTCIceCandidate candidate) {
-      print("ICE candidate: ${candidate.toMap()}");
-      // TODO: Implement sending ICE candidate to Discord
+      // print("ICE candidate: ${candidate.toMap()}");
+      // we can ignore ice candidates as we aren't "true" p2p
     };
 
     _peerConnection!.onIceConnectionState = (state) {

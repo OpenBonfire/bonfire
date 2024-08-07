@@ -19,7 +19,7 @@ dependencies:
   firebridge:
     git:
       url: https://github.com/OpenBonfire/firebridge
-      ref: 68fe30e92e5b9aa8d62d03ee65df7c909304285a 
+      ref: e340db86c1c342f1c60dd0d0c7f907b617798387 
 
   markdown_viewer:
     git:
@@ -91,7 +91,7 @@ dependency_overrides:
   firebridge:
     git:
       url: https://github.com/OpenBonfire/firebridge
-      ref: 68fe30e92e5b9aa8d62d03ee65df7c909304285a
+      ref: e340db86c1c342f1c60dd0d0c7f907b617798387
 
   media_kit:
     git:

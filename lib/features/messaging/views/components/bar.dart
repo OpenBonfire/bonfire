@@ -129,7 +129,7 @@ class _MessageBarState extends ConsumerState<MessageBar> {
                       ),
                     ),
                   ),
-                  (UniversalPlatform.isMobile)
+                  (shouldUseMobileLayout(context))
                       ? Padding(
                           // no idea why this is needed
                           padding: EdgeInsets.only(
