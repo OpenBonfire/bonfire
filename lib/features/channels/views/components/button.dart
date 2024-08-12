@@ -87,22 +87,17 @@ class _ChannelButtonState extends ConsumerState<ChannelButton> {
                 padding: const EdgeInsets.only(bottom: 2, left: 0, right: 10),
                 child: SizedBox(
                   width: double.infinity,
-                  height: 35,
+                  height: 38,
                   child: OutlinedButton(
                     style: OutlinedButton.styleFrom(
                         minimumSize: Size.zero,
                         padding: EdgeInsets.zero,
-                        side: BorderSide(
-                          color: (widget.channel.id == widget.currentChannelId)
-                              ? Theme.of(context)
-                                  .custom
-                                  .colorTheme
-                                  .deselectedChannelText
-                              : Colors.transparent,
-                          width: 0.1,
+                        side: const BorderSide(
+                          color: Colors.transparent,
+                          width: 0,
                         ),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: BorderRadius.circular(4),
                         ),
                         foregroundColor: selected
                             ? Theme.of(context)

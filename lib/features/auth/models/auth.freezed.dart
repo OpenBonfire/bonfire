@@ -23,8 +23,12 @@ mixin _$AuthSuccess {
   String get token => throw _privateConstructorUsedError;
   Map<String, dynamic> get user_settings => throw _privateConstructorUsedError;
 
+  /// Serializes this AuthSuccess to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of AuthSuccess
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $AuthSuccessCopyWith<AuthSuccess> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -48,6 +52,8 @@ class _$AuthSuccessCopyWithImpl<$Res, $Val extends AuthSuccess>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of AuthSuccess
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -86,6 +92,8 @@ class __$$AuthSuccessImplCopyWithImpl<$Res>
       _$AuthSuccessImpl _value, $Res Function(_$AuthSuccessImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of AuthSuccess
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -140,12 +148,14 @@ class _$AuthSuccessImpl implements _AuthSuccess {
                 .equals(other._user_settings, _user_settings));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType, token, const DeepCollectionEquality().hash(_user_settings));
 
-  @JsonKey(ignore: true)
+  /// Create a copy of AuthSuccess
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$AuthSuccessImplCopyWith<_$AuthSuccessImpl> get copyWith =>
@@ -171,8 +181,11 @@ abstract class _AuthSuccess implements AuthSuccess {
   String get token;
   @override
   Map<String, dynamic> get user_settings;
+
+  /// Create a copy of AuthSuccess
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$AuthSuccessImplCopyWith<_$AuthSuccessImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -191,8 +204,12 @@ mixin _$MFARequired {
   bool? get totp => throw _privateConstructorUsedError;
   dynamic get webauthn => throw _privateConstructorUsedError;
 
+  /// Serializes this MFARequired to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of MFARequired
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $MFARequiredCopyWith<MFARequired> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -223,6 +240,8 @@ class _$MFARequiredCopyWithImpl<$Res, $Val extends MFARequired>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of MFARequired
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -293,6 +312,8 @@ class __$$MFARequiredImplCopyWithImpl<$Res>
       _$MFARequiredImpl _value, $Res Function(_$MFARequiredImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of MFARequired
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -386,12 +407,14 @@ class _$MFARequiredImpl implements _MFARequired {
             const DeepCollectionEquality().equals(other.webauthn, webauthn));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, user_id, mfa, ticket, sms,
       backup, totp, const DeepCollectionEquality().hash(webauthn));
 
-  @JsonKey(ignore: true)
+  /// Create a copy of MFARequired
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$MFARequiredImplCopyWith<_$MFARequiredImpl> get copyWith =>
@@ -432,8 +455,11 @@ abstract class _MFARequired implements MFARequired {
   bool? get totp;
   @override
   dynamic get webauthn;
+
+  /// Create a copy of MFARequired
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$MFARequiredImplCopyWith<_$MFARequiredImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -448,8 +474,12 @@ mixin _$CaptchaResponse {
   String get captcha_sitekey => throw _privateConstructorUsedError;
   String get captcha_service => throw _privateConstructorUsedError;
 
+  /// Serializes this CaptchaResponse to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of CaptchaResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $CaptchaResponseCopyWith<CaptchaResponse> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -476,6 +506,8 @@ class _$CaptchaResponseCopyWithImpl<$Res, $Val extends CaptchaResponse>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of CaptchaResponse
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -522,6 +554,8 @@ class __$$CaptchaResponseImplCopyWithImpl<$Res>
       _$CaptchaResponseImpl _value, $Res Function(_$CaptchaResponseImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of CaptchaResponse
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -589,7 +623,7 @@ class _$CaptchaResponseImpl implements _CaptchaResponse {
                 other.captcha_service == captcha_service));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType,
@@ -597,7 +631,9 @@ class _$CaptchaResponseImpl implements _CaptchaResponse {
       captcha_sitekey,
       captcha_service);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of CaptchaResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$CaptchaResponseImplCopyWith<_$CaptchaResponseImpl> get copyWith =>
@@ -627,8 +663,11 @@ abstract class _CaptchaResponse implements CaptchaResponse {
   String get captcha_sitekey;
   @override
   String get captcha_service;
+
+  /// Create a copy of CaptchaResponse
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$CaptchaResponseImplCopyWith<_$CaptchaResponseImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

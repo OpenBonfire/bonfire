@@ -142,7 +142,7 @@ class _MemberCardState extends ConsumerState<MemberCard> {
         Container(
             height: 55,
             decoration: BoxDecoration(
-              color: Theme.of(context).custom.colorTheme.messageBar,
+              color: Theme.of(context).custom.colorTheme.foreground,
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(borderRadiusTop),
                 topRight: Radius.circular(borderRadiusTop),

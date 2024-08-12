@@ -129,15 +129,6 @@ class _ChannelsListState extends ConsumerState<ChannelsList> {
                         (guildBannerUrl != null)
                             ? Container(
                                 height: 150,
-                                decoration: BoxDecoration(
-                                  color: Theme.of(context)
-                                      .custom
-                                      .colorTheme
-                                      .foreground,
-                                  borderRadius: const BorderRadius.only(
-                                      topLeft: Radius.circular(24),
-                                      topRight: Radius.circular(12)),
-                                ),
                                 child: Image.network(
                                   "$guildBannerUrl?size=512",
                                   fit: BoxFit.cover,

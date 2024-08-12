@@ -12,8 +12,14 @@ import 'package:bonfire/shared/utils/platform.dart';
 class MessageBar extends ConsumerStatefulWidget {
   final Snowflake guildId;
   final Channel channel;
+  final EdgeInsetsGeometry padding;
 
-  const MessageBar({super.key, required this.guildId, required this.channel});
+  const MessageBar({
+    super.key,
+    required this.guildId,
+    required this.channel,
+    this.padding = const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+  });
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _MessageBarState();
@@ -24,16 +30,24 @@ class _MessageBarState extends ConsumerState<MessageBar> {
   FocusNode messageBarFocusNode = FocusNode();
 
   Widget _messageBarIcon(SvgPicture icon, void Function() onPressed,
-      {Color? backgroundColor}) {
-    return Padding(
-      padding: const EdgeInsets.all(8),
-      child: Container(
-        decoration: BoxDecoration(
-          color:
-              backgroundColor ?? Theme.of(context).custom.colorTheme.messageBar,
-          shape: BoxShape.circle,
+      {Color? backgroundColor, BorderRadius? borderRadius}) {
+    return AspectRatio(
+      aspectRatio: 1,
+      child: ClipRRect(
+        borderRadius: borderRadius ?? BorderRadius.zero,
+        child: Container(
+          decoration: BoxDecoration(
+            color: backgroundColor ??
+                Theme.of(context).custom.colorTheme.foreground,
+          ),
+          child: Material(
+            color: Colors.transparent,
+            child: InkWell(
+              onTap: onPressed,
+              child: Center(child: icon),
+            ),
+          ),
         ),
-        child: IconButton(icon: icon, onPressed: onPressed),
       ),
     );
   }
@@ -56,27 +70,19 @@ class _MessageBarState extends ConsumerState<MessageBar> {
   @override
   Widget build(BuildContext context) {
     bool isWatch = isSmartwatch(context);
-    return Padding(
-      padding: EdgeInsets.only(left: isWatch ? 24 : 0, right: 4),
-      child: Center(
-        child: Column(
-          children: [
-            TypingView(channelId: widget.channel.id),
-            Container(
-              height: 60,
+    bool isMobileLayout = shouldUseMobileLayout(context);
+
+    return Column(
+      children: [
+        TypingView(channelId: widget.channel.id),
+        Padding(
+          padding: widget.padding,
+          child: IntrinsicHeight(
+            child: Container(
               decoration: BoxDecoration(
-                  color: isWatch
-                      ? Colors.transparent
-                      : Theme.of(context)
-                          .custom
-                          .colorTheme
-                          .messageBarBackground,
-                  border: Border.symmetric(
-                    horizontal: BorderSide(
-                      color: Theme.of(context).custom.colorTheme.foreground,
-                      width: 1,
-                    ),
-                  )),
+                color: Theme.of(context).custom.colorTheme.foreground,
+                borderRadius: BorderRadius.circular(8),
+              ),
               child: Row(
                 children: [
                   if (!isWatch)
@@ -87,71 +93,58 @@ class _MessageBarState extends ConsumerState<MessageBar> {
                         height: 24,
                       ),
                       () => print("add"),
-                    ),
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).custom.colorTheme.messageBar,
-                          borderRadius: BorderRadius.circular(36),
-                        ),
-                        child: Padding(
-                            padding: const EdgeInsets.only(left: 8),
-                            child: Center(
-                              child: TextField(
-                                focusNode: messageBarFocusNode,
-                                controller: messageBarController,
-                                onSubmitted: (_) {
-                                  if (UniversalPlatform.isDesktopOrWeb) {
-                                    _sendMessage();
-                                  }
-                                },
-                                decoration: InputDecoration(
-                                  contentPadding:
-                                      const EdgeInsets.only(left: 8, bottom: 6),
-                                  hintText: isSmartwatch(context)
-                                      ? "#${getChannelName(widget.channel)}"
-                                      : "Message #${getChannelName(widget.channel)}",
-                                  hintStyle: TextStyle(
-                                      color: Theme.of(context)
-                                          .custom
-                                          .colorTheme
-                                          .messageBarHintText),
-                                  border: InputBorder.none,
-                                ),
-                                style: Theme.of(context)
-                                    .custom
-                                    .textTheme
-                                    .bodyText1,
-                              ),
-                            )),
+                      borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(8),
+                        bottomLeft: Radius.circular(8),
                       ),
                     ),
+                  Expanded(
+                    child: TextField(
+                      focusNode: messageBarFocusNode,
+                      controller: messageBarController,
+                      onSubmitted: (_) {
+                        if (UniversalPlatform.isDesktopOrWeb) {
+                          _sendMessage();
+                        }
+                      },
+                      decoration: InputDecoration(
+                        contentPadding:
+                            const EdgeInsets.symmetric(horizontal: 16),
+                        hintText: isSmartwatch(context)
+                            ? "#${getChannelName(widget.channel)}"
+                            : "Message #${getChannelName(widget.channel)}",
+                        hintStyle: TextStyle(
+                          color: Theme.of(context)
+                              .custom
+                              .colorTheme
+                              .messageBarHintText,
+                        ),
+                        border: InputBorder.none,
+                      ),
+                      style: Theme.of(context).custom.textTheme.bodyText1,
+                    ),
                   ),
-                  (shouldUseMobileLayout(context))
-                      ? Padding(
-                          // no idea why this is needed
-                          padding: EdgeInsets.only(
-                              top: 2, bottom: 2, right: isWatch ? 12 : 0),
-                          child: _messageBarIcon(
-                            SvgPicture.asset(
-                              "assets/icons/send.svg",
-                              width: 24,
-                              height: 24,
-                            ),
-                            _sendMessage,
-                            backgroundColor:
-                                Theme.of(context).custom.colorTheme.blurple,
-                          ),
-                        )
-                      : const SizedBox(),
+                  if (UniversalPlatform.isMobile || UniversalPlatform.isWeb)
+                    _messageBarIcon(
+                      SvgPicture.asset(
+                        "assets/icons/send.svg",
+                        width: 24,
+                        height: 24,
+                      ),
+                      _sendMessage,
+                      backgroundColor:
+                          Theme.of(context).custom.colorTheme.blurple,
+                      borderRadius: const BorderRadius.only(
+                        topRight: Radius.circular(8),
+                        bottomRight: Radius.circular(8),
+                      ),
+                    ),
                 ],
               ),
             ),
-          ],
+          ),
         ),
-      ),
+      ],
     );
   }
 }

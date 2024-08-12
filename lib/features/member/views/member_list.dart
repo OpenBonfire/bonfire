@@ -68,28 +68,37 @@ class _MemberListState extends ConsumerState<MemberList> {
 
     String channelName = getChannelName(channel);
 
-    return Column(
-      children: [
-        if (!isSmartwatch(context))
-          Padding(
-            padding:
-                EdgeInsets.only(left: UniversalPlatform.isDesktop ? 8.0 : 0),
-            child: topBox(channelName, ""),
-          ),
-        Expanded(
-          child: Padding(
-            padding: EdgeInsets.only(
-              left: (shouldUseMobileLayout(context) && !isSmartwatch(context))
-                  ? 32
-                  : 8,
+    return Container(
+      decoration: BoxDecoration(
+        color: Theme.of(context).custom.colorTheme.background,
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(8),
+          topRight: Radius.circular(8),
+        ),
+      ),
+      child: Column(
+        children: [
+          if (!isSmartwatch(context))
+            Padding(
+              padding:
+                  EdgeInsets.only(left: UniversalPlatform.isDesktop ? 8.0 : 0),
+              child: topBox(channelName, ""),
             ),
-            child: MemberScrollView(
-              guild: guild,
-              channel: channel,
+          Expanded(
+            child: Padding(
+              padding: EdgeInsets.only(
+                left: (shouldUseMobileLayout(context) && !isSmartwatch(context))
+                    ? 32
+                    : 8,
+              ),
+              child: MemberScrollView(
+                guild: guild,
+                channel: channel,
+              ),
             ),
-          ),
-        )
-      ],
+          )
+        ],
+      ),
     );
   }
 }

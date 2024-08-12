@@ -134,7 +134,7 @@ class _MessageViewState extends ConsumerState<MessageView> {
 
     return Container(
       decoration: BoxDecoration(
-        color: Theme.of(context).custom.colorTheme.messageViewBackground,
+        color: Theme.of(context).custom.colorTheme.background,
         boxShadow: const [],
       ),
       child: Column(
