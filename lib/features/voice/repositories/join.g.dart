@@ -7,7 +7,7 @@ part of 'join.dart';
 // **************************************************************************
 
 String _$voiceChannelControllerHash() =>
-    r'4f4b997b97b44b8acb8bf126fe0d29c6c95a31b7';
+    r'c1ffc22cd2379c92a17fc6a983b44a53dce176bc';
 
 /// See also [VoiceChannelController].
 @ProviderFor(VoiceChannelController)

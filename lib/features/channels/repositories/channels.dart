@@ -26,7 +26,11 @@ class Channels extends _$Channels {
   @override
   Future<List<Channel>> build(Snowflake guildId) async {
     var auth = ref.watch(authProvider.notifier).getAuth();
-    Guild guild = ref.watch(guildControllerProvider(guildId)).valueOrNull!;
+    Guild? guild = ref.watch(guildControllerProvider(guildId)).valueOrNull;
+
+    if (guild == null) {
+      return [];
+    }
 
     List<Channel> _channels = [];
     var cachedChannels = (await fetchFromCache());

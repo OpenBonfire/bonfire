@@ -31,7 +31,9 @@ class Typing extends _$Typing {
               return Timer(const Duration(seconds: 10), () async {
                 // don't like this, but it works
                 // the user should technically be in the list
-                users.remove(event.member ?? await event.user.get());
+                var id = event.member?.id ?? event.user.id;
+                users.removeWhere((element) => element.id == id);
+                timers.remove(id);
                 state = AsyncValue.data(users);
               });
             });
@@ -49,6 +51,7 @@ class Typing extends _$Typing {
     if (timers.containsKey(memberId)) {
       timers[memberId]!.cancel();
       users.removeWhere((element) => element.id == memberId);
+      timers.remove(memberId);
       state = AsyncValue.data(users);
     }
   }

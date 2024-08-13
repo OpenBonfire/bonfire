@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'package:bonfire/features/auth/data/repositories/auth.dart';
 import 'package:bonfire/features/auth/data/repositories/discord_auth.dart';
+import 'package:bonfire/features/voice/libs/local_builder.dart';
+import 'package:bonfire/features/voice/libs/remote_builder.dart';
 import 'package:bonfire/features/voice/libs/sdp_builder.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:firebridge/firebridge.dart';
@@ -83,13 +85,13 @@ class VoiceChannelController extends _$VoiceChannelController {
     _peerConnection = await createPeerConnection(configuration);
 
     // no idea why we need 22 audio tracks, but discord does it
-    for (int i = 0; i < 22; i++) {
-      MediaStream audioStream =
-          await navigator.mediaDevices.getUserMedia({'audio': true});
-      audioStream.getAudioTracks().forEach((track) {
-        _peerConnection!.addTrack(track, audioStream);
-      });
-    }
+    // for (int i = 0; i < 12; i++) {
+    //   MediaStream audioStream =
+    //       await navigator.mediaDevices.getUserMedia({'audio': true});
+    //   audioStream.getAudioTracks().forEach((track) {
+    //     _peerConnection!.addTrack(track, audioStream);
+    //   });
+    // }
 
     // for (int i = 0; i < 12; i++) {
     //   MediaStream videoStream =
@@ -131,11 +133,21 @@ class VoiceChannelController extends _$VoiceChannelController {
 
     _peerConnection!.onTrack = (event) {
       print("Received track: ${event.track}");
+      event.track.enabled = true;
     };
 
     var offer = await _peerConnection!.createOffer(configuration);
     // print("Created offer:\n${offer.sdp}");
+    // var mockOffer = await _peerConnection!.createOffer(configuration);
+    // print("LOCAL OFFER AS IT STANDS");
+    // print(mockOffer.sdp);
+    // var offer = RTCSessionDescription(
+    //   LocalBuilder.build(),
+    //   'offer',
+    // );
+
     _peerConnection!.setLocalDescription(offer);
+    print("set wack offer");
 
     _voiceClient!.sendVoiceSelectProtocol(
       VoiceSelectProtocolBuilder(
@@ -218,20 +230,20 @@ class VoiceChannelController extends _$VoiceChannelController {
     modifiedLines.add('t=0 0');
 
     modifiedLines
-        .add('a=group:BUNDLE ${List.generate(22, (i) => i).join(' ')}');
+        .add('a=group:BUNDLE ${List.generate(12, (i) => i).join(' ')}');
 
     if (lines.contains('a=ice-lite')) {
       modifiedLines.add('a=ice-lite');
     }
 
-    // add 22 audio tracks (I still have no idea why)
-    for (int i = 0; i < 22; i++) {
+    // add 12 audio tracks (I still have no idea why)
+    for (int i = 0; i < 12; i++) {
       modifiedLines.add('m=audio 9 UDP/TLS/RTP/SAVPF 109 101');
-      modifiedLines.add(connectionLine ?? 'c=IN IP4 0.0.0.0');
+      modifiedLines.add(connectionLine!);
       if (rtcpLine != null) modifiedLines.add(rtcpLine);
       modifiedLines.add('a=rtcp-mux');
       if (iceUfrag != null) modifiedLines.add(iceUfrag);
-      if (icePwd != null) modifiedLines.add(icePwd);
+      modifiedLines.add(icePwd!);
       modifiedLines.add(fingerprint);
       modifiedLines.add('a=setup:active');
       modifiedLines.add('a=mid:$i');
@@ -244,8 +256,10 @@ class VoiceChannelController extends _$VoiceChannelController {
 
     final modifiedSdp = '${modifiedLines.join('\r\n')}\r\n';
 
-    print("Modified Remote SDP:");
-    print(modifiedSdp);
+    // print("Modified Remote SDP:");
+    // print(modifiedSdp);
+
+    // var modifiedSdp = RemoteBuilder.build();
 
     final description = RTCSessionDescription(modifiedSdp, 'answer');
     await _peerConnection!.setRemoteDescription(description);
