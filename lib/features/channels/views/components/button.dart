@@ -87,7 +87,7 @@ class _ChannelButtonState extends ConsumerState<ChannelButton> {
                 padding: const EdgeInsets.only(bottom: 2, left: 0, right: 10),
                 child: SizedBox(
                   width: double.infinity,
-                  height: 38,
+                  height: 36,
                   child: OutlinedButton(
                     style: OutlinedButton.styleFrom(
                         minimumSize: Size.zero,

@@ -52,7 +52,7 @@ class _DownloadAttachmentState extends State<DownloadAttachment> {
         height: 60,
         width: 300,
         decoration: BoxDecoration(
-          color: Theme.of(context).custom.colorTheme.embedBackground,
+          color: Theme.of(context).custom.colorTheme.foreground,
         ),
         child: Stack(
           children: [

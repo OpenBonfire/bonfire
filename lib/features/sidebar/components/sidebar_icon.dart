@@ -135,8 +135,8 @@ class _SidebarIconState extends ConsumerState<SidebarIcon> {
       children: [
         Center(
           child: SizedBox(
-            width: widget.mini ? 16 : 47,
-            height: widget.mini ? 16 : 47,
+            width: widget.mini ? 16 : 49,
+            height: widget.mini ? 16 : 49,
             child: widget.isClickable
                 ? InkWell(
                     onTap: () {

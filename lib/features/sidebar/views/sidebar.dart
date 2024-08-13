@@ -38,7 +38,7 @@ class _SidebarState extends ConsumerState<Sidebar> {
     List<UserGuild> guildList = [];
     guildWatch.when(
         data: (guilds) {
-          guildList = guilds ?? [];
+          guildList = guilds;
         },
         error: (data, trace) {
           print("ERROR11111111111");
@@ -60,7 +60,7 @@ class _SidebarState extends ConsumerState<Sidebar> {
         children: [
           Expanded(
             child: SizedBox(
-              width: 70,
+              width: 75,
               child: Center(
                 child: MouseRegion(
                   onEnter: (_) {

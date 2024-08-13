@@ -5,9 +5,8 @@ import 'package:bonfire/features/guild/controllers/guild.dart';
 import 'package:bonfire/features/messaging/repositories/messages.dart';
 import 'package:bonfire/features/messaging/views/components/bar.dart';
 import 'package:bonfire/features/messaging/views/components/box/box.dart';
+import 'package:bonfire/features/messaging/views/components/box/channel_header.dart';
 import 'package:bonfire/features/messaging/views/components/keyboard_buffer.dart';
-import 'package:bonfire/features/overview/controllers/member_list.dart';
-import 'package:bonfire/theme/theme.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -115,8 +114,6 @@ class _MessageViewState extends ConsumerState<MessageView> {
       },
     );
 
-    var topPadding = MediaQuery.of(context).padding.top;
-
     String channelName = "";
     Channel? channel =
         ref.watch(channelControllerProvider(widget.channelId)).valueOrNull;
@@ -132,130 +129,76 @@ class _MessageViewState extends ConsumerState<MessageView> {
 
     channelName = getChannelName(channel);
 
-    return Container(
-      decoration: BoxDecoration(
-        color: Theme.of(context).custom.colorTheme.background,
-        boxShadow: const [],
-      ),
-      child: Column(
+    return Scaffold(
+      body: Column(
         children: [
-          if (!isSmartwatch(context))
-            Container(
-              height: topPadding + 50,
-              decoration: BoxDecoration(
-                color:
-                    Theme.of(context).custom.colorTheme.messageViewBackground,
-                border: Border(
-                  bottom: BorderSide(
-                    color: Theme.of(context).custom.colorTheme.foreground,
-                    width: 1,
+          Expanded(
+            child: Stack(
+              children: [
+                ListView.custom(
+                  controller: _scrollController,
+                  reverse: true,
+                  shrinkWrap: true,
+                  padding: const EdgeInsets.only(bottom: 12),
+                  childrenDelegate: SliverChildBuilderDelegate(
+                    childCount:
+                        loadedMessages.length + (isSmartwatch(context) ? 1 : 0),
+                    findChildIndexCallback: (Key key) {
+                      final ValueKey<BigInt> valueKey = key as ValueKey<BigInt>;
+                      var idx = loadedMessages.indexWhere(
+                          (message) => message.id.value == valueKey.value);
+                      if (idx == -1) return null;
+                      return idx;
+                    },
+                    (context, index) {
+                      if (isSmartwatch(context) && index == 0) {
+                        return MessageBar(
+                          guildId: guild?.id ?? Snowflake.zero,
+                          channel: channel,
+                        );
+                      }
+
+                      final messageIndex =
+                          isSmartwatch(context) ? index - 1 : index;
+                      bool showAuthor = true;
+
+                      if (messageIndex + 1 < loadedMessages.length) {
+                        Message currentMessage = loadedMessages[messageIndex];
+                        Message lastMessage = loadedMessages[messageIndex + 1];
+
+                        showAuthor =
+                            lastMessage.author.id != currentMessage.author.id;
+
+                        if (currentMessage.timestamp
+                                .difference(lastMessage.timestamp)
+                                .inMinutes >
+                            5) {
+                          showAuthor = true;
+                        }
+                        if (currentMessage.referencedMessage != null) {
+                          showAuthor = true;
+                        }
+                      } else {
+                        showAuthor = true;
+                      }
+                      if (messageIndex == loadedMessages.length - 1 &&
+                          lastScrollMessage == null) {
+                        firstBatchLastMessage = loadedMessages[messageIndex];
+                      }
+
+                      return MessageBox(
+                        key: ValueKey(loadedMessages[messageIndex].id.value),
+                        guildId: guild?.id ?? Snowflake.zero,
+                        channel: channel,
+                        message: loadedMessages[messageIndex],
+                        showSenderInfo: showAuthor,
+                      );
+                    },
                   ),
                 ),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.only(left: 16, right: 16),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Expanded(
-                      child: Align(
-                        alignment: Alignment.bottomLeft,
-                        child: Padding(
-                          padding: const EdgeInsets.only(bottom: 8),
-                          child: Text(
-                            "# $channelName",
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 1,
-                            softWrap: false,
-                            style: Theme.of(context)
-                                .custom
-                                .textTheme
-                                .titleSmall
-                                .copyWith(
-                                  color: Theme.of(context)
-                                      .custom
-                                      .colorTheme
-                                      .channelHeaderText,
-                                ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    if (shouldUseDesktopLayout(context))
-                      IconButton(
-                        icon: const Icon(Icons.group_rounded),
-                        onPressed: () {
-                          ref
-                              .read(memberListVisibilityProvider.notifier)
-                              .toggleVisibility();
-                        },
-                      ),
-                  ],
-                ),
-              ),
-            ),
-          Expanded(
-            child: ListView.custom(
-              controller: _scrollController,
-              reverse: true,
-              shrinkWrap: true,
-              padding: const EdgeInsets.only(bottom: 12),
-              childrenDelegate: SliverChildBuilderDelegate(
-                childCount:
-                    loadedMessages.length + (isSmartwatch(context) ? 1 : 0),
-                findChildIndexCallback: (Key key) {
-                  final ValueKey<BigInt> valueKey = key as ValueKey<BigInt>;
-                  var idx = loadedMessages.indexWhere(
-                      (message) => message.id.value == valueKey.value);
-                  if (idx == -1) return null;
-                  return idx;
-                },
-                (context, index) {
-                  if (isSmartwatch(context) && index == 0) {
-                    return MessageBar(
-                      guildId: guild?.id ?? Snowflake.zero,
-                      channel: channel,
-                    );
-                  }
-
-                  final messageIndex =
-                      isSmartwatch(context) ? index - 1 : index;
-                  bool showAuthor = true;
-
-                  if (messageIndex + 1 < loadedMessages.length) {
-                    Message currentMessage = loadedMessages[messageIndex];
-                    Message lastMessage = loadedMessages[messageIndex + 1];
-
-                    showAuthor =
-                        lastMessage.author.id != currentMessage.author.id;
-
-                    if (currentMessage.timestamp
-                            .difference(lastMessage.timestamp)
-                            .inMinutes >
-                        5) {
-                      showAuthor = true;
-                    }
-                    if (currentMessage.referencedMessage != null) {
-                      showAuthor = true;
-                    }
-                  } else {
-                    showAuthor = true;
-                  }
-                  if (messageIndex == loadedMessages.length - 1 &&
-                      lastScrollMessage == null) {
-                    firstBatchLastMessage = loadedMessages[messageIndex];
-                  }
-
-                  return MessageBox(
-                    key: ValueKey(loadedMessages[messageIndex].id.value),
-                    guildId: guild?.id ?? Snowflake.zero,
-                    channel: channel,
-                    message: loadedMessages[messageIndex],
-                    showSenderInfo: showAuthor,
-                  );
-                },
-              ),
+                if (!isSmartwatch(context))
+                  ChannelHeader(channelName: channelName),
+              ],
             ),
           ),
           if (!isSmartwatch(context))

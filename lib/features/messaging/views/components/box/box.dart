@@ -9,6 +9,7 @@ import 'package:bonfire/features/messaging/views/components/box/content/embed/em
 import 'package:bonfire/features/messaging/views/components/box/markdown_box.dart';
 import 'package:bonfire/features/messaging/views/components/box/popout.dart';
 import 'package:bonfire/features/messaging/views/components/box/reply.dart';
+import 'package:bonfire/theme/theme.dart';
 import 'package:firebridge/firebridge.dart' hide ButtonStyle;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -137,6 +138,8 @@ class _MessageBoxState extends ConsumerState<MessageBox> {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(0),
               ),
+              // change hover / select color to white
+              foregroundColor: Theme.of(context).custom.colorTheme.foreground,
             ),
             onPressed: () {},
             child: Stack(
