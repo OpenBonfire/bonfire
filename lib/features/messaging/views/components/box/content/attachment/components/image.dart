@@ -97,7 +97,7 @@ class BlurredBackgroundPageRoute<T> extends PageRoute<T> {
   }
 }
 
-class FullscreenImageView extends StatelessWidget {
+class FullscreenImageView extends StatefulWidget {
   final String imageUrl;
   final ThumbHash placeholder;
 
@@ -108,20 +108,47 @@ class FullscreenImageView extends StatelessWidget {
   });
 
   @override
+  State<FullscreenImageView> createState() => _FullscreenImageViewState();
+}
+
+class _FullscreenImageViewState extends State<FullscreenImageView> {
+  final TransformationController _controller = TransformationController();
+  late TapDownDetails _doubleTapDetails;
+
+  void _handleDoubleTapDown(TapDownDetails details) {
+    _doubleTapDetails = details;
+  }
+
+  void _handleDoubleTap() {
+    if (_controller.value != Matrix4.identity()) {
+      _controller.value = Matrix4.identity();
+    } else {
+      final position = _doubleTapDetails.localPosition;
+      // Zoom to 2x on double tap
+      _controller.value = Matrix4.identity()
+        ..translate(-position.dx, -position.dy)
+        ..scale(2.0)
+        ..translate(position.dx, position.dy);
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => Navigator.of(context).pop(),
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        body: Center(
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(12),
-            child: InteractiveViewer(
-              minScale: 0.5,
-              maxScale: 3.0,
+    return Scaffold(
+      backgroundColor: Colors.transparent,
+      body: GestureDetector(
+        onTap: () => Navigator.of(context).pop(),
+        child: InteractiveViewer(
+          transformationController: _controller,
+          minScale: 0.5,
+          maxScale: 5,
+          child: GestureDetector(
+            onDoubleTapDown: _handleDoubleTapDown,
+            onDoubleTap: _handleDoubleTap,
+            child: Center(
               child: FadeInImage(
-                placeholder: placeholder.toImage(),
-                image: NetworkImage(imageUrl),
+                placeholder: widget.placeholder.toImage(),
+                image: NetworkImage(widget.imageUrl),
                 fit: BoxFit.contain,
               ),
             ),
@@ -129,5 +156,11 @@ class FullscreenImageView extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 }

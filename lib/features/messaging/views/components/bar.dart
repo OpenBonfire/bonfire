@@ -90,8 +90,8 @@ class _MessageBarState extends ConsumerState<MessageBar> {
   Widget _messageBarIcon(SvgPicture icon, void Function() onPressed,
       {Color? backgroundColor, BorderRadius? borderRadius}) {
     return Container(
-      width: 43,
-      height: 43,
+      width: 48,
+      height: 48,
       decoration: BoxDecoration(
         color:
             backgroundColor ?? Theme.of(context).custom.colorTheme.foreground,
@@ -259,7 +259,9 @@ class _MessageBarState extends ConsumerState<MessageBar> {
                           ],
                           decoration: InputDecoration(
                             contentPadding: const EdgeInsets.symmetric(
-                                vertical: 10, horizontal: 16),
+                              horizontal: 8,
+                              vertical: 8,
+                            ),
                             hintText: isWatch
                                 ? "#${getChannelName(widget.channel)}"
                                 : "Message #${getChannelName(widget.channel)}",
@@ -271,7 +273,7 @@ class _MessageBarState extends ConsumerState<MessageBar> {
                               fontWeight: FontWeight.w600,
                             ),
                             border: InputBorder.none,
-                            isCollapsed: true,
+                            isCollapsed: false,
                           ),
                           style: Theme.of(context).custom.textTheme.bodyText1,
                           cursorColor: Colors.white,
