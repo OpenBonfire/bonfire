@@ -514,8 +514,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: e340db86c1c342f1c60dd0d0c7f907b617798387
-      resolved-ref: e340db86c1c342f1c60dd0d0c7f907b617798387
+      ref: "60b927dd961aef7828daf634c873d6f6c953dc1c"
+      resolved-ref: "60b927dd961aef7828daf634c873d6f6c953dc1c"
       url: "https://github.com/OpenBonfire/firebridge"
     source: git
     version: "6.2.14"
@@ -531,7 +531,7 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: a537dad4fa77e0ef99bc69c6bb1eeb6bb0aa65e5
+      ref: HEAD
       resolved-ref: a537dad4fa77e0ef99bc69c6bb1eeb6bb0aa65e5
       url: "https://github.com/OpenBonfire/fireview.git"
     source: git
@@ -984,7 +984,7 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "4d3e47209a5652cd81736aa3838c68979a796e81"
+      ref: HEAD
       resolved-ref: "4d3e47209a5652cd81736aa3838c68979a796e81"
       url: "https://github.com/OpenBonfire/markdown_viewer"
     source: git

@@ -81,7 +81,7 @@ class _WebVideoState extends ConsumerState<WebVideo> {
             padding: const EdgeInsets.only(left: 5),
             child: Container(
               decoration: BoxDecoration(
-                color: Theme.of(context).custom.colorTheme.embedBackground,
+                color: Theme.of(context).custom.colorTheme.foreground,
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

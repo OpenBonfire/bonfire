@@ -54,7 +54,7 @@ class Channels extends _$Channels {
 
       List<GuildChannel> guildChannels = [];
 
-      // filter out channels that the user can't view
+      // filter out channels that the user can't vie
       for (var channel in rawGuildChannels) {
         var permissions = await channel.computePermissionsFor(selfMember);
         if (permissions.canViewChannel) {

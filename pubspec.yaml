@@ -14,17 +14,14 @@ dependencies:
   fireview:
     git:
       url: https://github.com/OpenBonfire/fireview.git
-      ref: a537dad4fa77e0ef99bc69c6bb1eeb6bb0aa65e5
-
+      
   firebridge:
     git:
       url: https://github.com/OpenBonfire/firebridge
-      ref: e340db86c1c342f1c60dd0d0c7f907b617798387 
 
   markdown_viewer:
     git:
       url: https://github.com/OpenBonfire/markdown_viewer
-      ref: 4d3e47209a5652cd81736aa3838c68979a796e81
 
   google_fonts: ^6.2.1
   flutter_riverpod: ^2.5.1
@@ -91,7 +88,7 @@ dependency_overrides:
   firebridge:
     git:
       url: https://github.com/OpenBonfire/firebridge
-      ref: e340db86c1c342f1c60dd0d0c7f907b617798387
+      ref: 60b927dd961aef7828daf634c873d6f6c953dc1c
 
   media_kit:
     git:
