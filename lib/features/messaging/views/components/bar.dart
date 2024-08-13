@@ -182,7 +182,6 @@ class _MessageBarState extends ConsumerState<MessageBar> {
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             itemCount: _attachments.length,
-            // padding: const EdgeInsets.symmetric(horizontal: 8),
             itemBuilder: (context, index) {
               final attachment = _attachments[index];
               return Padding(

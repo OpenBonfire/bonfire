@@ -82,12 +82,7 @@ class DescriptionEmbed extends StatelessWidget {
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
                           color: embed.color != null
-                              ? Color.fromRGBO(
-                                  embed.color!.r,
-                                  embed.color!.g,
-                                  embed.color!.b,
-                                  1,
-                                )
+                              ? Colors.white
                               : Theme.of(context).custom.colorTheme.blurple,
                         ),
                       ),
