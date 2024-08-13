@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:bonfire/features/auth/data/repositories/auth.dart';
@@ -187,7 +186,7 @@ class Messages extends _$Messages {
   // }
 
   Future<Uint8List?> fetchMessageAuthorAvatar(MessageAuthor member) async {
-    String? hash = member.avatarHash;
+    // String? hash = member.avatarHash;
     // if (hash != null) {
     //   var cached = await fetchMemberAvatarFromCache(member.avatarHash!);
     //   if (cached != null) return cached;

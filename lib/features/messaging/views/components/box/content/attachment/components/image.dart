@@ -28,11 +28,7 @@ class _ImageAttachmentState extends ConsumerState<ImageAttachment> {
           builder: (context, constraints) {
             return FadeInImage(
               placeholder: hash.toImage(),
-              image: ResizeImage(
-                NetworkImage(widget.attachment.url.toString()),
-                width: constraints.maxWidth.round(),
-                height: constraints.maxHeight.round(),
-              ),
+              image: NetworkImage(widget.attachment.url.toString()),
               fit: BoxFit.cover,
               width: constraints.maxWidth,
               height: constraints.maxHeight,

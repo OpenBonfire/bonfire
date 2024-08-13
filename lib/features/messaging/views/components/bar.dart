@@ -71,7 +71,6 @@ class _MessageBarState extends ConsumerState<MessageBar> {
   @override
   Widget build(BuildContext context) {
     bool isWatch = isSmartwatch(context);
-    bool isMobileLayout = shouldUseMobileLayout(context);
 
     return Column(
       children: [
