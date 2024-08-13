@@ -258,7 +258,7 @@ class _MessageBoxState extends ConsumerState<MessageBox> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        MarkdownBox(message: widget.message!),
+        MessageMarkdownBox(message: widget.message!),
         ...widget.message!.embeds.map((embed) => Padding(
               padding: const EdgeInsets.only(top: 8),
               child: EmbedWidget(

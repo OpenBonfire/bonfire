@@ -6,9 +6,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:markdown_viewer/markdown_viewer.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class MarkdownBox extends StatelessWidget {
+class MessageMarkdownBox extends StatelessWidget {
   final Message message;
-  const MarkdownBox({super.key, required this.message});
+  const MessageMarkdownBox({super.key, required this.message});
 
   @override
   Widget build(BuildContext context) {

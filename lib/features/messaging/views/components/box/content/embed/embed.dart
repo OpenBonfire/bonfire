@@ -1,3 +1,4 @@
+import 'package:bonfire/features/messaging/views/components/box/content/embed/components/description.dart';
 import 'package:bonfire/features/messaging/views/components/box/content/embed/components/image.dart';
 import 'package:bonfire/features/messaging/views/components/box/content/embed/components/video.dart';
 import 'package:firebridge/firebridge.dart';
@@ -13,20 +14,21 @@ class EmbedWidget extends ConsumerStatefulWidget {
 }
 
 class _EmbedWidgetState extends ConsumerState<EmbedWidget> {
-  String? generateEmbedKey() {
-    return widget.embed.thumbnail?.url.toString() ??
-        widget.embed.video?.url.toString();
-  }
-
   @override
   Widget build(BuildContext context) {
-    Widget embedWidget = Container(key: PageStorageKey(generateEmbedKey()));
     if (widget.embed.image != null) {
-      embedWidget = ImageEmbed(embed: widget.embed);
+      return ImageEmbed(embed: widget.embed);
     }
     if (widget.embed.video != null) {
-      embedWidget = VideoEmbed(embed: widget.embed);
+      return VideoEmbed(embed: widget.embed);
     }
-    return embedWidget;
+
+    if (widget.embed.title != null || widget.embed.description != null) {
+      return DescriptionEmbed(embed: widget.embed);
+    }
+
+    print("no embed type found");
+
+    return Container();
   }
 }
