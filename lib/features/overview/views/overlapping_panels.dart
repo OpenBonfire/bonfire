@@ -1,6 +1,7 @@
 library overlapping_panels;
 
 import 'package:flutter/material.dart';
+import 'package:flutter/gestures.dart';
 import 'dart:core';
 
 /// Display sections
@@ -68,6 +69,8 @@ class OverlappingPanelsState extends State<OverlappingPanels>
   late Animation<double> _animation;
   double _translate = 0;
   int _lastDelta = 0;
+  bool _ignoreGestures = false;
+  late HorizontalDragGestureRecognizer _panelDragRecognizer;
 
   @override
   void initState() {
@@ -83,11 +86,16 @@ class OverlappingPanelsState extends State<OverlappingPanels>
       ),
     );
     _animation.addListener(_updateTranslate);
+    _panelDragRecognizer = HorizontalDragGestureRecognizer()
+      ..onStart = _handleDragStart
+      ..onUpdate = _handleDragUpdate
+      ..onEnd = _handleDragEnd;
   }
 
   @override
   void dispose() {
     _animationController.dispose();
+    _panelDragRecognizer.dispose();
     super.dispose();
   }
 
@@ -188,31 +196,55 @@ class OverlappingPanelsState extends State<OverlappingPanels>
     });
   }
 
+  void setIgnoreGestures(bool ignore) {
+    setState(() {
+      _ignoreGestures = ignore;
+    });
+  }
+
+  void _handleDragStart(DragStartDetails details) {
+    if (!_ignoreGestures) {
+      // Start of panel drag
+    }
+  }
+
+  void _handleDragUpdate(DragUpdateDetails details) {
+    if (!_ignoreGestures) {
+      _lastDelta = details.delta.dx.toInt();
+      onTranslate(details.delta.dx);
+    }
+  }
+
+  void _handleDragEnd(DragEndDetails details) {
+    if (!_ignoreGestures) {
+      _onApplyTranslation();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Stack(children: [
-      Offstage(
-        offstage: _translate < 0,
-        child: widget.left,
-      ),
-      Offstage(
-        offstage: _translate > 0,
-        child: widget.right,
-      ),
-      Transform.translate(
-        offset: Offset(_translate, 0),
-        child: widget.main,
-      ),
-      GestureDetector(
-        behavior: HitTestBehavior.translucent,
-        onHorizontalDragUpdate: (details) {
-          _lastDelta = details.delta.dx.toInt();
-          onTranslate(details.delta.dx);
-        },
-        onHorizontalDragEnd: (details) {
-          _onApplyTranslation();
-        },
-      ),
-    ]);
+    return RawGestureDetector(
+      gestures: {
+        HorizontalDragGestureRecognizer: GestureRecognizerFactoryWithHandlers<
+            HorizontalDragGestureRecognizer>(
+          () => _panelDragRecognizer,
+          (_) {},
+        ),
+      },
+      child: Stack(children: [
+        Offstage(
+          offstage: _translate < 0,
+          child: widget.left,
+        ),
+        Offstage(
+          offstage: _translate > 0,
+          child: widget.right,
+        ),
+        Transform.translate(
+          offset: Offset(_translate, 0),
+          child: widget.main,
+        ),
+      ]),
+    );
   }
 }

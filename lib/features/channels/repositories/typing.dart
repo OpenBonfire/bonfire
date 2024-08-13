@@ -21,8 +21,9 @@ class Typing extends _$Typing {
           var key = event.member?.id ?? event.user.id;
           if (timers.containsKey(key)) {
             timers[key]!.cancel();
-            timers[key] = Timer(const Duration(seconds: 10), () {
-              users.remove(event.member!);
+            timers[key] = Timer(const Duration(seconds: 10), () async {
+              // todo: this breaks in dms becaue there isn't a member
+              users.remove(event.member ?? await event.user.get());
               state = AsyncValue.data(users);
             });
           } else {

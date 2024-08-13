@@ -153,14 +153,21 @@ class Messages extends _$Messages {
     }
   }
 
-  Future<bool> sendMessage(Channel channel, String message) async {
+  Future<bool> sendMessage(
+    Channel channel,
+    String message, {
+    List<AttachmentBuilder>? attachments,
+  }) async {
     var authOutput = ref.watch(authProvider.notifier).getAuth();
     if (authOutput is AuthUser) {
       user = authOutput;
       var textChannel = channel as TextChannel;
-      await textChannel.sendMessage(MessageBuilder(
-        content: message,
-      ));
+      await textChannel.sendMessage(
+        MessageBuilder(
+          content: message,
+          attachments: attachments,
+        ),
+      );
       return true;
     }
     return false;
