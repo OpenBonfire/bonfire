@@ -1,4 +1,6 @@
+import 'package:bonfire/features/messaging/controllers/reply.dart';
 import 'package:bonfire/features/messaging/repositories/messages.dart';
+import 'package:bonfire/features/messaging/views/components/box/reply/reply_to.dart';
 import 'package:bonfire/features/messaging/views/components/typing/typing_view.dart';
 import 'package:bonfire/features/messaging/views/messages.dart';
 import 'package:bonfire/features/overview/views/overlapping_panels.dart';
@@ -160,6 +162,7 @@ class _MessageBarState extends ConsumerState<MessageBar> {
             message,
             attachments: _attachments,
           );
+      ref.read(replyControllerProvider.notifier).setMessageReply(null);
       setState(() {
         messageBarController.clear();
         _attachments.clear();
@@ -203,6 +206,7 @@ class _MessageBarState extends ConsumerState<MessageBar> {
   @override
   Widget build(BuildContext context) {
     bool isWatch = isSmartwatch(context);
+    ReplyState? replyState = ref.watch(replyControllerProvider);
 
     return Column(
       children: [
@@ -210,101 +214,115 @@ class _MessageBarState extends ConsumerState<MessageBar> {
         if (_attachments.isNotEmpty) _buildAttachmentList(),
         Padding(
           padding: widget.padding,
-          child: Container(
-            decoration: BoxDecoration(
-              color: Theme.of(context).custom.colorTheme.foreground,
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                if (!isWatch)
-                  _messageBarIcon(
-                    SvgPicture.asset(
-                      "assets/icons/add.svg",
-                      width: 24,
-                      height: 24,
-                    ),
-                    _pickFiles,
-                    borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(8),
-                      bottomLeft: Radius.circular(8),
-                    ),
-                  ),
-                Expanded(
-                  child: ConstrainedBox(
-                    constraints: const BoxConstraints(
-                      maxHeight: 4 * 24,
-                    ),
-                    child: TextSelectionTheme(
-                      data: TextSelectionThemeData(
-                        cursorColor:
-                            Theme.of(context).custom.colorTheme.blurple,
-                        selectionColor:
-                            Theme.of(context).custom.colorTheme.blurple,
-                        selectionHandleColor:
-                            Theme.of(context).custom.colorTheme.blurple,
+          child: Column(
+            children: [
+              if (replyState != null)
+                ReplyTo(
+                  messageId: replyState.messageId,
+                  shouldMention: replyState.shouldMention,
+                ),
+              Container(
+                decoration: BoxDecoration(
+                    color: Theme.of(context).custom.colorTheme.foreground,
+                    borderRadius: (replyState == null)
+                        ? BorderRadius.circular(8)
+                        : const BorderRadius.only(
+                            bottomLeft: Radius.circular(8),
+                            bottomRight: Radius.circular(8),
+                          )),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    if (!isWatch)
+                      _messageBarIcon(
+                        SvgPicture.asset(
+                          "assets/icons/add.svg",
+                          width: 24,
+                          height: 24,
+                        ),
+                        _pickFiles,
+                        borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(8),
+                          bottomLeft: Radius.circular(8),
+                        ),
                       ),
-                      child: KeyboardListener(
-                        focusNode: FocusNode(),
-                        onKeyEvent: (event) => _handleKeyEvent(
-                            event, shouldUseDesktopLayout(context)),
-                        child: TextField(
-                          focusNode: messageBarFocusNode,
-                          controller: messageBarController,
-                          maxLines: null,
-                          minLines: 1,
-                          keyboardType: TextInputType.multiline,
-                          textInputAction: TextInputAction.newline,
-                          onSubmitted: (_) => _sendMessage(),
-                          inputFormatters: [
-                            EnterKeyFormatter(
-                              isShiftPressed: _isShiftPressed,
-                              isDesktop: shouldUseDesktopLayout(context),
-                            ),
-                          ],
-                          decoration: InputDecoration(
-                            contentPadding: const EdgeInsets.symmetric(
-                              horizontal: 8,
-                              vertical: 8,
-                            ),
-                            hintText: isWatch
-                                ? "#${getChannelName(widget.channel)}"
-                                : "Message #${getChannelName(widget.channel)}",
-                            hintStyle: GoogleFonts.publicSans(
-                              color: Theme.of(context)
-                                  .custom
-                                  .colorTheme
-                                  .messageBarHintText,
-                              fontWeight: FontWeight.w600,
-                            ),
-                            border: InputBorder.none,
-                            isCollapsed: false,
+                    Expanded(
+                      child: ConstrainedBox(
+                        constraints: const BoxConstraints(
+                          maxHeight: 4 * 24,
+                        ),
+                        child: TextSelectionTheme(
+                          data: TextSelectionThemeData(
+                            cursorColor:
+                                Theme.of(context).custom.colorTheme.blurple,
+                            selectionColor:
+                                Theme.of(context).custom.colorTheme.blurple,
+                            selectionHandleColor:
+                                Theme.of(context).custom.colorTheme.blurple,
                           ),
-                          style: Theme.of(context).custom.textTheme.bodyText1,
-                          cursorColor: Colors.white,
+                          child: KeyboardListener(
+                            focusNode: FocusNode(),
+                            onKeyEvent: (event) => _handleKeyEvent(
+                                event, shouldUseDesktopLayout(context)),
+                            child: TextField(
+                              focusNode: messageBarFocusNode,
+                              controller: messageBarController,
+                              maxLines: null,
+                              minLines: 1,
+                              keyboardType: TextInputType.multiline,
+                              textInputAction: TextInputAction.newline,
+                              onSubmitted: (_) => _sendMessage(),
+                              inputFormatters: [
+                                EnterKeyFormatter(
+                                  isShiftPressed: _isShiftPressed,
+                                  isDesktop: shouldUseDesktopLayout(context),
+                                ),
+                              ],
+                              decoration: InputDecoration(
+                                contentPadding: const EdgeInsets.symmetric(
+                                  horizontal: 8,
+                                  vertical: 8,
+                                ),
+                                hintText: isWatch
+                                    ? "#${getChannelName(widget.channel)}"
+                                    : "Message #${getChannelName(widget.channel)}",
+                                hintStyle: GoogleFonts.publicSans(
+                                  color: Theme.of(context)
+                                      .custom
+                                      .colorTheme
+                                      .messageBarHintText,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                                border: InputBorder.none,
+                                isCollapsed: false,
+                              ),
+                              style:
+                                  Theme.of(context).custom.textTheme.bodyText1,
+                              cursorColor: Colors.white,
+                            ),
+                          ),
                         ),
                       ),
                     ),
-                  ),
+                    if (UniversalPlatform.isMobile || UniversalPlatform.isWeb)
+                      _messageBarIcon(
+                        SvgPicture.asset(
+                          "assets/icons/send.svg",
+                          width: 24,
+                          height: 24,
+                        ),
+                        _sendMessage,
+                        backgroundColor:
+                            Theme.of(context).custom.colorTheme.blurple,
+                        borderRadius: const BorderRadius.only(
+                          topRight: Radius.circular(8),
+                          bottomRight: Radius.circular(8),
+                        ),
+                      ),
+                  ],
                 ),
-                if (UniversalPlatform.isMobile || UniversalPlatform.isWeb)
-                  _messageBarIcon(
-                    SvgPicture.asset(
-                      "assets/icons/send.svg",
-                      width: 24,
-                      height: 24,
-                    ),
-                    _sendMessage,
-                    backgroundColor:
-                        Theme.of(context).custom.colorTheme.blurple,
-                    borderRadius: const BorderRadius.only(
-                      topRight: Radius.circular(8),
-                      bottomRight: Radius.circular(8),
-                    ),
-                  ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ],

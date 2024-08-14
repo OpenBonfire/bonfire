@@ -43,7 +43,7 @@ class _MessageViewState extends ConsumerState<MessageView> {
   bool _isLoadingMore = false;
   bool sentInitialAck = false;
 
-  void _routeListener() {}
+  // void _routeListener() {}
 
   @override
   void initState() {
@@ -190,7 +190,7 @@ class _MessageViewState extends ConsumerState<MessageView> {
                         key: ValueKey(loadedMessages[messageIndex].id.value),
                         guildId: guild?.id ?? Snowflake.zero,
                         channel: channel,
-                        message: loadedMessages[messageIndex],
+                        messageId: loadedMessages[messageIndex].id,
                         showSenderInfo: showAuthor,
                       );
                     },

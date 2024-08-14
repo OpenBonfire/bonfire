@@ -1,21 +1,23 @@
 import 'dart:typed_data';
 
 import 'package:bonfire/features/guild/repositories/member.dart';
+import 'package:bonfire/features/messaging/controllers/message.dart';
 import 'package:bonfire/features/messaging/repositories/name.dart';
 import 'package:bonfire/features/messaging/repositories/role_icon.dart';
 import 'package:bonfire/features/messaging/views/components/box/avatar.dart';
 import 'package:bonfire/features/messaging/views/components/box/content/attachment/attachment.dart';
 import 'package:bonfire/features/messaging/views/components/box/content/embed/embed.dart';
 import 'package:bonfire/features/messaging/views/components/box/markdown_box.dart';
+import 'package:bonfire/features/messaging/views/components/box/mobile_message_drawer.dart';
 import 'package:bonfire/features/messaging/views/components/box/popout.dart';
-import 'package:bonfire/features/messaging/views/components/box/reply.dart';
+import 'package:bonfire/features/messaging/views/components/box/reply/message_reply.dart';
 import 'package:bonfire/theme/theme.dart';
 import 'package:firebridge/firebridge.dart' hide ButtonStyle;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class MessageBox extends ConsumerStatefulWidget {
-  final Message? message;
+  final Snowflake messageId;
   final bool showSenderInfo;
   final Snowflake guildId;
   final Channel channel;
@@ -23,7 +25,7 @@ class MessageBox extends ConsumerStatefulWidget {
     required this.guildId,
     required this.channel,
     super.key,
-    required this.message,
+    required this.messageId,
     required this.showSenderInfo,
   });
 
@@ -31,13 +33,23 @@ class MessageBox extends ConsumerStatefulWidget {
   ConsumerState<MessageBox> createState() => _MessageBoxState();
 }
 
-class _MessageBoxState extends ConsumerState<MessageBox> {
+class _MessageBoxState extends ConsumerState<MessageBox>
+    with SingleTickerProviderStateMixin {
   bool _isHovering = false;
+  late AnimationController _animationController;
+  late Animation<double> _animation;
 
   @override
   void initState() {
-    // print("box init!");
     super.initState();
+    _animationController = AnimationController(
+      duration: const Duration(milliseconds: 300),
+      vsync: this,
+    );
+    _animation = CurvedAnimation(
+      parent: _animationController,
+      curve: Curves.easeInOut,
+    );
   }
 
   String dateTimeFormat(DateTime time) {
@@ -63,19 +75,19 @@ class _MessageBoxState extends ConsumerState<MessageBox> {
     return section1 + section2;
   }
 
-  bool mentionsSelf() {
+  bool mentionsSelf(Message message) {
     var selfMember =
         ref.watch(getSelfMemberProvider(widget.guildId)).valueOrNull;
     if (selfMember == null) return false;
 
     bool directlyMentions =
-        widget.message!.mentions.any((mention) => mention.id == selfMember.id);
+        message.mentions.any((mention) => mention.id == selfMember.id);
 
     if (directlyMentions) return true;
 
-    if (widget.message!.mentionsEveryone) return true;
+    if (message.mentionsEveryone) return true;
 
-    for (var role in widget.message!.roleMentionIds) {
+    for (var role in message.roleMentionIds) {
       if (selfMember.roleIds.contains(role)) {
         return true;
       }
@@ -83,28 +95,65 @@ class _MessageBoxState extends ConsumerState<MessageBox> {
     return false;
   }
 
+  void _showMobileDrawer() {
+    _animationController.forward();
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      transitionAnimationController: _animationController,
+      builder: (BuildContext context) {
+        return GestureDetector(
+          onTap: () {},
+          child: AnimatedBuilder(
+            animation: _animation,
+            builder: (context, child) {
+              return FractionalTranslation(
+                translation: Offset(0.0, 1.0 - _animation.value),
+                child: child,
+              );
+            },
+            child: DraggableScrollableSheet(
+              initialChildSize: 0.5,
+              minChildSize: 0.2,
+              maxChildSize: 0.75,
+              builder: (_, controller) {
+                return MobileMessageDrawer(messageId: widget.messageId);
+              },
+            ),
+          ),
+        );
+      },
+    ).then((_) {
+      print("Drawer dismissed");
+      _animationController.reverse();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    Message? message = ref.watch(messageControllerProvider(widget.messageId));
+
     String? name = ref
             .watch(messageAuthorNameProvider(
-                widget.guildId, widget.channel, widget.message!.author))
+                widget.guildId, widget.channel, message!.author))
             .valueOrNull ??
-        widget.message!.author.username;
+        message.author.username;
 
     var member = ref
-        .watch(getMemberProvider(widget.guildId, widget.message!.author.id))
+        .watch(getMemberProvider(widget.guildId, message.author.id))
         .valueOrNull;
 
     var roleIconRef = ref.watch(roleIconProvider(
       widget.guildId,
-      widget.message!.author.id,
+      message.author.id,
     ));
 
     Color textColor = ref
             .watch(
               roleColorProvider(
                 widget.guildId,
-                widget.message!.author.id,
+                message.author.id,
               ),
             )
             .valueOrNull ??
@@ -114,7 +163,7 @@ class _MessageBoxState extends ConsumerState<MessageBox> {
 
     name = member?.nick ?? member?.user?.globalName ?? name;
 
-    bool mentioned = mentionsSelf();
+    bool mentioned = mentionsSelf(message);
 
     return MouseRegion(
       onEnter: (_) => setState(() => _isHovering = true),
@@ -122,11 +171,11 @@ class _MessageBoxState extends ConsumerState<MessageBox> {
       child: Column(
         children: [
           SizedBox(height: widget.showSenderInfo ? 16 : 0),
-          if (widget.message!.referencedMessage != null)
+          if (message.referencedMessage != null)
             MessageReply(
               guildId: widget.guildId,
               channel: widget.channel,
-              parentMessage: widget.message!,
+              parentMessage: message,
             ),
           OutlinedButton(
             style: OutlinedButton.styleFrom(
@@ -144,6 +193,7 @@ class _MessageBoxState extends ConsumerState<MessageBox> {
               foregroundColor: Theme.of(context).custom.colorTheme.foreground,
             ),
             onPressed: () {},
+            onLongPress: _showMobileDrawer,
             child: Stack(
               children: [
                 if (mentioned)
@@ -161,8 +211,8 @@ class _MessageBoxState extends ConsumerState<MessageBox> {
                     left: mentioned ? 2 : 0,
                     right: 16,
                   ),
-                  child:
-                      _buildMessageLayout(context, name, textColor, roleIcon),
+                  child: _buildMessageLayout(
+                      context, name, textColor, message, roleIcon),
                 ),
                 if (_isHovering)
                   Positioned(
@@ -170,7 +220,9 @@ class _MessageBoxState extends ConsumerState<MessageBox> {
                     right: 0,
                     child: OverlayEntry(
                       maintainState: true,
-                      builder: (context) => const ContextPopout(),
+                      builder: (context) => ContextPopout(
+                        messageId: message.id,
+                      ),
                     ).builder(context),
                   ),
               ],
@@ -182,7 +234,12 @@ class _MessageBoxState extends ConsumerState<MessageBox> {
   }
 
   Widget _buildMessageLayout(
-      BuildContext context, String name, Color textColor, Uint8List? roleIcon) {
+    BuildContext context,
+    String name,
+    Color textColor,
+    Message message,
+    Uint8List? roleIcon,
+  ) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 12),
       child: Row(
@@ -193,7 +250,7 @@ class _MessageBoxState extends ConsumerState<MessageBox> {
             Padding(
               padding: const EdgeInsets.only(top: 2),
               child: Avatar(
-                author: widget.message!.author,
+                author: message.author,
                 guildId: widget.guildId,
                 channelId: widget.channel.id,
               ),
@@ -206,8 +263,8 @@ class _MessageBoxState extends ConsumerState<MessageBox> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 if (widget.showSenderInfo)
-                  _buildMessageHeader(name, textColor, roleIcon),
-                _buildMessageContent(),
+                  _buildMessageHeader(name, textColor, message, roleIcon),
+                _buildMessageContent(message),
               ],
             ),
           ),
@@ -217,7 +274,11 @@ class _MessageBoxState extends ConsumerState<MessageBox> {
   }
 
   Widget _buildMessageHeader(
-      String name, Color textColor, Uint8List? roleIcon) {
+    String name,
+    Color textColor,
+    Message message,
+    Uint8List? roleIcon,
+  ) {
     return Wrap(
       crossAxisAlignment: WrapCrossAlignment.center,
       children: [
@@ -234,7 +295,7 @@ class _MessageBoxState extends ConsumerState<MessageBox> {
               ),
               const TextSpan(text: '  '),
               TextSpan(
-                text: dateTimeFormat(widget.message!.timestamp.toLocal()),
+                text: dateTimeFormat(message.timestamp.toLocal()),
                 style: const TextStyle(
                   color: Color.fromARGB(189, 255, 255, 255),
                   fontSize: 12,
@@ -256,18 +317,18 @@ class _MessageBoxState extends ConsumerState<MessageBox> {
     );
   }
 
-  Widget _buildMessageContent() {
+  Widget _buildMessageContent(Message message) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        MessageMarkdownBox(message: widget.message!),
-        ...widget.message!.embeds.map((embed) => Padding(
+        MessageMarkdownBox(message: message),
+        ...message.embeds.map((embed) => Padding(
               padding: const EdgeInsets.only(top: 8),
               child: EmbedWidget(
                 embed: embed,
               ),
             )),
-        ...widget.message!.attachments.map((attachment) => Padding(
+        ...message.attachments.map((attachment) => Padding(
               padding: const EdgeInsets.only(top: 8),
               child: AttachmentWidget(
                 attachment: attachment,

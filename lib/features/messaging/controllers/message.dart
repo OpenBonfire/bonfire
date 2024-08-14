@@ -3,14 +3,14 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'message.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: true)
 class MessageController extends _$MessageController {
   @override
-  Snowflake? build(Snowflake messageId) {
+  Message? build(Snowflake messageId) {
     return null;
   }
 
-  void setInitialMessage(Snowflake messageId) {
-    state = messageId;
+  void setMessage(Message message) {
+    state = message;
   }
 }

@@ -5,6 +5,8 @@ import 'package:bonfire/features/auth/data/repositories/discord_auth.dart';
 import 'package:bonfire/features/channels/controllers/channel.dart';
 import 'package:bonfire/features/channels/repositories/typing.dart';
 import 'package:bonfire/features/guild/controllers/guild.dart';
+import 'package:bonfire/features/messaging/controllers/message.dart';
+import 'package:bonfire/features/messaging/controllers/reply.dart';
 import 'package:firebridge_extensions/firebridge_extensions.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -12,7 +14,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'messages.g.dart';
 
 /// Message provider for fetching messages from the Discord API
-@Riverpod(keepAlive: true)
+@riverpod
 class Messages extends _$Messages {
   AuthUser? user;
   bool listenerRunning = false;
@@ -27,8 +29,6 @@ class Messages extends _$Messages {
   //     maxNrOfCacheObjects: 10000,
   //   ),
   // );
-
-  bool realtimeListernRunning = false;
 
   @override
   Future<List<Message>?> build(Snowflake channelId) async {
@@ -49,6 +49,8 @@ class Messages extends _$Messages {
   }
 
   void _subscribeToMessages(AuthUser auth, Snowflake channelId) {
+    // I don't know if I like this paradigm
+    // Maybe I should make a better dispatcher from auth
     auth.client.onMessageCreate.listen((event) {
       if (event.message.channelId == channelId) {
         processMessage(event.message);
@@ -113,6 +115,12 @@ class Messages extends _$Messages {
         }
       }
 
+      messages.forEach((message) {
+        ref.read(messageControllerProvider(message.id).notifier).setMessage(
+              message,
+            );
+      });
+
       return messages;
     } else {
       return null;
@@ -135,6 +143,12 @@ class Messages extends _$Messages {
       state = AsyncValue.data(messages);
     }
 
+    messages.forEach((message) {
+      ref.read(messageControllerProvider(message.id).notifier).setMessage(
+            message,
+          );
+    });
+
     return messages;
   }
 
@@ -142,6 +156,10 @@ class Messages extends _$Messages {
     Channel? channel =
         ref.watch(channelControllerProvider(channelId)).valueOrNull;
     if (channel == null) return;
+
+    ref.read(messageControllerProvider(message.id).notifier).setMessage(
+          message,
+        );
 
     if (message.channel.id == channel.id) {
       ref
@@ -162,10 +180,15 @@ class Messages extends _$Messages {
     if (authOutput is AuthUser) {
       user = authOutput;
       var textChannel = channel as TextChannel;
+      Snowflake? replyTo = ref.watch(replyControllerProvider)?.messageId;
+      bool? shouldMention = ref.watch(replyControllerProvider)?.shouldMention;
       await textChannel.sendMessage(
         MessageBuilder(
           content: message,
           attachments: attachments,
+          replyId: replyTo,
+          // there's no mention option... might be a bot specific thing
+          // mention: shouldMention,
         ),
       );
       return true;

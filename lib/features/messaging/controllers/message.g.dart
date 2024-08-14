@@ -6,7 +6,7 @@ part of 'message.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$messageControllerHash() => r'6f9af65eb6afb74e44e531a4a81548c3e5b70e69';
+String _$messageControllerHash() => r'd6357da5886d254634eea9d742c87f81ca20a3e3';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -29,11 +29,10 @@ class _SystemHash {
   }
 }
 
-abstract class _$MessageController
-    extends BuildlessAutoDisposeNotifier<Snowflake?> {
+abstract class _$MessageController extends BuildlessNotifier<Message?> {
   late final Snowflake messageId;
 
-  Snowflake? build(
+  Message? build(
     Snowflake messageId,
   );
 }
@@ -43,7 +42,7 @@ abstract class _$MessageController
 const messageControllerProvider = MessageControllerFamily();
 
 /// See also [MessageController].
-class MessageControllerFamily extends Family<Snowflake?> {
+class MessageControllerFamily extends Family<Message?> {
   /// See also [MessageController].
   const MessageControllerFamily();
 
@@ -82,7 +81,7 @@ class MessageControllerFamily extends Family<Snowflake?> {
 
 /// See also [MessageController].
 class MessageControllerProvider
-    extends AutoDisposeNotifierProviderImpl<MessageController, Snowflake?> {
+    extends NotifierProviderImpl<MessageController, Message?> {
   /// See also [MessageController].
   MessageControllerProvider(
     Snowflake messageId,
@@ -113,7 +112,7 @@ class MessageControllerProvider
   final Snowflake messageId;
 
   @override
-  Snowflake? runNotifierBuild(
+  Message? runNotifierBuild(
     covariant MessageController notifier,
   ) {
     return notifier.build(
@@ -138,8 +137,7 @@ class MessageControllerProvider
   }
 
   @override
-  AutoDisposeNotifierProviderElement<MessageController, Snowflake?>
-      createElement() {
+  NotifierProviderElement<MessageController, Message?> createElement() {
     return _MessageControllerProviderElement(this);
   }
 
@@ -157,13 +155,13 @@ class MessageControllerProvider
   }
 }
 
-mixin MessageControllerRef on AutoDisposeNotifierProviderRef<Snowflake?> {
+mixin MessageControllerRef on NotifierProviderRef<Message?> {
   /// The parameter `messageId` of this provider.
   Snowflake get messageId;
 }
 
 class _MessageControllerProviderElement
-    extends AutoDisposeNotifierProviderElement<MessageController, Snowflake?>
+    extends NotifierProviderElement<MessageController, Message?>
     with MessageControllerRef {
   _MessageControllerProviderElement(super.provider);
 
