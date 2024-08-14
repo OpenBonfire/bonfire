@@ -36,7 +36,7 @@ class DescriptionEmbed extends StatelessWidget {
       ),
       child: Row(
         children: [
-          const SizedBox(width: 6),
+          const SizedBox(width: 8),
           Expanded(
             child: Container(
               decoration: BoxDecoration(

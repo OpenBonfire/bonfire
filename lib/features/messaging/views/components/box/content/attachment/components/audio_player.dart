@@ -88,7 +88,7 @@ class _AudioAttachmentState extends State<AudioAttachment> {
         width: min(800, MediaQuery.of(context).size.width - 90),
         child: Container(
           decoration: BoxDecoration(
-            color: Theme.of(context).custom.colorTheme.embedBackground,
+            color: Theme.of(context).custom.colorTheme.foreground,
             borderRadius: BorderRadius.circular(8),
           ),
           child: Padding(

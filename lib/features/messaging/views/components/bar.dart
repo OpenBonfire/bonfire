@@ -10,23 +10,26 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:universal_platform/universal_platform.dart';
+// import 'package:universal_platform/universal_platform.dart';
 import 'package:bonfire/shared/utils/platform.dart';
 import 'package:path/path.dart' as path_lib;
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/gestures.dart';
+import 'package:universal_platform/universal_platform.dart';
 
 class EnterKeyFormatter extends TextInputFormatter {
   final bool isShiftPressed;
+  final bool isDesktop;
 
-  EnterKeyFormatter({required this.isShiftPressed});
+  EnterKeyFormatter({
+    required this.isShiftPressed,
+    required this.isDesktop,
+  });
 
   @override
   TextEditingValue formatEditUpdate(
       TextEditingValue oldValue, TextEditingValue newValue) {
-    if (newValue.text.endsWith('\n') &&
-        !isShiftPressed &&
-        UniversalPlatform.isDesktop) {
+    if (newValue.text.endsWith('\n') && !isShiftPressed && isDesktop) {
       return oldValue;
     }
     return newValue;
@@ -108,14 +111,14 @@ class _MessageBarState extends ConsumerState<MessageBar> {
     );
   }
 
-  void _handleKeyEvent(KeyEvent event) {
+  void _handleKeyEvent(KeyEvent event, bool isDesktop) {
     if (event is KeyDownEvent) {
       if (event.physicalKey == PhysicalKeyboardKey.shiftLeft ||
           event.physicalKey == PhysicalKeyboardKey.shiftRight) {
         setState(() => _isShiftPressed = true);
       } else if (event.physicalKey == PhysicalKeyboardKey.enter &&
           !_isShiftPressed &&
-          UniversalPlatform.isDesktop) {
+          isDesktop) {
         _sendMessage();
       }
     } else if (event is KeyUpEvent) {
@@ -245,7 +248,8 @@ class _MessageBarState extends ConsumerState<MessageBar> {
                       ),
                       child: KeyboardListener(
                         focusNode: FocusNode(),
-                        onKeyEvent: _handleKeyEvent,
+                        onKeyEvent: (event) => _handleKeyEvent(
+                            event, shouldUseDesktopLayout(context)),
                         child: TextField(
                           focusNode: messageBarFocusNode,
                           controller: messageBarController,
@@ -255,7 +259,10 @@ class _MessageBarState extends ConsumerState<MessageBar> {
                           textInputAction: TextInputAction.newline,
                           onSubmitted: (_) => _sendMessage(),
                           inputFormatters: [
-                            EnterKeyFormatter(isShiftPressed: _isShiftPressed),
+                            EnterKeyFormatter(
+                              isShiftPressed: _isShiftPressed,
+                              isDesktop: shouldUseDesktopLayout(context),
+                            ),
                           ],
                           decoration: InputDecoration(
                             contentPadding: const EdgeInsets.symmetric(
