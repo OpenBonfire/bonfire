@@ -10,7 +10,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
-// import 'package:universal_platform/universal_platform.dart';
 import 'package:bonfire/shared/utils/platform.dart';
 import 'package:path/path.dart' as path_lib;
 import 'package:file_picker/file_picker.dart';

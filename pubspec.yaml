@@ -80,6 +80,7 @@ dependencies:
   infinite_scroll_pagination: ^4.0.0
   flutter_cache_manager: ^3.4.0
   file_picker: ^8.0.7
+  path: ^1.9.0
 
 dependency_overrides:
   webview_flutter_platform_interface: ^2.4.0

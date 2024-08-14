@@ -21,15 +21,15 @@ class ContextPopout extends StatelessWidget {
         },
         itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
           const PopupMenuItem<String>(
-            value: 'edit',
+            value: 'reply',
             height: 36,
-            child: Text('Edit', style: TextStyle(color: Colors.white)),
+            child: Text('Reply', style: TextStyle(color: Colors.white)),
           ),
-          const PopupMenuItem<String>(
-            value: 'delete',
-            height: 36,
-            child: Text('Delete', style: TextStyle(color: Colors.white)),
-          ),
+          // const PopupMenuItem<String>(
+          //   value: 'delete',
+          //   height: 36,
+          //   child: Text('Delete', style: TextStyle(color: Colors.white)),
+          // ),
         ],
         position: PopupMenuPosition.under,
         splashRadius: 0,

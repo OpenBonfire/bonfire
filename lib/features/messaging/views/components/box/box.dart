@@ -101,10 +101,12 @@ class _MessageBoxState extends ConsumerState<MessageBox> {
     ));
 
     Color textColor = ref
-            .watch(roleColorProvider(
-              widget.guildId,
-              widget.message!.author.id,
-            ))
+            .watch(
+              roleColorProvider(
+                widget.guildId,
+                widget.message!.author.id,
+              ),
+            )
             .valueOrNull ??
         Colors.white;
 

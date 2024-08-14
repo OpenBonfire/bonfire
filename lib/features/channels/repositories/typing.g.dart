@@ -6,7 +6,7 @@ part of 'typing.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$typingHash() => r'8bc4102e1a030de6b43ba9ddf51e9d3cef561222';
+String _$typingHash() => r'02661668bdf306e5c6b8b7872da2a8e64c38d244';
 
 /// Copied from Dart SDK
 class _SystemHash {
