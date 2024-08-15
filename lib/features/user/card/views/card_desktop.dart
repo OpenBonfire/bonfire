@@ -33,7 +33,7 @@ class UserCard extends ConsumerWidget {
 
     return TextButton(
       style: ButtonStyle(
-        padding: MaterialStateProperty.all(EdgeInsets.zero),
+        padding: WidgetStateProperty.all(EdgeInsets.zero),
       ),
       onPressed: () {
         GoRouter.of(context).go("/switcher/model");

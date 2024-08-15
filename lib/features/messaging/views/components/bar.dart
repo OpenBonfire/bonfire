@@ -57,7 +57,7 @@ class _MessageBarState extends ConsumerState<MessageBar> {
   late TextEditingController messageBarController;
   late FocusNode messageBarFocusNode;
   bool _isShiftPressed = false;
-  List<AttachmentBuilder> _attachments = [];
+  final List<AttachmentBuilder> _attachments = [];
   late HorizontalDragGestureRecognizer _attachmentDragRecognizer;
 
   @override

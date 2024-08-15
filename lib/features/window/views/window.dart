@@ -48,7 +48,7 @@ class WindowButtons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
+    return const Row(
       children: [
         MinimizeWindowButton(),
         MaximizeRestoreWindowButton(),
@@ -59,6 +59,8 @@ class WindowButtons extends StatelessWidget {
 }
 
 class MinimizeWindowButton extends StatelessWidget {
+  const MinimizeWindowButton({super.key});
+
   @override
   Widget build(BuildContext context) {
     return IconButton(
@@ -74,6 +76,8 @@ class MinimizeWindowButton extends StatelessWidget {
 }
 
 class MaximizeRestoreWindowButton extends StatelessWidget {
+  const MaximizeRestoreWindowButton({super.key});
+
   @override
   Widget build(BuildContext context) {
     return IconButton(
@@ -94,6 +98,8 @@ class MaximizeRestoreWindowButton extends StatelessWidget {
 }
 
 class CloseWindowButton extends StatelessWidget {
+  const CloseWindowButton({super.key});
+
   @override
   Widget build(BuildContext context) {
     return IconButton(

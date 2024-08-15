@@ -32,7 +32,7 @@ class Channels extends _$Channels {
       return [];
     }
 
-    List<Channel> _channels = [];
+    List<Channel> channels = [];
     var cachedChannels = (await fetchFromCache());
     if (cachedChannels != null) {
       if (cachedChannels.isNotEmpty) {
@@ -67,24 +67,24 @@ class Channels extends _$Channels {
       // first load categories, so we can parent channels later
       for (var channel in guildChannels) {
         if (channel.type == ChannelType.guildCategory) {
-          _channels.add(channel);
+          channels.add(channel);
         }
       }
 
       // load channels, parenting them to their categories if applicable
       for (var channel in guildChannels) {
         if (channel.type != ChannelType.guildCategory) {
-          _channels.add(channel);
+          channels.add(channel);
         }
       }
 
       // sorts the channels by position (provided by nyxx)
-      _channels.sort((a, b) {
+      channels.sort((a, b) {
         return (a as GuildChannel)
             .position
             .compareTo((b as GuildChannel).position);
       });
-      channels = _channels;
+      channels = channels;
       saveToCache(channels);
       state = AsyncValue.data(channels);
     }

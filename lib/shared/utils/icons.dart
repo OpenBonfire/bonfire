@@ -1,6 +1,5 @@
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class BonfireIcons {
   static Map<ChannelType, Icon> channelIcons = {

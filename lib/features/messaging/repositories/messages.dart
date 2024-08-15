@@ -115,11 +115,11 @@ class Messages extends _$Messages {
         }
       }
 
-      messages.forEach((message) {
+      for (var message in messages) {
         ref.read(messageControllerProvider(message.id).notifier).setMessage(
               message,
             );
-      });
+      }
 
       return messages;
     } else {
@@ -143,11 +143,11 @@ class Messages extends _$Messages {
       state = AsyncValue.data(messages);
     }
 
-    messages.forEach((message) {
+    for (var message in messages) {
       ref.read(messageControllerProvider(message.id).notifier).setMessage(
             message,
           );
-    });
+    }
 
     return messages;
   }

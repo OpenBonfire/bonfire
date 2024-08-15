@@ -30,7 +30,7 @@ class _MFAPageState extends ConsumerState<MFAPage> {
           Text(
             "MULTI FACTOR CODE",
             style: CustomTextTheme().labelLarge.copyWith(
-                  color: Theme.of(context).colorScheme.background,
+                  color: Theme.of(context).colorScheme.surface,
                 ),
           ),
           Container(
@@ -113,7 +113,7 @@ class _MFAPageState extends ConsumerState<MFAPage> {
                     Text(
                       "Enter your second factor code. This can be found in your authenticator app.",
                       style: CustomTextTheme().subtitle1.copyWith(
-                            color: Theme.of(context).colorScheme.background,
+                            color: Theme.of(context).colorScheme.surface,
                           ),
                       textAlign: TextAlign.center,
                     ),

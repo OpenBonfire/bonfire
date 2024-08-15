@@ -41,7 +41,7 @@ class _LoginState extends ConsumerState<CredentialsScreen> {
             Text(
               loginType == LoginType.username ? "Email" : "Password",
               style: CustomTextTheme().labelLarge.copyWith(
-                    color: Theme.of(context).colorScheme.background,
+                    color: Theme.of(context).colorScheme.surface,
                   ),
             ),
             Container(
@@ -110,7 +110,7 @@ class _LoginState extends ConsumerState<CredentialsScreen> {
                   Text(
                     "Let's get ya signed in!",
                     style: CustomTextTheme().subtitle1.copyWith(
-                          color: Theme.of(context).colorScheme.background,
+                          color: Theme.of(context).colorScheme.surface,
                         ),
                   ),
                   const SizedBox(height: 80),

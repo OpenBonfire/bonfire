@@ -58,13 +58,13 @@ class _ChannelsListState extends ConsumerState<ChannelsList> {
     Map<GuildChannel, List<GuildChannel>> categoryMap = {};
 
     // group channels by category
-    channels.forEach((channel) {
+    for (var channel in channels) {
       if (channel.type == ChannelType.guildCategory) {
         categoryMap[channel as GuildChannel] = [];
       }
-    });
+    }
 
-    channels.forEach((channel) {
+    for (var channel in channels) {
       if (channel.type != ChannelType.guildCategory) {
         var parentChannel = (channel as GuildChannel).parent;
 
@@ -73,15 +73,15 @@ class _ChannelsListState extends ConsumerState<ChannelsList> {
           categoryMap[parentChannel]!.add(channel);
         }
       }
-    });
+    }
 
     Widget buildChannelButton(int index) {
       if (index < channelsWithoutParent.length) {
-        var _channel = channelsWithoutParent[index];
+        var channel = channelsWithoutParent[index];
         return ChannelButton(
             currentChannelId: widget.channelId,
             currentGuildId: widget.guildId,
-            channel: _channel as GuildChannel);
+            channel: channel as GuildChannel);
       } else {
         var categoryIndex = index - channelsWithoutParent.length;
         var category = categoryMap.keys.elementAt(categoryIndex);
@@ -127,7 +127,7 @@ class _ChannelsListState extends ConsumerState<ChannelsList> {
                       padding: EdgeInsets.zero,
                       children: [
                         (guildBannerUrl != null)
-                            ? Container(
+                            ? SizedBox(
                                 height: 150,
                                 child: Image.network(
                                   "$guildBannerUrl?size=512",
