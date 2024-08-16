@@ -132,6 +132,8 @@ class Messages extends _$Messages {
         ref.watch(channelControllerProvider(channelId)).valueOrNull!;
     List<Message> messages = [];
 
+    print("getting messages before $before");
+
     messages.addAll(loadedMessages);
     messages.addAll(await getMessages(
           before: before?.id,

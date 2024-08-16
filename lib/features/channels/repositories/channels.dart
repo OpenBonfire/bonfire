@@ -33,13 +33,6 @@ class Channels extends _$Channels {
     }
 
     List<Channel> channels = [];
-    var cachedChannels = (await fetchFromCache());
-    if (cachedChannels != null) {
-      if (cachedChannels.isNotEmpty) {
-        channels = cachedChannels;
-        state = AsyncValue.data(channels);
-      }
-    }
 
     if (auth != null && auth is AuthUser) {
       if (selfMembers[guild] == null) {
