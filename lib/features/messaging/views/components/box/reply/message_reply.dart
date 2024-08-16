@@ -36,7 +36,7 @@ class MessageReply extends ConsumerWidget {
     );
 
     return Padding(
-      padding: const EdgeInsets.only(left: 72, bottom: 8),
+      padding: const EdgeInsets.only(left: 64, bottom: 8),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

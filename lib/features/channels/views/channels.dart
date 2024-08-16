@@ -74,9 +74,6 @@ class _ChannelsListState extends ConsumerState<ChannelsList> {
         }
       }
     }
-
-    print("got channels of length ${channels.length}");
-
     Widget buildChannelButton(int index) {
       if (index < channelsWithoutParent.length) {
         var channel = channelsWithoutParent[index];

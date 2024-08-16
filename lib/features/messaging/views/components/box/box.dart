@@ -171,12 +171,6 @@ class _MessageBoxState extends ConsumerState<MessageBox>
       child: Column(
         children: [
           SizedBox(height: widget.showSenderInfo ? 16 : 0),
-          if (message.referencedMessage != null)
-            MessageReply(
-              guildId: widget.guildId,
-              channel: widget.channel,
-              parentMessage: message,
-            ),
           OutlinedButton(
             style: OutlinedButton.styleFrom(
               padding: EdgeInsets.zero,
@@ -211,8 +205,18 @@ class _MessageBoxState extends ConsumerState<MessageBox>
                     left: mentioned ? 2 : 0,
                     right: 16,
                   ),
-                  child: _buildMessageLayout(
-                      context, name, textColor, message, roleIcon),
+                  child: Column(
+                    children: [
+                      if (message.referencedMessage != null)
+                        MessageReply(
+                          guildId: widget.guildId,
+                          channel: widget.channel,
+                          parentMessage: message,
+                        ),
+                      _buildMessageLayout(
+                          context, name, textColor, message, roleIcon),
+                    ],
+                  ),
                 ),
                 if (_isHovering)
                   Positioned(
@@ -309,8 +313,8 @@ class _MessageBoxState extends ConsumerState<MessageBox>
             padding: const EdgeInsets.only(left: 6),
             child: Image.memory(
               roleIcon,
-              width: 22,
-              height: 22,
+              width: 20,
+              height: 20,
             ),
           ),
       ],
