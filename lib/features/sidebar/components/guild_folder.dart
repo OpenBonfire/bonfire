@@ -30,6 +30,7 @@ class GuildFolderWidgetState extends ConsumerState<GuildFolderWidget>
   late AnimationController _controller;
   late Animation<double> _expandAnimation;
   double _iconHeight = 8;
+  double iconSpacing = 6.0;
 
   bool _hasUnreadsInFolder(List<UserGuild> folderGuilds, WidgetRef ref) {
     for (var guild in folderGuilds) {
@@ -112,10 +113,11 @@ class GuildFolderWidgetState extends ConsumerState<GuildFolderWidget>
         .where((guild) => widget.guildFolder.guildIds.contains(guild.id))
         .toList();
 
-    // If there's only one guild in the folder, treat it as a regular server icon
+    if (folderGuilds.isEmpty) return const SizedBox.shrink();
+
     if (folderGuilds.length == 1) {
       return Padding(
-        padding: const EdgeInsets.symmetric(vertical: 2),
+        padding: const EdgeInsets.only(bottom: 0),
         child: SidebarIcon(
           selected: widget.selectedGuildId == folderGuilds[0].id,
           guild: folderGuilds[0],
@@ -133,30 +135,29 @@ class GuildFolderWidgetState extends ConsumerState<GuildFolderWidget>
       }
     });
 
-    return Padding(
-      padding: const EdgeInsets.only(top: 2),
-      child: Stack(
-        children: [
-          Column(
-            children: [
-              MouseRegion(
-                cursor: SystemMouseCursors.click,
-                child: GestureDetector(
-                  onTap: () {
-                    HapticFeedback.mediumImpact();
-                    setState(() {
-                      _isExpanded = !_isExpanded;
-                      if (_isExpanded) {
-                        _controller.forward();
-                      } else {
-                        _controller.reverse();
-                      }
-                    });
-                  },
-                  child: AnimatedBuilder(
-                    animation: _expandAnimation,
-                    builder: (context, child) {
-                      return Column(
+    return Stack(
+      children: [
+        Column(
+          children: [
+            MouseRegion(
+              cursor: SystemMouseCursors.click,
+              child: GestureDetector(
+                onTap: () {
+                  HapticFeedback.mediumImpact();
+                  setState(() {
+                    _isExpanded = !_isExpanded;
+                    if (_isExpanded) {
+                      _controller.forward();
+                    } else {
+                      _controller.reverse();
+                    }
+                  });
+                },
+                child: AnimatedBuilder(
+                  animation: _expandAnimation,
+                  builder: (context, child) {
+                    return Center(
+                      child: Column(
                         children: [
                           Stack(
                             alignment: Alignment.center,
@@ -169,7 +170,7 @@ class GuildFolderWidgetState extends ConsumerState<GuildFolderWidget>
                                       color: Theme.of(context)
                                           .custom
                                           .colorTheme
-                                          .blurple
+                                          .foreground // 'twas blurple before
                                           .withOpacity(0.5),
                                       borderRadius: BorderRadius.circular(16),
                                     ),
@@ -203,12 +204,14 @@ class GuildFolderWidgetState extends ConsumerState<GuildFolderWidget>
                                 opacity: _expandAnimation.value,
                                 child: Center(
                                   child: FolderIcon(
-                                    color: Color(widget.guildFolder.color ??
-                                        Theme.of(context)
-                                            .custom
-                                            .colorTheme
-                                            .blurple
-                                            .value),
+                                    color: Color(
+                                      // widget.guildFolder.color ??
+                                      Theme.of(context)
+                                          .custom
+                                          .colorTheme
+                                          .blurple
+                                          .value,
+                                    ),
                                   ),
                                 ),
                               ),
@@ -223,11 +226,13 @@ class GuildFolderWidgetState extends ConsumerState<GuildFolderWidget>
                           SizeTransition(
                             sizeFactor: _expandAnimation,
                             child: Column(
-                              children: folderGuilds
-                                  .map((guild) => Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 2),
-                                        child: Center(
+                              children: (folderGuilds
+                                  .map(
+                                    (guild) => SizedBox(
+                                      child: Center(
+                                        child: Padding(
+                                          padding:
+                                              EdgeInsets.only(top: iconSpacing),
                                           child: SidebarIcon(
                                             selected: widget.selectedGuildId ==
                                                 guild.id,
@@ -235,42 +240,47 @@ class GuildFolderWidgetState extends ConsumerState<GuildFolderWidget>
                                             isClickable: true,
                                           ),
                                         ),
-                                      ))
-                                  .toList(),
+                                      ),
+                                    ),
+                                  )
+                                  .toList() as List<Widget>)
+                                ..add(
+                                  const SizedBox(height: 4),
+                                ),
                             ),
                           ),
                         ],
-                      );
-                    },
-                  ),
+                      ),
+                    );
+                  },
                 ),
               ),
-              SizedBox(height: _isExpanded ? 0 : 4),
-            ],
-          ),
-          if (!_isExpanded && hasUnreadsInFolder)
-            Positioned(
-              left: 0,
-              top: 2,
-              bottom: 4,
-              child: Center(
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 200),
-                  curve: Curves.easeInOutExpo,
-                  width: 4,
-                  height: _iconHeight,
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.only(
-                      bottomRight: Radius.circular(8),
-                      topRight: Radius.circular(8),
-                    ),
+            ),
+            // SizedBox(height: _isExpanded ? 0 : 4),
+          ],
+        ),
+        if (!_isExpanded && hasUnreadsInFolder)
+          Positioned(
+            left: 0,
+            top: 2,
+            bottom: 4,
+            child: Center(
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 200),
+                curve: Curves.easeInOutExpo,
+                width: 4,
+                height: _iconHeight,
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                    bottomRight: Radius.circular(8),
+                    topRight: Radius.circular(8),
                   ),
                 ),
               ),
             ),
-        ],
-      ),
+          ),
+      ],
     );
   }
 }

@@ -1,68 +1,28 @@
+import 'package:bonfire/features/sidebar/components/sidebar_item.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
-import 'package:flutter/services.dart';
-import 'package:bonfire/theme/theme.dart';
 
-class MessagesIcon extends StatelessWidget {
+class MessagesIcon extends ConsumerWidget {
   final bool selected;
-
   const MessagesIcon({super.key, this.selected = false});
 
   @override
-  Widget build(BuildContext context) {
-    return Stack(
-      alignment: Alignment.center,
-      children: [
-        Center(
-          child: Container(
-            width: 47,
-            height: 47,
-            decoration: BoxDecoration(
-              color: selected
-                  ? Theme.of(context).custom.colorTheme.blurple
-                  : Theme.of(context).custom.colorTheme.foreground,
-              shape: BoxShape.circle,
-            ),
-            child: InkWell(
-              onTap: () {
-                HapticFeedback.mediumImpact();
-                GoRouter.of(context).go('/channels/@me');
-              },
-              splashFactory: NoSplash.splashFactory,
-              splashColor: Colors.transparent,
-              highlightColor: Colors.transparent,
-              child: ClipRRect(
-                borderRadius:
-                    BorderRadius.all(Radius.circular(selected ? 15 : 100)),
-                child: Transform.scale(
-                  scale: 0.4,
-                  child: SvgPicture.asset(
-                    'assets/icons/dms.svg',
-                    fit: BoxFit.contain,
-                  ),
-                ),
-              ),
-            ),
-          ),
+  Widget build(BuildContext context, WidgetRef ref) {
+    return SidebarItem(
+      selected: selected,
+      onTap: () {
+        GoRouter.of(context).go('/channels/@me');
+      },
+      child: Transform.scale(
+        scale: 0.4,
+        child: SvgPicture.asset(
+          'assets/icons/dms.svg',
+          fit: BoxFit.contain,
         ),
-        if (selected)
-          Positioned(
-            left: 0,
-            child: Container(
-              width: 4,
-              height: 40,
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
-                  bottomRight: Radius.circular(8),
-                  topRight: Radius.circular(8),
-                ),
-              ),
-            ),
-          )
-      ],
+      ),
     );
   }
 }

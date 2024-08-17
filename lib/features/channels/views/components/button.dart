@@ -31,22 +31,42 @@ class _ChannelButtonState extends ConsumerState<ChannelButton> {
   var lastGuildChannels = Hive.box("last-guild-channels");
   Map<int, Widget> categoryMap = {};
 
-  Widget mentionBubble(int count) {
+  Widget _buildMentionBubble(int count) {
     return Container(
-        width: 18,
-        height: 18,
-        decoration: BoxDecoration(
-          color: Theme.of(context).custom.colorTheme.red,
-          borderRadius: BorderRadius.circular(20),
-        ),
-        child: Text(
-          count.toString(),
-          style: Theme.of(context).custom.textTheme.bodyText1.copyWith(
-                fontSize: 11,
-                color: Colors.white,
+      width: 23,
+      height: 23,
+      decoration: BoxDecoration(
+        color: Theme.of(context).custom.colorTheme.background,
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Stack(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(3),
+            child: Container(
+              decoration: BoxDecoration(
+                color: Theme.of(context).custom.colorTheme.red,
+                borderRadius: BorderRadius.circular(20),
               ),
-          textAlign: TextAlign.center,
-        ));
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 2),
+            child: Center(
+              child: Text(
+                count.toString(),
+                style: Theme.of(context).custom.textTheme.bodyText1.copyWith(
+                      fontSize: 11,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white,
+                    ),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          )
+        ],
+      ),
+    );
   }
 
   @override
@@ -183,7 +203,7 @@ class _ChannelButtonState extends ConsumerState<ChannelButton> {
                                   ),
                                   // const Spacer(),
                                   if (mentionCount > 0)
-                                    mentionBubble(mentionCount),
+                                    _buildMentionBubble(mentionCount),
                                 ],
                               )),
                             ],

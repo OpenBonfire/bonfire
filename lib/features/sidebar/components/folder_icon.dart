@@ -12,10 +12,10 @@ class FolderIcon extends StatelessWidget {
       width: 50,
       height: 50,
       decoration: BoxDecoration(
-        color: Theme.of(context).custom.colorTheme.blurple,
+        color: Theme.of(context).custom.colorTheme.foreground,
         borderRadius: BorderRadius.circular(16),
       ),
-      child: const Icon(Icons.folder, size: 30, color: Colors.white),
+      child: Icon(Icons.folder, size: 30, color: color),
     );
   }
 }

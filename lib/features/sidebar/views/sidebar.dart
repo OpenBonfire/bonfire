@@ -20,6 +20,7 @@ class Sidebar extends ConsumerStatefulWidget {
 class _SidebarState extends ConsumerState<Sidebar> {
   UserGuild? previousSelectedGuild;
   final ScrollController _scrollController = ScrollController();
+  double iconSpacing = 6.0;
 
   @override
   void dispose() {
@@ -98,10 +99,13 @@ class _SidebarState extends ConsumerState<Sidebar> {
                           ),
                         ),
                         if (guildFolders != null)
-                          ...guildFolders.map((folder) => GuildFolderWidget(
-                                guildFolder: folder,
-                                guildList: guildList,
-                                selectedGuildId: widget.guildId,
+                          ...guildFolders.map((folder) => Padding(
+                                padding: EdgeInsets.only(bottom: iconSpacing),
+                                child: GuildFolderWidget(
+                                  guildFolder: folder,
+                                  guildList: guildList,
+                                  selectedGuildId: widget.guildId,
+                                ),
                               )),
                         SizedBox(height: bottomPadding + navbarHeight)
                       ],
