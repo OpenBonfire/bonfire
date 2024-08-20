@@ -26,7 +26,7 @@ class _HeaderCardState extends ConsumerState<GroupHeader> {
 
     if (widget.group.id != null) {
       role = ref
-          .watch(getRoleProvider(widget.guild, widget.group.id!))
+          .watch(getRoleProvider(widget.guild.id, widget.group.id!))
           .valueOrNull;
     }
     int groupCount = 0;
