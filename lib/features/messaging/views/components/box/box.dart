@@ -11,6 +11,7 @@ import 'package:bonfire/features/messaging/views/components/box/markdown_box.dar
 import 'package:bonfire/features/messaging/views/components/box/mobile_message_drawer.dart';
 import 'package:bonfire/features/messaging/views/components/box/popout.dart';
 import 'package:bonfire/features/messaging/views/components/box/reply/message_reply.dart';
+import 'package:bonfire/shared/utils/platform.dart';
 import 'package:bonfire/theme/theme.dart';
 import 'package:firebridge/firebridge.dart' hide ButtonStyle;
 import 'package:flutter/material.dart';
@@ -187,7 +188,11 @@ class _MessageBoxState extends ConsumerState<MessageBox>
               foregroundColor: Theme.of(context).custom.colorTheme.foreground,
             ),
             onPressed: () {},
-            onLongPress: _showMobileDrawer,
+            onLongPress: () {
+              if (shouldUseMobileLayout(context)) {
+                _showMobileDrawer();
+              }
+            },
             child: Stack(
               children: [
                 if (mentioned)
