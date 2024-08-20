@@ -1,6 +1,8 @@
 You can find us on Discord: https://discord.gg/QafRarw25u
 
 # Usage
+The fastest way to give it a go is at https://app.openbonfire.dev/! Note that at the time it will most likely require a token to login! This is because everything in the web version is proxied, so Discord requires captcha (which isn't implemented in Bonfire quite yet).
+
 We now offer nightly builds! Please check out the [github actions](https://github.com/OpenBonfire/bonfire/actions) for the latest builds. _You must be logged into to GitHub to view these builds_.
 
 **NOTE**: Bonfire is in it's very early stages of development. It is absolutely NOT ready for regular usage.
