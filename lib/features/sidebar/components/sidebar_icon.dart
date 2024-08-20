@@ -48,7 +48,7 @@ class SidebarIcon extends ConsumerWidget {
         }
       },
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(25),
+        //borderRadius: BorderRadius.circular(25),
         child: _buildGuildIcon(),
       ),
     );

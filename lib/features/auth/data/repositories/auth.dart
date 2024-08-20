@@ -181,7 +181,6 @@ class Auth extends _$Auth {
             .setUserActivity(event.activities!);
       }
     });
-
     return response;
   }
 

@@ -38,7 +38,7 @@ class _HomeState extends ConsumerState<HomeDesktop> {
               guildId: widget.guildId,
             ),
             SizedBox(
-              width: 300,
+              width: 275,
               child: ChannelsList(
                 guildId: widget.guildId,
                 channelId: widget.channelId,

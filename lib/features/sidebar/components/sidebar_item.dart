@@ -35,7 +35,7 @@ class _SidebarItemState extends ConsumerState<SidebarItem>
   void initState() {
     super.initState();
     _controller = AnimationController(
-      duration: const Duration(milliseconds: 200),
+      duration: const Duration(milliseconds: 400),
       vsync: this,
     );
     _barAnimation = Tween<double>(begin: 8, end: 40).animate(CurvedAnimation(

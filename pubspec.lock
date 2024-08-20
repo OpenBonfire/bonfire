@@ -522,8 +522,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "60b927dd961aef7828daf634c873d6f6c953dc1c"
-      resolved-ref: "60b927dd961aef7828daf634c873d6f6c953dc1c"
+      ref: a2c4f534eaf63bf8ebd1a23cf78ee9350f714d42
+      resolved-ref: a2c4f534eaf63bf8ebd1a23cf78ee9350f714d42
       url: "https://github.com/OpenBonfire/firebridge"
     source: git
     version: "6.2.14"
@@ -1618,10 +1618,10 @@ packages:
     dependency: transitive
     description:
       name: sqflite_common
-      sha256: c5e5b2a142a893a752cb36ae5888680248686725a54afceff31f9a3a76bc53c2
+      sha256: "3da423ce7baf868be70e2c0976c28a1bb2f73644268b7ffa7d2e08eab71f16a4"
       url: "https://pub.dev"
     source: hosted
-    version: "2.5.4+1"
+    version: "2.5.4"
   stack_trace:
     dependency: transitive
     description:
@@ -1674,10 +1674,10 @@ packages:
     dependency: transitive
     description:
       name: synchronized
-      sha256: a824e842b8a054f91a728b783c177c1e4731f6b124f9192468457a8913371255
+      sha256: "539ef412b170d65ecdafd780f924e5be3f60032a1128df156adad6c5b373d558"
       url: "https://pub.dev"
     source: hosted
-    version: "3.2.0"
+    version: "3.1.0+1"
   term_glyph:
     dependency: transitive
     description:
@@ -2103,5 +2103,5 @@ packages:
     source: hosted
     version: "3.1.2"
 sdks:
-  dart: ">=3.5.0 <3.22.3"
+  dart: ">=3.5.0-259.0.dev <3.22.3"
   flutter: ">=3.22.0"
