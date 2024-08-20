@@ -208,13 +208,19 @@ class _MessageBoxState extends ConsumerState<MessageBox>
                   child: Column(
                     children: [
                       if (message.referencedMessage != null)
-                        MessageReply(
-                          guildId: widget.guildId,
-                          channel: widget.channel,
-                          parentMessage: message,
+                        Padding(
+                          padding: const EdgeInsets.only(top: 4),
+                          child: MessageReply(
+                            guildId: widget.guildId,
+                            channel: widget.channel,
+                            parentMessage: message,
+                          ),
                         ),
-                      _buildMessageLayout(
-                          context, name, textColor, message, roleIcon),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 4),
+                        child: _buildMessageLayout(
+                            context, name, textColor, message, roleIcon),
+                      ),
                     ],
                   ),
                 ),
