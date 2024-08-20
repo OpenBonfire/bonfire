@@ -180,8 +180,8 @@ class Messages extends _$Messages {
     if (authOutput is AuthUser) {
       user = authOutput;
       var textChannel = channel as TextChannel;
-      Snowflake? replyTo = ref.watch(replyControllerProvider)?.messageId;
-      bool? shouldMention = ref.watch(replyControllerProvider)?.shouldMention;
+      Snowflake? replyTo = ref.read(replyControllerProvider)?.messageId;
+      bool? shouldMention = ref.read(replyControllerProvider)?.shouldMention;
       await textChannel.sendMessage(
         MessageBuilder(
           content: message,

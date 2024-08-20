@@ -204,7 +204,6 @@ class MemberScrollViewState extends ConsumerState<MemberScrollView> {
             }).toList(),
           );
         }
-        // return Text((memberList[index] as List<dynamic>).length.toString());
         if ((memberList[index] as List<dynamic>).isEmpty) {
           return Container();
         }

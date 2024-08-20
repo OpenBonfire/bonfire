@@ -173,7 +173,7 @@ class _GuildMemberListProviderElement extends AsyncNotifierProviderElement<
   Snowflake get guildId => (origin as GuildMemberListProvider).guildId;
 }
 
-String _$channelMembersHash() => r'9d13afb2764749b7994b3bcf3ac47a2a79e43610';
+String _$channelMembersHash() => r'1d35d31f9203f082d683cdbdbf7428bfb86d6421';
 
 /// See also [ChannelMembers].
 @ProviderFor(ChannelMembers)

@@ -88,8 +88,6 @@ class ChannelMembers extends _$ChannelMembers {
     List<GuildMemberListGroup> groups,
     Snowflake guildId,
   ) {
-    // this may not be needed, not tested yet
-    ref.watch(guildMemberListProvider(guildId));
     var pair = Pair(groups, memberList);
     ref
         .watch(guildMemberListProvider(guildId).notifier)
