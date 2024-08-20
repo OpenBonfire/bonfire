@@ -7,11 +7,31 @@ import 'package:firebridge/firebridge.dart';
 part 'channel_members.g.dart';
 
 @Riverpod(keepAlive: true)
+class GuildMemberList extends _$GuildMemberList {
+  Pair<List<GuildMemberListGroup>, List<dynamic>>? _data;
+
+  @override
+  Future<Pair<List<GuildMemberListGroup>, List<dynamic>>> build(
+      Snowflake guildId) async {
+    return _data!;
+  }
+
+  void setData(
+    Snowflake channelId,
+    Pair<List<GuildMemberListGroup>, List<dynamic>> newData,
+  ) {
+    _data = newData;
+    state = AsyncValue.data(_data!);
+  }
+}
+
+@Riverpod(keepAlive: true)
 class ChannelMembers extends _$ChannelMembers {
   AuthUser? user;
   Snowflake guildId = Snowflake.zero;
   Snowflake channelId = Snowflake.zero;
-  Pair<List<GuildMemberListGroup>, List<dynamic>>? lastPair;
+  // Map<Snowflake, Pair<List<GuildMemberListGroup>, List<dynamic>>>
+  //     subscriptionCache = {};
   List<GuildSubscriptionChannel> currentSubscriptions = [];
 
   @override
@@ -20,15 +40,6 @@ class ChannelMembers extends _$ChannelMembers {
     if (authOutput is AuthUser) {
       user = authOutput;
     }
-
-    user!.client.onGuildMemberListUpdate.listen((event) {
-      if (event.eventType == MemberListUpdateType.sync) {
-        List<GuildMemberListGroup> groupList =
-            List<GuildMemberListGroup>.from(event.groups);
-
-        updateMemberList(event.memberList!, groupList);
-      }
-    });
 
     return null;
   }
@@ -59,26 +70,6 @@ class ChannelMembers extends _$ChannelMembers {
     _updateSubscriptions();
   }
 
-  void unloadMemberRange(int lowerBound, int upperBound) {
-    currentSubscriptions.removeWhere((sub) =>
-        sub.memberRange.lowerMemberBound == lowerBound &&
-        sub.memberRange.upperMemberBound == upperBound);
-    _updateSubscriptions();
-
-    // Remove the unloaded members from the local state
-    if (lastPair != null) {
-      var updatedMemberList = lastPair!.second.where((member) {
-        if (member is Member) {
-          int index = lastPair!.second.indexOf(member);
-          return index < lowerBound || index > upperBound;
-        }
-        return true;
-      }).toList();
-
-      state = AsyncValue.data(Pair(lastPair!.first, updatedMemberList));
-    }
-  }
-
   void _updateSubscriptions() {
     if (user is AuthUser) {
       user!.client.updateGuildSubscriptionsBulk(GuildSubscriptionsBulkBuilder()
@@ -93,8 +84,17 @@ class ChannelMembers extends _$ChannelMembers {
   }
 
   void updateMemberList(
-      List<dynamic> memberList, List<GuildMemberListGroup> groups) {
-    lastPair = Pair(groups, memberList);
-    state = AsyncValue.data(lastPair!);
+    List<dynamic> memberList,
+    List<GuildMemberListGroup> groups,
+    Snowflake guildId,
+  ) {
+    // this may not be needed, not tested yet
+    ref.watch(guildMemberListProvider(guildId));
+    var pair = Pair(groups, memberList);
+    ref
+        .watch(guildMemberListProvider(guildId).notifier)
+        .setData(channelId, pair);
+
+    state = AsyncValue.data(pair);
   }
 }
