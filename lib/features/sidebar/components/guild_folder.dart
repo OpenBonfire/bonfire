@@ -7,6 +7,7 @@ import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hex/hex.dart';
 
 class GuildFolderWidget extends ConsumerStatefulWidget {
   final GuildFolder guildFolder;
@@ -167,11 +168,17 @@ class GuildFolderWidgetState extends ConsumerState<GuildFolderWidget>
                                 child: Center(
                                   child: Container(
                                     decoration: BoxDecoration(
-                                      color: Theme.of(context)
-                                          .custom
-                                          .colorTheme
-                                          .foreground // 'twas blurple before
-                                          .withOpacity(0.5),
+                                      color: (widget.guildFolder.color != null)
+                                          ? Color(int.parse(
+                                                  widget.guildFolder.color
+                                                      .toString(),
+                                                  radix: 10))
+                                              .withOpacity(0.5)
+                                          : Theme.of(context)
+                                              .custom
+                                              .colorTheme
+                                              .blurple
+                                              .withOpacity(0.5),
                                       borderRadius: BorderRadius.circular(16),
                                     ),
                                     width: 50,
@@ -204,14 +211,19 @@ class GuildFolderWidgetState extends ConsumerState<GuildFolderWidget>
                                 opacity: _expandAnimation.value,
                                 child: Center(
                                   child: FolderIcon(
-                                    color: Color(
-                                      // widget.guildFolder.color ??
-                                      Theme.of(context)
-                                          .custom
-                                          .colorTheme
-                                          .blurple
-                                          .value,
-                                    ),
+                                    color: (widget.guildFolder.color != null)
+                                        ? Color(int.parse(
+                                                widget.guildFolder.color
+                                                    .toString(),
+                                                radix: 10))
+                                            .withOpacity(1)
+                                        : Color(
+                                            Theme.of(context)
+                                                .custom
+                                                .colorTheme
+                                                .blurple
+                                                .value,
+                                          ),
                                   ),
                                 ),
                               ),
