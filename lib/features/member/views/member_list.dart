@@ -122,7 +122,8 @@ class MemberScrollViewState extends ConsumerState<MemberScrollView> {
 
   _onRouteChanged() {
     Snowflake newGuildId = Snowflake.parse(
-        _router.routerDelegate.currentConfiguration.pathParameters["guildId"]!);
+        _router.routerDelegate.currentConfiguration.pathParameters["guildId"] ??
+            0);
     Snowflake newChannelId = Snowflake.parse(_router
         .routerDelegate.currentConfiguration.pathParameters["channelId"]!);
     ref

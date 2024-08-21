@@ -31,10 +31,8 @@ class _MessageOverviewState extends ConsumerState<MessageOverview> {
                 Sidebar(guildId: Snowflake.zero),
                 SizedBox(
                   width: 275,
-                  child: Expanded(
-                    child: PrivateMessages(
-                      channelId: widget.channelId ?? Snowflake.zero,
-                    ),
+                  child: PrivateMessages(
+                    channelId: widget.channelId ?? Snowflake.zero,
                   ),
                 ),
                 (widget.channelId != null)
