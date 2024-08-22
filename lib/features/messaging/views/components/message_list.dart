@@ -8,34 +8,23 @@ import 'package:bonfire/features/messaging/views/components/box/box.dart';
 import 'package:bonfire/features/messaging/views/components/box/channel_header.dart';
 import 'package:bonfire/features/messaging/views/components/box/message_loading_animation.dart';
 import 'package:bonfire/features/messaging/views/components/keyboard_buffer.dart';
+import 'package:bonfire/shared/utils/channel_name.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:bonfire/shared/utils/platform.dart';
 
-String getChannelName(Channel channel) {
-  if (channel is DmChannel) {
-    String name = "";
-    for (var recipient in channel.recipients) {
-      name += "${recipient.globalName ?? recipient.username}, ";
-    }
-
-    return name.substring(0, name.length - 2);
-  }
-  return (channel as GuildChannel).name;
-}
-
-class MessageView extends ConsumerStatefulWidget {
+class MessageList extends ConsumerStatefulWidget {
   final Snowflake guildId;
   final Snowflake channelId;
-  const MessageView(
+  const MessageList(
       {super.key, required this.guildId, required this.channelId});
 
   @override
-  ConsumerState<MessageView> createState() => _MessageViewState();
+  ConsumerState<MessageList> createState() => _MessageViewState();
 }
 
-class _MessageViewState extends ConsumerState<MessageView>
+class _MessageViewState extends ConsumerState<MessageList>
     with SingleTickerProviderStateMixin {
   final ScrollController _scrollController = ScrollController();
   List<Message> loadedMessages = [];

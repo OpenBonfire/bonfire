@@ -1,5 +1,5 @@
 import 'package:bonfire/features/auth/views/switcher.dart';
-import 'package:bonfire/features/me/views/message_overview.dart';
+import 'package:bonfire/features/me/views/messages.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
