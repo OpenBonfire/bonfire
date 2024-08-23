@@ -26,6 +26,8 @@ class _MessageViewState extends ConsumerState<MessageView> {
       return MessageList(guildId: widget.guildId, channelId: widget.channelId);
     } else if (channel is ForumChannel) {
       return ForumView(guildId: widget.guildId, channelId: widget.channelId);
+    } else if (channel == null) {
+      return const Center(child: CircularProgressIndicator());
     }
 
     return Center(
