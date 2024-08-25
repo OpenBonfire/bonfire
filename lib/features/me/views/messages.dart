@@ -1,6 +1,6 @@
 import 'package:bonfire/features/me/views/components/private_messages.dart';
 import 'package:bonfire/features/member/views/member_list.dart';
-import 'package:bonfire/features/messaging/views/messages.dart';
+import 'package:bonfire/features/me/views/components/messages.dart';
 import 'package:bonfire/features/overview/controllers/navigation_bar.dart';
 import 'package:bonfire/features/overview/views/overlapping_panels.dart';
 import 'package:bonfire/features/sidebar/views/sidebar.dart';
@@ -31,10 +31,8 @@ class _MessageOverviewState extends ConsumerState<MessageOverview> {
                 Sidebar(guildId: Snowflake.zero),
                 SizedBox(
                   width: 275,
-                  child: Expanded(
-                    child: PrivateMessages(
-                      channelId: widget.channelId ?? Snowflake.zero,
-                    ),
+                  child: PrivateMessages(
+                    channelId: widget.channelId ?? Snowflake.zero,
                   ),
                 ),
                 (widget.channelId != null)

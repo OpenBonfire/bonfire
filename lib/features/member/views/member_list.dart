@@ -1,3 +1,4 @@
+import 'package:bonfire/shared/models/pair.dart';
 import 'package:bonfire/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -8,6 +9,7 @@ import 'package:bonfire/features/member/views/components/group.dart';
 import 'package:bonfire/features/member/views/components/member_card.dart';
 import 'package:bonfire/shared/utils/platform.dart';
 import 'package:firebridge/firebridge.dart';
+import 'package:go_router/go_router.dart';
 import 'package:universal_platform/universal_platform.dart';
 
 class MemberList extends ConsumerStatefulWidget {
@@ -115,21 +117,48 @@ class MemberScrollView extends ConsumerStatefulWidget {
 
 class MemberScrollViewState extends ConsumerState<MemberScrollView> {
   final ScrollController _scrollController = ScrollController();
-  List<int> loadedChunks = [0]; // Always keep 0-99 loaded
+  // Pair<List<GuildMemberListGroup>, List<dynamic>>? memberListPair;
+  late final GoRouter _router;
+
+  _onRouteChanged() {
+    Snowflake newGuildId = Snowflake.parse(
+        _router.routerDelegate.currentConfiguration.pathParameters["guildId"] ??
+            0);
+    Snowflake newChannelId = Snowflake.parse(_router
+        .routerDelegate.currentConfiguration.pathParameters["channelId"]!);
+    ref
+        .read(channelMembersProvider.notifier)
+        .setRoute(newGuildId, newChannelId);
+  }
 
   @override
   void initState() {
     super.initState();
+    _router = GoRouter.of(context);
+    _router.routerDelegate.addListener(_onRouteChanged);
+    _scrollController.addListener(_onScroll);
     ref
         .read(channelMembersProvider.notifier)
         .setRoute(widget.guild.id, widget.channel.id);
-    _scrollController.addListener(_onScroll);
+
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   print("ran post frame");
+    //   var asdf = ref.watch(guildMemberListProvider(widget.guild.id));
+    //   asdf.whenData((data) {
+    //     print("got data!");
+    //     setState(() {
+    //       print("setting state");
+    //       memberListPair = data;
+    //     });
+    //   });
+    // });
   }
 
   @override
   void dispose() {
     _scrollController.removeListener(_onScroll);
     _scrollController.dispose();
+    _router.routerDelegate.removeListener(_onRouteChanged);
     super.dispose();
   }
 
@@ -146,8 +175,8 @@ class MemberScrollViewState extends ConsumerState<MemberScrollView> {
 
   @override
   Widget build(BuildContext context) {
-    var memberListPair = ref.watch(channelMembersProvider).valueOrNull;
-
+    var memberListPair =
+        ref.watch(guildMemberListProvider(widget.guild.id)).valueOrNull;
     var groupList = memberListPair?.first ?? [];
     var memberList = memberListPair?.second ?? [];
 
@@ -176,7 +205,6 @@ class MemberScrollViewState extends ConsumerState<MemberScrollView> {
             }).toList(),
           );
         }
-        // return Text((memberList[index] as List<dynamic>).length.toString());
         if ((memberList[index] as List<dynamic>).isEmpty) {
           return Container();
         }

@@ -1,12 +1,12 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'messages.dart';
+part of 'forum_posts.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$messagesHash() => r'a9c64e9b9e41ce8a11db2da6a410bb0cbf62e6aa';
+String _$forumPostsHash() => r'440ee92e5a0e1327ad51c50933436fc2497c8be5';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -29,44 +29,43 @@ class _SystemHash {
   }
 }
 
-abstract class _$Messages
-    extends BuildlessAutoDisposeAsyncNotifier<List<Message>?> {
+abstract class _$ForumPosts extends BuildlessAsyncNotifier<ThreadList?> {
   late final Snowflake channelId;
 
-  FutureOr<List<Message>?> build(
+  FutureOr<ThreadList?> build(
     Snowflake channelId,
   );
 }
 
-/// Message provider for fetching messages from the Discord API
+/// Fetches a forum channel from the [channelId].
 ///
-/// Copied from [Messages].
-@ProviderFor(Messages)
-const messagesProvider = MessagesFamily();
+/// Copied from [ForumPosts].
+@ProviderFor(ForumPosts)
+const forumPostsProvider = ForumPostsFamily();
 
-/// Message provider for fetching messages from the Discord API
+/// Fetches a forum channel from the [channelId].
 ///
-/// Copied from [Messages].
-class MessagesFamily extends Family<AsyncValue<List<Message>?>> {
-  /// Message provider for fetching messages from the Discord API
+/// Copied from [ForumPosts].
+class ForumPostsFamily extends Family<AsyncValue<ThreadList?>> {
+  /// Fetches a forum channel from the [channelId].
   ///
-  /// Copied from [Messages].
-  const MessagesFamily();
+  /// Copied from [ForumPosts].
+  const ForumPostsFamily();
 
-  /// Message provider for fetching messages from the Discord API
+  /// Fetches a forum channel from the [channelId].
   ///
-  /// Copied from [Messages].
-  MessagesProvider call(
+  /// Copied from [ForumPosts].
+  ForumPostsProvider call(
     Snowflake channelId,
   ) {
-    return MessagesProvider(
+    return ForumPostsProvider(
       channelId,
     );
   }
 
   @override
-  MessagesProvider getProviderOverride(
-    covariant MessagesProvider provider,
+  ForumPostsProvider getProviderOverride(
+    covariant ForumPostsProvider provider,
   ) {
     return call(
       provider.channelId,
@@ -85,33 +84,34 @@ class MessagesFamily extends Family<AsyncValue<List<Message>?>> {
       _allTransitiveDependencies;
 
   @override
-  String? get name => r'messagesProvider';
+  String? get name => r'forumPostsProvider';
 }
 
-/// Message provider for fetching messages from the Discord API
+/// Fetches a forum channel from the [channelId].
 ///
-/// Copied from [Messages].
-class MessagesProvider
-    extends AutoDisposeAsyncNotifierProviderImpl<Messages, List<Message>?> {
-  /// Message provider for fetching messages from the Discord API
+/// Copied from [ForumPosts].
+class ForumPostsProvider
+    extends AsyncNotifierProviderImpl<ForumPosts, ThreadList?> {
+  /// Fetches a forum channel from the [channelId].
   ///
-  /// Copied from [Messages].
-  MessagesProvider(
+  /// Copied from [ForumPosts].
+  ForumPostsProvider(
     Snowflake channelId,
   ) : this._internal(
-          () => Messages()..channelId = channelId,
-          from: messagesProvider,
-          name: r'messagesProvider',
+          () => ForumPosts()..channelId = channelId,
+          from: forumPostsProvider,
+          name: r'forumPostsProvider',
           debugGetCreateSourceHash:
               const bool.fromEnvironment('dart.vm.product')
                   ? null
-                  : _$messagesHash,
-          dependencies: MessagesFamily._dependencies,
-          allTransitiveDependencies: MessagesFamily._allTransitiveDependencies,
+                  : _$forumPostsHash,
+          dependencies: ForumPostsFamily._dependencies,
+          allTransitiveDependencies:
+              ForumPostsFamily._allTransitiveDependencies,
           channelId: channelId,
         );
 
-  MessagesProvider._internal(
+  ForumPostsProvider._internal(
     super._createNotifier, {
     required super.name,
     required super.dependencies,
@@ -124,8 +124,8 @@ class MessagesProvider
   final Snowflake channelId;
 
   @override
-  FutureOr<List<Message>?> runNotifierBuild(
-    covariant Messages notifier,
+  FutureOr<ThreadList?> runNotifierBuild(
+    covariant ForumPosts notifier,
   ) {
     return notifier.build(
       channelId,
@@ -133,10 +133,10 @@ class MessagesProvider
   }
 
   @override
-  Override overrideWith(Messages Function() create) {
+  Override overrideWith(ForumPosts Function() create) {
     return ProviderOverride(
       origin: this,
-      override: MessagesProvider._internal(
+      override: ForumPostsProvider._internal(
         () => create()..channelId = channelId,
         from: from,
         name: null,
@@ -149,14 +149,13 @@ class MessagesProvider
   }
 
   @override
-  AutoDisposeAsyncNotifierProviderElement<Messages, List<Message>?>
-      createElement() {
-    return _MessagesProviderElement(this);
+  AsyncNotifierProviderElement<ForumPosts, ThreadList?> createElement() {
+    return _ForumPostsProviderElement(this);
   }
 
   @override
   bool operator ==(Object other) {
-    return other is MessagesProvider && other.channelId == channelId;
+    return other is ForumPostsProvider && other.channelId == channelId;
   }
 
   @override
@@ -168,18 +167,18 @@ class MessagesProvider
   }
 }
 
-mixin MessagesRef on AutoDisposeAsyncNotifierProviderRef<List<Message>?> {
+mixin ForumPostsRef on AsyncNotifierProviderRef<ThreadList?> {
   /// The parameter `channelId` of this provider.
   Snowflake get channelId;
 }
 
-class _MessagesProviderElement
-    extends AutoDisposeAsyncNotifierProviderElement<Messages, List<Message>?>
-    with MessagesRef {
-  _MessagesProviderElement(super.provider);
+class _ForumPostsProviderElement
+    extends AsyncNotifierProviderElement<ForumPosts, ThreadList?>
+    with ForumPostsRef {
+  _ForumPostsProviderElement(super.provider);
 
   @override
-  Snowflake get channelId => (origin as MessagesProvider).channelId;
+  Snowflake get channelId => (origin as ForumPostsProvider).channelId;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

@@ -17,7 +17,7 @@ class Channels extends _$Channels {
   Map<UserGuild, Member> selfMembers = {};
   final _cacheManager = CacheManager(
     Config(
-      'bonfire_channel_cache',
+      'channel_cache',
       stalePeriod: const Duration(days: 7),
       maxNrOfCacheObjects: 10000,
     ),

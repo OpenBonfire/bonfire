@@ -42,11 +42,12 @@ Future<List<Role>?> getGuildRoles(
 }
 
 @riverpod
-Future<Role> getRole(GetRoleRef ref, Guild guild, Snowflake roleId) async {
+Future<Role> getRole(
+    GetRoleRef ref, Snowflake guildid, Snowflake roleId) async {
   var authOutput = ref.watch(authProvider.notifier).getAuth();
 
   if (authOutput is AuthUser) {
-    return await authOutput.client.guilds[guild.id].roles.get(roleId);
+    return await authOutput.client.guilds[guildid].roles.get(roleId);
   } else {
     throw Exception('No auth user');
   }

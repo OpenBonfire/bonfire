@@ -428,7 +428,7 @@ class _GetGuildRolesProviderElement
   Snowflake get guildId => (origin as GetGuildRolesProvider).guildId;
 }
 
-String _$getRoleHash() => r'28dd347c073d347d6584ca45169117daa0a7075f';
+String _$getRoleHash() => r'd93bebff67d542c80d5ab861f6da38457e02d785';
 
 /// See also [getRole].
 @ProviderFor(getRole)
@@ -441,11 +441,11 @@ class GetRoleFamily extends Family<AsyncValue<Role>> {
 
   /// See also [getRole].
   GetRoleProvider call(
-    Guild guild,
+    Snowflake guildid,
     Snowflake roleId,
   ) {
     return GetRoleProvider(
-      guild,
+      guildid,
       roleId,
     );
   }
@@ -455,7 +455,7 @@ class GetRoleFamily extends Family<AsyncValue<Role>> {
     covariant GetRoleProvider provider,
   ) {
     return call(
-      provider.guild,
+      provider.guildid,
       provider.roleId,
     );
   }
@@ -479,12 +479,12 @@ class GetRoleFamily extends Family<AsyncValue<Role>> {
 class GetRoleProvider extends AutoDisposeFutureProvider<Role> {
   /// See also [getRole].
   GetRoleProvider(
-    Guild guild,
+    Snowflake guildid,
     Snowflake roleId,
   ) : this._internal(
           (ref) => getRole(
             ref as GetRoleRef,
-            guild,
+            guildid,
             roleId,
           ),
           from: getRoleProvider,
@@ -495,7 +495,7 @@ class GetRoleProvider extends AutoDisposeFutureProvider<Role> {
                   : _$getRoleHash,
           dependencies: GetRoleFamily._dependencies,
           allTransitiveDependencies: GetRoleFamily._allTransitiveDependencies,
-          guild: guild,
+          guildid: guildid,
           roleId: roleId,
         );
 
@@ -506,11 +506,11 @@ class GetRoleProvider extends AutoDisposeFutureProvider<Role> {
     required super.allTransitiveDependencies,
     required super.debugGetCreateSourceHash,
     required super.from,
-    required this.guild,
+    required this.guildid,
     required this.roleId,
   }) : super.internal();
 
-  final Guild guild;
+  final Snowflake guildid;
   final Snowflake roleId;
 
   @override
@@ -526,7 +526,7 @@ class GetRoleProvider extends AutoDisposeFutureProvider<Role> {
         dependencies: null,
         allTransitiveDependencies: null,
         debugGetCreateSourceHash: null,
-        guild: guild,
+        guildid: guildid,
         roleId: roleId,
       ),
     );
@@ -540,14 +540,14 @@ class GetRoleProvider extends AutoDisposeFutureProvider<Role> {
   @override
   bool operator ==(Object other) {
     return other is GetRoleProvider &&
-        other.guild == guild &&
+        other.guildid == guildid &&
         other.roleId == roleId;
   }
 
   @override
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, guild.hashCode);
+    hash = _SystemHash.combine(hash, guildid.hashCode);
     hash = _SystemHash.combine(hash, roleId.hashCode);
 
     return _SystemHash.finish(hash);
@@ -555,8 +555,8 @@ class GetRoleProvider extends AutoDisposeFutureProvider<Role> {
 }
 
 mixin GetRoleRef on AutoDisposeFutureProviderRef<Role> {
-  /// The parameter `guild` of this provider.
-  Guild get guild;
+  /// The parameter `guildid` of this provider.
+  Snowflake get guildid;
 
   /// The parameter `roleId` of this provider.
   Snowflake get roleId;
@@ -567,7 +567,7 @@ class _GetRoleProviderElement extends AutoDisposeFutureProviderElement<Role>
   _GetRoleProviderElement(super.provider);
 
   @override
-  Guild get guild => (origin as GetRoleProvider).guild;
+  Snowflake get guildid => (origin as GetRoleProvider).guildid;
   @override
   Snowflake get roleId => (origin as GetRoleProvider).roleId;
 }

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:bonfire/features/auth/data/headers.dart';
 import 'package:bonfire/features/auth/data/repositories/discord_auth.dart';
 import 'package:bonfire/features/auth/models/auth.dart';
+import 'package:bonfire/features/channels/repositories/channel_members.dart';
 import 'package:bonfire/features/voice/repositories/voice_members.dart';
 import 'package:bonfire/features/me/controllers/settings.dart';
 import 'package:http/http.dart' as http;
@@ -181,6 +182,20 @@ class Auth extends _$Auth {
             .setUserActivity(event.activities!);
       }
     });
+
+    client.onGuildMemberListUpdate.listen((event) {
+      if (event.eventType == MemberListUpdateType.sync) {
+        List<GuildMemberListGroup> groupList =
+            List<GuildMemberListGroup>.from(event.groups);
+
+        ref.read(channelMembersProvider.notifier).updateMemberList(
+              event.memberList!,
+              groupList,
+              event.guildId,
+            );
+      }
+    });
+
     return response;
   }
 

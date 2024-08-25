@@ -1,12 +1,12 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'messages.dart';
+part of 'forums.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$messagesHash() => r'a9c64e9b9e41ce8a11db2da6a410bb0cbf62e6aa';
+String _$forumsHash() => r'1778fc36ac6e304d9cb1e8ebb65c68e12d15812a';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -29,44 +29,43 @@ class _SystemHash {
   }
 }
 
-abstract class _$Messages
-    extends BuildlessAutoDisposeAsyncNotifier<List<Message>?> {
+abstract class _$Forums extends BuildlessAsyncNotifier<ForumChannel?> {
   late final Snowflake channelId;
 
-  FutureOr<List<Message>?> build(
+  FutureOr<ForumChannel?> build(
     Snowflake channelId,
   );
 }
 
-/// Message provider for fetching messages from the Discord API
+/// Fetches a forum channel from the [channelId].
 ///
-/// Copied from [Messages].
-@ProviderFor(Messages)
-const messagesProvider = MessagesFamily();
+/// Copied from [Forums].
+@ProviderFor(Forums)
+const forumsProvider = ForumsFamily();
 
-/// Message provider for fetching messages from the Discord API
+/// Fetches a forum channel from the [channelId].
 ///
-/// Copied from [Messages].
-class MessagesFamily extends Family<AsyncValue<List<Message>?>> {
-  /// Message provider for fetching messages from the Discord API
+/// Copied from [Forums].
+class ForumsFamily extends Family<AsyncValue<ForumChannel?>> {
+  /// Fetches a forum channel from the [channelId].
   ///
-  /// Copied from [Messages].
-  const MessagesFamily();
+  /// Copied from [Forums].
+  const ForumsFamily();
 
-  /// Message provider for fetching messages from the Discord API
+  /// Fetches a forum channel from the [channelId].
   ///
-  /// Copied from [Messages].
-  MessagesProvider call(
+  /// Copied from [Forums].
+  ForumsProvider call(
     Snowflake channelId,
   ) {
-    return MessagesProvider(
+    return ForumsProvider(
       channelId,
     );
   }
 
   @override
-  MessagesProvider getProviderOverride(
-    covariant MessagesProvider provider,
+  ForumsProvider getProviderOverride(
+    covariant ForumsProvider provider,
   ) {
     return call(
       provider.channelId,
@@ -85,33 +84,32 @@ class MessagesFamily extends Family<AsyncValue<List<Message>?>> {
       _allTransitiveDependencies;
 
   @override
-  String? get name => r'messagesProvider';
+  String? get name => r'forumsProvider';
 }
 
-/// Message provider for fetching messages from the Discord API
+/// Fetches a forum channel from the [channelId].
 ///
-/// Copied from [Messages].
-class MessagesProvider
-    extends AutoDisposeAsyncNotifierProviderImpl<Messages, List<Message>?> {
-  /// Message provider for fetching messages from the Discord API
+/// Copied from [Forums].
+class ForumsProvider extends AsyncNotifierProviderImpl<Forums, ForumChannel?> {
+  /// Fetches a forum channel from the [channelId].
   ///
-  /// Copied from [Messages].
-  MessagesProvider(
+  /// Copied from [Forums].
+  ForumsProvider(
     Snowflake channelId,
   ) : this._internal(
-          () => Messages()..channelId = channelId,
-          from: messagesProvider,
-          name: r'messagesProvider',
+          () => Forums()..channelId = channelId,
+          from: forumsProvider,
+          name: r'forumsProvider',
           debugGetCreateSourceHash:
               const bool.fromEnvironment('dart.vm.product')
                   ? null
-                  : _$messagesHash,
-          dependencies: MessagesFamily._dependencies,
-          allTransitiveDependencies: MessagesFamily._allTransitiveDependencies,
+                  : _$forumsHash,
+          dependencies: ForumsFamily._dependencies,
+          allTransitiveDependencies: ForumsFamily._allTransitiveDependencies,
           channelId: channelId,
         );
 
-  MessagesProvider._internal(
+  ForumsProvider._internal(
     super._createNotifier, {
     required super.name,
     required super.dependencies,
@@ -124,8 +122,8 @@ class MessagesProvider
   final Snowflake channelId;
 
   @override
-  FutureOr<List<Message>?> runNotifierBuild(
-    covariant Messages notifier,
+  FutureOr<ForumChannel?> runNotifierBuild(
+    covariant Forums notifier,
   ) {
     return notifier.build(
       channelId,
@@ -133,10 +131,10 @@ class MessagesProvider
   }
 
   @override
-  Override overrideWith(Messages Function() create) {
+  Override overrideWith(Forums Function() create) {
     return ProviderOverride(
       origin: this,
-      override: MessagesProvider._internal(
+      override: ForumsProvider._internal(
         () => create()..channelId = channelId,
         from: from,
         name: null,
@@ -149,14 +147,13 @@ class MessagesProvider
   }
 
   @override
-  AutoDisposeAsyncNotifierProviderElement<Messages, List<Message>?>
-      createElement() {
-    return _MessagesProviderElement(this);
+  AsyncNotifierProviderElement<Forums, ForumChannel?> createElement() {
+    return _ForumsProviderElement(this);
   }
 
   @override
   bool operator ==(Object other) {
-    return other is MessagesProvider && other.channelId == channelId;
+    return other is ForumsProvider && other.channelId == channelId;
   }
 
   @override
@@ -168,18 +165,17 @@ class MessagesProvider
   }
 }
 
-mixin MessagesRef on AutoDisposeAsyncNotifierProviderRef<List<Message>?> {
+mixin ForumsRef on AsyncNotifierProviderRef<ForumChannel?> {
   /// The parameter `channelId` of this provider.
   Snowflake get channelId;
 }
 
-class _MessagesProviderElement
-    extends AutoDisposeAsyncNotifierProviderElement<Messages, List<Message>?>
-    with MessagesRef {
-  _MessagesProviderElement(super.provider);
+class _ForumsProviderElement
+    extends AsyncNotifierProviderElement<Forums, ForumChannel?> with ForumsRef {
+  _ForumsProviderElement(super.provider);
 
   @override
-  Snowflake get channelId => (origin as MessagesProvider).channelId;
+  Snowflake get channelId => (origin as ForumsProvider).channelId;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
