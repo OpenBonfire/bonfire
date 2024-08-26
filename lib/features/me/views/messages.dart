@@ -60,11 +60,13 @@ class _MessageOverviewState extends ConsumerState<MessageOverview> {
                       guildId: Snowflake.zero,
                     ),
                     Expanded(
-                        child: Expanded(
-                      child: PrivateMessages(
-                        channelId: widget.channelId ?? Snowflake.zero,
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 32),
+                        child: PrivateMessages(
+                          channelId: widget.channelId ?? Snowflake.zero,
+                        ),
                       ),
-                    ))
+                    )
                   ],
                 ),
               ),
