@@ -68,7 +68,6 @@ dependencies:
   loading_animation_widget: ^1.2.1
   hive: ^2.2.3
   universal_io: ^2.2.2
-  routemaster: ^1.0.1
   video_player: ^2.9.1
   sodium: ^2.3.1+1
   opus_flutter: ^3.0.2
@@ -77,7 +76,6 @@ dependencies:
   flutter_circular_text: ^0.3.1
   flutter_thumbhash: ^0.1.0+1
   video_thumbnail_imageview: ^0.0.6
-  infinite_scroll_pagination: ^4.0.0
   flutter_cache_manager: ^3.4.0
   file_picker: ^8.0.7
   path: ^1.9.0

@@ -37,7 +37,7 @@ class AppColorsDark {
 
   static const floatingActionColorButton = Color(0xFF2c2d35);
 
-  static const blurple = Color(0xff5865f2);
+  static const blurple = Color(0xff2448BE);
   static const red = Color(0xFFED4245);
   static const green = Color(0xFF57F287);
   static const yellow = Color(0xFFFEE75C);

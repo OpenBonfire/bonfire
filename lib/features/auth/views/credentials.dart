@@ -2,8 +2,10 @@ import 'package:bonfire/features/auth/data/repositories/auth.dart';
 import 'package:bonfire/features/auth/models/auth.dart';
 import 'package:bonfire/shared/widgets/confirm_button.dart';
 import 'package:bonfire/theme/text_theme.dart';
+import 'package:bonfire/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class CredentialsScreen extends ConsumerStatefulWidget {
   final bool storeCredentials;
@@ -38,17 +40,23 @@ class _LoginState extends ConsumerState<CredentialsScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              loginType == LoginType.username ? "Email" : "Password",
-              style: CustomTextTheme().labelLarge.copyWith(
-                    color: Theme.of(context).colorScheme.surface,
-                  ),
+            Padding(
+              padding: const EdgeInsets.all(2),
+              child: Text(
+                loginType == LoginType.username ? "Email" : "Password",
+                style: GoogleFonts.publicSans(
+                  // todo: add this to the theme
+                  color: const Color(0xFFC8C8C8),
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
             ),
             Container(
               height: 60,
               decoration: BoxDecoration(
-                color: const Color.fromARGB(255, 22, 20, 20),
-                borderRadius: BorderRadius.circular(0),
+                color: Theme.of(context).custom.colorTheme.foreground,
+                borderRadius: BorderRadius.circular(12),
               ),
               child: Center(
                 child: TextFormField(
@@ -86,53 +94,63 @@ class _LoginState extends ConsumerState<CredentialsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    double bottomPadding = MediaQuery.of(context).padding.bottom;
+
     return Scaffold(
       body: Stack(
         children: [
-          Image.asset(
-            'assets/images/login_background.png',
-            fit: BoxFit.cover,
-            width: double.infinity,
-            height: double.infinity,
-          ),
-          SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const SizedBox(height: 40),
-                  Text(
-                    "Welcome Back!",
-                    style: CustomTextTheme().titleLarge,
-                  ),
-                  Text(
-                    "Let's get ya signed in!",
-                    style: CustomTextTheme().subtitle1.copyWith(
-                          color: Theme.of(context).colorScheme.surface,
+          Column(
+            children: [
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        const SizedBox(height: 40),
+                        Text(
+                          "Welcome Back!",
+                          style: CustomTextTheme().titleLarge,
                         ),
-                  ),
-                  const SizedBox(height: 80),
-                  Form(
-                    child: AutofillGroup(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          loginBox(LoginType.username),
-                          const SizedBox(height: 20),
-                          loginBox(LoginType.password),
-                        ],
-                      ),
+                        Text(
+                          "Let's get ya signed in",
+                          style: GoogleFonts.publicSans(
+                            color: const Color(0xFFC8C8C8),
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        const SizedBox(height: 80),
+                        Form(
+                          child: AutofillGroup(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                loginBox(LoginType.username),
+                                const SizedBox(height: 20),
+                                loginBox(LoginType.password),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  const SizedBox(height: 40),
-                  ConfirmButton(text: "CONFIRM", onPressed: submitCredentials),
-                  const SizedBox(height: 20),
-                ],
+                ),
               ),
-            ),
+              Padding(
+                padding: EdgeInsets.only(
+                  bottom: bottomPadding,
+                ),
+                child: ConfirmButton(
+                  text: "CONFIRM",
+                  onPressed: submitCredentials,
+                ),
+              ),
+            ],
           ),
         ],
       ),
