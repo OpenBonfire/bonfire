@@ -1,5 +1,6 @@
 import 'package:bonfire/features/auth/data/repositories/auth.dart';
 import 'package:bonfire/features/auth/models/auth.dart';
+import 'package:bonfire/features/auth/views/physics_scene.dart';
 import 'package:bonfire/shared/widgets/confirm_button.dart';
 import 'package:bonfire/theme/text_theme.dart';
 import 'package:bonfire/theme/theme.dart';
@@ -99,6 +100,9 @@ class _LoginState extends ConsumerState<CredentialsScreen> {
     return Scaffold(
       body: Stack(
         children: [
+          // Center(
+          //   child: const PhysicsGame(),
+          // ),
           Column(
             children: [
               Expanded(

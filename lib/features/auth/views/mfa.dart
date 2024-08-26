@@ -2,8 +2,10 @@ import 'package:bonfire/features/auth/data/repositories/auth.dart';
 import 'package:bonfire/features/auth/models/auth.dart';
 import 'package:bonfire/shared/widgets/confirm_button.dart';
 import 'package:bonfire/theme/text_theme.dart';
+import 'package:bonfire/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class MFAPage extends ConsumerStatefulWidget {
   const MFAPage({super.key});
@@ -29,15 +31,17 @@ class _MFAPageState extends ConsumerState<MFAPage> {
         children: [
           Text(
             "MULTI FACTOR CODE",
-            style: CustomTextTheme().labelLarge.copyWith(
-                  color: Theme.of(context).colorScheme.surface,
-                ),
+            style: GoogleFonts.publicSans(
+              color: const Color(0xFFC8C8C8),
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+            ),
           ),
           Container(
             height: 60,
             decoration: BoxDecoration(
-              color: const Color.fromARGB(255, 22, 20, 20),
-              borderRadius: BorderRadius.circular(0),
+              color: Theme.of(context).custom.colorTheme.foreground,
+              borderRadius: BorderRadius.circular(12),
             ),
             child: Center(
               child: TextFormField(
@@ -68,16 +72,11 @@ class _MFAPageState extends ConsumerState<MFAPage> {
       final resp =
           await ref.read(authProvider.notifier).submitMfa(controller.text);
       if (resp is MFAInvalidError) {
-        // Handle invalid MFA error
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(resp.error)),
         );
-      } else {
-        // Handle successful MFA submission
-        // Navigate to next screen or show success message
-      }
+      } else {}
     } catch (e) {
-      // Handle any unexpected errors
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("An unexpected error occurred")),
       );
@@ -87,49 +86,50 @@ class _MFAPageState extends ConsumerState<MFAPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          Image.asset(
-            'assets/images/login_background.png',
-            fit: BoxFit.cover,
-            width: double.infinity,
-            height: double.infinity,
-          ),
-          Center(
-            child: SingleChildScrollView(
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "Multi Factor Authentication",
-                      style: CustomTextTheme().titleLarge,
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(height: 30),
-                    Text(
-                      "Enter your second factor code. This can be found in your authenticator app.",
-                      style: CustomTextTheme().subtitle1.copyWith(
-                            color: Theme.of(context).colorScheme.surface,
-                          ),
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(height: 30),
-                    mfaBox(),
-                    const SizedBox(height: 40),
-                    ConfirmButton(
-                      text: "Sign In",
-                      onPressed: submitMFA,
-                    ),
-                  ],
+      body: Center(
+        child: Column(
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Multi Factor Authentication",
+                        style: CustomTextTheme().titleLarge,
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 30),
+                      Text(
+                        "Enter your second factor code. This can be found in your authenticator app.",
+                        style: GoogleFonts.publicSans(
+                          color: const Color(0xFFC8C8C8),
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 30),
+                      mfaBox(),
+                      const SizedBox(height: 40),
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: ConfirmButton(
+                text: "Sign In",
+                onPressed: submitMFA,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
