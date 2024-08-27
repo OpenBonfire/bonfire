@@ -16,42 +16,46 @@ class DescriptionEmbed extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 8),
-      decoration: BoxDecoration(
-        borderRadius: const BorderRadius.only(
-          topRight: Radius.circular(24),
-          bottomRight: Radius.circular(24),
-          topLeft: Radius.circular(12),
-          bottomLeft: Radius.circular(12),
+    return ClipRRect(
+      borderRadius: const BorderRadius.all(Radius.circular(12)),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Theme.of(context).custom.colorTheme.foreground,
+          borderRadius: const BorderRadius.only(
+            topRight: Radius.circular(12),
+            bottomRight: Radius.circular(12),
+          ),
         ),
-        color: embed.color != null
-            ? Color.fromRGBO(
-                embed.color!.r,
-                embed.color!.g,
-                embed.color!.b,
-                1,
-              )
-            : Theme.of(context).custom.colorTheme.blurple,
-      ),
-      child: Row(
-        children: [
-          const SizedBox(width: 8),
-          Expanded(
-            child: Container(
-              decoration: BoxDecoration(
-                color: Theme.of(context).custom.colorTheme.foreground,
-                borderRadius: const BorderRadius.only(
-                  topRight: Radius.circular(12),
-                  bottomRight: Radius.circular(12),
+        child: Stack(
+          children: [
+            Positioned(
+              left: 0,
+              top: 0,
+              bottom: 0,
+              child: Container(
+                width: 8,
+                decoration: BoxDecoration(
+                  color: embed.color != null
+                      ? Color.fromRGBO(
+                          embed.color!.r,
+                          embed.color!.g,
+                          embed.color!.b,
+                          1,
+                        )
+                      : Theme.of(context).custom.colorTheme.blurple,
                 ),
               ),
+            ),
+            // Content
+            Padding(
+              padding: const EdgeInsets.only(left: 8),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   if (embed.author != null)
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(12, 8, 16, 0),
+                      padding: const EdgeInsets.fromLTRB(8, 8, 8, 4),
                       child: Row(
                         children: [
                           if (embed.author!.iconUrl != null)
@@ -75,7 +79,7 @@ class DescriptionEmbed extends StatelessWidget {
                     ),
                   if (embed.title != null)
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(12, 8, 16, 8),
+                      padding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
                       child: Text(
                         embed.title!,
                         style: GoogleFonts.publicSans(
@@ -89,12 +93,12 @@ class DescriptionEmbed extends StatelessWidget {
                     ),
                   if (embed.description != null)
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(12, 0, 16, 8),
+                      padding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
                       child: EmbedMarkdownBox(embed: embed),
                     ),
                   if (embed.image != null)
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(12, 0, 16, 8),
+                      padding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(4),
                         child: Image.network(
@@ -105,7 +109,7 @@ class DescriptionEmbed extends StatelessWidget {
                     ),
                   if (embed.footer != null)
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(12, 8, 16, 8),
+                      padding: const EdgeInsets.fromLTRB(8, 4, 8, 8),
                       child: Row(
                         children: [
                           if (embed.footer!.iconUrl != null)
@@ -128,8 +132,8 @@ class DescriptionEmbed extends StatelessWidget {
                 ],
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
