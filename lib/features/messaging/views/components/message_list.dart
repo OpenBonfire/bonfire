@@ -43,7 +43,7 @@ class _MessageViewState extends ConsumerState<MessageList>
     _scrollController.addListener(_scrollListener);
 
     _fadeController = AnimationController(
-      duration: const Duration(milliseconds: 150),
+      duration: const Duration(milliseconds: 0),
       // reverseDuration: const Duration(milliseconds: 300),
       vsync: this,
     );

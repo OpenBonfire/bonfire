@@ -303,10 +303,9 @@ class _MessageBoxState extends ConsumerState<MessageBox>
               TextSpan(
                 text: name,
                 style: TextStyle(
-                  color: textColor,
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
+                    color: textColor,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700),
               ),
               const TextSpan(text: '  '),
               TextSpan(
