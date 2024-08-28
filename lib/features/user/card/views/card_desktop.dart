@@ -40,7 +40,7 @@ class UserCard extends ConsumerWidget {
       },
       child: Container(
         decoration: BoxDecoration(
-          color: Theme.of(context).custom.colorTheme.messageBarBackground,
+          color: Theme.of(context).custom.colorTheme.foreground,
           borderRadius: BorderRadius.circular(10),
         ),
         child: Padding(
