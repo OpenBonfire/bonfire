@@ -31,6 +31,8 @@ class GuildFolderWidgetState extends ConsumerState<GuildFolderWidget>
   late Animation<double> _expandAnimation;
   double _iconHeight = 8;
   double iconSpacing = 6.0;
+  final GlobalKey _sizeTransitionKey = GlobalKey();
+  double boxHeight = 0.0;
 
   bool _hasUnreadsInFolder(List<UserGuild> folderGuilds, WidgetRef ref) {
     for (var guild in folderGuilds) {
@@ -61,6 +63,20 @@ class GuildFolderWidgetState extends ConsumerState<GuildFolderWidget>
       parent: _controller,
       curve: Curves.easeInOut,
     );
+
+    _controller.addListener(() {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        final RenderBox? renderBox =
+            _sizeTransitionKey.currentContext?.findRenderObject() as RenderBox?;
+        if (renderBox != null) {
+          setState(() {
+            // we want this height for the grey background
+            // this wouldn't be an issue, but we need the unreads outside of the grey area
+            boxHeight = renderBox.size.height;
+          });
+        }
+      });
+    });
   }
 
   @override
@@ -137,138 +153,141 @@ class GuildFolderWidgetState extends ConsumerState<GuildFolderWidget>
 
     return Stack(
       children: [
-        Column(
-          children: [
-            MouseRegion(
-              cursor: SystemMouseCursors.click,
-              child: GestureDetector(
-                onTap: () {
-                  HapticFeedback.mediumImpact();
-                  setState(() {
-                    _isExpanded = !_isExpanded;
-                    if (_isExpanded) {
-                      _controller.forward();
-                    } else {
-                      _controller.reverse();
-                    }
-                  });
-                },
-                child: AnimatedBuilder(
-                  animation: _expandAnimation,
-                  builder: (context, child) {
-                    return Center(
-                      child: Column(
+        Center(
+          child: Container(
+            height: (boxHeight <= 10) ? 0 : boxHeight + 50 - 8,
+            width: 50,
+            decoration: BoxDecoration(
+              color: Theme.of(context).custom.colorTheme.foreground,
+              borderRadius: BorderRadius.circular(36),
+            ),
+          ),
+        ),
+        MouseRegion(
+          cursor: SystemMouseCursors.click,
+          child: GestureDetector(
+            onTap: () {
+              HapticFeedback.mediumImpact();
+              setState(() {
+                _isExpanded = !_isExpanded;
+                if (_isExpanded) {
+                  _controller.forward();
+                } else {
+                  _controller.reverse();
+                }
+              });
+            },
+            child: AnimatedBuilder(
+              animation: _expandAnimation,
+              builder: (context, child) {
+                return Center(
+                  child: Column(
+                    children: [
+                      Stack(
+                        alignment: Alignment.center,
                         children: [
-                          Stack(
-                            alignment: Alignment.center,
-                            children: [
-                              Opacity(
-                                opacity: 1 - _expandAnimation.value,
-                                child: Center(
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      color: (widget.guildFolder.color != null)
-                                          ? Color(int.parse(
-                                                  widget.guildFolder.color
-                                                      .toString(),
-                                                  radix: 10))
-                                              .withOpacity(0.5)
-                                          : Theme.of(context)
-                                              .custom
-                                              .colorTheme
-                                              .blurple
-                                              .withOpacity(0.5),
-                                      borderRadius: BorderRadius.circular(16),
-                                    ),
-                                    width: 50,
-                                    height: 50,
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(4),
-                                      child: GridView.count(
-                                        physics:
-                                            const NeverScrollableScrollPhysics(),
-                                        crossAxisCount: 2,
-                                        children:
-                                            folderGuilds.take(4).map((guild) {
-                                          return Center(
-                                            child: SidebarIcon(
-                                              selected:
-                                                  widget.selectedGuildId ==
-                                                      guild.id,
-                                              guild: guild,
-                                              mini: true,
-                                              isClickable: false,
-                                            ),
-                                          );
-                                        }).toList(),
-                                      ),
-                                    ),
-                                  ),
+                          Opacity(
+                            opacity: 1 - _expandAnimation.value,
+                            child: Center(
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: (widget.guildFolder.color != null)
+                                      ? Color(int.parse(
+                                              widget.guildFolder.color
+                                                  .toString(),
+                                              radix: 10))
+                                          .withOpacity(0.5)
+                                      : Theme.of(context)
+                                          .custom
+                                          .colorTheme
+                                          .blurple
+                                          .withOpacity(0.5),
+                                  borderRadius: BorderRadius.circular(16),
                                 ),
-                              ),
-                              Opacity(
-                                opacity: _expandAnimation.value,
-                                child: Center(
-                                  child: FolderIcon(
-                                    color: (widget.guildFolder.color != null)
-                                        ? Color(int.parse(
-                                                widget.guildFolder.color
-                                                    .toString(),
-                                                radix: 10))
-                                            .withOpacity(1)
-                                        : Color(
-                                            Theme.of(context)
-                                                .custom
-                                                .colorTheme
-                                                .blurple
-                                                .value,
-                                          ),
-                                  ),
-                                ),
-                              ),
-                              if (totalMentions > 0 && !_isExpanded)
-                                Positioned(
-                                  right: 8,
-                                  bottom: -3,
-                                  child: _buildMentionBubble(totalMentions),
-                                ),
-                            ],
-                          ),
-                          SizeTransition(
-                            sizeFactor: _expandAnimation,
-                            child: Column(
-                              children: (folderGuilds
-                                  .map(
-                                    (guild) => SizedBox(
-                                      child: Center(
-                                        child: Padding(
-                                          padding:
-                                              EdgeInsets.only(top: iconSpacing),
-                                          child: SidebarIcon(
-                                            selected: widget.selectedGuildId ==
-                                                guild.id,
-                                            guild: guild,
-                                            isClickable: true,
-                                          ),
+                                width: 50,
+                                height: 50,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(4),
+                                  child: GridView.count(
+                                    physics:
+                                        const NeverScrollableScrollPhysics(),
+                                    crossAxisCount: 2,
+                                    children: folderGuilds.take(4).map((guild) {
+                                      return Center(
+                                        child: SidebarIcon(
+                                          selected: widget.selectedGuildId ==
+                                              guild.id,
+                                          guild: guild,
+                                          mini: true,
+                                          isClickable: false,
                                         ),
-                                      ),
-                                    ),
-                                  )
-                                  .toList() as List<Widget>)
-                                ..add(
-                                  const SizedBox(height: 4),
+                                      );
+                                    }).toList(),
+                                  ),
                                 ),
+                              ),
                             ),
                           ),
+                          Opacity(
+                            opacity: _expandAnimation.value,
+                            child: Center(
+                              child: FolderIcon(
+                                color: (widget.guildFolder.color != null)
+                                    ? Color(int.parse(
+                                            widget.guildFolder.color.toString(),
+                                            radix: 10))
+                                        .withOpacity(1)
+                                    : Color(
+                                        Theme.of(context)
+                                            .custom
+                                            .colorTheme
+                                            .blurple
+                                            .value,
+                                      ),
+                              ),
+                            ),
+                          ),
+                          if (totalMentions > 0 && !_isExpanded)
+                            Positioned(
+                              right: 8,
+                              bottom: -3,
+                              child: _buildMentionBubble(totalMentions),
+                            ),
                         ],
                       ),
-                    );
-                  },
-                ),
-              ),
+                      SizeTransition(
+                        key: _sizeTransitionKey,
+                        sizeFactor: _expandAnimation,
+                        child: Column(
+                          children: (folderGuilds
+                              .map(
+                                (guild) => SizedBox(
+                                  child: Center(
+                                    child: Padding(
+                                      padding:
+                                          EdgeInsets.only(top: iconSpacing),
+                                      child: SidebarIcon(
+                                        selected:
+                                            widget.selectedGuildId == guild.id,
+                                        guild: guild,
+                                        isClickable: true,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              )
+                              .toList() as List<Widget>)
+                            ..add(
+                              const SizedBox(height: 4),
+                            ),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
             ),
-            // SizedBox(height: _isExpanded ? 0 : 4),
-          ],
+          ),
         ),
         if (!_isExpanded && hasUnreadsInFolder)
           Positioned(

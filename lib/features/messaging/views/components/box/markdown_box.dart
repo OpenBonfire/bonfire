@@ -24,7 +24,9 @@ class MessageMarkdownBox extends StatelessWidget {
         enableImageSize: false,
         selectable: false,
         enableKbd: false,
-        syntaxExtensions: [DiscordMentionSyntax()],
+        syntaxExtensions: [
+          // DiscordMentionSyntax(),
+        ],
         elementBuilders: [
           DiscordMentionBuilder(),
         ],
