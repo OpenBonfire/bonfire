@@ -24,7 +24,6 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge,
       overlays: [SystemUiOverlay.top]);
-
   if (!UniversalPlatform.isWeb) {
     final appDocumentDir = await getApplicationDocumentsDirectory();
     final dataDir = Directory('${appDocumentDir.path}/bonfire/data');
@@ -33,20 +32,16 @@ void main() async {
     }
     Hive.init(dataDir.path);
   }
-
   await Hive.openBox("auth");
   await Hive.openBox("last-location");
   await Hive.openBox("last-guild-channels");
   await Hive.openBox("added-accounts");
-
   print("run app!");
-
   runApp(const ProviderScope(
     child: MaterialApp(
       home: MainWindow(),
     ),
   ));
-
   if (UniversalPlatform.isDesktop) {
     doWhenWindowReady(() {
       const initialSize = Size(1280, 720);
@@ -60,7 +55,6 @@ void main() async {
 
 class MainWindow extends ConsumerStatefulWidget {
   const MainWindow({super.key});
-
   @override
   ConsumerState<MainWindow> createState() => _MainWindowState();
 }
@@ -78,20 +72,23 @@ class _MainWindowState extends ConsumerState<MainWindow> {
 
     return Scaffold(
       backgroundColor: Colors.transparent,
-      body: Column(
+      body: Stack(
         children: [
-          (UniversalPlatform.isDesktop)
-              ? const WindowTopBar()
-              : const SizedBox(),
-          Flexible(
-              child: KeyboardSizeProvider(
-            child: MaterialApp.router(
-              title: 'Bonfire',
-              theme: ref.read(darkThemeProvider),
-              darkTheme: ref.read(darkThemeProvider),
-              routerConfig: routerController,
-            ),
-          )),
+          Column(
+            children: [
+              if (UniversalPlatform.isDesktop) const WindowTopBar(),
+              Flexible(
+                child: KeyboardSizeProvider(
+                  child: MaterialApp.router(
+                    title: 'Bonfire',
+                    theme: ref.read(darkThemeProvider),
+                    darkTheme: ref.read(darkThemeProvider),
+                    routerConfig: routerController,
+                  ),
+                ),
+              ),
+            ],
+          ),
         ],
       ),
     );

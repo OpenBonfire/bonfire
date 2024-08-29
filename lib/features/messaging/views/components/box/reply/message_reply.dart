@@ -1,5 +1,6 @@
 import 'package:bonfire/features/guild/repositories/member.dart';
 import 'package:bonfire/features/messaging/views/components/box/avatar.dart';
+import 'package:bonfire/shared/utils/platform.dart';
 import 'package:bonfire/shared/utils/role_color.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
@@ -35,8 +36,10 @@ class MessageReply extends ConsumerWidget {
       error: (error, stack) {},
     );
 
+    bool isWatch = isSmartwatch(context);
+
     return Padding(
-      padding: const EdgeInsets.only(left: 64, bottom: 8),
+      padding: EdgeInsets.only(left: isWatch ? 0 : 64, bottom: isWatch ? 2 : 8),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

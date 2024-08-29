@@ -103,6 +103,8 @@ class _MessageViewState extends ConsumerState<MessageList>
         top: isSmartwatch(context)
             ? 0
             : 50, // add the height of the channel header
+        left: 0,
+        right: 0,
       ),
       childrenDelegate: SliverChildBuilderDelegate(
         childCount: loadedMessages.length + (isSmartwatch(context) ? 1 : 0),

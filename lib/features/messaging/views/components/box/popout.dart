@@ -7,12 +7,10 @@ import 'package:google_fonts/google_fonts.dart';
 
 class ContextPopout extends ConsumerStatefulWidget {
   final Snowflake messageId;
-
   const ContextPopout({
     super.key,
     required this.messageId,
   });
-
   @override
   _ContextPopoutState createState() => _ContextPopoutState();
 }
@@ -25,21 +23,22 @@ class _ContextPopoutState extends ConsumerState<ContextPopout> {
         _buttonKey.currentContext!.findRenderObject() as RenderBox;
     final position = renderBox.localToGlobal(Offset.zero);
     final size = renderBox.size;
-
     final replyController = ref.read(replyControllerProvider.notifier);
 
     showMenu<String>(
       context: context,
+      popUpAnimationStyle: AnimationStyle.noAnimation,
       position: RelativeRect.fromLTRB(
         position.dx,
         position.dy + size.height,
         position.dx + size.width,
         position.dy + size.height,
       ),
+      menuPadding: const EdgeInsets.all(8),
       items: _buildMenuItems(context),
       elevation: 8,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(4),
+        borderRadius: BorderRadius.circular(12),
       ),
       color: Theme.of(context).custom.colorTheme.foreground,
     ).then((String? result) {
@@ -65,7 +64,6 @@ class _ContextPopoutState extends ConsumerState<ContextPopout> {
   }
 
   List<PopupMenuEntry<String>> _buildMenuItems(BuildContext context) {
-    print("Building menu items");
     return <PopupMenuEntry<String>>[
       _buildMenuItem(context, 'reply', Icons.reply, 'Reply'),
       _buildMenuItem(context, 'edit', Icons.edit, 'Edit Message'),
@@ -84,23 +82,29 @@ class _ContextPopoutState extends ConsumerState<ContextPopout> {
     return PopupMenuItem<String>(
       value: value,
       height: 36,
-      child: Row(
-        children: [
-          Icon(
-            icon,
-            size: 16,
-            color: isDestructive ? Colors.red : Colors.white,
-          ),
-          const SizedBox(width: 8),
-          Text(
-            text,
-            style: GoogleFonts.publicSans(
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(18),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              icon,
+              size: 16,
               color: isDestructive ? Colors.red : Colors.white,
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
             ),
-          ),
-        ],
+            const SizedBox(width: 8),
+            Text(
+              text,
+              style: GoogleFonts.publicSans(
+                color: isDestructive ? Colors.red : Colors.white,
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -111,7 +115,6 @@ class _ContextPopoutState extends ConsumerState<ContextPopout> {
       color: Colors.transparent,
       child: GestureDetector(
         onTap: () {
-          print("Child tapped");
           _showPopupMenu();
         },
         child: Container(

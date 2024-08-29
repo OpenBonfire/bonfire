@@ -212,7 +212,8 @@ class _MessageBoxState extends ConsumerState<MessageBox>
                   ),
                   child: Column(
                     children: [
-                      if (message.referencedMessage != null)
+                      if (message.referencedMessage != null &&
+                          !isSmartwatch(context))
                         Padding(
                           padding: const EdgeInsets.only(top: 4),
                           child: MessageReply(
@@ -255,34 +256,51 @@ class _MessageBoxState extends ConsumerState<MessageBox>
     Message message,
     Uint8List? roleIcon,
   ) {
+    bool isWatch = isSmartwatch(context);
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 12),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Column(
         children: [
-          // const SizedBox(width: 8.0),
-          if (widget.showSenderInfo)
-            Padding(
-              padding: const EdgeInsets.only(top: 2),
-              child: Avatar(
-                author: message.author,
-                guildId: widget.guildId,
-                channelId: widget.channel.id,
+          Row(
+            crossAxisAlignment:
+                isWatch ? CrossAxisAlignment.center : CrossAxisAlignment.start,
+            children: [
+              if (widget.showSenderInfo)
+                Padding(
+                  padding: const EdgeInsets.only(top: 2),
+                  child: Avatar(
+                    author: message.author,
+                    guildId: widget.guildId,
+                    channelId: widget.channel.id,
+                  ),
+                )
+              else
+                const SizedBox(width: 40),
+              const SizedBox(width: 8.0),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if (message.referencedMessage != null && isWatch)
+                      MessageReply(
+                        guildId: widget.guildId,
+                        channel: widget.channel,
+                        parentMessage: message,
+                      ),
+                    if (widget.showSenderInfo)
+                      _buildMessageHeader(name, textColor, message, roleIcon),
+                    if (!isWatch) _buildMessageContent(message),
+                  ],
+                ),
               ),
-            )
-          else
-            const SizedBox(width: 40),
-          const SizedBox(width: 8.0),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                if (widget.showSenderInfo)
-                  _buildMessageHeader(name, textColor, message, roleIcon),
-                _buildMessageContent(message),
-              ],
-            ),
+            ],
           ),
+          if (isWatch)
+            Align(
+              alignment: Alignment.centerLeft,
+              child: _buildMessageContent(message),
+            ),
         ],
       ),
     );

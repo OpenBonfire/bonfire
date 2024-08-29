@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:bonfire/features/channels/views/channels.dart';
 import 'package:bonfire/features/member/views/member_list.dart';
 import 'package:bonfire/features/me/views/components/messages.dart';
@@ -6,8 +8,6 @@ import 'package:bonfire/features/overview/views/navigator.dart';
 import 'package:bonfire/features/overview/views/overlapping_panels.dart';
 import 'package:bonfire/features/sidebar/views/sidebar.dart';
 import 'package:firebridge/firebridge.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:bonfire/shared/utils/platform.dart';
 
 class HomeMobile extends ConsumerStatefulWidget {
@@ -19,67 +19,116 @@ class HomeMobile extends ConsumerStatefulWidget {
   ConsumerState<HomeMobile> createState() => _HomeState();
 }
 
-class _HomeState extends ConsumerState<HomeMobile> {
-  RevealSide selfPanelState = RevealSide.main;
+class _HomeState extends ConsumerState<HomeMobile>
+    with SingleTickerProviderStateMixin {
+  RevealSide currentPanel = RevealSide.main;
+  final GlobalKey<OverlappingPanelsState> _panelsKey =
+      GlobalKey<OverlappingPanelsState>();
+  late AnimationController _animationController;
+  late Animation<double> _animation;
 
   @override
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      // TODO: Make this less hacky
-      /*
-        This works because there's a bug on initstate for the panels.
-        When the panels are initialized *at all*, they will return to the
-        `right` state. I think this may break once that is fixed.
-
-        Currently, we don't even need `selfPanelState`, we could actually
-        just guess the `right` state and be correct.
-      */
-      ref.read(navigationBarProvider.notifier).onSideChange(selfPanelState);
-    });
-
     super.initState();
+    _animationController = AnimationController(
+      duration: const Duration(milliseconds: 300),
+      vsync: this,
+    );
+    _animation = Tween<double>(begin: 1, end: 0).animate(_animationController);
+
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      ref.read(navigationBarProvider.notifier).onSideChange(currentPanel);
+    });
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  void _cyclePanel() {
+    OverlappingPanelsState? panelsState = _panelsKey.currentState;
+    if (panelsState == null) return;
+
+    setState(() {
+      switch (currentPanel) {
+        case RevealSide.right:
+          currentPanel = RevealSide.main;
+          panelsState.moveToState(RevealSide.main);
+          break;
+        case RevealSide.main:
+          currentPanel = RevealSide.left;
+          panelsState.moveToState(RevealSide.left);
+          _animationController.forward();
+          break;
+        case RevealSide.left:
+          // no point in showing here
+          break;
+      }
+    });
+    ref.read(navigationBarProvider.notifier).onSideChange(currentPanel);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        resizeToAvoidBottomInset: false,
-        body: Stack(
-          children: [
-            OverlappingPanels(
-              onSideChange: (value) {
-                FocusScope.of(context).unfocus();
-                selfPanelState = value;
-                ref.read(navigationBarProvider.notifier).onSideChange(value);
-              },
-              left: SizedBox(
-                width: MediaQuery.of(context).size.width,
-                child: Row(
-                  children: [
-                    Sidebar(
-                      guildId: widget.guildId,
-                    ),
-                    Expanded(
-                        child: Expanded(
-                            child: ChannelsList(
+      resizeToAvoidBottomInset: false,
+      body: Stack(
+        children: [
+          OverlappingPanels(
+            key: _panelsKey,
+            onSideChange: (value) {
+              FocusScope.of(context).unfocus();
+              setState(() {
+                currentPanel = value;
+                if (value != RevealSide.left) {
+                  _animationController.reverse();
+                }
+              });
+              ref.read(navigationBarProvider.notifier).onSideChange(value);
+            },
+            left: SizedBox(
+              width: MediaQuery.of(context).size.width,
+              child: Row(
+                children: [
+                  Sidebar(guildId: widget.guildId),
+                  Expanded(
+                    child: ChannelsList(
                       guildId: widget.guildId,
                       channelId: widget.channelId,
-                    )))
-                  ],
+                    ),
+                  )
+                ],
+              ),
+            ),
+            main: MessageView(
+              guildId: widget.guildId,
+              channelId: widget.channelId,
+            ),
+            right: MemberList(
+              guildId: widget.guildId,
+              channelId: widget.channelId,
+            ),
+            restWidth: isSmartwatch(context) ? 0.0 : 24,
+          ),
+          if (!isSmartwatch(context)) const NavigationBarWidget(),
+          if (isSmartwatch(context))
+            Positioned(
+              top: 15,
+              left: 15,
+              child: FadeTransition(
+                opacity: _animation,
+                child: FloatingActionButton(
+                  mini: true,
+                  backgroundColor: Colors.black.withOpacity(0.5),
+                  onPressed: _cyclePanel,
+                  child: const Icon(Icons.arrow_back, color: Colors.white),
                 ),
               ),
-              main: MessageView(
-                guildId: widget.guildId,
-                channelId: widget.channelId,
-              ),
-              right: MemberList(
-                guildId: widget.guildId,
-                channelId: widget.channelId,
-              ),
-              restWidth: isSmartwatch(context) ? 0.0 : 24,
             ),
-            if (!isSmartwatch(context)) const NavigationBarWidget()
-          ],
-        ));
+        ],
+      ),
+    );
   }
 }
