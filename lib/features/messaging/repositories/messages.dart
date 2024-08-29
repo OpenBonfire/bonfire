@@ -22,14 +22,6 @@ class Messages extends _$Messages {
   List<Message> loadedMessages = [];
   bool subscribed = false;
 
-  // final _cacheManager = CacheManager(
-  //   Config(
-  //     'messages',
-  //     stalePeriod: const Duration(days: 7),
-  //     maxNrOfCacheObjects: 10000,
-  //   ),
-  // );
-
   @override
   Future<List<Message>?> build(Snowflake channelId) async {
     var auth = ref.watch(authProvider.notifier).getAuth();

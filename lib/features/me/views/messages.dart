@@ -1,3 +1,4 @@
+import 'package:bonfire/features/friends/views/friends.dart';
 import 'package:bonfire/features/me/views/components/private_messages.dart';
 import 'package:bonfire/features/member/views/member_list.dart';
 import 'package:bonfire/features/me/views/components/messages.dart';
@@ -42,7 +43,7 @@ class _MessageOverviewState extends ConsumerState<MessageOverview> {
                           channelId: widget.channelId!,
                         ),
                       )
-                    : const SizedBox()
+                    : const Expanded(child: FriendsList()),
               ],
             );
           } else {
