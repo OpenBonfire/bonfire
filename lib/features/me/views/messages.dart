@@ -43,7 +43,11 @@ class _MessageOverviewState extends ConsumerState<MessageOverview> {
                           channelId: widget.channelId!,
                         ),
                       )
-                    : const Expanded(child: FriendsList()),
+                    : Expanded(
+                        child: FriendsList(
+                          channelId: Snowflake.zero,
+                        ),
+                      ),
               ],
             );
           } else {
@@ -76,7 +80,9 @@ class _MessageOverviewState extends ConsumerState<MessageOverview> {
                       guildId: Snowflake.zero,
                       channelId: widget.channelId!,
                     )
-                  : const SizedBox(),
+                  : FriendsList(
+                      channelId: Snowflake.zero,
+                    ),
               right: (widget.channelId != null)
                   ? MemberList(
                       guildId: Snowflake.zero,

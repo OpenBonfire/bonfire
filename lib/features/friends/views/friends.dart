@@ -1,10 +1,11 @@
 import 'package:bonfire/features/friends/views/friend_card.dart';
+import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class FriendsList extends ConsumerStatefulWidget {
-  const FriendsList({super.key});
+  final Snowflake channelId;
+  const FriendsList({super.key, required this.channelId});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _FriendsListState();
@@ -13,12 +14,19 @@ class FriendsList extends ConsumerStatefulWidget {
 class _FriendsListState extends ConsumerState<FriendsList> {
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: ListView.builder(
-        itemBuilder: (BuildContext context, int index) {
-          return const FriendCard();
-        },
+    return Container(
+      decoration: BoxDecoration(
+        color: Theme.of(context).scaffoldBackgroundColor,
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: ListView.builder(
+          itemBuilder: (BuildContext context, int index) {
+            return FriendCard(
+              channelId: Snowflake.zero,
+            );
+          },
+        ),
       ),
     );
   }

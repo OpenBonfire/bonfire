@@ -1,20 +1,24 @@
 import 'package:bonfire/theme/theme.dart';
+import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class FriendCard extends ConsumerStatefulWidget {
-  const FriendCard({super.key});
+  final Snowflake channelId;
+  const FriendCard({
+    super.key,
+    required this.channelId,
+  });
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _FriendCardState();
 }
 
 class _FriendCardState extends ConsumerState<FriendCard> {
-  bool selected = true;
-
   @override
   Widget build(BuildContext context) {
+    bool selected = widget.channelId == Snowflake.zero;
     return Padding(
       padding: const EdgeInsets.fromLTRB(4, 0, 4, 4),
       child: OutlinedButton(

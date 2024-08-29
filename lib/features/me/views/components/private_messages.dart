@@ -25,7 +25,7 @@ class _TopButtonsState extends ConsumerState<TopButtons> {
     return Column(
       children: [
         TopButton(
-          channelId: Snowflake.zero,
+          channelId: widget.channelId,
         ),
       ],
     );
@@ -48,7 +48,6 @@ class _TopButtonState extends ConsumerState<TopButton> {
   @override
   Widget build(BuildContext context) {
     bool selected = widget.channelId == Snowflake.zero;
-    print(widget.channelId);
     return Padding(
       padding: const EdgeInsets.fromLTRB(4, 0, 4, 4),
       child: OutlinedButton(
@@ -122,7 +121,6 @@ class PrivateMessages extends ConsumerStatefulWidget {
 class _PrivateMessagesState extends ConsumerState<PrivateMessages> {
   @override
   Widget build(BuildContext context) {
-    print(widget.channelId);
     var topPadding = MediaQuery.of(context).padding.top +
         (UniversalPlatform.isDesktopOrWeb ? 8 : 0);
     double bottomPadding = UniversalPlatform.isMobile
@@ -161,7 +159,6 @@ class _PrivateMessagesState extends ConsumerState<PrivateMessages> {
                               width: 1.0))),
                   child: Column(
                     children: [
-                      // const OverviewCard(),
                       Expanded(
                         child: ListView.builder(
                           padding: EdgeInsets.only(bottom: bottomPadding),
@@ -169,7 +166,7 @@ class _PrivateMessagesState extends ConsumerState<PrivateMessages> {
                           itemBuilder: (context, index) {
                             if (index == 0) {
                               return TopButtons(
-                                channelId: Snowflake.zero,
+                                channelId: widget.channelId,
                               );
                             }
                             return DirectMessageMember(
