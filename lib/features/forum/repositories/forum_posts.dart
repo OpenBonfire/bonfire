@@ -17,10 +17,10 @@ class ForumPosts extends _$ForumPosts {
       if (channel is ForumChannel) {
         print("is a forum channel");
         Guild guild = await auth.client.guilds.get(channel.guildId);
-        ThreadList threads = await guild.listActiveThreads();
+        // ThreadList threads = []; // await guild.listActiveThreads();
 
-        print('got active threads');
-        print(threads);
+        // print('got active threads');
+        // print(threads);
 
         // return channel.listPublicArchivedThreads()
       }

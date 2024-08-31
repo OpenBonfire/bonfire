@@ -1,4 +1,3 @@
-import 'package:bonfire/features/channels/repositories/channel_members.dart';
 import 'package:bonfire/features/guild/repositories/guild_icon.dart';
 import 'package:bonfire/features/guild/repositories/guild_mentions.dart';
 import 'package:bonfire/features/guild/repositories/guild_unreads.dart';

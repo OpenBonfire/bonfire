@@ -1,6 +1,8 @@
 import 'package:bonfire/features/guild/repositories/member.dart';
-import 'package:bonfire/features/member/views/components/member_avatar.dart';
+import 'package:bonfire/features/user/components/presence_avatar.dart';
+import 'package:bonfire/shared/utils/presence.dart';
 import 'package:bonfire/shared/utils/role_color.dart';
+import 'package:bonfire/shared/widgets/presence_text.dart';
 import 'package:bonfire/theme/theme.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
@@ -27,100 +29,6 @@ class MemberCard extends ConsumerStatefulWidget {
 }
 
 class _MemberCardState extends ConsumerState<MemberCard> {
-  (String?, String?)? calculatePresenceMessage(List<Activity> activities) {
-    if (activities.isEmpty) return null;
-
-    final priorityOrder = [
-      ActivityType.custom,
-      ActivityType.streaming,
-      ActivityType.game,
-      ActivityType.listening,
-      ActivityType.watching,
-      ActivityType.competing
-    ];
-
-    var sortedActivities = activities.toList()
-      ..sort((a, b) => priorityOrder
-          .indexOf(a.type)
-          .compareTo(priorityOrder.indexOf(b.type)));
-
-    Activity highestPriorityActivity = sortedActivities.first;
-
-    switch (highestPriorityActivity.type) {
-      case ActivityType.custom:
-        return (highestPriorityActivity.state, null);
-      case ActivityType.streaming:
-        return ("Streaming", highestPriorityActivity.name);
-      case ActivityType.game:
-        return ("Playing", highestPriorityActivity.name);
-      case ActivityType.listening:
-        return ("Listening to", highestPriorityActivity.name);
-      case ActivityType.watching:
-        return ("Watching", highestPriorityActivity.name);
-      case ActivityType.competing:
-        return ("Competing in", highestPriorityActivity.name);
-      default:
-        return null;
-    }
-  }
-
-  Widget getStatusIcon(ClientStatus? clientStatus, UserStatus overallStatus) {
-    const double iconSize = 16;
-    Color statusColor;
-    IconData statusIcon;
-    ShapeBorder containerShape;
-    EdgeInsetsGeometry padding = const EdgeInsets.all(1);
-
-    switch (overallStatus) {
-      case UserStatus.online:
-        statusColor = Theme.of(context).custom.colorTheme.green;
-        break;
-      case UserStatus.idle:
-        statusColor = Theme.of(context).custom.colorTheme.yellow;
-        break;
-      case UserStatus.dnd:
-        statusColor = Theme.of(context).custom.colorTheme.red;
-        break;
-      case UserStatus.offline:
-      default:
-        statusColor = Theme.of(context).custom.colorTheme.foreground;
-    }
-
-    if (clientStatus?.mobile == overallStatus) {
-      statusIcon = Icons.phone_android;
-      containerShape = RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(5),
-      );
-      padding = const EdgeInsets.symmetric(horizontal: 0, vertical: 1);
-    } else if (clientStatus?.desktop == overallStatus) {
-      statusIcon = Icons.desktop_windows;
-      containerShape = RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(5),
-      );
-    } else if (clientStatus?.web == overallStatus) {
-      statusIcon = Icons.language;
-      containerShape = const CircleBorder();
-    } else {
-      statusIcon = Icons.circle;
-      containerShape = const CircleBorder();
-    }
-
-    return Container(
-      decoration: ShapeDecoration(
-        color: Theme.of(context).custom.colorTheme.background,
-        shape: containerShape,
-      ),
-      child: Padding(
-        padding: padding,
-        child: Icon(
-          statusIcon,
-          size: iconSize,
-          color: statusColor,
-        ),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     var roles =
@@ -140,7 +48,6 @@ class _MemberCardState extends ConsumerState<MemberCard> {
     return Stack(
       children: [
         Container(
-            height: 55,
             decoration: BoxDecoration(
               color: Theme.of(context).custom.colorTheme.foreground,
               borderRadius: BorderRadius.only(
@@ -151,28 +58,16 @@ class _MemberCardState extends ConsumerState<MemberCard> {
               ),
             ),
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12),
+              padding: const EdgeInsets.symmetric(horizontal: 4),
               child: Row(
                 children: [
-                  Stack(
-                    children: [
-                      const SizedBox(width: 50, height: 50),
-                      Center(
-                        child: MemberAvatar(
-                          guild: widget.guild,
-                          channel: widget.channel,
-                          member: widget.member,
-                        ),
-                      ),
-                      Positioned(
-                        right: 11,
-                        bottom: 6,
-                        child: getStatusIcon(
-                          initialPresence?.clientStatus,
-                          initialPresence?.status ?? UserStatus.offline,
-                        ),
-                      )
-                    ],
+                  const SizedBox(
+                    width: 6,
+                    height: 58,
+                  ),
+                  PresenceAvatar(
+                    user: widget.member.user!,
+                    initialPresence: initialPresence,
                   ),
                   const SizedBox(width: 8),
                   Expanded(
@@ -193,36 +88,39 @@ class _MemberCardState extends ConsumerState<MemberCard> {
                               .copyWith(
                                   color: getRoleColor(widget.member, roles)),
                         ),
-                        if (calculatedPresenceMessage != null)
-                          RichText(
-                            overflow: TextOverflow.ellipsis,
-                            text: TextSpan(
-                              style: GoogleFonts.publicSans(
-                                color: Theme.of(context)
-                                    .custom
-                                    .colorTheme
-                                    .deselectedChannelText,
-                                fontWeight: FontWeight.w400,
-                                fontSize: 13,
-                              ),
-                              children: [
-                                if (calculatedPresenceMessage.$1 != null)
-                                  TextSpan(
-                                    text: "${calculatedPresenceMessage.$1} ",
-                                    style: GoogleFonts.publicSans(
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                  ),
-                                if (calculatedPresenceMessage.$2 != null)
-                                  TextSpan(
-                                    text: calculatedPresenceMessage.$2,
-                                    style: GoogleFonts.publicSans(
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                              ],
-                            ),
-                          ),
+                        PresenceText(
+                            userid: widget.member.user!.id,
+                            initialPresence: initialPresence),
+                        // if (calculatedPresenceMessage != null)
+                        //   RichText(
+                        //     overflow: TextOverflow.ellipsis,
+                        //     text: TextSpan(
+                        //       style: GoogleFonts.publicSans(
+                        //         color: Theme.of(context)
+                        //             .custom
+                        //             .colorTheme
+                        //             .deselectedChannelText,
+                        //         fontWeight: FontWeight.w400,
+                        //         fontSize: 13,
+                        //       ),
+                        //       children: [
+                        //         if (calculatedPresenceMessage.$1 != null)
+                        //           TextSpan(
+                        //             text: "${calculatedPresenceMessage.$1} ",
+                        //             style: GoogleFonts.publicSans(
+                        //               fontWeight: FontWeight.w400,
+                        //             ),
+                        //           ),
+                        //         if (calculatedPresenceMessage.$2 != null)
+                        //           TextSpan(
+                        //             text: calculatedPresenceMessage.$2,
+                        //             style: GoogleFonts.publicSans(
+                        //               fontWeight: FontWeight.bold,
+                        //             ),
+                        //           ),
+                        //       ],
+                        //     ),
+                        //   ),
                       ],
                     ),
                   ),

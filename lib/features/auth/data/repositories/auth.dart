@@ -4,6 +4,8 @@ import 'package:bonfire/features/auth/data/headers.dart';
 import 'package:bonfire/features/auth/data/repositories/discord_auth.dart';
 import 'package:bonfire/features/auth/models/auth.dart';
 import 'package:bonfire/features/channels/repositories/channel_members.dart';
+import 'package:bonfire/features/friends/controllers/relationships.dart';
+import 'package:bonfire/features/user/controllers/presence.dart';
 import 'package:bonfire/features/voice/repositories/voice_members.dart';
 import 'package:bonfire/features/me/controllers/settings.dart';
 import 'package:http/http.dart' as http;
@@ -134,11 +136,28 @@ class Auth extends _$Auth {
 
       ref.read(guildsStateProvider.notifier).setGuilds(event.guilds);
 
+      ref
+          .read(relationshipControllerProvider.notifier)
+          .setRelationships(event.relationships);
+
+      for (var presence in event.presences) {
+        if (presence.user == null) continue;
+        ref
+            .read(presenceControllerProvider(presence.user!.id).notifier)
+            .setPresence(presence);
+      }
+
       if (event.userSettings.customStatus != null) {
         ref
             .read(customStatusStateProvider.notifier)
             .setCustomStatus(event.userSettings.customStatus!);
       }
+    });
+
+    client.onPresenceUpdate.listen((event) {
+      ref
+          .watch(presenceControllerProvider(event.user!.id).notifier)
+          .setPresence(event);
     });
 
     client.onChannelUnread.listen((event) {
@@ -194,6 +213,19 @@ class Auth extends _$Auth {
               event.guildId,
             );
       }
+    });
+
+    client.onRelationshipAdd.listen((event) {
+      // TODO: handle shouldNotify
+      ref
+          .read(relationshipControllerProvider.notifier)
+          .addRelationship(event.relationship);
+    });
+
+    client.onRelationshipRemove.listen((event) {
+      ref
+          .read(relationshipControllerProvider.notifier)
+          .removeRelationship(event.id);
     });
 
     return response;

@@ -4,6 +4,15 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'settings.g.dart';
 
+/*
+I'm not a huge fan of this- it should really be in seperate controllers per-feature.
+Most (if not all) of these will be modified via gateway events, and all the ready
+event does it provide an initial state, so this isn't really proper convention.
+
+tldr: We need to make seperate controllers for each feature within the feature folder.
+I am already doing that with friends.
+*/
+
 @Riverpod(keepAlive: true)
 class PrivateMessageHistory extends _$PrivateMessageHistory {
   AuthUser? user;

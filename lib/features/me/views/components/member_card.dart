@@ -1,4 +1,8 @@
 import 'package:bonfire/features/overview/views/overlapping_panels.dart';
+import 'package:bonfire/features/user/components/presence_avatar.dart';
+import 'package:bonfire/features/user/controllers/presence.dart';
+import 'package:bonfire/shared/utils/presence.dart';
+import 'package:bonfire/shared/widgets/presence_text.dart';
 import 'package:bonfire/theme/theme.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
@@ -29,11 +33,24 @@ class _DirectMessageMemberState extends ConsumerState<DirectMessageMember> {
   @override
   Widget build(BuildContext context) {
     bool selected = widget.privateChannel.id == widget.currentChannelId;
+
+    Snowflake userId =
+        widget.privateChannel.recipients.firstOrNull?.id ?? Snowflake.zero;
+
+    PresenceUpdateEvent? presence =
+        ref.watch(presenceControllerProvider(userId));
+
+    (String?, String?)? calculatedPresenceMessage;
+
+    if (presence?.activities != null) {
+      calculatedPresenceMessage =
+          calculatePresenceMessage(presence!.activities!);
+    }
+
     return Padding(
       padding: const EdgeInsets.only(left: 4, right: 4, bottom: 4),
       child: SizedBox(
         width: double.infinity,
-        height: 45,
         child: OutlinedButton(
             style: OutlinedButton.styleFrom(
                 minimumSize: Size.zero,
@@ -69,49 +86,40 @@ class _DirectMessageMemberState extends ConsumerState<DirectMessageMember> {
                 overlappingPanelsState.moveToState(RevealSide.main);
               }
             },
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const SizedBox(width: 8),
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(48),
-                  child: Image.network(
-                    widget.privateChannel.recipients.firstOrNull?.avatar.url
-                            .toString() ??
-                        "",
-                    width: 35,
-                    height: 35,
+            child: Padding(
+              padding: const EdgeInsets.all(4),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Center(
+                    child: PresenceAvatar(
+                      initialPresence: presence,
+                      user: widget.privateChannel.recipients.firstOrNull!,
+                    ),
                   ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        widget.privateChannel.recipients
-                            .map((e) => e.globalName ?? e.username)
-                            .join(', '),
-                        style: Theme.of(context).custom.textTheme.subtitle1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      Text(
-                        "Status placeholder",
-                        style: GoogleFonts.publicSans(
-                          color: Theme.of(context)
-                              .custom
-                              .colorTheme
-                              .deselectedChannelText,
-                          fontWeight: FontWeight.w400,
-                          fontSize: 12,
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          widget.privateChannel.recipients
+                              .map((e) => e.globalName ?? e.username)
+                              .join(', '),
+                          style: Theme.of(context).custom.textTheme.subtitle1,
+                          overflow: TextOverflow.ellipsis,
                         ),
-                      ),
-                    ],
+                        PresenceText(
+                          userid: userId,
+                          initialPresence: presence,
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             )),
       ),
     );

@@ -99,6 +99,7 @@ class Wall extends BodyComponent {
 }
 
 class RoundedBox extends BodyComponent {
+  @override
   final Vector2 position;
   final double width;
   final double height;
@@ -134,6 +135,7 @@ class RoundedBox extends BodyComponent {
 }
 
 class Ball extends BodyComponent {
+  @override
   final Vector2 position;
   final double radius;
   final Color color;
@@ -164,6 +166,7 @@ class Ball extends BodyComponent {
 }
 
 class RoundedTriangle extends BodyComponent {
+  @override
   final Vector2 position;
   final double size;
   final Color color;

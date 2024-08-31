@@ -6,7 +6,7 @@ part of 'forum_posts.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$forumPostsHash() => r'440ee92e5a0e1327ad51c50933436fc2497c8be5';
+String _$forumPostsHash() => r'd11e1931bc1de168304134120ddc235eaaece5af';
 
 /// Copied from Dart SDK
 class _SystemHash {
