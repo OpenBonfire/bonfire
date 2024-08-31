@@ -81,8 +81,9 @@ class _MemberCardState extends ConsumerState<MemberCard> {
                                   color: getRoleColor(widget.member, roles)),
                         ),
                         PresenceText(
-                            userid: widget.member.user!.id,
-                            initialPresence: initialPresence),
+                          userid: widget.member.user!.id,
+                          initialPresence: initialPresence,
+                        ),
                       ],
                     ),
                   ),
