@@ -35,6 +35,7 @@ class _PresenceTextState extends ConsumerState<PresenceText> {
     if (calculatedPresenceMessage != null) {
       return RichText(
         overflow: TextOverflow.ellipsis,
+        maxLines: 1,
         text: TextSpan(
           style: GoogleFonts.publicSans(
             color: Theme.of(context).custom.colorTheme.deselectedChannelText,

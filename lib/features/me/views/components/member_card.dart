@@ -1,7 +1,6 @@
 import 'package:bonfire/features/overview/views/overlapping_panels.dart';
 import 'package:bonfire/features/user/components/presence_avatar.dart';
 import 'package:bonfire/features/user/controllers/presence.dart';
-import 'package:bonfire/shared/utils/presence.dart';
 import 'package:bonfire/shared/widgets/presence_text.dart';
 import 'package:bonfire/theme/theme.dart';
 import 'package:firebridge/firebridge.dart';
@@ -9,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
 
 class DirectMessageMember extends ConsumerStatefulWidget {
@@ -39,13 +37,6 @@ class _DirectMessageMemberState extends ConsumerState<DirectMessageMember> {
 
     PresenceUpdateEvent? presence =
         ref.watch(presenceControllerProvider(userId));
-
-    (String?, String?)? calculatedPresenceMessage;
-
-    if (presence?.activities != null) {
-      calculatedPresenceMessage =
-          calculatePresenceMessage(presence!.activities!);
-    }
 
     return Padding(
       padding: const EdgeInsets.only(left: 4, right: 4, bottom: 4),

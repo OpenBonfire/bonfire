@@ -5,7 +5,6 @@ import 'package:bonfire/theme/theme.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class FriendCard extends ConsumerStatefulWidget {
   final Relationship relationship;
@@ -47,7 +46,7 @@ class _FriendCardState extends ConsumerState<FriendCard> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Padding(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.all(8),
               child: PresenceAvatar(
                 user: widget.relationship.user,
                 initialPresence: presence,

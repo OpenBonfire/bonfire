@@ -27,11 +27,11 @@ class _AudioAttachmentState extends State<AudioAttachment> {
 
   bool get _isPlaying => _playerState == PlayerState.playing;
 
-  bool get _isPaused => _playerState == PlayerState.paused;
+  // bool get _isPaused => _playerState == PlayerState.paused;
 
-  String get _durationText => _duration?.toString().split('.').first ?? '';
+  // String get _durationText => _duration?.toString().split('.').first ?? '';
 
-  String get _positionText => _position?.toString().split('.').first ?? '';
+  // String get _positionText => _position?.toString().split('.').first ?? '';
 
   @override
   void initState() {
@@ -210,11 +210,11 @@ class _AudioAttachmentState extends State<AudioAttachment> {
     setState(() => _playerState = PlayerState.paused);
   }
 
-  Future<void> _stop() async {
-    await player!.stop();
-    setState(() {
-      _playerState = PlayerState.stopped;
-      _position = Duration.zero;
-    });
-  }
+  // Future<void> _stop() async {
+  //   await player!.stop();
+  //   setState(() {
+  //     _playerState = PlayerState.stopped;
+  //     _position = Duration.zero;
+  //   });
+  // }
 }

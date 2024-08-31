@@ -1,13 +1,11 @@
 import 'package:bonfire/features/guild/repositories/member.dart';
 import 'package:bonfire/features/user/components/presence_avatar.dart';
-import 'package:bonfire/shared/utils/presence.dart';
 import 'package:bonfire/shared/utils/role_color.dart';
 import 'package:bonfire/shared/widgets/presence_text.dart';
 import 'package:bonfire/theme/theme.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class MemberCard extends ConsumerStatefulWidget {
   final Member member;
@@ -38,12 +36,6 @@ class _MemberCardState extends ConsumerState<MemberCard> {
 
     double borderRadiusTop = widget.roundTop ? 20 : 0;
     double borderRadiusBottom = widget.roundBottom ? 20 : 0;
-
-    (String?, String?)? calculatedPresenceMessage;
-    if (initialPresence?.activities != null) {
-      calculatedPresenceMessage =
-          calculatePresenceMessage(initialPresence!.activities!);
-    }
 
     return Stack(
       children: [
@@ -91,36 +83,6 @@ class _MemberCardState extends ConsumerState<MemberCard> {
                         PresenceText(
                             userid: widget.member.user!.id,
                             initialPresence: initialPresence),
-                        // if (calculatedPresenceMessage != null)
-                        //   RichText(
-                        //     overflow: TextOverflow.ellipsis,
-                        //     text: TextSpan(
-                        //       style: GoogleFonts.publicSans(
-                        //         color: Theme.of(context)
-                        //             .custom
-                        //             .colorTheme
-                        //             .deselectedChannelText,
-                        //         fontWeight: FontWeight.w400,
-                        //         fontSize: 13,
-                        //       ),
-                        //       children: [
-                        //         if (calculatedPresenceMessage.$1 != null)
-                        //           TextSpan(
-                        //             text: "${calculatedPresenceMessage.$1} ",
-                        //             style: GoogleFonts.publicSans(
-                        //               fontWeight: FontWeight.w400,
-                        //             ),
-                        //           ),
-                        //         if (calculatedPresenceMessage.$2 != null)
-                        //           TextSpan(
-                        //             text: calculatedPresenceMessage.$2,
-                        //             style: GoogleFonts.publicSans(
-                        //               fontWeight: FontWeight.bold,
-                        //             ),
-                        //           ),
-                        //       ],
-                        //     ),
-                        //   ),
                       ],
                     ),
                   ),

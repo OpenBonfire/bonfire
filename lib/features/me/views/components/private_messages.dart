@@ -3,6 +3,7 @@ import 'package:bonfire/features/me/views/components/member_card.dart';
 import 'package:bonfire/theme/theme.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:universal_platform/universal_platform.dart';
@@ -68,6 +69,7 @@ class _TopButtonState extends ConsumerState<TopButton> {
                 ? Theme.of(context).custom.colorTheme.foreground
                 : Colors.transparent),
         onPressed: () {
+          HapticFeedback.selectionClick();
           GoRouter.of(context).go("/channels/@me");
         },
         child: Row(
