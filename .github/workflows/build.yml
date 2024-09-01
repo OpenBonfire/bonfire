@@ -18,7 +18,7 @@ jobs:
         run: flutter pub get
 
       - name: Build and deploy
-        uses: OpenBonfire/flutter-gh-pages
+        uses: OpenBonfire/flutter-gh-pages@main
         with:
           baseHref: /
           compileToWasm: true
