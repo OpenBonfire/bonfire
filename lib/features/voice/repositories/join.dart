@@ -4,7 +4,7 @@ import 'package:bonfire/features/auth/data/repositories/discord_auth.dart';
 import 'package:bonfire/features/voice/libs/sdp_builder.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:firebridge/firebridge.dart';
-import 'package:flutter_webrtc/flutter_webrtc.dart';
+// import 'package:flutter_webrtc/flutter_webrtc.dart';
 
 part 'join.g.dart';
 
@@ -15,8 +15,8 @@ class VoiceChannelController extends _$VoiceChannelController {
   bool _isConnecting = false;
   StreamSubscription? _voiceServerUpdateSubscription;
   StreamSubscription? _voiceStateUpdateSubscription;
-  RTCPeerConnection? _peerConnection;
-  MediaStream? _localStream;
+  // RTCPeerConnection? _peerConnection;
+  // MediaStream? _localStream;
 
   @override
   VoiceReadyEvent? build() {
@@ -80,7 +80,7 @@ class VoiceChannelController extends _$VoiceChannelController {
       'bundlePolicy': 'max-bundle',
     };
 
-    _peerConnection = await createPeerConnection(configuration);
+    // _peerConnection = await createPeerConnection(configuration);
 
     // no idea why we need 22 audio tracks, but discord does it
     // for (int i = 0; i < 12; i++) {
@@ -99,60 +99,60 @@ class VoiceChannelController extends _$VoiceChannelController {
     //   });
     // }
 
-    _peerConnection!.onIceCandidate = (RTCIceCandidate candidate) {
-      // print("ICE candidate: ${candidate.toMap()}");
-      // we can ignore ice candidates as we aren't "true" p2p
-    };
+    // _peerConnection!.onIceCandidate = (RTCIceCandidate candidate) {
+    //   // print("ICE candidate: ${candidate.toMap()}");
+    //   // we can ignore ice candidates as we aren't "true" p2p
+    // };
 
-    _peerConnection!.onIceConnectionState = (state) {
-      // print("ICE connection state: $state");
-    };
+    // _peerConnection!.onIceConnectionState = (state) {
+    //   // print("ICE connection state: $state");
+    // };
 
-    _peerConnection!.onIceGatheringState = (state) {
-      print("ICE gathering state: $state");
-    };
+    // _peerConnection!.onIceGatheringState = (state) {
+    //   print("ICE gathering state: $state");
+    // };
 
-    _peerConnection!.onConnectionState = (RTCPeerConnectionState state) {
-      print('Connection state change: $state');
-    };
+    // _peerConnection!.onConnectionState = (RTCPeerConnectionState state) {
+    //   print('Connection state change: $state');
+    // };
 
-    _peerConnection!.onSignalingState = (RTCSignalingState state) {
-      print('Signaling state change: $state');
-    };
+    // _peerConnection!.onSignalingState = (RTCSignalingState state) {
+    //   print('Signaling state change: $state');
+    // };
 
-    _peerConnection!.onAddStream = (MediaStream stream) {
-      print('Stream added: $stream');
-    };
+    // _peerConnection!.onAddStream = (MediaStream stream) {
+    //   print('Stream added: $stream');
+    // };
 
     // _localStream = await navigator.mediaDevices.getUserMedia({'audio': true});
     // _localStream!.getTracks().forEach((track) {
     //   _peerConnection!.addTrack(track, _localStream!);
     // });
 
-    _peerConnection!.onTrack = (event) {
-      print("Received track: ${event.track}");
-      event.track.enabled = true;
-    };
+    // _peerConnection!.onTrack = (event) {
+    //   print("Received track: ${event.track}");
+    //   event.track.enabled = true;
+    // };
 
-    var offer = await _peerConnection!.createOffer(configuration);
-    // print("Created offer:\n${offer.sdp}");
-    // var mockOffer = await _peerConnection!.createOffer(configuration);
-    // print("LOCAL OFFER AS IT STANDS");
-    // print(mockOffer.sdp);
-    // var offer = RTCSessionDescription(
-    //   LocalBuilder.build(),
-    //   'offer',
+    // var offer = await _peerConnection!.createOffer(configuration);
+    // // print("Created offer:\n${offer.sdp}");
+    // // var mockOffer = await _peerConnection!.createOffer(configuration);
+    // // print("LOCAL OFFER AS IT STANDS");
+    // // print(mockOffer.sdp);
+    // // var offer = RTCSessionDescription(
+    // //   LocalBuilder.build(),
+    // //   'offer',
+    // // );
+
+    // _peerConnection!.setLocalDescription(offer);
+    // print("set wack offer");
+
+    // _voiceClient!.sendVoiceSelectProtocol(
+    //   VoiceSelectProtocolBuilder(
+    //     protocol: "webrtc",
+    //     data: SdpBuilder.buildVoiceSelectSdp(offer),
+    //   ),
     // );
-
-    _peerConnection!.setLocalDescription(offer);
-    print("set wack offer");
-
-    _voiceClient!.sendVoiceSelectProtocol(
-      VoiceSelectProtocolBuilder(
-        protocol: "webrtc",
-        data: SdpBuilder.buildVoiceSelectSdp(offer),
-      ),
-    );
   }
 
   void _connect({
@@ -259,8 +259,8 @@ class VoiceChannelController extends _$VoiceChannelController {
 
     // var modifiedSdp = RemoteBuilder.build();
 
-    final description = RTCSessionDescription(modifiedSdp, 'answer');
-    await _peerConnection!.setRemoteDescription(description);
+    // final description = RTCSessionDescription(modifiedSdp, 'answer');
+    // await _peerConnection!.setRemoteDescription(description);
   }
 
   void leaveVoiceChannel() {
@@ -279,11 +279,11 @@ class VoiceChannelController extends _$VoiceChannelController {
     _voiceClient?.close();
     _voiceClient = null;
 
-    _peerConnection?.close();
-    _peerConnection = null;
+    // _peerConnection?.close();
+    // _peerConnection = null;
 
-    _localStream?.dispose();
-    _localStream = null;
+    // _localStream?.dispose();
+    // _localStream = null;
 
     _cancelSubscriptions();
 

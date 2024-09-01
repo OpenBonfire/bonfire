@@ -12,7 +12,7 @@
   <meta name="apple-mobile-web-app-title" content="bonfire">
   <link rel="apple-touch-icon" href="icons/Icon-192.png">
   <link rel="icon" type="image/png" href="favicon.png" />
-  <title>Bonfire - Loading Web Edition</title>
+  <title>Bonfire - Web Edition</title>
   <link rel="manifest" href="manifest.json">
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;600&display=swap');
@@ -167,22 +167,7 @@
     </div>
     <div class="loading-text">Loading Bonfire - Web Edition</div>
   </div>
-  <script>
-    window.addEventListener('load', function (ev) {
-      var loading = document.querySelector('.loading-container');
-      _flutter.loader.loadEntrypoint({
-        serviceWorker: {
-          serviceWorkerVersion: serviceWorkerVersion,
-        },
-        onEntrypointLoaded: function (engineInitializer) {
-          engineInitializer.initializeEngine().then(function (appRunner) {
-            loading.style.display = 'none';
-            appRunner.runApp();
-          });
-        }
-      });
-    });
-  </script>
+
   <script src="flutter_bootstrap.js" async></script>
 </body>
 

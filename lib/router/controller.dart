@@ -7,7 +7,7 @@ import 'package:bonfire/features/auth/views/login.dart';
 import 'package:bonfire/features/auth/views/mfa.dart';
 import 'package:bonfire/features/overview/views/navigation_frame.dart';
 import 'package:bonfire/features/overview/views/home.dart';
-import 'package:hive/hive.dart';
+import 'package:hive_ce/hive.dart';
 
 final routerController = GoRouter(
   routes: [

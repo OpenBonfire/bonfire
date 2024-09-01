@@ -6,7 +6,7 @@ import 'package:bonfire/features/overview/views/overlapping_panels.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
-import 'package:hive/hive.dart';
+import 'package:hive_ce/hive.dart';
 
 class NavigationBarWidget extends ConsumerStatefulWidget {
   const NavigationBarWidget({super.key});

@@ -11,7 +11,7 @@ import 'package:bonfire/features/me/controllers/settings.dart';
 import 'package:http/http.dart' as http;
 import 'package:firebridge/firebridge.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:hive/hive.dart';
+import 'package:hive_ce/hive.dart';
 import 'package:universal_platform/universal_platform.dart';
 
 part 'auth.g.dart';

@@ -4,7 +4,7 @@ import 'package:bonfire/theme/theme.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:fireview/webview_all.dart';
+// import 'package:fireview/webview_all.dart';
 
 class WebVideo extends ConsumerStatefulWidget {
   final Embed embed;
@@ -26,9 +26,10 @@ class _WebVideoState extends ConsumerState<WebVideo> {
                     MediaQuery.of(context).size.width - 90),
                 500),
             height: height,
-            child: Webview(
-              url: widget.embed.video!.url!.toString(),
-            ))
+            // child: Webview(
+            //   url: widget.embed.video!.url!.toString(),
+            // ),
+          )
         : OutlinedButton(
             style: OutlinedButton.styleFrom(
               padding: const EdgeInsets.all(0),

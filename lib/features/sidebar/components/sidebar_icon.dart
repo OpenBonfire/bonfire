@@ -7,7 +7,7 @@ import 'package:go_router/go_router.dart';
 import 'package:bonfire/theme/theme.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:hive/hive.dart';
+import 'package:hive_ce/hive.dart';
 
 class SidebarIcon extends ConsumerWidget {
   final bool selected;
