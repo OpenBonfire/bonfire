@@ -17,27 +17,12 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
-      - run: flutter config --enable-web
-        shell: bash
-        working-directory: .
-      - run: flutter build web --base-href "/" --no-tree-shake-icons --wasm --release
-        shell: bash
-        working-directory: .
-      - run: git config user.name github-actions
-        shell: bash
-        working-directory: .
-      - run: git config user.email github-actions@github.com
-        shell: bash
-        working-directory: .
-      - run: git --work-tree build/web add --all
-        shell: bash
-        working-directory: .
-      - run: git commit -m "Automatic deployment by github-actions"
-        shell: bash
-        working-directory: .
-      - run: git push origin HEAD:gh-pages --force
-        shell: bash
-        working-directory: .
+      - name: Build and deploy
+        uses: TesteurManiak/flutter-gh-pages@feat/wasm-compilation
+        with:
+          baseHref: /
+          compileToWasm: true
+          customArgs: --no-tree-shake-icons
 
   build-android:
     runs-on: ubuntu-latest
@@ -168,53 +153,3 @@ jobs:
         with:
           name: bonfire-macos
           path: build/macos/Build/Products/Release/*.app
-
-  # build-ios:
-  #   runs-on: macos-latest
-  #   steps:
-  #     - name: Clone repository
-  #       uses: actions/checkout@v2
-
-  #     - name: Set up Java 17
-  #       uses: actions/setup-java@v2
-  #       with:
-  #         java-version: '17'
-  #         distribution: 'adopt'
-
-  #     - name: Set up Flutter
-  #       uses: subosito/flutter-action@v2
-  #       with:
-  #         flutter-version: '3.22.3'
-
-  #     - name: Install dependencies
-  #       run: flutter pub get
-
-  #     - name: Install CocoaPods
-  #       run: sudo gem install cocoapods
-
-  #     - name: Install iOS dependencies
-  #       run: |
-  #         cd ios
-  #         pod install --repo-update
-
-  #     - name: Build iOS
-  #       run: |
-  #         cd $GITHUB_WORKSPACE
-  #         flutter build ios --release --no-codesign --no-tree-shake-icons
-
-  #     - name: Upload iOS Archive
-  #       uses: actions/upload-artifact@v4
-  #       with:
-  #         name: ios-archive
-  #         path: build/ios/archive/MyApp.xcarchive
-
-  #     - name: Build iOS IPA
-  #       run: |
-  #         cd $GITHUB_WORKSPACE/build/ios/archive/MyApp.xcarchive
-  #         xcodebuild -exportArchive -archivePath MyApp.xcarchive -exportPath . -exportOptionsPlist ExportOptions.plist
-
-  #     - name: Upload iOS IPA
-  #       uses: actions/upload-artifact@v4
-  #       with:
-  #         name: ios-ipa
-  #         path: build/ios/archive/MyApp.ipa
