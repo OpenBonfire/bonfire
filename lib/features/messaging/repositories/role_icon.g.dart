@@ -6,7 +6,7 @@ part of 'role_icon.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$roleIconHash() => r'7925d6e92243b0dac5ddc924fbd1c87c9a0b6a38';
+String _$roleIconHash() => r'dcaae7382243eb2d985902afd78df265fa040c39';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -75,7 +75,7 @@ class RoleIconFamily extends Family<AsyncValue<Uint8List?>> {
 }
 
 /// See also [roleIcon].
-class RoleIconProvider extends AutoDisposeFutureProvider<Uint8List?> {
+class RoleIconProvider extends FutureProvider<Uint8List?> {
   /// See also [roleIcon].
   RoleIconProvider(
     Snowflake guildId,
@@ -132,7 +132,7 @@ class RoleIconProvider extends AutoDisposeFutureProvider<Uint8List?> {
   }
 
   @override
-  AutoDisposeFutureProviderElement<Uint8List?> createElement() {
+  FutureProviderElement<Uint8List?> createElement() {
     return _RoleIconProviderElement(this);
   }
 
@@ -153,7 +153,7 @@ class RoleIconProvider extends AutoDisposeFutureProvider<Uint8List?> {
   }
 }
 
-mixin RoleIconRef on AutoDisposeFutureProviderRef<Uint8List?> {
+mixin RoleIconRef on FutureProviderRef<Uint8List?> {
   /// The parameter `guildId` of this provider.
   Snowflake get guildId;
 
@@ -161,8 +161,8 @@ mixin RoleIconRef on AutoDisposeFutureProviderRef<Uint8List?> {
   Snowflake get authorId;
 }
 
-class _RoleIconProviderElement
-    extends AutoDisposeFutureProviderElement<Uint8List?> with RoleIconRef {
+class _RoleIconProviderElement extends FutureProviderElement<Uint8List?>
+    with RoleIconRef {
   _RoleIconProviderElement(super.provider);
 
   @override

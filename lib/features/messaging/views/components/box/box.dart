@@ -145,10 +145,12 @@ class _MessageBoxState extends ConsumerState<MessageBox>
         .watch(getMemberProvider(widget.guildId, message.author.id))
         .valueOrNull;
 
-    var roleIconRef = ref.watch(roleIconProvider(
-      widget.guildId,
-      message.author.id,
-    ));
+    var roleIconRef = ref.watch(
+      roleIconProvider(
+        widget.guildId,
+        message.author.id,
+      ),
+    );
 
     Color textColor = ref
             .watch(
@@ -225,7 +227,12 @@ class _MessageBoxState extends ConsumerState<MessageBox>
                       Padding(
                         padding: const EdgeInsets.only(bottom: 4),
                         child: _buildMessageLayout(
-                            context, name, textColor, message, roleIcon),
+                          context,
+                          name,
+                          textColor,
+                          message,
+                          roleIcon,
+                        ),
                       ),
                     ],
                   ),

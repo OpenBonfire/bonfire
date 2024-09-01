@@ -13,6 +13,7 @@ Future<Member?> getMember(
   if (authOutput is AuthUser) {
     return await authOutput.client.guilds[guildId].members.get(memberId);
   }
+
   return null;
 }
 
@@ -30,7 +31,7 @@ Future<Member?> getSelfMember(
   return null;
 }
 
-@riverpod
+@Riverpod(keepAlive: true)
 Future<List<Role>?> getGuildRoles(
     GetGuildRolesRef ref, Snowflake guildId) async {
   var authOutput = ref.watch(authProvider.notifier).getAuth();

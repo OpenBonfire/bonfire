@@ -299,7 +299,7 @@ class _GetSelfMemberProviderElement extends FutureProviderElement<Member?>
   Snowflake get guildId => (origin as GetSelfMemberProvider).guildId;
 }
 
-String _$getGuildRolesHash() => r'e7e541411138c1eca7a39a0e08717656e09ac27d';
+String _$getGuildRolesHash() => r'b493dbc979c1e95ccce665ee6f6694034a5ff969';
 
 /// See also [getGuildRoles].
 @ProviderFor(getGuildRoles)
@@ -344,7 +344,7 @@ class GetGuildRolesFamily extends Family<AsyncValue<List<Role>?>> {
 }
 
 /// See also [getGuildRoles].
-class GetGuildRolesProvider extends AutoDisposeFutureProvider<List<Role>?> {
+class GetGuildRolesProvider extends FutureProvider<List<Role>?> {
   /// See also [getGuildRoles].
   GetGuildRolesProvider(
     Snowflake guildId,
@@ -396,7 +396,7 @@ class GetGuildRolesProvider extends AutoDisposeFutureProvider<List<Role>?> {
   }
 
   @override
-  AutoDisposeFutureProviderElement<List<Role>?> createElement() {
+  FutureProviderElement<List<Role>?> createElement() {
     return _GetGuildRolesProviderElement(this);
   }
 
@@ -414,13 +414,12 @@ class GetGuildRolesProvider extends AutoDisposeFutureProvider<List<Role>?> {
   }
 }
 
-mixin GetGuildRolesRef on AutoDisposeFutureProviderRef<List<Role>?> {
+mixin GetGuildRolesRef on FutureProviderRef<List<Role>?> {
   /// The parameter `guildId` of this provider.
   Snowflake get guildId;
 }
 
-class _GetGuildRolesProviderElement
-    extends AutoDisposeFutureProviderElement<List<Role>?>
+class _GetGuildRolesProviderElement extends FutureProviderElement<List<Role>?>
     with GetGuildRolesRef {
   _GetGuildRolesProviderElement(super.provider);
 

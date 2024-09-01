@@ -4,12 +4,21 @@ import 'package:bonfire/features/guild/repositories/member.dart';
 import 'package:bonfire/shared/utils/role_color.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:http/http.dart' as http;
 
 part 'role_icon.g.dart';
 
-@riverpod
+// role icon cache using flutter_cache_manager
+var roleIconCache = CacheManager(
+  Config(
+    'role_icon_cache',
+    maxNrOfCacheObjects: 1000,
+  ),
+);
+
+@Riverpod(keepAlive: true)
 Future<Uint8List?> roleIcon(
     RoleIconRef ref, Snowflake guildId, Snowflake authorId) async {
   var member = ref.watch(getMemberProvider(guildId, authorId)).valueOrNull;
@@ -17,9 +26,16 @@ Future<Uint8List?> roleIcon(
   if (member == null || roles == null) return null;
 
   String? url = getRoleIconUrl(member, roles);
+
   if (url == null) return null;
 
+  var fromCache = await roleIconCache.getFileFromCache(url);
+  if (fromCache != null) {
+    return fromCache.file.readAsBytes();
+  }
+
   var bytes = (await http.get(Uri.parse(url))).bodyBytes;
+  await roleIconCache.putFile(url, bytes);
 
   return bytes;
 }
