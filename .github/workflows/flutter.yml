@@ -15,7 +15,7 @@ jobs:
       - uses: bluefireteam/flutter-gh-pages@v7
         with:
           # baseHref: /bonfire/
-          customArgs: --no-tree-shake-icons
+          customArgs: --no-tree-shake-icons --wasm
   build-android:
     runs-on: ubuntu-latest
     steps:
