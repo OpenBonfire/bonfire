@@ -3,19 +3,31 @@ name: Flutter Build with Artifacts
 on: [push, pull_request]
 
 jobs:
-  build:
+  build-web:
     runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/checkout@v2
-      - uses: subosito/flutter-action@v1
-        with:
-          channel: stable
-      - run: flutter pub get
-      - uses: bluefireteam/flutter-gh-pages@v7
-        with:
-          # baseHref: /bonfire/
-          customArgs: --no-tree-shake-icons --wasm
+      - run: flutter config --enable-web
+        shell: bash
+        working-directory: .
+      - run: flutter build web --no-tree-shake-icons --wasm --release
+        shell: bash
+        working-directory: .
+      - run: git config user.name github-actions
+        shell: bash
+        working-directory: .
+      - run: git config user.email github-actions@github.com
+        shell: bash
+        working-directory: .
+      - run: git --work-tree build/web add --all
+        shell: bash
+        working-directory: .
+      - run: git commit -m "Automatic deployment by github-actions"
+        shell: bash
+        working-directory: .
+      - run: git push origin HEAD:gh-pages --force
+        shell: bash
+        working-directory: .
+        
   build-android:
     runs-on: ubuntu-latest
     steps:
