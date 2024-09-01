@@ -20,7 +20,7 @@ jobs:
       - run: flutter config --enable-web
         shell: bash
         working-directory: .
-      - run: flutter build web --no-tree-shake-icons --wasm --release
+      - run: flutter build web --base-href "/" --no-tree-shake-icons --wasm --release
         shell: bash
         working-directory: .
       - run: git config user.name github-actions
