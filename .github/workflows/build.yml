@@ -21,7 +21,7 @@ jobs:
         uses: OpenBonfire/flutter-gh-pages@main
         with:
           baseHref: /
-          compileToWasm: true
+          compileToWasm: false
           customArgs: --no-tree-shake-icons
 
   build-android:

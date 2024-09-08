@@ -47,7 +47,10 @@ class MessageMarkdownBox extends StatelessWidget {
           launchUrl(Uri.parse(href!), mode: LaunchMode.externalApplication);
         },
         styleSheet: MarkdownStyle(
-          paragraph: Theme.of(context).custom.textTheme.bodyText1,
+          paragraph: GoogleFonts.publicSans(
+            fontSize: 14.5,
+            fontWeight: FontWeight.w300,
+          ),
           codeBlock: GoogleFonts.jetBrainsMono(
             fontSize: 14,
           ),

@@ -95,8 +95,7 @@ class _ChannelsListState extends ConsumerState<ChannelsList> {
     }
 
     return Padding(
-      padding: EdgeInsets.only(
-          top: topPadding, right: isSmartwatch(context) ? 0 : 30),
+      padding: EdgeInsets.only(top: topPadding),
       child: Container(
         height: double.infinity,
         decoration: BoxDecoration(

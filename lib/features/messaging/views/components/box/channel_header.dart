@@ -4,6 +4,7 @@ import 'package:bonfire/shared/utils/platform.dart';
 import 'package:bonfire/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class ChannelHeader extends ConsumerStatefulWidget {
   final String channelName;
@@ -52,16 +53,11 @@ class _ChannelHeaderState extends ConsumerState<ChannelHeader> {
                           overflow: TextOverflow.ellipsis,
                           maxLines: 1,
                           softWrap: false,
-                          style: Theme.of(context)
-                              .custom
-                              .textTheme
-                              .titleSmall
-                              .copyWith(
-                                color: Theme.of(context)
-                                    .custom
-                                    .colorTheme
-                                    .channelHeaderText,
-                              ),
+                          style: GoogleFonts.publicSans(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.white,
+                          ),
                         ),
                       ),
                     ),

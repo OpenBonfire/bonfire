@@ -188,7 +188,7 @@ class _ChannelButtonState extends ConsumerState<ChannelButton> {
                                       style: Theme.of(context)
                                           .custom
                                           .textTheme
-                                          .bodyText1
+                                          .bodyText2
                                           .copyWith(
                                               color: (selected || hasUnreads)
                                                   ? Theme.of(context)

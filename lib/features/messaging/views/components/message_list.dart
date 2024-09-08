@@ -9,6 +9,7 @@ import 'package:bonfire/features/messaging/views/components/box/channel_header.d
 import 'package:bonfire/features/messaging/views/components/box/message_loading_animation.dart';
 import 'package:bonfire/features/messaging/views/components/keyboard_buffer.dart';
 import 'package:bonfire/shared/utils/channel_name.dart';
+import 'package:bonfire/theme/theme.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -224,33 +225,35 @@ class _MessageViewState extends ConsumerState<MessageList>
     channelName = getChannelName(channel);
 
     return Scaffold(
-      body: Column(
-        children: [
-          Expanded(
-            child: Stack(
-              children: [
-                FadeTransition(
-                    opacity: _fadeAnimation,
-                    child: Align(
-                      alignment: Alignment.bottomLeft,
-                      child: content,
-                    )),
-                if (!isSmartwatch(context))
-                  ChannelHeader(channelName: channelName),
-              ],
+      body: Container(
+        child: Column(
+          children: [
+            Expanded(
+              child: Stack(
+                children: [
+                  FadeTransition(
+                      opacity: _fadeAnimation,
+                      child: Align(
+                        alignment: Alignment.bottomLeft,
+                        child: content,
+                      )),
+                  if (!isSmartwatch(context))
+                    ChannelHeader(channelName: channelName),
+                ],
+              ),
             ),
-          ),
-          if (!isSmartwatch(context))
-            MessageBar(
-              guildId: guild?.id ?? Snowflake.zero,
-              channel: channel,
-            ),
-          if (!isSmartwatch(context))
-            SizedBox(
-              height: MediaQuery.of(context).padding.bottom,
-            ),
-          if (!isSmartwatch(context)) const KeyboardBuffer()
-        ],
+            if (!isSmartwatch(context))
+              MessageBar(
+                guildId: guild?.id ?? Snowflake.zero,
+                channel: channel,
+              ),
+            if (!isSmartwatch(context))
+              SizedBox(
+                height: MediaQuery.of(context).padding.bottom,
+              ),
+            if (!isSmartwatch(context)) const KeyboardBuffer()
+          ],
+        ),
       ),
     );
   }

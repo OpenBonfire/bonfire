@@ -16,6 +16,7 @@ import 'package:bonfire/theme/theme.dart';
 import 'package:firebridge/firebridge.dart' hide ButtonStyle;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class MessageBox extends ConsumerStatefulWidget {
   final Snowflake messageId;
@@ -327,17 +328,18 @@ class _MessageBoxState extends ConsumerState<MessageBox>
             children: [
               TextSpan(
                 text: name,
-                style: TextStyle(
-                    color: textColor,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700),
+                style: GoogleFonts.publicSans(
+                  color: textColor,
+                  fontSize: 15,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
               const TextSpan(text: '  '),
               TextSpan(
                 text: dateTimeFormat(message.timestamp.toLocal()),
                 style: const TextStyle(
                   color: Color.fromARGB(189, 255, 255, 255),
-                  fontSize: 12,
+                  fontSize: 11,
                 ),
               ),
             ],

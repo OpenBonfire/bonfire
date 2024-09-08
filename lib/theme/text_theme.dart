@@ -15,7 +15,7 @@ class CustomTextTheme {
     fontWeight: FontWeight.w600,
   );
   final titleSmall = TextStyle(
-    fontSize: 18,
+    fontSize: 15,
     fontFamily: _family,
     fontWeight: FontWeight.w600,
   );
@@ -37,6 +37,7 @@ class CustomTextTheme {
     fontSize: 15,
     fontFamily: _family,
     color: const Color.fromARGB(255, 255, 255, 255),
+    fontWeight: FontWeight.bold,
   );
   final bodyText2 = TextStyle(
     fontSize: 15,
