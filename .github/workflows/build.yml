@@ -8,15 +8,14 @@ jobs:
     steps:
       - name: Clone repository
         uses: actions/checkout@v2
-
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
           channel: stable
-
       - name: Install dependencies
         run: flutter pub get
-
+      - name: Create CNAME file
+        run: echo "app.openbonfire.dev" > web/CNAME
       - name: Build and deploy
         uses: OpenBonfire/flutter-gh-pages@main
         with:
