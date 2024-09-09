@@ -1,7 +1,6 @@
 import 'dart:ui';
 import 'package:bonfire/features/overview/controllers/member_list.dart';
 import 'package:bonfire/shared/utils/platform.dart';
-import 'package:bonfire/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';

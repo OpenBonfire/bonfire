@@ -38,7 +38,7 @@ class _HomeState extends ConsumerState<HomeDesktop> {
               guildId: widget.guildId,
             ),
             SizedBox(
-              width: 275,
+              width: 255,
               child: ChannelsList(
                 guildId: widget.guildId,
                 channelId: widget.channelId,
@@ -52,7 +52,7 @@ class _HomeState extends ConsumerState<HomeDesktop> {
             ),
             if (isVisible)
               SizedBox(
-                width: 300,
+                width: 255,
                 child: MemberList(
                   guildId: widget.guildId,
                   channelId: widget.channelId,

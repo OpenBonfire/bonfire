@@ -33,7 +33,7 @@ class DescriptionEmbed extends StatelessWidget {
               top: 0,
               bottom: 0,
               child: Container(
-                width: 8,
+                width: 4,
                 decoration: BoxDecoration(
                   color: embed.color != null
                       ? Color.fromRGBO(

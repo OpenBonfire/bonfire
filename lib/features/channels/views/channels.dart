@@ -95,7 +95,10 @@ class _ChannelsListState extends ConsumerState<ChannelsList> {
     }
 
     return Padding(
-      padding: EdgeInsets.only(top: topPadding),
+      padding: EdgeInsets.only(
+        top: topPadding,
+        right: 8,
+      ),
       child: Container(
         height: double.infinity,
         decoration: BoxDecoration(

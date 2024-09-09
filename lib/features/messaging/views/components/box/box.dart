@@ -330,8 +330,8 @@ class _MessageBoxState extends ConsumerState<MessageBox>
                 text: name,
                 style: GoogleFonts.publicSans(
                   color: textColor,
-                  fontSize: 15,
-                  fontWeight: FontWeight.w500,
+                  fontSize: 15.5,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
               const TextSpan(text: '  '),
