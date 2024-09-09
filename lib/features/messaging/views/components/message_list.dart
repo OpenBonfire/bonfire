@@ -9,7 +9,6 @@ import 'package:bonfire/features/messaging/views/components/box/channel_header.d
 import 'package:bonfire/features/messaging/views/components/box/message_loading_animation.dart';
 import 'package:bonfire/features/messaging/views/components/keyboard_buffer.dart';
 import 'package:bonfire/shared/utils/channel_name.dart';
-import 'package:bonfire/theme/theme.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -103,7 +102,10 @@ class _MessageViewState extends ConsumerState<MessageList>
         bottom: 12,
         top: isSmartwatch(context)
             ? 0
-            : 50, // add the height of the channel header
+            : 50 +
+                MediaQuery.of(context)
+                    .viewPadding
+                    .top, // add the height of the channel header
         left: 0,
         right: 0,
       ),
