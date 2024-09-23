@@ -21,7 +21,7 @@ class GuildController extends _$GuildController {
     }
 
     if (auth is AuthUser) {
-      var guilds = ref.watch(guildsStateProvider);
+      var guilds = ref.watch(guildsStateProvider).valueOrNull;
       if (guilds == null) return null;
       return guilds.where((element) => element.id == guildId).first;
     }

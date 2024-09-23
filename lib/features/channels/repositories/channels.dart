@@ -41,9 +41,13 @@ class Channels extends _$Channels {
       }
 
       var selfMember = selfMembers[guild]!;
-      var rawGuildChannels = await auth.client.guilds.fetchGuildChannels(
-        guild.id,
-      );
+      // var rawGuildChannels = await auth.client.guilds.fetchGuildChannels(
+      //   guild.id,
+      // );
+
+      // works because the onready event has the channels already
+      // will desync since I don't support sync updates for channels
+      var rawGuildChannels = guild.channels!;
 
       List<GuildChannel> guildChannels = [];
 
@@ -54,8 +58,6 @@ class Channels extends _$Channels {
           guildChannels.add(channel);
         }
       }
-
-      // runPrecache(guildChannels);
 
       // first load categories, so we can parent channels later
       for (var channel in guildChannels) {

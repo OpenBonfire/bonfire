@@ -22,7 +22,7 @@ Future<Uint8List?> guildIcon(GuildIconRef ref, Snowflake guildId) async {
   var user = ref.watch(authProvider.notifier).getAuth();
   if (user is! AuthUser) return Uint8List(0);
 
-  Guild guild = ref.watch(guildsStateProvider)!.firstWhereOrNull(
+  Guild guild = ref.watch(guildsStateProvider).valueOrNull!.firstWhereOrNull(
         (element) => element.id == guildId,
       )!;
 

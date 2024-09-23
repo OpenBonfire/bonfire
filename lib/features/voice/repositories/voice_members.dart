@@ -20,7 +20,8 @@ class VoiceMembers extends _$VoiceMembers {
     if (authOutput is AuthUser) {
       user = authOutput;
       Guild voiceGuild = ref
-          .watch(guildsStateProvider)!
+          .watch(guildsStateProvider)
+          .valueOrNull!
           .firstWhere((element) => element.id == guildId);
 
       var allStates = voiceGuild.voiceStates.entries.toList();

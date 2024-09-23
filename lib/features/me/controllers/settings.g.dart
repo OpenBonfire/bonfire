@@ -517,12 +517,12 @@ final customStatusStateProvider =
 );
 
 typedef _$CustomStatusState = Notifier<CustomStatus?>;
-String _$guildsStateHash() => r'cc23fc227059af452ebb927ee332ec09c10595a0';
+String _$guildsStateHash() => r'b7ab1060b5eca0b5e4018f15467437c427b58bdc';
 
 /// See also [GuildsState].
 @ProviderFor(GuildsState)
 final guildsStateProvider =
-    NotifierProvider<GuildsState, List<Guild>?>.internal(
+    AsyncNotifierProvider<GuildsState, List<Guild>?>.internal(
   GuildsState.new,
   name: r'guildsStateProvider',
   debugGetCreateSourceHash:
@@ -531,6 +531,6 @@ final guildsStateProvider =
   allTransitiveDependencies: null,
 );
 
-typedef _$GuildsState = Notifier<List<Guild>?>;
+typedef _$GuildsState = AsyncNotifier<List<Guild>?>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

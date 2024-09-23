@@ -6,7 +6,7 @@ part of 'guild_icon.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$guildIconHash() => r'2834302f8117083853bbc23f660e8b705f98c121';
+String _$guildIconHash() => r'50e4587fec18346a62eed822ec30822d7b425501';
 
 /// Copied from Dart SDK
 class _SystemHash {

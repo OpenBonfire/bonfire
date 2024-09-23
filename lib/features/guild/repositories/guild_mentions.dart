@@ -14,11 +14,12 @@ class GuildMentions extends _$GuildMentions {
     var user = ref.watch(authProvider.notifier).getAuth();
     if (user is! AuthUser) return 0;
 
-    List<Guild> guilds = ref.watch(guildsStateProvider) ?? [];
+    AsyncValue<List<Guild>?> guilds = ref.watch(guildsStateProvider);
 
     // we want to retrieve the guild from settings as it
     // has all of the channels
-    var currentGuild = guilds.firstWhereOrNull((g) => g.id == guildId);
+    var currentGuild =
+        guilds.valueOrNull?.firstWhereOrNull((g) => g.id == guildId);
     var channels = currentGuild?.channels ?? [];
 
     if (currentGuild == null) return 0;

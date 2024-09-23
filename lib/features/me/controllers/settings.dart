@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:bonfire/features/auth/data/repositories/discord_auth.dart';
 import 'package:firebridge/firebridge.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'settings.g.dart';
@@ -12,6 +15,8 @@ event does it provide an initial state, so this isn't really proper convention.
 tldr: We need to make seperate controllers for each feature within the feature folder.
 I am already doing that with friends.
 */
+
+final DefaultCacheManager _cacheManager = DefaultCacheManager();
 
 @Riverpod(keepAlive: true)
 class PrivateMessageHistory extends _$PrivateMessageHistory {
@@ -114,18 +119,26 @@ class CustomStatusState extends _$CustomStatusState {
 @Riverpod(keepAlive: true)
 class GuildsState extends _$GuildsState {
   AuthUser? user;
+  var cacheKey = "guilds";
 
   @override
-  List<Guild>? build() {
+  FutureOr<List<Guild>?> build() async {
+    var cacheData = await _cacheManager.getFileFromCache(cacheKey);
+
+    if (cacheData != null) {
+      var decoded = json.decode(utf8.decode(cacheData.file.readAsBytesSync()));
+      var mapped = (decoded.map((e) => user!.client.guilds.parse(e)).toList());
+      print('got from cache!');
+      return List<Guild>.from(mapped);
+    }
     return null;
   }
 
   void setGuilds(List<Guild> guilds) {
-    // if (guilds.length == state?.length) {
-    //   print("Guild sizes are identical, ignoring state update!!!");
-    //   return;
-    // }
-    state = guilds;
+    _cacheManager.putFile(
+        cacheKey, utf8.encode(json.encode(guilds.map((e) => e.json).toList())));
+    print("set via network");
+    state = AsyncValue.data(guilds);
   }
 }
 

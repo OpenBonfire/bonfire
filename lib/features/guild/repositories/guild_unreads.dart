@@ -9,7 +9,7 @@ part 'guild_unreads.g.dart';
 class GuildUnreads extends _$GuildUnreads {
   @override
   Future<bool> build(Snowflake guildId) async {
-    List<Guild> guilds = ref.watch(guildsStateProvider) ?? [];
+    List<Guild> guilds = ref.watch(guildsStateProvider).valueOrNull ?? [];
     var currentGuild = guilds.firstWhere((g) => g.id == guildId);
     var channels = currentGuild.channels!;
 
