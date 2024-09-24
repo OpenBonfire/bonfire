@@ -179,14 +179,16 @@ class EmbedMarkdownBox extends StatelessWidget {
         }
       },
       styleSheet: MarkdownStyle(
-        paragraph: Theme.of(context).custom.textTheme.bodyText1,
+        paragraph: GoogleFonts.publicSans(
+          fontSize: 14,
+          fontWeight: FontWeight.w300,
+        ),
         codeBlock: GoogleFonts.jetBrainsMono(
           fontSize: 14,
         ),
         codeblockDecoration: BoxDecoration(
-          color: Theme.of(context).custom.colorTheme.foreground,
-          borderRadius: BorderRadius.circular(8),
-        ),
+            color: Theme.of(context).custom.colorTheme.foreground,
+            borderRadius: BorderRadius.circular(8)),
         codeSpan: GoogleFonts.jetBrainsMono(
           backgroundColor: Theme.of(context).custom.colorTheme.foreground,
           fontSize: 14,

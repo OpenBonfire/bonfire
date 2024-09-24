@@ -48,8 +48,8 @@ class MessageMarkdownBox extends StatelessWidget {
         },
         styleSheet: MarkdownStyle(
           paragraph: GoogleFonts.publicSans(
-            fontSize: 14.5,
-            fontWeight: FontWeight.w400,
+            fontSize: 14,
+            fontWeight: FontWeight.w300,
           ),
           codeBlock: GoogleFonts.jetBrainsMono(
             fontSize: 14,

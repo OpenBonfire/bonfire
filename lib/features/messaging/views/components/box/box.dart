@@ -329,16 +329,18 @@ class _MessageBoxState extends ConsumerState<MessageBox>
               TextSpan(
                 text: name,
                 style: GoogleFonts.publicSans(
+                  letterSpacing: 0.3,
                   color: textColor,
-                  fontSize: 15.5,
-                  fontWeight: FontWeight.w600,
+                  fontSize: 15,
+                  fontWeight: FontWeight.w500,
                 ),
               ),
               const TextSpan(text: '  '),
               TextSpan(
                 text: dateTimeFormat(message.timestamp.toLocal()),
-                style: const TextStyle(
-                  color: Color.fromARGB(189, 255, 255, 255),
+                style: GoogleFonts.publicSans(
+                  letterSpacing: 0.3,
+                  color: const Color.fromARGB(189, 255, 255, 255),
                   fontSize: 11,
                 ),
               ),

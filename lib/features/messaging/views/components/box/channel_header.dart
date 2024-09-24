@@ -54,7 +54,8 @@ class _ChannelHeaderState extends ConsumerState<ChannelHeader> {
                           softWrap: false,
                           style: GoogleFonts.publicSans(
                             fontSize: 16,
-                            fontWeight: FontWeight.w600,
+                            letterSpacing: 0.4,
+                            fontWeight: FontWeight.w500,
                             color: Colors.white,
                           ),
                         ),
