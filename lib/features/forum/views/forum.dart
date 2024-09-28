@@ -36,12 +36,14 @@ class _ForumViewState extends ConsumerState<ForumView> {
       );
       print("not null, posts!");
     }
-    return ListView.builder(itemBuilder: (context, index) {
-      return ListTile(
-        title: Text('Forum Post $index'),
-        subtitle: Text('This is the subtitle for post $index'),
-        onTap: () {},
-      );
-    });
+    return Scaffold(
+      body: ListView.builder(itemBuilder: (context, index) {
+        return ListTile(
+          title: Text('Forum Post $index'),
+          subtitle: Text('This is the subtitle for post $index'),
+          onTap: () {},
+        );
+      }),
+    );
   }
 }

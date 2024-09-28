@@ -291,7 +291,7 @@ class _MessageBarState extends ConsumerState<MessageBar> {
                                       .custom
                                       .colorTheme
                                       .messageBarHintText,
-                                  fontWeight: FontWeight.w300,
+                                  fontWeight: FontWeight.w600,
                                 ),
                                 border: InputBorder.none,
                                 isCollapsed: false,
