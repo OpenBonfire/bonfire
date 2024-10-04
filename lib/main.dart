@@ -12,12 +12,15 @@ import 'package:hive_ce/hive.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:universal_io/io.dart';
 import 'package:appflowy_editor/appflowy_editor.dart';
-import 'package:flutter_web_plugins/flutter_web_plugins.dart';
+
+import 'package:bonfire/shared/utils/web_utils/web_utils.dart'
+    if (dart.library.io) 'package:bonfire/shared/utils/web_utils/non_web_utils.dart';
 
 void main() async {
   print("main!");
-  setUrlStrategy(PathUrlStrategy());
-  
+
+  initializePlatform();
+
   VideoPlayerMediaKit.ensureInitialized(
     android: true,
     iOS: true,
@@ -77,7 +80,6 @@ class _MainWindowState extends ConsumerState<MainWindow> {
       systemStatusBarContrastEnforced: false,
       systemNavigationBarContrastEnforced: false,
     ));
-
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: Stack(
