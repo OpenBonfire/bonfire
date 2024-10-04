@@ -10,6 +10,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_web_plugins:
+    sdk: flutter
 
   # fireview:
   #   git:
@@ -71,6 +73,8 @@ dependencies:
   flutter_cache_manager: ^3.4.0
   file_picker: ^8.0.7
   path: ^1.9.0
+  appflowy_editor: ^3.3.0
+  flutter_localization: ^0.2.2
 
 dependency_overrides:
   # webview_flutter_platform_interface: ^2.4.0
@@ -99,11 +103,11 @@ dependency_overrides:
       path: libs/universal/media_kit_libs_video
       ref: main
 
-  media_kit_native_event_loop:
-    git:
-      url: https://github.com/media-kit/media-kit
-      path: media_kit_native_event_loop
-      ref: main
+  # media_kit_native_event_loop:
+  #   git:
+  #     url: https://github.com/media-kit/media-kit
+  #     path: media_kit_native_event_loop
+  #     ref: main
 
   flutter_keyboard_visibility_web:
     git:

@@ -9,6 +9,7 @@
 #include <audioplayers_windows/audioplayers_windows_plugin.h>
 #include <bitsdojo_window_windows/bitsdojo_window_plugin.h>
 #include <file_selector_windows/file_selector_windows.h>
+#include <flutter_localization/flutter_localization_plugin_c_api.h>
 #include <fullscreen_window/fullscreen_window_plugin_c_api.h>
 #include <media_kit_libs_windows_video/media_kit_libs_windows_video_plugin_c_api.h>
 #include <media_kit_video/media_kit_video_plugin_c_api.h>
@@ -23,6 +24,8 @@ void RegisterPlugins(flutter::PluginRegistry* registry) {
       registry->GetRegistrarForPlugin("BitsdojoWindowPlugin"));
   FileSelectorWindowsRegisterWithRegistrar(
       registry->GetRegistrarForPlugin("FileSelectorWindows"));
+  FlutterLocalizationPluginCApiRegisterWithRegistrar(
+      registry->GetRegistrarForPlugin("FlutterLocalizationPluginCApi"));
   FullscreenWindowPluginCApiRegisterWithRegistrar(
       registry->GetRegistrarForPlugin("FullscreenWindowPluginCApi"));
   MediaKitLibsWindowsVideoPluginCApiRegisterWithRegistrar(

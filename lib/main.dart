@@ -11,9 +11,13 @@ import 'package:universal_platform/universal_platform.dart';
 import 'package:hive_ce/hive.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:universal_io/io.dart';
+import 'package:appflowy_editor/appflowy_editor.dart';
+import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 
 void main() async {
   print("main!");
+  setUrlStrategy(PathUrlStrategy());
+  
   VideoPlayerMediaKit.ensureInitialized(
     android: true,
     iOS: true,
@@ -40,6 +44,9 @@ void main() async {
   print("run app!");
   runApp(const ProviderScope(
     child: MaterialApp(
+      localizationsDelegates: [
+        AppFlowyEditorLocalizations.delegate,
+      ],
       home: MainWindow(),
     ),
   ));
