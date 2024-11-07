@@ -95,6 +95,11 @@ I'm pretty new to managing public projects, so you'll have to bear with me here.
 - Run `dart run build_runner watch` in a seperate terminal
 - You are on your way!
 
+## Build issues (mostly linux)
+You may encounter issues on Linux (usually with packaging)
+1. **libmpv cannot be found**: Download `libmpv` / `libmpv-devel` (package name varies per distro). If you get an issue in adjacent to `libmpv cannot be found` and it is installed (particuarly on Fedora), run `sudo ln -s /usr/lib64/libmpv.so.2 /usr/lib64/libmpv.so.1`. This issue also appears when running the release varient from GitHub. I will eventually bundle the depend or apply this fix in the library itself. This issue is tracked at https://github.com/OpenBonfire/bonfire/issues/3.
+2. **various media kit build errors**: You need `mpv` / `mpv-devel`. Fedora will require you to follow the fix for build issue 1.
+
 Don't forget to run `dart run build_runner watch` before developing! This is required when using freezed and riverpod.
 
 ## A quick note for contributors.
