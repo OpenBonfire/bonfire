@@ -76,6 +76,12 @@ class _MemberListState extends ConsumerState<MemberList> {
           topLeft: Radius.circular(8),
           topRight: Radius.circular(8),
         ),
+        border: Border(
+          left: BorderSide(
+            color: Theme.of(context).custom.colorTheme.foreground,
+            width: 1,
+          ),
+        ),
       ),
       child: Column(
         children: [
@@ -139,18 +145,6 @@ class MemberScrollViewState extends ConsumerState<MemberScrollView> {
     ref
         .read(channelMembersProvider.notifier)
         .setRoute(widget.guild.id, widget.channel.id);
-
-    // WidgetsBinding.instance.addPostFrameCallback((_) {
-    //   print("ran post frame");
-    //   var asdf = ref.watch(guildMemberListProvider(widget.guild.id));
-    //   asdf.whenData((data) {
-    //     print("got data!");
-    //     setState(() {
-    //       print("setting state");
-    //       memberListPair = data;
-    //     });
-    //   });
-    // });
   }
 
   @override
@@ -179,46 +173,52 @@ class MemberScrollViewState extends ConsumerState<MemberScrollView> {
     var groupList = memberListPair?.first ?? [];
     var memberList = memberListPair?.second ?? [];
 
-    return ListView.builder(
-      controller: _scrollController,
-      itemCount: memberList.length,
-      itemBuilder: (context, index) {
-        if (isMember(memberList[index])) {
-          var members = memberList[index] as List;
-          return Column(
-            children: members.map<Widget>((member) {
-              member = member as Member;
-              bool shouldRoundBottom = (index == memberList.length - 1) ||
-                  (!isMember(memberList[index + 1]));
-              return Padding(
-                padding: EdgeInsets.only(
-                    right: 8, bottom: shouldRoundBottom ? 8 : 0),
-                child: MemberCard(
-                  member: member,
-                  guild: widget.guild,
-                  channel: widget.channel,
-                  roundTop: (index == 0) || (!isMember(memberList[index - 1])),
-                  roundBottom: shouldRoundBottom,
-                ),
+    return Container(
+      child: ScrollConfiguration(
+        behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
+        child: ListView.builder(
+          controller: _scrollController,
+          itemCount: memberList.length,
+          itemBuilder: (context, index) {
+            if (isMember(memberList[index])) {
+              var members = memberList[index] as List;
+              return Column(
+                children: members.map<Widget>((member) {
+                  member = member as Member;
+                  bool shouldRoundBottom = (index == memberList.length - 1) ||
+                      (!isMember(memberList[index + 1]));
+                  return Padding(
+                    padding: EdgeInsets.only(
+                        right: 8, bottom: shouldRoundBottom ? 8 : 0),
+                    child: MemberCard(
+                      member: member,
+                      guild: widget.guild,
+                      channel: widget.channel,
+                      roundTop:
+                          (index == 0) || (!isMember(memberList[index - 1])),
+                      roundBottom: shouldRoundBottom,
+                    ),
+                  );
+                }).toList(),
               );
-            }).toList(),
-          );
-        }
-        if ((memberList[index] as List<dynamic>).isEmpty) {
-          return Container();
-        }
-        var headerGroup = memberList[index][0] as GuildMemberListGroup;
+            }
+            if ((memberList[index] as List<dynamic>).isEmpty) {
+              return Container();
+            }
+            var headerGroup = memberList[index][0] as GuildMemberListGroup;
 
-        return Padding(
-          padding: EdgeInsets.only(
-              left: isSmartwatch(context) ? 34 : 2, top: 10, bottom: 4),
-          child: GroupHeader(
-            guild: widget.guild,
-            groups: groupList,
-            group: headerGroup,
-          ),
-        );
-      },
+            return Padding(
+              padding: EdgeInsets.only(
+                  left: isSmartwatch(context) ? 34 : 2, top: 10, bottom: 4),
+              child: GroupHeader(
+                guild: widget.guild,
+                groups: groupList,
+                group: headerGroup,
+              ),
+            );
+          },
+        ),
+      ),
     );
   }
 }

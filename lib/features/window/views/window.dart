@@ -3,8 +3,38 @@ import 'package:flutter/material.dart';
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class WindowTopBar extends StatelessWidget {
+class WindowTopBar extends StatefulWidget {
   const WindowTopBar({super.key});
+
+  @override
+  State<WindowTopBar> createState() => _WindowTopBarState();
+}
+
+class _WindowTopBarState extends State<WindowTopBar>
+    with WidgetsBindingObserver {
+  bool isMaximized = false;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    isMaximized = appWindow.isMaximized;
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeMetrics() {
+    if (mounted) {
+      setState(() {
+        isMaximized = appWindow.isMaximized;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +64,7 @@ class WindowTopBar extends StatelessWidget {
                 ),
               ),
               Expanded(child: MoveWindow()),
-              const WindowButtons(),
+              WindowButtons(isMaximized: isMaximized),
             ],
           ),
         ),
@@ -44,14 +74,16 @@ class WindowTopBar extends StatelessWidget {
 }
 
 class WindowButtons extends StatelessWidget {
-  const WindowButtons({super.key});
+  final bool isMaximized;
+
+  const WindowButtons({super.key, required this.isMaximized});
 
   @override
   Widget build(BuildContext context) {
-    return const Row(
+    return Row(
       children: [
         MinimizeWindowButton(),
-        MaximizeRestoreWindowButton(),
+        MaximizeRestoreWindowButton(isMaximized: isMaximized),
         CloseWindowButton(),
       ],
     );
@@ -65,9 +97,10 @@ class MinimizeWindowButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return IconButton(
       icon: Icon(
-          color: Theme.of(context).custom.colorTheme.messageBarActivatedIcon,
-          Icons.minimize,
-          size: 18),
+        color: Theme.of(context).custom.colorTheme.messageBarActivatedIcon,
+        Icons.remove,
+        size: 18,
+      ),
       onPressed: () {
         appWindow.minimize();
       },
@@ -76,18 +109,27 @@ class MinimizeWindowButton extends StatelessWidget {
 }
 
 class MaximizeRestoreWindowButton extends StatelessWidget {
-  const MaximizeRestoreWindowButton({super.key});
+  final bool isMaximized;
+
+  const MaximizeRestoreWindowButton({super.key, required this.isMaximized});
 
   @override
   Widget build(BuildContext context) {
+    // isMaximized ? Icons.crop_square : Icons.filter_none,
     return IconButton(
-      icon: Icon(
-        color: Theme.of(context).custom.colorTheme.messageBarActivatedIcon,
-        appWindow.isMaximized ? Icons.restore : Icons.crop_square,
-        size: 18,
-      ),
+      icon: isMaximized
+          ? const Icon(
+              color: Colors.white,
+              Icons.crop_square_outlined,
+              size: 16,
+            )
+          : const Icon(
+              color: Colors.white,
+              Icons.filter_none_outlined,
+              size: 12,
+            ),
       onPressed: () {
-        if (appWindow.isMaximized) {
+        if (isMaximized) {
           appWindow.restore();
         } else {
           appWindow.maximize();
