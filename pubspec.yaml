@@ -13,9 +13,9 @@ dependencies:
   flutter_web_plugins:
     sdk: flutter
 
-  # fireview:
-  #   git:
-  #     url: https://github.com/OpenBonfire/fireview.git
+  fireview:
+    git:
+      url: https://github.com/EricApostal/fireview
       
   firebridge:
     git:

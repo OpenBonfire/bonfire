@@ -5,15 +5,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class CaptchaView extends ConsumerStatefulWidget {
-  final List<dynamic> captchaKey;
-  final String captchaSitekey;
-  final String captchaService;
-
   const CaptchaView({
     super.key,
-    required this.captchaKey,
-    required this.captchaSitekey,
-    required this.captchaService,
   });
 
   @override
@@ -57,7 +50,7 @@ class _CaptchaViewState extends ConsumerState<CaptchaView> {
               ),
               const SizedBox(height: 16),
               Text(
-                "Alrighty, here's the deal. I need to add captcha support. I still need to finish my webview library before I can do that. So for now, you're gonna have to put your token in directly.",
+                "Because of the goofy way login works on web, you need to input your token in directly. This is for advanced users only.",
                 style: GoogleFonts.publicSans(
                   fontSize: 16,
                   color:

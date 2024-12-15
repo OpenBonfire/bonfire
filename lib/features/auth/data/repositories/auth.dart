@@ -30,7 +30,7 @@ class Auth extends _$Auth {
 
   /// Authenticate client with Discord [username] and [password]
   Future<AuthResponse> loginWithCredentials(
-      String username, String password, bool store) async {
+      String username, String password) async {
     Map<String, Object?> body = {
       'gift_code_sku_id': null,
       'login': username,
@@ -70,17 +70,7 @@ class Auth extends _$Auth {
         'INVALID_LOGIN') {
       authResponse =
           FailedAuth(error: json['errors']['login']['_errors'][0]['message']);
-      if (store == false) {
-        state = authResponse;
-      } else {
-        // store in hive
-        if (authResponse is AuthUser) {
-          print("SAVING AUTH");
-          var box = await Hive.openBox('added-accounts');
-          box.put('username', username);
-          box.put('token', authResponse.token);
-        }
-      }
+      state = authResponse;
     } else {
       throw Exception('Unknown response');
     }

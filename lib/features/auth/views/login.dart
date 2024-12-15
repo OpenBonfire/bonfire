@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hive_ce/hive.dart';
+import 'package:universal_platform/universal_platform.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
@@ -42,26 +43,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       }
     });
 
-    return Stack(
-      children: [
-        const CredentialsScreen(
-          storeCredentials: false,
-        ),
-        if (auth is CaptchaResponse)
-          Positioned.fill(
-            child: Container(
-              color: Colors.black.withOpacity(0.5),
-              child: Center(
-                child: CaptchaView(
-                  captchaKey: auth.captcha_key,
-                  captchaService: auth.captcha_service,
-                  captchaSitekey: auth.captcha_sitekey,
-                ),
-              ),
-            ),
-          ),
-      ],
-    );
+    if (auth == null) {
+      return const Center(child: CircularProgressIndicator());
+    } else {
+      if (UniversalPlatform.isWeb) {
+        return CaptchaView();
+      }
+      return const CredentialsScreen();
+    }
   }
 
   void _navigateToLastLocation() async {

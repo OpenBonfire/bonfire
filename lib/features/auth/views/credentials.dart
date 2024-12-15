@@ -3,13 +3,13 @@ import 'package:bonfire/features/auth/models/auth.dart';
 import 'package:bonfire/shared/widgets/confirm_button.dart';
 import 'package:bonfire/theme/text_theme.dart';
 import 'package:bonfire/theme/theme.dart';
+import 'package:fireview/fireview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class CredentialsScreen extends ConsumerStatefulWidget {
-  final bool storeCredentials;
-  const CredentialsScreen({super.key, required this.storeCredentials});
+  const CredentialsScreen({super.key});
 
   @override
   ConsumerState<CredentialsScreen> createState() => _LoginState();
@@ -20,6 +20,7 @@ enum LoginType { username, password }
 class _LoginState extends ConsumerState<CredentialsScreen> {
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final FireviewController fireviewController = FireviewController();
 
   @override
   void dispose() {
@@ -89,7 +90,32 @@ class _LoginState extends ConsumerState<CredentialsScreen> {
     String password = passwordController.text;
     return await ref
         .read(authProvider.notifier)
-        .loginWithCredentials(username, password, widget.storeCredentials);
+        .loginWithCredentials(username, password);
+  }
+
+  @override
+  void initState() {
+    fireviewController.clearCache();
+    fireviewController.initialize(Uri.parse("https://discord.com/login"));
+    fireviewController.titleStream.listen((title) {
+      setState(() {
+        if (title!.contains("Friends")) {
+          // thanks: https://stackoverflow.com/questions/67348339/any-way-to-get-my-discord-token-from-browser-dev-console
+          fireviewController
+              .evaluateJavascript(
+                  "(webpackChunkdiscord_app.push([[''],{},e=>{m=[];for(let c in e.c)m.push(e.c[c])}]),m).find(m=>m?.exports?.default?.getToken!==void 0).exports.default.getToken();")
+              .then((value) async {
+            await ref
+                .read(authProvider.notifier)
+                .loginWithToken(value as String);
+          });
+        }
+      });
+    });
+    fireviewController
+        .evaluateJavascript("document.body.style.backgroundColor = '#14161A';");
+
+    super.initState();
   }
 
   @override
@@ -104,43 +130,27 @@ class _LoginState extends ConsumerState<CredentialsScreen> {
           // ),
           Column(
             children: [
+              const SizedBox(height: 40),
+              Text(
+                "Welcome Back!",
+                style: CustomTextTheme().titleLarge,
+              ),
+              Text(
+                "Let's get ya signed in",
+                style: GoogleFonts.publicSans(
+                  color: const Color(0xFFC8C8C8),
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              const SizedBox(height: 40),
               Expanded(
-                child: SingleChildScrollView(
+                child: SizedBox(
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        const SizedBox(height: 40),
-                        Text(
-                          "Welcome Back!",
-                          style: CustomTextTheme().titleLarge,
-                        ),
-                        Text(
-                          "Let's get ya signed in",
-                          style: GoogleFonts.publicSans(
-                            color: const Color(0xFFC8C8C8),
-                            fontSize: 18,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        const SizedBox(height: 80),
-                        Form(
-                          child: AutofillGroup(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                loginBox(LoginType.username),
-                                const SizedBox(height: 20),
-                                loginBox(LoginType.password),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+                    child: ClipRRect(
+                        borderRadius: BorderRadius.circular(24),
+                        child: Fireview(controller: fireviewController)),
                   ),
                 ),
               ),
