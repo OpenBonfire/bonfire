@@ -164,7 +164,7 @@ class _PrivateMessagesState extends ConsumerState<PrivateMessages> {
                       Expanded(
                         child: ListView.builder(
                           padding: EdgeInsets.only(bottom: bottomPadding),
-                          itemCount: dms.length + 1,
+                          itemCount: dms.length,
                           itemBuilder: (context, index) {
                             if (index == 0) {
                               return TopButtons(

@@ -69,6 +69,7 @@ class OverlappingPanelsState extends State<OverlappingPanels>
   late Animation<double> _animation;
   double _translate = 0;
   int _lastDelta = 0;
+  int _lastLastDelta = 0;
   bool _ignoreGestures = false;
   late HorizontalDragGestureRecognizer _panelDragRecognizer;
 
@@ -132,20 +133,25 @@ class OverlappingPanelsState extends State<OverlappingPanels>
   void _onApplyTranslation() {
     final mediaWidth = MediaQuery.of(context).size.width;
 
+    var _averagedDelta = (_lastDelta + _lastLastDelta) / 2;
+    print("LastDelta $_lastDelta");
+    print("LastLastDelta $_lastLastDelta");
+    print("AveragedDelta $_averagedDelta");
+
     var goal = 0.0;
-    if (_lastDelta > 0) {
+    if (_averagedDelta > 0) {
       goal = _calculateGoal(mediaWidth, 1);
     }
 
-    if (_lastDelta < 0) {
+    if (_averagedDelta < 0) {
       goal = _calculateGoal(mediaWidth, -1);
     }
 
-    if (_lastDelta > 0 && _translate < 0) {
+    if (_averagedDelta > 0 && _translate < 0) {
       goal = 0;
     }
 
-    if (_lastDelta < 0 && _translate > 0) {
+    if (_averagedDelta < 0 && _translate > 0) {
       goal = 0;
     }
 
@@ -210,6 +216,7 @@ class OverlappingPanelsState extends State<OverlappingPanels>
 
   void _handleDragUpdate(DragUpdateDetails details) {
     if (!_ignoreGestures) {
+      _lastLastDelta = _lastDelta;
       _lastDelta = details.delta.dx.toInt();
       onTranslate(details.delta.dx);
     }
