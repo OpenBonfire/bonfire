@@ -16,6 +16,7 @@ dependencies:
   fireview:
     git:
       url: https://github.com/EricApostal/fireview
+      ref: 5a375a70c5c8ccb8914dc10b309e01d07ba1cada
       
   firebridge:
     git:
@@ -65,7 +66,7 @@ dependencies:
   loading_animation_widget: ^1.2.1
   hive_ce: ^2.5.0
   universal_io: ^2.2.2
-  video_player: ^2.9.1
+
   flutter_circular_text: ^0.3.1
   flutter_thumbhash: ^0.1.0+1
   video_thumbnail_imageview: ^0.0.6
@@ -74,6 +75,7 @@ dependencies:
   path: ^1.9.0
   appflowy_editor: ^3.3.0
   flutter_localization: ^0.2.2
+  video_player: ^2.9.2
 
 dependency_overrides:
   # webview_flutter_platform_interface: ^2.4.0

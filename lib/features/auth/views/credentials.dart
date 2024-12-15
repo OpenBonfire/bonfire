@@ -21,6 +21,7 @@ class _LoginState extends ConsumerState<CredentialsScreen> {
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final FireviewController fireviewController = FireviewController();
+  bool fireviewInitialized = false;
 
   @override
   void dispose() {
@@ -95,25 +96,31 @@ class _LoginState extends ConsumerState<CredentialsScreen> {
 
   @override
   void initState() {
-    fireviewController.clearCache();
-    fireviewController.initialize(Uri.parse("https://discord.com/login"));
-    fireviewController.titleStream.listen((title) {
+    fireviewController
+        .initialize(Uri.parse("https://discord.com/login"))
+        .then((_) async {
+      await fireviewController.clearCookies();
+      await fireviewController.clearCache();
+
       setState(() {
-        if (title!.contains("Friends")) {
-          // thanks: https://stackoverflow.com/questions/67348339/any-way-to-get-my-discord-token-from-browser-dev-console
+        fireviewInitialized = true;
+      });
+
+      fireviewController.urlStream.listen((url) async {
+        if (url.toString() == "https://discord.com/channels/@me") {
           fireviewController
               .evaluateJavascript(
                   "(webpackChunkdiscord_app.push([[''],{},e=>{m=[];for(let c in e.c)m.push(e.c[c])}]),m).find(m=>m?.exports?.default?.getToken!==void 0).exports.default.getToken();")
               .then((value) async {
             await ref
                 .read(authProvider.notifier)
-                .loginWithToken(value as String);
+                .loginWithToken((value as String).replaceAll('"', ""));
           });
         }
       });
+      fireviewController.evaluateJavascript(
+          "document.body.style.backgroundColor = '#14161A';");
     });
-    fireviewController
-        .evaluateJavascript("document.body.style.backgroundColor = '#14161A';");
 
     super.initState();
   }
@@ -149,8 +156,11 @@ class _LoginState extends ConsumerState<CredentialsScreen> {
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: ClipRRect(
-                        borderRadius: BorderRadius.circular(24),
-                        child: Fireview(controller: fireviewController)),
+                      borderRadius: BorderRadius.circular(24),
+                      child: fireviewInitialized
+                          ? Fireview(controller: fireviewController)
+                          : const SizedBox(),
+                    ),
                   ),
                 ),
               ),

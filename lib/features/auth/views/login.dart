@@ -43,14 +43,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       }
     });
 
-    if (auth == null) {
-      return const Center(child: CircularProgressIndicator());
-    } else {
-      if (UniversalPlatform.isWeb) {
-        return CaptchaView();
-      }
-      return const CredentialsScreen();
+    if (UniversalPlatform.isWeb) {
+      return const CaptchaView();
     }
+    return const CredentialsScreen();
   }
 
   void _navigateToLastLocation() async {
