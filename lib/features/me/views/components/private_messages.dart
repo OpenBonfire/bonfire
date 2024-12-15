@@ -172,7 +172,7 @@ class _PrivateMessagesState extends ConsumerState<PrivateMessages> {
                               );
                             }
                             return DirectMessageMember(
-                              privateChannel: dms[index],
+                              privateChannel: dms[index - 1],
                               currentChannelId: widget.channelId,
                             );
                           },

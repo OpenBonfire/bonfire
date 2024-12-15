@@ -88,7 +88,8 @@ class Channels extends _$Channels {
   }
 
   Future<void> saveToCache(List<Channel> channels) async {
-    Guild guild = ref.watch(guildControllerProvider(guildId)).valueOrNull!;
+    Guild? guild = ref.watch(guildControllerProvider(guildId)).valueOrNull;
+    if (guild == null) return;
     var cacheKey = "channels_${guild.id.value}";
     await _cacheManager.putFile(
       cacheKey,

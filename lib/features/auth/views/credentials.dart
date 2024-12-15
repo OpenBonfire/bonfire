@@ -27,6 +27,7 @@ class _LoginState extends ConsumerState<CredentialsScreen> {
   void dispose() {
     usernameController.dispose();
     passwordController.dispose();
+    fireviewController.dispose();
     super.dispose();
   }
 
@@ -166,12 +167,12 @@ class _LoginState extends ConsumerState<CredentialsScreen> {
               ),
               Padding(
                 padding: EdgeInsets.only(
-                  bottom: bottomPadding,
+                  bottom: bottomPadding + 12,
                 ),
-                child: ConfirmButton(
-                  text: "CONFIRM",
-                  onPressed: submitCredentials,
-                ),
+                // child: ConfirmButton(
+                //   text: "CONFIRM",
+                //   onPressed: submitCredentials,
+                // ),
               ),
             ],
           ),
