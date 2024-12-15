@@ -42,6 +42,7 @@ class Guilds extends _$Guilds {
 
       // Wait for all guilds to be fetched concurrently
       List<UserGuild> fetchedGuilds = await Future.wait(guildFutures);
+      state = AsyncValue.data(fetchedGuilds);
       return fetchedGuilds;
     } else {
       print("Not an auth user. This is probably very bad.");

@@ -2,6 +2,7 @@ import 'package:bonfire/features/guild/repositories/guilds.dart';
 import 'package:bonfire/features/me/controllers/settings.dart';
 import 'package:bonfire/features/sidebar/components/guild_folder.dart';
 import 'package:bonfire/features/sidebar/components/messages_icon.dart';
+import 'package:bonfire/features/sidebar/components/sidebar_icon.dart';
 import 'package:bonfire/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -28,6 +29,53 @@ class _SidebarState extends ConsumerState<Sidebar> {
     super.dispose();
   }
 
+  List<Widget> _buildGuildList(
+      List<UserGuild> allGuilds, List<GuildFolder>? folders) {
+    List<Widget> items = [];
+
+    // set of guild IDs that are in foldersp
+    Set<Snowflake> folderedGuildIds = {};
+    if (folders != null) {
+      for (var folder in folders) {
+        folderedGuildIds.addAll(folder.guildIds);
+      }
+    }
+
+    // guilds that are not in folders
+    for (var guild in allGuilds) {
+      if (!folderedGuildIds.contains(guild.id)) {
+        items.add(
+          Padding(
+            padding: EdgeInsets.only(bottom: iconSpacing),
+            child: SidebarIcon(
+              selected: widget.guildId == guild.id,
+              guild: guild,
+              isClickable: true,
+            ),
+          ),
+        );
+      }
+    }
+
+    // folders
+    if (folders != null) {
+      for (var folder in folders) {
+        items.add(
+          Padding(
+            padding: EdgeInsets.only(bottom: iconSpacing),
+            child: GuildFolderWidget(
+              guildFolder: folder,
+              guildList: allGuilds,
+              selectedGuildId: widget.guildId,
+            ),
+          ),
+        );
+      }
+    }
+
+    return items;
+  }
+
   @override
   Widget build(BuildContext context) {
     var guildWatch = ref.watch(guildsProvider);
@@ -47,6 +95,7 @@ class _SidebarState extends ConsumerState<Sidebar> {
         loading: () {});
 
     List<GuildFolder>? guildFolders = guildFoldersWatch;
+
     return Container(
       decoration: BoxDecoration(
         color: Theme.of(context).custom.colorTheme.background,
@@ -98,15 +147,7 @@ class _SidebarState extends ConsumerState<Sidebar> {
                                 Theme.of(context).custom.colorTheme.foreground,
                           ),
                         ),
-                        if (guildFolders != null)
-                          ...guildFolders.map((folder) => Padding(
-                                padding: EdgeInsets.only(bottom: iconSpacing),
-                                child: GuildFolderWidget(
-                                  guildFolder: folder,
-                                  guildList: guildList,
-                                  selectedGuildId: widget.guildId,
-                                ),
-                              )),
+                        ..._buildGuildList(guildList, guildFolders),
                         SizedBox(height: bottomPadding + navbarHeight)
                       ],
                     ),
