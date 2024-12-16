@@ -13,7 +13,13 @@ import 'package:bonfire/shared/utils/platform.dart';
 class HomeMobile extends ConsumerStatefulWidget {
   final Snowflake guildId;
   final Snowflake channelId;
-  const HomeMobile({super.key, required this.guildId, required this.channelId});
+  final Snowflake? threadId;
+  const HomeMobile({
+    super.key,
+    required this.guildId,
+    required this.channelId,
+    this.threadId,
+  });
 
   @override
   ConsumerState<HomeMobile> createState() => _HomeState();
@@ -105,6 +111,7 @@ class _HomeState extends ConsumerState<HomeMobile>
             main: MessageView(
               guildId: widget.guildId,
               channelId: widget.channelId,
+              threadId: widget.threadId,
             ),
             right: MemberList(
               guildId: widget.guildId,

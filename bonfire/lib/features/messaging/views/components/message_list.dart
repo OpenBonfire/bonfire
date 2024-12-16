@@ -17,8 +17,13 @@ import 'package:bonfire/shared/utils/platform.dart';
 class MessageList extends ConsumerStatefulWidget {
   final Snowflake guildId;
   final Snowflake channelId;
-  const MessageList(
-      {super.key, required this.guildId, required this.channelId});
+  final Snowflake? threadId;
+  const MessageList({
+    super.key,
+    required this.guildId,
+    required this.channelId,
+    this.threadId,
+  });
 
   @override
   ConsumerState<MessageList> createState() => _MessageViewState();
@@ -40,6 +45,7 @@ class _MessageViewState extends ConsumerState<MessageList>
   @override
   void initState() {
     super.initState();
+
     _scrollController.addListener(_scrollListener);
 
     _fadeController = AnimationController(
@@ -81,7 +87,11 @@ class _MessageViewState extends ConsumerState<MessageList>
     lastScrollMessage = lastScrollMessage ?? firstBatchLastMessage!;
     List<Message>? recents = await ref
         .read(messagesProvider(widget.channelId).notifier)
-        .fetchMessages(before: lastScrollMessage!, limit: 50);
+        .fetchMessages(
+          before: lastScrollMessage!,
+          limit: 50,
+          around: widget.threadId,
+        );
 
     if (recents.isNotEmpty) {
       if (lastScrollMessage?.id != recents.last.id) {

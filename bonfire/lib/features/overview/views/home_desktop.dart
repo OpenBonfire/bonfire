@@ -11,8 +11,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class HomeDesktop extends ConsumerStatefulWidget {
   final Snowflake guildId;
   final Snowflake channelId;
-  const HomeDesktop(
-      {super.key, required this.guildId, required this.channelId});
+  final Snowflake? threadId;
+  const HomeDesktop({
+    super.key,
+    required this.guildId,
+    required this.channelId,
+    this.threadId,
+  });
 
   @override
   ConsumerState<HomeDesktop> createState() => _HomeState();
@@ -48,6 +53,7 @@ class _HomeState extends ConsumerState<HomeDesktop> {
               child: MessageView(
                 guildId: widget.guildId,
                 channelId: widget.channelId,
+                threadId: widget.threadId,
               ),
             ),
             if (isVisible)

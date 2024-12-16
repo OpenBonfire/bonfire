@@ -11,8 +11,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class GuildMessagingOverview extends ConsumerStatefulWidget {
   final Snowflake guildId;
   final Snowflake channelId;
-  const GuildMessagingOverview(
-      {super.key, required this.guildId, required this.channelId});
+  final Snowflake? threadId;
+  const GuildMessagingOverview({
+    super.key,
+    required this.guildId,
+    required this.channelId,
+    this.threadId,
+  });
 
   @override
   ConsumerState<GuildMessagingOverview> createState() => _HomeState();
@@ -29,14 +34,17 @@ class _HomeState extends ConsumerState<GuildMessagingOverview> {
 
   @override
   Widget build(BuildContext context) {
+    print("GuildMessagingOverview.build");
     return (shouldUseMobileLayout(context))
         ? HomeMobile(
             guildId: widget.guildId,
             channelId: widget.channelId,
+            threadId: widget.threadId,
           )
         : HomeDesktop(
             guildId: widget.guildId,
             channelId: widget.channelId,
+            threadId: widget.threadId,
           );
   }
 }

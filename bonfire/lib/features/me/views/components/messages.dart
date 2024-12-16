@@ -9,8 +9,13 @@ import 'package:google_fonts/google_fonts.dart';
 class MessageView extends ConsumerStatefulWidget {
   final Snowflake guildId;
   final Snowflake channelId;
-  const MessageView(
-      {super.key, required this.guildId, required this.channelId});
+  final Snowflake? threadId;
+  const MessageView({
+    super.key,
+    required this.guildId,
+    required this.channelId,
+    this.threadId,
+  });
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _MessageViewState();
@@ -19,13 +24,21 @@ class MessageView extends ConsumerStatefulWidget {
 class _MessageViewState extends ConsumerState<MessageView> {
   @override
   Widget build(BuildContext context) {
+    var channelId = widget.channelId;
+    if (widget.threadId != null) {
+      channelId = widget.threadId!;
+    }
     Channel? channel =
-        ref.watch(channelControllerProvider(widget.channelId)).valueOrNull;
+        ref.watch(channelControllerProvider(channelId)).valueOrNull;
 
     if (channel is TextChannel) {
-      return MessageList(guildId: widget.guildId, channelId: widget.channelId);
+      return MessageList(
+        guildId: widget.guildId,
+        channelId: channelId,
+        threadId: widget.threadId,
+      );
     } else if (channel is ForumChannel) {
-      return ForumView(guildId: widget.guildId, channelId: widget.channelId);
+      return ForumView(guildId: widget.guildId, channelId: channelId);
     } else if (channel == null) {
       return const Center(child: CircularProgressIndicator());
     }

@@ -1,6 +1,7 @@
 import 'package:bonfire/features/forum/repositories/forum_posts.dart';
 import 'package:bonfire/features/forum/repositories/forums.dart';
 import 'package:bonfire/features/forum/views/components/card/card.dart';
+import 'package:bonfire/features/messaging/views/components/box/channel_header.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -66,21 +67,29 @@ class _ForumViewState extends ConsumerState<ForumView> {
               return (threadList?.threads ?? []) as List<Channel>;
             }).toList();
 
-            return ListView.builder(
-              controller: _scrollController,
-              itemCount: threads.length,
-              itemBuilder: (context, index) {
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: 8.0),
-                  child: ThreadCard(
-                    channelId: threads[index].id,
-                    scrollController: _scrollController,
+            return Stack(
+              children: [
+                ListView.builder(
+                  controller: _scrollController,
+                  itemCount: threads.length,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 8.0),
+                      child: ThreadCard(
+                        threadId: threads[index].id,
+                        channelId: channel.id,
+                      ),
+                    );
+                  },
+                  padding: EdgeInsets.only(
+                    top: MediaQuery.of(context).padding.top + 60,
+                    bottom: MediaQuery.of(context).padding.bottom,
                   ),
-                );
-              },
-              padding: const EdgeInsets.only(
-                top: 8,
-              ),
+                ),
+                ChannelHeader(
+                  channelName: channel.name,
+                ),
+              ],
             );
           },
           loading: () => threads.isEmpty
@@ -93,7 +102,7 @@ class _ForumViewState extends ConsumerState<ForumView> {
                       padding: const EdgeInsets.only(bottom: 8.0),
                       child: ThreadCard(
                         channelId: threads[index].id,
-                        scrollController: _scrollController,
+                        threadId: threads[index].id,
                       ),
                     );
                   },

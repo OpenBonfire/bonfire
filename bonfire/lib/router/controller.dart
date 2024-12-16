@@ -84,6 +84,31 @@ final routerController = GoRouter(
                   ),
                 );
               },
+              routes: [
+                GoRoute(
+                  path: 'threads/:threadId',
+                  pageBuilder: (context, state) {
+                    print("threadId: ${state.pathParameters['threadId']}");
+                    print("full path: ${state.fullPath}");
+                    final guildId = state.pathParameters['guildId']!;
+                    final channelId = state.pathParameters['channelId']!;
+                    final threadId = state.pathParameters['threadId']!;
+                    var lastLocation = Hive.box("last-location");
+                    lastLocation.put("guildId", guildId);
+                    lastLocation.put("channelId", channelId);
+                    lastLocation.put("threadId", threadId);
+                    return buildPageWithNoTransition(
+                      context: context,
+                      state: state,
+                      child: GuildMessagingOverview(
+                        guildId: Snowflake.parse(guildId),
+                        channelId: Snowflake.parse(channelId),
+                        threadId: Snowflake.parse(threadId),
+                      ),
+                    );
+                  },
+                ),
+              ],
             ),
           ],
         ),

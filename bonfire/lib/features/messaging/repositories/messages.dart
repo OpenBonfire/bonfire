@@ -54,6 +54,7 @@ class Messages extends _$Messages {
 
   Future<List<Message>?> getMessages({
     Snowflake? before,
+    Snowflake? around,
     int? count,
     bool disableAck = false,
   }) async {
@@ -93,9 +94,9 @@ class Messages extends _$Messages {
 
       var messages = await (channel as TextChannel)
           .messages
-          .fetchMany(limit: count ?? 50, before: before);
+          .fetchMany(limit: count ?? 50, before: before, around: around);
 
-      if (before == null) {
+      if (before == null && around == null) {
         loadedMessages = messages.toList();
       } else {
         loadedMessages.addAll(messages.toList());
@@ -119,7 +120,11 @@ class Messages extends _$Messages {
     }
   }
 
-  Future<List<Message>> fetchMessages({Message? before, int? limit}) async {
+  Future<List<Message>> fetchMessages({
+    Message? before,
+    int? limit,
+    Snowflake? around,
+  }) async {
     Channel channel =
         ref.watch(channelControllerProvider(channelId)).valueOrNull!;
     List<Message> messages = [];
@@ -127,6 +132,7 @@ class Messages extends _$Messages {
     messages.addAll(loadedMessages);
     messages.addAll(await getMessages(
           before: before?.id,
+          around: around,
           count: limit,
         ) ??
         []);
