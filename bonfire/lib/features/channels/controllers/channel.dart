@@ -10,6 +10,8 @@ part 'channel.g.dart';
 class ChannelController extends _$ChannelController {
   Channel? channel;
 
+  // TODO: We don't need to cache this, we should get it onReady then on the subsequent events
+
   @override
   Future<Channel?> build(Snowflake channelId) async {
     var auth = ref.watch(authProvider.notifier).getAuth();

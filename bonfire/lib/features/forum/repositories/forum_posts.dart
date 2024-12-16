@@ -1,5 +1,7 @@
 import 'package:bonfire/features/auth/data/repositories/auth.dart';
 import 'package:bonfire/features/auth/data/repositories/discord_auth.dart';
+import 'package:bonfire/features/forum/controllers/forum.dart';
+import 'package:bonfire/features/messaging/controllers/message.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -8,24 +10,70 @@ part 'forum_posts.g.dart';
 /// Fetches a forum channel from the [channelId].
 @Riverpod(keepAlive: true)
 class ForumPosts extends _$ForumPosts {
+  int _currentOffset = 0;
+  bool _hasMore = true;
+
   @override
-  Future<ThreadList?> build(Snowflake channelId) async {
+  Future<List<ThreadList?>> build(Snowflake channelId) async {
+    _currentOffset = 0;
+    _hasMore = true;
+    return [await _fetchThreads(channelId)];
+  }
+
+  Future<ThreadList?> _fetchThreads(Snowflake channelId) async {
     var auth = ref.watch(authProvider.notifier).getAuth();
 
     if (auth is AuthUser) {
       Channel channel = await auth.client.channels.get(channelId);
       if (channel is ForumChannel) {
-        print("is a forum channel");
-        Guild guild = await auth.client.guilds.get(channel.guildId);
-        // ThreadList threads = []; // await guild.listActiveThreads();
+        ThreadList? threadData = await channel.manager.searchThreads(
+          channel.id,
+          25,
+          offset: _currentOffset,
+        );
 
-        // print('got active threads');
-        // print(threads);
+        if (threadData != null) {
+          _hasMore = threadData.threads.length == 25;
 
-        // return channel.listPublicArchivedThreads()
+          threadData.threads.forEach((element) {
+            ref
+                .read(threadChannelProvider(element.id).notifier)
+                .setThreadChannel(element);
+          });
+
+          int idx = 0;
+          threadData.firstMessages.forEach((message) {
+            ref
+                .read(messageControllerProvider(message.id).notifier)
+                .setMessage(message);
+
+            var thread = threadData.threads[idx];
+
+            ref
+                .read(firstMessageProvider(thread.id).notifier)
+                .setFirstMessage(message);
+
+            idx++;
+          });
+
+          return threadData;
+        }
       }
     }
 
     return null;
   }
+
+  Future<void> loadMore() async {
+    if (!_hasMore) return;
+
+    _currentOffset += 25;
+    final newThreads = await _fetchThreads(channelId);
+
+    if (newThreads != null) {
+      state = AsyncData([...state.value ?? [], newThreads]);
+    }
+  }
+
+  bool get hasMore => _hasMore;
 }

@@ -296,8 +296,10 @@ class _MessageBarState extends ConsumerState<MessageBar> {
                                 border: InputBorder.none,
                                 isCollapsed: false,
                               ),
-                              style:
-                                  Theme.of(context).custom.textTheme.bodyText1,
+                              style: GoogleFonts.publicSans(
+                                  color: const Color(0xFFBDBDBD),
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 14.5),
                               cursorColor: Colors.white,
                             ),
                           ),

@@ -129,6 +129,12 @@ class MemberScrollViewState extends ConsumerState<MemberScrollView> {
     Snowflake newGuildId = Snowflake.parse(
         _router.routerDelegate.currentConfiguration.pathParameters["guildId"] ??
             0);
+
+    String? cId =
+        _router.routerDelegate.currentConfiguration.pathParameters["channelId"];
+
+    if (cId == null) return;
+
     Snowflake newChannelId = Snowflake.parse(_router
         .routerDelegate.currentConfiguration.pathParameters["channelId"]!);
     ref

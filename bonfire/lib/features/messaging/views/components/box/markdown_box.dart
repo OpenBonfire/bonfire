@@ -77,8 +77,9 @@ class _MessageMarkdownBoxState extends State<MessageMarkdownBox> {
       },
       styleSheet: MarkdownStyle(
         paragraph: GoogleFonts.publicSans(
-          fontSize: 14,
-          fontWeight: FontWeight.w400,
+          fontSize: 14.5,
+          fontWeight: FontWeight.w500,
+          color: const Color(0xFFBDBDBD),
         ),
         codeBlock: GoogleFonts.jetBrainsMono(
           fontSize: 14,

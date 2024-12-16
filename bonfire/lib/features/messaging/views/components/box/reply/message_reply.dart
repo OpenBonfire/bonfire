@@ -68,7 +68,7 @@ class MessageReply extends ConsumerWidget {
                   TextSpan(
                     text: parentMessage.referencedMessage!.content,
                     style: GoogleFonts.publicSans(
-                      color: Colors.white,
+                      color: const Color(0xFFBDBDBD),
                       fontSize: 12,
                     ),
                   ),

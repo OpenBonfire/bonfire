@@ -85,15 +85,13 @@ class DescriptionEmbed extends StatelessWidget {
                         style: GoogleFonts.publicSans(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
-                          color: embed.color != null
-                              ? Colors.white
-                              : Theme.of(context).custom.colorTheme.blurple,
+                          color: Colors.white,
                         ),
                       ),
                     ),
                   if (embed.description != null)
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
+                      padding: const EdgeInsets.fromLTRB(8, 4, 8, 8),
                       child: EmbedMarkdownBox(embed: embed),
                     ),
                   if (embed.image != null)
@@ -124,7 +122,10 @@ class DescriptionEmbed extends StatelessWidget {
                           Text(
                             embed.footer!.text,
                             style: GoogleFonts.publicSans(
-                                fontSize: 12, color: Colors.white),
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                              color: const Color(0xFFBDBDBD),
+                            ),
                           ),
                         ],
                       ),
@@ -181,7 +182,7 @@ class EmbedMarkdownBox extends StatelessWidget {
       styleSheet: MarkdownStyle(
         paragraph: GoogleFonts.publicSans(
           fontSize: 14,
-          fontWeight: FontWeight.w300,
+          fontWeight: FontWeight.w500,
         ),
         codeBlock: GoogleFonts.jetBrainsMono(
           fontSize: 14,

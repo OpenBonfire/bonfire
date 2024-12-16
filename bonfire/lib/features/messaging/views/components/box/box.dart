@@ -332,7 +332,7 @@ class _MessageBoxState extends ConsumerState<MessageBox>
                   letterSpacing: 0.3,
                   color: textColor,
                   fontSize: 15,
-                  fontWeight: FontWeight.w500,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
               const TextSpan(text: '  '),

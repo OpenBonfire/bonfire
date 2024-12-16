@@ -18,19 +18,21 @@ class NavigationBarWidget extends ConsumerStatefulWidget {
 class _BarWidgetState extends ConsumerState<NavigationBarWidget> {
   bool visible = false;
   Uri? _selectedPath;
+  late final RouterDelegate routerDelegate;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _updateSelectedPath();
-      GoRouter.of(context).routerDelegate.addListener(_updateSelectedPath);
+      routerDelegate = GoRouter.of(context).routerDelegate;
+      routerDelegate.addListener(_updateSelectedPath);
     });
   }
 
   @override
   void dispose() {
-    GoRouter.of(context).routerDelegate.removeListener(_updateSelectedPath);
+    routerDelegate.removeListener(_updateSelectedPath);
     super.dispose();
   }
 

@@ -9,7 +9,7 @@ import 'package:firebridge/firebridge.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_ce/hive.dart';
 
-class SidebarIcon extends ConsumerWidget {
+class SidebarIcon extends ConsumerStatefulWidget {
   final bool selected;
   final UserGuild guild;
   final bool mini;
@@ -24,26 +24,35 @@ class SidebarIcon extends ConsumerWidget {
   });
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<SidebarIcon> createState() => _SidebarIconState();
+}
+
+class _SidebarIconState extends ConsumerState<SidebarIcon> {
+  @override
+  Widget build(BuildContext context) {
     var hasUnreads =
-        ref.watch(guildUnreadsProvider(guild.id)).valueOrNull ?? false;
-    var mentions = ref.watch(guildMentionsProvider(guild.id)).value ?? 0;
+        ref.watch(guildUnreadsProvider(widget.guild.id)).valueOrNull ?? false;
+    var mentions = ref.watch(guildMentionsProvider(widget.guild.id)).value ?? 0;
 
     return SidebarItem(
-      selected: selected,
+      selected: widget.selected,
       hasUnreads: hasUnreads,
       mentions: mentions,
-      mini: mini,
+      mini: widget.mini,
       onTap: () {
-        if (isClickable) {
-          GoRouter.of(context).go('/channels/${guild.id}/${Snowflake.zero}');
-          guild.manager.get(guild.id).then((Guild guild) async {
+        if (widget.isClickable) {
+          GoRouter.of(context)
+              .go('/channels/${widget.guild.id}/${Snowflake.zero}');
+          widget.guild.manager.get(widget.guild.id).then((Guild guild) async {
             var lastGuildChannels = Hive.box("last-guild-channels");
             var channelId = lastGuildChannels.get(guild.id.value.toString()) ??
                 guild.rulesChannelId ??
                 (await guild.fetchChannels()).first.id.value;
 
-            GoRouter.of(context).go('/channels/${guild.id}/$channelId');
+            // if mounted
+            if (mounted) {
+              GoRouter.of(context).go('/channels/${guild.id}/$channelId');
+            }
           });
         }
       },
@@ -57,11 +66,11 @@ class SidebarIcon extends ConsumerWidget {
   Widget _buildGuildIcon() {
     return Consumer(
       builder: (context, ref, _) {
-        var icon = ref.watch(guildIconProvider(guild.id)).valueOrNull;
+        var icon = ref.watch(guildIconProvider(widget.guild.id)).valueOrNull;
         if (icon != null) {
           return Image.memory(icon);
         } else {
-          String iconText = guild.name
+          String iconText = widget.guild.name
               .split(" ")
               .map((word) => word.isNotEmpty ? word[0] : '')
               .join();
@@ -75,7 +84,7 @@ class SidebarIcon extends ConsumerWidget {
                     .custom
                     .textTheme
                     .titleSmall
-                    .copyWith(fontSize: mini ? 3 : 12),
+                    .copyWith(fontSize: widget.mini ? 3 : 12),
               ),
             ),
           );
