@@ -118,7 +118,6 @@ class OverlappingPanelsState extends State<OverlappingPanels>
         goal = _calculateGoal(mediaWidth, -1);
         break;
       case RevealSide.main:
-      default:
         goal = 0;
         break;
     }
@@ -133,25 +132,22 @@ class OverlappingPanelsState extends State<OverlappingPanels>
   void _onApplyTranslation() {
     final mediaWidth = MediaQuery.of(context).size.width;
 
-    var _averagedDelta = (_lastDelta + _lastLastDelta) / 2;
-    print("LastDelta $_lastDelta");
-    print("LastLastDelta $_lastLastDelta");
-    print("AveragedDelta $_averagedDelta");
+    double averagedDelta = (_lastDelta + _lastLastDelta) / 2;
 
     var goal = 0.0;
-    if (_averagedDelta > 0) {
+    if (averagedDelta > 0) {
       goal = _calculateGoal(mediaWidth, 1);
     }
 
-    if (_averagedDelta < 0) {
+    if (averagedDelta < 0) {
       goal = _calculateGoal(mediaWidth, -1);
     }
 
-    if (_averagedDelta > 0 && _translate < 0) {
+    if (averagedDelta > 0 && _translate < 0) {
       goal = 0;
     }
 
-    if (_averagedDelta < 0 && _translate > 0) {
+    if (averagedDelta < 0 && _translate > 0) {
       goal = 0;
     }
 

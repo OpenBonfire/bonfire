@@ -24,7 +24,7 @@ class MessageView extends ConsumerStatefulWidget {
 class _MessageViewState extends ConsumerState<MessageView> {
   @override
   Widget build(BuildContext context) {
-    var channelId = widget.channelId;
+    Snowflake channelId = widget.channelId;
     if (widget.threadId != null) {
       channelId = widget.threadId!;
     }

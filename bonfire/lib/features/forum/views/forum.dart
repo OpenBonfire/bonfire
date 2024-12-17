@@ -64,7 +64,7 @@ class _ForumViewState extends ConsumerState<ForumView> {
           data: (threadLists) {
             // Combine all threads from the list of ThreadLists
             threads = threadLists.expand((threadList) {
-              return (threadList?.threads ?? []) as List<Channel>;
+              return threadList?.threads ?? [] as List<Channel>;
             }).toList();
 
             return Stack(

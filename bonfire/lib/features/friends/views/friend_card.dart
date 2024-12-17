@@ -1,4 +1,3 @@
-import 'package:bonfire/features/me/controllers/settings.dart';
 import 'package:bonfire/features/user/components/presence_avatar.dart';
 import 'package:bonfire/features/user/controllers/presence.dart';
 import 'package:bonfire/shared/widgets/presence_text.dart';

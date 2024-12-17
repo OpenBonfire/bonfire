@@ -237,35 +237,33 @@ class _MessageViewState extends ConsumerState<MessageList>
     channelName = getChannelName(channel);
 
     return Scaffold(
-      body: Container(
-        child: Column(
-          children: [
-            Expanded(
-              child: Stack(
-                children: [
-                  FadeTransition(
-                      opacity: _fadeAnimation,
-                      child: Align(
-                        alignment: Alignment.bottomLeft,
-                        child: content,
-                      )),
-                  if (!isSmartwatch(context))
-                    ChannelHeader(channelName: channelName),
-                ],
-              ),
+      body: Column(
+        children: [
+          Expanded(
+            child: Stack(
+              children: [
+                FadeTransition(
+                    opacity: _fadeAnimation,
+                    child: Align(
+                      alignment: Alignment.bottomLeft,
+                      child: content,
+                    )),
+                if (!isSmartwatch(context))
+                  ChannelHeader(channelName: channelName),
+              ],
             ),
-            if (!isSmartwatch(context))
-              MessageBar(
-                guildId: guild?.id ?? Snowflake.zero,
-                channel: channel,
-              ),
-            if (!isSmartwatch(context))
-              SizedBox(
-                height: MediaQuery.of(context).padding.bottom,
-              ),
-            if (!isSmartwatch(context)) const KeyboardBuffer()
-          ],
-        ),
+          ),
+          if (!isSmartwatch(context))
+            MessageBar(
+              guildId: guild?.id ?? Snowflake.zero,
+              channel: channel,
+            ),
+          if (!isSmartwatch(context))
+            SizedBox(
+              height: MediaQuery.of(context).padding.bottom,
+            ),
+          if (!isSmartwatch(context)) const KeyboardBuffer()
+        ],
       ),
     );
   }
