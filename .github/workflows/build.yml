@@ -92,6 +92,15 @@ jobs:
           java-version: '17'
           distribution: 'adopt'
 
+      - name: Set up Visual Studio
+        uses: microsoft/setup-msbuild@v1.1
+
+      - name: Configure MSVC
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: x64
+          toolset: 14.29
+
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:

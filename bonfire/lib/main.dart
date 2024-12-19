@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_keyboard_size/flutter_keyboard_size.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:universal_platform/universal_platform.dart';
 import 'package:video_player_media_kit/video_player_media_kit.dart';
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:bonfire/features/window/views/window.dart';
-import 'package:universal_platform/universal_platform.dart';
 import 'package:hive_ce/hive.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:universal_io/io.dart';
@@ -53,6 +53,7 @@ void main() async {
       home: MainWindow(),
     ),
   ));
+
   if (UniversalPlatform.isDesktop) {
     doWhenWindowReady(() {
       const initialSize = Size(1280, 720);
