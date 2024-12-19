@@ -92,11 +92,11 @@ jobs:
             java-version: '17'
             distribution: 'adopt'
 
-        - name: Cleanup Visual Studio Installer
-          continue-on-error: true
-          run: |
-            & "C:\Program Files (x86)\Microsoft Visual Studio\Installer\InstallCleanup.exe"
-          shell: pwsh
+        # - name: Cleanup Visual Studio Installer
+        #   continue-on-error: true
+        #   run: |
+        #     & "C:\Program Files (x86)\Microsoft Visual Studio\Installer\InstallCleanup.exe"
+        #   shell: pwsh
 
         # - name: Install Visual Studio 2022 Enterprise
         #   run: |
