@@ -17,6 +17,9 @@ jobs:
       - name: Install dependencies
         working-directory: ./bonfire
         run: flutter pub get
+      - name: Run code generation
+        working-directory: ./bonfire
+        run: dart run build_runner build --delete-conflicting-outputs
       - name: Create CNAME file
         working-directory: ./bonfire
         run: echo "app.openbonfire.dev" > web/CNAME
@@ -50,6 +53,10 @@ jobs:
       - name: Install dependencies
         working-directory: ./bonfire
         run: flutter pub get
+
+      - name: Run code generation
+        working-directory: ./bonfire
+        run: dart run build_runner build --delete-conflicting-outputs
 
       - name: Build Android APK
         working-directory: ./bonfire
@@ -99,6 +106,10 @@ jobs:
         working-directory: ./bonfire
         run: flutter pub get
 
+      - name: Run code generation
+        working-directory: ./bonfire
+        run: dart run build_runner build --delete-conflicting-outputs
+
       - name: Build Windows
         working-directory: ./bonfire
         run: flutter build windows --no-tree-shake-icons
@@ -137,6 +148,10 @@ jobs:
       - name: Install dependencies
         working-directory: ./bonfire
         run: flutter pub get
+
+      - name: Run code generation
+        working-directory: ./bonfire
+        run: dart run build_runner build --delete-conflicting-outputs
 
       - name: Install Linux dependencies
         run: |
@@ -181,6 +196,10 @@ jobs:
       - name: Install dependencies
         working-directory: ./bonfire
         run: flutter pub get
+
+      - name: Run code generation
+        working-directory: ./bonfire
+        run: dart run build_runner build --delete-conflicting-outputs
 
       - name: Build macOS
         working-directory: ./bonfire
