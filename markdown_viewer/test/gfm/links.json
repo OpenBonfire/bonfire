@@ -1,0 +1,2846 @@
+[
+  {
+    "description": "Links, https://github.github.com/gfm/#example-493",
+    "markdown": "[link](/uri \"title\")\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "text": "link",
+              "style": {
+                "fontSize": 16.0,
+                "color": "Color(0xff2196f3)"
+              },
+              "recognizer": "TapGestureRecognizer"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Links, https://github.github.com/gfm/#example-494",
+    "markdown": "[link](/uri)\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "text": "link",
+              "style": {
+                "fontSize": 16.0,
+                "color": "Color(0xff2196f3)"
+              },
+              "recognizer": "TapGestureRecognizer"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Links, https://github.github.com/gfm/#example-495",
+    "markdown": "[link]()\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "text": "link",
+              "style": {
+                "fontSize": 16.0,
+                "color": "Color(0xff2196f3)"
+              },
+              "recognizer": "TapGestureRecognizer"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Links, https://github.github.com/gfm/#example-496",
+    "markdown": "[link](<>)\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "text": "link",
+              "style": {
+                "fontSize": 16.0,
+                "color": "Color(0xff2196f3)"
+              },
+              "recognizer": "TapGestureRecognizer"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Links, https://github.github.com/gfm/#example-497",
+    "markdown": "[link](/my uri)\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "text": "[link](/my uri)",
+              "style": {
+                "fontSize": 16.0,
+                "color": "Color(0xff333333)"
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Links, https://github.github.com/gfm/#example-498",
+    "markdown": "[link](</my uri>)\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "text": "link",
+              "style": {
+                "fontSize": 16.0,
+                "color": "Color(0xff2196f3)"
+              },
+              "recognizer": "TapGestureRecognizer"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Links, https://github.github.com/gfm/#example-499",
+    "markdown": "[link](foo\nbar)\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "text": "[link](foo bar)",
+              "style": {
+                "fontSize": 16.0,
+                "color": "Color(0xff333333)"
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Links, https://github.github.com/gfm/#example-500",
+    "markdown": "[link](<foo\nbar>)\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "text": "[link](<foo bar>)",
+              "style": {
+                "fontSize": 16.0,
+                "color": "Color(0xff333333)"
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Links, https://github.github.com/gfm/#example-501",
+    "markdown": "[a](<b)c>)\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "text": "a",
+              "style": {
+                "fontSize": 16.0,
+                "color": "Color(0xff2196f3)"
+              },
+              "recognizer": "TapGestureRecognizer"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Links, https://github.github.com/gfm/#example-502",
+    "markdown": "[link](<foo\\>)\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "text": "[link](<foo>)",
+              "style": {
+                "fontSize": 16.0,
+                "color": "Color(0xff333333)"
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Links, https://github.github.com/gfm/#example-503",
+    "markdown": "[a](<b)c\n[a](<b)c>\n[a](<b>c)\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "text": "[a](<b)c [a](<b)c> [a](<b>c)",
+              "style": {
+                "fontSize": 16.0,
+                "color": "Color(0xff333333)"
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Links, https://github.github.com/gfm/#example-504",
+    "markdown": "[link](\\(foo\\))\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "text": "link",
+              "style": {
+                "fontSize": 16.0,
+                "color": "Color(0xff2196f3)"
+              },
+              "recognizer": "TapGestureRecognizer"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Links, https://github.github.com/gfm/#example-505",
+    "markdown": "[link](foo(and(bar)))\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "text": "link",
+              "style": {
+                "fontSize": 16.0,
+                "color": "Color(0xff2196f3)"
+              },
+              "recognizer": "TapGestureRecognizer"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Links, https://github.github.com/gfm/#example-506",
+    "markdown": "[link](foo\\(and\\(bar\\))\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "text": "link",
+              "style": {
+                "fontSize": 16.0,
+                "color": "Color(0xff2196f3)"
+              },
+              "recognizer": "TapGestureRecognizer"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Links, https://github.github.com/gfm/#example-507",
+    "markdown": "[link](<foo(and(bar)>)\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "text": "link",
+              "style": {
+                "fontSize": 16.0,
+                "color": "Color(0xff2196f3)"
+              },
+              "recognizer": "TapGestureRecognizer"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Links, https://github.github.com/gfm/#example-508",
+    "markdown": "[link](foo\\)\\:)\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "text": "link",
+              "style": {
+                "fontSize": 16.0,
+                "color": "Color(0xff2196f3)"
+              },
+              "recognizer": "TapGestureRecognizer"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Links, https://github.github.com/gfm/#example-509",
+    "markdown": "[link](#fragment)\n\n[link](http://example.com#fragment)\n\n[link](http://example.com?foo=3#frag)\n",
+    "expected": [
+      {
+        "type": "Padding",
+        "child": {
+          "type": "Column",
+          "children": [
+            {
+              "type": "RichText",
+              "textAlign": "TextAlign.start",
+              "text": {
+                "type": "TextSpan",
+                "text": "link",
+                "style": {
+                  "fontSize": 16.0,
+                  "color": "Color(0xff2196f3)"
+                },
+                "recognizer": "TapGestureRecognizer"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "type": "SizedBox",
+        "height": 8.0
+      },
+      {
+        "type": "Padding",
+        "child": {
+          "type": "Column",
+          "children": [
+            {
+              "type": "RichText",
+              "textAlign": "TextAlign.start",
+              "text": {
+                "type": "TextSpan",
+                "text": "link",
+                "style": {
+                  "fontSize": 16.0,
+                  "color": "Color(0xff2196f3)"
+                },
+                "recognizer": "TapGestureRecognizer"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "type": "SizedBox",
+        "height": 8.0
+      },
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "text": "link",
+              "style": {
+                "fontSize": 16.0,
+                "color": "Color(0xff2196f3)"
+              },
+              "recognizer": "TapGestureRecognizer"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Links, https://github.github.com/gfm/#example-510",
+    "markdown": "[link](foo\\bar)\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "text": "link",
+              "style": {
+                "fontSize": 16.0,
+                "color": "Color(0xff2196f3)"
+              },
+              "recognizer": "TapGestureRecognizer"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Links, https://github.github.com/gfm/#example-511",
+    "markdown": "[link](foo%20b&auml;)\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "text": "link",
+              "style": {
+                "fontSize": 16.0,
+                "color": "Color(0xff2196f3)"
+              },
+              "recognizer": "TapGestureRecognizer"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Links, https://github.github.com/gfm/#example-512",
+    "markdown": "[link](\"title\")\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "text": "link",
+              "style": {
+                "fontSize": 16.0,
+                "color": "Color(0xff2196f3)"
+              },
+              "recognizer": "TapGestureRecognizer"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Links, https://github.github.com/gfm/#example-513",
+    "markdown": "[link](/url \"title\")\n[link](/url 'title')\n[link](/url (title))\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "children": [
+                {
+                  "type": "TextSpan",
+                  "text": "link",
+                  "style": {
+                    "fontSize": 16.0,
+                    "color": "Color(0xff2196f3)"
+                  },
+                  "recognizer": "TapGestureRecognizer"
+                },
+                {
+                  "type": "TextSpan",
+                  "text": " ",
+                  "style": {
+                    "fontSize": 16.0,
+                    "color": "Color(0xff333333)"
+                  }
+                },
+                {
+                  "type": "TextSpan",
+                  "text": "link",
+                  "style": {
+                    "fontSize": 16.0,
+                    "color": "Color(0xff2196f3)"
+                  },
+                  "recognizer": "TapGestureRecognizer"
+                },
+                {
+                  "type": "TextSpan",
+                  "text": " ",
+                  "style": {
+                    "fontSize": 16.0,
+                    "color": "Color(0xff333333)"
+                  }
+                },
+                {
+                  "type": "TextSpan",
+                  "text": "link",
+                  "style": {
+                    "fontSize": 16.0,
+                    "color": "Color(0xff2196f3)"
+                  },
+                  "recognizer": "TapGestureRecognizer"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Links, https://github.github.com/gfm/#example-514",
+    "markdown": "[link](/url \"title \\\"&quot;\")\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "text": "link",
+              "style": {
+                "fontSize": 16.0,
+                "color": "Color(0xff2196f3)"
+              },
+              "recognizer": "TapGestureRecognizer"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Links, https://github.github.com/gfm/#example-515",
+    "markdown": "[link](/url \"title\")\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "text": "link",
+              "style": {
+                "fontSize": 16.0,
+                "color": "Color(0xff2196f3)"
+              },
+              "recognizer": "TapGestureRecognizer"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Links, https://github.github.com/gfm/#example-516",
+    "markdown": "[link](/url \"title \"and\" title\")\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "text": "[link](/url \"title \"and\" title\")",
+              "style": {
+                "fontSize": 16.0,
+                "color": "Color(0xff333333)"
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Links, https://github.github.com/gfm/#example-517",
+    "markdown": "[link](/url 'title \"and\" title')\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "text": "link",
+              "style": {
+                "fontSize": 16.0,
+                "color": "Color(0xff2196f3)"
+              },
+              "recognizer": "TapGestureRecognizer"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Links, https://github.github.com/gfm/#example-518",
+    "markdown": "[link](   /uri\n  \"title\"  )\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "text": "link",
+              "style": {
+                "fontSize": 16.0,
+                "color": "Color(0xff2196f3)"
+              },
+              "recognizer": "TapGestureRecognizer"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Links, https://github.github.com/gfm/#example-519",
+    "markdown": "[link] (/uri)\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "text": "[link] (/uri)",
+              "style": {
+                "fontSize": 16.0,
+                "color": "Color(0xff333333)"
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Links, https://github.github.com/gfm/#example-520",
+    "markdown": "[link [foo [bar]]](/uri)\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "text": "link [foo [bar]]",
+              "style": {
+                "fontSize": 16.0,
+                "color": "Color(0xff2196f3)"
+              },
+              "recognizer": "TapGestureRecognizer"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Links, https://github.github.com/gfm/#example-521",
+    "markdown": "[link] bar](/uri)\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "text": "[link] bar](/uri)",
+              "style": {
+                "fontSize": 16.0,
+                "color": "Color(0xff333333)"
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Links, https://github.github.com/gfm/#example-522",
+    "markdown": "[link [bar](/uri)\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "children": [
+                {
+                  "type": "TextSpan",
+                  "text": "[link ",
+                  "style": {
+                    "fontSize": 16.0,
+                    "color": "Color(0xff333333)"
+                  }
+                },
+                {
+                  "type": "TextSpan",
+                  "text": "bar",
+                  "style": {
+                    "fontSize": 16.0,
+                    "color": "Color(0xff2196f3)"
+                  },
+                  "recognizer": "TapGestureRecognizer"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Links, https://github.github.com/gfm/#example-523",
+    "markdown": "[link \\[bar](/uri)\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "text": "link [bar",
+              "style": {
+                "fontSize": 16.0,
+                "color": "Color(0xff2196f3)"
+              },
+              "recognizer": "TapGestureRecognizer"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Links, https://github.github.com/gfm/#example-524",
+    "markdown": "[link *foo **bar** `#`*](/uri)\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "children": [
+                {
+                  "type": "TextSpan",
+                  "text": "link ",
+                  "style": {
+                    "fontSize": 16.0,
+                    "color": "Color(0xff2196f3)"
+                  },
+                  "recognizer": "TapGestureRecognizer"
+                },
+                {
+                  "type": "TextSpan",
+                  "children": [
+                    {
+                      "type": "TextSpan",
+                      "text": "foo ",
+                      "style": {
+                        "fontSize": 16.0,
+                        "fontStyle": "FontStyle.italic",
+                        "color": "Color(0xff2196f3)"
+                      },
+                      "recognizer": "TapGestureRecognizer"
+                    },
+                    {
+                      "type": "TextSpan",
+                      "text": "bar",
+                      "style": {
+                        "fontWeight": "FontWeight.w700",
+                        "fontSize": 16.0,
+                        "fontStyle": "FontStyle.italic",
+                        "color": "Color(0xff2196f3)"
+                      },
+                      "recognizer": "TapGestureRecognizer"
+                    },
+                    {
+                      "type": "TextSpan",
+                      "text": " ",
+                      "style": {
+                        "fontSize": 16.0,
+                        "fontStyle": "FontStyle.italic",
+                        "color": "Color(0xff2196f3)"
+                      },
+                      "recognizer": "TapGestureRecognizer"
+                    },
+                    {
+                      "type": "TextSpan",
+                      "text": "#",
+                      "style": {
+                        "fontFamily": "monospace",
+                        "fontSize": 16.0,
+                        "fontStyle": "FontStyle.italic",
+                        "color": "Color(0xff8b1c1c)",
+                        "backgroundColor": "Color(0x10000000)"
+                      },
+                      "recognizer": "TapGestureRecognizer"
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Links, https://github.github.com/gfm/#example-525",
+    "markdown": "[![moon](moon.jpg)](/uri)\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "Image",
+            "alignment": "Alignment.center"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Links, https://github.github.com/gfm/#example-526",
+    "markdown": "[foo [bar](/uri)](/uri)\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "children": [
+                {
+                  "type": "TextSpan",
+                  "text": "[foo ",
+                  "style": {
+                    "fontSize": 16.0,
+                    "color": "Color(0xff333333)"
+                  }
+                },
+                {
+                  "type": "TextSpan",
+                  "text": "bar",
+                  "style": {
+                    "fontSize": 16.0,
+                    "color": "Color(0xff2196f3)"
+                  },
+                  "recognizer": "TapGestureRecognizer"
+                },
+                {
+                  "type": "TextSpan",
+                  "text": "](/uri)",
+                  "style": {
+                    "fontSize": 16.0,
+                    "color": "Color(0xff333333)"
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Links, https://github.github.com/gfm/#example-527",
+    "markdown": "[foo *[bar [baz](/uri)](/uri)*](/uri)\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "children": [
+                {
+                  "type": "TextSpan",
+                  "text": "[foo ",
+                  "style": {
+                    "fontSize": 16.0,
+                    "color": "Color(0xff333333)"
+                  }
+                },
+                {
+                  "type": "TextSpan",
+                  "children": [
+                    {
+                      "type": "TextSpan",
+                      "text": "[bar ",
+                      "style": {
+                        "fontSize": 16.0,
+                        "fontStyle": "FontStyle.italic",
+                        "color": "Color(0xff333333)"
+                      }
+                    },
+                    {
+                      "type": "TextSpan",
+                      "text": "baz",
+                      "style": {
+                        "fontSize": 16.0,
+                        "fontStyle": "FontStyle.italic",
+                        "color": "Color(0xff2196f3)"
+                      },
+                      "recognizer": "TapGestureRecognizer"
+                    },
+                    {
+                      "type": "TextSpan",
+                      "text": "](/uri)",
+                      "style": {
+                        "fontSize": 16.0,
+                        "fontStyle": "FontStyle.italic",
+                        "color": "Color(0xff333333)"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "TextSpan",
+                  "text": "](/uri)",
+                  "style": {
+                    "fontSize": 16.0,
+                    "color": "Color(0xff333333)"
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Links, https://github.github.com/gfm/#example-528",
+    "markdown": "![[[foo](uri1)](uri2)](uri3)\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "Image",
+            "alignment": "Alignment.center"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Links, https://github.github.com/gfm/#example-529",
+    "markdown": "*[foo*](/uri)\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "children": [
+                {
+                  "type": "TextSpan",
+                  "text": "*",
+                  "style": {
+                    "fontSize": 16.0,
+                    "color": "Color(0xff333333)"
+                  }
+                },
+                {
+                  "type": "TextSpan",
+                  "text": "foo*",
+                  "style": {
+                    "fontSize": 16.0,
+                    "color": "Color(0xff2196f3)"
+                  },
+                  "recognizer": "TapGestureRecognizer"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Links, https://github.github.com/gfm/#example-530",
+    "markdown": "[foo *bar](baz*)\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "text": "foo *bar",
+              "style": {
+                "fontSize": 16.0,
+                "color": "Color(0xff2196f3)"
+              },
+              "recognizer": "TapGestureRecognizer"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Links, https://github.github.com/gfm/#example-531",
+    "markdown": "*foo [bar* baz]\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "children": [
+                {
+                  "type": "TextSpan",
+                  "text": "foo [bar",
+                  "style": {
+                    "fontSize": 16.0,
+                    "fontStyle": "FontStyle.italic",
+                    "color": "Color(0xff333333)"
+                  }
+                },
+                {
+                  "type": "TextSpan",
+                  "text": " baz]",
+                  "style": {
+                    "fontSize": 16.0,
+                    "color": "Color(0xff333333)"
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Links, https://github.github.com/gfm/#example-532",
+    "markdown": "[foo <bar attr=\"](baz)\">\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "children": [
+                {
+                  "type": "TextSpan",
+                  "text": "foo <bar attr=\"",
+                  "style": {
+                    "fontSize": 16.0,
+                    "color": "Color(0xff2196f3)"
+                  },
+                  "recognizer": "TapGestureRecognizer"
+                },
+                {
+                  "type": "TextSpan",
+                  "text": "\">",
+                  "style": {
+                    "fontSize": 16.0,
+                    "color": "Color(0xff333333)"
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Links, https://github.github.com/gfm/#example-533",
+    "markdown": "[foo`](/uri)`\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "children": [
+                {
+                  "type": "TextSpan",
+                  "text": "[foo",
+                  "style": {
+                    "fontSize": 16.0,
+                    "color": "Color(0xff333333)"
+                  }
+                },
+                {
+                  "type": "TextSpan",
+                  "text": "](/uri)",
+                  "style": {
+                    "fontFamily": "monospace",
+                    "fontSize": 16.0,
+                    "color": "Color(0xff8b1c1c)",
+                    "backgroundColor": "Color(0x10000000)"
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Links, https://github.github.com/gfm/#example-534",
+    "markdown": "[foo<http://example.com/?search=](uri)>\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "children": [
+                {
+                  "type": "TextSpan",
+                  "text": "[foo",
+                  "style": {
+                    "fontSize": 16.0,
+                    "color": "Color(0xff333333)"
+                  }
+                },
+                {
+                  "type": "TextSpan",
+                  "text": "http://example.com/?search=](uri)",
+                  "style": {
+                    "fontSize": 16.0,
+                    "color": "Color(0xff2196f3)"
+                  },
+                  "recognizer": "TapGestureRecognizer"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Links, https://github.github.com/gfm/#example-535",
+    "markdown": "[foo][bar]\n\n[bar]: /url \"title\"\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "text": "foo",
+              "style": {
+                "fontSize": 16.0,
+                "color": "Color(0xff2196f3)"
+              },
+              "recognizer": "TapGestureRecognizer"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Links, https://github.github.com/gfm/#example-536",
+    "markdown": "[link [foo [bar]]][ref]\n\n[ref]: /uri\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "text": "link [foo [bar]]",
+              "style": {
+                "fontSize": 16.0,
+                "color": "Color(0xff2196f3)"
+              },
+              "recognizer": "TapGestureRecognizer"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Links, https://github.github.com/gfm/#example-537",
+    "markdown": "[link \\[bar][ref]\n\n[ref]: /uri\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "text": "link [bar",
+              "style": {
+                "fontSize": 16.0,
+                "color": "Color(0xff2196f3)"
+              },
+              "recognizer": "TapGestureRecognizer"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Links, https://github.github.com/gfm/#example-538",
+    "markdown": "[link *foo **bar** `#`*][ref]\n\n[ref]: /uri\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "children": [
+                {
+                  "type": "TextSpan",
+                  "text": "link ",
+                  "style": {
+                    "fontSize": 16.0,
+                    "color": "Color(0xff2196f3)"
+                  },
+                  "recognizer": "TapGestureRecognizer"
+                },
+                {
+                  "type": "TextSpan",
+                  "children": [
+                    {
+                      "type": "TextSpan",
+                      "text": "foo ",
+                      "style": {
+                        "fontSize": 16.0,
+                        "fontStyle": "FontStyle.italic",
+                        "color": "Color(0xff2196f3)"
+                      },
+                      "recognizer": "TapGestureRecognizer"
+                    },
+                    {
+                      "type": "TextSpan",
+                      "text": "bar",
+                      "style": {
+                        "fontWeight": "FontWeight.w700",
+                        "fontSize": 16.0,
+                        "fontStyle": "FontStyle.italic",
+                        "color": "Color(0xff2196f3)"
+                      },
+                      "recognizer": "TapGestureRecognizer"
+                    },
+                    {
+                      "type": "TextSpan",
+                      "text": " ",
+                      "style": {
+                        "fontSize": 16.0,
+                        "fontStyle": "FontStyle.italic",
+                        "color": "Color(0xff2196f3)"
+                      },
+                      "recognizer": "TapGestureRecognizer"
+                    },
+                    {
+                      "type": "TextSpan",
+                      "text": "#",
+                      "style": {
+                        "fontFamily": "monospace",
+                        "fontSize": 16.0,
+                        "fontStyle": "FontStyle.italic",
+                        "color": "Color(0xff8b1c1c)",
+                        "backgroundColor": "Color(0x10000000)"
+                      },
+                      "recognizer": "TapGestureRecognizer"
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Links, https://github.github.com/gfm/#example-539",
+    "markdown": "[![moon](moon.jpg)][ref]\n\n[ref]: /uri\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "Image",
+            "alignment": "Alignment.center"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Links, https://github.github.com/gfm/#example-540",
+    "markdown": "[foo [bar](/uri)][ref]\n\n[ref]: /uri\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "children": [
+                {
+                  "type": "TextSpan",
+                  "text": "[foo ",
+                  "style": {
+                    "fontSize": 16.0,
+                    "color": "Color(0xff333333)"
+                  }
+                },
+                {
+                  "type": "TextSpan",
+                  "text": "bar",
+                  "style": {
+                    "fontSize": 16.0,
+                    "color": "Color(0xff2196f3)"
+                  },
+                  "recognizer": "TapGestureRecognizer"
+                },
+                {
+                  "type": "TextSpan",
+                  "text": "]",
+                  "style": {
+                    "fontSize": 16.0,
+                    "color": "Color(0xff333333)"
+                  }
+                },
+                {
+                  "type": "TextSpan",
+                  "text": "ref",
+                  "style": {
+                    "fontSize": 16.0,
+                    "color": "Color(0xff2196f3)"
+                  },
+                  "recognizer": "TapGestureRecognizer"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Links, https://github.github.com/gfm/#example-541",
+    "markdown": "[foo *bar [baz][ref]*][ref]\n\n[ref]: /uri\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "children": [
+                {
+                  "type": "TextSpan",
+                  "text": "[foo ",
+                  "style": {
+                    "fontSize": 16.0,
+                    "color": "Color(0xff333333)"
+                  }
+                },
+                {
+                  "type": "TextSpan",
+                  "children": [
+                    {
+                      "type": "TextSpan",
+                      "text": "bar ",
+                      "style": {
+                        "fontSize": 16.0,
+                        "fontStyle": "FontStyle.italic",
+                        "color": "Color(0xff333333)"
+                      }
+                    },
+                    {
+                      "type": "TextSpan",
+                      "text": "baz",
+                      "style": {
+                        "fontSize": 16.0,
+                        "fontStyle": "FontStyle.italic",
+                        "color": "Color(0xff2196f3)"
+                      },
+                      "recognizer": "TapGestureRecognizer"
+                    }
+                  ]
+                },
+                {
+                  "type": "TextSpan",
+                  "text": "]",
+                  "style": {
+                    "fontSize": 16.0,
+                    "color": "Color(0xff333333)"
+                  }
+                },
+                {
+                  "type": "TextSpan",
+                  "text": "ref",
+                  "style": {
+                    "fontSize": 16.0,
+                    "color": "Color(0xff2196f3)"
+                  },
+                  "recognizer": "TapGestureRecognizer"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Links, https://github.github.com/gfm/#example-542",
+    "markdown": "*[foo*][ref]\n\n[ref]: /uri\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "children": [
+                {
+                  "type": "TextSpan",
+                  "text": "*",
+                  "style": {
+                    "fontSize": 16.0,
+                    "color": "Color(0xff333333)"
+                  }
+                },
+                {
+                  "type": "TextSpan",
+                  "text": "foo*",
+                  "style": {
+                    "fontSize": 16.0,
+                    "color": "Color(0xff2196f3)"
+                  },
+                  "recognizer": "TapGestureRecognizer"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Links, https://github.github.com/gfm/#example-543",
+    "markdown": "[foo *bar][ref]\n\n[ref]: /uri\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "text": "foo *bar",
+              "style": {
+                "fontSize": 16.0,
+                "color": "Color(0xff2196f3)"
+              },
+              "recognizer": "TapGestureRecognizer"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Links, https://github.github.com/gfm/#example-544",
+    "markdown": "[foo <bar attr=\"][ref]\">\n\n[ref]: /uri\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "children": [
+                {
+                  "type": "TextSpan",
+                  "text": "foo <bar attr=\"",
+                  "style": {
+                    "fontSize": 16.0,
+                    "color": "Color(0xff2196f3)"
+                  },
+                  "recognizer": "TapGestureRecognizer"
+                },
+                {
+                  "type": "TextSpan",
+                  "text": "\">",
+                  "style": {
+                    "fontSize": 16.0,
+                    "color": "Color(0xff333333)"
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Links, https://github.github.com/gfm/#example-545",
+    "markdown": "[foo`][ref]`\n\n[ref]: /uri\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "children": [
+                {
+                  "type": "TextSpan",
+                  "text": "[foo",
+                  "style": {
+                    "fontSize": 16.0,
+                    "color": "Color(0xff333333)"
+                  }
+                },
+                {
+                  "type": "TextSpan",
+                  "text": "][ref]",
+                  "style": {
+                    "fontFamily": "monospace",
+                    "fontSize": 16.0,
+                    "color": "Color(0xff8b1c1c)",
+                    "backgroundColor": "Color(0x10000000)"
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Links, https://github.github.com/gfm/#example-546",
+    "markdown": "[foo<http://example.com/?search=][ref]>\n\n[ref]: /uri\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "children": [
+                {
+                  "type": "TextSpan",
+                  "text": "[foo",
+                  "style": {
+                    "fontSize": 16.0,
+                    "color": "Color(0xff333333)"
+                  }
+                },
+                {
+                  "type": "TextSpan",
+                  "text": "http://example.com/?search=][ref]",
+                  "style": {
+                    "fontSize": 16.0,
+                    "color": "Color(0xff2196f3)"
+                  },
+                  "recognizer": "TapGestureRecognizer"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Links, https://github.github.com/gfm/#example-547",
+    "markdown": "[foo][BaR]\n\n[bar]: /url \"title\"\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "text": "foo",
+              "style": {
+                "fontSize": 16.0,
+                "color": "Color(0xff2196f3)"
+              },
+              "recognizer": "TapGestureRecognizer"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Links, https://github.github.com/gfm/#example-548",
+    "markdown": "[Толпой][Толпой] is a Russian word.\n\n[ТОЛПОЙ]: /url\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "children": [
+                {
+                  "type": "TextSpan",
+                  "text": "Толпой",
+                  "style": {
+                    "fontSize": 16.0,
+                    "color": "Color(0xff2196f3)"
+                  },
+                  "recognizer": "TapGestureRecognizer"
+                },
+                {
+                  "type": "TextSpan",
+                  "text": " is a Russian word.",
+                  "style": {
+                    "fontSize": 16.0,
+                    "color": "Color(0xff333333)"
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Links, https://github.github.com/gfm/#example-549",
+    "markdown": "[Foo\n  bar]: /url\n\n[Baz][Foo bar]\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "text": "Baz",
+              "style": {
+                "fontSize": 16.0,
+                "color": "Color(0xff2196f3)"
+              },
+              "recognizer": "TapGestureRecognizer"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Links, https://github.github.com/gfm/#example-550",
+    "markdown": "[foo] [bar]\n\n[bar]: /url \"title\"\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "children": [
+                {
+                  "type": "TextSpan",
+                  "text": "[foo] ",
+                  "style": {
+                    "fontSize": 16.0,
+                    "color": "Color(0xff333333)"
+                  }
+                },
+                {
+                  "type": "TextSpan",
+                  "text": "bar",
+                  "style": {
+                    "fontSize": 16.0,
+                    "color": "Color(0xff2196f3)"
+                  },
+                  "recognizer": "TapGestureRecognizer"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Links, https://github.github.com/gfm/#example-551",
+    "markdown": "[foo]\n[bar]\n\n[bar]: /url \"title\"\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "children": [
+                {
+                  "type": "TextSpan",
+                  "text": "[foo] ",
+                  "style": {
+                    "fontSize": 16.0,
+                    "color": "Color(0xff333333)"
+                  }
+                },
+                {
+                  "type": "TextSpan",
+                  "text": "bar",
+                  "style": {
+                    "fontSize": 16.0,
+                    "color": "Color(0xff2196f3)"
+                  },
+                  "recognizer": "TapGestureRecognizer"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Links, https://github.github.com/gfm/#example-552",
+    "markdown": "[foo]: /url1\n\n[foo]: /url2\n\n[bar][foo]\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "text": "bar",
+              "style": {
+                "fontSize": 16.0,
+                "color": "Color(0xff2196f3)"
+              },
+              "recognizer": "TapGestureRecognizer"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Links, https://github.github.com/gfm/#example-553",
+    "markdown": "[bar][foo\\!]\n\n[foo!]: /url\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "text": "[bar][foo!]",
+              "style": {
+                "fontSize": 16.0,
+                "color": "Color(0xff333333)"
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Links, https://github.github.com/gfm/#example-554",
+    "markdown": "[foo][ref[]\n\n[ref[]: /uri\n",
+    "expected": [
+      {
+        "type": "Padding",
+        "child": {
+          "type": "Column",
+          "children": [
+            {
+              "type": "RichText",
+              "textAlign": "TextAlign.start",
+              "text": {
+                "type": "TextSpan",
+                "text": "[foo][ref[]",
+                "style": {
+                  "fontSize": 16.0,
+                  "color": "Color(0xff333333)"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "type": "SizedBox",
+        "height": 8.0
+      },
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "text": "[ref[]: /uri",
+              "style": {
+                "fontSize": 16.0,
+                "color": "Color(0xff333333)"
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Links, https://github.github.com/gfm/#example-555",
+    "markdown": "[foo][ref[bar]]\n\n[ref[bar]]: /uri\n",
+    "expected": [
+      {
+        "type": "Padding",
+        "child": {
+          "type": "Column",
+          "children": [
+            {
+              "type": "RichText",
+              "textAlign": "TextAlign.start",
+              "text": {
+                "type": "TextSpan",
+                "text": "[foo][ref[bar]]",
+                "style": {
+                  "fontSize": 16.0,
+                  "color": "Color(0xff333333)"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "type": "SizedBox",
+        "height": 8.0
+      },
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "text": "[ref[bar]]: /uri",
+              "style": {
+                "fontSize": 16.0,
+                "color": "Color(0xff333333)"
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Links, https://github.github.com/gfm/#example-556",
+    "markdown": "[[[foo]]]\n\n[[[foo]]]: /url\n",
+    "expected": [
+      {
+        "type": "Padding",
+        "child": {
+          "type": "Column",
+          "children": [
+            {
+              "type": "RichText",
+              "textAlign": "TextAlign.start",
+              "text": {
+                "type": "TextSpan",
+                "text": "[[[foo]]]",
+                "style": {
+                  "fontSize": 16.0,
+                  "color": "Color(0xff333333)"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "type": "SizedBox",
+        "height": 8.0
+      },
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "text": "[[[foo]]]: /url",
+              "style": {
+                "fontSize": 16.0,
+                "color": "Color(0xff333333)"
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Links, https://github.github.com/gfm/#example-557",
+    "markdown": "[foo][ref\\[]\n\n[ref\\[]: /uri\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "text": "foo",
+              "style": {
+                "fontSize": 16.0,
+                "color": "Color(0xff2196f3)"
+              },
+              "recognizer": "TapGestureRecognizer"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Links, https://github.github.com/gfm/#example-558",
+    "markdown": "[bar\\\\]: /uri\n\n[bar\\\\]\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "text": "bar\\",
+              "style": {
+                "fontSize": 16.0,
+                "color": "Color(0xff2196f3)"
+              },
+              "recognizer": "TapGestureRecognizer"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Links, https://github.github.com/gfm/#example-559",
+    "markdown": "[]\n\n[]: /uri\n",
+    "expected": [
+      {
+        "type": "Padding",
+        "child": {
+          "type": "Column",
+          "children": [
+            {
+              "type": "RichText",
+              "textAlign": "TextAlign.start",
+              "text": {
+                "type": "TextSpan",
+                "text": "[]",
+                "style": {
+                  "fontSize": 16.0,
+                  "color": "Color(0xff333333)"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "type": "SizedBox",
+        "height": 8.0
+      },
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "text": "[]: /uri",
+              "style": {
+                "fontSize": 16.0,
+                "color": "Color(0xff333333)"
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Links, https://github.github.com/gfm/#example-560",
+    "markdown": "[\n ]\n\n[\n ]: /uri\n",
+    "expected": [
+      {
+        "type": "Padding",
+        "child": {
+          "type": "Column",
+          "children": [
+            {
+              "type": "RichText",
+              "textAlign": "TextAlign.start",
+              "text": {
+                "type": "TextSpan",
+                "text": "[ ]",
+                "style": {
+                  "fontSize": 16.0,
+                  "color": "Color(0xff333333)"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "type": "SizedBox",
+        "height": 8.0
+      },
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "text": "[ ]: /uri",
+              "style": {
+                "fontSize": 16.0,
+                "color": "Color(0xff333333)"
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Links, https://github.github.com/gfm/#example-561",
+    "markdown": "[foo][]\n\n[foo]: /url \"title\"\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "text": "foo",
+              "style": {
+                "fontSize": 16.0,
+                "color": "Color(0xff2196f3)"
+              },
+              "recognizer": "TapGestureRecognizer"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Links, https://github.github.com/gfm/#example-562",
+    "markdown": "[*foo* bar][]\n\n[*foo* bar]: /url \"title\"\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "children": [
+                {
+                  "type": "TextSpan",
+                  "text": "foo",
+                  "style": {
+                    "fontSize": 16.0,
+                    "fontStyle": "FontStyle.italic",
+                    "color": "Color(0xff2196f3)"
+                  },
+                  "recognizer": "TapGestureRecognizer"
+                },
+                {
+                  "type": "TextSpan",
+                  "text": " bar",
+                  "style": {
+                    "fontSize": 16.0,
+                    "color": "Color(0xff2196f3)"
+                  },
+                  "recognizer": "TapGestureRecognizer"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Links, https://github.github.com/gfm/#example-563",
+    "markdown": "[Foo][]\n\n[foo]: /url \"title\"\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "text": "Foo",
+              "style": {
+                "fontSize": 16.0,
+                "color": "Color(0xff2196f3)"
+              },
+              "recognizer": "TapGestureRecognizer"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Links, https://github.github.com/gfm/#example-564",
+    "markdown": "[foo] \n[]\n\n[foo]: /url \"title\"\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "children": [
+                {
+                  "type": "TextSpan",
+                  "text": "foo",
+                  "style": {
+                    "fontSize": 16.0,
+                    "color": "Color(0xff2196f3)"
+                  },
+                  "recognizer": "TapGestureRecognizer"
+                },
+                {
+                  "type": "TextSpan",
+                  "text": " []",
+                  "style": {
+                    "fontSize": 16.0,
+                    "color": "Color(0xff333333)"
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Links, https://github.github.com/gfm/#example-565",
+    "markdown": "[foo]\n\n[foo]: /url \"title\"\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "text": "foo",
+              "style": {
+                "fontSize": 16.0,
+                "color": "Color(0xff2196f3)"
+              },
+              "recognizer": "TapGestureRecognizer"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Links, https://github.github.com/gfm/#example-566",
+    "markdown": "[*foo* bar]\n\n[*foo* bar]: /url \"title\"\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "children": [
+                {
+                  "type": "TextSpan",
+                  "text": "foo",
+                  "style": {
+                    "fontSize": 16.0,
+                    "fontStyle": "FontStyle.italic",
+                    "color": "Color(0xff2196f3)"
+                  },
+                  "recognizer": "TapGestureRecognizer"
+                },
+                {
+                  "type": "TextSpan",
+                  "text": " bar",
+                  "style": {
+                    "fontSize": 16.0,
+                    "color": "Color(0xff2196f3)"
+                  },
+                  "recognizer": "TapGestureRecognizer"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Links, https://github.github.com/gfm/#example-567",
+    "markdown": "[[*foo* bar]]\n\n[*foo* bar]: /url \"title\"\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "children": [
+                {
+                  "type": "TextSpan",
+                  "text": "[",
+                  "style": {
+                    "fontSize": 16.0,
+                    "color": "Color(0xff333333)"
+                  }
+                },
+                {
+                  "type": "TextSpan",
+                  "children": [
+                    {
+                      "type": "TextSpan",
+                      "text": "foo",
+                      "style": {
+                        "fontSize": 16.0,
+                        "fontStyle": "FontStyle.italic",
+                        "color": "Color(0xff2196f3)"
+                      },
+                      "recognizer": "TapGestureRecognizer"
+                    },
+                    {
+                      "type": "TextSpan",
+                      "text": " bar",
+                      "style": {
+                        "fontSize": 16.0,
+                        "color": "Color(0xff2196f3)"
+                      },
+                      "recognizer": "TapGestureRecognizer"
+                    }
+                  ]
+                },
+                {
+                  "type": "TextSpan",
+                  "text": "]",
+                  "style": {
+                    "fontSize": 16.0,
+                    "color": "Color(0xff333333)"
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Links, https://github.github.com/gfm/#example-568",
+    "markdown": "[[bar [foo]\n\n[foo]: /url\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "children": [
+                {
+                  "type": "TextSpan",
+                  "text": "[[bar ",
+                  "style": {
+                    "fontSize": 16.0,
+                    "color": "Color(0xff333333)"
+                  }
+                },
+                {
+                  "type": "TextSpan",
+                  "text": "foo",
+                  "style": {
+                    "fontSize": 16.0,
+                    "color": "Color(0xff2196f3)"
+                  },
+                  "recognizer": "TapGestureRecognizer"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Links, https://github.github.com/gfm/#example-569",
+    "markdown": "[Foo]\n\n[foo]: /url \"title\"\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "text": "Foo",
+              "style": {
+                "fontSize": 16.0,
+                "color": "Color(0xff2196f3)"
+              },
+              "recognizer": "TapGestureRecognizer"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Links, https://github.github.com/gfm/#example-570",
+    "markdown": "[foo] bar\n\n[foo]: /url\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "children": [
+                {
+                  "type": "TextSpan",
+                  "text": "foo",
+                  "style": {
+                    "fontSize": 16.0,
+                    "color": "Color(0xff2196f3)"
+                  },
+                  "recognizer": "TapGestureRecognizer"
+                },
+                {
+                  "type": "TextSpan",
+                  "text": " bar",
+                  "style": {
+                    "fontSize": 16.0,
+                    "color": "Color(0xff333333)"
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Links, https://github.github.com/gfm/#example-571",
+    "markdown": "\\[foo]\n\n[foo]: /url \"title\"\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "text": "[foo]",
+              "style": {
+                "fontSize": 16.0,
+                "color": "Color(0xff333333)"
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Links, https://github.github.com/gfm/#example-572",
+    "markdown": "[foo*]: /url\n\n*[foo*]\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "children": [
+                {
+                  "type": "TextSpan",
+                  "text": "*",
+                  "style": {
+                    "fontSize": 16.0,
+                    "color": "Color(0xff333333)"
+                  }
+                },
+                {
+                  "type": "TextSpan",
+                  "text": "foo*",
+                  "style": {
+                    "fontSize": 16.0,
+                    "color": "Color(0xff2196f3)"
+                  },
+                  "recognizer": "TapGestureRecognizer"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Links, https://github.github.com/gfm/#example-573",
+    "markdown": "[foo][bar]\n\n[foo]: /url1\n[bar]: /url2\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "text": "foo",
+              "style": {
+                "fontSize": 16.0,
+                "color": "Color(0xff2196f3)"
+              },
+              "recognizer": "TapGestureRecognizer"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Links, https://github.github.com/gfm/#example-574",
+    "markdown": "[foo][]\n\n[foo]: /url1\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "text": "foo",
+              "style": {
+                "fontSize": 16.0,
+                "color": "Color(0xff2196f3)"
+              },
+              "recognizer": "TapGestureRecognizer"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Links, https://github.github.com/gfm/#example-575",
+    "markdown": "[foo]()\n\n[foo]: /url1\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "text": "foo",
+              "style": {
+                "fontSize": 16.0,
+                "color": "Color(0xff2196f3)"
+              },
+              "recognizer": "TapGestureRecognizer"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Links, https://github.github.com/gfm/#example-576",
+    "markdown": "[foo](not a link)\n\n[foo]: /url1\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "children": [
+                {
+                  "type": "TextSpan",
+                  "text": "foo",
+                  "style": {
+                    "fontSize": 16.0,
+                    "color": "Color(0xff2196f3)"
+                  },
+                  "recognizer": "TapGestureRecognizer"
+                },
+                {
+                  "type": "TextSpan",
+                  "text": "(not a link)",
+                  "style": {
+                    "fontSize": 16.0,
+                    "color": "Color(0xff333333)"
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Links, https://github.github.com/gfm/#example-577",
+    "markdown": "[foo][bar][baz]\n\n[baz]: /url\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "children": [
+                {
+                  "type": "TextSpan",
+                  "text": "[foo]",
+                  "style": {
+                    "fontSize": 16.0,
+                    "color": "Color(0xff333333)"
+                  }
+                },
+                {
+                  "type": "TextSpan",
+                  "text": "bar",
+                  "style": {
+                    "fontSize": 16.0,
+                    "color": "Color(0xff2196f3)"
+                  },
+                  "recognizer": "TapGestureRecognizer"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Links, https://github.github.com/gfm/#example-578",
+    "markdown": "[foo][bar][baz]\n\n[baz]: /url1\n[bar]: /url2\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "children": [
+                {
+                  "type": "TextSpan",
+                  "text": "foo",
+                  "style": {
+                    "fontSize": 16.0,
+                    "color": "Color(0xff2196f3)"
+                  },
+                  "recognizer": "TapGestureRecognizer"
+                },
+                {
+                  "type": "TextSpan",
+                  "text": "baz",
+                  "style": {
+                    "fontSize": 16.0,
+                    "color": "Color(0xff2196f3)"
+                  },
+                  "recognizer": "TapGestureRecognizer"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Links, https://github.github.com/gfm/#example-579",
+    "markdown": "[foo][bar][baz]\n\n[baz]: /url1\n[foo]: /url2\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "children": [
+                {
+                  "type": "TextSpan",
+                  "text": "[foo]",
+                  "style": {
+                    "fontSize": 16.0,
+                    "color": "Color(0xff333333)"
+                  }
+                },
+                {
+                  "type": "TextSpan",
+                  "text": "bar",
+                  "style": {
+                    "fontSize": 16.0,
+                    "color": "Color(0xff2196f3)"
+                  },
+                  "recognizer": "TapGestureRecognizer"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  }
+]

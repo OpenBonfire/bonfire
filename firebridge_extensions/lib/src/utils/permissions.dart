@@ -1,0 +1,85 @@
+import 'package:firebridge/firebridge.dart';
+
+/// Compute the permissions for [member] in a given [channel].
+///
+/// {@template compute_permissions_detail}
+/// This method returns the permissions for [member] according to the
+/// permissions granted to them by their roles at a guild level as well as
+/// the permission overwrites for [channel].
+///
+/// Adapted from https://discord.com/developers/docs/topics/permissions#permission-overwrites
+/// {@endtemplate}
+Future<Permissions> computePermissions(
+  GuildChannel channel,
+  Member member,
+) async {
+  final guild = await channel.guild.get();
+
+  Future<Permissions> computeBasePermissions() async {
+    if (guild.ownerId == member.id) {
+      return Permissions.allPermissions;
+    }
+
+    final everyoneRole = await guild.roles[guild.id].get();
+    Flags<Permissions> permissions = everyoneRole.permissions;
+
+    for (final role in member.roles) {
+      final rolePermissions = (await role.get()).permissions;
+
+      permissions |= rolePermissions;
+    }
+
+    permissions = Permissions(permissions.value);
+    permissions as Permissions;
+
+    if (permissions.isAdministrator) {
+      return Permissions.allPermissions;
+    }
+
+    return permissions;
+  }
+
+  Future<Permissions> computeOverwrites(Permissions basePermissions) async {
+    if (basePermissions.isAdministrator) {
+      return Permissions.allPermissions;
+    }
+
+    Flags<Permissions> permissions = basePermissions;
+
+    final everyoneOverwrite = channel.permissionOverwrites
+        .where((overwrite) => overwrite.id == guild.id)
+        .singleOrNull;
+    if (everyoneOverwrite != null) {
+      permissions &= ~everyoneOverwrite.deny;
+      permissions |= everyoneOverwrite.allow;
+    }
+
+    Flags<Permissions> allow = Permissions(0);
+    Flags<Permissions> deny = Permissions(0);
+
+    for (final roleId in member.roleIds) {
+      final roleOverwrite = channel.permissionOverwrites
+          .where((overwrite) => overwrite.id == roleId)
+          .singleOrNull;
+      if (roleOverwrite != null) {
+        allow |= roleOverwrite.allow;
+        deny |= roleOverwrite.deny;
+      }
+    }
+
+    permissions &= ~deny;
+    permissions |= allow;
+
+    final memberOverwrite = channel.permissionOverwrites
+        .where((overwrite) => overwrite.id == member.id)
+        .singleOrNull;
+    if (memberOverwrite != null) {
+      permissions &= ~memberOverwrite.deny;
+      permissions |= memberOverwrite.allow;
+    }
+
+    return Permissions(permissions.value);
+  }
+
+  return computeOverwrites(await computeBasePermissions());
+}

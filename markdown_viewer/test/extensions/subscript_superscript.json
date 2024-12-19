@@ -1,0 +1,62 @@
+[
+  {
+    "description": "A simple one",
+    "markdown": "foo^sup^ bar~sub~",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "Wrap",
+            "children": [
+              {
+                "type": "RichText",
+                "textAlign": "TextAlign.start",
+                "text": {
+                  "type": "TextSpan",
+                  "text": "foo",
+                  "style": { "fontSize": 16.0, "color": "Color(0xff333333)" }
+                }
+              },
+              {
+                "type": "RichText",
+                "textAlign": "TextAlign.start",
+                "text": {
+                  "type": "TextSpan",
+                  "text": "sup",
+                  "style": {
+                    "fontSize": 16.0,
+                    "color": "Color(0xff333333)",
+                    "fontFeatures": ["FontFeature('sups', 1)"]
+                  }
+                }
+              },
+              {
+                "type": "RichText",
+                "textAlign": "TextAlign.start",
+                "text": {
+                  "type": "TextSpan",
+                  "text": " bar",
+                  "style": { "fontSize": 16.0, "color": "Color(0xff333333)" }
+                }
+              },
+              {
+                "type": "RichText",
+                "textAlign": "TextAlign.start",
+                "text": {
+                  "type": "TextSpan",
+                  "text": "sub",
+                  "style": {
+                    "fontSize": 16.0,
+                    "color": "Color(0xff333333)",
+                    "fontFeatures": ["FontFeature('subs', 1)"]
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,819 @@
+[
+  {
+    "description": "ATX headings, https://github.github.com/gfm/#example-32",
+    "markdown": "# foo\n## foo\n### foo\n#### foo\n##### foo\n###### foo\n",
+    "expected": [
+      {
+        "type": "Padding",
+        "child": {
+          "type": "Column",
+          "children": [
+            {
+              "type": "RichText",
+              "textAlign": "TextAlign.start",
+              "text": {
+                "type": "TextSpan",
+                "text": "foo",
+                "style": {
+                  "fontSize": 25.6,
+                  "color": "Color(0xff333333)"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "type": "SizedBox",
+        "height": 8.0
+      },
+      {
+        "type": "Padding",
+        "child": {
+          "type": "Column",
+          "children": [
+            {
+              "type": "RichText",
+              "textAlign": "TextAlign.start",
+              "text": {
+                "type": "TextSpan",
+                "text": "foo",
+                "style": {
+                  "fontSize": 22.4,
+                  "color": "Color(0xff333333)"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "type": "SizedBox",
+        "height": 8.0
+      },
+      {
+        "type": "Padding",
+        "child": {
+          "type": "Column",
+          "children": [
+            {
+              "type": "RichText",
+              "textAlign": "TextAlign.start",
+              "text": {
+                "type": "TextSpan",
+                "text": "foo",
+                "style": {
+                  "fontSize": 19.2,
+                  "color": "Color(0xff333333)"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "type": "SizedBox",
+        "height": 8.0
+      },
+      {
+        "type": "Padding",
+        "child": {
+          "type": "Column",
+          "children": [
+            {
+              "type": "RichText",
+              "textAlign": "TextAlign.start",
+              "text": {
+                "type": "TextSpan",
+                "text": "foo",
+                "style": {
+                  "fontSize": 17.6,
+                  "color": "Color(0xff333333)"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "type": "SizedBox",
+        "height": 8.0
+      },
+      {
+        "type": "Padding",
+        "child": {
+          "type": "Column",
+          "children": [
+            {
+              "type": "RichText",
+              "textAlign": "TextAlign.start",
+              "text": {
+                "type": "TextSpan",
+                "text": "foo",
+                "style": {
+                  "fontSize": 16.0,
+                  "color": "Color(0xff333333)"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "type": "SizedBox",
+        "height": 8.0
+      },
+      {
+        "type": "Padding",
+        "child": {
+          "type": "Column",
+          "children": [
+            {
+              "type": "RichText",
+              "textAlign": "TextAlign.start",
+              "text": {
+                "type": "TextSpan",
+                "text": "foo",
+                "style": {
+                  "fontSize": 16.0,
+                  "color": "Color(0xff333333)"
+                }
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "description": "ATX headings, https://github.github.com/gfm/#example-33",
+    "markdown": "####### foo\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "text": "####### foo",
+              "style": {
+                "fontSize": 16.0,
+                "color": "Color(0xff333333)"
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "ATX headings, https://github.github.com/gfm/#example-34",
+    "markdown": "#5 bolt\n\n#hashtag\n",
+    "expected": [
+      {
+        "type": "Padding",
+        "child": {
+          "type": "Column",
+          "children": [
+            {
+              "type": "RichText",
+              "textAlign": "TextAlign.start",
+              "text": {
+                "type": "TextSpan",
+                "text": "#5 bolt",
+                "style": {
+                  "fontSize": 16.0,
+                  "color": "Color(0xff333333)"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "type": "SizedBox",
+        "height": 8.0
+      },
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "text": "#hashtag",
+              "style": {
+                "fontSize": 16.0,
+                "color": "Color(0xff333333)"
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "ATX headings, https://github.github.com/gfm/#example-35",
+    "markdown": "\\## foo\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "text": "## foo",
+              "style": {
+                "fontSize": 16.0,
+                "color": "Color(0xff333333)"
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "ATX headings, https://github.github.com/gfm/#example-36",
+    "markdown": "# foo *bar* \\*baz\\*\n",
+    "expected": [
+      {
+        "type": "Padding",
+        "child": {
+          "type": "Column",
+          "children": [
+            {
+              "type": "RichText",
+              "textAlign": "TextAlign.start",
+              "text": {
+                "type": "TextSpan",
+                "children": [
+                  {
+                    "type": "TextSpan",
+                    "text": "foo ",
+                    "style": {
+                      "fontSize": 25.6,
+                      "color": "Color(0xff333333)"
+                    }
+                  },
+                  {
+                    "type": "TextSpan",
+                    "text": "bar",
+                    "style": {
+                      "fontSize": 25.6,
+                      "fontStyle": "FontStyle.italic",
+                      "color": "Color(0xff333333)"
+                    }
+                  },
+                  {
+                    "type": "TextSpan",
+                    "text": " *baz*",
+                    "style": {
+                      "fontSize": 25.6,
+                      "color": "Color(0xff333333)"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "description": "ATX headings, https://github.github.com/gfm/#example-37",
+    "markdown": "#                  foo                     \n",
+    "expected": [
+      {
+        "type": "Padding",
+        "child": {
+          "type": "Column",
+          "children": [
+            {
+              "type": "RichText",
+              "textAlign": "TextAlign.start",
+              "text": {
+                "type": "TextSpan",
+                "text": "foo",
+                "style": {
+                  "fontSize": 25.6,
+                  "color": "Color(0xff333333)"
+                }
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "description": "ATX headings, https://github.github.com/gfm/#example-38",
+    "markdown": " ### foo\n  ## foo\n   # foo\n",
+    "expected": [
+      {
+        "type": "Padding",
+        "child": {
+          "type": "Column",
+          "children": [
+            {
+              "type": "RichText",
+              "textAlign": "TextAlign.start",
+              "text": {
+                "type": "TextSpan",
+                "text": "foo",
+                "style": {
+                  "fontSize": 19.2,
+                  "color": "Color(0xff333333)"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "type": "SizedBox",
+        "height": 8.0
+      },
+      {
+        "type": "Padding",
+        "child": {
+          "type": "Column",
+          "children": [
+            {
+              "type": "RichText",
+              "textAlign": "TextAlign.start",
+              "text": {
+                "type": "TextSpan",
+                "text": "foo",
+                "style": {
+                  "fontSize": 22.4,
+                  "color": "Color(0xff333333)"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "type": "SizedBox",
+        "height": 8.0
+      },
+      {
+        "type": "Padding",
+        "child": {
+          "type": "Column",
+          "children": [
+            {
+              "type": "RichText",
+              "textAlign": "TextAlign.start",
+              "text": {
+                "type": "TextSpan",
+                "text": "foo",
+                "style": {
+                  "fontSize": 25.6,
+                  "color": "Color(0xff333333)"
+                }
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "description": "ATX headings, https://github.github.com/gfm/#example-39",
+    "markdown": "    # foo\n",
+    "expected": [
+      {
+        "type": "Container",
+        "child": {
+          "type": "Stack",
+          "children": [
+            {
+              "type": "Scrollbar",
+              "child": {
+                "type": "SingleChildScrollView",
+                "child": {
+                  "type": "RichText",
+                  "textAlign": "TextAlign.start",
+                  "text": {
+                    "type": "TextSpan",
+                    "text": "# foo",
+                    "style": {
+                      "fontFamily": "monospace",
+                      "fontSize": 16.0,
+                      "color": "Color(0xff333333)"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "type": "Positioned"
+            }
+          ]
+        },
+        "decoration": {
+          "type": "BoxDecoration"
+        }
+      }
+    ]
+  },
+  {
+    "description": "ATX headings, https://github.github.com/gfm/#example-40",
+    "markdown": "foo\n    # bar\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "text": "foo # bar",
+              "style": {
+                "fontSize": 16.0,
+                "color": "Color(0xff333333)"
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "ATX headings, https://github.github.com/gfm/#example-41",
+    "markdown": "## foo ##\n  ###   bar    ###\n",
+    "expected": [
+      {
+        "type": "Padding",
+        "child": {
+          "type": "Column",
+          "children": [
+            {
+              "type": "RichText",
+              "textAlign": "TextAlign.start",
+              "text": {
+                "type": "TextSpan",
+                "text": "foo",
+                "style": {
+                  "fontSize": 22.4,
+                  "color": "Color(0xff333333)"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "type": "SizedBox",
+        "height": 8.0
+      },
+      {
+        "type": "Padding",
+        "child": {
+          "type": "Column",
+          "children": [
+            {
+              "type": "RichText",
+              "textAlign": "TextAlign.start",
+              "text": {
+                "type": "TextSpan",
+                "text": "bar",
+                "style": {
+                  "fontSize": 19.2,
+                  "color": "Color(0xff333333)"
+                }
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "description": "ATX headings, https://github.github.com/gfm/#example-42",
+    "markdown": "# foo ##################################\n##### foo ##\n",
+    "expected": [
+      {
+        "type": "Padding",
+        "child": {
+          "type": "Column",
+          "children": [
+            {
+              "type": "RichText",
+              "textAlign": "TextAlign.start",
+              "text": {
+                "type": "TextSpan",
+                "text": "foo",
+                "style": {
+                  "fontSize": 25.6,
+                  "color": "Color(0xff333333)"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "type": "SizedBox",
+        "height": 8.0
+      },
+      {
+        "type": "Padding",
+        "child": {
+          "type": "Column",
+          "children": [
+            {
+              "type": "RichText",
+              "textAlign": "TextAlign.start",
+              "text": {
+                "type": "TextSpan",
+                "text": "foo",
+                "style": {
+                  "fontSize": 16.0,
+                  "color": "Color(0xff333333)"
+                }
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "description": "ATX headings, https://github.github.com/gfm/#example-43",
+    "markdown": "### foo ###     \n",
+    "expected": [
+      {
+        "type": "Padding",
+        "child": {
+          "type": "Column",
+          "children": [
+            {
+              "type": "RichText",
+              "textAlign": "TextAlign.start",
+              "text": {
+                "type": "TextSpan",
+                "text": "foo",
+                "style": {
+                  "fontSize": 19.2,
+                  "color": "Color(0xff333333)"
+                }
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "description": "ATX headings, https://github.github.com/gfm/#example-44",
+    "markdown": "### foo ### b\n",
+    "expected": [
+      {
+        "type": "Padding",
+        "child": {
+          "type": "Column",
+          "children": [
+            {
+              "type": "RichText",
+              "textAlign": "TextAlign.start",
+              "text": {
+                "type": "TextSpan",
+                "text": "foo ### b",
+                "style": {
+                  "fontSize": 19.2,
+                  "color": "Color(0xff333333)"
+                }
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "description": "ATX headings, https://github.github.com/gfm/#example-45",
+    "markdown": "# foo#\n",
+    "expected": [
+      {
+        "type": "Padding",
+        "child": {
+          "type": "Column",
+          "children": [
+            {
+              "type": "RichText",
+              "textAlign": "TextAlign.start",
+              "text": {
+                "type": "TextSpan",
+                "text": "foo#",
+                "style": {
+                  "fontSize": 25.6,
+                  "color": "Color(0xff333333)"
+                }
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "description": "ATX headings, https://github.github.com/gfm/#example-46",
+    "markdown": "### foo \\###\n## foo #\\##\n# foo \\#\n",
+    "expected": [
+      {
+        "type": "Padding",
+        "child": {
+          "type": "Column",
+          "children": [
+            {
+              "type": "RichText",
+              "textAlign": "TextAlign.start",
+              "text": {
+                "type": "TextSpan",
+                "text": "foo ###",
+                "style": {
+                  "fontSize": 19.2,
+                  "color": "Color(0xff333333)"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "type": "SizedBox",
+        "height": 8.0
+      },
+      {
+        "type": "Padding",
+        "child": {
+          "type": "Column",
+          "children": [
+            {
+              "type": "RichText",
+              "textAlign": "TextAlign.start",
+              "text": {
+                "type": "TextSpan",
+                "text": "foo ###",
+                "style": {
+                  "fontSize": 22.4,
+                  "color": "Color(0xff333333)"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "type": "SizedBox",
+        "height": 8.0
+      },
+      {
+        "type": "Padding",
+        "child": {
+          "type": "Column",
+          "children": [
+            {
+              "type": "RichText",
+              "textAlign": "TextAlign.start",
+              "text": {
+                "type": "TextSpan",
+                "text": "foo #",
+                "style": {
+                  "fontSize": 25.6,
+                  "color": "Color(0xff333333)"
+                }
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "description": "ATX headings, https://github.github.com/gfm/#example-47",
+    "markdown": "****\n## foo\n****\n",
+    "expected": [
+      {
+        "type": "Divider"
+      },
+      {
+        "type": "SizedBox",
+        "height": 8.0
+      },
+      {
+        "type": "Padding",
+        "child": {
+          "type": "Column",
+          "children": [
+            {
+              "type": "RichText",
+              "textAlign": "TextAlign.start",
+              "text": {
+                "type": "TextSpan",
+                "text": "foo",
+                "style": {
+                  "fontSize": 22.4,
+                  "color": "Color(0xff333333)"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "type": "SizedBox",
+        "height": 8.0
+      },
+      {
+        "type": "Divider"
+      }
+    ]
+  },
+  {
+    "description": "ATX headings, https://github.github.com/gfm/#example-48",
+    "markdown": "Foo bar\n# baz\nBar foo\n",
+    "expected": [
+      {
+        "type": "Padding",
+        "child": {
+          "type": "Column",
+          "children": [
+            {
+              "type": "RichText",
+              "textAlign": "TextAlign.start",
+              "text": {
+                "type": "TextSpan",
+                "text": "Foo bar",
+                "style": {
+                  "fontSize": 16.0,
+                  "color": "Color(0xff333333)"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "type": "SizedBox",
+        "height": 8.0
+      },
+      {
+        "type": "Padding",
+        "child": {
+          "type": "Column",
+          "children": [
+            {
+              "type": "RichText",
+              "textAlign": "TextAlign.start",
+              "text": {
+                "type": "TextSpan",
+                "text": "baz",
+                "style": {
+                  "fontSize": 25.6,
+                  "color": "Color(0xff333333)"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "type": "SizedBox",
+        "height": 8.0
+      },
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "text": "Bar foo",
+              "style": {
+                "fontSize": 16.0,
+                "color": "Color(0xff333333)"
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "ATX headings, https://github.github.com/gfm/#example-49",
+    "markdown": "## \n#\n### ###\n",
+    "expected": []
+  }
+]

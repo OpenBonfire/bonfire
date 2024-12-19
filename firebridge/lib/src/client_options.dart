@@ -1,0 +1,156 @@
+import 'package:logging/logging.dart';
+import 'package:firebridge/src/cache/cache.dart';
+import 'package:firebridge/src/client.dart';
+import 'package:firebridge/src/models/channel/channel.dart';
+import 'package:firebridge/src/models/commands/application_command.dart';
+import 'package:firebridge/src/models/commands/application_command_permissions.dart';
+import 'package:firebridge/src/models/emoji.dart';
+import 'package:firebridge/src/models/channel/stage_instance.dart';
+import 'package:firebridge/src/models/entitlement.dart';
+import 'package:firebridge/src/models/guild/audit_log.dart';
+import 'package:firebridge/src/models/guild/auto_moderation.dart';
+import 'package:firebridge/src/models/guild/guild.dart';
+import 'package:firebridge/src/models/guild/integration.dart';
+import 'package:firebridge/src/models/guild/member.dart';
+import 'package:firebridge/src/models/guild/scheduled_event.dart';
+import 'package:firebridge/src/models/message/message.dart';
+import 'package:firebridge/src/models/role.dart';
+import 'package:firebridge/src/models/sticker/global_sticker.dart';
+import 'package:firebridge/src/models/sticker/guild_sticker.dart';
+import 'package:firebridge/src/models/user/user.dart';
+import 'package:firebridge/src/models/voice/voice_state.dart';
+import 'package:firebridge/src/models/webhook.dart';
+import 'package:firebridge/src/plugin/plugin.dart';
+
+/// Options for controlling the behavior of a [Nyxx] client.
+abstract class ClientOptions {
+  /// The plugins to use for this client.
+  final List<NyxxPlugin> plugins;
+
+  /// The name of the logger to use for this client.
+  final String loggerName;
+
+  /// The logger to use for this client.
+  Logger get logger => Logger(loggerName);
+
+  /// Create a new [ClientOptions].
+  const ClientOptions({this.plugins = const [], this.loggerName = 'Nyxx'});
+}
+
+/// Options for controlling the behavior of a [NyxxRest] client.
+class RestClientOptions extends ClientOptions {
+  /// The [CacheConfig] to use for the cache of the [NyxxRest.users] manager.
+  final CacheConfig<User> userCacheConfig;
+
+  /// The [CacheConfig] to use for the cache of the [NyxxRest.channels] manager.
+  final CacheConfig<Channel> channelCacheConfig;
+
+  /// The [CacheConfig] to use for the cache of [TextChannel.messages] managers.
+  final CacheConfig<Message> messageCacheConfig;
+
+  /// The [CacheConfig] to use for the cache of the [NyxxRest.webhooks] manager.
+  final CacheConfig<Webhook> webhookCacheConfig;
+
+  /// The [CacheConfig] to use for the cache of the [NyxxRest.guilds] manager.
+  final CacheConfig<Guild> guildCacheConfig;
+
+  /// The [CacheConfig] to use for the [Guild.members] manager.
+  final CacheConfig<Member> memberCacheConfig;
+
+  /// The [CacheConfig] to use for the [Guild.roles] manager.
+  final CacheConfig<Role> roleCacheConfig;
+
+  /// The [CacheConfig] to use for the [Emoji]s in the [Guild.emojis] manager.
+  final CacheConfig<Emoji> emojiCacheConfig;
+
+  /// The [CacheConfig] to use for the [GuildSticker]s in the [Guild.stickers] manager.
+  final CacheConfig<GuildSticker> stickerCacheConfig;
+
+  /// The [CacheConfig] to use for the [GlobalSticker]s in the [NyxxRest.stickers] manager.
+  final CacheConfig<GlobalSticker> globalStickerCacheConfig;
+
+  /// The [CacheConfig] to use for [StageInstance]s in the [NyxxRest.channels] manager.
+  final CacheConfig<StageInstance> stageInstanceCacheConfig;
+
+  /// The [CacheConfig] to use for the [Guild.scheduledEvents] manager.
+  final CacheConfig<ScheduledEvent> scheduledEventCacheConfig;
+
+  /// The [CacheConfig] to use for the [Guild.autoModerationRules] manager.
+  final CacheConfig<AutoModerationRule> autoModerationRuleConfig;
+
+  /// The [CacheConfig] to use for the [Guild.integrations] manager.
+  final CacheConfig<Integration> integrationConfig;
+
+  /// The [CacheConfig] to use for the [Guild.auditLogs] manager.
+  final CacheConfig<AuditLogEntry> auditLogEntryConfig;
+
+  /// The [CacheConfig] to use for the [NyxxRest.voice] manager.
+  final CacheConfig<VoiceState> voiceStateConfig;
+
+  /// The [CacheConfig] to use for the [NyxxRest.commands] manager.
+  final CacheConfig<ApplicationCommand> applicationCommandConfig;
+
+  /// The [CacheConfig] to use for the [GuildApplicationCommandManager.permissionsCache] cache.
+  final CacheConfig<CommandPermissions> commandPermissionsConfig;
+
+  /// The [CacheConfig] to use for the [Application.entitlements] manager.
+  final CacheConfig<Entitlement> entitlementConfig;
+
+  /// Create a new [RestClientOptions].
+  const RestClientOptions({
+    super.plugins,
+    super.loggerName,
+    this.userCacheConfig = const CacheConfig(),
+    this.channelCacheConfig = const CacheConfig(),
+    this.messageCacheConfig = const CacheConfig(),
+    this.webhookCacheConfig = const CacheConfig(),
+    this.guildCacheConfig = const CacheConfig(),
+    this.memberCacheConfig = const CacheConfig(),
+    this.roleCacheConfig = const CacheConfig(),
+    this.emojiCacheConfig = const CacheConfig(),
+    this.stageInstanceCacheConfig = const CacheConfig(),
+    this.scheduledEventCacheConfig = const CacheConfig(),
+    this.autoModerationRuleConfig = const CacheConfig(),
+    this.integrationConfig = const CacheConfig(),
+    this.auditLogEntryConfig = const CacheConfig(),
+    this.voiceStateConfig = const CacheConfig(),
+    this.stickerCacheConfig = const CacheConfig(),
+    this.globalStickerCacheConfig = const CacheConfig(),
+    this.applicationCommandConfig = const CacheConfig(),
+    this.commandPermissionsConfig = const CacheConfig(),
+    this.entitlementConfig = const CacheConfig(),
+  });
+}
+
+/// Options for controlling the behavior of a [NyxxGateway] client.
+class GatewayClientOptions extends RestClientOptions {
+  /// The minimum number of session starts this client needs to connect.
+  ///
+  /// This is a safety feature to avoid API bans due to excessive connection starts.
+  ///
+  /// If the remaining number of session starts is below this number, an error will be thrown when connecting.
+  final int minimumSessionStarts;
+
+  /// Create a new [GatewayClientOptions].
+  const GatewayClientOptions({
+    this.minimumSessionStarts = 10,
+    super.plugins,
+    super.loggerName,
+    super.userCacheConfig,
+    super.channelCacheConfig,
+    super.messageCacheConfig,
+    super.webhookCacheConfig,
+    super.guildCacheConfig,
+    super.memberCacheConfig,
+    super.roleCacheConfig,
+    super.stageInstanceCacheConfig,
+    super.scheduledEventCacheConfig,
+    super.autoModerationRuleConfig,
+    super.integrationConfig,
+    super.auditLogEntryConfig,
+    super.voiceStateConfig,
+    super.applicationCommandConfig,
+    super.commandPermissionsConfig,
+    super.entitlementConfig,
+  });
+}

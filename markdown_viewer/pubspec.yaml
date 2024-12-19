@@ -1,0 +1,22 @@
+name: markdown_viewer
+description: A Markdown renderer for Flutter. Render Markdown String to rich
+  text output.
+version: 0.6.2
+repository: https://github.com/tagnote-app/markdown_viewer
+
+environment:
+  sdk: '>=2.19.4 <4.0.0'
+  flutter: '>=1.17.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  dart_markdown: ^3.1.7
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0
+
+flutter:

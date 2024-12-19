@@ -1,0 +1,508 @@
+[
+  {
+    "description": "Entity and numeric character references, https://github.github.com/gfm/#example-321",
+    "markdown": "&nbsp; &amp; &copy; &AElig; &Dcaron;\n&frac34; &HilbertSpace; &DifferentialD;\n&ClockwiseContourIntegral; &ngE;\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "text": "&nbsp; &amp; &copy; &AElig; &Dcaron; &frac34; &HilbertSpace; &DifferentialD; &ClockwiseContourIntegral; &ngE;",
+              "style": {
+                "fontSize": 16.0,
+                "color": "Color(0xff333333)"
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Entity and numeric character references, https://github.github.com/gfm/#example-322",
+    "markdown": "&#35; &#1234; &#992; &#0;\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "text": "&#35; &#1234; &#992; &#0;",
+              "style": {
+                "fontSize": 16.0,
+                "color": "Color(0xff333333)"
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Entity and numeric character references, https://github.github.com/gfm/#example-323",
+    "markdown": "&#X22; &#XD06; &#xcab;\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "text": "&#X22; &#XD06; &#xcab;",
+              "style": {
+                "fontSize": 16.0,
+                "color": "Color(0xff333333)"
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Entity and numeric character references, https://github.github.com/gfm/#example-324",
+    "markdown": "&nbsp &x; &#; &#x;\n&#987654321;\n&#abcdef0;\n&ThisIsNotDefined; &hi?;\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "text": "&nbsp &x; &#; &#x; &#987654321; &#abcdef0; &ThisIsNotDefined; &hi?;",
+              "style": {
+                "fontSize": 16.0,
+                "color": "Color(0xff333333)"
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Entity and numeric character references, https://github.github.com/gfm/#example-325",
+    "markdown": "&copy\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "text": "&copy",
+              "style": {
+                "fontSize": 16.0,
+                "color": "Color(0xff333333)"
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Entity and numeric character references, https://github.github.com/gfm/#example-326",
+    "markdown": "&MadeUpEntity;\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "text": "&MadeUpEntity;",
+              "style": {
+                "fontSize": 16.0,
+                "color": "Color(0xff333333)"
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Entity and numeric character references, https://github.github.com/gfm/#example-327",
+    "markdown": "<a href=\"&ouml;&ouml;.html\">\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "text": "<a href=\"&ouml;&ouml;.html\">",
+              "style": {
+                "fontSize": 16.0,
+                "color": "Color(0xff333333)"
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Entity and numeric character references, https://github.github.com/gfm/#example-328",
+    "markdown": "[foo](/f&ouml;&ouml; \"f&ouml;&ouml;\")\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "text": "foo",
+              "style": {
+                "fontSize": 16.0,
+                "color": "Color(0xff2196f3)"
+              },
+              "recognizer": "TapGestureRecognizer"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Entity and numeric character references, https://github.github.com/gfm/#example-329",
+    "markdown": "[foo]\n\n[foo]: /f&ouml;&ouml; \"f&ouml;&ouml;\"\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "text": "foo",
+              "style": {
+                "fontSize": 16.0,
+                "color": "Color(0xff2196f3)"
+              },
+              "recognizer": "TapGestureRecognizer"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Entity and numeric character references, https://github.github.com/gfm/#example-330",
+    "markdown": "``` f&ouml;&ouml;\nfoo\n```\n",
+    "expected": [
+      {
+        "type": "Container",
+        "child": {
+          "type": "Stack",
+          "children": [
+            {
+              "type": "Scrollbar",
+              "child": {
+                "type": "SingleChildScrollView",
+                "child": {
+                  "type": "RichText",
+                  "textAlign": "TextAlign.start",
+                  "text": {
+                    "type": "TextSpan",
+                    "text": "foo",
+                    "style": {
+                      "fontFamily": "monospace",
+                      "fontSize": 16.0,
+                      "color": "Color(0xff333333)"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "type": "Positioned"
+            }
+          ]
+        },
+        "decoration": {
+          "type": "BoxDecoration"
+        }
+      }
+    ]
+  },
+  {
+    "description": "Entity and numeric character references, https://github.github.com/gfm/#example-331",
+    "markdown": "`f&ouml;&ouml;`\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "text": "f&ouml;&ouml;",
+              "style": {
+                "fontFamily": "monospace",
+                "fontSize": 16.0,
+                "color": "Color(0xff8b1c1c)",
+                "backgroundColor": "Color(0x10000000)"
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Entity and numeric character references, https://github.github.com/gfm/#example-332",
+    "markdown": "    f&ouml;f&ouml;\n",
+    "expected": [
+      {
+        "type": "Container",
+        "child": {
+          "type": "Stack",
+          "children": [
+            {
+              "type": "Scrollbar",
+              "child": {
+                "type": "SingleChildScrollView",
+                "child": {
+                  "type": "RichText",
+                  "textAlign": "TextAlign.start",
+                  "text": {
+                    "type": "TextSpan",
+                    "text": "f&ouml;f&ouml;",
+                    "style": {
+                      "fontFamily": "monospace",
+                      "fontSize": 16.0,
+                      "color": "Color(0xff333333)"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "type": "Positioned"
+            }
+          ]
+        },
+        "decoration": {
+          "type": "BoxDecoration"
+        }
+      }
+    ]
+  },
+  {
+    "description": "Entity and numeric character references, https://github.github.com/gfm/#example-333",
+    "markdown": "&#42;foo&#42;\n*foo*\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "children": [
+                {
+                  "type": "TextSpan",
+                  "text": "&#42;foo&#42; ",
+                  "style": {
+                    "fontSize": 16.0,
+                    "color": "Color(0xff333333)"
+                  }
+                },
+                {
+                  "type": "TextSpan",
+                  "text": "foo",
+                  "style": {
+                    "fontSize": 16.0,
+                    "fontStyle": "FontStyle.italic",
+                    "color": "Color(0xff333333)"
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Entity and numeric character references, https://github.github.com/gfm/#example-334",
+    "markdown": "&#42; foo\n\n* foo\n",
+    "expected": [
+      {
+        "type": "Padding",
+        "child": {
+          "type": "Column",
+          "children": [
+            {
+              "type": "RichText",
+              "textAlign": "TextAlign.start",
+              "text": {
+                "type": "TextSpan",
+                "text": "&#42; foo",
+                "style": {
+                  "fontSize": 16.0,
+                  "color": "Color(0xff333333)"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "type": "SizedBox",
+        "height": 8.0
+      },
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "Row",
+            "children": [
+              {
+                "type": "ConstrainedBox",
+                "constraints": {
+                  "type": "BoxConstraints",
+                  "minWidth": 30.0,
+                  "minHeight": 24.0,
+                  "maxWidth": 24.0
+                },
+                "child": {
+                  "type": "Align",
+                  "alignment": "Alignment.center",
+                  "child": {
+                    "type": "Padding",
+                    "child": {
+                      "type": "RichText",
+                      "textAlign": "TextAlign.right",
+                      "text": {
+                        "type": "TextSpan",
+                        "text": "•",
+                        "style": {
+                          "fontSize": 22.4,
+                          "color": "Color(0xbf333333)"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "type": "Expanded",
+                "child": {
+                  "type": "Column",
+                  "children": [
+                    {
+                      "type": "RichText",
+                      "textAlign": "TextAlign.start",
+                      "text": {
+                        "type": "TextSpan",
+                        "text": "foo",
+                        "style": {
+                          "fontSize": 16.0,
+                          "color": "Color(0xff333333)"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Entity and numeric character references, https://github.github.com/gfm/#example-335",
+    "markdown": "foo&#10;&#10;bar\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "text": "foo&#10;&#10;bar",
+              "style": {
+                "fontSize": 16.0,
+                "color": "Color(0xff333333)"
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Entity and numeric character references, https://github.github.com/gfm/#example-336",
+    "markdown": "&#9;foo\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "text": "&#9;foo",
+              "style": {
+                "fontSize": 16.0,
+                "color": "Color(0xff333333)"
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Entity and numeric character references, https://github.github.com/gfm/#example-337",
+    "markdown": "[a](url &quot;tit&quot;)\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "text": "[a](url &quot;tit&quot;)",
+              "style": {
+                "fontSize": 16.0,
+                "color": "Color(0xff333333)"
+              }
+            }
+          }
+        ]
+      }
+    ]
+  }
+]

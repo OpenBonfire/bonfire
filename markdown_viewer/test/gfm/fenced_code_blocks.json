@@ -1,0 +1,1176 @@
+[
+  {
+    "description": "Fenced code blocks, https://github.github.com/gfm/#example-89",
+    "markdown": "```\n<\n >\n```\n",
+    "expected": [
+      {
+        "type": "Container",
+        "child": {
+          "type": "Stack",
+          "children": [
+            {
+              "type": "Scrollbar",
+              "child": {
+                "type": "SingleChildScrollView",
+                "child": {
+                  "type": "RichText",
+                  "textAlign": "TextAlign.start",
+                  "text": {
+                    "type": "TextSpan",
+                    "text": "<\n >",
+                    "style": {
+                      "fontFamily": "monospace",
+                      "fontSize": 16.0,
+                      "color": "Color(0xff333333)"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "type": "Positioned"
+            }
+          ]
+        },
+        "decoration": {
+          "type": "BoxDecoration"
+        }
+      }
+    ]
+  },
+  {
+    "description": "Fenced code blocks, https://github.github.com/gfm/#example-90",
+    "markdown": "~~~\n<\n >\n~~~\n",
+    "expected": [
+      {
+        "type": "Container",
+        "child": {
+          "type": "Stack",
+          "children": [
+            {
+              "type": "Scrollbar",
+              "child": {
+                "type": "SingleChildScrollView",
+                "child": {
+                  "type": "RichText",
+                  "textAlign": "TextAlign.start",
+                  "text": {
+                    "type": "TextSpan",
+                    "text": "<\n >",
+                    "style": {
+                      "fontFamily": "monospace",
+                      "fontSize": 16.0,
+                      "color": "Color(0xff333333)"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "type": "Positioned"
+            }
+          ]
+        },
+        "decoration": {
+          "type": "BoxDecoration"
+        }
+      }
+    ]
+  },
+  {
+    "description": "Fenced code blocks, https://github.github.com/gfm/#example-91",
+    "markdown": "``\nfoo\n``\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "text": "foo",
+              "style": {
+                "fontFamily": "monospace",
+                "fontSize": 16.0,
+                "color": "Color(0xff8b1c1c)",
+                "backgroundColor": "Color(0x10000000)"
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Fenced code blocks, https://github.github.com/gfm/#example-92",
+    "markdown": "```\naaa\n~~~\n```\n",
+    "expected": [
+      {
+        "type": "Container",
+        "child": {
+          "type": "Stack",
+          "children": [
+            {
+              "type": "Scrollbar",
+              "child": {
+                "type": "SingleChildScrollView",
+                "child": {
+                  "type": "RichText",
+                  "textAlign": "TextAlign.start",
+                  "text": {
+                    "type": "TextSpan",
+                    "text": "aaa\n~~~",
+                    "style": {
+                      "fontFamily": "monospace",
+                      "fontSize": 16.0,
+                      "color": "Color(0xff333333)"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "type": "Positioned"
+            }
+          ]
+        },
+        "decoration": {
+          "type": "BoxDecoration"
+        }
+      }
+    ]
+  },
+  {
+    "description": "Fenced code blocks, https://github.github.com/gfm/#example-93",
+    "markdown": "~~~\naaa\n```\n~~~\n",
+    "expected": [
+      {
+        "type": "Container",
+        "child": {
+          "type": "Stack",
+          "children": [
+            {
+              "type": "Scrollbar",
+              "child": {
+                "type": "SingleChildScrollView",
+                "child": {
+                  "type": "RichText",
+                  "textAlign": "TextAlign.start",
+                  "text": {
+                    "type": "TextSpan",
+                    "text": "aaa\n```",
+                    "style": {
+                      "fontFamily": "monospace",
+                      "fontSize": 16.0,
+                      "color": "Color(0xff333333)"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "type": "Positioned"
+            }
+          ]
+        },
+        "decoration": {
+          "type": "BoxDecoration"
+        }
+      }
+    ]
+  },
+  {
+    "description": "Fenced code blocks, https://github.github.com/gfm/#example-94",
+    "markdown": "````\naaa\n```\n``````\n",
+    "expected": [
+      {
+        "type": "Container",
+        "child": {
+          "type": "Stack",
+          "children": [
+            {
+              "type": "Scrollbar",
+              "child": {
+                "type": "SingleChildScrollView",
+                "child": {
+                  "type": "RichText",
+                  "textAlign": "TextAlign.start",
+                  "text": {
+                    "type": "TextSpan",
+                    "text": "aaa\n```",
+                    "style": {
+                      "fontFamily": "monospace",
+                      "fontSize": 16.0,
+                      "color": "Color(0xff333333)"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "type": "Positioned"
+            }
+          ]
+        },
+        "decoration": {
+          "type": "BoxDecoration"
+        }
+      }
+    ]
+  },
+  {
+    "description": "Fenced code blocks, https://github.github.com/gfm/#example-95",
+    "markdown": "~~~~\naaa\n~~~\n~~~~\n",
+    "expected": [
+      {
+        "type": "Container",
+        "child": {
+          "type": "Stack",
+          "children": [
+            {
+              "type": "Scrollbar",
+              "child": {
+                "type": "SingleChildScrollView",
+                "child": {
+                  "type": "RichText",
+                  "textAlign": "TextAlign.start",
+                  "text": {
+                    "type": "TextSpan",
+                    "text": "aaa\n~~~",
+                    "style": {
+                      "fontFamily": "monospace",
+                      "fontSize": 16.0,
+                      "color": "Color(0xff333333)"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "type": "Positioned"
+            }
+          ]
+        },
+        "decoration": {
+          "type": "BoxDecoration"
+        }
+      }
+    ]
+  },
+  {
+    "description": "Fenced code blocks, https://github.github.com/gfm/#example-96",
+    "markdown": "```\n",
+    "expected": [
+      {
+        "type": "Container",
+        "child": {
+          "type": "SizedBox",
+          "height": 15.0
+        },
+        "decoration": {
+          "type": "BoxDecoration"
+        }
+      }
+    ]
+  },
+  {
+    "description": "Fenced code blocks, https://github.github.com/gfm/#example-97",
+    "markdown": "`````\n\n```\naaa\n",
+    "expected": [
+      {
+        "type": "Container",
+        "child": {
+          "type": "Stack",
+          "children": [
+            {
+              "type": "Scrollbar",
+              "child": {
+                "type": "SingleChildScrollView",
+                "child": {
+                  "type": "RichText",
+                  "textAlign": "TextAlign.start",
+                  "text": {
+                    "type": "TextSpan",
+                    "text": "\n```\naaa",
+                    "style": {
+                      "fontFamily": "monospace",
+                      "fontSize": 16.0,
+                      "color": "Color(0xff333333)"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "type": "Positioned"
+            }
+          ]
+        },
+        "decoration": {
+          "type": "BoxDecoration"
+        }
+      }
+    ]
+  },
+  {
+    "description": "Fenced code blocks, https://github.github.com/gfm/#example-98",
+    "markdown": "> ```\n> aaa\n\nbbb\n",
+    "expected": [
+      {
+        "type": "Container",
+        "child": {
+          "type": "Column",
+          "children": [
+            {
+              "type": "Container",
+              "child": {
+                "type": "Stack",
+                "children": [
+                  {
+                    "type": "Scrollbar",
+                    "child": {
+                      "type": "SingleChildScrollView",
+                      "child": {
+                        "type": "RichText",
+                        "textAlign": "TextAlign.start",
+                        "text": {
+                          "type": "TextSpan",
+                          "text": "aaa",
+                          "style": {
+                            "fontFamily": "monospace",
+                            "fontSize": 16.0,
+                            "color": "Color(0xff333333)"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "type": "Positioned"
+                  }
+                ]
+              },
+              "decoration": {
+                "type": "BoxDecoration"
+              }
+            }
+          ]
+        },
+        "decoration": {
+          "type": "BoxDecoration",
+          "border": {
+            "type": "Border"
+          }
+        }
+      },
+      {
+        "type": "SizedBox",
+        "height": 8.0
+      },
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "text": "bbb",
+              "style": {
+                "fontSize": 16.0,
+                "color": "Color(0xff333333)"
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Fenced code blocks, https://github.github.com/gfm/#example-99",
+    "markdown": "```\n\n  \n```\n",
+    "expected": [
+      {
+        "type": "Container",
+        "child": {
+          "type": "Stack",
+          "children": [
+            {
+              "type": "Scrollbar",
+              "child": {
+                "type": "SingleChildScrollView",
+                "child": {
+                  "type": "RichText",
+                  "textAlign": "TextAlign.start",
+                  "text": {
+                    "type": "TextSpan",
+                    "text": "",
+                    "style": {
+                      "fontFamily": "monospace",
+                      "fontSize": 16.0,
+                      "color": "Color(0xff333333)"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "type": "Positioned"
+            }
+          ]
+        },
+        "decoration": {
+          "type": "BoxDecoration"
+        }
+      }
+    ]
+  },
+  {
+    "description": "Fenced code blocks, https://github.github.com/gfm/#example-100",
+    "markdown": "```\n```\n",
+    "expected": [
+      {
+        "type": "Container",
+        "child": {
+          "type": "SizedBox",
+          "height": 15.0
+        },
+        "decoration": {
+          "type": "BoxDecoration"
+        }
+      }
+    ]
+  },
+  {
+    "description": "Fenced code blocks, https://github.github.com/gfm/#example-101",
+    "markdown": " ```\n aaa\naaa\n```\n",
+    "expected": [
+      {
+        "type": "Container",
+        "child": {
+          "type": "Stack",
+          "children": [
+            {
+              "type": "Scrollbar",
+              "child": {
+                "type": "SingleChildScrollView",
+                "child": {
+                  "type": "RichText",
+                  "textAlign": "TextAlign.start",
+                  "text": {
+                    "type": "TextSpan",
+                    "text": "aaa\naaa",
+                    "style": {
+                      "fontFamily": "monospace",
+                      "fontSize": 16.0,
+                      "color": "Color(0xff333333)"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "type": "Positioned"
+            }
+          ]
+        },
+        "decoration": {
+          "type": "BoxDecoration"
+        }
+      }
+    ]
+  },
+  {
+    "description": "Fenced code blocks, https://github.github.com/gfm/#example-102",
+    "markdown": "  ```\naaa\n  aaa\naaa\n  ```\n",
+    "expected": [
+      {
+        "type": "Container",
+        "child": {
+          "type": "Stack",
+          "children": [
+            {
+              "type": "Scrollbar",
+              "child": {
+                "type": "SingleChildScrollView",
+                "child": {
+                  "type": "RichText",
+                  "textAlign": "TextAlign.start",
+                  "text": {
+                    "type": "TextSpan",
+                    "text": "aaa\naaa\naaa",
+                    "style": {
+                      "fontFamily": "monospace",
+                      "fontSize": 16.0,
+                      "color": "Color(0xff333333)"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "type": "Positioned"
+            }
+          ]
+        },
+        "decoration": {
+          "type": "BoxDecoration"
+        }
+      }
+    ]
+  },
+  {
+    "description": "Fenced code blocks, https://github.github.com/gfm/#example-103",
+    "markdown": "   ```\n   aaa\n    aaa\n  aaa\n   ```\n",
+    "expected": [
+      {
+        "type": "Container",
+        "child": {
+          "type": "Stack",
+          "children": [
+            {
+              "type": "Scrollbar",
+              "child": {
+                "type": "SingleChildScrollView",
+                "child": {
+                  "type": "RichText",
+                  "textAlign": "TextAlign.start",
+                  "text": {
+                    "type": "TextSpan",
+                    "text": "aaa\n aaa\naaa",
+                    "style": {
+                      "fontFamily": "monospace",
+                      "fontSize": 16.0,
+                      "color": "Color(0xff333333)"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "type": "Positioned"
+            }
+          ]
+        },
+        "decoration": {
+          "type": "BoxDecoration"
+        }
+      }
+    ]
+  },
+  {
+    "description": "Fenced code blocks, https://github.github.com/gfm/#example-104",
+    "markdown": "    ```\n    aaa\n    ```\n",
+    "expected": [
+      {
+        "type": "Container",
+        "child": {
+          "type": "Stack",
+          "children": [
+            {
+              "type": "Scrollbar",
+              "child": {
+                "type": "SingleChildScrollView",
+                "child": {
+                  "type": "RichText",
+                  "textAlign": "TextAlign.start",
+                  "text": {
+                    "type": "TextSpan",
+                    "text": "```\naaa\n```",
+                    "style": {
+                      "fontFamily": "monospace",
+                      "fontSize": 16.0,
+                      "color": "Color(0xff333333)"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "type": "Positioned"
+            }
+          ]
+        },
+        "decoration": {
+          "type": "BoxDecoration"
+        }
+      }
+    ]
+  },
+  {
+    "description": "Fenced code blocks, https://github.github.com/gfm/#example-105",
+    "markdown": "```\naaa\n  ```\n",
+    "expected": [
+      {
+        "type": "Container",
+        "child": {
+          "type": "Stack",
+          "children": [
+            {
+              "type": "Scrollbar",
+              "child": {
+                "type": "SingleChildScrollView",
+                "child": {
+                  "type": "RichText",
+                  "textAlign": "TextAlign.start",
+                  "text": {
+                    "type": "TextSpan",
+                    "text": "aaa",
+                    "style": {
+                      "fontFamily": "monospace",
+                      "fontSize": 16.0,
+                      "color": "Color(0xff333333)"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "type": "Positioned"
+            }
+          ]
+        },
+        "decoration": {
+          "type": "BoxDecoration"
+        }
+      }
+    ]
+  },
+  {
+    "description": "Fenced code blocks, https://github.github.com/gfm/#example-106",
+    "markdown": "   ```\naaa\n  ```\n",
+    "expected": [
+      {
+        "type": "Container",
+        "child": {
+          "type": "Stack",
+          "children": [
+            {
+              "type": "Scrollbar",
+              "child": {
+                "type": "SingleChildScrollView",
+                "child": {
+                  "type": "RichText",
+                  "textAlign": "TextAlign.start",
+                  "text": {
+                    "type": "TextSpan",
+                    "text": "aaa",
+                    "style": {
+                      "fontFamily": "monospace",
+                      "fontSize": 16.0,
+                      "color": "Color(0xff333333)"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "type": "Positioned"
+            }
+          ]
+        },
+        "decoration": {
+          "type": "BoxDecoration"
+        }
+      }
+    ]
+  },
+  {
+    "description": "Fenced code blocks, https://github.github.com/gfm/#example-107",
+    "markdown": "```\naaa\n    ```\n",
+    "expected": [
+      {
+        "type": "Container",
+        "child": {
+          "type": "Stack",
+          "children": [
+            {
+              "type": "Scrollbar",
+              "child": {
+                "type": "SingleChildScrollView",
+                "child": {
+                  "type": "RichText",
+                  "textAlign": "TextAlign.start",
+                  "text": {
+                    "type": "TextSpan",
+                    "text": "aaa\n    ```",
+                    "style": {
+                      "fontFamily": "monospace",
+                      "fontSize": 16.0,
+                      "color": "Color(0xff333333)"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "type": "Positioned"
+            }
+          ]
+        },
+        "decoration": {
+          "type": "BoxDecoration"
+        }
+      }
+    ]
+  },
+  {
+    "description": "Fenced code blocks, https://github.github.com/gfm/#example-108",
+    "markdown": "``` ```\naaa\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "children": [
+                {
+                  "type": "TextSpan",
+                  "text": " ",
+                  "style": {
+                    "fontFamily": "monospace",
+                    "fontSize": 16.0,
+                    "color": "Color(0xff8b1c1c)",
+                    "backgroundColor": "Color(0x10000000)"
+                  }
+                },
+                {
+                  "type": "TextSpan",
+                  "text": " aaa",
+                  "style": {
+                    "fontSize": 16.0,
+                    "color": "Color(0xff333333)"
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Fenced code blocks, https://github.github.com/gfm/#example-109",
+    "markdown": "~~~~~~\naaa\n~~~ ~~\n",
+    "expected": [
+      {
+        "type": "Container",
+        "child": {
+          "type": "Stack",
+          "children": [
+            {
+              "type": "Scrollbar",
+              "child": {
+                "type": "SingleChildScrollView",
+                "child": {
+                  "type": "RichText",
+                  "textAlign": "TextAlign.start",
+                  "text": {
+                    "type": "TextSpan",
+                    "text": "aaa\n~~~ ~~",
+                    "style": {
+                      "fontFamily": "monospace",
+                      "fontSize": 16.0,
+                      "color": "Color(0xff333333)"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "type": "Positioned"
+            }
+          ]
+        },
+        "decoration": {
+          "type": "BoxDecoration"
+        }
+      }
+    ]
+  },
+  {
+    "description": "Fenced code blocks, https://github.github.com/gfm/#example-110",
+    "markdown": "foo\n```\nbar\n```\nbaz\n",
+    "expected": [
+      {
+        "type": "Padding",
+        "child": {
+          "type": "Column",
+          "children": [
+            {
+              "type": "RichText",
+              "textAlign": "TextAlign.start",
+              "text": {
+                "type": "TextSpan",
+                "text": "foo",
+                "style": {
+                  "fontSize": 16.0,
+                  "color": "Color(0xff333333)"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "type": "SizedBox",
+        "height": 8.0
+      },
+      {
+        "type": "Container",
+        "child": {
+          "type": "Stack",
+          "children": [
+            {
+              "type": "Scrollbar",
+              "child": {
+                "type": "SingleChildScrollView",
+                "child": {
+                  "type": "RichText",
+                  "textAlign": "TextAlign.start",
+                  "text": {
+                    "type": "TextSpan",
+                    "text": "bar",
+                    "style": {
+                      "fontFamily": "monospace",
+                      "fontSize": 16.0,
+                      "color": "Color(0xff333333)"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "type": "Positioned"
+            }
+          ]
+        },
+        "decoration": {
+          "type": "BoxDecoration"
+        }
+      },
+      {
+        "type": "SizedBox",
+        "height": 8.0
+      },
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "text": "baz",
+              "style": {
+                "fontSize": 16.0,
+                "color": "Color(0xff333333)"
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Fenced code blocks, https://github.github.com/gfm/#example-111",
+    "markdown": "foo\n---\n~~~\nbar\n~~~\n# baz\n",
+    "expected": [
+      {
+        "type": "Padding",
+        "child": {
+          "type": "Column",
+          "children": [
+            {
+              "type": "RichText",
+              "textAlign": "TextAlign.start",
+              "text": {
+                "type": "TextSpan",
+                "text": "foo",
+                "style": {
+                  "fontSize": 22.4,
+                  "color": "Color(0xff333333)"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "type": "SizedBox",
+        "height": 8.0
+      },
+      {
+        "type": "Container",
+        "child": {
+          "type": "Stack",
+          "children": [
+            {
+              "type": "Scrollbar",
+              "child": {
+                "type": "SingleChildScrollView",
+                "child": {
+                  "type": "RichText",
+                  "textAlign": "TextAlign.start",
+                  "text": {
+                    "type": "TextSpan",
+                    "text": "bar",
+                    "style": {
+                      "fontFamily": "monospace",
+                      "fontSize": 16.0,
+                      "color": "Color(0xff333333)"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "type": "Positioned"
+            }
+          ]
+        },
+        "decoration": {
+          "type": "BoxDecoration"
+        }
+      },
+      {
+        "type": "SizedBox",
+        "height": 8.0
+      },
+      {
+        "type": "Padding",
+        "child": {
+          "type": "Column",
+          "children": [
+            {
+              "type": "RichText",
+              "textAlign": "TextAlign.start",
+              "text": {
+                "type": "TextSpan",
+                "text": "baz",
+                "style": {
+                  "fontSize": 25.6,
+                  "color": "Color(0xff333333)"
+                }
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "description": "Fenced code blocks, https://github.github.com/gfm/#example-112",
+    "markdown": "```ruby\ndef foo(x)\n  return 3\nend\n```\n",
+    "expected": [
+      {
+        "type": "Container",
+        "child": {
+          "type": "Stack",
+          "children": [
+            {
+              "type": "Scrollbar",
+              "child": {
+                "type": "SingleChildScrollView",
+                "child": {
+                  "type": "RichText",
+                  "textAlign": "TextAlign.start",
+                  "text": {
+                    "type": "TextSpan",
+                    "text": "def foo(x)\n  return 3\nend",
+                    "style": {
+                      "fontFamily": "monospace",
+                      "fontSize": 16.0,
+                      "color": "Color(0xff333333)"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "type": "Positioned"
+            }
+          ]
+        },
+        "decoration": {
+          "type": "BoxDecoration"
+        }
+      }
+    ]
+  },
+  {
+    "description": "Fenced code blocks, https://github.github.com/gfm/#example-113",
+    "markdown": "~~~~    ruby startline=3 $%@#$\ndef foo(x)\n  return 3\nend\n~~~~~~~\n",
+    "expected": [
+      {
+        "type": "Container",
+        "child": {
+          "type": "Stack",
+          "children": [
+            {
+              "type": "Scrollbar",
+              "child": {
+                "type": "SingleChildScrollView",
+                "child": {
+                  "type": "RichText",
+                  "textAlign": "TextAlign.start",
+                  "text": {
+                    "type": "TextSpan",
+                    "text": "def foo(x)\n  return 3\nend",
+                    "style": {
+                      "fontFamily": "monospace",
+                      "fontSize": 16.0,
+                      "color": "Color(0xff333333)"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "type": "Positioned"
+            }
+          ]
+        },
+        "decoration": {
+          "type": "BoxDecoration"
+        }
+      }
+    ]
+  },
+  {
+    "description": "Fenced code blocks, https://github.github.com/gfm/#example-114",
+    "markdown": "````;\n````\n",
+    "expected": [
+      {
+        "type": "Container",
+        "child": {
+          "type": "SizedBox",
+          "height": 15.0
+        },
+        "decoration": {
+          "type": "BoxDecoration"
+        }
+      }
+    ]
+  },
+  {
+    "description": "Fenced code blocks, https://github.github.com/gfm/#example-115",
+    "markdown": "``` aa ```\nfoo\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "children": [
+                {
+                  "type": "TextSpan",
+                  "text": "aa",
+                  "style": {
+                    "fontFamily": "monospace",
+                    "fontSize": 16.0,
+                    "color": "Color(0xff8b1c1c)",
+                    "backgroundColor": "Color(0x10000000)"
+                  }
+                },
+                {
+                  "type": "TextSpan",
+                  "text": " foo",
+                  "style": {
+                    "fontSize": 16.0,
+                    "color": "Color(0xff333333)"
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Fenced code blocks, https://github.github.com/gfm/#example-116",
+    "markdown": "~~~ aa ``` ~~~\nfoo\n~~~\n",
+    "expected": [
+      {
+        "type": "Container",
+        "child": {
+          "type": "Stack",
+          "children": [
+            {
+              "type": "Scrollbar",
+              "child": {
+                "type": "SingleChildScrollView",
+                "child": {
+                  "type": "RichText",
+                  "textAlign": "TextAlign.start",
+                  "text": {
+                    "type": "TextSpan",
+                    "text": "foo",
+                    "style": {
+                      "fontFamily": "monospace",
+                      "fontSize": 16.0,
+                      "color": "Color(0xff333333)"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "type": "Positioned"
+            }
+          ]
+        },
+        "decoration": {
+          "type": "BoxDecoration"
+        }
+      }
+    ]
+  },
+  {
+    "description": "Fenced code blocks, https://github.github.com/gfm/#example-117",
+    "markdown": "```\n``` aaa\n```\n",
+    "expected": [
+      {
+        "type": "Container",
+        "child": {
+          "type": "Stack",
+          "children": [
+            {
+              "type": "Scrollbar",
+              "child": {
+                "type": "SingleChildScrollView",
+                "child": {
+                  "type": "RichText",
+                  "textAlign": "TextAlign.start",
+                  "text": {
+                    "type": "TextSpan",
+                    "text": "``` aaa",
+                    "style": {
+                      "fontFamily": "monospace",
+                      "fontSize": 16.0,
+                      "color": "Color(0xff333333)"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "type": "Positioned"
+            }
+          ]
+        },
+        "decoration": {
+          "type": "BoxDecoration"
+        }
+      }
+    ]
+  }
+]

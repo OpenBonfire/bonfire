@@ -1,0 +1,1449 @@
+[
+  {
+    "description": "Block quotes, https://github.github.com/gfm/#example-206",
+    "markdown": "> # Foo\n> bar\n> baz\n",
+    "expected": [
+      {
+        "type": "Container",
+        "child": {
+          "type": "Column",
+          "children": [
+            {
+              "type": "Padding",
+              "child": {
+                "type": "Column",
+                "children": [
+                  {
+                    "type": "RichText",
+                    "textAlign": "TextAlign.start",
+                    "text": {
+                      "type": "TextSpan",
+                      "text": "Foo",
+                      "style": {
+                        "fontSize": 25.6,
+                        "color": "Color(0xff333333)"
+                      }
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "type": "SizedBox",
+              "height": 8.0
+            },
+            {
+              "type": "Column",
+              "children": [
+                {
+                  "type": "RichText",
+                  "textAlign": "TextAlign.start",
+                  "text": {
+                    "type": "TextSpan",
+                    "text": "bar baz",
+                    "style": {
+                      "fontSize": 16.0,
+                      "color": "Color(0xff666666)"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "decoration": {
+          "type": "BoxDecoration",
+          "border": {
+            "type": "Border"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "description": "Block quotes, https://github.github.com/gfm/#example-207",
+    "markdown": "># Foo\n>bar\n> baz\n",
+    "expected": [
+      {
+        "type": "Container",
+        "child": {
+          "type": "Column",
+          "children": [
+            {
+              "type": "Padding",
+              "child": {
+                "type": "Column",
+                "children": [
+                  {
+                    "type": "RichText",
+                    "textAlign": "TextAlign.start",
+                    "text": {
+                      "type": "TextSpan",
+                      "text": "Foo",
+                      "style": {
+                        "fontSize": 25.6,
+                        "color": "Color(0xff333333)"
+                      }
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "type": "SizedBox",
+              "height": 8.0
+            },
+            {
+              "type": "Column",
+              "children": [
+                {
+                  "type": "RichText",
+                  "textAlign": "TextAlign.start",
+                  "text": {
+                    "type": "TextSpan",
+                    "text": "bar baz",
+                    "style": {
+                      "fontSize": 16.0,
+                      "color": "Color(0xff666666)"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "decoration": {
+          "type": "BoxDecoration",
+          "border": {
+            "type": "Border"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "description": "Block quotes, https://github.github.com/gfm/#example-208",
+    "markdown": "   > # Foo\n   > bar\n > baz\n",
+    "expected": [
+      {
+        "type": "Container",
+        "child": {
+          "type": "Column",
+          "children": [
+            {
+              "type": "Padding",
+              "child": {
+                "type": "Column",
+                "children": [
+                  {
+                    "type": "RichText",
+                    "textAlign": "TextAlign.start",
+                    "text": {
+                      "type": "TextSpan",
+                      "text": "Foo",
+                      "style": {
+                        "fontSize": 25.6,
+                        "color": "Color(0xff333333)"
+                      }
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "type": "SizedBox",
+              "height": 8.0
+            },
+            {
+              "type": "Column",
+              "children": [
+                {
+                  "type": "RichText",
+                  "textAlign": "TextAlign.start",
+                  "text": {
+                    "type": "TextSpan",
+                    "text": "bar baz",
+                    "style": {
+                      "fontSize": 16.0,
+                      "color": "Color(0xff666666)"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "decoration": {
+          "type": "BoxDecoration",
+          "border": {
+            "type": "Border"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "description": "Block quotes, https://github.github.com/gfm/#example-209",
+    "markdown": "    > # Foo\n    > bar\n    > baz\n",
+    "expected": [
+      {
+        "type": "Container",
+        "child": {
+          "type": "Stack",
+          "children": [
+            {
+              "type": "Scrollbar",
+              "child": {
+                "type": "SingleChildScrollView",
+                "child": {
+                  "type": "RichText",
+                  "textAlign": "TextAlign.start",
+                  "text": {
+                    "type": "TextSpan",
+                    "text": "> # Foo\n> bar\n> baz",
+                    "style": {
+                      "fontFamily": "monospace",
+                      "fontSize": 16.0,
+                      "color": "Color(0xff333333)"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "type": "Positioned"
+            }
+          ]
+        },
+        "decoration": {
+          "type": "BoxDecoration"
+        }
+      }
+    ]
+  },
+  {
+    "description": "Block quotes, https://github.github.com/gfm/#example-210",
+    "markdown": "> # Foo\n> bar\nbaz\n",
+    "expected": [
+      {
+        "type": "Container",
+        "child": {
+          "type": "Column",
+          "children": [
+            {
+              "type": "Padding",
+              "child": {
+                "type": "Column",
+                "children": [
+                  {
+                    "type": "RichText",
+                    "textAlign": "TextAlign.start",
+                    "text": {
+                      "type": "TextSpan",
+                      "text": "Foo",
+                      "style": {
+                        "fontSize": 25.6,
+                        "color": "Color(0xff333333)"
+                      }
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "type": "SizedBox",
+              "height": 8.0
+            },
+            {
+              "type": "Column",
+              "children": [
+                {
+                  "type": "RichText",
+                  "textAlign": "TextAlign.start",
+                  "text": {
+                    "type": "TextSpan",
+                    "text": "bar baz",
+                    "style": {
+                      "fontSize": 16.0,
+                      "color": "Color(0xff666666)"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "decoration": {
+          "type": "BoxDecoration",
+          "border": {
+            "type": "Border"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "description": "Block quotes, https://github.github.com/gfm/#example-211",
+    "markdown": "> bar\nbaz\n> foo\n",
+    "expected": [
+      {
+        "type": "Container",
+        "child": {
+          "type": "Column",
+          "children": [
+            {
+              "type": "Column",
+              "children": [
+                {
+                  "type": "RichText",
+                  "textAlign": "TextAlign.start",
+                  "text": {
+                    "type": "TextSpan",
+                    "text": "bar baz foo",
+                    "style": {
+                      "fontSize": 16.0,
+                      "color": "Color(0xff666666)"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "decoration": {
+          "type": "BoxDecoration",
+          "border": {
+            "type": "Border"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "description": "Block quotes, https://github.github.com/gfm/#example-212",
+    "markdown": "> foo\n---\n",
+    "expected": [
+      {
+        "type": "Container",
+        "child": {
+          "type": "Column",
+          "children": [
+            {
+              "type": "Column",
+              "children": [
+                {
+                  "type": "RichText",
+                  "textAlign": "TextAlign.start",
+                  "text": {
+                    "type": "TextSpan",
+                    "text": "foo",
+                    "style": {
+                      "fontSize": 16.0,
+                      "color": "Color(0xff666666)"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "decoration": {
+          "type": "BoxDecoration",
+          "border": {
+            "type": "Border"
+          }
+        }
+      },
+      {
+        "type": "SizedBox",
+        "height": 8.0
+      },
+      {
+        "type": "Divider"
+      }
+    ]
+  },
+  {
+    "description": "Block quotes, https://github.github.com/gfm/#example-213",
+    "markdown": "> - foo\n- bar\n",
+    "expected": [
+      {
+        "type": "Container",
+        "child": {
+          "type": "Column",
+          "children": [
+            {
+              "type": "Column",
+              "children": [
+                {
+                  "type": "Row",
+                  "children": [
+                    {
+                      "type": "ConstrainedBox",
+                      "constraints": {
+                        "type": "BoxConstraints",
+                        "minWidth": 30.0,
+                        "minHeight": 24.0,
+                        "maxWidth": 24.0
+                      },
+                      "child": {
+                        "type": "Align",
+                        "alignment": "Alignment.center",
+                        "child": {
+                          "type": "Padding",
+                          "child": {
+                            "type": "RichText",
+                            "textAlign": "TextAlign.right",
+                            "text": {
+                              "type": "TextSpan",
+                              "text": "•",
+                              "style": {
+                                "fontSize": 22.4,
+                                "color": "Color(0xbf666666)"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "type": "Expanded",
+                      "child": {
+                        "type": "Column",
+                        "children": [
+                          {
+                            "type": "RichText",
+                            "textAlign": "TextAlign.start",
+                            "text": {
+                              "type": "TextSpan",
+                              "text": "foo",
+                              "style": {
+                                "fontSize": 16.0,
+                                "color": "Color(0xff666666)"
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "decoration": {
+          "type": "BoxDecoration",
+          "border": {
+            "type": "Border"
+          }
+        }
+      },
+      {
+        "type": "SizedBox",
+        "height": 8.0
+      },
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "Row",
+            "children": [
+              {
+                "type": "ConstrainedBox",
+                "constraints": {
+                  "type": "BoxConstraints",
+                  "minWidth": 30.0,
+                  "minHeight": 24.0,
+                  "maxWidth": 24.0
+                },
+                "child": {
+                  "type": "Align",
+                  "alignment": "Alignment.center",
+                  "child": {
+                    "type": "Padding",
+                    "child": {
+                      "type": "RichText",
+                      "textAlign": "TextAlign.right",
+                      "text": {
+                        "type": "TextSpan",
+                        "text": "•",
+                        "style": {
+                          "fontSize": 22.4,
+                          "color": "Color(0xbf333333)"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "type": "Expanded",
+                "child": {
+                  "type": "Column",
+                  "children": [
+                    {
+                      "type": "RichText",
+                      "textAlign": "TextAlign.start",
+                      "text": {
+                        "type": "TextSpan",
+                        "text": "bar",
+                        "style": {
+                          "fontSize": 16.0,
+                          "color": "Color(0xff333333)"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Block quotes, https://github.github.com/gfm/#example-214",
+    "markdown": ">     foo\n    bar\n",
+    "expected": [
+      {
+        "type": "Container",
+        "child": {
+          "type": "Column",
+          "children": [
+            {
+              "type": "Container",
+              "child": {
+                "type": "Stack",
+                "children": [
+                  {
+                    "type": "Scrollbar",
+                    "child": {
+                      "type": "SingleChildScrollView",
+                      "child": {
+                        "type": "RichText",
+                        "textAlign": "TextAlign.start",
+                        "text": {
+                          "type": "TextSpan",
+                          "text": "foo",
+                          "style": {
+                            "fontFamily": "monospace",
+                            "fontSize": 16.0,
+                            "color": "Color(0xff333333)"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "type": "Positioned"
+                  }
+                ]
+              },
+              "decoration": {
+                "type": "BoxDecoration"
+              }
+            }
+          ]
+        },
+        "decoration": {
+          "type": "BoxDecoration",
+          "border": {
+            "type": "Border"
+          }
+        }
+      },
+      {
+        "type": "SizedBox",
+        "height": 8.0
+      },
+      {
+        "type": "Container",
+        "child": {
+          "type": "Stack",
+          "children": [
+            {
+              "type": "Scrollbar",
+              "child": {
+                "type": "SingleChildScrollView",
+                "child": {
+                  "type": "RichText",
+                  "textAlign": "TextAlign.start",
+                  "text": {
+                    "type": "TextSpan",
+                    "text": "bar",
+                    "style": {
+                      "fontFamily": "monospace",
+                      "fontSize": 16.0,
+                      "color": "Color(0xff333333)"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "type": "Positioned"
+            }
+          ]
+        },
+        "decoration": {
+          "type": "BoxDecoration"
+        }
+      }
+    ]
+  },
+  {
+    "description": "Block quotes, https://github.github.com/gfm/#example-215",
+    "markdown": "> ```\nfoo\n```\n",
+    "expected": [
+      {
+        "type": "Container",
+        "child": {
+          "type": "Column",
+          "children": [
+            {
+              "type": "Container",
+              "child": {
+                "type": "SizedBox",
+                "height": 15.0
+              },
+              "decoration": {
+                "type": "BoxDecoration"
+              }
+            }
+          ]
+        },
+        "decoration": {
+          "type": "BoxDecoration",
+          "border": {
+            "type": "Border"
+          }
+        }
+      },
+      {
+        "type": "SizedBox",
+        "height": 8.0
+      },
+      {
+        "type": "Padding",
+        "child": {
+          "type": "Column",
+          "children": [
+            {
+              "type": "RichText",
+              "textAlign": "TextAlign.start",
+              "text": {
+                "type": "TextSpan",
+                "text": "foo",
+                "style": {
+                  "fontSize": 16.0,
+                  "color": "Color(0xff333333)"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "type": "SizedBox",
+        "height": 8.0
+      },
+      {
+        "type": "Container",
+        "child": {
+          "type": "SizedBox",
+          "height": 15.0
+        },
+        "decoration": {
+          "type": "BoxDecoration"
+        }
+      }
+    ]
+  },
+  {
+    "description": "Block quotes, https://github.github.com/gfm/#example-216",
+    "markdown": "> foo\n    - bar\n",
+    "expected": [
+      {
+        "type": "Container",
+        "child": {
+          "type": "Column",
+          "children": [
+            {
+              "type": "Column",
+              "children": [
+                {
+                  "type": "RichText",
+                  "textAlign": "TextAlign.start",
+                  "text": {
+                    "type": "TextSpan",
+                    "text": "foo - bar",
+                    "style": {
+                      "fontSize": 16.0,
+                      "color": "Color(0xff666666)"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "decoration": {
+          "type": "BoxDecoration",
+          "border": {
+            "type": "Border"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "description": "Block quotes, https://github.github.com/gfm/#example-217",
+    "markdown": ">\n",
+    "expected": [
+      {
+        "type": "Container",
+        "decoration": {
+          "type": "BoxDecoration",
+          "border": {
+            "type": "Border"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "description": "Block quotes, https://github.github.com/gfm/#example-218",
+    "markdown": ">\n>  \n> \n",
+    "expected": [
+      {
+        "type": "Container",
+        "decoration": {
+          "type": "BoxDecoration",
+          "border": {
+            "type": "Border"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "description": "Block quotes, https://github.github.com/gfm/#example-219",
+    "markdown": ">\n> foo\n>  \n",
+    "expected": [
+      {
+        "type": "Container",
+        "child": {
+          "type": "Column",
+          "children": [
+            {
+              "type": "Column",
+              "children": [
+                {
+                  "type": "RichText",
+                  "textAlign": "TextAlign.start",
+                  "text": {
+                    "type": "TextSpan",
+                    "text": "foo",
+                    "style": {
+                      "fontSize": 16.0,
+                      "color": "Color(0xff666666)"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "decoration": {
+          "type": "BoxDecoration",
+          "border": {
+            "type": "Border"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "description": "Block quotes, https://github.github.com/gfm/#example-220",
+    "markdown": "> foo\n\n> bar\n",
+    "expected": [
+      {
+        "type": "Container",
+        "child": {
+          "type": "Column",
+          "children": [
+            {
+              "type": "Column",
+              "children": [
+                {
+                  "type": "RichText",
+                  "textAlign": "TextAlign.start",
+                  "text": {
+                    "type": "TextSpan",
+                    "text": "foo",
+                    "style": {
+                      "fontSize": 16.0,
+                      "color": "Color(0xff666666)"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "decoration": {
+          "type": "BoxDecoration",
+          "border": {
+            "type": "Border"
+          }
+        }
+      },
+      {
+        "type": "SizedBox",
+        "height": 8.0
+      },
+      {
+        "type": "Container",
+        "child": {
+          "type": "Column",
+          "children": [
+            {
+              "type": "Column",
+              "children": [
+                {
+                  "type": "RichText",
+                  "textAlign": "TextAlign.start",
+                  "text": {
+                    "type": "TextSpan",
+                    "text": "bar",
+                    "style": {
+                      "fontSize": 16.0,
+                      "color": "Color(0xff666666)"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "decoration": {
+          "type": "BoxDecoration",
+          "border": {
+            "type": "Border"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "description": "Block quotes, https://github.github.com/gfm/#example-221",
+    "markdown": "> foo\n> bar\n",
+    "expected": [
+      {
+        "type": "Container",
+        "child": {
+          "type": "Column",
+          "children": [
+            {
+              "type": "Column",
+              "children": [
+                {
+                  "type": "RichText",
+                  "textAlign": "TextAlign.start",
+                  "text": {
+                    "type": "TextSpan",
+                    "text": "foo bar",
+                    "style": {
+                      "fontSize": 16.0,
+                      "color": "Color(0xff666666)"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "decoration": {
+          "type": "BoxDecoration",
+          "border": {
+            "type": "Border"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "description": "Block quotes, https://github.github.com/gfm/#example-222",
+    "markdown": "> foo\n>\n> bar\n",
+    "expected": [
+      {
+        "type": "Container",
+        "child": {
+          "type": "Column",
+          "children": [
+            {
+              "type": "Padding",
+              "child": {
+                "type": "Column",
+                "children": [
+                  {
+                    "type": "RichText",
+                    "textAlign": "TextAlign.start",
+                    "text": {
+                      "type": "TextSpan",
+                      "text": "foo",
+                      "style": {
+                        "fontSize": 16.0,
+                        "color": "Color(0xff666666)"
+                      }
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "type": "SizedBox",
+              "height": 8.0
+            },
+            {
+              "type": "Column",
+              "children": [
+                {
+                  "type": "RichText",
+                  "textAlign": "TextAlign.start",
+                  "text": {
+                    "type": "TextSpan",
+                    "text": "bar",
+                    "style": {
+                      "fontSize": 16.0,
+                      "color": "Color(0xff666666)"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "decoration": {
+          "type": "BoxDecoration",
+          "border": {
+            "type": "Border"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "description": "Block quotes, https://github.github.com/gfm/#example-223",
+    "markdown": "foo\n> bar\n",
+    "expected": [
+      {
+        "type": "Padding",
+        "child": {
+          "type": "Column",
+          "children": [
+            {
+              "type": "RichText",
+              "textAlign": "TextAlign.start",
+              "text": {
+                "type": "TextSpan",
+                "text": "foo",
+                "style": {
+                  "fontSize": 16.0,
+                  "color": "Color(0xff333333)"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "type": "SizedBox",
+        "height": 8.0
+      },
+      {
+        "type": "Container",
+        "child": {
+          "type": "Column",
+          "children": [
+            {
+              "type": "Column",
+              "children": [
+                {
+                  "type": "RichText",
+                  "textAlign": "TextAlign.start",
+                  "text": {
+                    "type": "TextSpan",
+                    "text": "bar",
+                    "style": {
+                      "fontSize": 16.0,
+                      "color": "Color(0xff666666)"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "decoration": {
+          "type": "BoxDecoration",
+          "border": {
+            "type": "Border"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "description": "Block quotes, https://github.github.com/gfm/#example-224",
+    "markdown": "> aaa\n***\n> bbb\n",
+    "expected": [
+      {
+        "type": "Container",
+        "child": {
+          "type": "Column",
+          "children": [
+            {
+              "type": "Column",
+              "children": [
+                {
+                  "type": "RichText",
+                  "textAlign": "TextAlign.start",
+                  "text": {
+                    "type": "TextSpan",
+                    "text": "aaa",
+                    "style": {
+                      "fontSize": 16.0,
+                      "color": "Color(0xff666666)"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "decoration": {
+          "type": "BoxDecoration",
+          "border": {
+            "type": "Border"
+          }
+        }
+      },
+      {
+        "type": "SizedBox",
+        "height": 8.0
+      },
+      {
+        "type": "Divider"
+      },
+      {
+        "type": "SizedBox",
+        "height": 8.0
+      },
+      {
+        "type": "Container",
+        "child": {
+          "type": "Column",
+          "children": [
+            {
+              "type": "Column",
+              "children": [
+                {
+                  "type": "RichText",
+                  "textAlign": "TextAlign.start",
+                  "text": {
+                    "type": "TextSpan",
+                    "text": "bbb",
+                    "style": {
+                      "fontSize": 16.0,
+                      "color": "Color(0xff666666)"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "decoration": {
+          "type": "BoxDecoration",
+          "border": {
+            "type": "Border"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "description": "Block quotes, https://github.github.com/gfm/#example-225",
+    "markdown": "> bar\nbaz\n",
+    "expected": [
+      {
+        "type": "Container",
+        "child": {
+          "type": "Column",
+          "children": [
+            {
+              "type": "Column",
+              "children": [
+                {
+                  "type": "RichText",
+                  "textAlign": "TextAlign.start",
+                  "text": {
+                    "type": "TextSpan",
+                    "text": "bar baz",
+                    "style": {
+                      "fontSize": 16.0,
+                      "color": "Color(0xff666666)"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "decoration": {
+          "type": "BoxDecoration",
+          "border": {
+            "type": "Border"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "description": "Block quotes, https://github.github.com/gfm/#example-226",
+    "markdown": "> bar\n\nbaz\n",
+    "expected": [
+      {
+        "type": "Container",
+        "child": {
+          "type": "Column",
+          "children": [
+            {
+              "type": "Column",
+              "children": [
+                {
+                  "type": "RichText",
+                  "textAlign": "TextAlign.start",
+                  "text": {
+                    "type": "TextSpan",
+                    "text": "bar",
+                    "style": {
+                      "fontSize": 16.0,
+                      "color": "Color(0xff666666)"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "decoration": {
+          "type": "BoxDecoration",
+          "border": {
+            "type": "Border"
+          }
+        }
+      },
+      {
+        "type": "SizedBox",
+        "height": 8.0
+      },
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "text": "baz",
+              "style": {
+                "fontSize": 16.0,
+                "color": "Color(0xff333333)"
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Block quotes, https://github.github.com/gfm/#example-227",
+    "markdown": "> bar\n>\nbaz\n",
+    "expected": [
+      {
+        "type": "Container",
+        "child": {
+          "type": "Column",
+          "children": [
+            {
+              "type": "Column",
+              "children": [
+                {
+                  "type": "RichText",
+                  "textAlign": "TextAlign.start",
+                  "text": {
+                    "type": "TextSpan",
+                    "text": "bar",
+                    "style": {
+                      "fontSize": 16.0,
+                      "color": "Color(0xff666666)"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "decoration": {
+          "type": "BoxDecoration",
+          "border": {
+            "type": "Border"
+          }
+        }
+      },
+      {
+        "type": "SizedBox",
+        "height": 8.0
+      },
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "text": "baz",
+              "style": {
+                "fontSize": 16.0,
+                "color": "Color(0xff333333)"
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Block quotes, https://github.github.com/gfm/#example-228",
+    "markdown": "> > > foo\nbar\n",
+    "expected": [
+      {
+        "type": "Container",
+        "child": {
+          "type": "Column",
+          "children": [
+            {
+              "type": "Container",
+              "child": {
+                "type": "Column",
+                "children": [
+                  {
+                    "type": "Container",
+                    "child": {
+                      "type": "Column",
+                      "children": [
+                        {
+                          "type": "Column",
+                          "children": [
+                            {
+                              "type": "RichText",
+                              "textAlign": "TextAlign.start",
+                              "text": {
+                                "type": "TextSpan",
+                                "text": "foo bar",
+                                "style": {
+                                  "fontSize": 16.0,
+                                  "color": "Color(0xff666666)"
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    "decoration": {
+                      "type": "BoxDecoration",
+                      "border": {
+                        "type": "Border"
+                      }
+                    }
+                  }
+                ]
+              },
+              "decoration": {
+                "type": "BoxDecoration",
+                "border": {
+                  "type": "Border"
+                }
+              }
+            }
+          ]
+        },
+        "decoration": {
+          "type": "BoxDecoration",
+          "border": {
+            "type": "Border"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "description": "Block quotes, https://github.github.com/gfm/#example-229",
+    "markdown": ">>> foo\n> bar\n>>baz\n",
+    "expected": [
+      {
+        "type": "Container",
+        "child": {
+          "type": "Column",
+          "children": [
+            {
+              "type": "Container",
+              "child": {
+                "type": "Column",
+                "children": [
+                  {
+                    "type": "Container",
+                    "child": {
+                      "type": "Column",
+                      "children": [
+                        {
+                          "type": "Column",
+                          "children": [
+                            {
+                              "type": "RichText",
+                              "textAlign": "TextAlign.start",
+                              "text": {
+                                "type": "TextSpan",
+                                "text": "foo bar baz",
+                                "style": {
+                                  "fontSize": 16.0,
+                                  "color": "Color(0xff666666)"
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    "decoration": {
+                      "type": "BoxDecoration",
+                      "border": {
+                        "type": "Border"
+                      }
+                    }
+                  }
+                ]
+              },
+              "decoration": {
+                "type": "BoxDecoration",
+                "border": {
+                  "type": "Border"
+                }
+              }
+            }
+          ]
+        },
+        "decoration": {
+          "type": "BoxDecoration",
+          "border": {
+            "type": "Border"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "description": "Block quotes, https://github.github.com/gfm/#example-230",
+    "markdown": ">     code\n\n>    not code\n",
+    "expected": [
+      {
+        "type": "Container",
+        "child": {
+          "type": "Column",
+          "children": [
+            {
+              "type": "Container",
+              "child": {
+                "type": "Stack",
+                "children": [
+                  {
+                    "type": "Scrollbar",
+                    "child": {
+                      "type": "SingleChildScrollView",
+                      "child": {
+                        "type": "RichText",
+                        "textAlign": "TextAlign.start",
+                        "text": {
+                          "type": "TextSpan",
+                          "text": "code",
+                          "style": {
+                            "fontFamily": "monospace",
+                            "fontSize": 16.0,
+                            "color": "Color(0xff333333)"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "type": "Positioned"
+                  }
+                ]
+              },
+              "decoration": {
+                "type": "BoxDecoration"
+              }
+            }
+          ]
+        },
+        "decoration": {
+          "type": "BoxDecoration",
+          "border": {
+            "type": "Border"
+          }
+        }
+      },
+      {
+        "type": "SizedBox",
+        "height": 8.0
+      },
+      {
+        "type": "Container",
+        "child": {
+          "type": "Column",
+          "children": [
+            {
+              "type": "Column",
+              "children": [
+                {
+                  "type": "RichText",
+                  "textAlign": "TextAlign.start",
+                  "text": {
+                    "type": "TextSpan",
+                    "text": "not code",
+                    "style": {
+                      "fontSize": 16.0,
+                      "color": "Color(0xff666666)"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "decoration": {
+          "type": "BoxDecoration",
+          "border": {
+            "type": "Border"
+          }
+        }
+      }
+    ]
+  }
+]

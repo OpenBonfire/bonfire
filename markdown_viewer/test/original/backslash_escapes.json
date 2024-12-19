@@ -1,0 +1,23 @@
+[
+  {
+    "description": "Backslash in link text",
+    "markdown": "[foo\\_bar](/url)\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "text": "foo_bar",
+              "style": { "fontSize": 16.0, "color": "Color(0xff2196f3)" },
+              "recognizer": "TapGestureRecognizer"
+            }
+          }
+        ]
+      }
+    ]
+  }
+]

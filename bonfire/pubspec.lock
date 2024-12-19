@@ -583,9 +583,11 @@ packages:
   fireview:
     dependency: "direct main"
     description:
-      path: "../fireview/fireview"
-      relative: true
-    source: path
+      path: "."
+      ref: HEAD
+      resolved-ref: e8c1ef6659d57c72c6f0a74f8d87a23d4e93e66d
+      url: "https://github.com/ericApostal/fireview"
+    source: git
     version: "0.0.1"
   fixnum:
     dependency: transitive

@@ -1,0 +1,5279 @@
+[
+  {
+    "description": "List items, https://github.github.com/gfm/#example-231",
+    "markdown": "A paragraph\nwith two lines.\n\n    indented code\n\n> A block quote.\n",
+    "expected": [
+      {
+        "type": "Padding",
+        "child": {
+          "type": "Column",
+          "children": [
+            {
+              "type": "RichText",
+              "textAlign": "TextAlign.start",
+              "text": {
+                "type": "TextSpan",
+                "text": "A paragraph with two lines.",
+                "style": {
+                  "fontSize": 16.0,
+                  "color": "Color(0xff333333)"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "type": "SizedBox",
+        "height": 8.0
+      },
+      {
+        "type": "Container",
+        "child": {
+          "type": "Stack",
+          "children": [
+            {
+              "type": "Scrollbar",
+              "child": {
+                "type": "SingleChildScrollView",
+                "child": {
+                  "type": "RichText",
+                  "textAlign": "TextAlign.start",
+                  "text": {
+                    "type": "TextSpan",
+                    "text": "indented code",
+                    "style": {
+                      "fontFamily": "monospace",
+                      "fontSize": 16.0,
+                      "color": "Color(0xff333333)"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "type": "Positioned"
+            }
+          ]
+        },
+        "decoration": {
+          "type": "BoxDecoration"
+        }
+      },
+      {
+        "type": "SizedBox",
+        "height": 8.0
+      },
+      {
+        "type": "Container",
+        "child": {
+          "type": "Column",
+          "children": [
+            {
+              "type": "Column",
+              "children": [
+                {
+                  "type": "RichText",
+                  "textAlign": "TextAlign.start",
+                  "text": {
+                    "type": "TextSpan",
+                    "text": "A block quote.",
+                    "style": {
+                      "fontSize": 16.0,
+                      "color": "Color(0xff666666)"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "decoration": {
+          "type": "BoxDecoration",
+          "border": {
+            "type": "Border"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "description": "List items, https://github.github.com/gfm/#example-232",
+    "markdown": "1.  A paragraph\n    with two lines.\n\n        indented code\n\n    > A block quote.\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "Padding",
+            "child": {
+              "type": "Row",
+              "children": [
+                {
+                  "type": "ConstrainedBox",
+                  "constraints": {
+                    "type": "BoxConstraints",
+                    "minWidth": 30.0,
+                    "minHeight": 24.0,
+                    "maxWidth": 24.0
+                  },
+                  "child": {
+                    "type": "Align",
+                    "alignment": "Alignment.center",
+                    "child": {
+                      "type": "Padding",
+                      "child": {
+                        "type": "RichText",
+                        "textAlign": "TextAlign.right",
+                        "text": {
+                          "type": "TextSpan",
+                          "text": "1.",
+                          "style": {
+                            "fontSize": 15.36,
+                            "color": "Color(0xbf333333)"
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                {
+                  "type": "Expanded",
+                  "child": {
+                    "type": "Column",
+                    "children": [
+                      {
+                        "type": "Column",
+                        "children": [
+                          {
+                            "type": "RichText",
+                            "textAlign": "TextAlign.start",
+                            "text": {
+                              "type": "TextSpan",
+                              "text": "A paragraph with two lines.",
+                              "style": {
+                                "fontSize": 16.0,
+                                "color": "Color(0xff333333)"
+                              }
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "type": "SizedBox",
+                        "height": 8.0
+                      },
+                      {
+                        "type": "Container",
+                        "child": {
+                          "type": "Stack",
+                          "children": [
+                            {
+                              "type": "Scrollbar",
+                              "child": {
+                                "type": "SingleChildScrollView",
+                                "child": {
+                                  "type": "RichText",
+                                  "textAlign": "TextAlign.start",
+                                  "text": {
+                                    "type": "TextSpan",
+                                    "text": "indented code",
+                                    "style": {
+                                      "fontFamily": "monospace",
+                                      "fontSize": 16.0,
+                                      "color": "Color(0xff333333)"
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            {
+                              "type": "Positioned"
+                            }
+                          ]
+                        },
+                        "decoration": {
+                          "type": "BoxDecoration"
+                        }
+                      },
+                      {
+                        "type": "SizedBox",
+                        "height": 8.0
+                      },
+                      {
+                        "type": "Container",
+                        "child": {
+                          "type": "Column",
+                          "children": [
+                            {
+                              "type": "Column",
+                              "children": [
+                                {
+                                  "type": "RichText",
+                                  "textAlign": "TextAlign.start",
+                                  "text": {
+                                    "type": "TextSpan",
+                                    "text": "A block quote.",
+                                    "style": {
+                                      "fontSize": 16.0,
+                                      "color": "Color(0xff666666)"
+                                    }
+                                  }
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        "decoration": {
+                          "type": "BoxDecoration",
+                          "border": {
+                            "type": "Border"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "List items, https://github.github.com/gfm/#example-233",
+    "markdown": "- one\n\n two\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "Row",
+            "children": [
+              {
+                "type": "ConstrainedBox",
+                "constraints": {
+                  "type": "BoxConstraints",
+                  "minWidth": 30.0,
+                  "minHeight": 24.0,
+                  "maxWidth": 24.0
+                },
+                "child": {
+                  "type": "Align",
+                  "alignment": "Alignment.center",
+                  "child": {
+                    "type": "Padding",
+                    "child": {
+                      "type": "RichText",
+                      "textAlign": "TextAlign.right",
+                      "text": {
+                        "type": "TextSpan",
+                        "text": "•",
+                        "style": {
+                          "fontSize": 22.4,
+                          "color": "Color(0xbf333333)"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "type": "Expanded",
+                "child": {
+                  "type": "Column",
+                  "children": [
+                    {
+                      "type": "RichText",
+                      "textAlign": "TextAlign.start",
+                      "text": {
+                        "type": "TextSpan",
+                        "text": "one",
+                        "style": {
+                          "fontSize": 16.0,
+                          "color": "Color(0xff333333)"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "SizedBox",
+        "height": 8.0
+      },
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "text": "two",
+              "style": {
+                "fontSize": 16.0,
+                "color": "Color(0xff333333)"
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "List items, https://github.github.com/gfm/#example-234",
+    "markdown": "- one\n\n  two\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "Padding",
+            "child": {
+              "type": "Row",
+              "children": [
+                {
+                  "type": "ConstrainedBox",
+                  "constraints": {
+                    "type": "BoxConstraints",
+                    "minWidth": 30.0,
+                    "minHeight": 24.0,
+                    "maxWidth": 24.0
+                  },
+                  "child": {
+                    "type": "Align",
+                    "alignment": "Alignment.center",
+                    "child": {
+                      "type": "Padding",
+                      "child": {
+                        "type": "RichText",
+                        "textAlign": "TextAlign.right",
+                        "text": {
+                          "type": "TextSpan",
+                          "text": "•",
+                          "style": {
+                            "fontSize": 22.4,
+                            "color": "Color(0xbf333333)"
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                {
+                  "type": "Expanded",
+                  "child": {
+                    "type": "Column",
+                    "children": [
+                      {
+                        "type": "Column",
+                        "children": [
+                          {
+                            "type": "RichText",
+                            "textAlign": "TextAlign.start",
+                            "text": {
+                              "type": "TextSpan",
+                              "text": "one",
+                              "style": {
+                                "fontSize": 16.0,
+                                "color": "Color(0xff333333)"
+                              }
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "type": "SizedBox",
+                        "height": 8.0
+                      },
+                      {
+                        "type": "Column",
+                        "children": [
+                          {
+                            "type": "RichText",
+                            "textAlign": "TextAlign.start",
+                            "text": {
+                              "type": "TextSpan",
+                              "text": "two",
+                              "style": {
+                                "fontSize": 16.0,
+                                "color": "Color(0xff333333)"
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "List items, https://github.github.com/gfm/#example-235",
+    "markdown": " -    one\n\n     two\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "Row",
+            "children": [
+              {
+                "type": "ConstrainedBox",
+                "constraints": {
+                  "type": "BoxConstraints",
+                  "minWidth": 30.0,
+                  "minHeight": 24.0,
+                  "maxWidth": 24.0
+                },
+                "child": {
+                  "type": "Align",
+                  "alignment": "Alignment.center",
+                  "child": {
+                    "type": "Padding",
+                    "child": {
+                      "type": "RichText",
+                      "textAlign": "TextAlign.right",
+                      "text": {
+                        "type": "TextSpan",
+                        "text": "•",
+                        "style": {
+                          "fontSize": 22.4,
+                          "color": "Color(0xbf333333)"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "type": "Expanded",
+                "child": {
+                  "type": "Column",
+                  "children": [
+                    {
+                      "type": "RichText",
+                      "textAlign": "TextAlign.start",
+                      "text": {
+                        "type": "TextSpan",
+                        "text": "one",
+                        "style": {
+                          "fontSize": 16.0,
+                          "color": "Color(0xff333333)"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "SizedBox",
+        "height": 8.0
+      },
+      {
+        "type": "Container",
+        "child": {
+          "type": "Stack",
+          "children": [
+            {
+              "type": "Scrollbar",
+              "child": {
+                "type": "SingleChildScrollView",
+                "child": {
+                  "type": "RichText",
+                  "textAlign": "TextAlign.start",
+                  "text": {
+                    "type": "TextSpan",
+                    "text": " two",
+                    "style": {
+                      "fontFamily": "monospace",
+                      "fontSize": 16.0,
+                      "color": "Color(0xff333333)"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "type": "Positioned"
+            }
+          ]
+        },
+        "decoration": {
+          "type": "BoxDecoration"
+        }
+      }
+    ]
+  },
+  {
+    "description": "List items, https://github.github.com/gfm/#example-236",
+    "markdown": " -    one\n\n      two\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "Padding",
+            "child": {
+              "type": "Row",
+              "children": [
+                {
+                  "type": "ConstrainedBox",
+                  "constraints": {
+                    "type": "BoxConstraints",
+                    "minWidth": 30.0,
+                    "minHeight": 24.0,
+                    "maxWidth": 24.0
+                  },
+                  "child": {
+                    "type": "Align",
+                    "alignment": "Alignment.center",
+                    "child": {
+                      "type": "Padding",
+                      "child": {
+                        "type": "RichText",
+                        "textAlign": "TextAlign.right",
+                        "text": {
+                          "type": "TextSpan",
+                          "text": "•",
+                          "style": {
+                            "fontSize": 22.4,
+                            "color": "Color(0xbf333333)"
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                {
+                  "type": "Expanded",
+                  "child": {
+                    "type": "Column",
+                    "children": [
+                      {
+                        "type": "Column",
+                        "children": [
+                          {
+                            "type": "RichText",
+                            "textAlign": "TextAlign.start",
+                            "text": {
+                              "type": "TextSpan",
+                              "text": "one",
+                              "style": {
+                                "fontSize": 16.0,
+                                "color": "Color(0xff333333)"
+                              }
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "type": "SizedBox",
+                        "height": 8.0
+                      },
+                      {
+                        "type": "Column",
+                        "children": [
+                          {
+                            "type": "RichText",
+                            "textAlign": "TextAlign.start",
+                            "text": {
+                              "type": "TextSpan",
+                              "text": "two",
+                              "style": {
+                                "fontSize": 16.0,
+                                "color": "Color(0xff333333)"
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "List items, https://github.github.com/gfm/#example-237",
+    "markdown": "   > > 1.  one\n>>\n>>     two\n",
+    "expected": [
+      {
+        "type": "Container",
+        "child": {
+          "type": "Column",
+          "children": [
+            {
+              "type": "Container",
+              "child": {
+                "type": "Column",
+                "children": [
+                  {
+                    "type": "Column",
+                    "children": [
+                      {
+                        "type": "Padding",
+                        "child": {
+                          "type": "Row",
+                          "children": [
+                            {
+                              "type": "ConstrainedBox",
+                              "constraints": {
+                                "type": "BoxConstraints",
+                                "minWidth": 30.0,
+                                "minHeight": 24.0,
+                                "maxWidth": 24.0
+                              },
+                              "child": {
+                                "type": "Align",
+                                "alignment": "Alignment.center",
+                                "child": {
+                                  "type": "Padding",
+                                  "child": {
+                                    "type": "RichText",
+                                    "textAlign": "TextAlign.right",
+                                    "text": {
+                                      "type": "TextSpan",
+                                      "text": "1.",
+                                      "style": {
+                                        "fontSize": 15.36,
+                                        "color": "Color(0xbf666666)"
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            {
+                              "type": "Expanded",
+                              "child": {
+                                "type": "Column",
+                                "children": [
+                                  {
+                                    "type": "Column",
+                                    "children": [
+                                      {
+                                        "type": "RichText",
+                                        "textAlign": "TextAlign.start",
+                                        "text": {
+                                          "type": "TextSpan",
+                                          "text": "one",
+                                          "style": {
+                                            "fontSize": 16.0,
+                                            "color": "Color(0xff666666)"
+                                          }
+                                        }
+                                      }
+                                    ]
+                                  },
+                                  {
+                                    "type": "SizedBox",
+                                    "height": 8.0
+                                  },
+                                  {
+                                    "type": "Column",
+                                    "children": [
+                                      {
+                                        "type": "RichText",
+                                        "textAlign": "TextAlign.start",
+                                        "text": {
+                                          "type": "TextSpan",
+                                          "text": "two",
+                                          "style": {
+                                            "fontSize": 16.0,
+                                            "color": "Color(0xff666666)"
+                                          }
+                                        }
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              "decoration": {
+                "type": "BoxDecoration",
+                "border": {
+                  "type": "Border"
+                }
+              }
+            }
+          ]
+        },
+        "decoration": {
+          "type": "BoxDecoration",
+          "border": {
+            "type": "Border"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "description": "List items, https://github.github.com/gfm/#example-238",
+    "markdown": ">>- one\n>>\n  >  > two\n",
+    "expected": [
+      {
+        "type": "Container",
+        "child": {
+          "type": "Column",
+          "children": [
+            {
+              "type": "Container",
+              "child": {
+                "type": "Column",
+                "children": [
+                  {
+                    "type": "Column",
+                    "children": [
+                      {
+                        "type": "Row",
+                        "children": [
+                          {
+                            "type": "ConstrainedBox",
+                            "constraints": {
+                              "type": "BoxConstraints",
+                              "minWidth": 30.0,
+                              "minHeight": 24.0,
+                              "maxWidth": 24.0
+                            },
+                            "child": {
+                              "type": "Align",
+                              "alignment": "Alignment.center",
+                              "child": {
+                                "type": "Padding",
+                                "child": {
+                                  "type": "RichText",
+                                  "textAlign": "TextAlign.right",
+                                  "text": {
+                                    "type": "TextSpan",
+                                    "text": "•",
+                                    "style": {
+                                      "fontSize": 22.4,
+                                      "color": "Color(0xbf666666)"
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          {
+                            "type": "Expanded",
+                            "child": {
+                              "type": "Column",
+                              "children": [
+                                {
+                                  "type": "RichText",
+                                  "textAlign": "TextAlign.start",
+                                  "text": {
+                                    "type": "TextSpan",
+                                    "text": "one",
+                                    "style": {
+                                      "fontSize": 16.0,
+                                      "color": "Color(0xff666666)"
+                                    }
+                                  }
+                                }
+                              ]
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "SizedBox",
+                    "height": 8.0
+                  },
+                  {
+                    "type": "Column",
+                    "children": [
+                      {
+                        "type": "RichText",
+                        "textAlign": "TextAlign.start",
+                        "text": {
+                          "type": "TextSpan",
+                          "text": "two",
+                          "style": {
+                            "fontSize": 16.0,
+                            "color": "Color(0xff666666)"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              "decoration": {
+                "type": "BoxDecoration",
+                "border": {
+                  "type": "Border"
+                }
+              }
+            }
+          ]
+        },
+        "decoration": {
+          "type": "BoxDecoration",
+          "border": {
+            "type": "Border"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "description": "List items, https://github.github.com/gfm/#example-239",
+    "markdown": "-one\n\n2.two\n",
+    "expected": [
+      {
+        "type": "Padding",
+        "child": {
+          "type": "Column",
+          "children": [
+            {
+              "type": "RichText",
+              "textAlign": "TextAlign.start",
+              "text": {
+                "type": "TextSpan",
+                "text": "-one",
+                "style": {
+                  "fontSize": 16.0,
+                  "color": "Color(0xff333333)"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "type": "SizedBox",
+        "height": 8.0
+      },
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "text": "2.two",
+              "style": {
+                "fontSize": 16.0,
+                "color": "Color(0xff333333)"
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "List items, https://github.github.com/gfm/#example-240",
+    "markdown": "- foo\n\n\n  bar\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "Padding",
+            "child": {
+              "type": "Row",
+              "children": [
+                {
+                  "type": "ConstrainedBox",
+                  "constraints": {
+                    "type": "BoxConstraints",
+                    "minWidth": 30.0,
+                    "minHeight": 24.0,
+                    "maxWidth": 24.0
+                  },
+                  "child": {
+                    "type": "Align",
+                    "alignment": "Alignment.center",
+                    "child": {
+                      "type": "Padding",
+                      "child": {
+                        "type": "RichText",
+                        "textAlign": "TextAlign.right",
+                        "text": {
+                          "type": "TextSpan",
+                          "text": "•",
+                          "style": {
+                            "fontSize": 22.4,
+                            "color": "Color(0xbf333333)"
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                {
+                  "type": "Expanded",
+                  "child": {
+                    "type": "Column",
+                    "children": [
+                      {
+                        "type": "Column",
+                        "children": [
+                          {
+                            "type": "RichText",
+                            "textAlign": "TextAlign.start",
+                            "text": {
+                              "type": "TextSpan",
+                              "text": "foo",
+                              "style": {
+                                "fontSize": 16.0,
+                                "color": "Color(0xff333333)"
+                              }
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "type": "SizedBox",
+                        "height": 8.0
+                      },
+                      {
+                        "type": "Column",
+                        "children": [
+                          {
+                            "type": "RichText",
+                            "textAlign": "TextAlign.start",
+                            "text": {
+                              "type": "TextSpan",
+                              "text": "bar",
+                              "style": {
+                                "fontSize": 16.0,
+                                "color": "Color(0xff333333)"
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "List items, https://github.github.com/gfm/#example-241",
+    "markdown": "1.  foo\n\n    ```\n    bar\n    ```\n\n    baz\n\n    > bam\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "Padding",
+            "child": {
+              "type": "Row",
+              "children": [
+                {
+                  "type": "ConstrainedBox",
+                  "constraints": {
+                    "type": "BoxConstraints",
+                    "minWidth": 30.0,
+                    "minHeight": 24.0,
+                    "maxWidth": 24.0
+                  },
+                  "child": {
+                    "type": "Align",
+                    "alignment": "Alignment.center",
+                    "child": {
+                      "type": "Padding",
+                      "child": {
+                        "type": "RichText",
+                        "textAlign": "TextAlign.right",
+                        "text": {
+                          "type": "TextSpan",
+                          "text": "1.",
+                          "style": {
+                            "fontSize": 15.36,
+                            "color": "Color(0xbf333333)"
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                {
+                  "type": "Expanded",
+                  "child": {
+                    "type": "Column",
+                    "children": [
+                      {
+                        "type": "Column",
+                        "children": [
+                          {
+                            "type": "RichText",
+                            "textAlign": "TextAlign.start",
+                            "text": {
+                              "type": "TextSpan",
+                              "text": "foo",
+                              "style": {
+                                "fontSize": 16.0,
+                                "color": "Color(0xff333333)"
+                              }
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "type": "SizedBox",
+                        "height": 8.0
+                      },
+                      {
+                        "type": "Container",
+                        "child": {
+                          "type": "Stack",
+                          "children": [
+                            {
+                              "type": "Scrollbar",
+                              "child": {
+                                "type": "SingleChildScrollView",
+                                "child": {
+                                  "type": "RichText",
+                                  "textAlign": "TextAlign.start",
+                                  "text": {
+                                    "type": "TextSpan",
+                                    "text": "bar",
+                                    "style": {
+                                      "fontFamily": "monospace",
+                                      "fontSize": 16.0,
+                                      "color": "Color(0xff333333)"
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            {
+                              "type": "Positioned"
+                            }
+                          ]
+                        },
+                        "decoration": {
+                          "type": "BoxDecoration"
+                        }
+                      },
+                      {
+                        "type": "SizedBox",
+                        "height": 8.0
+                      },
+                      {
+                        "type": "Column",
+                        "children": [
+                          {
+                            "type": "RichText",
+                            "textAlign": "TextAlign.start",
+                            "text": {
+                              "type": "TextSpan",
+                              "text": "baz",
+                              "style": {
+                                "fontSize": 16.0,
+                                "color": "Color(0xff333333)"
+                              }
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "type": "SizedBox",
+                        "height": 8.0
+                      },
+                      {
+                        "type": "Container",
+                        "child": {
+                          "type": "Column",
+                          "children": [
+                            {
+                              "type": "Column",
+                              "children": [
+                                {
+                                  "type": "RichText",
+                                  "textAlign": "TextAlign.start",
+                                  "text": {
+                                    "type": "TextSpan",
+                                    "text": "bam",
+                                    "style": {
+                                      "fontSize": 16.0,
+                                      "color": "Color(0xff666666)"
+                                    }
+                                  }
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        "decoration": {
+                          "type": "BoxDecoration",
+                          "border": {
+                            "type": "Border"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "List items, https://github.github.com/gfm/#example-242",
+    "markdown": "- Foo\n\n      bar\n\n\n      baz\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "Padding",
+            "child": {
+              "type": "Row",
+              "children": [
+                {
+                  "type": "ConstrainedBox",
+                  "constraints": {
+                    "type": "BoxConstraints",
+                    "minWidth": 30.0,
+                    "minHeight": 24.0,
+                    "maxWidth": 24.0
+                  },
+                  "child": {
+                    "type": "Align",
+                    "alignment": "Alignment.center",
+                    "child": {
+                      "type": "Padding",
+                      "child": {
+                        "type": "RichText",
+                        "textAlign": "TextAlign.right",
+                        "text": {
+                          "type": "TextSpan",
+                          "text": "•",
+                          "style": {
+                            "fontSize": 22.4,
+                            "color": "Color(0xbf333333)"
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                {
+                  "type": "Expanded",
+                  "child": {
+                    "type": "Column",
+                    "children": [
+                      {
+                        "type": "Column",
+                        "children": [
+                          {
+                            "type": "RichText",
+                            "textAlign": "TextAlign.start",
+                            "text": {
+                              "type": "TextSpan",
+                              "text": "Foo",
+                              "style": {
+                                "fontSize": 16.0,
+                                "color": "Color(0xff333333)"
+                              }
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "type": "SizedBox",
+                        "height": 8.0
+                      },
+                      {
+                        "type": "Container",
+                        "child": {
+                          "type": "Stack",
+                          "children": [
+                            {
+                              "type": "Scrollbar",
+                              "child": {
+                                "type": "SingleChildScrollView",
+                                "child": {
+                                  "type": "RichText",
+                                  "textAlign": "TextAlign.start",
+                                  "text": {
+                                    "type": "TextSpan",
+                                    "text": "bar\n\n\nbaz",
+                                    "style": {
+                                      "fontFamily": "monospace",
+                                      "fontSize": 16.0,
+                                      "color": "Color(0xff333333)"
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            {
+                              "type": "Positioned"
+                            }
+                          ]
+                        },
+                        "decoration": {
+                          "type": "BoxDecoration"
+                        }
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "List items, https://github.github.com/gfm/#example-243",
+    "markdown": "123456789. ok\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "Row",
+            "children": [
+              {
+                "type": "ConstrainedBox",
+                "constraints": {
+                  "type": "BoxConstraints",
+                  "minWidth": 30.0,
+                  "minHeight": 24.0,
+                  "maxWidth": 24.0
+                },
+                "child": {
+                  "type": "Align",
+                  "alignment": "Alignment.center",
+                  "child": {
+                    "type": "Padding",
+                    "child": {
+                      "type": "RichText",
+                      "textAlign": "TextAlign.right",
+                      "text": {
+                        "type": "TextSpan",
+                        "text": "123456789.",
+                        "style": {
+                          "fontSize": 15.36,
+                          "color": "Color(0xbf333333)"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "type": "Expanded",
+                "child": {
+                  "type": "Column",
+                  "children": [
+                    {
+                      "type": "RichText",
+                      "textAlign": "TextAlign.start",
+                      "text": {
+                        "type": "TextSpan",
+                        "text": "ok",
+                        "style": {
+                          "fontSize": 16.0,
+                          "color": "Color(0xff333333)"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "List items, https://github.github.com/gfm/#example-244",
+    "markdown": "1234567890. not ok\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "text": "1234567890. not ok",
+              "style": {
+                "fontSize": 16.0,
+                "color": "Color(0xff333333)"
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "List items, https://github.github.com/gfm/#example-245",
+    "markdown": "0. ok\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "Row",
+            "children": [
+              {
+                "type": "ConstrainedBox",
+                "constraints": {
+                  "type": "BoxConstraints",
+                  "minWidth": 30.0,
+                  "minHeight": 24.0,
+                  "maxWidth": 24.0
+                },
+                "child": {
+                  "type": "Align",
+                  "alignment": "Alignment.center",
+                  "child": {
+                    "type": "Padding",
+                    "child": {
+                      "type": "RichText",
+                      "textAlign": "TextAlign.right",
+                      "text": {
+                        "type": "TextSpan",
+                        "text": "0.",
+                        "style": {
+                          "fontSize": 15.36,
+                          "color": "Color(0xbf333333)"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "type": "Expanded",
+                "child": {
+                  "type": "Column",
+                  "children": [
+                    {
+                      "type": "RichText",
+                      "textAlign": "TextAlign.start",
+                      "text": {
+                        "type": "TextSpan",
+                        "text": "ok",
+                        "style": {
+                          "fontSize": 16.0,
+                          "color": "Color(0xff333333)"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "List items, https://github.github.com/gfm/#example-246",
+    "markdown": "003. ok\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "Row",
+            "children": [
+              {
+                "type": "ConstrainedBox",
+                "constraints": {
+                  "type": "BoxConstraints",
+                  "minWidth": 30.0,
+                  "minHeight": 24.0,
+                  "maxWidth": 24.0
+                },
+                "child": {
+                  "type": "Align",
+                  "alignment": "Alignment.center",
+                  "child": {
+                    "type": "Padding",
+                    "child": {
+                      "type": "RichText",
+                      "textAlign": "TextAlign.right",
+                      "text": {
+                        "type": "TextSpan",
+                        "text": "3.",
+                        "style": {
+                          "fontSize": 15.36,
+                          "color": "Color(0xbf333333)"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "type": "Expanded",
+                "child": {
+                  "type": "Column",
+                  "children": [
+                    {
+                      "type": "RichText",
+                      "textAlign": "TextAlign.start",
+                      "text": {
+                        "type": "TextSpan",
+                        "text": "ok",
+                        "style": {
+                          "fontSize": 16.0,
+                          "color": "Color(0xff333333)"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "List items, https://github.github.com/gfm/#example-247",
+    "markdown": "-1. not ok\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "text": "-1. not ok",
+              "style": {
+                "fontSize": 16.0,
+                "color": "Color(0xff333333)"
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "List items, https://github.github.com/gfm/#example-248",
+    "markdown": "- foo\n\n      bar\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "Padding",
+            "child": {
+              "type": "Row",
+              "children": [
+                {
+                  "type": "ConstrainedBox",
+                  "constraints": {
+                    "type": "BoxConstraints",
+                    "minWidth": 30.0,
+                    "minHeight": 24.0,
+                    "maxWidth": 24.0
+                  },
+                  "child": {
+                    "type": "Align",
+                    "alignment": "Alignment.center",
+                    "child": {
+                      "type": "Padding",
+                      "child": {
+                        "type": "RichText",
+                        "textAlign": "TextAlign.right",
+                        "text": {
+                          "type": "TextSpan",
+                          "text": "•",
+                          "style": {
+                            "fontSize": 22.4,
+                            "color": "Color(0xbf333333)"
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                {
+                  "type": "Expanded",
+                  "child": {
+                    "type": "Column",
+                    "children": [
+                      {
+                        "type": "Column",
+                        "children": [
+                          {
+                            "type": "RichText",
+                            "textAlign": "TextAlign.start",
+                            "text": {
+                              "type": "TextSpan",
+                              "text": "foo",
+                              "style": {
+                                "fontSize": 16.0,
+                                "color": "Color(0xff333333)"
+                              }
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "type": "SizedBox",
+                        "height": 8.0
+                      },
+                      {
+                        "type": "Container",
+                        "child": {
+                          "type": "Stack",
+                          "children": [
+                            {
+                              "type": "Scrollbar",
+                              "child": {
+                                "type": "SingleChildScrollView",
+                                "child": {
+                                  "type": "RichText",
+                                  "textAlign": "TextAlign.start",
+                                  "text": {
+                                    "type": "TextSpan",
+                                    "text": "bar",
+                                    "style": {
+                                      "fontFamily": "monospace",
+                                      "fontSize": 16.0,
+                                      "color": "Color(0xff333333)"
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            {
+                              "type": "Positioned"
+                            }
+                          ]
+                        },
+                        "decoration": {
+                          "type": "BoxDecoration"
+                        }
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "List items, https://github.github.com/gfm/#example-249",
+    "markdown": "  10.  foo\n\n           bar\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "Padding",
+            "child": {
+              "type": "Row",
+              "children": [
+                {
+                  "type": "ConstrainedBox",
+                  "constraints": {
+                    "type": "BoxConstraints",
+                    "minWidth": 30.0,
+                    "minHeight": 24.0,
+                    "maxWidth": 24.0
+                  },
+                  "child": {
+                    "type": "Align",
+                    "alignment": "Alignment.center",
+                    "child": {
+                      "type": "Padding",
+                      "child": {
+                        "type": "RichText",
+                        "textAlign": "TextAlign.right",
+                        "text": {
+                          "type": "TextSpan",
+                          "text": "10.",
+                          "style": {
+                            "fontSize": 15.36,
+                            "color": "Color(0xbf333333)"
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                {
+                  "type": "Expanded",
+                  "child": {
+                    "type": "Column",
+                    "children": [
+                      {
+                        "type": "Column",
+                        "children": [
+                          {
+                            "type": "RichText",
+                            "textAlign": "TextAlign.start",
+                            "text": {
+                              "type": "TextSpan",
+                              "text": "foo",
+                              "style": {
+                                "fontSize": 16.0,
+                                "color": "Color(0xff333333)"
+                              }
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "type": "SizedBox",
+                        "height": 8.0
+                      },
+                      {
+                        "type": "Container",
+                        "child": {
+                          "type": "Stack",
+                          "children": [
+                            {
+                              "type": "Scrollbar",
+                              "child": {
+                                "type": "SingleChildScrollView",
+                                "child": {
+                                  "type": "RichText",
+                                  "textAlign": "TextAlign.start",
+                                  "text": {
+                                    "type": "TextSpan",
+                                    "text": "bar",
+                                    "style": {
+                                      "fontFamily": "monospace",
+                                      "fontSize": 16.0,
+                                      "color": "Color(0xff333333)"
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            {
+                              "type": "Positioned"
+                            }
+                          ]
+                        },
+                        "decoration": {
+                          "type": "BoxDecoration"
+                        }
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "List items, https://github.github.com/gfm/#example-250",
+    "markdown": "    indented code\n\nparagraph\n\n    more code\n",
+    "expected": [
+      {
+        "type": "Container",
+        "child": {
+          "type": "Stack",
+          "children": [
+            {
+              "type": "Scrollbar",
+              "child": {
+                "type": "SingleChildScrollView",
+                "child": {
+                  "type": "RichText",
+                  "textAlign": "TextAlign.start",
+                  "text": {
+                    "type": "TextSpan",
+                    "text": "indented code",
+                    "style": {
+                      "fontFamily": "monospace",
+                      "fontSize": 16.0,
+                      "color": "Color(0xff333333)"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "type": "Positioned"
+            }
+          ]
+        },
+        "decoration": {
+          "type": "BoxDecoration"
+        }
+      },
+      {
+        "type": "SizedBox",
+        "height": 8.0
+      },
+      {
+        "type": "Padding",
+        "child": {
+          "type": "Column",
+          "children": [
+            {
+              "type": "RichText",
+              "textAlign": "TextAlign.start",
+              "text": {
+                "type": "TextSpan",
+                "text": "paragraph",
+                "style": {
+                  "fontSize": 16.0,
+                  "color": "Color(0xff333333)"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "type": "SizedBox",
+        "height": 8.0
+      },
+      {
+        "type": "Container",
+        "child": {
+          "type": "Stack",
+          "children": [
+            {
+              "type": "Scrollbar",
+              "child": {
+                "type": "SingleChildScrollView",
+                "child": {
+                  "type": "RichText",
+                  "textAlign": "TextAlign.start",
+                  "text": {
+                    "type": "TextSpan",
+                    "text": "more code",
+                    "style": {
+                      "fontFamily": "monospace",
+                      "fontSize": 16.0,
+                      "color": "Color(0xff333333)"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "type": "Positioned"
+            }
+          ]
+        },
+        "decoration": {
+          "type": "BoxDecoration"
+        }
+      }
+    ]
+  },
+  {
+    "description": "List items, https://github.github.com/gfm/#example-251",
+    "markdown": "1.     indented code\n\n   paragraph\n\n       more code\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "Padding",
+            "child": {
+              "type": "Row",
+              "children": [
+                {
+                  "type": "ConstrainedBox",
+                  "constraints": {
+                    "type": "BoxConstraints",
+                    "minWidth": 30.0,
+                    "minHeight": 24.0,
+                    "maxWidth": 24.0
+                  },
+                  "child": {
+                    "type": "Align",
+                    "alignment": "Alignment.center",
+                    "child": {
+                      "type": "Padding",
+                      "child": {
+                        "type": "RichText",
+                        "textAlign": "TextAlign.right",
+                        "text": {
+                          "type": "TextSpan",
+                          "text": "1.",
+                          "style": {
+                            "fontSize": 15.36,
+                            "color": "Color(0xbf333333)"
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                {
+                  "type": "Expanded",
+                  "child": {
+                    "type": "Column",
+                    "children": [
+                      {
+                        "type": "Container",
+                        "child": {
+                          "type": "Stack",
+                          "children": [
+                            {
+                              "type": "Scrollbar",
+                              "child": {
+                                "type": "SingleChildScrollView",
+                                "child": {
+                                  "type": "RichText",
+                                  "textAlign": "TextAlign.start",
+                                  "text": {
+                                    "type": "TextSpan",
+                                    "text": "indented code",
+                                    "style": {
+                                      "fontFamily": "monospace",
+                                      "fontSize": 16.0,
+                                      "color": "Color(0xff333333)"
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            {
+                              "type": "Positioned"
+                            }
+                          ]
+                        },
+                        "decoration": {
+                          "type": "BoxDecoration"
+                        }
+                      },
+                      {
+                        "type": "SizedBox",
+                        "height": 8.0
+                      },
+                      {
+                        "type": "Column",
+                        "children": [
+                          {
+                            "type": "RichText",
+                            "textAlign": "TextAlign.start",
+                            "text": {
+                              "type": "TextSpan",
+                              "text": "paragraph",
+                              "style": {
+                                "fontSize": 16.0,
+                                "color": "Color(0xff333333)"
+                              }
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "type": "SizedBox",
+                        "height": 8.0
+                      },
+                      {
+                        "type": "Container",
+                        "child": {
+                          "type": "Stack",
+                          "children": [
+                            {
+                              "type": "Scrollbar",
+                              "child": {
+                                "type": "SingleChildScrollView",
+                                "child": {
+                                  "type": "RichText",
+                                  "textAlign": "TextAlign.start",
+                                  "text": {
+                                    "type": "TextSpan",
+                                    "text": "more code",
+                                    "style": {
+                                      "fontFamily": "monospace",
+                                      "fontSize": 16.0,
+                                      "color": "Color(0xff333333)"
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            {
+                              "type": "Positioned"
+                            }
+                          ]
+                        },
+                        "decoration": {
+                          "type": "BoxDecoration"
+                        }
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "List items, https://github.github.com/gfm/#example-252",
+    "markdown": "1.      indented code\n\n   paragraph\n\n       more code\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "Padding",
+            "child": {
+              "type": "Row",
+              "children": [
+                {
+                  "type": "ConstrainedBox",
+                  "constraints": {
+                    "type": "BoxConstraints",
+                    "minWidth": 30.0,
+                    "minHeight": 24.0,
+                    "maxWidth": 24.0
+                  },
+                  "child": {
+                    "type": "Align",
+                    "alignment": "Alignment.center",
+                    "child": {
+                      "type": "Padding",
+                      "child": {
+                        "type": "RichText",
+                        "textAlign": "TextAlign.right",
+                        "text": {
+                          "type": "TextSpan",
+                          "text": "1.",
+                          "style": {
+                            "fontSize": 15.36,
+                            "color": "Color(0xbf333333)"
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                {
+                  "type": "Expanded",
+                  "child": {
+                    "type": "Column",
+                    "children": [
+                      {
+                        "type": "Container",
+                        "child": {
+                          "type": "Stack",
+                          "children": [
+                            {
+                              "type": "Scrollbar",
+                              "child": {
+                                "type": "SingleChildScrollView",
+                                "child": {
+                                  "type": "RichText",
+                                  "textAlign": "TextAlign.start",
+                                  "text": {
+                                    "type": "TextSpan",
+                                    "text": " indented code",
+                                    "style": {
+                                      "fontFamily": "monospace",
+                                      "fontSize": 16.0,
+                                      "color": "Color(0xff333333)"
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            {
+                              "type": "Positioned"
+                            }
+                          ]
+                        },
+                        "decoration": {
+                          "type": "BoxDecoration"
+                        }
+                      },
+                      {
+                        "type": "SizedBox",
+                        "height": 8.0
+                      },
+                      {
+                        "type": "Column",
+                        "children": [
+                          {
+                            "type": "RichText",
+                            "textAlign": "TextAlign.start",
+                            "text": {
+                              "type": "TextSpan",
+                              "text": "paragraph",
+                              "style": {
+                                "fontSize": 16.0,
+                                "color": "Color(0xff333333)"
+                              }
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "type": "SizedBox",
+                        "height": 8.0
+                      },
+                      {
+                        "type": "Container",
+                        "child": {
+                          "type": "Stack",
+                          "children": [
+                            {
+                              "type": "Scrollbar",
+                              "child": {
+                                "type": "SingleChildScrollView",
+                                "child": {
+                                  "type": "RichText",
+                                  "textAlign": "TextAlign.start",
+                                  "text": {
+                                    "type": "TextSpan",
+                                    "text": "more code",
+                                    "style": {
+                                      "fontFamily": "monospace",
+                                      "fontSize": 16.0,
+                                      "color": "Color(0xff333333)"
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            {
+                              "type": "Positioned"
+                            }
+                          ]
+                        },
+                        "decoration": {
+                          "type": "BoxDecoration"
+                        }
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "List items, https://github.github.com/gfm/#example-253",
+    "markdown": "   foo\n\nbar\n",
+    "expected": [
+      {
+        "type": "Padding",
+        "child": {
+          "type": "Column",
+          "children": [
+            {
+              "type": "RichText",
+              "textAlign": "TextAlign.start",
+              "text": {
+                "type": "TextSpan",
+                "text": "foo",
+                "style": {
+                  "fontSize": 16.0,
+                  "color": "Color(0xff333333)"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "type": "SizedBox",
+        "height": 8.0
+      },
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "text": "bar",
+              "style": {
+                "fontSize": 16.0,
+                "color": "Color(0xff333333)"
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "List items, https://github.github.com/gfm/#example-254",
+    "markdown": "-    foo\n\n  bar\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "Row",
+            "children": [
+              {
+                "type": "ConstrainedBox",
+                "constraints": {
+                  "type": "BoxConstraints",
+                  "minWidth": 30.0,
+                  "minHeight": 24.0,
+                  "maxWidth": 24.0
+                },
+                "child": {
+                  "type": "Align",
+                  "alignment": "Alignment.center",
+                  "child": {
+                    "type": "Padding",
+                    "child": {
+                      "type": "RichText",
+                      "textAlign": "TextAlign.right",
+                      "text": {
+                        "type": "TextSpan",
+                        "text": "•",
+                        "style": {
+                          "fontSize": 22.4,
+                          "color": "Color(0xbf333333)"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "type": "Expanded",
+                "child": {
+                  "type": "Column",
+                  "children": [
+                    {
+                      "type": "RichText",
+                      "textAlign": "TextAlign.start",
+                      "text": {
+                        "type": "TextSpan",
+                        "text": "foo",
+                        "style": {
+                          "fontSize": 16.0,
+                          "color": "Color(0xff333333)"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "SizedBox",
+        "height": 8.0
+      },
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "text": "bar",
+              "style": {
+                "fontSize": 16.0,
+                "color": "Color(0xff333333)"
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "List items, https://github.github.com/gfm/#example-255",
+    "markdown": "-  foo\n\n   bar\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "Padding",
+            "child": {
+              "type": "Row",
+              "children": [
+                {
+                  "type": "ConstrainedBox",
+                  "constraints": {
+                    "type": "BoxConstraints",
+                    "minWidth": 30.0,
+                    "minHeight": 24.0,
+                    "maxWidth": 24.0
+                  },
+                  "child": {
+                    "type": "Align",
+                    "alignment": "Alignment.center",
+                    "child": {
+                      "type": "Padding",
+                      "child": {
+                        "type": "RichText",
+                        "textAlign": "TextAlign.right",
+                        "text": {
+                          "type": "TextSpan",
+                          "text": "•",
+                          "style": {
+                            "fontSize": 22.4,
+                            "color": "Color(0xbf333333)"
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                {
+                  "type": "Expanded",
+                  "child": {
+                    "type": "Column",
+                    "children": [
+                      {
+                        "type": "Column",
+                        "children": [
+                          {
+                            "type": "RichText",
+                            "textAlign": "TextAlign.start",
+                            "text": {
+                              "type": "TextSpan",
+                              "text": "foo",
+                              "style": {
+                                "fontSize": 16.0,
+                                "color": "Color(0xff333333)"
+                              }
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "type": "SizedBox",
+                        "height": 8.0
+                      },
+                      {
+                        "type": "Column",
+                        "children": [
+                          {
+                            "type": "RichText",
+                            "textAlign": "TextAlign.start",
+                            "text": {
+                              "type": "TextSpan",
+                              "text": "bar",
+                              "style": {
+                                "fontSize": 16.0,
+                                "color": "Color(0xff333333)"
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "List items, https://github.github.com/gfm/#example-256",
+    "markdown": "-\n  foo\n-\n  ```\n  bar\n  ```\n-\n      baz\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "Row",
+            "children": [
+              {
+                "type": "ConstrainedBox",
+                "constraints": {
+                  "type": "BoxConstraints",
+                  "minWidth": 30.0,
+                  "minHeight": 24.0,
+                  "maxWidth": 24.0
+                },
+                "child": {
+                  "type": "Align",
+                  "alignment": "Alignment.center",
+                  "child": {
+                    "type": "Padding",
+                    "child": {
+                      "type": "RichText",
+                      "textAlign": "TextAlign.right",
+                      "text": {
+                        "type": "TextSpan",
+                        "text": "•",
+                        "style": {
+                          "fontSize": 22.4,
+                          "color": "Color(0xbf333333)"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "type": "Expanded",
+                "child": {
+                  "type": "Column",
+                  "children": [
+                    {
+                      "type": "RichText",
+                      "textAlign": "TextAlign.start",
+                      "text": {
+                        "type": "TextSpan",
+                        "text": "foo",
+                        "style": {
+                          "fontSize": 16.0,
+                          "color": "Color(0xff333333)"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "type": "SizedBox",
+            "height": 8.0
+          },
+          {
+            "type": "Row",
+            "children": [
+              {
+                "type": "ConstrainedBox",
+                "constraints": {
+                  "type": "BoxConstraints",
+                  "minWidth": 30.0,
+                  "minHeight": 24.0,
+                  "maxWidth": 24.0
+                },
+                "child": {
+                  "type": "Align",
+                  "alignment": "Alignment.center",
+                  "child": {
+                    "type": "Padding",
+                    "child": {
+                      "type": "RichText",
+                      "textAlign": "TextAlign.right",
+                      "text": {
+                        "type": "TextSpan",
+                        "text": "•",
+                        "style": {
+                          "fontSize": 22.4,
+                          "color": "Color(0xbf333333)"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "type": "Expanded",
+                "child": {
+                  "type": "Column",
+                  "children": [
+                    {
+                      "type": "Container",
+                      "child": {
+                        "type": "Stack",
+                        "children": [
+                          {
+                            "type": "Scrollbar",
+                            "child": {
+                              "type": "SingleChildScrollView",
+                              "child": {
+                                "type": "RichText",
+                                "textAlign": "TextAlign.start",
+                                "text": {
+                                  "type": "TextSpan",
+                                  "text": "bar",
+                                  "style": {
+                                    "fontFamily": "monospace",
+                                    "fontSize": 16.0,
+                                    "color": "Color(0xff333333)"
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          {
+                            "type": "Positioned"
+                          }
+                        ]
+                      },
+                      "decoration": {
+                        "type": "BoxDecoration"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "type": "SizedBox",
+            "height": 8.0
+          },
+          {
+            "type": "Row",
+            "children": [
+              {
+                "type": "ConstrainedBox",
+                "constraints": {
+                  "type": "BoxConstraints",
+                  "minWidth": 30.0,
+                  "minHeight": 24.0,
+                  "maxWidth": 24.0
+                },
+                "child": {
+                  "type": "Align",
+                  "alignment": "Alignment.center",
+                  "child": {
+                    "type": "Padding",
+                    "child": {
+                      "type": "RichText",
+                      "textAlign": "TextAlign.right",
+                      "text": {
+                        "type": "TextSpan",
+                        "text": "•",
+                        "style": {
+                          "fontSize": 22.4,
+                          "color": "Color(0xbf333333)"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "type": "Expanded",
+                "child": {
+                  "type": "Column",
+                  "children": [
+                    {
+                      "type": "Container",
+                      "child": {
+                        "type": "Stack",
+                        "children": [
+                          {
+                            "type": "Scrollbar",
+                            "child": {
+                              "type": "SingleChildScrollView",
+                              "child": {
+                                "type": "RichText",
+                                "textAlign": "TextAlign.start",
+                                "text": {
+                                  "type": "TextSpan",
+                                  "text": "baz",
+                                  "style": {
+                                    "fontFamily": "monospace",
+                                    "fontSize": 16.0,
+                                    "color": "Color(0xff333333)"
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          {
+                            "type": "Positioned"
+                          }
+                        ]
+                      },
+                      "decoration": {
+                        "type": "BoxDecoration"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "List items, https://github.github.com/gfm/#example-257",
+    "markdown": "-   \n  foo\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "Row",
+            "children": [
+              {
+                "type": "ConstrainedBox",
+                "constraints": {
+                  "type": "BoxConstraints",
+                  "minWidth": 30.0,
+                  "minHeight": 24.0,
+                  "maxWidth": 24.0
+                },
+                "child": {
+                  "type": "Align",
+                  "alignment": "Alignment.center",
+                  "child": {
+                    "type": "Padding",
+                    "child": {
+                      "type": "RichText",
+                      "textAlign": "TextAlign.right",
+                      "text": {
+                        "type": "TextSpan",
+                        "text": "•",
+                        "style": {
+                          "fontSize": 22.4,
+                          "color": "Color(0xbf333333)"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "type": "Expanded",
+                "child": {
+                  "type": "Column",
+                  "children": [
+                    {
+                      "type": "RichText",
+                      "textAlign": "TextAlign.start",
+                      "text": {
+                        "type": "TextSpan",
+                        "text": "foo",
+                        "style": {
+                          "fontSize": 16.0,
+                          "color": "Color(0xff333333)"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "List items, https://github.github.com/gfm/#example-258",
+    "markdown": "-\n\n  foo\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "Padding",
+            "child": {
+              "type": "Row",
+              "children": [
+                {
+                  "type": "ConstrainedBox",
+                  "constraints": {
+                    "type": "BoxConstraints",
+                    "minWidth": 30.0,
+                    "minHeight": 24.0,
+                    "maxWidth": 24.0
+                  },
+                  "child": {
+                    "type": "Align",
+                    "alignment": "Alignment.center",
+                    "child": {
+                      "type": "Padding",
+                      "child": {
+                        "type": "RichText",
+                        "textAlign": "TextAlign.right",
+                        "text": {
+                          "type": "TextSpan",
+                          "text": "•",
+                          "style": {
+                            "fontSize": 22.4,
+                            "color": "Color(0xbf333333)"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "type": "SizedBox",
+        "height": 8.0
+      },
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "text": "foo",
+              "style": {
+                "fontSize": 16.0,
+                "color": "Color(0xff333333)"
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "List items, https://github.github.com/gfm/#example-259",
+    "markdown": "- foo\n-\n- bar\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "Row",
+            "children": [
+              {
+                "type": "ConstrainedBox",
+                "constraints": {
+                  "type": "BoxConstraints",
+                  "minWidth": 30.0,
+                  "minHeight": 24.0,
+                  "maxWidth": 24.0
+                },
+                "child": {
+                  "type": "Align",
+                  "alignment": "Alignment.center",
+                  "child": {
+                    "type": "Padding",
+                    "child": {
+                      "type": "RichText",
+                      "textAlign": "TextAlign.right",
+                      "text": {
+                        "type": "TextSpan",
+                        "text": "•",
+                        "style": {
+                          "fontSize": 22.4,
+                          "color": "Color(0xbf333333)"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "type": "Expanded",
+                "child": {
+                  "type": "Column",
+                  "children": [
+                    {
+                      "type": "RichText",
+                      "textAlign": "TextAlign.start",
+                      "text": {
+                        "type": "TextSpan",
+                        "text": "foo",
+                        "style": {
+                          "fontSize": 16.0,
+                          "color": "Color(0xff333333)"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "type": "SizedBox",
+            "height": 8.0
+          },
+          {
+            "type": "Row",
+            "children": [
+              {
+                "type": "ConstrainedBox",
+                "constraints": {
+                  "type": "BoxConstraints",
+                  "minWidth": 30.0,
+                  "minHeight": 24.0,
+                  "maxWidth": 24.0
+                },
+                "child": {
+                  "type": "Align",
+                  "alignment": "Alignment.center",
+                  "child": {
+                    "type": "Padding",
+                    "child": {
+                      "type": "RichText",
+                      "textAlign": "TextAlign.right",
+                      "text": {
+                        "type": "TextSpan",
+                        "text": "•",
+                        "style": {
+                          "fontSize": 22.4,
+                          "color": "Color(0xbf333333)"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "type": "SizedBox",
+            "height": 8.0
+          },
+          {
+            "type": "Row",
+            "children": [
+              {
+                "type": "ConstrainedBox",
+                "constraints": {
+                  "type": "BoxConstraints",
+                  "minWidth": 30.0,
+                  "minHeight": 24.0,
+                  "maxWidth": 24.0
+                },
+                "child": {
+                  "type": "Align",
+                  "alignment": "Alignment.center",
+                  "child": {
+                    "type": "Padding",
+                    "child": {
+                      "type": "RichText",
+                      "textAlign": "TextAlign.right",
+                      "text": {
+                        "type": "TextSpan",
+                        "text": "•",
+                        "style": {
+                          "fontSize": 22.4,
+                          "color": "Color(0xbf333333)"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "type": "Expanded",
+                "child": {
+                  "type": "Column",
+                  "children": [
+                    {
+                      "type": "RichText",
+                      "textAlign": "TextAlign.start",
+                      "text": {
+                        "type": "TextSpan",
+                        "text": "bar",
+                        "style": {
+                          "fontSize": 16.0,
+                          "color": "Color(0xff333333)"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "List items, https://github.github.com/gfm/#example-260",
+    "markdown": "- foo\n-   \n- bar\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "Row",
+            "children": [
+              {
+                "type": "ConstrainedBox",
+                "constraints": {
+                  "type": "BoxConstraints",
+                  "minWidth": 30.0,
+                  "minHeight": 24.0,
+                  "maxWidth": 24.0
+                },
+                "child": {
+                  "type": "Align",
+                  "alignment": "Alignment.center",
+                  "child": {
+                    "type": "Padding",
+                    "child": {
+                      "type": "RichText",
+                      "textAlign": "TextAlign.right",
+                      "text": {
+                        "type": "TextSpan",
+                        "text": "•",
+                        "style": {
+                          "fontSize": 22.4,
+                          "color": "Color(0xbf333333)"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "type": "Expanded",
+                "child": {
+                  "type": "Column",
+                  "children": [
+                    {
+                      "type": "RichText",
+                      "textAlign": "TextAlign.start",
+                      "text": {
+                        "type": "TextSpan",
+                        "text": "foo",
+                        "style": {
+                          "fontSize": 16.0,
+                          "color": "Color(0xff333333)"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "type": "SizedBox",
+            "height": 8.0
+          },
+          {
+            "type": "Row",
+            "children": [
+              {
+                "type": "ConstrainedBox",
+                "constraints": {
+                  "type": "BoxConstraints",
+                  "minWidth": 30.0,
+                  "minHeight": 24.0,
+                  "maxWidth": 24.0
+                },
+                "child": {
+                  "type": "Align",
+                  "alignment": "Alignment.center",
+                  "child": {
+                    "type": "Padding",
+                    "child": {
+                      "type": "RichText",
+                      "textAlign": "TextAlign.right",
+                      "text": {
+                        "type": "TextSpan",
+                        "text": "•",
+                        "style": {
+                          "fontSize": 22.4,
+                          "color": "Color(0xbf333333)"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "type": "SizedBox",
+            "height": 8.0
+          },
+          {
+            "type": "Row",
+            "children": [
+              {
+                "type": "ConstrainedBox",
+                "constraints": {
+                  "type": "BoxConstraints",
+                  "minWidth": 30.0,
+                  "minHeight": 24.0,
+                  "maxWidth": 24.0
+                },
+                "child": {
+                  "type": "Align",
+                  "alignment": "Alignment.center",
+                  "child": {
+                    "type": "Padding",
+                    "child": {
+                      "type": "RichText",
+                      "textAlign": "TextAlign.right",
+                      "text": {
+                        "type": "TextSpan",
+                        "text": "•",
+                        "style": {
+                          "fontSize": 22.4,
+                          "color": "Color(0xbf333333)"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "type": "Expanded",
+                "child": {
+                  "type": "Column",
+                  "children": [
+                    {
+                      "type": "RichText",
+                      "textAlign": "TextAlign.start",
+                      "text": {
+                        "type": "TextSpan",
+                        "text": "bar",
+                        "style": {
+                          "fontSize": 16.0,
+                          "color": "Color(0xff333333)"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "List items, https://github.github.com/gfm/#example-261",
+    "markdown": "1. foo\n2.\n3. bar\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "Row",
+            "children": [
+              {
+                "type": "ConstrainedBox",
+                "constraints": {
+                  "type": "BoxConstraints",
+                  "minWidth": 30.0,
+                  "minHeight": 24.0,
+                  "maxWidth": 24.0
+                },
+                "child": {
+                  "type": "Align",
+                  "alignment": "Alignment.center",
+                  "child": {
+                    "type": "Padding",
+                    "child": {
+                      "type": "RichText",
+                      "textAlign": "TextAlign.right",
+                      "text": {
+                        "type": "TextSpan",
+                        "text": "1.",
+                        "style": {
+                          "fontSize": 15.36,
+                          "color": "Color(0xbf333333)"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "type": "Expanded",
+                "child": {
+                  "type": "Column",
+                  "children": [
+                    {
+                      "type": "RichText",
+                      "textAlign": "TextAlign.start",
+                      "text": {
+                        "type": "TextSpan",
+                        "text": "foo",
+                        "style": {
+                          "fontSize": 16.0,
+                          "color": "Color(0xff333333)"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "type": "SizedBox",
+            "height": 8.0
+          },
+          {
+            "type": "Row",
+            "children": [
+              {
+                "type": "ConstrainedBox",
+                "constraints": {
+                  "type": "BoxConstraints",
+                  "minWidth": 30.0,
+                  "minHeight": 24.0,
+                  "maxWidth": 24.0
+                },
+                "child": {
+                  "type": "Align",
+                  "alignment": "Alignment.center",
+                  "child": {
+                    "type": "Padding",
+                    "child": {
+                      "type": "RichText",
+                      "textAlign": "TextAlign.right",
+                      "text": {
+                        "type": "TextSpan",
+                        "text": "2.",
+                        "style": {
+                          "fontSize": 15.36,
+                          "color": "Color(0xbf333333)"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "type": "SizedBox",
+            "height": 8.0
+          },
+          {
+            "type": "Row",
+            "children": [
+              {
+                "type": "ConstrainedBox",
+                "constraints": {
+                  "type": "BoxConstraints",
+                  "minWidth": 30.0,
+                  "minHeight": 24.0,
+                  "maxWidth": 24.0
+                },
+                "child": {
+                  "type": "Align",
+                  "alignment": "Alignment.center",
+                  "child": {
+                    "type": "Padding",
+                    "child": {
+                      "type": "RichText",
+                      "textAlign": "TextAlign.right",
+                      "text": {
+                        "type": "TextSpan",
+                        "text": "3.",
+                        "style": {
+                          "fontSize": 15.36,
+                          "color": "Color(0xbf333333)"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "type": "Expanded",
+                "child": {
+                  "type": "Column",
+                  "children": [
+                    {
+                      "type": "RichText",
+                      "textAlign": "TextAlign.start",
+                      "text": {
+                        "type": "TextSpan",
+                        "text": "bar",
+                        "style": {
+                          "fontSize": 16.0,
+                          "color": "Color(0xff333333)"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "List items, https://github.github.com/gfm/#example-262",
+    "markdown": "*\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "Row",
+            "children": [
+              {
+                "type": "ConstrainedBox",
+                "constraints": {
+                  "type": "BoxConstraints",
+                  "minWidth": 30.0,
+                  "minHeight": 24.0,
+                  "maxWidth": 24.0
+                },
+                "child": {
+                  "type": "Align",
+                  "alignment": "Alignment.center",
+                  "child": {
+                    "type": "Padding",
+                    "child": {
+                      "type": "RichText",
+                      "textAlign": "TextAlign.right",
+                      "text": {
+                        "type": "TextSpan",
+                        "text": "•",
+                        "style": {
+                          "fontSize": 22.4,
+                          "color": "Color(0xbf333333)"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "List items, https://github.github.com/gfm/#example-263",
+    "markdown": "foo\n*\n\nfoo\n1.\n",
+    "expected": [
+      {
+        "type": "Padding",
+        "child": {
+          "type": "Column",
+          "children": [
+            {
+              "type": "RichText",
+              "textAlign": "TextAlign.start",
+              "text": {
+                "type": "TextSpan",
+                "text": "foo *",
+                "style": {
+                  "fontSize": 16.0,
+                  "color": "Color(0xff333333)"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "type": "SizedBox",
+        "height": 8.0
+      },
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "text": "foo 1.",
+              "style": {
+                "fontSize": 16.0,
+                "color": "Color(0xff333333)"
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "List items, https://github.github.com/gfm/#example-264",
+    "markdown": " 1.  A paragraph\n     with two lines.\n\n         indented code\n\n     > A block quote.\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "Padding",
+            "child": {
+              "type": "Row",
+              "children": [
+                {
+                  "type": "ConstrainedBox",
+                  "constraints": {
+                    "type": "BoxConstraints",
+                    "minWidth": 30.0,
+                    "minHeight": 24.0,
+                    "maxWidth": 24.0
+                  },
+                  "child": {
+                    "type": "Align",
+                    "alignment": "Alignment.center",
+                    "child": {
+                      "type": "Padding",
+                      "child": {
+                        "type": "RichText",
+                        "textAlign": "TextAlign.right",
+                        "text": {
+                          "type": "TextSpan",
+                          "text": "1.",
+                          "style": {
+                            "fontSize": 15.36,
+                            "color": "Color(0xbf333333)"
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                {
+                  "type": "Expanded",
+                  "child": {
+                    "type": "Column",
+                    "children": [
+                      {
+                        "type": "Column",
+                        "children": [
+                          {
+                            "type": "RichText",
+                            "textAlign": "TextAlign.start",
+                            "text": {
+                              "type": "TextSpan",
+                              "text": "A paragraph with two lines.",
+                              "style": {
+                                "fontSize": 16.0,
+                                "color": "Color(0xff333333)"
+                              }
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "type": "SizedBox",
+                        "height": 8.0
+                      },
+                      {
+                        "type": "Container",
+                        "child": {
+                          "type": "Stack",
+                          "children": [
+                            {
+                              "type": "Scrollbar",
+                              "child": {
+                                "type": "SingleChildScrollView",
+                                "child": {
+                                  "type": "RichText",
+                                  "textAlign": "TextAlign.start",
+                                  "text": {
+                                    "type": "TextSpan",
+                                    "text": "indented code",
+                                    "style": {
+                                      "fontFamily": "monospace",
+                                      "fontSize": 16.0,
+                                      "color": "Color(0xff333333)"
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            {
+                              "type": "Positioned"
+                            }
+                          ]
+                        },
+                        "decoration": {
+                          "type": "BoxDecoration"
+                        }
+                      },
+                      {
+                        "type": "SizedBox",
+                        "height": 8.0
+                      },
+                      {
+                        "type": "Container",
+                        "child": {
+                          "type": "Column",
+                          "children": [
+                            {
+                              "type": "Column",
+                              "children": [
+                                {
+                                  "type": "RichText",
+                                  "textAlign": "TextAlign.start",
+                                  "text": {
+                                    "type": "TextSpan",
+                                    "text": "A block quote.",
+                                    "style": {
+                                      "fontSize": 16.0,
+                                      "color": "Color(0xff666666)"
+                                    }
+                                  }
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        "decoration": {
+                          "type": "BoxDecoration",
+                          "border": {
+                            "type": "Border"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "List items, https://github.github.com/gfm/#example-265",
+    "markdown": "  1.  A paragraph\n      with two lines.\n\n          indented code\n\n      > A block quote.\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "Padding",
+            "child": {
+              "type": "Row",
+              "children": [
+                {
+                  "type": "ConstrainedBox",
+                  "constraints": {
+                    "type": "BoxConstraints",
+                    "minWidth": 30.0,
+                    "minHeight": 24.0,
+                    "maxWidth": 24.0
+                  },
+                  "child": {
+                    "type": "Align",
+                    "alignment": "Alignment.center",
+                    "child": {
+                      "type": "Padding",
+                      "child": {
+                        "type": "RichText",
+                        "textAlign": "TextAlign.right",
+                        "text": {
+                          "type": "TextSpan",
+                          "text": "1.",
+                          "style": {
+                            "fontSize": 15.36,
+                            "color": "Color(0xbf333333)"
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                {
+                  "type": "Expanded",
+                  "child": {
+                    "type": "Column",
+                    "children": [
+                      {
+                        "type": "Column",
+                        "children": [
+                          {
+                            "type": "RichText",
+                            "textAlign": "TextAlign.start",
+                            "text": {
+                              "type": "TextSpan",
+                              "text": "A paragraph with two lines.",
+                              "style": {
+                                "fontSize": 16.0,
+                                "color": "Color(0xff333333)"
+                              }
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "type": "SizedBox",
+                        "height": 8.0
+                      },
+                      {
+                        "type": "Container",
+                        "child": {
+                          "type": "Stack",
+                          "children": [
+                            {
+                              "type": "Scrollbar",
+                              "child": {
+                                "type": "SingleChildScrollView",
+                                "child": {
+                                  "type": "RichText",
+                                  "textAlign": "TextAlign.start",
+                                  "text": {
+                                    "type": "TextSpan",
+                                    "text": "indented code",
+                                    "style": {
+                                      "fontFamily": "monospace",
+                                      "fontSize": 16.0,
+                                      "color": "Color(0xff333333)"
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            {
+                              "type": "Positioned"
+                            }
+                          ]
+                        },
+                        "decoration": {
+                          "type": "BoxDecoration"
+                        }
+                      },
+                      {
+                        "type": "SizedBox",
+                        "height": 8.0
+                      },
+                      {
+                        "type": "Container",
+                        "child": {
+                          "type": "Column",
+                          "children": [
+                            {
+                              "type": "Column",
+                              "children": [
+                                {
+                                  "type": "RichText",
+                                  "textAlign": "TextAlign.start",
+                                  "text": {
+                                    "type": "TextSpan",
+                                    "text": "A block quote.",
+                                    "style": {
+                                      "fontSize": 16.0,
+                                      "color": "Color(0xff666666)"
+                                    }
+                                  }
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        "decoration": {
+                          "type": "BoxDecoration",
+                          "border": {
+                            "type": "Border"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "List items, https://github.github.com/gfm/#example-266",
+    "markdown": "   1.  A paragraph\n       with two lines.\n\n           indented code\n\n       > A block quote.\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "Padding",
+            "child": {
+              "type": "Row",
+              "children": [
+                {
+                  "type": "ConstrainedBox",
+                  "constraints": {
+                    "type": "BoxConstraints",
+                    "minWidth": 30.0,
+                    "minHeight": 24.0,
+                    "maxWidth": 24.0
+                  },
+                  "child": {
+                    "type": "Align",
+                    "alignment": "Alignment.center",
+                    "child": {
+                      "type": "Padding",
+                      "child": {
+                        "type": "RichText",
+                        "textAlign": "TextAlign.right",
+                        "text": {
+                          "type": "TextSpan",
+                          "text": "1.",
+                          "style": {
+                            "fontSize": 15.36,
+                            "color": "Color(0xbf333333)"
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                {
+                  "type": "Expanded",
+                  "child": {
+                    "type": "Column",
+                    "children": [
+                      {
+                        "type": "Column",
+                        "children": [
+                          {
+                            "type": "RichText",
+                            "textAlign": "TextAlign.start",
+                            "text": {
+                              "type": "TextSpan",
+                              "text": "A paragraph with two lines.",
+                              "style": {
+                                "fontSize": 16.0,
+                                "color": "Color(0xff333333)"
+                              }
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "type": "SizedBox",
+                        "height": 8.0
+                      },
+                      {
+                        "type": "Container",
+                        "child": {
+                          "type": "Stack",
+                          "children": [
+                            {
+                              "type": "Scrollbar",
+                              "child": {
+                                "type": "SingleChildScrollView",
+                                "child": {
+                                  "type": "RichText",
+                                  "textAlign": "TextAlign.start",
+                                  "text": {
+                                    "type": "TextSpan",
+                                    "text": "indented code",
+                                    "style": {
+                                      "fontFamily": "monospace",
+                                      "fontSize": 16.0,
+                                      "color": "Color(0xff333333)"
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            {
+                              "type": "Positioned"
+                            }
+                          ]
+                        },
+                        "decoration": {
+                          "type": "BoxDecoration"
+                        }
+                      },
+                      {
+                        "type": "SizedBox",
+                        "height": 8.0
+                      },
+                      {
+                        "type": "Container",
+                        "child": {
+                          "type": "Column",
+                          "children": [
+                            {
+                              "type": "Column",
+                              "children": [
+                                {
+                                  "type": "RichText",
+                                  "textAlign": "TextAlign.start",
+                                  "text": {
+                                    "type": "TextSpan",
+                                    "text": "A block quote.",
+                                    "style": {
+                                      "fontSize": 16.0,
+                                      "color": "Color(0xff666666)"
+                                    }
+                                  }
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        "decoration": {
+                          "type": "BoxDecoration",
+                          "border": {
+                            "type": "Border"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "List items, https://github.github.com/gfm/#example-267",
+    "markdown": "    1.  A paragraph\n        with two lines.\n\n            indented code\n\n        > A block quote.\n",
+    "expected": [
+      {
+        "type": "Container",
+        "child": {
+          "type": "Stack",
+          "children": [
+            {
+              "type": "Scrollbar",
+              "child": {
+                "type": "SingleChildScrollView",
+                "child": {
+                  "type": "RichText",
+                  "textAlign": "TextAlign.start",
+                  "text": {
+                    "type": "TextSpan",
+                    "text": "1.  A paragraph\n    with two lines.\n\n        indented code\n\n    > A block quote.",
+                    "style": {
+                      "fontFamily": "monospace",
+                      "fontSize": 16.0,
+                      "color": "Color(0xff333333)"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "type": "Positioned"
+            }
+          ]
+        },
+        "decoration": {
+          "type": "BoxDecoration"
+        }
+      }
+    ]
+  },
+  {
+    "description": "List items, https://github.github.com/gfm/#example-268",
+    "markdown": "  1.  A paragraph\nwith two lines.\n\n          indented code\n\n      > A block quote.\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "Padding",
+            "child": {
+              "type": "Row",
+              "children": [
+                {
+                  "type": "ConstrainedBox",
+                  "constraints": {
+                    "type": "BoxConstraints",
+                    "minWidth": 30.0,
+                    "minHeight": 24.0,
+                    "maxWidth": 24.0
+                  },
+                  "child": {
+                    "type": "Align",
+                    "alignment": "Alignment.center",
+                    "child": {
+                      "type": "Padding",
+                      "child": {
+                        "type": "RichText",
+                        "textAlign": "TextAlign.right",
+                        "text": {
+                          "type": "TextSpan",
+                          "text": "1.",
+                          "style": {
+                            "fontSize": 15.36,
+                            "color": "Color(0xbf333333)"
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                {
+                  "type": "Expanded",
+                  "child": {
+                    "type": "Column",
+                    "children": [
+                      {
+                        "type": "Column",
+                        "children": [
+                          {
+                            "type": "RichText",
+                            "textAlign": "TextAlign.start",
+                            "text": {
+                              "type": "TextSpan",
+                              "text": "A paragraph with two lines.",
+                              "style": {
+                                "fontSize": 16.0,
+                                "color": "Color(0xff333333)"
+                              }
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "type": "SizedBox",
+                        "height": 8.0
+                      },
+                      {
+                        "type": "Container",
+                        "child": {
+                          "type": "Stack",
+                          "children": [
+                            {
+                              "type": "Scrollbar",
+                              "child": {
+                                "type": "SingleChildScrollView",
+                                "child": {
+                                  "type": "RichText",
+                                  "textAlign": "TextAlign.start",
+                                  "text": {
+                                    "type": "TextSpan",
+                                    "text": "indented code",
+                                    "style": {
+                                      "fontFamily": "monospace",
+                                      "fontSize": 16.0,
+                                      "color": "Color(0xff333333)"
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            {
+                              "type": "Positioned"
+                            }
+                          ]
+                        },
+                        "decoration": {
+                          "type": "BoxDecoration"
+                        }
+                      },
+                      {
+                        "type": "SizedBox",
+                        "height": 8.0
+                      },
+                      {
+                        "type": "Container",
+                        "child": {
+                          "type": "Column",
+                          "children": [
+                            {
+                              "type": "Column",
+                              "children": [
+                                {
+                                  "type": "RichText",
+                                  "textAlign": "TextAlign.start",
+                                  "text": {
+                                    "type": "TextSpan",
+                                    "text": "A block quote.",
+                                    "style": {
+                                      "fontSize": 16.0,
+                                      "color": "Color(0xff666666)"
+                                    }
+                                  }
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        "decoration": {
+                          "type": "BoxDecoration",
+                          "border": {
+                            "type": "Border"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "List items, https://github.github.com/gfm/#example-269",
+    "markdown": "  1.  A paragraph\n    with two lines.\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "Row",
+            "children": [
+              {
+                "type": "ConstrainedBox",
+                "constraints": {
+                  "type": "BoxConstraints",
+                  "minWidth": 30.0,
+                  "minHeight": 24.0,
+                  "maxWidth": 24.0
+                },
+                "child": {
+                  "type": "Align",
+                  "alignment": "Alignment.center",
+                  "child": {
+                    "type": "Padding",
+                    "child": {
+                      "type": "RichText",
+                      "textAlign": "TextAlign.right",
+                      "text": {
+                        "type": "TextSpan",
+                        "text": "1.",
+                        "style": {
+                          "fontSize": 15.36,
+                          "color": "Color(0xbf333333)"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "type": "Expanded",
+                "child": {
+                  "type": "Column",
+                  "children": [
+                    {
+                      "type": "RichText",
+                      "textAlign": "TextAlign.start",
+                      "text": {
+                        "type": "TextSpan",
+                        "text": "A paragraph with two lines.",
+                        "style": {
+                          "fontSize": 16.0,
+                          "color": "Color(0xff333333)"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "List items, https://github.github.com/gfm/#example-270",
+    "markdown": "> 1. > Blockquote\ncontinued here.\n",
+    "expected": [
+      {
+        "type": "Container",
+        "child": {
+          "type": "Column",
+          "children": [
+            {
+              "type": "Column",
+              "children": [
+                {
+                  "type": "Row",
+                  "children": [
+                    {
+                      "type": "ConstrainedBox",
+                      "constraints": {
+                        "type": "BoxConstraints",
+                        "minWidth": 30.0,
+                        "minHeight": 24.0,
+                        "maxWidth": 24.0
+                      },
+                      "child": {
+                        "type": "Align",
+                        "alignment": "Alignment.center",
+                        "child": {
+                          "type": "Padding",
+                          "child": {
+                            "type": "RichText",
+                            "textAlign": "TextAlign.right",
+                            "text": {
+                              "type": "TextSpan",
+                              "text": "1.",
+                              "style": {
+                                "fontSize": 15.36,
+                                "color": "Color(0xbf666666)"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "type": "Expanded",
+                      "child": {
+                        "type": "Column",
+                        "children": [
+                          {
+                            "type": "Container",
+                            "child": {
+                              "type": "Column",
+                              "children": [
+                                {
+                                  "type": "Column",
+                                  "children": [
+                                    {
+                                      "type": "RichText",
+                                      "textAlign": "TextAlign.start",
+                                      "text": {
+                                        "type": "TextSpan",
+                                        "text": "Blockquote continued here.",
+                                        "style": {
+                                          "fontSize": 16.0,
+                                          "color": "Color(0xff666666)"
+                                        }
+                                      }
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            "decoration": {
+                              "type": "BoxDecoration",
+                              "border": {
+                                "type": "Border"
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "decoration": {
+          "type": "BoxDecoration",
+          "border": {
+            "type": "Border"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "description": "List items, https://github.github.com/gfm/#example-271",
+    "markdown": "> 1. > Blockquote\n> continued here.\n",
+    "expected": [
+      {
+        "type": "Container",
+        "child": {
+          "type": "Column",
+          "children": [
+            {
+              "type": "Column",
+              "children": [
+                {
+                  "type": "Row",
+                  "children": [
+                    {
+                      "type": "ConstrainedBox",
+                      "constraints": {
+                        "type": "BoxConstraints",
+                        "minWidth": 30.0,
+                        "minHeight": 24.0,
+                        "maxWidth": 24.0
+                      },
+                      "child": {
+                        "type": "Align",
+                        "alignment": "Alignment.center",
+                        "child": {
+                          "type": "Padding",
+                          "child": {
+                            "type": "RichText",
+                            "textAlign": "TextAlign.right",
+                            "text": {
+                              "type": "TextSpan",
+                              "text": "1.",
+                              "style": {
+                                "fontSize": 15.36,
+                                "color": "Color(0xbf666666)"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "type": "Expanded",
+                      "child": {
+                        "type": "Column",
+                        "children": [
+                          {
+                            "type": "Container",
+                            "child": {
+                              "type": "Column",
+                              "children": [
+                                {
+                                  "type": "Column",
+                                  "children": [
+                                    {
+                                      "type": "RichText",
+                                      "textAlign": "TextAlign.start",
+                                      "text": {
+                                        "type": "TextSpan",
+                                        "text": "Blockquote continued here.",
+                                        "style": {
+                                          "fontSize": 16.0,
+                                          "color": "Color(0xff666666)"
+                                        }
+                                      }
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            "decoration": {
+                              "type": "BoxDecoration",
+                              "border": {
+                                "type": "Border"
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "decoration": {
+          "type": "BoxDecoration",
+          "border": {
+            "type": "Border"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "description": "List items, https://github.github.com/gfm/#example-272",
+    "markdown": "- foo\n  - bar\n    - baz\n      - boo\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "Row",
+            "children": [
+              {
+                "type": "ConstrainedBox",
+                "constraints": {
+                  "type": "BoxConstraints",
+                  "minWidth": 30.0,
+                  "minHeight": 24.0,
+                  "maxWidth": 24.0
+                },
+                "child": {
+                  "type": "Align",
+                  "alignment": "Alignment.center",
+                  "child": {
+                    "type": "Padding",
+                    "child": {
+                      "type": "RichText",
+                      "textAlign": "TextAlign.right",
+                      "text": {
+                        "type": "TextSpan",
+                        "text": "•",
+                        "style": {
+                          "fontSize": 22.4,
+                          "color": "Color(0xbf333333)"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "type": "Expanded",
+                "child": {
+                  "type": "Column",
+                  "children": [
+                    {
+                      "type": "RichText",
+                      "textAlign": "TextAlign.start",
+                      "text": {
+                        "type": "TextSpan",
+                        "text": "foo",
+                        "style": {
+                          "fontSize": 16.0,
+                          "color": "Color(0xff333333)"
+                        }
+                      }
+                    },
+                    {
+                      "type": "SizedBox",
+                      "height": 8.0
+                    },
+                    {
+                      "type": "Column",
+                      "children": [
+                        {
+                          "type": "Row",
+                          "children": [
+                            {
+                              "type": "ConstrainedBox",
+                              "constraints": {
+                                "type": "BoxConstraints",
+                                "minWidth": 30.0,
+                                "minHeight": 24.0,
+                                "maxWidth": 24.0
+                              },
+                              "child": {
+                                "type": "Align",
+                                "alignment": "Alignment.center",
+                                "child": {
+                                  "type": "Padding",
+                                  "child": {
+                                    "type": "RichText",
+                                    "textAlign": "TextAlign.right",
+                                    "text": {
+                                      "type": "TextSpan",
+                                      "text": "•",
+                                      "style": {
+                                        "fontSize": 22.4,
+                                        "color": "Color(0xbf333333)"
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            {
+                              "type": "Expanded",
+                              "child": {
+                                "type": "Column",
+                                "children": [
+                                  {
+                                    "type": "RichText",
+                                    "textAlign": "TextAlign.start",
+                                    "text": {
+                                      "type": "TextSpan",
+                                      "text": "bar",
+                                      "style": {
+                                        "fontSize": 16.0,
+                                        "color": "Color(0xff333333)"
+                                      }
+                                    }
+                                  },
+                                  {
+                                    "type": "SizedBox",
+                                    "height": 8.0
+                                  },
+                                  {
+                                    "type": "Column",
+                                    "children": [
+                                      {
+                                        "type": "Row",
+                                        "children": [
+                                          {
+                                            "type": "ConstrainedBox",
+                                            "constraints": {
+                                              "type": "BoxConstraints",
+                                              "minWidth": 30.0,
+                                              "minHeight": 24.0,
+                                              "maxWidth": 24.0
+                                            },
+                                            "child": {
+                                              "type": "Align",
+                                              "alignment": "Alignment.center",
+                                              "child": {
+                                                "type": "Padding",
+                                                "child": {
+                                                  "type": "RichText",
+                                                  "textAlign": "TextAlign.right",
+                                                  "text": {
+                                                    "type": "TextSpan",
+                                                    "text": "•",
+                                                    "style": {
+                                                      "fontSize": 22.4,
+                                                      "color": "Color(0xbf333333)"
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          },
+                                          {
+                                            "type": "Expanded",
+                                            "child": {
+                                              "type": "Column",
+                                              "children": [
+                                                {
+                                                  "type": "RichText",
+                                                  "textAlign": "TextAlign.start",
+                                                  "text": {
+                                                    "type": "TextSpan",
+                                                    "text": "baz",
+                                                    "style": {
+                                                      "fontSize": 16.0,
+                                                      "color": "Color(0xff333333)"
+                                                    }
+                                                  }
+                                                },
+                                                {
+                                                  "type": "SizedBox",
+                                                  "height": 8.0
+                                                },
+                                                {
+                                                  "type": "Column",
+                                                  "children": [
+                                                    {
+                                                      "type": "Row",
+                                                      "children": [
+                                                        {
+                                                          "type": "ConstrainedBox",
+                                                          "constraints": {
+                                                            "type": "BoxConstraints",
+                                                            "minWidth": 30.0,
+                                                            "minHeight": 24.0,
+                                                            "maxWidth": 24.0
+                                                          },
+                                                          "child": {
+                                                            "type": "Align",
+                                                            "alignment": "Alignment.center",
+                                                            "child": {
+                                                              "type": "Padding",
+                                                              "child": {
+                                                                "type": "RichText",
+                                                                "textAlign": "TextAlign.right",
+                                                                "text": {
+                                                                  "type": "TextSpan",
+                                                                  "text": "•",
+                                                                  "style": {
+                                                                    "fontSize": 22.4,
+                                                                    "color": "Color(0xbf333333)"
+                                                                  }
+                                                                }
+                                                              }
+                                                            }
+                                                          }
+                                                        },
+                                                        {
+                                                          "type": "Expanded",
+                                                          "child": {
+                                                            "type": "Column",
+                                                            "children": [
+                                                              {
+                                                                "type": "RichText",
+                                                                "textAlign": "TextAlign.start",
+                                                                "text": {
+                                                                  "type": "TextSpan",
+                                                                  "text": "boo",
+                                                                  "style": {
+                                                                    "fontSize": 16.0,
+                                                                    "color": "Color(0xff333333)"
+                                                                  }
+                                                                }
+                                                              }
+                                                            ]
+                                                          }
+                                                        }
+                                                      ]
+                                                    }
+                                                  ]
+                                                }
+                                              ]
+                                            }
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "List items, https://github.github.com/gfm/#example-273",
+    "markdown": "- foo\n - bar\n  - baz\n   - boo\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "Row",
+            "children": [
+              {
+                "type": "ConstrainedBox",
+                "constraints": {
+                  "type": "BoxConstraints",
+                  "minWidth": 30.0,
+                  "minHeight": 24.0,
+                  "maxWidth": 24.0
+                },
+                "child": {
+                  "type": "Align",
+                  "alignment": "Alignment.center",
+                  "child": {
+                    "type": "Padding",
+                    "child": {
+                      "type": "RichText",
+                      "textAlign": "TextAlign.right",
+                      "text": {
+                        "type": "TextSpan",
+                        "text": "•",
+                        "style": {
+                          "fontSize": 22.4,
+                          "color": "Color(0xbf333333)"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "type": "Expanded",
+                "child": {
+                  "type": "Column",
+                  "children": [
+                    {
+                      "type": "RichText",
+                      "textAlign": "TextAlign.start",
+                      "text": {
+                        "type": "TextSpan",
+                        "text": "foo",
+                        "style": {
+                          "fontSize": 16.0,
+                          "color": "Color(0xff333333)"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "type": "SizedBox",
+            "height": 8.0
+          },
+          {
+            "type": "Row",
+            "children": [
+              {
+                "type": "ConstrainedBox",
+                "constraints": {
+                  "type": "BoxConstraints",
+                  "minWidth": 30.0,
+                  "minHeight": 24.0,
+                  "maxWidth": 24.0
+                },
+                "child": {
+                  "type": "Align",
+                  "alignment": "Alignment.center",
+                  "child": {
+                    "type": "Padding",
+                    "child": {
+                      "type": "RichText",
+                      "textAlign": "TextAlign.right",
+                      "text": {
+                        "type": "TextSpan",
+                        "text": "•",
+                        "style": {
+                          "fontSize": 22.4,
+                          "color": "Color(0xbf333333)"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "type": "Expanded",
+                "child": {
+                  "type": "Column",
+                  "children": [
+                    {
+                      "type": "RichText",
+                      "textAlign": "TextAlign.start",
+                      "text": {
+                        "type": "TextSpan",
+                        "text": "bar",
+                        "style": {
+                          "fontSize": 16.0,
+                          "color": "Color(0xff333333)"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "type": "SizedBox",
+            "height": 8.0
+          },
+          {
+            "type": "Row",
+            "children": [
+              {
+                "type": "ConstrainedBox",
+                "constraints": {
+                  "type": "BoxConstraints",
+                  "minWidth": 30.0,
+                  "minHeight": 24.0,
+                  "maxWidth": 24.0
+                },
+                "child": {
+                  "type": "Align",
+                  "alignment": "Alignment.center",
+                  "child": {
+                    "type": "Padding",
+                    "child": {
+                      "type": "RichText",
+                      "textAlign": "TextAlign.right",
+                      "text": {
+                        "type": "TextSpan",
+                        "text": "•",
+                        "style": {
+                          "fontSize": 22.4,
+                          "color": "Color(0xbf333333)"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "type": "Expanded",
+                "child": {
+                  "type": "Column",
+                  "children": [
+                    {
+                      "type": "RichText",
+                      "textAlign": "TextAlign.start",
+                      "text": {
+                        "type": "TextSpan",
+                        "text": "baz",
+                        "style": {
+                          "fontSize": 16.0,
+                          "color": "Color(0xff333333)"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "type": "SizedBox",
+            "height": 8.0
+          },
+          {
+            "type": "Row",
+            "children": [
+              {
+                "type": "ConstrainedBox",
+                "constraints": {
+                  "type": "BoxConstraints",
+                  "minWidth": 30.0,
+                  "minHeight": 24.0,
+                  "maxWidth": 24.0
+                },
+                "child": {
+                  "type": "Align",
+                  "alignment": "Alignment.center",
+                  "child": {
+                    "type": "Padding",
+                    "child": {
+                      "type": "RichText",
+                      "textAlign": "TextAlign.right",
+                      "text": {
+                        "type": "TextSpan",
+                        "text": "•",
+                        "style": {
+                          "fontSize": 22.4,
+                          "color": "Color(0xbf333333)"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "type": "Expanded",
+                "child": {
+                  "type": "Column",
+                  "children": [
+                    {
+                      "type": "RichText",
+                      "textAlign": "TextAlign.start",
+                      "text": {
+                        "type": "TextSpan",
+                        "text": "boo",
+                        "style": {
+                          "fontSize": 16.0,
+                          "color": "Color(0xff333333)"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "List items, https://github.github.com/gfm/#example-274",
+    "markdown": "10) foo\n    - bar\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "Row",
+            "children": [
+              {
+                "type": "ConstrainedBox",
+                "constraints": {
+                  "type": "BoxConstraints",
+                  "minWidth": 30.0,
+                  "minHeight": 24.0,
+                  "maxWidth": 24.0
+                },
+                "child": {
+                  "type": "Align",
+                  "alignment": "Alignment.center",
+                  "child": {
+                    "type": "Padding",
+                    "child": {
+                      "type": "RichText",
+                      "textAlign": "TextAlign.right",
+                      "text": {
+                        "type": "TextSpan",
+                        "text": "10.",
+                        "style": {
+                          "fontSize": 15.36,
+                          "color": "Color(0xbf333333)"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "type": "Expanded",
+                "child": {
+                  "type": "Column",
+                  "children": [
+                    {
+                      "type": "RichText",
+                      "textAlign": "TextAlign.start",
+                      "text": {
+                        "type": "TextSpan",
+                        "text": "foo",
+                        "style": {
+                          "fontSize": 16.0,
+                          "color": "Color(0xff333333)"
+                        }
+                      }
+                    },
+                    {
+                      "type": "SizedBox",
+                      "height": 8.0
+                    },
+                    {
+                      "type": "Column",
+                      "children": [
+                        {
+                          "type": "Row",
+                          "children": [
+                            {
+                              "type": "ConstrainedBox",
+                              "constraints": {
+                                "type": "BoxConstraints",
+                                "minWidth": 30.0,
+                                "minHeight": 24.0,
+                                "maxWidth": 24.0
+                              },
+                              "child": {
+                                "type": "Align",
+                                "alignment": "Alignment.center",
+                                "child": {
+                                  "type": "Padding",
+                                  "child": {
+                                    "type": "RichText",
+                                    "textAlign": "TextAlign.right",
+                                    "text": {
+                                      "type": "TextSpan",
+                                      "text": "•",
+                                      "style": {
+                                        "fontSize": 22.4,
+                                        "color": "Color(0xbf333333)"
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            {
+                              "type": "Expanded",
+                              "child": {
+                                "type": "Column",
+                                "children": [
+                                  {
+                                    "type": "RichText",
+                                    "textAlign": "TextAlign.start",
+                                    "text": {
+                                      "type": "TextSpan",
+                                      "text": "bar",
+                                      "style": {
+                                        "fontSize": 16.0,
+                                        "color": "Color(0xff333333)"
+                                      }
+                                    }
+                                  }
+                                ]
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "List items, https://github.github.com/gfm/#example-275",
+    "markdown": "10) foo\n   - bar\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "Row",
+            "children": [
+              {
+                "type": "ConstrainedBox",
+                "constraints": {
+                  "type": "BoxConstraints",
+                  "minWidth": 30.0,
+                  "minHeight": 24.0,
+                  "maxWidth": 24.0
+                },
+                "child": {
+                  "type": "Align",
+                  "alignment": "Alignment.center",
+                  "child": {
+                    "type": "Padding",
+                    "child": {
+                      "type": "RichText",
+                      "textAlign": "TextAlign.right",
+                      "text": {
+                        "type": "TextSpan",
+                        "text": "10.",
+                        "style": {
+                          "fontSize": 15.36,
+                          "color": "Color(0xbf333333)"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "type": "Expanded",
+                "child": {
+                  "type": "Column",
+                  "children": [
+                    {
+                      "type": "RichText",
+                      "textAlign": "TextAlign.start",
+                      "text": {
+                        "type": "TextSpan",
+                        "text": "foo",
+                        "style": {
+                          "fontSize": 16.0,
+                          "color": "Color(0xff333333)"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "SizedBox",
+        "height": 8.0
+      },
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "Row",
+            "children": [
+              {
+                "type": "ConstrainedBox",
+                "constraints": {
+                  "type": "BoxConstraints",
+                  "minWidth": 30.0,
+                  "minHeight": 24.0,
+                  "maxWidth": 24.0
+                },
+                "child": {
+                  "type": "Align",
+                  "alignment": "Alignment.center",
+                  "child": {
+                    "type": "Padding",
+                    "child": {
+                      "type": "RichText",
+                      "textAlign": "TextAlign.right",
+                      "text": {
+                        "type": "TextSpan",
+                        "text": "•",
+                        "style": {
+                          "fontSize": 22.4,
+                          "color": "Color(0xbf333333)"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "type": "Expanded",
+                "child": {
+                  "type": "Column",
+                  "children": [
+                    {
+                      "type": "RichText",
+                      "textAlign": "TextAlign.start",
+                      "text": {
+                        "type": "TextSpan",
+                        "text": "bar",
+                        "style": {
+                          "fontSize": 16.0,
+                          "color": "Color(0xff333333)"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "List items, https://github.github.com/gfm/#example-276",
+    "markdown": "- - foo\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "Row",
+            "children": [
+              {
+                "type": "ConstrainedBox",
+                "constraints": {
+                  "type": "BoxConstraints",
+                  "minWidth": 30.0,
+                  "minHeight": 24.0,
+                  "maxWidth": 24.0
+                },
+                "child": {
+                  "type": "Align",
+                  "alignment": "Alignment.center",
+                  "child": {
+                    "type": "Padding",
+                    "child": {
+                      "type": "RichText",
+                      "textAlign": "TextAlign.right",
+                      "text": {
+                        "type": "TextSpan",
+                        "text": "•",
+                        "style": {
+                          "fontSize": 22.4,
+                          "color": "Color(0xbf333333)"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "type": "Expanded",
+                "child": {
+                  "type": "Column",
+                  "children": [
+                    {
+                      "type": "Column",
+                      "children": [
+                        {
+                          "type": "Row",
+                          "children": [
+                            {
+                              "type": "ConstrainedBox",
+                              "constraints": {
+                                "type": "BoxConstraints",
+                                "minWidth": 30.0,
+                                "minHeight": 24.0,
+                                "maxWidth": 24.0
+                              },
+                              "child": {
+                                "type": "Align",
+                                "alignment": "Alignment.center",
+                                "child": {
+                                  "type": "Padding",
+                                  "child": {
+                                    "type": "RichText",
+                                    "textAlign": "TextAlign.right",
+                                    "text": {
+                                      "type": "TextSpan",
+                                      "text": "•",
+                                      "style": {
+                                        "fontSize": 22.4,
+                                        "color": "Color(0xbf333333)"
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            {
+                              "type": "Expanded",
+                              "child": {
+                                "type": "Column",
+                                "children": [
+                                  {
+                                    "type": "RichText",
+                                    "textAlign": "TextAlign.start",
+                                    "text": {
+                                      "type": "TextSpan",
+                                      "text": "foo",
+                                      "style": {
+                                        "fontSize": 16.0,
+                                        "color": "Color(0xff333333)"
+                                      }
+                                    }
+                                  }
+                                ]
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "List items, https://github.github.com/gfm/#example-277",
+    "markdown": "1. - 2. foo\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "Row",
+            "children": [
+              {
+                "type": "ConstrainedBox",
+                "constraints": {
+                  "type": "BoxConstraints",
+                  "minWidth": 30.0,
+                  "minHeight": 24.0,
+                  "maxWidth": 24.0
+                },
+                "child": {
+                  "type": "Align",
+                  "alignment": "Alignment.center",
+                  "child": {
+                    "type": "Padding",
+                    "child": {
+                      "type": "RichText",
+                      "textAlign": "TextAlign.right",
+                      "text": {
+                        "type": "TextSpan",
+                        "text": "1.",
+                        "style": {
+                          "fontSize": 15.36,
+                          "color": "Color(0xbf333333)"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "type": "Expanded",
+                "child": {
+                  "type": "Column",
+                  "children": [
+                    {
+                      "type": "Column",
+                      "children": [
+                        {
+                          "type": "Row",
+                          "children": [
+                            {
+                              "type": "ConstrainedBox",
+                              "constraints": {
+                                "type": "BoxConstraints",
+                                "minWidth": 30.0,
+                                "minHeight": 24.0,
+                                "maxWidth": 24.0
+                              },
+                              "child": {
+                                "type": "Align",
+                                "alignment": "Alignment.center",
+                                "child": {
+                                  "type": "Padding",
+                                  "child": {
+                                    "type": "RichText",
+                                    "textAlign": "TextAlign.right",
+                                    "text": {
+                                      "type": "TextSpan",
+                                      "text": "•",
+                                      "style": {
+                                        "fontSize": 22.4,
+                                        "color": "Color(0xbf333333)"
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            {
+                              "type": "Expanded",
+                              "child": {
+                                "type": "Column",
+                                "children": [
+                                  {
+                                    "type": "Column",
+                                    "children": [
+                                      {
+                                        "type": "Row",
+                                        "children": [
+                                          {
+                                            "type": "ConstrainedBox",
+                                            "constraints": {
+                                              "type": "BoxConstraints",
+                                              "minWidth": 30.0,
+                                              "minHeight": 24.0,
+                                              "maxWidth": 24.0
+                                            },
+                                            "child": {
+                                              "type": "Align",
+                                              "alignment": "Alignment.center",
+                                              "child": {
+                                                "type": "Padding",
+                                                "child": {
+                                                  "type": "RichText",
+                                                  "textAlign": "TextAlign.right",
+                                                  "text": {
+                                                    "type": "TextSpan",
+                                                    "text": "2.",
+                                                    "style": {
+                                                      "fontSize": 15.36,
+                                                      "color": "Color(0xbf333333)"
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          },
+                                          {
+                                            "type": "Expanded",
+                                            "child": {
+                                              "type": "Column",
+                                              "children": [
+                                                {
+                                                  "type": "RichText",
+                                                  "textAlign": "TextAlign.start",
+                                                  "text": {
+                                                    "type": "TextSpan",
+                                                    "text": "foo",
+                                                    "style": {
+                                                      "fontSize": 16.0,
+                                                      "color": "Color(0xff333333)"
+                                                    }
+                                                  }
+                                                }
+                                              ]
+                                            }
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "List items, https://github.github.com/gfm/#example-278",
+    "markdown": "- # Foo\n- Bar\n  ---\n  baz\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "Row",
+            "children": [
+              {
+                "type": "ConstrainedBox",
+                "constraints": {
+                  "type": "BoxConstraints",
+                  "minWidth": 30.0,
+                  "minHeight": 24.0,
+                  "maxWidth": 24.0
+                },
+                "child": {
+                  "type": "Align",
+                  "alignment": "Alignment.center",
+                  "child": {
+                    "type": "Padding",
+                    "child": {
+                      "type": "RichText",
+                      "textAlign": "TextAlign.right",
+                      "text": {
+                        "type": "TextSpan",
+                        "text": "•",
+                        "style": {
+                          "fontSize": 22.4,
+                          "color": "Color(0xbf333333)"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "type": "Expanded",
+                "child": {
+                  "type": "Column",
+                  "children": [
+                    {
+                      "type": "Padding",
+                      "child": {
+                        "type": "Column",
+                        "children": [
+                          {
+                            "type": "RichText",
+                            "textAlign": "TextAlign.start",
+                            "text": {
+                              "type": "TextSpan",
+                              "text": "Foo",
+                              "style": {
+                                "fontSize": 25.6,
+                                "color": "Color(0xff333333)"
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "type": "SizedBox",
+            "height": 8.0
+          },
+          {
+            "type": "Row",
+            "children": [
+              {
+                "type": "ConstrainedBox",
+                "constraints": {
+                  "type": "BoxConstraints",
+                  "minWidth": 30.0,
+                  "minHeight": 24.0,
+                  "maxWidth": 24.0
+                },
+                "child": {
+                  "type": "Align",
+                  "alignment": "Alignment.center",
+                  "child": {
+                    "type": "Padding",
+                    "child": {
+                      "type": "RichText",
+                      "textAlign": "TextAlign.right",
+                      "text": {
+                        "type": "TextSpan",
+                        "text": "•",
+                        "style": {
+                          "fontSize": 22.4,
+                          "color": "Color(0xbf333333)"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "type": "Expanded",
+                "child": {
+                  "type": "Column",
+                  "children": [
+                    {
+                      "type": "Padding",
+                      "child": {
+                        "type": "Column",
+                        "children": [
+                          {
+                            "type": "RichText",
+                            "textAlign": "TextAlign.start",
+                            "text": {
+                              "type": "TextSpan",
+                              "text": "Bar",
+                              "style": {
+                                "fontSize": 22.4,
+                                "color": "Color(0xff333333)"
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "type": "RichText",
+                      "textAlign": "TextAlign.start",
+                      "text": {
+                        "type": "TextSpan",
+                        "text": "baz",
+                        "style": {
+                          "fontSize": 16.0,
+                          "color": "Color(0xff333333)"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

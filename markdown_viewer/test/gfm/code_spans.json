@@ -1,0 +1,682 @@
+[
+  {
+    "description": "Code spans, https://github.github.com/gfm/#example-338",
+    "markdown": "`foo`\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "text": "foo",
+              "style": {
+                "fontFamily": "monospace",
+                "fontSize": 16.0,
+                "color": "Color(0xff8b1c1c)",
+                "backgroundColor": "Color(0x10000000)"
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Code spans, https://github.github.com/gfm/#example-339",
+    "markdown": "`` foo ` bar ``\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "text": "foo ` bar",
+              "style": {
+                "fontFamily": "monospace",
+                "fontSize": 16.0,
+                "color": "Color(0xff8b1c1c)",
+                "backgroundColor": "Color(0x10000000)"
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Code spans, https://github.github.com/gfm/#example-340",
+    "markdown": "` `` `\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "text": "``",
+              "style": {
+                "fontFamily": "monospace",
+                "fontSize": 16.0,
+                "color": "Color(0xff8b1c1c)",
+                "backgroundColor": "Color(0x10000000)"
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Code spans, https://github.github.com/gfm/#example-341",
+    "markdown": "`  ``  `\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "text": " `` ",
+              "style": {
+                "fontFamily": "monospace",
+                "fontSize": 16.0,
+                "color": "Color(0xff8b1c1c)",
+                "backgroundColor": "Color(0x10000000)"
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Code spans, https://github.github.com/gfm/#example-342",
+    "markdown": "` a`\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "text": " a",
+              "style": {
+                "fontFamily": "monospace",
+                "fontSize": 16.0,
+                "color": "Color(0xff8b1c1c)",
+                "backgroundColor": "Color(0x10000000)"
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Code spans, https://github.github.com/gfm/#example-343",
+    "markdown": "` b `\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "text": " b ",
+              "style": {
+                "fontFamily": "monospace",
+                "fontSize": 16.0,
+                "color": "Color(0xff8b1c1c)",
+                "backgroundColor": "Color(0x10000000)"
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Code spans, https://github.github.com/gfm/#example-344",
+    "markdown": "` `\n`  `\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "children": [
+                {
+                  "type": "TextSpan",
+                  "text": " ",
+                  "style": {
+                    "fontFamily": "monospace",
+                    "fontSize": 16.0,
+                    "color": "Color(0xff8b1c1c)",
+                    "backgroundColor": "Color(0x10000000)"
+                  }
+                },
+                {
+                  "type": "TextSpan",
+                  "text": " ",
+                  "style": {
+                    "fontSize": 16.0,
+                    "color": "Color(0xff333333)"
+                  }
+                },
+                {
+                  "type": "TextSpan",
+                  "text": "  ",
+                  "style": {
+                    "fontFamily": "monospace",
+                    "fontSize": 16.0,
+                    "color": "Color(0xff8b1c1c)",
+                    "backgroundColor": "Color(0x10000000)"
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Code spans, https://github.github.com/gfm/#example-345",
+    "markdown": "``\nfoo\nbar  \nbaz\n``\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "text": "foo bar   baz",
+              "style": {
+                "fontFamily": "monospace",
+                "fontSize": 16.0,
+                "color": "Color(0xff8b1c1c)",
+                "backgroundColor": "Color(0x10000000)"
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Code spans, https://github.github.com/gfm/#example-346",
+    "markdown": "``\nfoo \n``\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "text": "foo ",
+              "style": {
+                "fontFamily": "monospace",
+                "fontSize": 16.0,
+                "color": "Color(0xff8b1c1c)",
+                "backgroundColor": "Color(0x10000000)"
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Code spans, https://github.github.com/gfm/#example-347",
+    "markdown": "`foo   bar \nbaz`\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "text": "foo   bar  baz",
+              "style": {
+                "fontFamily": "monospace",
+                "fontSize": 16.0,
+                "color": "Color(0xff8b1c1c)",
+                "backgroundColor": "Color(0x10000000)"
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Code spans, https://github.github.com/gfm/#example-348",
+    "markdown": "`foo\\`bar`\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "children": [
+                {
+                  "type": "TextSpan",
+                  "text": "foo\\",
+                  "style": {
+                    "fontFamily": "monospace",
+                    "fontSize": 16.0,
+                    "color": "Color(0xff8b1c1c)",
+                    "backgroundColor": "Color(0x10000000)"
+                  }
+                },
+                {
+                  "type": "TextSpan",
+                  "text": "bar`",
+                  "style": {
+                    "fontSize": 16.0,
+                    "color": "Color(0xff333333)"
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Code spans, https://github.github.com/gfm/#example-349",
+    "markdown": "``foo`bar``\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "text": "foo`bar",
+              "style": {
+                "fontFamily": "monospace",
+                "fontSize": 16.0,
+                "color": "Color(0xff8b1c1c)",
+                "backgroundColor": "Color(0x10000000)"
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Code spans, https://github.github.com/gfm/#example-350",
+    "markdown": "` foo `` bar `\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "text": "foo `` bar",
+              "style": {
+                "fontFamily": "monospace",
+                "fontSize": 16.0,
+                "color": "Color(0xff8b1c1c)",
+                "backgroundColor": "Color(0x10000000)"
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Code spans, https://github.github.com/gfm/#example-351",
+    "markdown": "*foo`*`\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "children": [
+                {
+                  "type": "TextSpan",
+                  "text": "*foo",
+                  "style": {
+                    "fontSize": 16.0,
+                    "color": "Color(0xff333333)"
+                  }
+                },
+                {
+                  "type": "TextSpan",
+                  "text": "*",
+                  "style": {
+                    "fontFamily": "monospace",
+                    "fontSize": 16.0,
+                    "color": "Color(0xff8b1c1c)",
+                    "backgroundColor": "Color(0x10000000)"
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Code spans, https://github.github.com/gfm/#example-352",
+    "markdown": "[not a `link](/foo`)\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "children": [
+                {
+                  "type": "TextSpan",
+                  "text": "[not a ",
+                  "style": {
+                    "fontSize": 16.0,
+                    "color": "Color(0xff333333)"
+                  }
+                },
+                {
+                  "type": "TextSpan",
+                  "text": "link](/foo",
+                  "style": {
+                    "fontFamily": "monospace",
+                    "fontSize": 16.0,
+                    "color": "Color(0xff8b1c1c)",
+                    "backgroundColor": "Color(0x10000000)"
+                  }
+                },
+                {
+                  "type": "TextSpan",
+                  "text": ")",
+                  "style": {
+                    "fontSize": 16.0,
+                    "color": "Color(0xff333333)"
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Code spans, https://github.github.com/gfm/#example-353",
+    "markdown": "`<a href=\"`\">`\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "children": [
+                {
+                  "type": "TextSpan",
+                  "text": "<a href=\"",
+                  "style": {
+                    "fontFamily": "monospace",
+                    "fontSize": 16.0,
+                    "color": "Color(0xff8b1c1c)",
+                    "backgroundColor": "Color(0x10000000)"
+                  }
+                },
+                {
+                  "type": "TextSpan",
+                  "text": "\">`",
+                  "style": {
+                    "fontSize": 16.0,
+                    "color": "Color(0xff333333)"
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Code spans, https://github.github.com/gfm/#example-354",
+    "markdown": "<a href=\"`\">`\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "children": [
+                {
+                  "type": "TextSpan",
+                  "text": "<a href=\"",
+                  "style": {
+                    "fontSize": 16.0,
+                    "color": "Color(0xff333333)"
+                  }
+                },
+                {
+                  "type": "TextSpan",
+                  "text": "\">",
+                  "style": {
+                    "fontFamily": "monospace",
+                    "fontSize": 16.0,
+                    "color": "Color(0xff8b1c1c)",
+                    "backgroundColor": "Color(0x10000000)"
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Code spans, https://github.github.com/gfm/#example-355",
+    "markdown": "`<http://foo.bar.`baz>`\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "children": [
+                {
+                  "type": "TextSpan",
+                  "text": "<http://foo.bar.",
+                  "style": {
+                    "fontFamily": "monospace",
+                    "fontSize": 16.0,
+                    "color": "Color(0xff8b1c1c)",
+                    "backgroundColor": "Color(0x10000000)"
+                  }
+                },
+                {
+                  "type": "TextSpan",
+                  "text": "baz>`",
+                  "style": {
+                    "fontSize": 16.0,
+                    "color": "Color(0xff333333)"
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Code spans, https://github.github.com/gfm/#example-356",
+    "markdown": "<http://foo.bar.`baz>`\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "children": [
+                {
+                  "type": "TextSpan",
+                  "text": "http://foo.bar.`baz",
+                  "style": {
+                    "fontSize": 16.0,
+                    "color": "Color(0xff2196f3)"
+                  },
+                  "recognizer": "TapGestureRecognizer"
+                },
+                {
+                  "type": "TextSpan",
+                  "text": "`",
+                  "style": {
+                    "fontSize": 16.0,
+                    "color": "Color(0xff333333)"
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Code spans, https://github.github.com/gfm/#example-357",
+    "markdown": "```foo``\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "text": "```foo``",
+              "style": {
+                "fontSize": 16.0,
+                "color": "Color(0xff333333)"
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Code spans, https://github.github.com/gfm/#example-358",
+    "markdown": "`foo\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "text": "`foo",
+              "style": {
+                "fontSize": 16.0,
+                "color": "Color(0xff333333)"
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Code spans, https://github.github.com/gfm/#example-359",
+    "markdown": "`foo``bar``\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "children": [
+                {
+                  "type": "TextSpan",
+                  "text": "`foo",
+                  "style": {
+                    "fontSize": 16.0,
+                    "color": "Color(0xff333333)"
+                  }
+                },
+                {
+                  "type": "TextSpan",
+                  "text": "bar",
+                  "style": {
+                    "fontFamily": "monospace",
+                    "fontSize": 16.0,
+                    "color": "Color(0xff8b1c1c)",
+                    "backgroundColor": "Color(0x10000000)"
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  }
+]

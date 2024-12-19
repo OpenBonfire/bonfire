@@ -1,0 +1,798 @@
+[
+  {
+    "description": "Thematic breaks, https://github.github.com/gfm/#example-13",
+    "markdown": "***\n---\n___\n",
+    "expected": [
+      {
+        "type": "Divider"
+      },
+      {
+        "type": "SizedBox",
+        "height": 8.0
+      },
+      {
+        "type": "Divider"
+      },
+      {
+        "type": "SizedBox",
+        "height": 8.0
+      },
+      {
+        "type": "Divider"
+      }
+    ]
+  },
+  {
+    "description": "Thematic breaks, https://github.github.com/gfm/#example-14",
+    "markdown": "+++\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "text": "+++",
+              "style": {
+                "fontSize": 16.0,
+                "color": "Color(0xff333333)"
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Thematic breaks, https://github.github.com/gfm/#example-15",
+    "markdown": "===\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "text": "===",
+              "style": {
+                "fontSize": 16.0,
+                "color": "Color(0xff333333)"
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Thematic breaks, https://github.github.com/gfm/#example-16",
+    "markdown": "--\n**\n__\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "text": "-- ** __",
+              "style": {
+                "fontSize": 16.0,
+                "color": "Color(0xff333333)"
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Thematic breaks, https://github.github.com/gfm/#example-17",
+    "markdown": " ***\n  ***\n   ***\n",
+    "expected": [
+      {
+        "type": "Divider"
+      },
+      {
+        "type": "SizedBox",
+        "height": 8.0
+      },
+      {
+        "type": "Divider"
+      },
+      {
+        "type": "SizedBox",
+        "height": 8.0
+      },
+      {
+        "type": "Divider"
+      }
+    ]
+  },
+  {
+    "description": "Thematic breaks, https://github.github.com/gfm/#example-18",
+    "markdown": "    ***\n",
+    "expected": [
+      {
+        "type": "Container",
+        "child": {
+          "type": "Stack",
+          "children": [
+            {
+              "type": "Scrollbar",
+              "child": {
+                "type": "SingleChildScrollView",
+                "child": {
+                  "type": "RichText",
+                  "textAlign": "TextAlign.start",
+                  "text": {
+                    "type": "TextSpan",
+                    "text": "***",
+                    "style": {
+                      "fontFamily": "monospace",
+                      "fontSize": 16.0,
+                      "color": "Color(0xff333333)"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "type": "Positioned"
+            }
+          ]
+        },
+        "decoration": {
+          "type": "BoxDecoration"
+        }
+      }
+    ]
+  },
+  {
+    "description": "Thematic breaks, https://github.github.com/gfm/#example-19",
+    "markdown": "Foo\n    ***\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "text": "Foo ***",
+              "style": {
+                "fontSize": 16.0,
+                "color": "Color(0xff333333)"
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Thematic breaks, https://github.github.com/gfm/#example-20",
+    "markdown": "_____________________________________\n",
+    "expected": [
+      {
+        "type": "Divider"
+      }
+    ]
+  },
+  {
+    "description": "Thematic breaks, https://github.github.com/gfm/#example-21",
+    "markdown": " - - -\n",
+    "expected": [
+      {
+        "type": "Divider"
+      }
+    ]
+  },
+  {
+    "description": "Thematic breaks, https://github.github.com/gfm/#example-22",
+    "markdown": " **  * ** * ** * **\n",
+    "expected": [
+      {
+        "type": "Divider"
+      }
+    ]
+  },
+  {
+    "description": "Thematic breaks, https://github.github.com/gfm/#example-23",
+    "markdown": "-     -      -      -\n",
+    "expected": [
+      {
+        "type": "Divider"
+      }
+    ]
+  },
+  {
+    "description": "Thematic breaks, https://github.github.com/gfm/#example-24",
+    "markdown": "- - - -    \n",
+    "expected": [
+      {
+        "type": "Divider"
+      }
+    ]
+  },
+  {
+    "description": "Thematic breaks, https://github.github.com/gfm/#example-25",
+    "markdown": "_ _ _ _ a\n\na------\n\n---a---\n",
+    "expected": [
+      {
+        "type": "Padding",
+        "child": {
+          "type": "Column",
+          "children": [
+            {
+              "type": "RichText",
+              "textAlign": "TextAlign.start",
+              "text": {
+                "type": "TextSpan",
+                "text": "_ _ _ _ a",
+                "style": {
+                  "fontSize": 16.0,
+                  "color": "Color(0xff333333)"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "type": "SizedBox",
+        "height": 8.0
+      },
+      {
+        "type": "Padding",
+        "child": {
+          "type": "Column",
+          "children": [
+            {
+              "type": "RichText",
+              "textAlign": "TextAlign.start",
+              "text": {
+                "type": "TextSpan",
+                "text": "a------",
+                "style": {
+                  "fontSize": 16.0,
+                  "color": "Color(0xff333333)"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "type": "SizedBox",
+        "height": 8.0
+      },
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "text": "---a---",
+              "style": {
+                "fontSize": 16.0,
+                "color": "Color(0xff333333)"
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Thematic breaks, https://github.github.com/gfm/#example-26",
+    "markdown": " *-*\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "text": "-",
+              "style": {
+                "fontSize": 16.0,
+                "fontStyle": "FontStyle.italic",
+                "color": "Color(0xff333333)"
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Thematic breaks, https://github.github.com/gfm/#example-27",
+    "markdown": "- foo\n***\n- bar\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "Row",
+            "children": [
+              {
+                "type": "ConstrainedBox",
+                "constraints": {
+                  "type": "BoxConstraints",
+                  "minWidth": 30.0,
+                  "minHeight": 24.0,
+                  "maxWidth": 24.0
+                },
+                "child": {
+                  "type": "Align",
+                  "alignment": "Alignment.center",
+                  "child": {
+                    "type": "Padding",
+                    "child": {
+                      "type": "RichText",
+                      "textAlign": "TextAlign.right",
+                      "text": {
+                        "type": "TextSpan",
+                        "text": "•",
+                        "style": {
+                          "fontSize": 22.4,
+                          "color": "Color(0xbf333333)"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "type": "Expanded",
+                "child": {
+                  "type": "Column",
+                  "children": [
+                    {
+                      "type": "RichText",
+                      "textAlign": "TextAlign.start",
+                      "text": {
+                        "type": "TextSpan",
+                        "text": "foo",
+                        "style": {
+                          "fontSize": 16.0,
+                          "color": "Color(0xff333333)"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "SizedBox",
+        "height": 8.0
+      },
+      {
+        "type": "Divider"
+      },
+      {
+        "type": "SizedBox",
+        "height": 8.0
+      },
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "Row",
+            "children": [
+              {
+                "type": "ConstrainedBox",
+                "constraints": {
+                  "type": "BoxConstraints",
+                  "minWidth": 30.0,
+                  "minHeight": 24.0,
+                  "maxWidth": 24.0
+                },
+                "child": {
+                  "type": "Align",
+                  "alignment": "Alignment.center",
+                  "child": {
+                    "type": "Padding",
+                    "child": {
+                      "type": "RichText",
+                      "textAlign": "TextAlign.right",
+                      "text": {
+                        "type": "TextSpan",
+                        "text": "•",
+                        "style": {
+                          "fontSize": 22.4,
+                          "color": "Color(0xbf333333)"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "type": "Expanded",
+                "child": {
+                  "type": "Column",
+                  "children": [
+                    {
+                      "type": "RichText",
+                      "textAlign": "TextAlign.start",
+                      "text": {
+                        "type": "TextSpan",
+                        "text": "bar",
+                        "style": {
+                          "fontSize": 16.0,
+                          "color": "Color(0xff333333)"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Thematic breaks, https://github.github.com/gfm/#example-28",
+    "markdown": "Foo\n***\nbar\n",
+    "expected": [
+      {
+        "type": "Padding",
+        "child": {
+          "type": "Column",
+          "children": [
+            {
+              "type": "RichText",
+              "textAlign": "TextAlign.start",
+              "text": {
+                "type": "TextSpan",
+                "text": "Foo",
+                "style": {
+                  "fontSize": 16.0,
+                  "color": "Color(0xff333333)"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "type": "SizedBox",
+        "height": 8.0
+      },
+      {
+        "type": "Divider"
+      },
+      {
+        "type": "SizedBox",
+        "height": 8.0
+      },
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "text": "bar",
+              "style": {
+                "fontSize": 16.0,
+                "color": "Color(0xff333333)"
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Thematic breaks, https://github.github.com/gfm/#example-29",
+    "markdown": "Foo\n---\nbar\n",
+    "expected": [
+      {
+        "type": "Padding",
+        "child": {
+          "type": "Column",
+          "children": [
+            {
+              "type": "RichText",
+              "textAlign": "TextAlign.start",
+              "text": {
+                "type": "TextSpan",
+                "text": "Foo",
+                "style": {
+                  "fontSize": 22.4,
+                  "color": "Color(0xff333333)"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "type": "SizedBox",
+        "height": 8.0
+      },
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "RichText",
+            "textAlign": "TextAlign.start",
+            "text": {
+              "type": "TextSpan",
+              "text": "bar",
+              "style": {
+                "fontSize": 16.0,
+                "color": "Color(0xff333333)"
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Thematic breaks, https://github.github.com/gfm/#example-30",
+    "markdown": "* Foo\n* * *\n* Bar\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "Row",
+            "children": [
+              {
+                "type": "ConstrainedBox",
+                "constraints": {
+                  "type": "BoxConstraints",
+                  "minWidth": 30.0,
+                  "minHeight": 24.0,
+                  "maxWidth": 24.0
+                },
+                "child": {
+                  "type": "Align",
+                  "alignment": "Alignment.center",
+                  "child": {
+                    "type": "Padding",
+                    "child": {
+                      "type": "RichText",
+                      "textAlign": "TextAlign.right",
+                      "text": {
+                        "type": "TextSpan",
+                        "text": "•",
+                        "style": {
+                          "fontSize": 22.4,
+                          "color": "Color(0xbf333333)"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "type": "Expanded",
+                "child": {
+                  "type": "Column",
+                  "children": [
+                    {
+                      "type": "RichText",
+                      "textAlign": "TextAlign.start",
+                      "text": {
+                        "type": "TextSpan",
+                        "text": "Foo",
+                        "style": {
+                          "fontSize": 16.0,
+                          "color": "Color(0xff333333)"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "SizedBox",
+        "height": 8.0
+      },
+      {
+        "type": "Divider"
+      },
+      {
+        "type": "SizedBox",
+        "height": 8.0
+      },
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "Row",
+            "children": [
+              {
+                "type": "ConstrainedBox",
+                "constraints": {
+                  "type": "BoxConstraints",
+                  "minWidth": 30.0,
+                  "minHeight": 24.0,
+                  "maxWidth": 24.0
+                },
+                "child": {
+                  "type": "Align",
+                  "alignment": "Alignment.center",
+                  "child": {
+                    "type": "Padding",
+                    "child": {
+                      "type": "RichText",
+                      "textAlign": "TextAlign.right",
+                      "text": {
+                        "type": "TextSpan",
+                        "text": "•",
+                        "style": {
+                          "fontSize": 22.4,
+                          "color": "Color(0xbf333333)"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "type": "Expanded",
+                "child": {
+                  "type": "Column",
+                  "children": [
+                    {
+                      "type": "RichText",
+                      "textAlign": "TextAlign.start",
+                      "text": {
+                        "type": "TextSpan",
+                        "text": "Bar",
+                        "style": {
+                          "fontSize": 16.0,
+                          "color": "Color(0xff333333)"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "description": "Thematic breaks, https://github.github.com/gfm/#example-31",
+    "markdown": "- Foo\n- * * *\n",
+    "expected": [
+      {
+        "type": "Column",
+        "children": [
+          {
+            "type": "Row",
+            "children": [
+              {
+                "type": "ConstrainedBox",
+                "constraints": {
+                  "type": "BoxConstraints",
+                  "minWidth": 30.0,
+                  "minHeight": 24.0,
+                  "maxWidth": 24.0
+                },
+                "child": {
+                  "type": "Align",
+                  "alignment": "Alignment.center",
+                  "child": {
+                    "type": "Padding",
+                    "child": {
+                      "type": "RichText",
+                      "textAlign": "TextAlign.right",
+                      "text": {
+                        "type": "TextSpan",
+                        "text": "•",
+                        "style": {
+                          "fontSize": 22.4,
+                          "color": "Color(0xbf333333)"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "type": "Expanded",
+                "child": {
+                  "type": "Column",
+                  "children": [
+                    {
+                      "type": "RichText",
+                      "textAlign": "TextAlign.start",
+                      "text": {
+                        "type": "TextSpan",
+                        "text": "Foo",
+                        "style": {
+                          "fontSize": 16.0,
+                          "color": "Color(0xff333333)"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "type": "SizedBox",
+            "height": 8.0
+          },
+          {
+            "type": "Row",
+            "children": [
+              {
+                "type": "ConstrainedBox",
+                "constraints": {
+                  "type": "BoxConstraints",
+                  "minWidth": 30.0,
+                  "minHeight": 24.0,
+                  "maxWidth": 24.0
+                },
+                "child": {
+                  "type": "Align",
+                  "alignment": "Alignment.center",
+                  "child": {
+                    "type": "Padding",
+                    "child": {
+                      "type": "RichText",
+                      "textAlign": "TextAlign.right",
+                      "text": {
+                        "type": "TextSpan",
+                        "text": "•",
+                        "style": {
+                          "fontSize": 22.4,
+                          "color": "Color(0xbf333333)"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "type": "Expanded",
+                "child": {
+                  "type": "Column",
+                  "children": [
+                    {
+                      "type": "Divider"
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]
