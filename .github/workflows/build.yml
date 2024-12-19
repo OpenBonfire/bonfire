@@ -60,7 +60,7 @@ jobs:
 
       - name: Build Android APK
         working-directory: ./bonfire
-        run: flutter build apk --no-tree-shake-icons
+        run: flutter build apk --no-tree-shake-icons -v
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
@@ -70,7 +70,7 @@ jobs:
 
       - name: Build Android App Bundle
         working-directory: ./bonfire
-        run: flutter build appbundle --no-tree-shake-icons
+        run: flutter build appbundle --no-tree-shake-icons -v
 
       - name: Upload App Bundle
         uses: actions/upload-artifact@v4
@@ -116,7 +116,7 @@ jobs:
 
       - name: Build Windows
         working-directory: ./bonfire
-        run: flutter build windows --no-tree-shake-icons
+        run: flutter build windows --no-tree-shake-icons -v
 
       - name: Upload Windows Executable
         uses: actions/upload-artifact@v4
@@ -164,7 +164,8 @@ jobs:
             libatk-bridge2.0-dev \
             libdrm-dev \
             libgbm-dev \
-            libasound2-dev
+            libasound2-dev \
+            libvulkan-dev
 
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
@@ -184,7 +185,7 @@ jobs:
         env:
           CC: clang
           CXX: clang++
-        run: flutter build linux --no-tree-shake-icons
+        run: flutter build linux --no-tree-shake-icons -v
 
       - name: Upload Linux Executable
         uses: actions/upload-artifact@v4
@@ -221,7 +222,7 @@ jobs:
 
       - name: Build macOS
         working-directory: ./bonfire
-        run: flutter build macos --no-tree-shake-icons
+        run: flutter build macos --no-tree-shake-icons -v
 
       - name: Upload macOS Application
         uses: actions/upload-artifact@v4
