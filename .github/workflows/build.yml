@@ -92,14 +92,11 @@ jobs:
           java-version: '17'
           distribution: 'adopt'
 
-      - name: Set up Visual Studio
-        uses: microsoft/setup-msbuild@v1.1
-
-      - name: Configure MSVC
-        uses: ilammy/msvc-dev-cmd@v1
+      - name: Install MinGW
+        uses: egor-tensin/setup-mingw@v2
         with:
-          arch: x64
-          toolset: 14.29
+          platform: x64
+          version: 14.2.0
 
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
@@ -116,6 +113,9 @@ jobs:
 
       - name: Build Windows
         working-directory: ./bonfire
+        env:
+          CC: gcc
+          CXX: g++
         run: flutter build windows --no-tree-shake-icons -v
 
       - name: Upload Windows Executable
@@ -138,6 +138,16 @@ jobs:
           java-version: '17'
           distribution: 'adopt'
 
+      - name: Install GCC 14
+        run: |
+          sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
+          sudo apt-get update
+          sudo apt-get install -y gcc-14 g++-14
+          sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-14 140
+          sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-14 140
+          sudo update-alternatives --set gcc /usr/bin/gcc-14
+          sudo update-alternatives --set g++ /usr/bin/g++-14
+
       - name: Install system dependencies
         run: |
           sudo apt-get update -y
@@ -149,7 +159,6 @@ jobs:
             libunwind-dev \
             libmpv-dev \
             mpv \
-            clang \
             cmake \
             pkg-config \
             xclip \
@@ -183,8 +192,8 @@ jobs:
       - name: Build Linux
         working-directory: ./bonfire
         env:
-          CC: clang
-          CXX: clang++
+          CC: gcc
+          CXX: g++
         run: flutter build linux --no-tree-shake-icons -v
 
       - name: Upload Linux Executable
@@ -206,6 +215,12 @@ jobs:
         with:
           java-version: '17'
           distribution: 'adopt'
+
+      - name: Install GCC 14
+        run: |
+          brew install gcc@14
+          echo "CC=gcc-14" >> $GITHUB_ENV
+          echo "CXX=g++-14" >> $GITHUB_ENV
 
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
