@@ -147,16 +147,6 @@ jobs:
           java-version: '17'
           distribution: 'adopt'
 
-      # - name: Install GCC 14
-      #   run: |
-      #     sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
-      #     sudo apt-get update
-      #     sudo apt-get install -y gcc-14 g++-14
-      #     sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-14 140
-      #     sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-14 140
-      #     sudo update-alternatives --set gcc /usr/bin/gcc-14
-      #     sudo update-alternatives --set g++ /usr/bin/g++-14
-
       - name: Install system dependencies
         run: |
           sudo apt-get update -y
@@ -198,11 +188,15 @@ jobs:
         working-directory: ./bonfire
         run: dart run build_runner build --delete-conflicting-outputs
 
+      - name: Update CMakeLists.txt
+        working-directory: ./bonfire
+        run: |
+          sed -i 's/target_link_libraries(${BINARY_NAME} PRIVATE PkgConfig::GTK/target_link_libraries(${BINARY_NAME} PRIVATE PkgConfig::GTK vulkan/' linux/CMakeLists.txt
+
       - name: Build Linux
         working-directory: ./bonfire
         env:
-          CC: gcc
-          CXX: g++
+          LD_LIBRARY_PATH: /usr/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH
         run: flutter build linux --no-tree-shake-icons -v
 
       - name: Upload Linux Executable
@@ -210,7 +204,7 @@ jobs:
         with:
           name: bonfire-linux
           path: bonfire/build/linux/x64/release/bundle/
-
+          
   build-macos:
     runs-on: macos-latest
     steps:
