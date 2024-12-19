@@ -15,7 +15,7 @@ dependencies:
 
   fireview:
     git: https://github.com/ericApostal/fireview
-      
+
   firebridge:
     path: ../firebridge
 
@@ -95,7 +95,6 @@ dependency_overrides:
   http: ^1.2.1
   meta: ^1.12.0
 
-
   media_kit:
     git:
       url: https://github.com/media-kit/media-kit.git
@@ -117,8 +116,6 @@ dependency_overrides:
       url: https://github.com/raldhafiri/flutter_keyboard_visibility.git
       ref: master
       path: flutter_keyboard_visibility_web
-
-  
 
 dev_dependencies:
   flutter_test:
