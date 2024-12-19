@@ -98,17 +98,17 @@ jobs:
             & "C:\Program Files (x86)\Microsoft Visual Studio\Installer\InstallCleanup.exe"
           shell: pwsh
 
-        - name: Install Visual Studio 2022 Enterprise
-          run: |
-            Invoke-WebRequest -Uri https://aka.ms/vs/17/release.ltsc.17.10/vs_enterprise.exe -OutFile vs_enterprise.exe
-            $process = Start-Process -FilePath '.\vs_enterprise.exe' -ArgumentList "--add", "Microsoft.VisualStudio.Workload.Azure", "--quiet", "--norestart", "--wait", "--includeRecommended" -Wait -PassThru
-            Write-Output $process.ExitCode
-            $process = Start-Process -FilePath '.\vs_enterprise.exe' -ArgumentList "--add", "Microsoft.VisualStudio.Workload.NativeDesktop", "--quiet", "--norestart", "--wait", "--includeRecommended" -Wait -PassThru
-            Write-Output $process.ExitCode
-          shell: pwsh
+        # - name: Install Visual Studio 2022 Enterprise
+        #   run: |
+        #     Invoke-WebRequest -Uri https://aka.ms/vs/17/release.ltsc.17.10/vs_enterprise.exe -OutFile vs_enterprise.exe
+        #     $process = Start-Process -FilePath '.\vs_enterprise.exe' -ArgumentList "--add", "Microsoft.VisualStudio.Workload.Azure", "--quiet", "--norestart", "--wait", "--includeRecommended" -Wait -PassThru
+        #     Write-Output $process.ExitCode
+        #     $process = Start-Process -FilePath '.\vs_enterprise.exe' -ArgumentList "--add", "Microsoft.VisualStudio.Workload.NativeDesktop", "--quiet", "--norestart", "--wait", "--includeRecommended" -Wait -PassThru
+        #     Write-Output $process.ExitCode
+        #   shell: pwsh
 
-        - name: Set up Visual Studio
-          uses: microsoft/setup-msbuild@v1.1
+        # - name: Set up Visual Studio
+        #   uses: microsoft/setup-msbuild@v1.1
 
         - name: Set up Flutter
           uses: subosito/flutter-action@v2
