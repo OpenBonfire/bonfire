@@ -1,5 +1,6 @@
 import 'package:bonfire/features/auth/views/switcher.dart';
 import 'package:bonfire/features/me/views/messages.dart';
+import 'package:bonfire/theme/theme.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -38,6 +39,16 @@ final routerController = GoRouter(
         ShellRoute(
           builder: (context, state, child) => NavigationFrame(child: child),
           routes: [
+            GoRoute(
+                path: 'overview/notifications',
+                builder: (context, state) => Scaffold(
+                      body: Center(
+                        child: Text(
+                          'Coming Soon',
+                          style: Theme.of(context).custom.textTheme.titleMedium,
+                        ),
+                      ),
+                    )),
             GoRoute(
               path: 'channels',
               redirect: (context, state) => 'channels/@me',

@@ -13,12 +13,15 @@ jobs:
         with:
           channel: stable
       - name: Install dependencies
+        working-directory: ./bonfire
         run: flutter pub get
       - name: Create CNAME file
+        working-directory: ./bonfire
         run: echo "app.openbonfire.dev" > web/CNAME
       - name: Build and deploy
         uses: OpenBonfire/flutter-gh-pages@main
         with:
+          workingDir: bonfire
           baseHref: /
           compileToWasm: false
           customArgs: --no-tree-shake-icons
@@ -41,25 +44,28 @@ jobs:
           channel: stable
 
       - name: Install dependencies
+        working-directory: ./bonfire
         run: flutter pub get
 
       - name: Build Android APK
+        working-directory: ./bonfire
         run: flutter build apk --no-tree-shake-icons
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: bonfire-android
-          path: build/app/outputs/flutter-apk/app-release.apk
+          path: bonfire/build/app/outputs/flutter-apk/app-release.apk
 
       - name: Build Android App Bundle
+        working-directory: ./bonfire
         run: flutter build appbundle --no-tree-shake-icons
 
       - name: Upload App Bundle
         uses: actions/upload-artifact@v4
         with:
           name: bonfire-android-bundle
-          path: build/app/outputs/bundle/release/app-release.aab
+          path: bonfire/build/app/outputs/bundle/release/app-release.aab
 
   build-windows:
     runs-on: windows-latest
@@ -67,6 +73,11 @@ jobs:
       - name: Clone repository
         uses: actions/checkout@v2
 
+      - name: Install GCC
+        uses: egor-tensin/setup-mingw@v2
+        with:
+          platform: x64
+
       - name: Set up Java 17
         uses: actions/setup-java@v2
         with:
@@ -79,16 +90,18 @@ jobs:
           channel: stable
 
       - name: Install dependencies
+        working-directory: ./bonfire
         run: flutter pub get
 
       - name: Build Windows
+        working-directory: ./bonfire
         run: flutter build windows --no-tree-shake-icons
 
       - name: Upload Windows Executable
         uses: actions/upload-artifact@v4
         with:
           name: bonfire-windows
-          path: build/windows/x64/runner/Release/
+          path: bonfire/build/windows/x64/runner/Release/
 
   build-linux:
     runs-on: ubuntu-latest
@@ -96,6 +109,12 @@ jobs:
       - name: Clone repository
         uses: actions/checkout@v2
 
+      - name: Install GCC 11
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gcc-11 g++-11
+          sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-11 110 --slave /usr/bin/g++ g++ /usr/bin/g++-11
+
       - name: Set up Java 17
         uses: actions/setup-java@v2
         with:
@@ -108,6 +127,7 @@ jobs:
           channel: stable
 
       - name: Install dependencies
+        working-directory: ./bonfire
         run: flutter pub get
 
       - name: Install Linux dependencies
@@ -116,19 +136,26 @@ jobs:
           sudo apt-get install -y ninja-build libgtk-3-dev libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev libunwind-dev libmpv-dev mpv
 
       - name: Build Linux
+        working-directory: ./bonfire
         run: flutter build linux --no-tree-shake-icons
 
       - name: Upload Linux Executable
         uses: actions/upload-artifact@v4
         with:
           name: bonfire-linux
-          path: build/linux/x64/release/bundle/
+          path: bonfire/build/linux/x64/release/bundle/
 
   build-macos:
     runs-on: macos-latest
     steps:
       - name: Clone repository
         uses: actions/checkout@v2
+
+      - name: Install GCC
+        run: |
+          brew install gcc@11
+          echo "CC=gcc-11" >> $GITHUB_ENV
+          echo "CXX=g++-11" >> $GITHUB_ENV
 
       - name: Set up Java 17
         uses: actions/setup-java@v2
@@ -142,13 +169,15 @@ jobs:
           channel: stable
 
       - name: Install dependencies
+        working-directory: ./bonfire
         run: flutter pub get
 
       - name: Build macOS
+        working-directory: ./bonfire
         run: flutter build macos --no-tree-shake-icons
 
       - name: Upload macOS Application
         uses: actions/upload-artifact@v4
         with:
           name: bonfire-macos
-          path: build/macos/Build/Products/Release/*.app
+          path: bonfire/build/macos/Build/Products/Release/*.app
