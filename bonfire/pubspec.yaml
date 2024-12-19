@@ -14,7 +14,7 @@ dependencies:
     sdk: flutter
 
   fireview:
-    path: ../fireview
+    path: ../fireview/fireview
       
   firebridge:
     path: ../firebridge

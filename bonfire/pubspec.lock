@@ -583,7 +583,7 @@ packages:
   fireview:
     dependency: "direct main"
     description:
-      path: "../fireview"
+      path: "../fireview/fireview"
       relative: true
     source: path
     version: "0.0.1"
@@ -1930,9 +1930,11 @@ packages:
   webview_cef:
     dependency: transitive
     description:
-      path: "../webview_cef"
-      relative: true
-    source: path
+      path: "."
+      ref: HEAD
+      resolved-ref: "76171a26763e7a5b43135a72032a4b877d27fc66"
+      url: "https://github.com/OpenBonfire/webview_cef"
+    source: git
     version: "0.2.2"
   webview_flutter:
     dependency: transitive
