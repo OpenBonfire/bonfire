@@ -85,7 +85,6 @@ dependencies:
   flutter_cache_manager: ^3.4.0
   file_picker: ^8.0.7
   path: ^1.9.0
-  appflowy_editor: ^3.3.0
   flutter_localization: ^0.2.2
   video_player: ^2.9.2
 

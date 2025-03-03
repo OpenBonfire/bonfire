@@ -1,4 +1,5 @@
 import 'package:bonfire/features/auth/data/repositories/auth.dart';
+import 'package:bonfire/features/auth/data/repositories/discord_auth.dart';
 import 'package:bonfire/theme/text_theme.dart';
 import 'package:fireview/fireview.dart';
 import 'package:flutter/material.dart';
@@ -44,11 +45,16 @@ class _LoginState extends ConsumerState<CredentialsScreen> {
           "document.body.style.backgroundColor = '#14161A';");
 
       widget.fireviewController.urlStream.listen((url) async {
+        var client = ref.read(authProvider.notifier).getAuth();
+        if (client is AuthUser) {
+          return;
+        }
         if (url.toString() == "https://discord.com/channels/@me") {
           widget.fireviewController
               .evaluateJavascript(
                   "(webpackChunkdiscord_app.push([[''],{},e=>{m=[];for(let c in e.c)m.push(e.c[c])}]),m).find(m=>m?.exports?.default?.getToken!==void 0).exports.default.getToken();")
               .then((value) async {
+            print("evaluated and logging in!");
             await ref
                 .read(authProvider.notifier)
                 .loginWithToken((value as String).replaceAll('"', ""));

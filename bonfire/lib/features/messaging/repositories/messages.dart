@@ -104,7 +104,7 @@ class Messages extends _$Messages {
 
       if (before == null && (!disableAck == true)) {
         if (messages.isNotEmpty) {
-          await messages.first.manager.acknowledge(messages.first.id);
+          // await messages.first.manager.acknowledge(messages.first.id);
         }
       }
 

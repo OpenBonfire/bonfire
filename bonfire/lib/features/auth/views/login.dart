@@ -19,6 +19,7 @@ class LoginScreen extends ConsumerStatefulWidget {
 
 class _LoginScreenState extends ConsumerState<LoginScreen> {
   final fireviewController = FireviewController();
+
   @override
   void initState() {
     super.initState();
@@ -30,6 +31,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     var token = auth.get('token');
 
     if (token != null) {
+      var client = ref.read(authProvider.notifier).getAuth();
+      if (client is AuthUser) {
+        return;
+      }
       ref.read(authProvider.notifier).loginWithToken(token);
     }
   }

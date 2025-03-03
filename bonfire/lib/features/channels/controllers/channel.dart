@@ -17,6 +17,10 @@ class ChannelController extends _$ChannelController {
     var auth = ref.watch(authProvider.notifier).getAuth();
 
     if (auth is AuthUser) {
+      if (channelId == Snowflake.zero) {
+        print("channelId is zero");
+        return null;
+      }
       return await auth.client.channels.get(channelId);
     }
 

@@ -1,4 +1,3 @@
-import 'package:appflowy_editor/appflowy_editor.dart';
 import 'package:bonfire/features/messaging/views/components/box/mention_syntax.dart';
 import 'package:bonfire/theme/theme.dart';
 import 'package:firebridge/firebridge.dart';
@@ -18,13 +17,8 @@ class MessageMarkdownBox extends StatefulWidget {
 }
 
 class _MessageMarkdownBoxState extends State<MessageMarkdownBox> {
-  late EditorState editorState;
-
   @override
   void initState() {
-    editorState = EditorState(
-      document: markdownToDocument(widget.message.content),
-    )..editable = false;
     super.initState();
   }
 

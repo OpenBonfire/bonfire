@@ -11,7 +11,6 @@ import 'package:bonfire/features/window/views/window.dart';
 import 'package:hive_ce/hive.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:universal_io/io.dart';
-import 'package:appflowy_editor/appflowy_editor.dart';
 
 import 'package:bonfire/shared/utils/web_utils/web_utils.dart'
     if (dart.library.io) 'package:bonfire/shared/utils/web_utils/non_web_utils.dart';
@@ -47,9 +46,6 @@ void main() async {
   print("Run App");
   runApp(const ProviderScope(
     child: MaterialApp(
-      localizationsDelegates: [
-        AppFlowyEditorLocalizations.delegate,
-      ],
       home: MainWindow(),
     ),
   ));

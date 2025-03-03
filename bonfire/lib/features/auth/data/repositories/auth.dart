@@ -80,6 +80,9 @@ class Auth extends _$Auth {
 
   /// Authenticate client with Discord [token]
   Future<AuthResponse> loginWithToken(String token) async {
+    print("LOGGING IN WITH TOKEN!");
+    // log stacktracks
+    print(StackTrace.current);
     AuthResponse response = AuthNotStarted();
 
     var client = await Nyxx.connectGatewayWithOptions(
