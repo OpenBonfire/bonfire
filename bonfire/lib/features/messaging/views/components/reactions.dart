@@ -72,8 +72,13 @@ class ReactionWidget extends ConsumerWidget {
       ),
       child: InkWell(
         onTap: () async {
-          var message = ref.read(messageControllerProvider(messageId));
-          message!.react(ReactionBuilder.fromEmoji(reaction.emoji as Emoji));
+          final message = ref.read(messageControllerProvider(messageId));
+          if (reaction.me) {
+            message!.deleteOwnReaction(
+                ReactionBuilder.fromEmoji(reaction.emoji as Emoji));
+          } else {
+            message!.react(ReactionBuilder.fromEmoji(reaction.emoji as Emoji));
+          }
         },
         borderRadius: BorderRadius.circular(8),
         child: Padding(

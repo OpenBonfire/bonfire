@@ -114,4 +114,21 @@ class MessageReactions extends _$MessageReactions {
       }
     }
   }
+
+  /// Check if the user has reacted to the message
+  bool hasReacted(Emoji emoji) {
+    for (var r in reactions) {
+      String name = "";
+      if (r.emoji is TextEmoji) {
+        name = (r.emoji as TextEmoji).name;
+      } else if (r.emoji is GuildEmoji) {
+        name = (r.emoji as GuildEmoji).name!;
+      }
+
+      if (emoji.name == name && r.me) {
+        return true;
+      }
+    }
+    return false;
+  }
 }
