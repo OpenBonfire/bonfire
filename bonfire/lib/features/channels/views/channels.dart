@@ -24,28 +24,6 @@ class ChannelsList extends ConsumerStatefulWidget {
 
 class _ChannelsListState extends ConsumerState<ChannelsList> {
   ScrollController scrollController = ScrollController();
-  List<Channel> channelsWithoutParent = [];
-  Map<GuildChannel, List<GuildChannel>> categoryMap = {};
-
-  Widget buildChannelButton(int index) {
-    if (index < channelsWithoutParent.length) {
-      var channel = channelsWithoutParent[index];
-      return ChannelButton(
-          currentChannelId: widget.channelId,
-          currentGuildId: widget.guildId,
-          channel: channel as GuildChannel);
-    } else {
-      var categoryIndex = index - channelsWithoutParent.length;
-      var category = categoryMap.keys.elementAt(categoryIndex);
-      var children = categoryMap[category] ?? [];
-      return Category(
-        guildId: widget.guildId,
-        channelId: widget.channelId,
-        category: category,
-        children: children,
-      );
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,31 +31,12 @@ class _ChannelsListState extends ConsumerState<ChannelsList> {
         (UniversalPlatform.isDesktopOrWeb ? 8 : 0);
 
     var channelWatch = ref.watch(channelsProvider(widget.guildId));
-
     var channels = channelWatch.valueOrNull ?? [];
 
-    channelWatch.when(
-      error: (error, stackTrace) {
-        print("ERROR");
-        print(error);
-        print(stackTrace);
-      },
-      loading: () {},
-      data: (data) {},
-    );
+    List<Channel> channelsWithoutParent = [];
+    Map<GuildChannel, List<GuildChannel>> categoryMap = {};
 
-    var guildBannerUrl =
-        ref.watch(guildBannerUrlProvider(widget.guildId)).valueOrNull;
-
-    // if (scrollController.hasClients) scrollController.jumpTo(0.0);
-
-    channelsWithoutParent = channels
-        .where((channel) =>
-            ((channel as GuildChannel).parent == null) &&
-            (channel.type != ChannelType.guildCategory))
-        .toList();
-
-    // group channels by category
+    // Group channels by category and filter the ones without parents
     for (var channel in channels) {
       if (channel.type == ChannelType.guildCategory) {
         categoryMap[channel as GuildChannel] = [];
@@ -86,14 +45,39 @@ class _ChannelsListState extends ConsumerState<ChannelsList> {
 
     for (var channel in channels) {
       if (channel.type != ChannelType.guildCategory) {
-        var parentChannel = (channel as GuildChannel).parent;
+        var guildChannel = channel as GuildChannel;
+        var parentChannel = guildChannel.parent;
 
-        if (parentChannel != null && categoryMap[parentChannel] != null) {
-          // print(categoryMap[parentChannel]);
-          categoryMap[parentChannel]!.add(channel);
+        if (parentChannel == null) {
+          channelsWithoutParent.add(channel);
+        } else if (categoryMap[parentChannel] != null) {
+          categoryMap[parentChannel]!.add(guildChannel);
         }
       }
     }
+
+    Widget buildChannelButton(int index) {
+      if (index < channelsWithoutParent.length) {
+        var channel = channelsWithoutParent[index];
+        return ChannelButton(
+            currentChannelId: widget.channelId,
+            currentGuildId: widget.guildId,
+            channel: channel as GuildChannel);
+      } else {
+        var categoryIndex = index - channelsWithoutParent.length;
+        var category = categoryMap.keys.elementAt(categoryIndex);
+        var children = categoryMap[category] ?? [];
+        return Category(
+          guildId: widget.guildId,
+          channelId: widget.channelId,
+          category: category,
+          children: children,
+        );
+      }
+    }
+
+    var guildBannerUrl =
+        ref.watch(guildBannerUrlProvider(widget.guildId)).valueOrNull;
 
     return Padding(
       padding: EdgeInsets.only(
@@ -134,6 +118,8 @@ class _ChannelsListState extends ConsumerState<ChannelsList> {
                     behavior: ScrollConfiguration.of(context)
                         .copyWith(scrollbars: false),
                     child: ListView(
+                        key: ValueKey(
+                            widget.guildId.toString()), // Key based on guild ID
                         controller: scrollController,
                         padding: EdgeInsets.zero,
                         children: [

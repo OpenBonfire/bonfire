@@ -13,7 +13,6 @@ part 'channels.g.dart';
 /// A riverpod provider that fetches the channels for the current guild.
 @Riverpod(keepAlive: true)
 class Channels extends _$Channels {
-  List<Channel> channels = [];
   Map<UserGuild, Member> selfMembers = {};
   final _cacheManager = CacheManager(
     Config(
@@ -25,14 +24,13 @@ class Channels extends _$Channels {
 
   @override
   Future<List<Channel>> build(Snowflake guildId) async {
+    List<Channel> channels = [];
     var auth = ref.watch(authProvider.notifier).getAuth();
     Guild? guild = ref.watch(guildControllerProvider(guildId)).valueOrNull;
 
     if (guild == null) {
       return [];
     }
-
-    List<Channel> channels = [];
 
     if (auth != null && auth is AuthUser) {
       if (selfMembers[guild] == null) {
@@ -80,10 +78,7 @@ class Channels extends _$Channels {
             .compareTo((b as GuildChannel).position);
       });
 
-      // what
-      channels = channels;
-
-      state = AsyncValue.data(channels);
+      // state = AsyncValue.data(channels);
     }
 
     return channels;
