@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:firebridge/src/builders/guild/channel_statuses.dart';
 import 'package:firebridge/src/builders/guild/guild_subscriptions_bulk.dart';
+import 'package:firebridge/src/models/discord_color.dart';
 import 'package:firebridge/src/models/gateway/events/relationship.dart';
 import 'package:firebridge/src/models/gateway/events/settings.dart';
 import 'package:firebridge/src/models/guild/member_list_group.dart';
@@ -1092,6 +1093,8 @@ class Gateway extends GatewayManager with EventParser {
       emoji: client.guilds[Snowflake.zero].emojis
           .parse(raw['emoji'] as Map<String, Object?>),
       messageAuthorId: maybeParse(raw['message_author_id'], Snowflake.parse),
+      burstColors: maybeParseMany(
+          raw['burst_colors'] as List?, DiscordColor.parseHexString),
     );
   }
 

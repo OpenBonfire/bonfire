@@ -5,6 +5,7 @@ import 'package:bonfire/features/auth/data/repositories/discord_auth.dart';
 import 'package:bonfire/features/auth/models/auth.dart';
 import 'package:bonfire/features/channels/repositories/channel_members.dart';
 import 'package:bonfire/features/friends/controllers/relationships.dart';
+import 'package:bonfire/features/messaging/repositories/reactions.dart';
 import 'package:bonfire/features/user/controllers/presence.dart';
 import 'package:bonfire/features/voice/repositories/voice_members.dart';
 import 'package:bonfire/features/me/controllers/settings.dart';
@@ -219,6 +220,18 @@ class Auth extends _$Auth {
       ref
           .read(relationshipControllerProvider.notifier)
           .removeRelationship(event.id);
+    });
+
+    client.onMessageReactionAdd.listen((event) {
+      ref
+          .read(messageReactionsProvider(event.messageId).notifier)
+          .addReaction(event.emoji, event.user, event.burstColors);
+    });
+
+    client.onMessageReactionRemove.listen((event) {
+      ref
+          .read(messageReactionsProvider(event.messageId).notifier)
+          .removeReaction(event.emoji, event.user);
     });
 
     return response;

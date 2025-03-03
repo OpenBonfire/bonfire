@@ -1,3 +1,4 @@
+import 'package:firebridge/firebridge.dart';
 import 'package:firebridge/src/models/channel/text_channel.dart';
 import 'package:firebridge/src/models/emoji.dart';
 import 'package:firebridge/src/models/gateway/event.dart';
@@ -165,6 +166,10 @@ class MessageReactionAddEvent extends DispatchEvent {
   /// The ID of the user that sent the message the reaction was added to.
   final Snowflake? messageAuthorId;
 
+  /// The hex-encoded colors to render the burst reaction with
+  /// TODO: Parse to dart type (or DiscordColor)
+  final List<DiscordColor>? burstColors;
+
   /// {@macro message_reaction_add_event}
   /// @nodoc
   MessageReactionAddEvent({
@@ -176,6 +181,7 @@ class MessageReactionAddEvent extends DispatchEvent {
     required this.member,
     required this.emoji,
     required this.messageAuthorId,
+    this.burstColors,
   });
 
   /// The guild the message is in.
