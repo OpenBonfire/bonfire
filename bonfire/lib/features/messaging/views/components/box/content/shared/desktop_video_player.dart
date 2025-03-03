@@ -77,7 +77,7 @@ class DesktopVideoPlayerState extends ConsumerState<DesktopVideoPlayer> {
                   ? Video(
                       controller: controller!,
                       // controls: CupertinoVideoControls,
-                      fit: BoxFit.cover,
+                      fit: BoxFit.contain,
                     )
                   : Center(
                       child: IconButton(
