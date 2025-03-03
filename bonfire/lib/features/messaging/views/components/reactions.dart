@@ -3,6 +3,7 @@ import 'package:bonfire/features/messaging/repositories/reactions.dart';
 import 'package:bonfire/theme/theme.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class MessageReactions extends ConsumerStatefulWidget {
@@ -31,17 +32,16 @@ class _MessageReactionsState extends ConsumerState<MessageReactions> {
       return Container();
     }
 
-    return Container(
-      child: Row(
-        spacing: 4,
-        children: [
-          for (var reaction in reactions)
-            ReactionWidget(
-              reaction: reaction,
-              messageId: widget.messageId,
-            ),
-        ],
-      ),
+    return Wrap(
+      spacing: 4,
+      runSpacing: 4,
+      children: [
+        for (var reaction in reactions)
+          ReactionWidget(
+            reaction: reaction,
+            messageId: widget.messageId,
+          ),
+      ],
     );
   }
 }
@@ -61,6 +61,7 @@ class ReactionWidget extends ConsumerWidget {
 
     return Container(
       height: 36,
+      width: 64,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
         color: reaction.me ? theme.colorTheme.blurple.withOpacity(0.2) : null,
@@ -79,15 +80,17 @@ class ReactionWidget extends ConsumerWidget {
           } else {
             message!.react(ReactionBuilder.fromEmoji(reaction.emoji as Emoji));
           }
+
+          HapticFeedback.lightImpact();
         },
         borderRadius: BorderRadius.circular(8),
         child: Padding(
           padding: const EdgeInsets.only(
-            right: 8,
-            left: 4,
-            top: 2,
-            bottom: 2,
-          ),
+              // right: 8,
+              // left: 4,
+              // top: 2,
+              // bottom: 2,
+              ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
