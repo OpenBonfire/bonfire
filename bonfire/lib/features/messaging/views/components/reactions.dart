@@ -1,3 +1,4 @@
+import 'package:bonfire/features/messaging/controllers/message.dart';
 import 'package:bonfire/features/messaging/repositories/reactions.dart';
 import 'package:bonfire/theme/theme.dart';
 import 'package:firebridge/firebridge.dart';
@@ -37,6 +38,7 @@ class _MessageReactionsState extends ConsumerState<MessageReactions> {
           for (var reaction in reactions)
             ReactionWidget(
               reaction: reaction,
+              messageId: widget.messageId,
             ),
         ],
       ),
@@ -46,9 +48,11 @@ class _MessageReactionsState extends ConsumerState<MessageReactions> {
 
 class ReactionWidget extends ConsumerWidget {
   final Reaction reaction;
+  final Snowflake messageId;
   const ReactionWidget({
     super.key,
     required this.reaction,
+    required this.messageId,
   });
 
   @override
@@ -67,7 +71,10 @@ class ReactionWidget extends ConsumerWidget {
         ),
       ),
       child: InkWell(
-        onTap: () {},
+        onTap: () async {
+          var message = ref.read(messageControllerProvider(messageId));
+          message!.react(ReactionBuilder.fromEmoji(reaction.emoji as Emoji));
+        },
         borderRadius: BorderRadius.circular(8),
         child: Padding(
           padding: const EdgeInsets.only(

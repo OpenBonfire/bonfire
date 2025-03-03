@@ -1,5 +1,5 @@
-import 'package:firebridge/firebridge.dart';
 import 'package:firebridge/src/models/channel/text_channel.dart';
+import 'package:firebridge/src/models/discord_color.dart';
 import 'package:firebridge/src/models/emoji.dart';
 import 'package:firebridge/src/models/gateway/event.dart';
 import 'package:firebridge/src/models/guild/guild.dart';
@@ -167,7 +167,6 @@ class MessageReactionAddEvent extends DispatchEvent {
   final Snowflake? messageAuthorId;
 
   /// The hex-encoded colors to render the burst reaction with
-  /// TODO: Parse to dart type (or DiscordColor)
   final List<DiscordColor>? burstColors;
 
   /// {@macro message_reaction_add_event}

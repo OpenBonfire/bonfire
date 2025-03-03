@@ -65,7 +65,6 @@ class ShardRunner {
     // This subscription is paused whenever the shard is not successfully connected,.
     final controlSubscription = messages.listen((message) {
       if (message is Send) {
-        print("Is send message: ${message.data}");
         connection!.add(message);
       }
 

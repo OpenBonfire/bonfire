@@ -12,9 +12,6 @@ class MessageController extends _$MessageController {
   }
 
   void setMessage(Message message) {
-    if (message.reactions.isNotEmpty) {
-      print("Reactions for ${message.id}: ${message.reactions}");
-    }
     ref.read(messageReactionsProvider(message.id).notifier).setReactions(
           message.reactions,
         );

@@ -34,7 +34,6 @@ class _HomeState extends ConsumerState<GuildMessagingOverview> {
 
   @override
   Widget build(BuildContext context) {
-    print("GuildMessagingOverview.build");
     return (shouldUseMobileLayout(context))
         ? HomeMobile(
             guildId: widget.guildId,

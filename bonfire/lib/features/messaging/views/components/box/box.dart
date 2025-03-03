@@ -378,6 +378,7 @@ class _MessageBoxState extends ConsumerState<MessageBox>
                 attachment: attachment,
               ),
             )),
+        const SizedBox(height: 4),
         MessageReactions(
           guildId: widget.guildId,
           messageId: widget.messageId,

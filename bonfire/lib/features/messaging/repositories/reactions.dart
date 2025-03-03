@@ -50,13 +50,14 @@ class MessageReactions extends _$MessageReactions {
         var newReaction = Reaction(
           count: r.count + 1,
           countDetails: r.countDetails,
-          me: r.me,
+          me: r.me || user.id == this.user!.client.user.id,
           meBurst: r.meBurst,
           emoji: r.emoji,
           // burstColors: burstColors ?? r.burstColors,
           burstColors: r.burstColors,
         );
         newReactions[reactions.indexOf(r)] = newReaction;
+        reactions = newReactions;
         state = newReactions;
         return;
       }
