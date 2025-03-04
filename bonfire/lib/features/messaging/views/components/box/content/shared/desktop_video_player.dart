@@ -10,14 +10,14 @@ class DesktopVideoPlayer extends ConsumerStatefulWidget {
   final double height;
   final Uri url;
   final Uri thumbnailUrl;
-  final String placeholder;
+  final String? placeholder;
   const DesktopVideoPlayer({
     super.key,
     required this.width,
     required this.height,
     required this.url,
     required this.thumbnailUrl,
-    required this.placeholder,
+    this.placeholder,
   });
 
   @override
@@ -65,12 +65,15 @@ class DesktopVideoPlayerState extends ConsumerState<DesktopVideoPlayer> {
               Image.network(
                 url,
                 loadingBuilder: (context, child, loadingProgress) {
+                  if (widget.placeholder == null) {
+                    return child;
+                  }
                   if (loadingProgress == null) {
                     return child;
                   }
                   return Image(
                       image:
-                          ThumbHash.fromBase64(widget.placeholder).toImage());
+                          ThumbHash.fromBase64(widget.placeholder!).toImage());
                 },
               ),
               shouldLoadVideo

@@ -18,7 +18,7 @@ class _DesktopVideoAttachmentState extends State<DesktopVideoAttachment> {
       height: widget.attachment.height!.toDouble(),
       url: widget.attachment.url,
       thumbnailUrl: widget.attachment.proxiedUrl,
-      placeholder: widget.attachment.placeholder!,
+      placeholder: widget.attachment.placeholder,
     );
   }
 }
