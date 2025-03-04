@@ -3,7 +3,7 @@ import 'package:bonfire/features/auth/data/repositories/auth.dart';
 import 'package:bonfire/features/auth/data/repositories/discord_auth.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:firebridge/firebridge.dart';
-// import 'package:flutter_webrtc/flutter_webrtc.dart';
+import 'package:flutter_webrtc/flutter_webrtc.dart';
 
 part 'join.g.dart';
 
@@ -14,8 +14,8 @@ class VoiceChannelController extends _$VoiceChannelController {
   bool _isConnecting = false;
   StreamSubscription? _voiceServerUpdateSubscription;
   StreamSubscription? _voiceStateUpdateSubscription;
-  // RTCPeerConnection? _peerConnection;
-  // MediaStream? _localStream;
+  RTCPeerConnection? _peerConnection;
+  MediaStream? _localStream;
 
   @override
   VoiceReadyEvent? build() {
@@ -43,33 +43,54 @@ class VoiceChannelController extends _$VoiceChannelController {
     String? sessionId;
     String? endpoint;
 
+    void connect() async {
+      if (_isConnecting) return;
+      _isConnecting = true;
+
+      try {
+        _voiceClient = await Nyxx.connectVoiceGateway(
+          VoiceGatewayUser(
+            serverId: guildId,
+            userId: user!.client.user.id,
+            sessionId: sessionId!,
+            token: token!,
+            maxSecureFramesVersion: 0,
+            video: true,
+            streams: [],
+          ),
+          Uri.parse("wss://$endpoint"),
+        );
+
+        _voiceClient!.onVoiceSessionDescription.listen((event) {
+          print("Received Session Description");
+          _handleRemoteSdp(event.sdp!);
+        });
+
+        _voiceClient!.onReady.listen((event) async {
+          state = event;
+          await _initializeWebRTC(event);
+        });
+      } catch (e) {
+        print("Error connecting to voice gateway: $e");
+        state = null;
+      } finally {
+        _isConnecting = false;
+      }
+    }
+
     _cancelSubscriptions();
 
     _voiceServerUpdateSubscription =
         user!.client.onVoiceServerUpdate.listen((event) {
       token = event.token;
       endpoint = event.endpoint;
-      if (token != null && sessionId != null) {
-        _connect(
-          token: token!,
-          guildId: guildId,
-          sessionId: sessionId!,
-          endpoint: endpoint!,
-        );
-      }
+      if (token != null && sessionId != null) connect();
     });
 
     _voiceStateUpdateSubscription =
         user!.client.onVoiceStateUpdate.listen((event) {
       sessionId = event.state.sessionId;
-      if (token != null && sessionId != null) {
-        _connect(
-          token: token!,
-          guildId: guildId,
-          sessionId: sessionId!,
-          endpoint: endpoint!,
-        );
-      }
+      if (token != null && sessionId != null) connect();
     });
   }
 
@@ -77,189 +98,141 @@ class VoiceChannelController extends _$VoiceChannelController {
     final configuration = <String, dynamic>{
       'sdpSemantics': 'unified-plan',
       'bundlePolicy': 'max-bundle',
+      'iceTransportPolicy': 'relay',
     };
 
-    // _peerConnection = await createPeerConnection(configuration);
+    _peerConnection = await createPeerConnection(configuration);
 
-    // no idea why we need 22 audio tracks, but discord does it
-    // for (int i = 0; i < 12; i++) {
-    //   MediaStream audioStream =
-    //       await navigator.mediaDevices.getUserMedia({'audio': true});
-    //   audioStream.getAudioTracks().forEach((track) {
-    //     _peerConnection!.addTrack(track, audioStream);
-    //   });
-    // }
+    _peerConnection!.onIceCandidate = (RTCIceCandidate candidate) {
+      print("ICE candidate: ${candidate.toMap()}");
+      // TODO: Implement sending ICE candidate to Discord
+    };
 
-    // for (int i = 0; i < 12; i++) {
-    //   MediaStream videoStream =
-    //       await navigator.mediaDevices.getUserMedia({'video': false});
-    //   videoStream.getVideoTracks().forEach((track) {
-    //     _peerConnection!.addTrack(track, videoStream);
-    //   });
-    // }
+    _peerConnection!.onConnectionState = (RTCPeerConnectionState state) {
+      print('Connection state change: $state');
+      if (state == RTCPeerConnectionState.RTCPeerConnectionStateFailed) {}
+    };
 
-    // _peerConnection!.onIceCandidate = (RTCIceCandidate candidate) {
-    //   // print("ICE candidate: ${candidate.toMap()}");
-    //   // we can ignore ice candidates as we aren't "true" p2p
-    // };
+    Future<void> _handleNegotiation() async {
+      if (_peerConnection == null) return;
+      var offer = await _peerConnection!.createOffer({
+        'offerToReceiveAudio': true,
+        'offerToReceiveVideo': true,
+      });
+      String sdp = offer.sdp!;
+      sdp = sdp.replaceAll('UDP/TLS/RTP/SAVPF', 'UDP/TLS/RTP/SAVP');
 
-    // _peerConnection!.onIceConnectionState = (state) {
-    //   // print("ICE connection state: $state");
-    // };
+      RTCSessionDescription modifiedOffer =
+          RTCSessionDescription(sdp, offer.type);
+      await _peerConnection!.setLocalDescription(modifiedOffer);
+    }
 
-    // _peerConnection!.onIceGatheringState = (state) {
-    //   print("ICE gathering state: $state");
-    // };
+    _peerConnection!.onRenegotiationNeeded = () async {
+      print("Negotiation needed");
+      await _handleNegotiation();
+    };
 
-    // _peerConnection!.onConnectionState = (RTCPeerConnectionState state) {
-    //   print('Connection state change: $state');
-    // };
+    _peerConnection!.onSignalingState = (RTCSignalingState state) {
+      print('Signaling state change: $state');
+    };
 
-    // _peerConnection!.onSignalingState = (RTCSignalingState state) {
-    //   print('Signaling state change: $state');
-    // };
+    _localStream = await navigator.mediaDevices
+        .getUserMedia({'audio': true, 'video': true});
+    _localStream!.getTracks().forEach((track) {
+      _peerConnection!.addTrack(track, _localStream!);
+    });
 
-    // _peerConnection!.onAddStream = (MediaStream stream) {
-    //   print('Stream added: $stream');
-    // };
+    RTCSessionDescription offer = await _peerConnection!.createOffer({
+      'offerToReceiveAudio': true,
+      'offerToReceiveVideo': true,
+    });
 
-    // _localStream = await navigator.mediaDevices.getUserMedia({'audio': true});
-    // _localStream!.getTracks().forEach((track) {
-    //   _peerConnection!.addTrack(track, _localStream!);
-    // });
+    String sdp = offer.sdp!;
+    sdp = sdp.replaceAll('UDP/TLS/RTP/SAVPF', 'UDP/TLS/RTP/SAVP');
 
-    // _peerConnection!.onTrack = (event) {
-    //   print("Received track: ${event.track}");
-    //   event.track.enabled = true;
-    // };
+    RTCSessionDescription modifiedOffer =
+        RTCSessionDescription(sdp, offer.type);
+    await _peerConnection!.setLocalDescription(modifiedOffer);
 
-    // var offer = await _peerConnection!.createOffer(configuration);
-    // // print("Created offer:\n${offer.sdp}");
-    // // var mockOffer = await _peerConnection!.createOffer(configuration);
-    // // print("LOCAL OFFER AS IT STANDS");
-    // // print(mockOffer.sdp);
-    // // var offer = RTCSessionDescription(
-    // //   LocalBuilder.build(),
-    // //   'offer',
-    // // );
+    print("Created offer:");
+    print(sdp);
 
-    // _peerConnection!.setLocalDescription(offer);
-    // print("set wack offer");
-
-    // _voiceClient!.sendVoiceSelectProtocol(
-    //   VoiceSelectProtocolBuilder(
-    //     protocol: "webrtc",
-    //     data: SdpBuilder.buildVoiceSelectSdp(offer),
-    //   ),
-    // );
-  }
-
-  void _connect({
-    required String token,
-    required Snowflake guildId,
-    required String sessionId,
-    required String endpoint,
-  }) async {
-    if (_isConnecting) return;
-    _isConnecting = true;
-
-    _voiceClient = await Nyxx.connectVoiceGateway(
-      VoiceGatewayUser(
-        serverId: guildId,
-        userId: user!.client.user.id,
-        sessionId: sessionId,
-        token: token,
-        maxSecureFramesVersion: 0,
-        video: true,
-        streams: [],
+    _voiceClient!.sendVoiceSelectProtocol(
+      VoiceSelectProtocolBuilder(
+        protocol: "webrtc",
+        data: sdp,
       ),
-      Uri.parse("wss://$endpoint"),
     );
-
-    _voiceClient!.onVoiceSessionDescription.listen((event) {
-      print("Received Session Description");
-      _handleRemoteSdp(event.sdp!);
-    });
-
-    _voiceClient!.onReady.listen((event) async {
-      // print("GOT READY");
-      state = event;
-
-      await _initializeWebRTC(event);
-    });
   }
 
   Future<void> _handleRemoteSdp(String remoteSdp) async {
-    final lines = remoteSdp.split('\n');
-    final modifiedLines = <String>[];
+    if (_peerConnection == null) {
+      throw Exception("Peer connection not initialized");
+    }
 
+    print("Received SDP from Discord:");
+    print(remoteSdp);
+
+    // this is stupid
+    final lines = remoteSdp.split('\n');
     String? fingerprint;
     String? iceUfrag;
     String? icePwd;
-    String? rtcpLine;
-    String? candidateLine;
-    String? connectionLine;
+    String? candidate;
+    String? ip;
+    String? port;
 
     for (var line in lines) {
-      if (line.contains('fingerprint:sha-256')) {
-        fingerprint = line.startsWith('a=') ? line : 'a=$line';
+      if (line.startsWith('a=fingerprint:')) {
+        fingerprint = line.split(' ')[1];
       } else if (line.startsWith('a=ice-ufrag:')) {
-        iceUfrag = line;
+        iceUfrag = line.split(':')[1];
       } else if (line.startsWith('a=ice-pwd:')) {
-        icePwd = line;
-      } else if (line.startsWith('a=rtcp:')) {
-        rtcpLine = line;
+        icePwd = line.split(':')[1];
       } else if (line.startsWith('a=candidate:')) {
-        candidateLine = line;
-      } else if (line.startsWith('c=')) {
-        connectionLine = line;
+        candidate = line.substring(2);
+        var parts = candidate.split(' ');
+        ip = parts[4];
+        port = parts[5];
+      } else if (line.startsWith('c=IN IP4')) {
+        ip = line.split(' ')[2];
+      } else if (line.startsWith('m=audio')) {
+        port = line.split(' ')[1];
       }
     }
 
-    if (fingerprint == null) {
-      throw Exception("No fingerprint found in the original SDP");
+    // this is less stupid, but still stupid
+    String sdpAnswer = """
+v=0
+o=- ${DateTime.now().millisecondsSinceEpoch} 2 IN IP4 127.0.0.1
+s=-
+t=0 0
+m=audio $port UDP/TLS/RTP/SAVP 111
+c=IN IP4 $ip
+a=rtcp:$port IN IP4 $ip
+a=ice-ufrag:$iceUfrag
+a=ice-pwd:$icePwd
+a=fingerprint:sha-256 $fingerprint
+a=setup:active
+a=mid:0
+a=sendrecv
+a=rtcp-mux
+a=rtpmap:111 opus/48000/2
+a=fmtp:111 minptime=10;useinbandfec=1
+a=candidate:$candidate
+a=end-of-candidates
+""";
+
+    try {
+      await _peerConnection!.setRemoteDescription(
+        RTCSessionDescription(sdpAnswer, 'answer'),
+      );
+      print("Remote description set successfully");
+    } catch (e) {
+      print("Error setting remote description: $e");
+      print("Attempted SDP answer:");
+      print(sdpAnswer);
     }
-
-    modifiedLines.add('v=0');
-    modifiedLines
-        .add('o=- ${DateTime.now().millisecondsSinceEpoch} 2 IN IP4 127.0.0.1');
-    modifiedLines.add('s=-');
-    modifiedLines.add('t=0 0');
-
-    modifiedLines
-        .add('a=group:BUNDLE ${List.generate(12, (i) => i).join(' ')}');
-
-    if (lines.contains('a=ice-lite')) {
-      modifiedLines.add('a=ice-lite');
-    }
-
-    // add 12 audio tracks (I still have no idea why)
-    for (int i = 0; i < 12; i++) {
-      modifiedLines.add('m=audio 9 UDP/TLS/RTP/SAVPF 109 101');
-      modifiedLines.add(connectionLine!);
-      if (rtcpLine != null) modifiedLines.add(rtcpLine);
-      modifiedLines.add('a=rtcp-mux');
-      if (iceUfrag != null) modifiedLines.add(iceUfrag);
-      modifiedLines.add(icePwd!);
-      modifiedLines.add(fingerprint);
-      modifiedLines.add('a=setup:active');
-      modifiedLines.add('a=mid:$i');
-      modifiedLines.add('a=sendrecv');
-      modifiedLines.add('a=rtpmap:109 opus/48000/2');
-      modifiedLines.add('a=rtpmap:101 telephone-event/8000');
-      modifiedLines.add('a=fmtp:109 minptime=10;useinbandfec=1');
-      if (candidateLine != null) modifiedLines.add(candidateLine);
-    }
-
-    final modifiedSdp = '${modifiedLines.join('\r\n')}\r\n';
-
-    // print("Modified Remote SDP:");
-    // print(modifiedSdp);
-
-    // var modifiedSdp = RemoteBuilder.build();
-
-    // final description = RTCSessionDescription(modifiedSdp, 'answer');
-    // await _peerConnection!.setRemoteDescription(description);
   }
 
   void leaveVoiceChannel() {
@@ -278,11 +251,11 @@ class VoiceChannelController extends _$VoiceChannelController {
     _voiceClient?.close();
     _voiceClient = null;
 
-    // _peerConnection?.close();
-    // _peerConnection = null;
+    _peerConnection?.close();
+    _peerConnection = null;
 
-    // _localStream?.dispose();
-    // _localStream = null;
+    _localStream?.dispose();
+    _localStream = null;
 
     _cancelSubscriptions();
 

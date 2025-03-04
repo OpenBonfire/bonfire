@@ -14,14 +14,17 @@ We now offer nightly builds! Please check out the [github actions](https://githu
 ## About
 A modern alternative to the Discord client. Use Discord without ever having to touch the mobile Discord client.
 
-## Platform Targets
+## Platform Support (all are targets, but not all are supported yet)
 - 🟩 Android
-- 🟩 iOS
+- 🟥 iOS
 - 🟩 Windows
-- 🟩 MacOS
-- 🟩 Linux
-- 🟩 WearOS (All major android smartwatches)
-- 🟩 Web
+- 🟥 MacOS
+- 🟨 Linux 
+- 🟨 WearOS (All major android smartwatches)
+- 🟨 Web
+
+## Contributor Note
+***We are looking for Flutter developers with iOS / macOS devices***. Bonfire can definitely be run on them, but I do not have any to test with, so I cannot add support. MacOS is very close (adding Webview broke the CI, but otherwise runs fine). I have not tested iOS, but there are no major reasons why it should not work. Once the login is revamped to support QR code login, Web and WearOS, and Linux will return as supported.
 
 Because we are using flutter instead of react native, it's possible to cross-compile to platforms other than mobile! The build currently runs on Windows, MacOS, Android, Linux, and now Web! I am unable to test on MacOS and iOS, so consider those builds very experimental.
 
@@ -54,9 +57,10 @@ I'm pretty new to managing public projects, so you'll have to bear with me here.
 
 ## Progress *not exhaustive, there's a lot of stuff to do*
 - 🟨 Login
-  -  🟩 Authenticator Login
-  -  🟥 SMS Login
-  -  🟥 No MFA Login (captcha appears when there's no authenticator)
+  - 🟩 WebView-based login
+  - 🟨 Web Login (you have to input your token manually)
+  - 🟥 WearOS login support (you have to compile yourself with the token hard-coded)
+
 - 🟨 Messaging
   - 🟩 Sending Messages
   - 🟩 Cache Messages
@@ -71,8 +75,8 @@ I'm pretty new to managing public projects, so you'll have to bear with me here.
         - 🟩 Video Attachments
         - 🟩 Audio Attachments (with actual mobile playback)
   - 🟥 Offline Message Scheduling
-  - 🟥 Unreads
-  - 🟥 Threads
+  - 🟨 Unreads (*viewable but can't be interacted with*)
+  - 🟨 Threads (*usable, but barebones*)
   - 🟨 Member List
     - 🟩 Base View
     - 🟩 Networking (handled in firebridge, tricky due to Discord's sharding)
@@ -85,6 +89,8 @@ I'm pretty new to managing public projects, so you'll have to bear with me here.
     - 🟩 Guild Order
     - 🟩 Guild Names
     - 🟩 Guild Folders
+
+**I am set on adding voice / video / etc, but it is very difficult**
 - 🟥 Voice Chat
 - 🟥 Camera Chat
 - 🟥 Screen Sharing
@@ -99,6 +105,8 @@ I'm pretty new to managing public projects, so you'll have to bear with me here.
 You may encounter issues on Linux (usually with packaging)
 1. **libmpv cannot be found**: Download `libmpv` / `libmpv-devel` (package name varies per distro). If you get an issue in adjacent to `libmpv cannot be found` and it is installed (particuarly on Fedora), run `sudo ln -s /usr/lib64/libmpv.so.2 /usr/lib64/libmpv.so.1`. This issue also appears when running the release varient from GitHub. I will eventually bundle the depend or apply this fix in the library itself. This issue is tracked at https://github.com/OpenBonfire/bonfire/issues/3.
 2. **various media kit build errors**: You need `mpv` / `mpv-devel`. Fedora will require you to follow the fix for build issue 1.
+
+There is also a fun error on Linux that will happen due to the WebView library. Essentially, you will have to handle the libmpv dependency chain yourself. I will automate this in the future, but I don't have a great fix for this at the moment.
 
 Don't forget to run `dart run build_runner watch` before developing! This is required when using freezed and riverpod.
 

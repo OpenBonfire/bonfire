@@ -128,7 +128,6 @@ class GuildsState extends _$GuildsState {
     if (cacheData != null) {
       var decoded = json.decode(utf8.decode(cacheData.file.readAsBytesSync()));
       var mapped = (decoded.map((e) => user!.client.guilds.parse(e)).toList());
-      print('got from cache!');
       return List<Guild>.from(mapped);
     }
     return null;
@@ -137,7 +136,6 @@ class GuildsState extends _$GuildsState {
   void setGuilds(List<Guild> guilds) {
     _cacheManager.putFile(
         cacheKey, utf8.encode(json.encode(guilds.map((e) => e.json).toList())));
-    print("set via network");
     state = AsyncValue.data(guilds);
   }
 }

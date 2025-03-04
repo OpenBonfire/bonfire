@@ -15,7 +15,6 @@ import 'package:firebridge/src/http/request.dart';
 import 'package:firebridge/src/http/route.dart';
 import 'package:firebridge/src/models/channel/channel.dart';
 import 'package:firebridge/src/models/channel/guild_channel.dart';
-import 'package:firebridge/src/models/channel/thread_list.dart';
 import 'package:firebridge/src/models/emoji.dart';
 import 'package:firebridge/src/models/guild/ban.dart';
 import 'package:firebridge/src/models/guild/guild.dart';

@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:firebridge/src/api_options.dart';
 import 'package:firebridge/src/builders/voice.dart';
 import 'package:firebridge/src/builders/voice_gateway.dart';
@@ -17,18 +16,11 @@ import 'package:logging/logging.dart';
 
 class VoiceGateway extends VoiceGatewayManager
     with VoiceEventParser, VoiceEventMixin {
-  /// The [VoiceGatewayUser] instance used to configure this [VoiceGateway].
   final VoiceGatewayUser voiceGatewayUser;
-
-  /// The [VoiceConnection] instance used to communicate with the Gateway.
   final VoiceConnection connection;
-
-  /// The endpoint of the Gateway.
   final Uri endpoint;
-
   late final Stream<VoiceGatewayEvent> events = connection.events;
 
-  /// Create a new [VoiceGateway].
   VoiceGateway(this.voiceGatewayUser, this.connection, this.endpoint)
       : super.create() {
     runHeartbeat();
@@ -43,21 +35,11 @@ class VoiceGateway extends VoiceGatewayManager
           "streams": [],
         }));
       }
-
       if (event is VoiceReadyEvent) {
         print("Voice Ready, attempting connect... ${event.ssrc}");
       }
-
       if (event is VoiceSessionDescriptionEvent) {
-        // connection.add(
-        //   VoiceSend(
-        //     opcode: VoiceOpcode.selectProtocol,
-        //     data: {
-        //       "protocol": "webrtc",
-        //       "data": event.ssrc,
-        //     },
-        //   ),
-        // );
+        print("Received Voice Session Description");
       }
     });
   }
@@ -102,24 +84,19 @@ class VoiceGateway extends VoiceGatewayManager
   }
 
   @override
-  // TODO: implement apiOptions
   ApiOptions get apiOptions => throw UnimplementedError();
 
   @override
-  Future<void> close() {
-    // TODO: implement close
-    throw UnimplementedError();
+  Future<void> close() async {
+    await disconnect();
   }
 
   @override
-  // TODO: implement httpHandler
   HttpHandler get httpHandler => throw UnimplementedError();
 
   @override
-  // TODO: implement logger
-  Logger get logger => throw UnimplementedError();
+  Logger get logger => Logger("VoiceGateway");
 
   @override
-  // TODO: implement options
   ClientOptions get options => throw UnimplementedError();
 }

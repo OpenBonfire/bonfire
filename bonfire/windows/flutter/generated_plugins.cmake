@@ -7,6 +7,7 @@ list(APPEND FLUTTER_PLUGIN_LIST
   bitsdojo_window_windows
   file_selector_windows
   flutter_localization
+  flutter_webrtc
   fullscreen_window
   media_kit_libs_windows_video
   media_kit_video

@@ -1,3 +1,4 @@
+import 'package:bonfire/features/messaging/repositories/reactions.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -11,6 +12,9 @@ class MessageController extends _$MessageController {
   }
 
   void setMessage(Message message) {
+    ref.read(messageReactionsProvider(message.id).notifier).setReactions(
+          message.reactions,
+        );
     state = message;
   }
 }

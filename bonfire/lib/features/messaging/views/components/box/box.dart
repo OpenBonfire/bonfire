@@ -11,6 +11,7 @@ import 'package:bonfire/features/messaging/views/components/box/markdown_box.dar
 import 'package:bonfire/features/messaging/views/components/box/mobile_message_drawer.dart';
 import 'package:bonfire/features/messaging/views/components/box/popout.dart';
 import 'package:bonfire/features/messaging/views/components/box/reply/message_reply.dart';
+import 'package:bonfire/features/messaging/views/components/reactions.dart';
 import 'package:bonfire/shared/utils/platform.dart';
 import 'package:bonfire/theme/theme.dart';
 import 'package:firebridge/firebridge.dart' hide ButtonStyle;
@@ -377,6 +378,11 @@ class _MessageBoxState extends ConsumerState<MessageBox>
                 attachment: attachment,
               ),
             )),
+        const SizedBox(height: 4),
+        MessageReactions(
+          guildId: widget.guildId,
+          messageId: widget.messageId,
+        ),
       ],
     );
   }
