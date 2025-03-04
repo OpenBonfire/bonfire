@@ -54,9 +54,10 @@ I'm pretty new to managing public projects, so you'll have to bear with me here.
 
 ## Progress *not exhaustive, there's a lot of stuff to do*
 - 🟨 Login
-  -  🟩 Authenticator Login
-  -  🟥 SMS Login
-  -  🟥 No MFA Login (captcha appears when there's no authenticator)
+  - 🟩 WebView-based login
+  - 🟨 Web Login (you have to input your token manually)
+  - 🟥 WearOS login support (you have to compile yourself with the token hard-coded)
+
 - 🟨 Messaging
   - 🟩 Sending Messages
   - 🟩 Cache Messages
@@ -71,8 +72,8 @@ I'm pretty new to managing public projects, so you'll have to bear with me here.
         - 🟩 Video Attachments
         - 🟩 Audio Attachments (with actual mobile playback)
   - 🟥 Offline Message Scheduling
-  - 🟥 Unreads
-  - 🟥 Threads
+  - 🟨 Unreads *displayed not triggered*
+  - 🟨 Threads *usable, but barebones*
   - 🟨 Member List
     - 🟩 Base View
     - 🟩 Networking (handled in firebridge, tricky due to Discord's sharding)
@@ -85,6 +86,7 @@ I'm pretty new to managing public projects, so you'll have to bear with me here.
     - 🟩 Guild Order
     - 🟩 Guild Names
     - 🟩 Guild Folders
+  **I very badly want to add voice / video / etc, but it is very difficult**
 - 🟥 Voice Chat
 - 🟥 Camera Chat
 - 🟥 Screen Sharing
