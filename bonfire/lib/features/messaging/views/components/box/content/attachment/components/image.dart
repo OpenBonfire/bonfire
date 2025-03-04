@@ -19,13 +19,23 @@ class _ImageAttachmentState extends ConsumerState<ImageAttachment> {
     double aspectRatio = (widget.attachment.width?.toDouble() ?? 1) /
         (widget.attachment.height?.toDouble() ?? 1);
     final hash = ThumbHash.fromBase64(widget.attachment.placeholder!);
+    String urlString = widget.attachment.url.toString();
+
+    // For the web proxy, but this doesn't work... Maybe it doesn't like this specific proxy?
+    // Uri url = Uri.parse(widget.attachment.url.toString());
+
+    // if (url.host == "cdn.discordapp.com") {
+    //   urlString = Uri.https("cors-proxy.mylo-fawcett.workers.dev", "/", {
+    //     'url': urlString,
+    //   }).toString();
+    // }
 
     return GestureDetector(
       onTap: () {
         Navigator.of(context).push(
           BlurredBackgroundPageRoute(
             builder: (context) => FullscreenImageView(
-              imageUrl: widget.attachment.url.toString(),
+              imageUrl: urlString,
               placeholder: hash,
             ),
           ),
@@ -39,7 +49,7 @@ class _ImageAttachmentState extends ConsumerState<ImageAttachment> {
             builder: (context, constraints) {
               return FadeInImage(
                 placeholder: hash.toImage(),
-                image: NetworkImage(widget.attachment.url.toString()),
+                image: NetworkImage(urlString),
                 fit: BoxFit.cover,
                 width: constraints.maxWidth,
                 height: constraints.maxHeight,

@@ -14,7 +14,9 @@ dependencies:
     sdk: flutter
 
   fireview:
-    git: https://github.com/ericApostal/fireview
+    git: 
+      url: https://github.com/ericApostal/fireview
+      ref: cda3048c55f0fe516a69e375f5aa422e82997540
 
   firebridge:
     path: ../firebridge

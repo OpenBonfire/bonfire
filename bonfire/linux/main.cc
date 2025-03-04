@@ -1,3 +1,4 @@
+#include <webview_cef/webview_cef_plugin.h>
 #include "my_application.h"
 
 int main(int argc, char **argv)
