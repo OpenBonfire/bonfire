@@ -105,6 +105,7 @@ I'm pretty new to managing public projects, so you'll have to bear with me here.
 You may encounter issues on Linux (usually with packaging)
 1. **libmpv cannot be found**: Download `libmpv` / `libmpv-devel` (package name varies per distro). If you get an issue in adjacent to `libmpv cannot be found` and it is installed (particuarly on Fedora), run `sudo ln -s /usr/lib64/libmpv.so.2 /usr/lib64/libmpv.so.1`. This issue also appears when running the release varient from GitHub. I will eventually bundle the depend or apply this fix in the library itself. This issue is tracked at https://github.com/OpenBonfire/bonfire/issues/3.
 2. **various media kit build errors**: You need `mpv` / `mpv-devel`. Fedora will require you to follow the fix for build issue 1.
+3. **symbol lookup error: /lib64/libmpv.so.2: undefined symbol: vkCreateXlibSurfaceKHR** You need to run `export LD_LIBRARY_PATH=/lib64:$LD_LIBRARY_PATH` in the same terminal you run bonfire from. This path should correspond to the location that libmpv is stored. I am looking to implement a proper fix for this.
 
 There is also a fun error on Linux that will happen due to the WebView library. Essentially, you will have to handle the libmpv dependency chain yourself. I will automate this in the future, but I don't have a great fix for this at the moment.
 
