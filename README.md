@@ -16,11 +16,11 @@ A modern alternative to the Discord client. Use Discord without ever having to t
 
 ## Platform Targets
 - 🟩 Android
-- 🟩 iOS
+- 🟨 iOS
 - 🟩 Windows
-- 🟩 MacOS
-- 🟩 Linux
-- 🟩 WearOS (All major android smartwatches)
+- 🟥 MacOS
+- 🟨 Linux 
+- 🟨 WearOS (All major android smartwatches)
 - 🟩 Web
 
 Because we are using flutter instead of react native, it's possible to cross-compile to platforms other than mobile! The build currently runs on Windows, MacOS, Android, Linux, and now Web! I am unable to test on MacOS and iOS, so consider those builds very experimental.
@@ -72,8 +72,8 @@ I'm pretty new to managing public projects, so you'll have to bear with me here.
         - 🟩 Video Attachments
         - 🟩 Audio Attachments (with actual mobile playback)
   - 🟥 Offline Message Scheduling
-  - 🟨 Unreads *displayed not triggered*
-  - 🟨 Threads *usable, but barebones*
+  - 🟨 Unreads (*viewable but can't be interacted with*)
+  - 🟨 Threads (*usable, but barebones*)
   - 🟨 Member List
     - 🟩 Base View
     - 🟩 Networking (handled in firebridge, tricky due to Discord's sharding)
@@ -86,7 +86,8 @@ I'm pretty new to managing public projects, so you'll have to bear with me here.
     - 🟩 Guild Order
     - 🟩 Guild Names
     - 🟩 Guild Folders
-  **I very badly want to add voice / video / etc, but it is very difficult**
+
+**I am set on adding voice / video / etc, but it is very difficult**
 - 🟥 Voice Chat
 - 🟥 Camera Chat
 - 🟥 Screen Sharing
@@ -101,6 +102,8 @@ I'm pretty new to managing public projects, so you'll have to bear with me here.
 You may encounter issues on Linux (usually with packaging)
 1. **libmpv cannot be found**: Download `libmpv` / `libmpv-devel` (package name varies per distro). If you get an issue in adjacent to `libmpv cannot be found` and it is installed (particuarly on Fedora), run `sudo ln -s /usr/lib64/libmpv.so.2 /usr/lib64/libmpv.so.1`. This issue also appears when running the release varient from GitHub. I will eventually bundle the depend or apply this fix in the library itself. This issue is tracked at https://github.com/OpenBonfire/bonfire/issues/3.
 2. **various media kit build errors**: You need `mpv` / `mpv-devel`. Fedora will require you to follow the fix for build issue 1.
+
+There is also a fun error on Linux that will happen due to the WebView library. Essentially, you will have to handle the libmpv dependency chain yourself. I will automate this in the future, but I don't have a great fix for this at the moment.
 
 Don't forget to run `dart run build_runner watch` before developing! This is required when using freezed and riverpod.
 
