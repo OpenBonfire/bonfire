@@ -16,6 +16,7 @@ class VoiceChannelController extends _$VoiceChannelController {
   StreamSubscription? _voiceStateUpdateSubscription;
   RTCPeerConnection? _peerConnection;
   MediaStream? _localStream;
+  Map<String, dynamic>? _lastOfferConstraints;
 
   @override
   VoiceReadyEvent? build() {
@@ -110,22 +111,16 @@ class VoiceChannelController extends _$VoiceChannelController {
 
     _peerConnection!.onConnectionState = (RTCPeerConnectionState state) {
       print('Connection state change: $state');
-      if (state == RTCPeerConnectionState.RTCPeerConnectionStateFailed) {}
+      if (state == RTCPeerConnectionState.RTCPeerConnectionStateFailed) {
+        print("Connection failed, closing peer connection");
+        _peerConnection?.close();
+        _peerConnection = null;
+      }
+
+      if (state == RTCPeerConnectionState.RTCPeerConnectionStateConnected) {
+        print("Connected to Discord!!!");
+      }
     };
-
-    Future<void> _handleNegotiation() async {
-      if (_peerConnection == null) return;
-      var offer = await _peerConnection!.createOffer({
-        'offerToReceiveAudio': true,
-        'offerToReceiveVideo': true,
-      });
-      String sdp = offer.sdp!;
-      sdp = sdp.replaceAll('UDP/TLS/RTP/SAVPF', 'UDP/TLS/RTP/SAVP');
-
-      RTCSessionDescription modifiedOffer =
-          RTCSessionDescription(sdp, offer.type);
-      await _peerConnection!.setLocalDescription(modifiedOffer);
-    }
 
     _peerConnection!.onRenegotiationNeeded = () async {
       print("Negotiation needed");
@@ -134,6 +129,11 @@ class VoiceChannelController extends _$VoiceChannelController {
 
     _peerConnection!.onSignalingState = (RTCSignalingState state) {
       print('Signaling state change: $state');
+
+      if (state == RTCSignalingState.RTCSignalingStateStable) {
+        print("Signaling state is stable");
+        _createAndSendOffer();
+      }
     };
 
     _localStream = await navigator.mediaDevices
@@ -142,20 +142,39 @@ class VoiceChannelController extends _$VoiceChannelController {
       _peerConnection!.addTrack(track, _localStream!);
     });
 
-    RTCSessionDescription offer = await _peerConnection!.createOffer({
+    // Initial negotiation
+    await _createAndSendOffer();
+  }
+
+  Future<void> _handleNegotiation() async {
+    if (_peerConnection == null) return;
+
+    // Check signaling state before proceeding
+    if (_peerConnection!.signalingState ==
+        RTCSignalingState.RTCSignalingStateStable) {
+      await _createAndSendOffer();
+    } else {
+      print("Cannot create offer, signaling state is not stable");
+    }
+  }
+
+  Future<void> _createAndSendOffer() async {
+    if (_peerConnection == null) return;
+
+    // Use consistent constraints for all offers
+    _lastOfferConstraints = {
       'offerToReceiveAudio': true,
       'offerToReceiveVideo': true,
-    });
+    };
 
+    RTCSessionDescription offer =
+        await _peerConnection!.createOffer(_lastOfferConstraints!);
     String sdp = offer.sdp!;
-    sdp = sdp.replaceAll('UDP/TLS/RTP/SAVPF', 'UDP/TLS/RTP/SAVP');
-
-    RTCSessionDescription modifiedOffer =
-        RTCSessionDescription(sdp, offer.type);
-    await _peerConnection!.setLocalDescription(modifiedOffer);
 
     print("Created offer:");
     print(sdp);
+
+    await _peerConnection!.setLocalDescription(offer);
 
     _voiceClient!.sendVoiceSelectProtocol(
       VoiceSelectProtocolBuilder(
