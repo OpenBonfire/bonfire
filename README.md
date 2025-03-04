@@ -14,14 +14,17 @@ We now offer nightly builds! Please check out the [github actions](https://githu
 ## About
 A modern alternative to the Discord client. Use Discord without ever having to touch the mobile Discord client.
 
-## Platform Targets
+## Platform Support (all are targets, but not all are supported yet)
 - 🟩 Android
-- 🟨 iOS
+- 🟥 iOS
 - 🟩 Windows
 - 🟥 MacOS
 - 🟨 Linux 
 - 🟨 WearOS (All major android smartwatches)
-- 🟩 Web
+- 🟨 Web
+
+## Contributor Note
+***We are looking for Flutter developers with iOS / macOS devices***. Bonfire can definitely be run on them, but I do not have any to test with, so I cannot add support. MacOS is very close (adding Webview broke the CI, but otherwise runs fine). I have not tested iOS, but there are no major reasons why it should not work. Once the login is revamped to support QR code login, Web and WearOS, and Linux will return as supported.
 
 Because we are using flutter instead of react native, it's possible to cross-compile to platforms other than mobile! The build currently runs on Windows, MacOS, Android, Linux, and now Web! I am unable to test on MacOS and iOS, so consider those builds very experimental.
 
