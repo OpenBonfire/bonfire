@@ -18,7 +18,11 @@ class _ImageAttachmentState extends ConsumerState<ImageAttachment> {
   Widget build(BuildContext context) {
     double aspectRatio = (widget.attachment.width?.toDouble() ?? 1) /
         (widget.attachment.height?.toDouble() ?? 1);
-    final hash = ThumbHash.fromBase64(widget.attachment.placeholder!);
+    ThumbHash? hash;
+
+    if (widget.attachment.placeholder != null) {
+      hash = ThumbHash.fromBase64(widget.attachment.placeholder!);
+    }
     String urlString = widget.attachment.url.toString();
 
     // For the web proxy, but this doesn't work... Maybe it doesn't like this specific proxy?
@@ -47,13 +51,16 @@ class _ImageAttachmentState extends ConsumerState<ImageAttachment> {
           aspectRatio: aspectRatio,
           child: LayoutBuilder(
             builder: (context, constraints) {
-              return FadeInImage(
-                placeholder: hash.toImage(),
-                image: NetworkImage(urlString),
-                fit: BoxFit.cover,
-                width: constraints.maxWidth,
-                height: constraints.maxHeight,
-              );
+              return (hash != null)
+                  ? FadeInImage(
+                      placeholder: hash.toImage(),
+                      image: NetworkImage(urlString),
+                      fit: BoxFit.contain,
+                    )
+                  : Image.network(
+                      urlString,
+                      fit: BoxFit.contain,
+                    );
             },
           ),
         ),
@@ -109,12 +116,12 @@ class BlurredBackgroundPageRoute<T> extends PageRoute<T> {
 
 class FullscreenImageView extends StatefulWidget {
   final String imageUrl;
-  final ThumbHash placeholder;
+  final ThumbHash? placeholder;
 
   const FullscreenImageView({
     super.key,
     required this.imageUrl,
-    required this.placeholder,
+    this.placeholder,
   });
 
   @override
@@ -156,12 +163,16 @@ class _FullscreenImageViewState extends State<FullscreenImageView> {
             onDoubleTapDown: _handleDoubleTapDown,
             onDoubleTap: _handleDoubleTap,
             child: Center(
-              child: FadeInImage(
-                placeholder: widget.placeholder.toImage(),
-                image: NetworkImage(widget.imageUrl),
-                fit: BoxFit.contain,
-              ),
-            ),
+                child: (widget.placeholder != null)
+                    ? FadeInImage(
+                        placeholder: widget.placeholder!.toImage(),
+                        image: NetworkImage(widget.imageUrl),
+                        fit: BoxFit.contain,
+                      )
+                    : Image.network(
+                        widget.imageUrl,
+                        fit: BoxFit.contain,
+                      )),
           ),
         ),
       ),
