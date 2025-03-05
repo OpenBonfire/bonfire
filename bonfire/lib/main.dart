@@ -5,8 +5,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_keyboard_size/flutter_keyboard_size.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:universal_platform/universal_platform.dart';
-import 'package:video_player_media_kit/video_player_media_kit.dart';
-import 'package:bitsdojo_window/bitsdojo_window.dart';
+// import 'package:video_player_media_kit/video_player_media_kit.dart';
+// import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:bonfire/features/window/views/window.dart';
 import 'package:hive_ce/hive.dart';
 import 'package:path_provider/path_provider.dart';
@@ -20,14 +20,14 @@ void main() async {
 
   initializePlatform();
 
-  VideoPlayerMediaKit.ensureInitialized(
-    android: true,
-    iOS: true,
-    macOS: true,
-    windows: true,
-    linux: true,
-    web: true,
-  );
+  // VideoPlayerMediaKit.ensureInitialized(
+  //   android: true,
+  //   iOS: true,
+  //   macOS: true,
+  //   windows: true,
+  //   linux: true,
+  //   web: true,
+  // );
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge,
       overlays: [SystemUiOverlay.top]);
@@ -50,15 +50,15 @@ void main() async {
     ),
   ));
 
-  if (UniversalPlatform.isDesktop) {
-    doWhenWindowReady(() {
-      const initialSize = Size(1280, 720);
-      appWindow.minSize = const Size(700, 360);
-      appWindow.size = initialSize;
-      appWindow.alignment = Alignment.center;
-      appWindow.show();
-    });
-  }
+//   if (UniversalPlatform.isDesktop) {
+//     doWhenWindowReady(() {
+//       const initialSize = Size(1280, 720);
+//       appWindow.minSize = const Size(700, 360);
+//       appWindow.size = initialSize;
+//       appWindow.alignment = Alignment.center;
+//       appWindow.show();
+//     });
+//   }
 }
 
 class MainWindow extends ConsumerStatefulWidget {
@@ -83,7 +83,7 @@ class _MainWindowState extends ConsumerState<MainWindow> {
         children: [
           Column(
             children: [
-              if (UniversalPlatform.isDesktop) const WindowTopBar(),
+              // if (UniversalPlatform.isDesktop) const WindowTopBar(),
               Flexible(
                 child: KeyboardSizeProvider(
                   child: MaterialApp.router(

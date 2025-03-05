@@ -1,8 +1,8 @@
 import 'package:bonfire/features/messaging/components/box/content/attachment/bounded_content.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_thumbhash/flutter_thumbhash.dart';
-import 'package:media_kit/media_kit.dart';
-import 'package:media_kit_video/media_kit_video.dart';
+// import 'package:media_kit/media_kit.dart';
+// import 'package:media_kit_video/media_kit_video.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class DesktopVideoPlayer extends ConsumerStatefulWidget {
@@ -26,8 +26,8 @@ class DesktopVideoPlayer extends ConsumerStatefulWidget {
 }
 
 class DesktopVideoPlayerState extends ConsumerState<DesktopVideoPlayer> {
-  Player? player;
-  VideoController? controller;
+  // Player? player;
+  // VideoController? controller;
   bool shouldLoadVideo = false;
 
   @override
@@ -37,71 +37,72 @@ class DesktopVideoPlayerState extends ConsumerState<DesktopVideoPlayer> {
 
   @override
   void dispose() {
-    player?.dispose();
+    // player?.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    var url = Uri.https(
-      'media.discordapp.net',
-      widget.thumbnailUrl.path,
-      {
-        ...widget.thumbnailUrl.queryParameters,
-        'format': "webp",
-        'width': widget.width.toInt().toString(),
-        'height': widget.height.toInt().toString(),
-      },
-    ).toString();
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(12),
-      child: BoundedContent(
-          aspectRatio: widget.width / widget.height,
-          minWidth: 300,
-          // ThumbHash.fromBase64(widget.attachment.placeholder!);
+    return Container();
+    // var url = Uri.https(
+    //   'media.discordapp.net',
+    //   widget.thumbnailUrl.path,
+    //   {
+    //     ...widget.thumbnailUrl.queryParameters,
+    //     'format': "webp",
+    //     'width': widget.width.toInt().toString(),
+    //     'height': widget.height.toInt().toString(),
+    //   },
+    // ).toString();
+    // return ClipRRect(
+    //   borderRadius: BorderRadius.circular(12),
+    //   child: BoundedContent(
+    //       aspectRatio: widget.width / widget.height,
+    //       minWidth: 300,
+    //       // ThumbHash.fromBase64(widget.attachment.placeholder!);
 
-          child: Stack(
-            children: [
-              Image.network(
-                url,
-                loadingBuilder: (context, child, loadingProgress) {
-                  if (widget.placeholder == null) {
-                    return child;
-                  }
-                  if (loadingProgress == null) {
-                    return child;
-                  }
-                  return Image(
-                      image:
-                          ThumbHash.fromBase64(widget.placeholder!).toImage());
-                },
-              ),
-              shouldLoadVideo
-                  ? Video(
-                      controller: controller!,
-                      // controls: CupertinoVideoControls,
-                      fit: BoxFit.contain,
-                    )
-                  : Center(
-                      child: IconButton(
-                        icon: const Icon(
-                          Icons.play_arrow_rounded,
-                          size: 50,
-                          color: Colors.white,
-                        ),
-                        onPressed: () {
-                          setState(() {
-                            player = Player();
-                            player!
-                                .open(Media(widget.url.toString()), play: true);
-                            controller = VideoController(player!);
-                            shouldLoadVideo = true;
-                          });
-                        },
-                      ),
-                    ),
-            ],
-          )),
-    );
+    //       child: Stack(
+    //         children: [
+    //           Image.network(
+    //             url,
+    //             loadingBuilder: (context, child, loadingProgress) {
+    //               if (widget.placeholder == null) {
+    //                 return child;
+    //               }
+    //               if (loadingProgress == null) {
+    //                 return child;
+    //               }
+    //               return Image(
+    //                   image:
+    //                       ThumbHash.fromBase64(widget.placeholder!).toImage());
+    //             },
+    //           ),
+    //           shouldLoadVideo
+    //               ? Video(
+    //                   controller: controller!,
+    //                   // controls: CupertinoVideoControls,
+    //                   fit: BoxFit.contain,
+    //                 )
+    //               : Center(
+    //                   child: IconButton(
+    //                     icon: const Icon(
+    //                       Icons.play_arrow_rounded,
+    //                       size: 50,
+    //                       color: Colors.white,
+    //                     ),
+    //                     onPressed: () {
+    //                       setState(() {
+    //                         player = Player();
+    //                         player!
+    //                             .open(Media(widget.url.toString()), play: true);
+    //                         controller = VideoController(player!);
+    //                         shouldLoadVideo = true;
+    //                       });
+    //                     },
+    //                   ),
+    //                 ),
+    //         ],
+    //       )),
+    // );
   }
 }
