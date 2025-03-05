@@ -122,21 +122,18 @@ class MemberScrollView extends ConsumerStatefulWidget {
 
 class MemberScrollViewState extends ConsumerState<MemberScrollView> {
   final ScrollController _scrollController = ScrollController();
-  // Pair<List<GuildMemberListGroup>, List<dynamic>>? memberListPair;
+  bool _isLoadingMore = false; // to prevent multiple simultaneous triggers
   late final GoRouter _router;
 
-  _onRouteChanged() {
+  void _onRouteChanged() {
     Snowflake newGuildId = Snowflake.parse(
-        _router.routerDelegate.currentConfiguration.pathParameters["guildId"] ??
-            0);
-
+      _router.routerDelegate.currentConfiguration.pathParameters["guildId"] ??
+          '0',
+    );
     String? cId =
         _router.routerDelegate.currentConfiguration.pathParameters["channelId"];
-
     if (cId == null) return;
-
-    Snowflake newChannelId = Snowflake.parse(_router
-        .routerDelegate.currentConfiguration.pathParameters["channelId"]!);
+    Snowflake newChannelId = Snowflake.parse(cId);
     ref
         .read(channelMembersProvider.notifier)
         .setRoute(newGuildId, newChannelId);
@@ -162,14 +159,36 @@ class MemberScrollViewState extends ConsumerState<MemberScrollView> {
   }
 
   void _onScroll() {
-    // if (_scrollController.position.pixels ==
-    //     _scrollController.position.maxScrollExtent) {
-    //   _loadMoreData();
-    // }
+    // When within 300 pixels of the bottom, load the next range.
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent - 300) {
+      if (!_isLoadingMore) {
+        _isLoadingMore = true;
+        _loadMoreData();
+      }
+    }
   }
 
-  bool isMember(dynamic item) {
-    return item[0] is Member;
+  void _loadMoreData() {
+    final channelMembersNotifier = ref.read(channelMembersProvider.notifier);
+
+    int nextLowerBound = 0;
+    if (channelMembersNotifier.currentSubscriptions.isNotEmpty) {
+      final maxUpperBound = channelMembersNotifier.currentSubscriptions
+          .expand((sub) => sub.memberRange)
+          .map((range) => range.upperMemberBound)
+          .reduce((a, b) => a > b ? a : b);
+      nextLowerBound = maxUpperBound + 1;
+    }
+
+    int nextUpperBound = nextLowerBound + 99;
+
+    print("Loading next range: $nextLowerBound - $nextUpperBound");
+    channelMembersNotifier.loadMemberRange(nextLowerBound, nextUpperBound);
+
+    Future.delayed(const Duration(milliseconds: 500), () {
+      _isLoadingMore = false;
+    });
   }
 
   @override
@@ -179,6 +198,8 @@ class MemberScrollViewState extends ConsumerState<MemberScrollView> {
     var groupList = memberListPair?.first ?? [];
     var memberList = memberListPair?.second ?? [];
 
+    print("Length of member list: ${memberList.length}");
+
     return Container(
       child: ScrollConfiguration(
         behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
@@ -186,42 +207,70 @@ class MemberScrollViewState extends ConsumerState<MemberScrollView> {
           controller: _scrollController,
           itemCount: memberList.length,
           itemBuilder: (context, index) {
-            if (isMember(memberList[index])) {
-              var members = memberList[index] as List;
+            // TODO: These should absolutely not be lists of one item
+            final item = memberList[index].first;
+
+            // Handle group headers
+            if (item is GuildMemberListGroup) {
+              return Padding(
+                padding: EdgeInsets.only(
+                  left: isSmartwatch(context) ? 34 : 2,
+                  top: 10,
+                  bottom: 4,
+                ),
+                child: GroupHeader(
+                  guild: widget.guild,
+                  groups: groupList,
+                  group: item,
+                ),
+              );
+            }
+
+            if (item is Member) {
+              bool shouldRoundBottom = index == memberList.length - 1 ||
+                  memberList[index + 1] is! Member;
+
+              return Padding(
+                padding: EdgeInsets.only(
+                    right: 8, bottom: shouldRoundBottom ? 8 : 0),
+                child: MemberCard(
+                  member: item,
+                  guild: widget.guild,
+                  channel: widget.channel,
+                  roundTop: index == 0 || memberList[index - 1] is! Member,
+                  roundBottom: shouldRoundBottom,
+                ),
+              );
+            }
+
+            // Handle lists of members (from SYNC operations)
+            if (item is List<Member>) {
               return Column(
-                children: members.map<Widget>((member) {
-                  member = member as Member;
-                  bool shouldRoundBottom = (index == memberList.length - 1) ||
-                      (!isMember(memberList[index + 1]));
+                children: item.map<Widget>((member) {
+                  bool shouldRoundBottom = member == item.last ||
+                      (index < memberList.length - 1 &&
+                          memberList[index + 1] is! List<Member>);
+
                   return Padding(
                     padding: EdgeInsets.only(
-                        right: 8, bottom: shouldRoundBottom ? 8 : 0),
+                      right: 8,
+                      bottom: shouldRoundBottom ? 8 : 0,
+                    ),
                     child: MemberCard(
                       member: member,
                       guild: widget.guild,
                       channel: widget.channel,
-                      roundTop:
-                          (index == 0) || (!isMember(memberList[index - 1])),
+                      roundTop: member == item.first &&
+                          (index == 0 ||
+                              memberList[index - 1] is! List<Member>),
                       roundBottom: shouldRoundBottom,
                     ),
                   );
                 }).toList(),
               );
             }
-            if ((memberList[index] as List<dynamic>).isEmpty) {
-              return Container();
-            }
-            var headerGroup = memberList[index][0] as GuildMemberListGroup;
 
-            return Padding(
-              padding: EdgeInsets.only(
-                  left: isSmartwatch(context) ? 34 : 2, top: 10, bottom: 4),
-              child: GroupHeader(
-                guild: widget.guild,
-                groups: groupList,
-                group: headerGroup,
-              ),
-            );
+            return Container();
           },
         ),
       ),

@@ -198,14 +198,13 @@ class Auth extends _$Auth {
 
     client.onGuildMemberListUpdate.listen((event) {
       if (event.eventType == MemberListUpdateType.sync) {
-        List<GuildMemberListGroup> groupList =
-            List<GuildMemberListGroup>.from(event.groups);
+        print("got guild member list update");
+        // List<GuildMemberListGroup> groupList =
+        //     List<GuildMemberListGroup>.from(event.groups);
 
-        ref.read(channelMembersProvider.notifier).updateMemberList(
-              event.memberList!,
-              groupList,
-              event.guildId,
-            );
+        ref.read(channelMembersProvider.notifier).updateMemberList(event);
+      } else {
+        print(event.eventType);
       }
     });
 

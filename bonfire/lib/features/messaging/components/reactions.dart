@@ -61,7 +61,7 @@ class ReactionWidget extends ConsumerWidget {
 
     return Container(
       height: 36,
-      width: 64,
+      // width: 64,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
         color: reaction.me ? theme.colorTheme.blurple.withOpacity(0.2) : null,
@@ -86,11 +86,11 @@ class ReactionWidget extends ConsumerWidget {
         borderRadius: BorderRadius.circular(8),
         child: Padding(
           padding: const EdgeInsets.only(
-              // right: 8,
-              // left: 4,
-              // top: 2,
-              // bottom: 2,
-              ),
+            right: 8,
+            left: 4,
+            // top: 2,
+            // bottom: 2,
+          ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,

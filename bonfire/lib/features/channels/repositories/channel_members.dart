@@ -13,7 +13,7 @@ class GuildMemberList extends _$GuildMemberList {
   @override
   Future<Pair<List<GuildMemberListGroup>, List<dynamic>>> build(
       Snowflake guildId) async {
-    return _data!;
+    return _data ?? Pair([], []);
   }
 
   void setData(
@@ -23,6 +23,85 @@ class GuildMemberList extends _$GuildMemberList {
     _data = newData;
     state = AsyncValue.data(_data!);
   }
+
+  void applyOperations(List<Map<String, dynamic>> operations) {
+    final currentData = _data ?? Pair([], []);
+    List<GuildMemberListGroup> newGroups = List.from(currentData.first);
+    List<dynamic> newMemberList = List.from(currentData.second);
+
+    for (final operation in operations) {
+      print("Range: ${operation['range']}");
+      final type = operation['type'] as MemberListUpdateType;
+      var data = operation['data'];
+      final range = operation['range'] as List<dynamic>;
+      final index = operation['index'] as int?;
+      print("doing switch case stuff for $type");
+      switch (type) {
+        case MemberListUpdateType.sync:
+          if (range != null) {
+            final start = range[0];
+            final end = range[1];
+
+            // Ensure the range is valid
+            if (start >= 0 && end >= start && start <= newMemberList.length) {
+              // Clamp the end index to the length of the list
+              final endIndex = end.clamp(0, newMemberList.length);
+
+              // Ensure the replacement list is not empty
+              if (data is List<dynamic> && data.isNotEmpty) {
+                // Calculate the length of the range to be replaced
+                final rangeLength = endIndex - start;
+
+                // If the replacement list is smaller than the range, pad it with null or empty values
+                if (data.length < rangeLength) {
+                  final padding =
+                      List<dynamic>.filled(rangeLength - data.length, null);
+                  data = [...data, ...padding];
+                }
+
+                // Replace the range
+                newMemberList.replaceRange(
+                  start,
+                  endIndex,
+                  data,
+                );
+              } else {
+                // If the replacement list is empty, remove the range
+                newMemberList.removeRange(start, endIndex);
+              }
+            } else {
+              // If the range is invalid, append the data to the list
+              newMemberList.addAll(data as List<dynamic>);
+            }
+          }
+          break;
+        case MemberListUpdateType.insert:
+          if (index != null) {
+            newMemberList.insert(index, data);
+          }
+          break;
+        case MemberListUpdateType.delete:
+          if (index != null && index < newMemberList.length) {
+            newMemberList.removeAt(index);
+          }
+          break;
+        case MemberListUpdateType.update:
+          if (index != null && index < newMemberList.length) {
+            newMemberList[index] = data;
+          }
+          break;
+        case MemberListUpdateType.invalidate:
+          print("no idea on what to do here");
+          print(operation['data']);
+          break;
+        case MemberListUpdateType.unknown:
+          break;
+      }
+    }
+
+    _data = Pair(newGroups, newMemberList);
+    state = AsyncValue.data(_data!);
+  }
 }
 
 @Riverpod(keepAlive: true)
@@ -30,8 +109,6 @@ class ChannelMembers extends _$ChannelMembers {
   AuthUser? user;
   Snowflake guildId = Snowflake.zero;
   Snowflake channelId = Snowflake.zero;
-  // Map<Snowflake, Pair<List<GuildMemberListGroup>, List<dynamic>>>
-  //     subscriptionCache = {};
   List<GuildSubscriptionChannel> currentSubscriptions = [];
 
   @override
@@ -50,24 +127,47 @@ class ChannelMembers extends _$ChannelMembers {
     currentSubscriptions = [
       GuildSubscriptionChannel(
         channelId: channelId,
-        memberRange: GuildMemberRange(
-          lowerMemberBound: 0,
-          upperMemberBound: 99,
-        ),
+        memberRange: [
+          GuildMemberRange(
+            lowerMemberBound: 0,
+            upperMemberBound: 99,
+          )
+        ],
       )
     ];
     _updateSubscriptions();
   }
 
   void loadMemberRange(int lowerBound, int upperBound) {
-    currentSubscriptions.add(GuildSubscriptionChannel(
-      channelId: channelId,
-      memberRange: GuildMemberRange(
+    final exists = currentSubscriptions.any((sub) => sub.memberRange.any(
+        (range) =>
+            range.lowerMemberBound == lowerBound &&
+            range.upperMemberBound == upperBound));
+
+    if (!exists) {
+      final subscription = currentSubscriptions.firstWhere(
+        (sub) => sub.channelId == channelId,
+        orElse: () => GuildSubscriptionChannel(
+          channelId: channelId,
+          memberRange: [],
+        ),
+      );
+
+      subscription.memberRange.add(GuildMemberRange(
         lowerMemberBound: lowerBound,
         upperMemberBound: upperBound,
-      ),
-    ));
-    _updateSubscriptions();
+      ));
+
+      if (subscription.memberRange.length > 3) {
+        subscription.memberRange.removeAt(0);
+      }
+
+      if (!currentSubscriptions.contains(subscription)) {
+        currentSubscriptions.add(subscription);
+      }
+
+      _updateSubscriptions();
+    }
   }
 
   void _updateSubscriptions() {
@@ -75,24 +175,36 @@ class ChannelMembers extends _$ChannelMembers {
       user!.client.updateGuildSubscriptionsBulk(GuildSubscriptionsBulkBuilder()
         ..subscriptions = [
           GuildSubscription(
-              typing: true,
-              memberUpdates: true,
-              channels: currentSubscriptions,
-              guildId: guildId)
+            typing: true,
+            memberUpdates: true,
+            channels: currentSubscriptions,
+            guildId: guildId,
+          )
         ]);
     }
   }
 
-  void updateMemberList(
-    List<dynamic> memberList,
-    List<GuildMemberListGroup> groups,
-    Snowflake guildId,
-  ) {
-    var pair = Pair(groups, memberList);
-    ref
-        .watch(guildMemberListProvider(guildId).notifier)
-        .setData(channelId, pair);
+  void updateMemberList(GuildMemberListUpdateEvent event) {
+    final currentState =
+        ref.read(guildMemberListProvider(event.guildId)).valueOrNull;
+    if (currentState != null) {
+      final newGroups = event.groups.cast<GuildMemberListGroup>();
 
-    state = AsyncValue.data(pair);
+      ref.read(guildMemberListProvider(event.guildId).notifier).applyOperations(
+            event.memberList!.cast<Map<String, dynamic>>(),
+          );
+
+      final updatedMemberList = ref
+              .read(guildMemberListProvider(event.guildId))
+              .valueOrNull
+              ?.second ??
+          [];
+      final newPair = Pair(newGroups, updatedMemberList);
+
+      ref.read(guildMemberListProvider(event.guildId).notifier).setData(
+            event.guildId,
+            newPair,
+          );
+    }
   }
 }

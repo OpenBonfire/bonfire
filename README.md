@@ -98,7 +98,7 @@ I'm pretty new to managing public projects, so you'll have to bear with me here.
 ## Building
 - Clone Bonfire
 - Run `flutter pub run`
-- Run `dart run build_runner watch` in a seperate terminal
+- Run `dart run build_runner watch --delete-conflicting-outputs` in a seperate terminal
 - You are on your way!
 
 ## Build issues (mostly linux)

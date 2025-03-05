@@ -443,6 +443,7 @@ export 'src/models/gateway/events/guild.dart'
         GuildScheduledEventUserRemoveEvent,
         GuildStickersUpdateEvent,
         GuildUpdateEvent,
+        GuildMemberListUpdateEvent,
         UnavailableGuildCreateEvent;
 export 'src/models/gateway/events/integration.dart'
     show IntegrationCreateEvent, IntegrationDeleteEvent, IntegrationUpdateEvent;

@@ -5,7 +5,7 @@ import 'package:firebridge/src/utils/to_string_helper/base_impl.dart';
 /// Represents a subscription channel for a guild
 class GuildSubscriptionChannel with ToStringHelper {
   final Snowflake channelId;
-  final GuildMemberRange memberRange;
+  final List<GuildMemberRange> memberRange;
 
   GuildSubscriptionChannel({
     required this.channelId,

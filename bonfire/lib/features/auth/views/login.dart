@@ -3,7 +3,7 @@ import 'package:bonfire/features/auth/data/repositories/discord_auth.dart';
 import 'package:bonfire/features/auth/models/auth.dart';
 import 'package:bonfire/features/auth/views/captcha.dart';
 import 'package:bonfire/features/auth/views/credentials.dart';
-import 'package:fireview/controller.dart';
+// import 'package:fireview/controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -18,7 +18,7 @@ class LoginScreen extends ConsumerStatefulWidget {
 }
 
 class _LoginScreenState extends ConsumerState<LoginScreen> {
-  final fireviewController = FireviewController();
+  // final fireviewController = FireviewController();
 
   @override
   void initState() {
@@ -54,7 +54,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     if (UniversalPlatform.isWeb) {
       return const CaptchaView();
     }
-    return CredentialsScreen(fireviewController: fireviewController);
+    return CredentialsScreen();
   }
 
   void _navigateToLastLocation() async {

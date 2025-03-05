@@ -102,8 +102,10 @@ enum Opcode {
 enum MemberListUpdateType {
   sync._("SYNC"),
   update._("UPDATE"),
-  unknown._("UNKNOWN"),
-  delete._("DELETE");
+  delete._("DELETE"),
+  insert._("INSERT"),
+  invalidate._("INVALIDATE"),
+  unknown._("UNKNOWN");
 
   final String value;
 

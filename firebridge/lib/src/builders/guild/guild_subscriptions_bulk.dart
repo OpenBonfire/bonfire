@@ -16,12 +16,13 @@ class GuildSubscriptionsBulkBuilder
 
       subscription.channels.forEach((channel) {
         final channelKey = channel.channelId.value.toString();
-        channels[channelKey] = [
-          [
-            channel.memberRange.lowerMemberBound,
-            channel.memberRange.upperMemberBound
-          ]
-        ];
+        // Store a list of ranges for each channel
+        channels[channelKey] = channel.memberRange
+            .map((range) => [
+                  range.lowerMemberBound,
+                  range.upperMemberBound,
+                ])
+            .toList();
       });
 
       _subscriptions[guildKey] = {

@@ -13,10 +13,10 @@ dependencies:
   flutter_web_plugins:
     sdk: flutter
 
-  fireview:
-    git: 
-      url: https://github.com/ericApostal/fireview
-      ref: cda3048c55f0fe516a69e375f5aa422e82997540
+  # fireview:
+  #   git: 
+  #     url: https://github.com/ericApostal/fireview
+  #     ref: cda3048c55f0fe516a69e375f5aa422e82997540
 
   firebridge:
     path: ../firebridge
@@ -31,37 +31,35 @@ dependencies:
   flutter_riverpod: ^2.5.1
   riverpod_annotation: ^2.3.5
 
-  # flutter_keyboard_visibility: ^6.0.0
   flutter_keyboard_size: ^1.0.1
-  # relative_time: ^5.0.0
   freezed_annotation: ^2.4.1
   json_serializable: ^6.7.1
 
   go_router: ^13.2.4
   flutter_prism: ^0.2.2
 
-  # media_kit:
-  #   git:
-  #     url: https://github.com/media-kit/media-kit.git
-  #     ref: 652c49e02701bb6bb80953a6fdf650a5c8f002f9
-  #     path: ./media_kit
-  # media_kit_video:
-  #   git:
-  #     url: https://github.com/media-kit/media-kit.git
-  #     ref: 652c49e02701bb6bb80953a6fdf650a5c8f002f9
-  #     path: ./media_kit_video
-  # media_kit_libs_video:
-  #   git:
-  #     url: https://github.com/media-kit/media-kit.git
-  #     ref: 652c49e02701bb6bb80953a6fdf650a5c8f002f9
-  #     path: ./libs/universal/media_kit_libs_video
+  media_kit:
+    git:
+      url: https://github.com/media-kit/media-kit.git
+      ref: 652c49e02701bb6bb80953a6fdf650a5c8f002f9
+      path: ./media_kit
+  media_kit_video:
+    git:
+      url: https://github.com/media-kit/media-kit.git
+      ref: 652c49e02701bb6bb80953a6fdf650a5c8f002f9
+      path: ./media_kit_video
+  media_kit_libs_video:
+    git:
+      url: https://github.com/media-kit/media-kit.git
+      ref: 652c49e02701bb6bb80953a6fdf650a5c8f002f9
+      path: ./libs/universal/media_kit_libs_video
 
-  # video_player_media_kit: ^1.0.5
-  # media_kit_libs_android_video: any
-  # media_kit_libs_ios_video: any
-  # media_kit_libs_macos_video: any
-  # media_kit_libs_windows_video: any
-  # media_kit_libs_linux: any
+  video_player_media_kit:
+    git: 
+      url: https://github.com/media-kit/media-kit.git
+      ref: 652c49e02701bb6bb80953a6fdf650a5c8f002f9
+      path: video_player_media_kit
+
   url_launcher: ^6.2.6
   sticky_headers: ^0.3.0+2
   flutter_svg: ^2.0.10+1
@@ -93,26 +91,29 @@ dependencies:
   crypto: ^3.0.6
 
 dependency_overrides:
-  # webview_flutter_platform_interface: ^2.4.0
-  # fullscreen_window: ^1.1.0
   http: ^1.2.1
-  # meta: ^1.12.0
 
-  # media_kit:
-  #   git:
-  #     url: https://github.com/media-kit/media-kit.git
-  #     ref: 652c49e02701bb6bb80953a6fdf650a5c8f002f9
-  #     path: ./media_kit
-  # media_kit_video:
-  #   git:
-  #     url: https://github.com/media-kit/media-kit.git
-  #     ref: 652c49e02701bb6bb80953a6fdf650a5c8f002f9
-  #     path: ./media_kit_video
-  # media_kit_libs_video:
-  #   git:
-  #     url: https://github.com/media-kit/media-kit.git
-  #     ref: 652c49e02701bb6bb80953a6fdf650a5c8f002f9
-  #     path: ./libs/universal/media_kit_libs_video
+  media_kit:
+    git:
+      url: https://github.com/media-kit/media-kit.git
+      ref: 652c49e02701bb6bb80953a6fdf650a5c8f002f9
+      path: ./media_kit
+  media_kit_video:
+    git:
+      url: https://github.com/media-kit/media-kit.git
+      ref: 652c49e02701bb6bb80953a6fdf650a5c8f002f9
+      path: ./media_kit_video
+  media_kit_libs_video:
+    git:
+      url: https://github.com/media-kit/media-kit.git
+      ref: 652c49e02701bb6bb80953a6fdf650a5c8f002f9
+      path: ./libs/universal/media_kit_libs_video
+
+  video_player_media_kit:
+    git: 
+      url: https://github.com/media-kit/media-kit.git
+      ref: 652c49e02701bb6bb80953a6fdf650a5c8f002f9
+      path: video_player_media_kit
 
   flutter_keyboard_visibility_web:
     git:

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:firebridge/src/builders/guild/channel_statuses.dart';
 import 'package:firebridge/src/builders/guild/guild_subscriptions_bulk.dart';
 import 'package:firebridge/src/models/discord_color.dart';
@@ -746,44 +747,93 @@ class Gateway extends GatewayManager with EventParser {
     );
   }
 
+  /// Parse a [GuildRoleCreateEvent] from [raw].
   GuildMemberListUpdateEvent parseGuildMembersUpdateEvent(
       Map<String, Object?> raw) {
-    // print("raw members update");
-    // print(jsonEncode(raw));
     final guildId = Snowflake.parse(raw['guild_id']!);
-    var ops = (raw["ops"]! as List<dynamic>)[0] as Map<String, Object?>;
+    final opsList = raw["ops"]! as List<dynamic>;
 
-    List<dynamic> items = [];
+    List<dynamic> memberListOperations = [];
+    List<MemberListUpdateType> eventTypes = [];
 
-    if (ops["op"] == "SYNC") {
-      items = ops["items"] as List<dynamic>;
+    for (var opDynamic in opsList) {
+      var op = opDynamic as Map<String, Object?>;
+      final opTypeStr = op["op"] as String;
+
+      print("TYPE = $opTypeStr");
+
+      MemberListUpdateType eventType = MemberListUpdateType.values.firstWhere(
+        (e) => e.value == opTypeStr,
+        orElse: () => MemberListUpdateType.unknown,
+      );
+      eventTypes.add(eventType);
+
+      dynamic parsedItems;
+      switch (eventType) {
+        case MemberListUpdateType.sync:
+          print("got sync");
+          var items = op["items"] as List<dynamic>;
+
+          parsedItems = parseMany(
+            items,
+            (Map<String, Object?> raw) => parseGuildMemberGroups(raw, guildId),
+          );
+
+          print("parsed");
+
+          break;
+        case MemberListUpdateType.insert:
+        case MemberListUpdateType.update:
+          var item = op["item"] as Map<String, Object?>;
+          parsedItems = parseGuildMemberGroups(item, guildId);
+          break;
+        case MemberListUpdateType.delete:
+          parsedItems = {
+            'index': op["index"],
+          };
+          break;
+        case MemberListUpdateType.invalidate:
+          parsedItems = {
+            'range': op["range"],
+          };
+          break;
+        default:
+          parsedItems = op;
+          break;
+      }
+
+      memberListOperations.add({
+        'type': eventType,
+        'data': parsedItems,
+        'index': op["index"],
+        'range': op["range"],
+      });
     }
 
-    MemberListUpdateType eventType =
-        MemberListUpdateType.values.firstWhere((e) {
-      return e.value == ops["op"];
-    }, orElse: () => MemberListUpdateType.unknown);
+    MemberListUpdateType overallEventType =
+        eventTypes.isNotEmpty ? eventTypes.first : MemberListUpdateType.unknown;
+
     BigInt? id = BigInt.tryParse(raw["id"].toString());
     PartialRole? role;
     if (id != null) {
       role = PartialRole(
-          id: Snowflake(id), json: {}, manager: client.guilds[guildId].roles);
+        id: Snowflake(id),
+        json: {},
+        manager: client.guilds[guildId].roles,
+      );
     }
+
     return GuildMemberListUpdateEvent(
-        gateway: this,
-        guildId: guildId,
-        eventType: eventType,
-        memberList: (ops["op"] == "SYNC")
-            ? parseMany(
-                items,
-                (Map<String, Object?> raw) =>
-                    parseGuildMemberGroups(raw, guildId))
-            : items,
-        onlineCount: raw["online_count"] as int,
-        memberCount: raw["member_count"] as int,
-        groups: parseMany(
-            raw["groups"] as List<Object?>, parseGuildMemberListGroup),
-        partialRole: role);
+      gateway: this,
+      guildId: guildId,
+      eventType: overallEventType,
+      memberList: memberListOperations,
+      onlineCount: raw["online_count"] as int,
+      memberCount: raw["member_count"] as int,
+      groups:
+          parseMany(raw["groups"] as List<Object?>, parseGuildMemberListGroup),
+      partialRole: role,
+    );
   }
 
   /// Parse a [GuildMemberListGroup] from [raw].
@@ -1425,6 +1475,7 @@ class Gateway extends GatewayManager with EventParser {
 
   /// Update the current guild subscription
   void updateGuildSubscriptionsBulk(GuildSubscriptionsBulkBuilder builder) {
+    print("Updating subscriptions: ${builder.build()}");
     for (final shard in shards) {
       shard.add(
           Send(opcode: Opcode.guildSubscriptionsBulk, data: builder.build()));
