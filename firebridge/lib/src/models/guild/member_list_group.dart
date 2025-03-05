@@ -1,3 +1,4 @@
+import 'package:firebridge/src/models/gateway/opcode.dart';
 import 'package:firebridge/src/models/snowflake.dart';
 
 class GuildMemberListGroup {
@@ -11,5 +12,19 @@ class GuildMemberListGroup {
     this.id,
     this.name,
     this.count,
+  });
+}
+
+class MemberListUpdateOperation {
+  final MemberListUpdateType type;
+  final dynamic data;
+  final int? index;
+  final List<int>? range;
+
+  MemberListUpdateOperation({
+    required this.type,
+    required this.data,
+    this.index,
+    this.range,
   });
 }

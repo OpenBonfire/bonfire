@@ -8,6 +8,7 @@ import 'package:firebridge/src/models/guild/audit_log.dart';
 import 'package:firebridge/src/models/guild/guild.dart';
 import 'package:firebridge/src/models/guild/guild_subscription.dart';
 import 'package:firebridge/src/models/guild/member.dart';
+import 'package:firebridge/src/models/guild/member_list_group.dart';
 import 'package:firebridge/src/models/guild/scheduled_event.dart';
 import 'package:firebridge/src/models/role.dart';
 import 'package:firebridge/src/models/snowflake.dart';
@@ -351,9 +352,8 @@ class GuildMemberListUpdateEvent extends DispatchEvent {
   final int onlineCount;
   final int memberCount;
   final List<dynamic> groups;
-  final MemberListUpdateType eventType;
+  final List<MemberListUpdateOperation> operations;
   final PartialRole? partialRole;
-  final List<dynamic>? memberList;
 
   GuildMemberListUpdateEvent({
     required super.gateway,
@@ -361,13 +361,14 @@ class GuildMemberListUpdateEvent extends DispatchEvent {
     required this.onlineCount,
     required this.memberCount,
     required this.groups,
-    required this.eventType,
+    required this.operations,
     this.partialRole,
-    this.memberList,
   });
 
   PartialGuild get guild => gateway.client.guilds[guildId];
 }
+
+/// Represents a single operation in a guild member list update event.
 
 /// {@template guild_role_create_event}
 /// Emitted when a role is created in a guild.

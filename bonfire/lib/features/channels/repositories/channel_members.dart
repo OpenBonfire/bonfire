@@ -24,21 +24,20 @@ class GuildMemberList extends _$GuildMemberList {
     state = AsyncValue.data(_data!);
   }
 
-  void applyOperations(List<Map<String, dynamic>> operations) {
+  void applyOperations(List<MemberListUpdateOperation> operations) {
     final currentData = _data ?? Pair([], []);
     List<GuildMemberListGroup> newGroups = List.from(currentData.first);
     List<dynamic> newMemberList = List.from(currentData.second);
 
     for (final operation in operations) {
-      print("Range: ${operation['range']}");
-      final type = operation['type'] as MemberListUpdateType;
-      var data = operation['data'];
-      final range = operation['range'] as List<dynamic>;
-      final index = operation['index'] as int?;
-      print("doing switch case stuff for $type");
+      final type = operation.type;
+      var data = operation.data;
+      final range = operation.range;
+      final index = operation.index;
+
       switch (type) {
         case MemberListUpdateType.sync:
-          if (range != null) {
+          if (range != null && range.length == 2) {
             final start = range[0];
             final end = range[1];
 
@@ -91,8 +90,7 @@ class GuildMemberList extends _$GuildMemberList {
           }
           break;
         case MemberListUpdateType.invalidate:
-          print("no idea on what to do here");
-          print(operation['data']);
+          // TODO: Handle invalidation if needed
           break;
         case MemberListUpdateType.unknown:
           break;
@@ -153,18 +151,19 @@ class ChannelMembers extends _$ChannelMembers {
         ),
       );
 
-      subscription.memberRange.add(GuildMemberRange(
-        lowerMemberBound: lowerBound,
-        upperMemberBound: upperBound,
-      ));
-
-      if (subscription.memberRange.length > 3) {
-        subscription.memberRange.removeAt(0);
-      }
-
-      if (!currentSubscriptions.contains(subscription)) {
-        currentSubscriptions.add(subscription);
-      }
+      subscription.memberRange.clear();
+      subscription.memberRange.add(
+        GuildMemberRange(
+          lowerMemberBound: 0,
+          upperMemberBound: 99,
+        ),
+      );
+      subscription.memberRange.add(
+        GuildMemberRange(
+          lowerMemberBound: lowerBound,
+          upperMemberBound: upperBound,
+        ),
+      );
 
       _updateSubscriptions();
     }
@@ -184,25 +183,27 @@ class ChannelMembers extends _$ChannelMembers {
     }
   }
 
-  void updateMemberList(GuildMemberListUpdateEvent event) {
-    final currentState =
-        ref.read(guildMemberListProvider(event.guildId)).valueOrNull;
+  void updateMemberList(MemberListUpdateOperation operation, Snowflake guildId,
+      List<dynamic> groups) {
+    final currentState = ref.read(guildMemberListProvider(guildId)).valueOrNull;
     if (currentState != null) {
-      final newGroups = event.groups.cast<GuildMemberListGroup>();
+      final newGroups = groups.cast<GuildMemberListGroup>();
 
-      ref.read(guildMemberListProvider(event.guildId).notifier).applyOperations(
-            event.memberList!.cast<Map<String, dynamic>>(),
-          );
+      // Apply the operation to the member list
+      ref
+          .read(guildMemberListProvider(guildId).notifier)
+          .applyOperations([operation]);
 
-      final updatedMemberList = ref
-              .read(guildMemberListProvider(event.guildId))
-              .valueOrNull
-              ?.second ??
-          [];
+      // Get the updated member list
+      final updatedMemberList =
+          ref.read(guildMemberListProvider(guildId)).valueOrNull?.second ?? [];
+
+      // Create a new Pair with the updated groups and member list
       final newPair = Pair(newGroups, updatedMemberList);
 
-      ref.read(guildMemberListProvider(event.guildId).notifier).setData(
-            event.guildId,
+      // Update the state with the new data
+      ref.read(guildMemberListProvider(guildId).notifier).setData(
+            guildId,
             newPair,
           );
     }

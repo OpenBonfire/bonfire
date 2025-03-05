@@ -747,40 +747,31 @@ class Gateway extends GatewayManager with EventParser {
     );
   }
 
-  /// Parse a [GuildRoleCreateEvent] from [raw].
+  /// Parse a [GuildMemberListUpdateEvent] from [raw].
   GuildMemberListUpdateEvent parseGuildMembersUpdateEvent(
       Map<String, Object?> raw) {
     final guildId = Snowflake.parse(raw['guild_id']!);
     final opsList = raw["ops"]! as List<dynamic>;
 
-    List<dynamic> memberListOperations = [];
-    List<MemberListUpdateType> eventTypes = [];
+    List<MemberListUpdateOperation> operations = [];
 
     for (var opDynamic in opsList) {
       var op = opDynamic as Map<String, Object?>;
       final opTypeStr = op["op"] as String;
 
-      print("TYPE = $opTypeStr");
-
       MemberListUpdateType eventType = MemberListUpdateType.values.firstWhere(
         (e) => e.value == opTypeStr,
         orElse: () => MemberListUpdateType.unknown,
       );
-      eventTypes.add(eventType);
 
       dynamic parsedItems;
       switch (eventType) {
         case MemberListUpdateType.sync:
-          print("got sync");
           var items = op["items"] as List<dynamic>;
-
           parsedItems = parseMany(
             items,
             (Map<String, Object?> raw) => parseGuildMemberGroups(raw, guildId),
           );
-
-          print("parsed");
-
           break;
         case MemberListUpdateType.insert:
         case MemberListUpdateType.update:
@@ -801,17 +792,13 @@ class Gateway extends GatewayManager with EventParser {
           parsedItems = op;
           break;
       }
-
-      memberListOperations.add({
-        'type': eventType,
-        'data': parsedItems,
-        'index': op["index"],
-        'range': op["range"],
-      });
+      operations.add(MemberListUpdateOperation(
+        type: eventType,
+        data: parsedItems,
+        index: op["index"] as int?,
+        range: (op["range"] as List<dynamic>?)?.cast<int>(),
+      ));
     }
-
-    MemberListUpdateType overallEventType =
-        eventTypes.isNotEmpty ? eventTypes.first : MemberListUpdateType.unknown;
 
     BigInt? id = BigInt.tryParse(raw["id"].toString());
     PartialRole? role;
@@ -826,12 +813,11 @@ class Gateway extends GatewayManager with EventParser {
     return GuildMemberListUpdateEvent(
       gateway: this,
       guildId: guildId,
-      eventType: overallEventType,
-      memberList: memberListOperations,
       onlineCount: raw["online_count"] as int,
       memberCount: raw["member_count"] as int,
       groups:
           parseMany(raw["groups"] as List<Object?>, parseGuildMemberListGroup),
+      operations: operations,
       partialRole: role,
     );
   }
