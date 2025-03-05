@@ -15,7 +15,13 @@ final sampleApplication = {
   "icon": null,
   "id": "172150183260323840",
   "name": "Baba O-Riley",
-  "owner": {"avatar": null, "discriminator": "1738", "flags": 1024, "id": "172150183260323840", "username": "i own a bot"},
+  "owner": {
+    "avatar": null,
+    "discriminator": "1738",
+    "flags": 1024,
+    "id": "172150183260323840",
+    "username": "i own a bot"
+  },
   "primary_sku_id": "172150183260323840",
   "slug": "test",
   "summary": "",
@@ -26,7 +32,12 @@ final sampleApplication = {
       {
         "membership_state": 2,
         "team_id": "531992624043786253",
-        "user": {"avatar": "d9e261cd35999608eb7e3de1fae3688b", "discriminator": "0001", "id": "511972282709709995", "username": "Mr Owner"},
+        "user": {
+          "avatar": "d9e261cd35999608eb7e3de1fae3688b",
+          "discriminator": "0001",
+          "id": "511972282709709995",
+          "username": "Mr Owner"
+        },
         "role": "admin",
       }
     ],
@@ -35,11 +46,12 @@ final sampleApplication = {
     "name": "test team",
     "owner_user_id": "0",
   },
-  "verify_key": "1e0a356058d627ca38a5c8c9648818061d49e49bd9da9e3ab17d98ad4d6bg2u8"
+  "verify_key":
+      "1e0a356058d627ca38a5c8c9648818061d49e49bd9da9e3ab17d98ad4d6bg2u8"
 };
 
 void checkApplication(Application application) {
-  expect(application.id, equals(Snowflake(172150183260323840)));
+  expect(application.id, equals(Snowflake(BigInt.from(172150183260323840))));
   expect(application.name, equals('Baba O-Riley'));
   expect(application.iconHash, isNull);
   expect(application.description, equals('Test'));
@@ -48,13 +60,21 @@ void checkApplication(Application application) {
   expect(application.botRequiresCodeGrant, isFalse);
   expect(application.termsOfServiceUrl, isNull);
   expect(application.privacyPolicyUrl, isNull);
-  expect(application.owner?.id, equals(Snowflake(172150183260323840)));
-  expect(application.verifyKey, equals('1e0a356058d627ca38a5c8c9648818061d49e49bd9da9e3ab17d98ad4d6bg2u8'));
-  expect(application.team?.id, equals(Snowflake(531992624043786253)));
-  expect(application.guildId, equals(Snowflake(290926798626357260)));
-  expect(application.primarySkuId, equals(Snowflake(172150183260323840)));
+  expect(application.owner?.id,
+      equals(Snowflake(BigInt.from(172150183260323840))));
+  expect(
+      application.verifyKey,
+      equals(
+          '1e0a356058d627ca38a5c8c9648818061d49e49bd9da9e3ab17d98ad4d6bg2u8'));
+  expect(
+      application.team?.id, equals(Snowflake(BigInt.from(531992624043786253))));
+  expect(
+      application.guildId, equals(Snowflake(BigInt.from(290926798626357260))));
+  expect(application.primarySkuId,
+      equals(Snowflake(BigInt.from(172150183260323840))));
   expect(application.slug, equals('test'));
-  expect(application.coverImageHash, equals('31deabb7e45b6c8ecfef77d2f99c81a5'));
+  expect(
+      application.coverImageHash, equals('31deabb7e45b6c8ecfef77d2f99c81a5'));
   expect(application.flags, equals(ApplicationFlags(0)));
   expect(application.tags, isNull);
   expect(application.installationParameters, isNull);
@@ -95,9 +115,9 @@ final sampleSku = {
 };
 
 void checkSku(Sku sku) {
-  expect(sku.id, equals(Snowflake(1088510058284990888)));
+  expect(sku.id, equals(Snowflake(BigInt.from(1088510058284990888))));
   expect(sku.type, equals(SkuType.subscription));
-  expect(sku.applicationId, equals(Snowflake(788708323867885999)));
+  expect(sku.applicationId, equals(Snowflake(BigInt.from(788708323867885999))));
   expect(sku.name, equals('Test Premium'));
   expect(sku.slug, equals('test-premium'));
 }
@@ -106,7 +126,8 @@ void main() {
   group('ApplicationManager', () {
     test('parse', () {
       final client = MockNyxx();
-      when(() => client.apiOptions).thenReturn(RestApiOptions(token: 'TEST_TOKEN'));
+      when(() => client.apiOptions)
+          .thenReturn(RestApiOptions(token: 'TEST_TOKEN'));
       when(() => client.options).thenReturn(RestClientOptions());
 
       ParsingTest<ApplicationManager, Application, Map<String, Object?>>(
@@ -119,10 +140,12 @@ void main() {
 
     test('parseApplicationRoleConnectionMetadata', () {
       final client = MockNyxx();
-      when(() => client.apiOptions).thenReturn(RestApiOptions(token: 'TEST_TOKEN'));
+      when(() => client.apiOptions)
+          .thenReturn(RestApiOptions(token: 'TEST_TOKEN'));
       when(() => client.options).thenReturn(RestClientOptions());
 
-      ParsingTest<ApplicationManager, ApplicationRoleConnectionMetadata, Map<String, Object?>>(
+      ParsingTest<ApplicationManager, ApplicationRoleConnectionMetadata,
+          Map<String, Object?>>(
         name: 'parseApplicationRoleConnectionMetadata',
         source: sampleRoleConnectionMetadata,
         parse: (manager) => manager.parseApplicationRoleConnectionMetadata,
@@ -132,7 +155,8 @@ void main() {
 
     test('parseSku', () {
       final client = MockNyxx();
-      when(() => client.apiOptions).thenReturn(RestApiOptions(token: 'TEST_TOKEN'));
+      when(() => client.apiOptions)
+          .thenReturn(RestApiOptions(token: 'TEST_TOKEN'));
       when(() => client.options).thenReturn(RestClientOptions());
 
       ParsingTest<ApplicationManager, Sku, Map<String, Object?>>(
@@ -146,7 +170,8 @@ void main() {
     testEndpoint(
       '/applications/0/role-connections/metadata',
       name: 'fetchApplicationRoleConnectionMetadata',
-      (client) => client.applications.fetchApplicationRoleConnectionMetadata(Snowflake.zero),
+      (client) => client.applications
+          .fetchApplicationRoleConnectionMetadata(Snowflake.zero),
       response: [sampleRoleConnectionMetadata],
     );
 
@@ -154,7 +179,8 @@ void main() {
       '/applications/0/role-connections/metadata',
       method: 'PUT',
       name: 'updateApplicationRoleConnectionMetadata',
-      (client) => client.applications.updateApplicationRoleConnectionMetadata(Snowflake.zero),
+      (client) => client.applications
+          .updateApplicationRoleConnectionMetadata(Snowflake.zero),
       response: [sampleRoleConnectionMetadata],
     );
 

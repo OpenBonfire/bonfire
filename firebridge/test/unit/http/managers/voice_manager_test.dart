@@ -25,8 +25,8 @@ final sampleVoiceState = {
 
 void checkVoiceState(VoiceState state) {
   expect(state.guildId, isNull);
-  expect(state.channelId, equals(Snowflake(157733188964188161)));
-  expect(state.userId, equals(Snowflake(80351110224678912)));
+  expect(state.channelId, equals(Snowflake(BigInt.from(157733188964188161))));
+  expect(state.userId, equals(Snowflake(BigInt.from(80351110224678912))));
   expect(state.sessionId, equals('90326bd25d71d39b9ef95b299e3872ff'));
   expect(state.isServerDeafened, isFalse);
   expect(state.isServerMuted, isFalse);
@@ -35,9 +35,11 @@ void checkVoiceState(VoiceState state) {
   expect(state.isStreaming, isFalse);
   expect(state.isVideoEnabled, isFalse);
   expect(state.isSuppressed, isFalse);
-  expect(state.requestedToSpeakAt, equals(DateTime.utc(2021, 3, 31, 18, 45, 31, 297, 561)));
+  expect(state.requestedToSpeakAt,
+      equals(DateTime.utc(2021, 3, 31, 18, 45, 31, 297, 561)));
   expect(state.member, isNotNull);
-  checkMemberNoUser(state.member!, expectedUserId: Snowflake(80351110224678912));
+  checkMemberNoUser(state.member!,
+      expectedUserId: Snowflake(BigInt.from(80351110224678912)));
 }
 
 final sampleVoiceRegion = {
@@ -63,7 +65,8 @@ void main() {
 
     setUp(() {
       client = MockNyxx();
-      when(() => client.apiOptions).thenReturn(RestApiOptions(token: 'TEST_TOKEN'));
+      when(() => client.apiOptions)
+          .thenReturn(RestApiOptions(token: 'TEST_TOKEN'));
       when(() => client.options).thenReturn(RestClientOptions());
 
       manager = VoiceManager(client);

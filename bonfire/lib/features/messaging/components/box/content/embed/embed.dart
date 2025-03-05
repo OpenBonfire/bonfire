@@ -1,6 +1,6 @@
-import 'package:bonfire/features/messaging/views/components/box/content/embed/components/description.dart';
-import 'package:bonfire/features/messaging/views/components/box/content/embed/components/image.dart';
-import 'package:bonfire/features/messaging/views/components/box/content/embed/components/video.dart';
+import 'package:bonfire/features/messaging/components/box/content/embed/components/description.dart';
+import 'package:bonfire/features/messaging/components/box/content/embed/components/image.dart';
+import 'package:bonfire/features/messaging/components/box/content/embed/components/video.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

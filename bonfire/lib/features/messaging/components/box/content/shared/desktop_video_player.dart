@@ -1,4 +1,4 @@
-import 'package:bonfire/features/messaging/views/components/box/content/attachment/bounded_content.dart';
+import 'package:bonfire/features/messaging/components/box/content/attachment/bounded_content.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_thumbhash/flutter_thumbhash.dart';
 import 'package:media_kit/media_kit.dart';

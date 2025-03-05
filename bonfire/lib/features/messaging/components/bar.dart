@@ -1,7 +1,7 @@
 import 'package:bonfire/features/messaging/controllers/reply.dart';
 import 'package:bonfire/features/messaging/repositories/messages.dart';
-import 'package:bonfire/features/messaging/views/components/box/reply/reply_to.dart';
-import 'package:bonfire/features/messaging/views/components/typing/typing_view.dart';
+import 'package:bonfire/features/messaging/components/box/reply/reply_to.dart';
+import 'package:bonfire/features/messaging/components/typing/typing_view.dart';
 import 'package:bonfire/features/overview/views/overlapping_panels.dart';
 import 'package:bonfire/shared/utils/channel_name.dart';
 import 'package:bonfire/theme/theme.dart';

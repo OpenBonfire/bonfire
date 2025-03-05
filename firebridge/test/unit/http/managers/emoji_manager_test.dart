@@ -7,7 +7,13 @@ final sampleGuildEmoji = {
   "id": "41771983429993937",
   "name": "LUL",
   "roles": ["41771983429993000", "41771983429993111"],
-  "user": {"username": "Luigi", "discriminator": "0002", "id": "96008815106887111", "avatar": "5500909a3274e1812beb4e8de6631111", "public_flags": 131328},
+  "user": {
+    "username": "Luigi",
+    "discriminator": "0002",
+    "id": "96008815106887111",
+    "avatar": "5500909a3274e1812beb4e8de6631111",
+    "public_flags": 131328
+  },
   "require_colons": true,
   "managed": false,
   "animated": false
@@ -17,10 +23,15 @@ void checkGuildEmoji(Emoji emoji) {
   expect(emoji, isA<GuildEmoji>());
 
   emoji as GuildEmoji;
-  expect(emoji.id, equals(Snowflake(41771983429993937)));
+  expect(emoji.id, equals(Snowflake(BigInt.from(41771983429993937))));
   expect(emoji.name, equals('LUL'));
-  expect(emoji.roleIds, equals([Snowflake(41771983429993000), Snowflake(41771983429993111)]));
-  expect(emoji.user?.id, equals(Snowflake(96008815106887111)));
+  expect(
+      emoji.roleIds,
+      equals([
+        Snowflake(BigInt.from(41771983429993000)),
+        Snowflake(BigInt.from(41771983429993111))
+      ]));
+  expect(emoji.user?.id, equals(Snowflake(BigInt.from(96008815106887111))));
   expect(emoji.requiresColons, isTrue);
   expect(emoji.isManaged, isFalse);
   expect(emoji.isAnimated, isFalse);
@@ -39,7 +50,8 @@ void checkTextEmoji(Emoji emoji) {
 void main() {
   testManager<Emoji, EmojiManager>(
     'EmojiManager',
-    (config, client) => EmojiManager(config, client, guildId: Snowflake(1)),
+    (config, client) =>
+        EmojiManager(config, client, guildId: Snowflake(BigInt.from(1))),
     RegExp(r'/guilds/1/emojis/\d+'),
     '/guilds/1/emojis',
     sampleObject: sampleGuildEmoji,
@@ -65,7 +77,8 @@ void main() {
         },
       ),
     ],
-    createBuilder: EmojiBuilder(name: 'foo', image: ImageBuilder(data: [], format: 'png'), roles: []),
+    createBuilder: EmojiBuilder(
+        name: 'foo', image: ImageBuilder(data: [], format: 'png'), roles: []),
     updateBuilder: EmojiUpdateBuilder(),
   );
 }

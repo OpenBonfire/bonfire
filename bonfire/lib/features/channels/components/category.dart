@@ -1,4 +1,4 @@
-import 'package:bonfire/features/channels/views/components/button.dart';
+import 'package:bonfire/features/channels/components/button.dart';
 import 'package:bonfire/theme/theme.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';

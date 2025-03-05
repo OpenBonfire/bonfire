@@ -20,21 +20,28 @@ final sampleEntitlement = {
 };
 
 void checkEntitlement(Entitlement entitlement) {
-  expect(entitlement.id, equals(Snowflake(1)));
-  expect(entitlement.skuId, equals(Snowflake(1019475255913222144)));
-  expect(entitlement.userId, equals(Snowflake(771129655544643584)));
-  expect(entitlement.guildId, equals(Snowflake(1015034326372454400)));
-  expect(entitlement.applicationId, equals(Snowflake(1019370614521200640)));
+  expect(entitlement.id, equals(Snowflake(BigInt.from(1))));
+  expect(
+      entitlement.skuId, equals(Snowflake(BigInt.from(1019475255913222144))));
+  expect(
+      entitlement.userId, equals(Snowflake(BigInt.from(771129655544643584))));
+  expect(
+      entitlement.guildId, equals(Snowflake(BigInt.from(1015034326372454400))));
+  expect(entitlement.applicationId,
+      equals(Snowflake(BigInt.from(1019370614521200640))));
   expect(entitlement.type, equals(EntitlementType.applicationSubscription));
   expect(entitlement.isConsumed, isFalse);
-  expect(entitlement.startsAt, equals(DateTime.utc(2022, 09, 14, 17, 0, 18, 704, 163)));
-  expect(entitlement.endsAt, equals(DateTime.utc(2022, 10, 14, 17, 0, 18, 704, 163)));
+  expect(entitlement.startsAt,
+      equals(DateTime.utc(2022, 09, 14, 17, 0, 18, 704, 163)));
+  expect(entitlement.endsAt,
+      equals(DateTime.utc(2022, 10, 14, 17, 0, 18, 704, 163)));
 }
 
 void main() {
   testReadOnlyManager<Entitlement, EntitlementManager>(
     'EntitlementManager',
-    (config, client) => EntitlementManager(config, client, applicationId: Snowflake.zero),
+    (config, client) =>
+        EntitlementManager(config, client, applicationId: Snowflake.zero),
     // fetch() artificially creates a before field as before = id + 1 - testing ID is 1 so before is 2
     '/applications/0/entitlements?before=2',
     sampleObject: sampleEntitlement,
@@ -58,8 +65,11 @@ void main() {
         method: 'POST',
         source: sampleEntitlement,
         urlMatcher: '/applications/0/entitlements',
-        execute: (manager) => manager
-            .createTestEntitlement(TestEntitlementBuilder(skuId: Snowflake.zero, ownerId: Snowflake.zero, ownerType: TestEntitlementType.userSubscription)),
+        execute: (manager) => manager.createTestEntitlement(
+            TestEntitlementBuilder(
+                skuId: Snowflake.zero,
+                ownerId: Snowflake.zero,
+                ownerType: TestEntitlementType.userSubscription)),
         check: checkEntitlement,
       ),
       EndpointTest<EntitlementManager, void, void>(
@@ -67,7 +77,8 @@ void main() {
         method: 'DELETE',
         source: null,
         urlMatcher: '/applications/0/entitlements/1',
-        execute: (manager) => manager.deleteTestEntitlement(Snowflake(1)),
+        execute: (manager) =>
+            manager.deleteTestEntitlement(Snowflake(BigInt.from(1))),
         check: (_) {},
       ),
     ],

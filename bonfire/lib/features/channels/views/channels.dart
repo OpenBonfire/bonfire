@@ -1,6 +1,6 @@
 import 'package:bonfire/features/channels/repositories/channels.dart';
-import 'package:bonfire/features/channels/views/components/button.dart';
-import 'package:bonfire/features/channels/views/components/category.dart';
+import 'package:bonfire/features/channels/components/button.dart';
+import 'package:bonfire/features/channels/components/category.dart';
 import 'package:bonfire/features/guild/repositories/guild.dart';
 import 'package:bonfire/features/guild/views/guild_overview.dart';
 import 'package:bonfire/features/user/card/views/card_desktop.dart';

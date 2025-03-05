@@ -53,7 +53,6 @@ extension GuildCategoryExtensions on GuildCategory {
   }
 
   /// Return a list of channels in the client's cache that are in this category.
-  List<GuildChannel> get cachedChannels => guild.cachedChannels
-      .where((element) => (element as GuildChannel).parentId == id)
-      .toList();
+  List<GuildChannel> get cachedChannels =>
+      guild.cachedChannels.where((element) => element.parentId == id).toList();
 }

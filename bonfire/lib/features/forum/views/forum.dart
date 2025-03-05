@@ -1,7 +1,7 @@
 import 'package:bonfire/features/forum/repositories/forum_posts.dart';
 import 'package:bonfire/features/forum/repositories/forums.dart';
-import 'package:bonfire/features/forum/views/components/card/card.dart';
-import 'package:bonfire/features/messaging/views/components/box/channel_header.dart';
+import 'package:bonfire/features/forum/components/card/card.dart';
+import 'package:bonfire/features/messaging/components/box/channel_header.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

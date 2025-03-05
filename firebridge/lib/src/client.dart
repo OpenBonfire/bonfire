@@ -24,7 +24,6 @@ import 'package:firebridge/src/models/user/user.dart';
 import 'package:firebridge/src/plugin/plugin.dart';
 import 'package:firebridge/src/utils/flags.dart';
 import 'package:runtime_type/runtime_type.dart';
-import 'package:universal_io/io.dart';
 
 /// A helper function to nest and execute calls to plugin connect methods.
 Future<T> _doConnect<T extends Nyxx>(

@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:firebridge/firebridge.dart';
 
 void main() async {

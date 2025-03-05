@@ -9,7 +9,7 @@ void main() {
     });
 
     test('structure is parsed correctly', () {
-      const snowflake = Snowflake(175928847299117063);
+      var snowflake = Snowflake(BigInt.from(175928847299117063));
 
       expect(snowflake.increment, equals(7));
       expect(snowflake.processId, equals(0));
@@ -18,13 +18,13 @@ void main() {
     });
 
     test('timestamp is parsed correctly', () {
-      const snowflake = Snowflake(175928847299117063);
+      final snowflake = Snowflake(BigInt.from(175928847299117063));
 
       expect(snowflake.timestamp, DateTime.utc(2016, 04, 30, 11, 18, 25, 796));
     });
 
     test('equality', () {
-      final snowflake = Snowflake(0);
+      final snowflake = Snowflake(BigInt.from(0));
 
       expect(snowflake, equals(Snowflake.zero));
       expect(snowflake.hashCode, equals(Snowflake.zero.hashCode));
@@ -32,7 +32,8 @@ void main() {
     });
 
     test('parse', () {
-      expect(Snowflake.parse('175928847299117063'), equals(Snowflake(175928847299117063)));
+      expect(Snowflake.parse('175928847299117063'),
+          equals(Snowflake(BigInt.from(175928847299117063))));
     });
 
     // Indirectly tests fromDateTime
@@ -43,7 +44,8 @@ void main() {
       expect(snowflake.processId, isZero);
       expect(snowflake.workerId, isZero);
 
-      expect(snowflake.timestamp.millisecondsSinceEpoch, closeTo(DateTime.now().millisecondsSinceEpoch, 500));
+      expect(snowflake.timestamp.millisecondsSinceEpoch,
+          closeTo(DateTime.now().millisecondsSinceEpoch, 500));
     });
 
     test('isBefore', () {
@@ -76,13 +78,15 @@ void main() {
     test('operator +', () {
       final snowflake = Snowflake.fromDateTime(DateTime(2022, 1, 1));
 
-      expect(snowflake + const Duration(days: 1), equals(Snowflake.fromDateTime(DateTime(2022, 1, 2))));
+      expect(snowflake + const Duration(days: 1),
+          equals(Snowflake.fromDateTime(DateTime(2022, 1, 2))));
     });
 
     test('operator -', () {
       final snowflake = Snowflake.fromDateTime(DateTime(2022, 1, 2));
 
-      expect(snowflake - const Duration(days: 1), equals(Snowflake.fromDateTime(DateTime(2022, 1, 1))));
+      expect(snowflake - const Duration(days: 1),
+          equals(Snowflake.fromDateTime(DateTime(2022, 1, 1))));
     });
 
     test('compareTo', () {
@@ -90,7 +94,8 @@ void main() {
       final snowflake2 = Snowflake.fromDateTime(DateTime(2018));
       final snowflake3 = Snowflake.fromDateTime(DateTime(2017));
 
-      expect([snowflake3, snowflake1, snowflake2, snowflake1]..sort(), equals([snowflake3, snowflake2, snowflake1, snowflake1]));
+      expect([snowflake3, snowflake1, snowflake2, snowflake1]..sort(),
+          equals([snowflake3, snowflake2, snowflake1, snowflake1]));
     });
   });
 }

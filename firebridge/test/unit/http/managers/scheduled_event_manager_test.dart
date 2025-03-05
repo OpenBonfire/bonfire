@@ -42,17 +42,19 @@ final sampleScheduledEvent2 = {
 
 void checkScheduledEvent(ScheduledEvent event) {
   expect(event.id, equals(Snowflake.zero));
-  expect(event.guildId, equals(Snowflake(1)));
-  expect(event.channelId, equals(Snowflake(2)));
-  expect(event.creatorId, equals(Snowflake(3)));
+  expect(event.guildId, equals(Snowflake(BigInt.from(1))));
+  expect(event.channelId, equals(Snowflake(BigInt.from(2))));
+  expect(event.creatorId, equals(Snowflake(BigInt.from(3))));
   expect(event.name, equals('test'));
   expect(event.description, equals('a test event'));
-  expect(event.scheduledStartTime, equals(DateTime.utc(2023, 06, 10, 16, 37, 18)));
-  expect(event.scheduledEndTime, equals(DateTime.utc(2023, 06, 10, 16, 37, 18)));
+  expect(
+      event.scheduledStartTime, equals(DateTime.utc(2023, 06, 10, 16, 37, 18)));
+  expect(
+      event.scheduledEndTime, equals(DateTime.utc(2023, 06, 10, 16, 37, 18)));
   expect(event.privacyLevel, equals(PrivacyLevel.guildOnly));
   expect(event.status, equals(EventStatus.scheduled));
   expect(event.type, equals(ScheduledEntityType.stageInstance));
-  expect(event.entityId, equals(Snowflake(2)));
+  expect(event.entityId, equals(Snowflake(BigInt.from(2))));
   expect(event.metadata, isNull);
   checkSampleUser(event.creator!);
   expect(event.userCount, isNull);
@@ -61,17 +63,19 @@ void checkScheduledEvent(ScheduledEvent event) {
 
 void checkScheduledEvent2(ScheduledEvent event) {
   expect(event.id, equals(Snowflake.zero));
-  expect(event.guildId, equals(Snowflake(1)));
+  expect(event.guildId, equals(Snowflake(BigInt.from(1))));
   expect(event.channelId, isNull);
-  expect(event.creatorId, equals(Snowflake(3)));
+  expect(event.creatorId, equals(Snowflake(BigInt.from(3))));
   expect(event.name, equals('test'));
   expect(event.description, equals('a test event'));
-  expect(event.scheduledStartTime, equals(DateTime.utc(2023, 06, 10, 16, 37, 18)));
-  expect(event.scheduledEndTime, equals(DateTime.utc(2023, 06, 10, 16, 37, 18)));
+  expect(
+      event.scheduledStartTime, equals(DateTime.utc(2023, 06, 10, 16, 37, 18)));
+  expect(
+      event.scheduledEndTime, equals(DateTime.utc(2023, 06, 10, 16, 37, 18)));
   expect(event.privacyLevel, equals(PrivacyLevel.guildOnly));
   expect(event.status, equals(EventStatus.scheduled));
   expect(event.type, equals(ScheduledEntityType.stageInstance));
-  expect(event.entityId, equals(Snowflake(2)));
+  expect(event.entityId, equals(Snowflake(BigInt.from(2))));
   expect(event.metadata, isNull);
   checkSampleUser(event.creator!);
   expect(event.userCount, isNull);
@@ -93,7 +97,8 @@ void checkScheduledEventUser(ScheduledEventUser user) {
 void main() {
   testManager<ScheduledEvent, ScheduledEventManager>(
     'ScheduledEventManager',
-    (config, client) => ScheduledEventManager(config, client, guildId: Snowflake.zero),
+    (config, client) =>
+        ScheduledEventManager(config, client, guildId: Snowflake.zero),
     RegExp(r'/guilds/0/scheduled-events/\d+'),
     '/guilds/0/scheduled-events',
     sampleObject: sampleScheduledEvent,
@@ -101,7 +106,8 @@ void main() {
     additionalSampleObjects: [sampleScheduledEvent2],
     additionalSampleMatchers: [checkScheduledEvent2],
     additionalParsingTests: [
-      ParsingTest<ScheduledEventManager, ScheduledEventUser, Map<String, Object?>>(
+      ParsingTest<ScheduledEventManager, ScheduledEventUser,
+          Map<String, Object?>>(
         name: 'parseScheduledEventUser',
         source: sampleScheduledEventUser,
         parse: (manager) => manager.parseScheduledEventUser,
@@ -119,11 +125,12 @@ void main() {
           checkScheduledEvent(list.single);
         },
       ),
-      EndpointTest<ScheduledEventManager, List<ScheduledEventUser>, List<Object?>>(
+      EndpointTest<ScheduledEventManager, List<ScheduledEventUser>,
+          List<Object?>>(
         name: 'listEventUsers',
         source: [sampleScheduledEventUser],
         urlMatcher: '/guilds/0/scheduled-events/1/users',
-        execute: (manager) => manager.listEventUsers(Snowflake(1)),
+        execute: (manager) => manager.listEventUsers(Snowflake(BigInt.from(1))),
         check: (list) {
           expect(list, hasLength(1));
           checkScheduledEventUser(list.single);

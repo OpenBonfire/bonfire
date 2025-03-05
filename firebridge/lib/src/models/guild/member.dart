@@ -9,7 +9,6 @@ import 'package:firebridge/src/models/snowflake_entity/snowflake_entity.dart';
 import 'package:firebridge/src/models/user/user.dart';
 import 'package:firebridge/src/utils/flags.dart';
 import 'package:firebridge/src/models/gateway/events/presence.dart';
-import 'package:firebridge/src/models/presence.dart';
 
 /// A partial [Member].
 class PartialMember extends WritableSnowflakeEntity<Member> {

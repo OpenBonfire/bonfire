@@ -19,7 +19,7 @@ final sampleRole = {
 };
 
 void checkRole(Role role) {
-  expect(role.id, equals(Snowflake(1)));
+  expect(role.id, equals(Snowflake(BigInt.from(1))));
   expect(role.name, equals('WE DEM BOYZZ!!!!!!'));
   expect(role.color, equals(DiscordColor(3447003)));
   expect(role.isHoisted, isTrue);

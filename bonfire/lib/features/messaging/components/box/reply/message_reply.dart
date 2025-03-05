@@ -1,5 +1,5 @@
 import 'package:bonfire/features/guild/repositories/member.dart';
-import 'package:bonfire/features/messaging/views/components/box/avatar.dart';
+import 'package:bonfire/features/messaging/components/box/avatar.dart';
 import 'package:bonfire/shared/utils/platform.dart';
 import 'package:bonfire/shared/utils/role_color.dart';
 import 'package:firebridge/firebridge.dart';

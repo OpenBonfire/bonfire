@@ -1,4 +1,4 @@
-import 'package:bonfire/features/messaging/views/components/box/content/shared/desktop_video_player.dart';
+import 'package:bonfire/features/messaging/components/box/content/shared/desktop_video_player.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
 

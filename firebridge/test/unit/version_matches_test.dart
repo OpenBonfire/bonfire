@@ -1,6 +1,4 @@
 import 'dart:io';
-
-import 'package:firebridge/firebridge.dart';
 import 'package:test/test.dart';
 
 void main() {

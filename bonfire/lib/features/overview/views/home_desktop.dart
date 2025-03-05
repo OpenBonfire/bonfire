@@ -1,6 +1,6 @@
 import 'package:bonfire/features/channels/views/channels.dart';
 import 'package:bonfire/features/member/views/member_list.dart';
-import 'package:bonfire/features/me/views/components/messages.dart';
+import 'package:bonfire/features/me/components/messages.dart';
 import 'package:bonfire/features/overview/controllers/member_list.dart';
 import 'package:bonfire/features/overview/views/overlapping_panels.dart';
 import 'package:bonfire/features/sidebar/views/sidebar.dart';

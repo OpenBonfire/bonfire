@@ -22,7 +22,7 @@ final sampleUser = {
 };
 
 void checkSampleUser(User user) {
-  expect(user.id, equals(Snowflake(80351110224678912)));
+  expect(user.id, equals(Snowflake(BigInt.from(80351110224678912))));
   expect(user.username, equals('Nelly'));
   expect(user.discriminator, equals('1337'));
   expect(user.globalName, isNull);
@@ -113,7 +113,15 @@ void main() {
             'icon': null,
             'owner': false,
             'permissions': '533130099674816',
-            'features': ['COMMUNITY', 'INVITE_SPLASH', 'DISCOVERABLE', 'WELCOME_SCREEN_ENABLED', 'VERIFIED', 'VANITY_URL', 'NEWS']
+            'features': [
+              'COMMUNITY',
+              'INVITE_SPLASH',
+              'DISCOVERABLE',
+              'WELCOME_SCREEN_ENABLED',
+              'VERIFIED',
+              'VANITY_URL',
+              'NEWS'
+            ]
           }
         ],
         urlMatcher: '/users/@me/guilds',
@@ -121,7 +129,7 @@ void main() {
         check: (list) {
           expect(list, hasLength(1));
           final guild = list.single;
-          expect(guild.id, equals(Snowflake(1)));
+          expect(guild.id, equals(Snowflake(BigInt.from(1))));
           expect(guild.name, 'nyxx');
           expect(guild.icon, isNull);
           expect(guild.isOwnedByCurrentUser, isFalse);
@@ -182,19 +190,24 @@ void main() {
           checkSampleConnection(connections.single);
         },
       ),
-      EndpointTest<UserManager, ApplicationRoleConnection, Map<String, Object?>>(
+      EndpointTest<UserManager, ApplicationRoleConnection,
+          Map<String, Object?>>(
         name: 'fetchCurrentUserApplicationRoleConnection',
         source: sampleApplicationRoleConnection,
         urlMatcher: '/users/@me/applications/0/role-connection',
-        execute: (manager) => manager.fetchCurrentUserApplicationRoleConnection(Snowflake.zero),
+        execute: (manager) =>
+            manager.fetchCurrentUserApplicationRoleConnection(Snowflake.zero),
         check: checkApplicationRoleConnection,
       ),
-      EndpointTest<UserManager, ApplicationRoleConnection, Map<String, Object?>>(
+      EndpointTest<UserManager, ApplicationRoleConnection,
+          Map<String, Object?>>(
         name: 'updateCurrentUserApplicationRoleConnection',
         method: 'PUT',
         source: sampleApplicationRoleConnection,
         urlMatcher: '/users/@me/applications/0/role-connection',
-        execute: (manager) => manager.updateCurrentUserApplicationRoleConnection(Snowflake.zero, ApplicationRoleConnectionUpdateBuilder()),
+        execute: (manager) =>
+            manager.updateCurrentUserApplicationRoleConnection(
+                Snowflake.zero, ApplicationRoleConnectionUpdateBuilder()),
         check: checkApplicationRoleConnection,
       ),
     ],

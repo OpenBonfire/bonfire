@@ -31,7 +31,6 @@ class _PresenceAvatarState extends State<PresenceAvatar> {
         statusColor = Theme.of(context).custom.colorTheme.red;
         break;
       case UserStatus.offline:
-      default:
         statusColor = Theme.of(context).custom.colorTheme.foreground;
     }
 

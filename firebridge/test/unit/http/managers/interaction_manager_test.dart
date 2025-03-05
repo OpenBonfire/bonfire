@@ -9,7 +9,13 @@ final sampleCommandInteraction = {
   "type": 2,
   "token": "A_UNIQUE_TOKEN",
   "member": {
-    "user": {"id": "53908232506183680", "username": "Mason", "avatar": "a_d5efa99b3eeaa7dd43acca82f5692432", "discriminator": "1337", "public_flags": 131141},
+    "user": {
+      "id": "53908232506183680",
+      "username": "Mason",
+      "avatar": "a_d5efa99b3eeaa7dd43acca82f5692432",
+      "discriminator": "1337",
+      "public_flags": 131141
+    },
     "roles": ["539082325061836999"],
     "premium_since": null,
     "permissions": "2147483647",
@@ -53,13 +59,16 @@ void checkCommandInteraction(Interaction<dynamic> interaction) {
   expect(interaction, isA<ApplicationCommandInteraction>());
   interaction as ApplicationCommandInteraction;
 
-  expect(interaction.id, equals(Snowflake(786008729715212338)));
+  expect(interaction.id, equals(Snowflake(BigInt.from(786008729715212338))));
   expect(interaction.applicationId, equals(Snowflake.zero));
   expect(interaction.type, equals(InteractionType.applicationCommand));
-  expect(interaction.guildId, equals(Snowflake(290926798626357999)));
+  expect(
+      interaction.guildId, equals(Snowflake(BigInt.from(290926798626357999))));
   expect(interaction.channel, isNull);
-  expect(interaction.channelId, equals(Snowflake(645027906669510667)));
-  expect(interaction.member?.id, equals(Snowflake(53908232506183680)));
+  expect(interaction.channelId,
+      equals(Snowflake(BigInt.from(645027906669510667))));
+  expect(interaction.member?.id,
+      equals(Snowflake(BigInt.from(53908232506183680))));
   expect(interaction.user, isNull);
   expect(interaction.token, equals('A_UNIQUE_TOKEN'));
   expect(interaction.version, equals(1));
@@ -71,8 +80,10 @@ void checkCommandInteraction(Interaction<dynamic> interaction) {
   expect(
       interaction.authorizingIntegrationOwners,
       equals({
-        ApplicationIntegrationType.guildInstall: Snowflake(846136758470443069),
-        ApplicationIntegrationType.userInstall: Snowflake(302359032612651009),
+        ApplicationIntegrationType.guildInstall:
+            Snowflake(BigInt.from(846136758470443069)),
+        ApplicationIntegrationType.userInstall:
+            Snowflake(BigInt.from(302359032612651009)),
       }));
   expect(interaction.context, equals(InteractionContextType.guild));
 }
@@ -111,7 +122,13 @@ final sampleCommandInteraction2 = {
   "guild": {
     "locale": "en-US",
     "id": "1033681997136146462",
-    "features": ["GUILD_ONBOARDING_EVER_ENABLED", "GUILD_ONBOARDING_HAS_PROMPTS", "NEWS", "GUILD_ONBOARDING", "COMMUNITY"]
+    "features": [
+      "GUILD_ONBOARDING_EVER_ENABLED",
+      "GUILD_ONBOARDING_HAS_PROMPTS",
+      "NEWS",
+      "GUILD_ONBOARDING",
+      "COMMUNITY"
+    ]
   },
   "entitlements": [],
   "entitlement_sku_ids": [],
@@ -183,22 +200,27 @@ void main() {
   group('InteractionManager', () {
     test('parse', () {
       final client = MockNyxx();
-      when(() => client.apiOptions).thenReturn(RestApiOptions(token: 'TEST_TOKEN'));
+      when(() => client.apiOptions)
+          .thenReturn(RestApiOptions(token: 'TEST_TOKEN'));
       when(() => client.options).thenReturn(RestClientOptions());
 
-      ParsingTest<InteractionManager, Interaction<dynamic>, Map<String, Object?>>(
+      ParsingTest<InteractionManager, Interaction<dynamic>,
+          Map<String, Object?>>(
         name: 'parse (1)',
         source: sampleCommandInteraction,
         parse: (manager) => manager.parse,
         check: checkCommandInteraction,
-      ).runWithManager(InteractionManager(client, applicationId: Snowflake.zero));
+      ).runWithManager(
+          InteractionManager(client, applicationId: Snowflake.zero));
 
-      ParsingTest<InteractionManager, Interaction<dynamic>, Map<String, Object?>>(
+      ParsingTest<InteractionManager, Interaction<dynamic>,
+          Map<String, Object?>>(
         name: 'parse (2)',
         source: sampleCommandInteraction2,
         parse: (manager) => manager.parse,
         check: checkCommandInteraction2,
-      ).runWithManager(InteractionManager(client, applicationId: Snowflake.zero));
+      ).runWithManager(
+          InteractionManager(client, applicationId: Snowflake.zero));
     });
 
     // Endpoints are tested in webhook_manager_test.dart as the implementation is the same.

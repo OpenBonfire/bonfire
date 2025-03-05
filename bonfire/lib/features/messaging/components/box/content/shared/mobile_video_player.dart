@@ -1,4 +1,4 @@
-import 'package:bonfire/features/messaging/views/components/box/content/attachment/bounded_content.dart';
+import 'package:bonfire/features/messaging/components/box/content/attachment/bounded_content.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 

@@ -1,4 +1,4 @@
-import 'package:bonfire/features/messaging/views/components/box/content/attachment/bounded_content.dart';
+import 'package:bonfire/features/messaging/components/box/content/attachment/bounded_content.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

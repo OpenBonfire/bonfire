@@ -1,9 +1,8 @@
-import 'package:bonfire/features/messaging/views/components/box/mention_syntax.dart';
+import 'package:bonfire/features/messaging/components/box/mention_syntax.dart';
 import 'package:bonfire/theme/theme.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_prism/flutter_prism.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:markdown_viewer/markdown_viewer.dart';
 import 'package:url_launcher/url_launcher.dart';

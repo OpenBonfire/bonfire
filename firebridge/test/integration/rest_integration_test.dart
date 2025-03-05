@@ -299,7 +299,6 @@ void main() {
 
       await expectLater(guild.fetchPreview(), completes);
       await expectLater(guild.fetchChannels(), completes);
-      await expectLater(guild.listActiveThreads(), completes);
       await expectLater(guild.listVoiceRegions(), completes);
 
       if (guild.isWidgetEnabled) {

@@ -2,7 +2,7 @@ import 'package:test/test.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:firebridge_extensions/firebridge_extensions.dart';
 
-final baseDate = Snowflake(846136758470443069).timestamp;
+final baseDate = Snowflake(BigInt.from(846136758470443069)).timestamp;
 
 void main() {
   group('Timestamp Test', () {

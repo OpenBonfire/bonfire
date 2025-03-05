@@ -108,8 +108,8 @@ extension TableRowExtensions on TableRow {
   Map<String, dynamic> toMap() {
     return {
       'type': runtimeType.toString(),
-      if (children != null && children!.isNotEmpty)
-        'children': children!.map((e) => e.toMap()).toList(),
+      if (children.isNotEmpty)
+        'children': children.map((e) => e.toMap()).toList(),
     };
   }
 }

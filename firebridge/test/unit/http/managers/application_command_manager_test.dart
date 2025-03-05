@@ -20,9 +20,10 @@ final sampleCommand = {
 };
 
 void checkCommand(ApplicationCommand command) {
-  expect(command.id, equals(Snowflake(1102343284505968762)));
-  expect(command.applicationId, equals(Snowflake(1033681843708510238)));
-  expect(command.version, equals(Snowflake(1107729458535878799)));
+  expect(command.id, equals(Snowflake(BigInt.from(1102343284505968762))));
+  expect(command.applicationId,
+      equals(Snowflake(BigInt.from(1033681843708510238))));
+  expect(command.version, equals(Snowflake(BigInt.from(1107729458535878799))));
   expect(command.defaultMemberPermissions, isNull);
   expect(command.type, equals(ApplicationCommandType.chatInput));
   expect(command.name, equals('ping'));
@@ -64,13 +65,13 @@ final sampleCommandPermissions = {
 
 void checkCommandPermissions(CommandPermissions permissions) {
   expect(permissions.id, equals(Snowflake.zero));
-  expect(permissions.applicationId, equals(Snowflake(1)));
-  expect(permissions.guildId, equals(Snowflake(2)));
+  expect(permissions.applicationId, equals(Snowflake(BigInt.from(1))));
+  expect(permissions.guildId, equals(Snowflake(BigInt.from(2))));
   expect(permissions.permissions, hasLength(1));
 
   final permission = permissions.permissions.single;
 
-  expect(permission.id, equals(Snowflake(3)));
+  expect(permission.id, equals(Snowflake(BigInt.from(3))));
   expect(permission.type, equals(CommandPermissionType.role));
   expect(permission.hasPermission, isTrue);
 }
@@ -78,14 +79,16 @@ void checkCommandPermissions(CommandPermissions permissions) {
 void main() {
   testManager<ApplicationCommand, GlobalApplicationCommandManager>(
     'GlobalApplicationCommandManager',
-    (config, client) => GlobalApplicationCommandManager(config, client, applicationId: Snowflake.zero),
+    (config, client) => GlobalApplicationCommandManager(config, client,
+        applicationId: Snowflake.zero),
     RegExp(r'/applications/0/commands/\d+'),
     '/applications/0/commands',
     sampleObject: sampleCommand,
     sampleMatches: checkCommand,
     additionalParsingTests: [],
     additionalEndpointTests: [
-      EndpointTest<GlobalApplicationCommandManager, List<ApplicationCommand>, List<Object?>>(
+      EndpointTest<GlobalApplicationCommandManager, List<ApplicationCommand>,
+          List<Object?>>(
         name: 'list',
         source: [sampleCommand],
         urlMatcher: '/applications/0/commands',
@@ -95,19 +98,24 @@ void main() {
           checkCommand(list.single);
         },
       ),
-      EndpointTest<GlobalApplicationCommandManager, List<ApplicationCommand>, List<Object?>>(
+      EndpointTest<GlobalApplicationCommandManager, List<ApplicationCommand>,
+          List<Object?>>(
         name: 'bulkOverride',
         method: 'PUT',
         source: [sampleCommand],
         urlMatcher: '/applications/0/commands',
-        execute: (manager) => manager.bulkOverride([ApplicationCommandBuilder(name: 'TEST', type: ApplicationCommandType.chatInput)]),
+        execute: (manager) => manager.bulkOverride([
+          ApplicationCommandBuilder(
+              name: 'TEST', type: ApplicationCommandType.chatInput)
+        ]),
         check: (list) {
           expect(list, hasLength(1));
           checkCommand(list.single);
         },
       ),
     ],
-    createBuilder: ApplicationCommandBuilder(name: 'TEST', type: ApplicationCommandType.chatInput),
+    createBuilder: ApplicationCommandBuilder(
+        name: 'TEST', type: ApplicationCommandType.chatInput),
     updateBuilder: ApplicationCommandUpdateBuilder(),
   );
 
@@ -117,7 +125,7 @@ void main() {
       config,
       client,
       applicationId: Snowflake.zero,
-      guildId: Snowflake(1),
+      guildId: Snowflake(BigInt.from(1)),
       permissionsConfig: const CacheConfig(),
     ),
     RegExp(r'/applications/0/guilds/1/commands/\d+'),
@@ -125,7 +133,8 @@ void main() {
     sampleObject: sampleCommand,
     sampleMatches: checkCommand,
     additionalParsingTests: [
-      ParsingTest<GuildApplicationCommandManager, CommandPermissions, Map<String, Object?>>(
+      ParsingTest<GuildApplicationCommandManager, CommandPermissions,
+          Map<String, Object?>>(
         name: 'parseCommandPermissions',
         source: sampleCommandPermissions,
         parse: (manager) => manager.parseCommandPermissions,
@@ -133,7 +142,8 @@ void main() {
       ),
     ],
     additionalEndpointTests: [
-      EndpointTest<GuildApplicationCommandManager, List<ApplicationCommand>, List<Object?>>(
+      EndpointTest<GuildApplicationCommandManager, List<ApplicationCommand>,
+          List<Object?>>(
         name: 'list',
         source: [sampleCommand],
         urlMatcher: '/applications/0/guilds/1/commands',
@@ -143,18 +153,23 @@ void main() {
           checkCommand(list.single);
         },
       ),
-      EndpointTest<GuildApplicationCommandManager, List<ApplicationCommand>, List<Object?>>(
+      EndpointTest<GuildApplicationCommandManager, List<ApplicationCommand>,
+          List<Object?>>(
         name: 'bulkOverride',
         method: 'PUT',
         source: [sampleCommand],
         urlMatcher: '/applications/0/guilds/1/commands',
-        execute: (manager) => manager.bulkOverride([ApplicationCommandBuilder(name: 'TEST', type: ApplicationCommandType.chatInput)]),
+        execute: (manager) => manager.bulkOverride([
+          ApplicationCommandBuilder(
+              name: 'TEST', type: ApplicationCommandType.chatInput)
+        ]),
         check: (list) {
           expect(list, hasLength(1));
           checkCommand(list.single);
         },
       ),
-      EndpointTest<GuildApplicationCommandManager, List<CommandPermissions>, List<Object?>>(
+      EndpointTest<GuildApplicationCommandManager, List<CommandPermissions>,
+          List<Object?>>(
         name: 'listCommandPermissions',
         source: [sampleCommandPermissions],
         urlMatcher: '/applications/0/guilds/1/commands/permissions',
@@ -164,15 +179,18 @@ void main() {
           checkCommandPermissions(list.single);
         },
       ),
-      EndpointTest<GuildApplicationCommandManager, CommandPermissions, Map<String, Object?>>(
+      EndpointTest<GuildApplicationCommandManager, CommandPermissions,
+          Map<String, Object?>>(
         name: 'fetchCommandPermissions',
         source: sampleCommandPermissions,
         urlMatcher: '/applications/0/guilds/1/commands/2/permissions',
-        execute: (manager) => manager.fetchPermissions(Snowflake(2)),
+        execute: (manager) =>
+            manager.fetchPermissions(Snowflake(BigInt.from(2))),
         check: checkCommandPermissions,
       ),
     ],
-    createBuilder: ApplicationCommandBuilder(name: 'TEST', type: ApplicationCommandType.chatInput),
+    createBuilder: ApplicationCommandBuilder(
+        name: 'TEST', type: ApplicationCommandType.chatInput),
     updateBuilder: ApplicationCommandUpdateBuilder(),
   );
 }

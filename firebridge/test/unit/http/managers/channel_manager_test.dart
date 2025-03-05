@@ -26,16 +26,17 @@ void checkGuildText(Channel channel) {
 
   channel as GuildTextChannel;
 
-  expect(channel.id, equals(Snowflake(41771983423143937)));
+  expect(channel.id, equals(Snowflake(BigInt.from(41771983423143937))));
   expect(channel.topic, equals('24/7 chat about how to gank Mike #2'));
   expect(channel.defaultAutoArchiveDuration, equals(Duration(minutes: 60)));
   expect(channel.defaultThreadRateLimitPerUser, isNull);
-  expect(channel.guildId, equals(Snowflake(41771983423143937)));
+  expect(channel.guildId, equals(Snowflake(BigInt.from(41771983423143937))));
   expect(channel.isNsfw, isTrue);
-  expect(channel.lastMessageId, equals(Snowflake(155117677105512449)));
+  expect(channel.lastMessageId,
+      equals(Snowflake(BigInt.from(155117677105512449))));
   expect(channel.lastPinTimestamp, isNull);
   expect(channel.name, equals('general'));
-  expect(channel.parentId, equals(Snowflake(399942396007890945)));
+  expect(channel.parentId, equals(Snowflake(BigInt.from(399942396007890945))));
   expect(channel.permissionOverwrites, equals([]));
   expect(channel.position, equals(6));
   expect(channel.rateLimitPerUser, equals(Duration(seconds: 2)));
@@ -60,16 +61,17 @@ void checkGuildAnnouncement(Channel channel) {
 
   channel as GuildAnnouncementChannel;
 
-  expect(channel.id, equals(Snowflake(41771983423143937)));
+  expect(channel.id, equals(Snowflake(BigInt.from(41771983423143937))));
   expect(channel.topic, equals('Rumors about Half Life 3'));
   expect(channel.defaultAutoArchiveDuration, equals(Duration(minutes: 60)));
   expect(channel.defaultThreadRateLimitPerUser, isNull);
-  expect(channel.guildId, equals(Snowflake(41771983423143937)));
+  expect(channel.guildId, equals(Snowflake(BigInt.from(41771983423143937))));
   expect(channel.isNsfw, isTrue);
-  expect(channel.lastMessageId, equals(Snowflake(155117677105512449)));
+  expect(channel.lastMessageId,
+      equals(Snowflake(BigInt.from(155117677105512449))));
   expect(channel.lastPinTimestamp, isNull);
   expect(channel.name, equals('important-news'));
-  expect(channel.parentId, equals(Snowflake(399942396007890945)));
+  expect(channel.parentId, equals(Snowflake(BigInt.from(399942396007890945))));
   expect(channel.permissionOverwrites, equals([]));
   expect(channel.position, equals(6));
   expect(channel.rateLimitPerUser, isNull);
@@ -96,11 +98,12 @@ void checkGuildVoice(Channel channel) {
 
   channel as GuildVoiceChannel;
 
-  expect(channel.id, equals(Snowflake(155101607195836416)));
+  expect(channel.id, equals(Snowflake(BigInt.from(155101607195836416))));
   expect(channel.bitrate, equals(64000));
-  expect(channel.guildId, equals(Snowflake(41771983423143937)));
+  expect(channel.guildId, equals(Snowflake(BigInt.from(41771983423143937))));
   expect(channel.isNsfw, isFalse);
-  expect(channel.lastMessageId, equals(Snowflake(174629835082649376)));
+  expect(channel.lastMessageId,
+      equals(Snowflake(BigInt.from(174629835082649376))));
   expect(channel.lastPinTimestamp, isNull);
   expect(channel.name, equals('ROCKET CHEESE'));
   expect(channel.parentId, isNull);
@@ -131,10 +134,11 @@ void checkDm(Channel channel) {
 
   channel as DmChannel;
 
-  expect(channel.id, equals(Snowflake(319674150115610528)));
+  expect(channel.id, equals(Snowflake(BigInt.from(319674150115610528))));
   // TODO: Implement for multiple ids
-  // expect(channel.recipients.id, equals(Snowflake(82198898841029460)));
-  expect(channel.lastMessageId, equals(Snowflake(3343820033257021450)));
+  // expect(channel.recipients.id, equals(Snowflake(BigInt.from(82198898841029460)));
+  expect(channel.lastMessageId,
+      equals(Snowflake(BigInt.from(3343820033257021450))));
   expect(channel.lastPinTimestamp, isNull);
   expect(channel.rateLimitPerUser, isNull);
 }
@@ -167,14 +171,15 @@ void checkGroupDm(Channel channel) {
 
   channel as GroupDmChannel;
 
-  expect(channel.id, equals(Snowflake(319674150115710528)));
+  expect(channel.id, equals(Snowflake(BigInt.from(319674150115710528))));
   expect(channel.name, equals('Some test channel'));
   expect(channel.recipients, hasLength(2));
   expect(channel.iconHash, isNull);
-  expect(channel.ownerId, equals(Snowflake(82198810841029460)));
+  expect(channel.ownerId, equals(Snowflake(BigInt.from(82198810841029460))));
   expect(channel.applicationId, isNull);
   expect(channel.isManaged, isFalse);
-  expect(channel.lastMessageId, equals(Snowflake(3343820033257021450)));
+  expect(channel.lastMessageId,
+      equals(Snowflake(BigInt.from(3343820033257021450))));
   expect(channel.lastPinTimestamp, isNull);
   expect(channel.rateLimitPerUser, isNull);
 }
@@ -195,8 +200,8 @@ void checkCategory(Channel channel) {
 
   channel as GuildCategory;
 
-  expect(channel.id, equals(Snowflake(399942396007890945)));
-  expect(channel.guildId, equals(Snowflake(290926798629997250)));
+  expect(channel.id, equals(Snowflake(BigInt.from(399942396007890945))));
+  expect(channel.guildId, equals(Snowflake(BigInt.from(290926798629997250))));
   expect(channel.isNsfw, isFalse);
   expect(channel.name, equals('Test'));
   expect(channel.parentId, isNull);
@@ -229,23 +234,24 @@ void checkThread(Channel channel) {
 
   channel as PublicThread;
 
-  expect(channel.id, equals(Snowflake(41771983423143937)));
+  expect(channel.id, equals(Snowflake(BigInt.from(41771983423143937))));
   expect(channel.appliedTags, isNull);
   expect(channel.approximateMemberCount, equals(5));
   expect(channel.archiveTimestamp,
       equals(DateTime.utc(2021, 04, 12, 23, 40, 39, 855, 793)));
   expect(channel.autoArchiveDuration, equals(Duration(minutes: 1440)));
   expect(channel.createdAt, equals(DateTime(2022, 01, 09)));
-  expect(channel.guildId, equals(Snowflake(41771983423143937)));
+  expect(channel.guildId, equals(Snowflake(BigInt.from(41771983423143937))));
   expect(channel.isArchived, isFalse);
   expect(channel.isLocked, isFalse);
   expect(channel.isNsfw, isFalse);
-  expect(channel.lastMessageId, equals(Snowflake(155117677105512449)));
+  expect(channel.lastMessageId,
+      equals(Snowflake(BigInt.from(155117677105512449))));
   expect(channel.lastPinTimestamp, isNull);
   expect(channel.messageCount, equals(1));
   expect(channel.name, equals("don't buy dota-2"));
-  expect(channel.ownerId, equals(Snowflake(41771983423143937)));
-  expect(channel.parentId, equals(Snowflake(41771983423143937)));
+  expect(channel.ownerId, equals(Snowflake(BigInt.from(41771983423143937))));
+  expect(channel.parentId, equals(Snowflake(BigInt.from(41771983423143937))));
   expect(channel.permissionOverwrites, equals([]));
   expect(channel.position, equals(-1));
   expect(channel.rateLimitPerUser, equals(Duration(seconds: 2)));
@@ -280,7 +286,7 @@ void checkAnnouncementThread(Channel channel) {
 
   channel as AnnouncementThread;
 
-  expect(channel.id, equals(Snowflake(1093553602909442119)));
+  expect(channel.id, equals(Snowflake(BigInt.from(1093553602909442119))));
   expect(channel.appliedTags, isNull);
   expect(channel.approximateMemberCount, equals(1));
   expect(channel.archiveTimestamp,
@@ -288,16 +294,17 @@ void checkAnnouncementThread(Channel channel) {
   expect(channel.autoArchiveDuration, equals(Duration(minutes: 4320)));
   expect(
       channel.createdAt, equals(DateTime.utc(2023, 04, 06, 15, 11, 36, 177)));
-  expect(channel.guildId, equals(Snowflake(1033681997136146462)));
+  expect(channel.guildId, equals(Snowflake(BigInt.from(1033681997136146462))));
   expect(channel.isArchived, isFalse);
   expect(channel.isLocked, isFalse);
   expect(channel.isNsfw, isFalse);
-  expect(channel.lastMessageId, equals(Snowflake(1093553605472170094)));
+  expect(channel.lastMessageId,
+      equals(Snowflake(BigInt.from(1093553605472170094))));
   expect(channel.lastPinTimestamp, isNull);
   expect(channel.messageCount, equals(1));
   expect(channel.name, equals('Wow, such announcement'));
-  expect(channel.ownerId, equals(Snowflake(506759329068613643)));
-  expect(channel.parentId, equals(Snowflake(1093553555270545438)));
+  expect(channel.ownerId, equals(Snowflake(BigInt.from(506759329068613643))));
+  expect(channel.parentId, equals(Snowflake(BigInt.from(1093553555270545438))));
   expect(channel.permissionOverwrites, equals([]));
   expect(channel.position, equals(-1));
   expect(channel.rateLimitPerUser, isNull);
@@ -341,7 +348,7 @@ void checkPrivateThread(Channel channel) {
 
   channel as PrivateThread;
 
-  expect(channel.id, equals(Snowflake(1093556383640715314)));
+  expect(channel.id, equals(Snowflake(BigInt.from(1093556383640715314))));
   expect(channel.isInvitable, isTrue);
   expect(channel.appliedTags, isNull);
   expect(channel.approximateMemberCount, equals(2));
@@ -350,16 +357,17 @@ void checkPrivateThread(Channel channel) {
   expect(channel.autoArchiveDuration, equals(Duration(minutes: 4320)));
   expect(
       channel.createdAt, equals(DateTime.utc(2023, 04, 06, 15, 22, 39, 155)));
-  expect(channel.guildId, equals(Snowflake(1033681997136146462)));
+  expect(channel.guildId, equals(Snowflake(BigInt.from(1033681997136146462))));
   expect(channel.isArchived, isFalse);
   expect(channel.isLocked, isFalse);
   expect(channel.isNsfw, isFalse);
-  expect(channel.lastMessageId, equals(Snowflake(1093556580290670633)));
+  expect(channel.lastMessageId,
+      equals(Snowflake(BigInt.from(1093556580290670633))));
   expect(channel.lastPinTimestamp, isNull);
   expect(channel.messageCount, equals(2));
   expect(channel.name, equals('blah'));
-  expect(channel.ownerId, equals(Snowflake(506759329068613643)));
-  expect(channel.parentId, equals(Snowflake(1038831656682930227)));
+  expect(channel.ownerId, equals(Snowflake(BigInt.from(506759329068613643))));
+  expect(channel.parentId, equals(Snowflake(BigInt.from(1038831656682930227))));
   expect(channel.permissionOverwrites, equals([]));
   expect(channel.position, equals(-1));
   expect(channel.rateLimitPerUser, isNull);
@@ -414,7 +422,7 @@ final sampleFollowedChannel = {
 
 void checkFollowedChannel(FollowedChannel followedChannel) {
   expect(followedChannel.channelId, equals(Snowflake.zero));
-  expect(followedChannel.webhookId, equals(Snowflake(1)));
+  expect(followedChannel.webhookId, equals(Snowflake(BigInt.from(1))));
 }
 
 final sampleThreadMember = {
@@ -427,7 +435,7 @@ final sampleThreadMember = {
 
 void checkThreadMember(ThreadMember member) {
   expect(member.threadId, equals(Snowflake.zero));
-  expect(member.userId, equals(Snowflake(1)));
+  expect(member.userId, equals(Snowflake(BigInt.from(1))));
   expect(member.flags.value, equals(17));
   expect(member.joinTimestamp, equals(DateTime.utc(2023, 04, 03, 10, 49, 41)));
   checkMember(member.member!);
@@ -460,12 +468,14 @@ final sampleStageInstance = {
 };
 
 void checkStageInstance(StageInstance instance) {
-  expect(instance.id, equals(Snowflake(840647391636226060)));
-  expect(instance.guildId, equals(Snowflake(197038439483310086)));
-  expect(instance.channelId, equals(Snowflake(733488538393510049)));
+  expect(instance.id, equals(Snowflake(BigInt.from(840647391636226060))));
+  expect(instance.guildId, equals(Snowflake(BigInt.from(197038439483310086))));
+  expect(
+      instance.channelId, equals(Snowflake(BigInt.from(733488538393510049))));
   expect(instance.topic, equals('Testing Testing, 123'));
   expect(instance.privacyLevel, equals(PrivacyLevel.public));
-  expect(instance.scheduledEventId, equals(Snowflake(947656305244532806)));
+  expect(instance.scheduledEventId,
+      equals(Snowflake(BigInt.from(947656305244532806))));
 }
 
 void main() {
@@ -566,7 +576,8 @@ void main() {
         execute: (manager) => manager.updatePermissionOverwrite(
             Snowflake.zero,
             PermissionOverwriteBuilder(
-                id: Snowflake(1), type: PermissionOverwriteType.role)),
+                id: Snowflake(BigInt.from(1)),
+                type: PermissionOverwriteType.role)),
         check: (_) {},
       ),
       EndpointTest<ChannelManager, void, void>(
@@ -574,8 +585,8 @@ void main() {
         method: 'delete',
         source: null,
         urlMatcher: '/channels/0/permissions/1',
-        execute: (manager) =>
-            manager.deletePermissionOverwrite(Snowflake.zero, Snowflake(1)),
+        execute: (manager) => manager.deletePermissionOverwrite(
+            Snowflake.zero, Snowflake(BigInt.from(1))),
         check: (_) {},
       ),
       EndpointTest<ChannelManager, List<InviteWithMetadata>, List<Object?>>(
@@ -604,7 +615,7 @@ void main() {
         source: sampleFollowedChannel,
         urlMatcher: '/channels/0/followers',
         execute: (manager) =>
-            manager.followChannel(Snowflake(1), Snowflake.zero),
+            manager.followChannel(Snowflake(BigInt.from(1)), Snowflake.zero),
         check: checkFollowedChannel,
       ),
       EndpointTest<ChannelManager, void, void>(
@@ -621,7 +632,7 @@ void main() {
         source: sampleThread,
         urlMatcher: '/channels/0/messages/1/threads',
         execute: (manager) => manager.createThreadFromMessage(Snowflake.zero,
-            Snowflake(1), ThreadFromMessageBuilder(name: 'test')),
+            Snowflake(BigInt.from(1)), ThreadFromMessageBuilder(name: 'test')),
         check: checkThread,
       ),
       EndpointTest<ChannelManager, Thread, Map<String, Object?>>(
@@ -656,7 +667,7 @@ void main() {
         source: null,
         urlMatcher: '/channels/0/thread-members/1',
         execute: (manager) =>
-            manager.addThreadMember(Snowflake.zero, Snowflake(1)),
+            manager.addThreadMember(Snowflake.zero, Snowflake(BigInt.from(1))),
         check: (_) {},
       ),
       EndpointTest<ChannelManager, void, void>(
@@ -672,16 +683,16 @@ void main() {
         method: 'delete',
         source: null,
         urlMatcher: '/channels/0/thread-members/1',
-        execute: (manager) =>
-            manager.removeThreadMember(Snowflake.zero, Snowflake(1)),
+        execute: (manager) => manager.removeThreadMember(
+            Snowflake.zero, Snowflake(BigInt.from(1))),
         check: (_) {},
       ),
       EndpointTest<ChannelManager, ThreadMember, Map<String, Object?>>(
         name: 'fetchThreadMember',
         source: sampleThreadMember,
         urlMatcher: '/channels/0/thread-members/1',
-        execute: (manager) =>
-            manager.fetchThreadMember(Snowflake.zero, Snowflake(1)),
+        execute: (manager) => manager.fetchThreadMember(
+            Snowflake.zero, Snowflake(BigInt.from(1))),
         check: checkThreadMember,
       ),
       EndpointTest<ChannelManager, List<ThreadMember>, List<Object?>>(

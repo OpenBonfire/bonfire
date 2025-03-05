@@ -23,7 +23,6 @@ import 'package:firebridge/src/models/channel/channel.dart';
 import 'package:firebridge/src/http/managers/sticker_manager.dart';
 import 'package:firebridge/src/models/channel/guild_channel.dart';
 import 'package:firebridge/src/models/channel/text_channel.dart';
-import 'package:firebridge/src/models/channel/thread_list.dart';
 import 'package:firebridge/src/models/emoji.dart';
 import 'package:firebridge/src/models/guild/ban.dart';
 import 'package:firebridge/src/models/guild/guild_preview.dart';

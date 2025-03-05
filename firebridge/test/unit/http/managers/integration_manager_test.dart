@@ -16,7 +16,7 @@ final sampleIntegration = {
 };
 
 void checkIntegration(Integration integration) {
-  expect(integration.id, equals(Snowflake(1)));
+  expect(integration.id, equals(Snowflake(BigInt.from(1))));
   expect(integration.name, equals("test"));
   expect(integration.type, equals("youtube"));
   expect(integration.isEnabled, isTrue);
@@ -26,7 +26,7 @@ void checkIntegration(Integration integration) {
   expect(integration.expireBehavior, isNull);
   expect(integration.expireGracePeriod, isNull);
   expect(integration.user, isNull);
-  expect(integration.account.id, equals(Snowflake(0)));
+  expect(integration.account.id, equals(Snowflake(BigInt.from(0))));
   expect(integration.syncedAt, isNull);
   expect(integration.subscriberCount, isNull);
   expect(integration.isRevoked, isNull);
@@ -37,7 +37,8 @@ void checkIntegration(Integration integration) {
 void main() {
   testReadOnlyManager<Integration, IntegrationManager>(
     'IntegrationManager',
-    (config, client) => IntegrationManager(config, client, guildId: Snowflake.zero),
+    (config, client) =>
+        IntegrationManager(config, client, guildId: Snowflake.zero),
     '/guilds/0/integrations',
     sampleObject: sampleIntegration,
     sampleMatches: checkIntegration,

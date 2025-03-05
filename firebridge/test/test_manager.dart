@@ -55,7 +55,8 @@ class EndpointTest<T, U, V> {
   }
 }
 
-Future<void> testReadOnlyManager<T extends ManagedSnowflakeEntity<T>, U extends ReadOnlyManager<T>>(
+Future<void> testReadOnlyManager<T extends ManagedSnowflakeEntity<T>,
+    U extends ReadOnlyManager<T>>(
   String name,
   U Function(CacheConfig<T>, NyxxRest) create,
   Pattern baseUrlMatcher, {
@@ -76,7 +77,8 @@ Future<void> testReadOnlyManager<T extends ManagedSnowflakeEntity<T>, U extends 
   group(name, () {
     test('parse', () {
       final client = MockNyxx();
-      when(() => client.apiOptions).thenReturn(RestApiOptions(token: Platform.environment['TEST_TOKEN'] ?? 'TEST_TOKEN'));
+      when(() => client.apiOptions).thenReturn(RestApiOptions(
+          token: Platform.environment['TEST_TOKEN'] ?? 'TEST_TOKEN'));
       when(() => client.options).thenReturn(RestClientOptions());
       final config = CacheConfig<T>();
 
@@ -98,7 +100,8 @@ Future<void> testReadOnlyManager<T extends ManagedSnowflakeEntity<T>, U extends 
       for (final parsingTest in additionalParsingTests) {
         test(parsingTest.name, () {
           final client = MockNyxx();
-          when(() => client.apiOptions).thenReturn(RestApiOptions(token: Platform.environment['TEST_TOKEN'] ?? 'TEST_TOKEN'));
+          when(() => client.apiOptions).thenReturn(RestApiOptions(
+              token: Platform.environment['TEST_TOKEN'] ?? 'TEST_TOKEN'));
           when(() => client.options).thenReturn(RestClientOptions());
           final config = CacheConfig<T>();
 
@@ -115,21 +118,24 @@ Future<void> testReadOnlyManager<T extends ManagedSnowflakeEntity<T>, U extends 
       (client) async {
         final manager = create(CacheConfig(), client);
 
-        final entity = await manager.fetch(Snowflake(1));
+        final entity = await manager.fetch(Snowflake(BigInt.one));
         sampleMatches(entity);
       },
     );
 
     test('fetch caches entity', () async {
       final client = MockNyxx();
-      when(() => client.apiOptions).thenReturn(RestApiOptions(token: Platform.environment['TEST_TOKEN'] ?? 'TEST_TOKEN'));
+      when(() => client.apiOptions).thenReturn(RestApiOptions(
+          token: Platform.environment['TEST_TOKEN'] ?? 'TEST_TOKEN'));
       when(() => client.options).thenReturn(RestClientOptions());
       when(() => client.httpHandler).thenReturn(HttpHandler(client));
 
-      nock('https://discord.com/api/v${client.apiOptions.apiVersion}').get(baseUrlMatcher).reply(200, jsonEncode(fetchObjectOverride ?? sampleObject));
+      nock('https://discord.com/api/v${client.apiOptions.apiVersion}')
+          .get(baseUrlMatcher)
+          .reply(200, jsonEncode(fetchObjectOverride ?? sampleObject));
 
       final manager = create(CacheConfig(), client);
-      final entity = await manager.fetch(Snowflake(1));
+      final entity = await manager.fetch(Snowflake(BigInt.one));
 
       expect(manager.cache.containsKey(entity.id), isTrue);
     });
@@ -145,7 +151,7 @@ Future<void> testReadOnlyManager<T extends ManagedSnowflakeEntity<T>, U extends 
         (client) async {
           final manager = create(CacheConfig(), client);
 
-          final entity = await manager.fetch(Snowflake(1));
+          final entity = await manager.fetch(Snowflake(BigInt.one));
           matcher(entity);
         },
       );
@@ -170,7 +176,8 @@ Future<void> testReadOnlyManager<T extends ManagedSnowflakeEntity<T>, U extends 
   });
 }
 
-Future<void> testManager<T extends WritableSnowflakeEntity<T>, U extends Manager<T>>(
+Future<void>
+    testManager<T extends WritableSnowflakeEntity<T>, U extends Manager<T>>(
   String name,
   U Function(CacheConfig<T>, NyxxRest) create,
   Pattern baseUrlMatcher,
@@ -215,13 +222,15 @@ Future<void> testManager<T extends WritableSnowflakeEntity<T>, U extends Manager
         nock.init();
 
         final client = MockNyxx();
-        when(() => client.apiOptions).thenReturn(RestApiOptions(token: Platform.environment['TEST_TOKEN'] ?? 'TEST_TOKEN'));
+        when(() => client.apiOptions).thenReturn(RestApiOptions(
+            token: Platform.environment['TEST_TOKEN'] ?? 'TEST_TOKEN'));
         when(() => client.options).thenReturn(RestClientOptions());
         when(() => client.httpHandler).thenReturn(HttpHandler(client));
 
         Interceptor(RequestMatcher(
           createMethod,
-          UriMatcher('https://discord.com/api/v${client.apiOptions.apiVersion}', createUrlMatcher),
+          UriMatcher('https://discord.com/api/v${client.apiOptions.apiVersion}',
+              createUrlMatcher),
           BodyMatcher((_, __) => true),
         )).reply(200, jsonEncode(sampleObject));
 
@@ -241,21 +250,26 @@ Future<void> testManager<T extends WritableSnowflakeEntity<T>, U extends Manager
         (client) async {
           final manager = create(CacheConfig(), client);
 
-          final entity = await manager.update(Snowflake(1), updateBuilder);
+          final entity =
+              await manager.update(Snowflake(BigInt.one), updateBuilder);
           sampleMatches(entity);
         },
       );
 
       test('update caches entity', () async {
         final client = MockNyxx();
-        when(() => client.apiOptions).thenReturn(RestApiOptions(token: Platform.environment['TEST_TOKEN'] ?? 'TEST_TOKEN'));
+        when(() => client.apiOptions).thenReturn(RestApiOptions(
+            token: Platform.environment['TEST_TOKEN'] ?? 'TEST_TOKEN'));
         when(() => client.options).thenReturn(RestClientOptions());
         when(() => client.httpHandler).thenReturn(HttpHandler(client));
 
-        nock('https://discord.com/api/v${client.apiOptions.apiVersion}').patch(baseUrlMatcher, (_) => true).reply(200, jsonEncode(sampleObject));
+        nock('https://discord.com/api/v${client.apiOptions.apiVersion}')
+            .patch(baseUrlMatcher, (_) => true)
+            .reply(200, jsonEncode(sampleObject));
 
         final manager = create(CacheConfig(), client);
-        final entity = await manager.update(Snowflake(1), updateBuilder);
+        final entity =
+            await manager.update(Snowflake(BigInt.one), updateBuilder);
 
         expect(manager.cache.containsKey(entity.id), isTrue);
       });
@@ -268,17 +282,20 @@ Future<void> testManager<T extends WritableSnowflakeEntity<T>, U extends Manager
         (client) async {
           final manager = create(CacheConfig(), client);
 
-          await manager.delete(Snowflake(1));
+          await manager.delete(Snowflake(BigInt.one));
         },
       );
 
       test('delete caches entity', () async {
         final client = MockNyxx();
-        when(() => client.apiOptions).thenReturn(RestApiOptions(token: Platform.environment['TEST_TOKEN'] ?? 'TEST_TOKEN'));
+        when(() => client.apiOptions).thenReturn(RestApiOptions(
+            token: Platform.environment['TEST_TOKEN'] ?? 'TEST_TOKEN'));
         when(() => client.options).thenReturn(RestClientOptions());
         when(() => client.httpHandler).thenReturn(HttpHandler(client));
 
-        nock('https://discord.com/api/v${client.apiOptions.apiVersion}').delete(baseUrlMatcher).reply(200, jsonEncode(sampleObject));
+        nock('https://discord.com/api/v${client.apiOptions.apiVersion}')
+            .delete(baseUrlMatcher)
+            .reply(200, jsonEncode(sampleObject));
 
         final manager = create(CacheConfig(), client);
         final entity = manager.parse(sampleObject);

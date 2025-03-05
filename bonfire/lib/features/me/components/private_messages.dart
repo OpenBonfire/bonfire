@@ -1,5 +1,5 @@
 import 'package:bonfire/features/me/controllers/settings.dart';
-import 'package:bonfire/features/me/views/components/member_card.dart';
+import 'package:bonfire/features/me/components/member_card.dart';
 import 'package:bonfire/theme/theme.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';

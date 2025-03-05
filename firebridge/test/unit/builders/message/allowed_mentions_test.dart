@@ -8,7 +8,7 @@ void main() {
         parse: ['a', 'b', 'c'],
         repliedUser: false,
         roles: [Snowflake.zero],
-        users: [Snowflake(1)],
+        users: [Snowflake(BigInt.one)],
       );
 
       expect(
@@ -41,10 +41,14 @@ void main() {
     });
 
     test('operator |', () {
-      final a = AllowedMentions.users([Snowflake(1), Snowflake(2), Snowflake(3)]);
+      final a = AllowedMentions.users([
+        Snowflake(BigInt.one),
+        Snowflake(BigInt.from(2)),
+        Snowflake(BigInt.from(3))
+      ]);
       final b = AllowedMentions(
         repliedUser: true,
-        users: [Snowflake(1)],
+        users: [Snowflake(BigInt.one)],
         roles: [Snowflake.zero],
         parse: ['everyone'],
       );
@@ -52,16 +56,26 @@ void main() {
       final builder = a | b;
 
       expect(builder.parse, equals(['everyone']));
-      expect(builder.users, equals([Snowflake(1), Snowflake(2), Snowflake(3)]));
+      expect(
+          builder.users,
+          equals([
+            Snowflake(BigInt.one),
+            Snowflake(BigInt.from(2)),
+            Snowflake(BigInt.from(3))
+          ]));
       expect(builder.roles, equals([Snowflake.zero]));
       expect(builder.repliedUser, isTrue);
     });
 
     test('operator &', () {
-      final a = AllowedMentions.users([Snowflake(1), Snowflake(2), Snowflake(3)]);
+      final a = AllowedMentions.users([
+        Snowflake(BigInt.one),
+        Snowflake(BigInt.from(2)),
+        Snowflake(BigInt.from(3))
+      ]);
       final b = AllowedMentions(
         repliedUser: true,
-        users: [Snowflake(1)],
+        users: [Snowflake(BigInt.one)],
         roles: [Snowflake.zero],
         parse: ['everyone'],
       );
@@ -69,7 +83,7 @@ void main() {
       final builder = a & b;
 
       expect(builder.parse, []);
-      expect(builder.users, equals([Snowflake(1)]));
+      expect(builder.users, equals([Snowflake(BigInt.one)]));
       expect(builder.roles, []);
       expect(builder.repliedUser, isFalse);
 
