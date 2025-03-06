@@ -1,3 +1,4 @@
+import 'package:bonfire/shared/components/drawer/mobile_drawer.dart';
 import 'package:bonfire/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -27,29 +28,45 @@ class BonfireDrawerButton extends ConsumerStatefulWidget {
 class _BonfireDrawerButtonState extends ConsumerState<BonfireDrawerButton> {
   @override
   Widget build(BuildContext context) {
+    final borderRadius = BorderRadius.vertical(
+      top: widget.roundTop ? const Radius.circular(12) : Radius.zero,
+      bottom: widget.roundBottom ? const Radius.circular(12) : Radius.zero,
+    );
     final CustomThemeData theme = Theme.of(context).custom;
-    return InkWell(
-        onTap: widget.onTap,
-        borderRadius: BorderRadius.vertical(
-          top: widget.roundTop ? const Radius.circular(12) : Radius.zero,
-          bottom: widget.roundBottom ? const Radius.circular(12) : Radius.zero,
-        ),
-        child: Container(
-            decoration: BoxDecoration(
-              color: theme.colorTheme.foreground,
-              borderRadius: const BorderRadius.all(Radius.circular(12)),
+    return OutlinedButton(
+        style: OutlinedButton.styleFrom(
+            minimumSize: Size.zero,
+            padding: EdgeInsets.zero,
+            side: const BorderSide(
+              color: Colors.transparent,
+              width: 0,
             ),
+            shape: RoundedRectangleBorder(
+              borderRadius: borderRadius,
+            ),
+            foregroundColor:
+                Theme.of(context).custom.colorTheme.selectedChannelText,
+            backgroundColor: Theme.of(context).custom.colorTheme.foreground),
+        onPressed: () {
+          GlobalDrawer.of(context)?.closeDrawer();
+          widget.onTap();
+        },
+        child: Container(
+            // decoration: BoxDecoration(
+            //   color: theme.colorTheme.foreground,
+            //   borderRadius: borderRadius,
+            // ),
             child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Row(
-                spacing: 12,
-                children: [
-                  Icon(widget.icon, color: widget.color),
-                  Text(widget.text,
-                      style: theme.textTheme.titleSmall
-                          .copyWith(color: widget.color)),
-                ],
-              ),
-            )));
+          padding: const EdgeInsets.all(16),
+          child: Row(
+            spacing: 12,
+            children: [
+              Icon(widget.icon, color: widget.color),
+              Text(widget.text,
+                  style:
+                      theme.textTheme.titleSmall.copyWith(color: widget.color)),
+            ],
+          ),
+        )));
   }
 }

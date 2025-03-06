@@ -25,20 +25,29 @@ class GlobalDrawerState extends State<GlobalDrawer>
     super.initState();
     _controller = RubberAnimationController(
       initialValue: 0,
-      dismissable: true,
-      duration: const Duration(milliseconds: 300),
+      duration: const Duration(milliseconds: 150),
       upperBoundValue: AnimationControllerValue(percentage: 0.7),
+      halfBoundValue: AnimationControllerValue(percentage: 0.4),
+      lowerBoundValue: AnimationControllerValue(percentage: 0),
+      // springDescription:
+      //     const SpringDescription(damping: 0.1, stiffness: 50, mass: 50),
       vsync: this,
     );
   }
 
   void toggleDrawer() {
     setState(() {
-      if (_controller.value == 0) {
-        _controller.expand();
+      if (_controller.value.round() == 0) {
+        _controller.halfExpand();
       } else {
         _controller.collapse();
       }
+    });
+  }
+
+  void closeDrawer() {
+    setState(() {
+      _controller.collapse();
     });
   }
 
