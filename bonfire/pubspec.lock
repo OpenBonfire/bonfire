@@ -487,6 +487,15 @@ packages:
       relative: true
     source: path
     version: "4.1.2"
+  fireview:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: cda3048c55f0fe516a69e375f5aa422e82997540
+      resolved-ref: cda3048c55f0fe516a69e375f5aa422e82997540
+      url: "https://github.com/ericApostal/fireview"
+    source: git
+    version: "0.0.1"
   fixnum:
     dependency: transitive
     description:
@@ -516,6 +525,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.3.1"
+  flutter_iframe_webview:
+    dependency: transitive
+    description:
+      name: flutter_iframe_webview
+      sha256: "9a25547ee099a1d9d79d6c9c1c1b129c8e7a12aa6b6f77cc72c50a0e82e5729e"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0"
+  flutter_jsbridge_sdk:
+    dependency: transitive
+    description:
+      name: flutter_jsbridge_sdk
+      sha256: "9792c5b8482db969aa5da16405c4fe8b7507d6e4dc1208619bf42c44efec10ba"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.2"
   flutter_keyboard_size:
     dependency: "direct main"
     description:
@@ -1764,6 +1789,55 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.5"
+  webview_cef:
+    dependency: transitive
+    description:
+      path: "."
+      ref: HEAD
+      resolved-ref: "76171a26763e7a5b43135a72032a4b877d27fc66"
+      url: "https://github.com/OpenBonfire/webview_cef"
+    source: git
+    version: "0.2.2"
+  webview_flutter:
+    dependency: transitive
+    description:
+      name: webview_flutter
+      sha256: "889a0a678e7c793c308c68739996227c9661590605e70b1f6cf6b9a6634f7aec"
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.10.0"
+  webview_flutter_android:
+    dependency: transitive
+    description:
+      name: webview_flutter_android
+      sha256: "512c26ccc5b8a571fd5d13ec994b7509f142ff6faf85835e243dde3538fdc713"
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.3.2"
+  webview_flutter_platform_interface:
+    dependency: transitive
+    description:
+      name: webview_flutter_platform_interface
+      sha256: d937581d6e558908d7ae3dc1989c4f87b786891ab47bb9df7de548a151779d8d
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.10.0"
+  webview_flutter_wkwebview:
+    dependency: transitive
+    description:
+      name: webview_flutter_wkwebview
+      sha256: c49a98510080378b1525132f407a92c3dcd3b7145bef04fb8137724aadcf1cf0
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.18.4"
+  webview_windows:
+    dependency: transitive
+    description:
+      name: webview_windows
+      sha256: "47fcad5875a45db29dbb5c9e6709bf5c88dcc429049872701343f91ed7255730"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.4.0"
   win32:
     dependency: transitive
     description:

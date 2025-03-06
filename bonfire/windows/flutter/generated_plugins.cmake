@@ -11,6 +11,8 @@ list(APPEND FLUTTER_PLUGIN_LIST
   media_kit_video
   permission_handler_windows
   url_launcher_windows
+  webview_cef
+  webview_windows
 )
 
 list(APPEND FLUTTER_FFI_PLUGIN_LIST
