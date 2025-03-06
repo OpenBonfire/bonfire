@@ -60,7 +60,7 @@ class GuildManager extends Manager<Guild> {
       id: id,
       json: raw,
       manager: this,
-      name: raw['name'] as String,
+      name: (raw['name'] as String?) ?? "Guild name borked",
       iconHash: (raw['icon'] ?? raw['icon_hash']) as String?,
       splashHash: raw['splash'] as String?,
       discoverySplashHash: raw['discovery_splash'] as String?,

@@ -118,7 +118,7 @@ class Auth extends _$Auth {
 
       FirebaseMessaging.onMessage.listen((RemoteMessage message) {
         print('Got a message whilst in the foreground!');
-        print('Message data: ${message.data}');
+        print('Message data: ${jsonEncode(message.data)}');
 
         if (message.notification != null) {
           print(
@@ -135,6 +135,13 @@ class Auth extends _$Auth {
       // hasSentInit = true;
 
       if (UniversalPlatform.isMobile) testPushNotifications();
+
+      // print("Closing!!");
+      // client.close();
+      // final notificationData =
+      //     client.gateway.parseNotificationCreated(testData);
+
+      // print("parsed!");
 
       print("READY!");
       ref

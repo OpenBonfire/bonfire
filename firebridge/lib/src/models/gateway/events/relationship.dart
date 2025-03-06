@@ -1,4 +1,5 @@
-import 'package:firebridge/firebridge.dart';
+import 'package:firebridge/src/models/gateway/event.dart';
+import 'package:firebridge/src/models/snowflake.dart';
 import 'package:firebridge/src/models/user/relationship.dart';
 
 /// {@template relationship_add_event}

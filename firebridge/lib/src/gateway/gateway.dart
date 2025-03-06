@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:firebridge/src/builders/guild/channel_statuses.dart';
 import 'package:firebridge/src/builders/guild/guild_subscriptions_bulk.dart';
 import 'package:firebridge/src/models/discord_color.dart';
+import 'package:firebridge/src/models/gateway/events/notification.dart';
 import 'package:firebridge/src/models/gateway/events/relationship.dart';
 import 'package:firebridge/src/models/gateway/events/settings.dart';
 import 'package:firebridge/src/models/guild/member_list_group.dart';
@@ -1436,6 +1437,32 @@ class Gateway extends GatewayManager with EventParser {
       id: Snowflake.parse(raw['id']!),
       type: raw['type'] as int,
       nickname: raw['nickname'] as String,
+    );
+  }
+
+  // technically not a gateway event
+  NotificationCreatedEvent parseNotificationCreated(Map<String, Object?> raw) {
+    return NotificationCreatedEvent(
+      userAvatar: raw['user_avatar'] as String,
+      notifInstanceId: Snowflake.parse(raw['notif_instance_id'] as String),
+      messageType: MessageType(int.parse(raw['message_type_'] as String)),
+      username: raw['user_username'] as String,
+      messageId: Snowflake.parse(raw['message_id'] as String),
+      recievingUserId: Snowflake.parse(raw['receiving_user_id'] as String),
+      eventType: raw['type'] as String,
+      message: MessageManager(
+        client.options.messageCacheConfig,
+        client,
+        channelId: Snowflake.parse(raw['channel_id']!),
+      ).parse(jsonDecode(raw['message'] as String) as Map<String, Object?>),
+      messageFlags: MessageFlags(int.parse(raw['message_flags'] as String)),
+      messageContent: raw['message_content'] as String,
+      userId: Snowflake.parse(raw['user_id'] as String),
+      category: raw['__category'] as String,
+      sound: raw['__sound'] as String,
+      channelType: ChannelType.values[raw['channel_type'] as int],
+      channelId: Snowflake.parse(raw['channel_id'] as String),
+      notifTypeId: raw['notif_type_id'] as int,
     );
   }
 
