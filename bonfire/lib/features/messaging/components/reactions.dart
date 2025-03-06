@@ -59,63 +59,62 @@ class ReactionWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context).custom;
 
-    return SizedBox.shrink(
-      child: Container(
-        height: 36,
-        // width: 64,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(8),
-          color: reaction.me ? theme.colorTheme.blurple.withOpacity(0.2) : null,
-          border: Border.all(
-            color: reaction.me
-                ? theme.colorTheme.blurple
-                : theme.colorTheme.foreground,
-          ),
+    return Container(
+      height: 32,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8),
+        color: reaction.me
+            ? theme.colorTheme.blurple.withValues(alpha: 0.2)
+            : null,
+        border: Border.all(
+          color: reaction.me
+              ? theme.colorTheme.blurple
+              : theme.colorTheme.foreground,
         ),
-        child: InkWell(
-          onTap: () async {
-            final message = ref.read(messageControllerProvider(messageId));
-            if (reaction.me) {
-              message!.deleteOwnReaction(
-                  ReactionBuilder.fromEmoji(reaction.emoji as Emoji));
-            } else {
-              message!
-                  .react(ReactionBuilder.fromEmoji(reaction.emoji as Emoji));
-            }
+      ),
+      child: InkWell(
+        onTap: () async {
+          final message = ref.read(messageControllerProvider(messageId));
+          if (reaction.me) {
+            message!.deleteOwnReaction(
+                ReactionBuilder.fromEmoji(reaction.emoji as Emoji));
+          } else {
+            message!.react(ReactionBuilder.fromEmoji(reaction.emoji as Emoji));
+          }
 
-            HapticFeedback.lightImpact();
-          },
-          borderRadius: BorderRadius.circular(8),
-          child: Padding(
-            padding: const EdgeInsets.only(
-              right: 8,
-              left: 4,
-              // top: 2,
-              // bottom: 2,
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              spacing: 4,
-              children: [
-                (reaction.emoji is TextEmoji)
-                    ? SizedBox(
-                        child: Text((reaction.emoji as TextEmoji).name,
-                            style:
-                                Theme.of(context).custom.textTheme.titleMedium),
-                      )
-                    : Image.network(
-                        (reaction.emoji as GuildEmoji).image.url.toString(),
-                        width: 20,
-                        height: 20,
-                      ),
-                Text(
-                  reaction.count.toString(),
-                  style: Theme.of(context).custom.textTheme.bodyText1,
-                  textAlign: TextAlign.center,
-                ),
-              ],
-            ),
+          HapticFeedback.lightImpact();
+        },
+        borderRadius: BorderRadius.circular(8),
+        child: Padding(
+          padding: const EdgeInsets.only(
+            right: 8,
+            left: 4,
+            // top: 2,
+            // bottom: 2,
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              (reaction.emoji is TextEmoji)
+                  ? SizedBox(
+                      child: Text((reaction.emoji as TextEmoji).name,
+                          style:
+                              Theme.of(context).custom.textTheme.titleMedium),
+                    )
+                  : Image.network(
+                      (reaction.emoji as GuildEmoji).image.url.toString(),
+                      width: 20,
+                      height: 20,
+                    ),
+              const SizedBox(width: 4),
+              Text(
+                reaction.count.toString(),
+                style: Theme.of(context).custom.textTheme.bodyText1,
+                textAlign: TextAlign.center,
+              ),
+            ],
           ),
         ),
       ),
