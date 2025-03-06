@@ -161,7 +161,7 @@ class MemberScrollViewState extends ConsumerState<MemberScrollView> {
   void _onScroll() {
     // When within 300 pixels of the bottom, load the next range.
     if (_scrollController.position.pixels >=
-        _scrollController.position.maxScrollExtent - 300) {
+        _scrollController.position.maxScrollExtent - 1000) {
       if (!_isLoadingMore) {
         _isLoadingMore = true;
         _loadMoreData();
