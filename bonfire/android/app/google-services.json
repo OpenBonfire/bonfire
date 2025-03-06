@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "653247688936",
-    "project_id": "bonfire-app-dev",
-    "storage_bucket": "bonfire-app-dev.firebasestorage.app"
+    "project_number": "162066849712",
+    "project_id": "adept-ethos-91518",
+    "storage_bucket": "adept-ethos-91518.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:653247688936:android:d573298672d5315d05595d",
+        "mobilesdk_app_id": "1:162066849712:android:db38e83be74de1b6",
         "android_client_info": {
           "package_name": "com.example.bonfire"
         }

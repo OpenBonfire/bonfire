@@ -1460,9 +1460,9 @@ class Gateway extends GatewayManager with EventParser {
       userId: Snowflake.parse(raw['user_id'] as String),
       category: raw['__category'] as String,
       sound: raw['__sound'] as String,
-      channelType: ChannelType.values[raw['channel_type'] as int],
+      channelType: ChannelType.values[int.parse(raw['channel_type'] as String)],
       channelId: Snowflake.parse(raw['channel_id'] as String),
-      notifTypeId: raw['notif_type_id'] as int,
+      notifTypeId: int.parse(raw['notif_type_id'] as String),
     );
   }
 
