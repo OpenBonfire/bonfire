@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:bonfire/features/guild/repositories/member.dart';
+import 'package:bonfire/features/messaging/components/box/context_drawer.dart';
 import 'package:bonfire/features/messaging/controllers/message.dart';
 import 'package:bonfire/features/messaging/repositories/name.dart';
 import 'package:bonfire/features/messaging/repositories/role_icon.dart';
@@ -12,7 +13,8 @@ import 'package:bonfire/features/messaging/components/box/mobile_message_drawer.
 import 'package:bonfire/features/messaging/components/box/popout.dart';
 import 'package:bonfire/features/messaging/components/box/reply/message_reply.dart';
 import 'package:bonfire/features/messaging/components/reactions.dart';
-import 'package:bonfire/shared/components/mobile_drawer.dart';
+import 'package:bonfire/shared/components/drawer/drawer_button.dart';
+import 'package:bonfire/shared/components/drawer/mobile_drawer.dart';
 import 'package:bonfire/shared/utils/platform.dart';
 import 'package:bonfire/theme/theme.dart';
 import 'package:firebridge/firebridge.dart' hide ButtonStyle;
@@ -165,6 +167,8 @@ class _MessageBoxState extends ConsumerState<MessageBox>
               //   _showMobileDrawer();
               // }
               GlobalDrawer.of(context)!.toggleDrawer();
+              GlobalDrawer.of(context)!
+                  .setChild(ContextDrawer(messageId: widget.messageId));
             },
             child: Stack(
               children: [

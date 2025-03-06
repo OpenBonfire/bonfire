@@ -1,5 +1,5 @@
 import 'package:bonfire/features/overview/views/navigator.dart';
-import 'package:bonfire/shared/components/mobile_drawer.dart';
+import 'package:bonfire/shared/components/drawer/mobile_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:bonfire/shared/utils/platform.dart';
@@ -15,7 +15,7 @@ class NavigationFrame extends ConsumerStatefulWidget {
 class _OverviewState extends ConsumerState<NavigationFrame> {
   @override
   Widget build(BuildContext context) {
-    return RubberDrawerWrapper(
+    return GlobalDrawer(
         child: Center(
       child: Stack(
         children: [

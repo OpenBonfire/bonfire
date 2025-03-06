@@ -18,6 +18,7 @@ class GlobalDrawer extends StatefulWidget {
 class GlobalDrawerState extends State<GlobalDrawer>
     with SingleTickerProviderStateMixin {
   late RubberAnimationController _controller;
+  Widget? child;
 
   @override
   void initState() {
@@ -41,6 +42,12 @@ class GlobalDrawerState extends State<GlobalDrawer>
     });
   }
 
+  void setChild(Widget child) {
+    setState(() {
+      this.child = child;
+    });
+  }
+
   @override
   void dispose() {
     _controller.dispose();
@@ -59,8 +66,9 @@ class GlobalDrawerState extends State<GlobalDrawer>
               backgroundColor: Colors.transparent,
               body: Container(
                 width: double.infinity,
+                height: double.infinity,
                 decoration: BoxDecoration(
-                  color: Theme.of(context).custom.colorTheme.foreground,
+                  color: Theme.of(context).custom.colorTheme.background,
                   borderRadius:
                       const BorderRadius.vertical(top: Radius.circular(16)),
                   boxShadow: [
@@ -72,6 +80,7 @@ class GlobalDrawerState extends State<GlobalDrawer>
                     ),
                   ],
                 ),
+                child: child,
               ),
             ),
             animationController: _controller,
