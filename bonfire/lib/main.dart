@@ -17,14 +17,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:bonfire/shared/utils/web_utils/web_utils.dart'
     if (dart.library.io) 'package:bonfire/shared/utils/web_utils/non_web_utils.dart';
 
-const firebaseOptions = FirebaseOptions(
-  // hey guys, don't mind me... Just chillin here.
-  apiKey: "AIzaSyCY8pVLbcOlWDz6NdLbaGckvwhOmfNu02U",
-  appId: "1:162066849712:android:db38e83be74de1b6",
-  messagingSenderId: "162066849712",
-  projectId: "adept-ethos-91518",
-);
-
 void main() async {
   print("Starting app...");
 

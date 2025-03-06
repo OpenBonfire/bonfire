@@ -1,6 +1,10 @@
+import 'dart:convert';
+
+import 'package:firebridge/firebridge.dart';
 import 'package:firebridge/src/client.dart';
 import 'package:firebridge/src/http/request.dart';
 import 'package:firebridge/src/http/route.dart';
+import 'package:firebridge/src/models/gateway/events/notification.dart';
 import 'package:firebridge/src/models/gateway/gateway.dart';
 import 'package:firebridge/src/models/presence.dart';
 import 'package:firebridge/src/models/snowflake.dart';
@@ -135,6 +139,32 @@ abstract class GatewayManager {
 
     final response = await client.httpHandler.executeSafe(request);
     return parseGatewayBot(response.jsonBody as Map<String, Object?>);
+  }
+
+  /// Parse a [NotificationCreatedEvent] from a raw map.
+  NotificationCreatedEvent parseNotificationCreated(Map<String, Object?> raw) {
+    return NotificationCreatedEvent(
+      userAvatar: raw['user_avatar'] as String,
+      notifInstanceId: Snowflake.parse(raw['notif_instance_id'] as String),
+      messageType: MessageType(int.parse(raw['message_type_'] as String)),
+      username: raw['user_username'] as String,
+      messageId: Snowflake.parse(raw['message_id'] as String),
+      recievingUserId: Snowflake.parse(raw['receiving_user_id'] as String),
+      eventType: raw['type'] as String,
+      message: MessageManager(
+        client.options.messageCacheConfig,
+        client,
+        channelId: Snowflake.parse(raw['channel_id']!),
+      ).parse(jsonDecode(raw['message'] as String) as Map<String, Object?>),
+      messageFlags: MessageFlags(int.parse(raw['message_flags'] as String)),
+      messageContent: raw['message_content'] as String,
+      userId: Snowflake.parse(raw['user_id'] as String),
+      category: raw['__category'] as String,
+      sound: raw['__sound'] as String,
+      channelType: ChannelType.values[int.parse(raw['channel_type'] as String)],
+      channelId: Snowflake.parse(raw['channel_id'] as String),
+      notifTypeId: int.parse(raw['notif_type_id'] as String),
+    );
   }
 }
 

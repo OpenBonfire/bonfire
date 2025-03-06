@@ -11,9 +11,9 @@ import 'package:hive_ce/hive.dart';
 const firebaseOptions = FirebaseOptions(
   // hey guys, don't mind me... Just chillin here.
   apiKey: "AIzaSyCY8pVLbcOlWDz6NdLbaGckvwhOmfNu02U",
-  appId: "1:653247688936:android:d573298672d5315d05595d",
-  messagingSenderId: "653247688936",
-  projectId: "bonfire-app-dev",
+  appId: "1:162066849712:android:db38e83be74de1b6",
+  messagingSenderId: "162066849712",
+  projectId: "adept-ethos-91518",
 );
 
 void showNotification(RemoteMessage message) async {
@@ -27,17 +27,18 @@ void showNotification(RemoteMessage message) async {
     return;
   }
 
-  final client = await Nyxx.connectGatewayWithOptions(
-      GatewayApiOptions(
-        token: token,
-        intents: GatewayIntents.all,
-        compression: GatewayCompression.none,
-      ),
-      GatewayClientOptions(
-        plugins: [
-          Logging(logLevel: Level.SEVERE),
-        ],
-      ));
+  final client = await Nyxx.connectRest(token);
+  // final client = await Nyxx.connectGatewayWithOptions(
+  //     GatewayApiOptions(
+  //       token: token,
+  //       intents: GatewayIntents.all,
+  //       compression: GatewayCompression.none,
+  //     ),
+  //     GatewayClientOptions(
+  //       plugins: [
+  //         Logging(logLevel: Level.SEVERE),
+  //       ],
+  //     ));
 
   final notificationData =
       client.gateway.parseNotificationCreated(message.data);
