@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "653247688936",
+    "project_id": "bonfire-app-dev",
+    "storage_bucket": "bonfire-app-dev.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:653247688936:android:d573298672d5315d05595d",
+        "android_client_info": {
+          "package_name": "com.example.bonfire"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCY8pVLbcOlWDz6NdLbaGckvwhOmfNu02U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

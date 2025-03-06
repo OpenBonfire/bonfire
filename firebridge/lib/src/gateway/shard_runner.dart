@@ -196,10 +196,11 @@ class ShardRunner {
             return;
           }
         } catch (error, stackTrace) {
-          print("Catching error: $error");
+          // TODO: Some sort of reconnect? Just so there isn't too much log spam.
+          // print("Catching error: $error");
           controller.add(ErrorReceived(error: error, stackTrace: stackTrace));
         } finally {
-          print("CLOSING!");
+          // print("CLOSING!");
           // Reset connection properties.
           connection?.close();
           connection = null;

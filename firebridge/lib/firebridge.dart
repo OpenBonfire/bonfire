@@ -215,6 +215,8 @@ export 'src/models/user/application_role_connection.dart'
 export 'src/models/user/connection.dart'
     show Connection, ConnectionType, ConnectionVisibility;
 export 'src/models/user/user.dart' show PartialUser, User, UserFlags, NitroType;
+export 'src/models/user/notification.dart'
+    show PushNotificationProvider, PushSyncToken;
 export 'src/models/user/relationship.dart' show Relationship;
 export 'src/models/user/settings/channel_overrides.dart' show ChannelOverrides;
 export 'src/models/user/settings/guild_folder.dart' show GuildFolder;

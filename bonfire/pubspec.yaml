@@ -91,6 +91,9 @@ dependencies:
   crypto: ^3.0.6
   shimmer: ^3.0.0
   rubber: ^1.1.0
+  firebase_messaging: ^15.2.4
+  firebase_core: ^3.12.1
+  flutter_local_notifications: ^18.0.1
 
 dependency_overrides:
   http: ^1.2.1

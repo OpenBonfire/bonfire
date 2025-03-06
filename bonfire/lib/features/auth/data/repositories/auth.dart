@@ -9,6 +9,7 @@ import 'package:bonfire/features/messaging/repositories/reactions.dart';
 import 'package:bonfire/features/user/controllers/presence.dart';
 import 'package:bonfire/features/voice/repositories/voice_members.dart';
 import 'package:bonfire/features/me/controllers/settings.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:http/http.dart' as http;
 import 'package:firebridge/firebridge.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -106,9 +107,35 @@ class Auth extends _$Auth {
     authResponse = AuthUser(token: token, client: client);
     state = authResponse!;
 
+    void testPushNotifications() async {
+      print("Testing push notifications...");
+
+      final fcmToken = await FirebaseMessaging.instance.getToken();
+      print("FCM TOKEN: $fcmToken");
+
+      client.users
+          .registerNotificationDevice(PushNotificationProvider.gcm, fcmToken!);
+
+      FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+        print('Got a message whilst in the foreground!');
+        print('Message data: ${message.data}');
+
+        if (message.notification != null) {
+          print(
+              'Message also contained a notification: ${message.notification}');
+        }
+      });
+      // FirebaseMessaging.onBackgroundMessage((message) async {
+      //   print("Handling a background message: ${message.messageId}");
+      // });
+    }
+
     client.onReady.listen((event) {
       // if (hasSentInit) return;
       // hasSentInit = true;
+
+      if (UniversalPlatform.isMobile) testPushNotifications();
+
       print("READY!");
       ref
           .read(privateMessageHistoryProvider.notifier)

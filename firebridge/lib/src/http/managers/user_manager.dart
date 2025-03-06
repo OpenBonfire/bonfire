@@ -20,6 +20,7 @@ import 'package:firebridge/src/models/presence.dart';
 import 'package:firebridge/src/models/snowflake.dart';
 import 'package:firebridge/src/models/user/application_role_connection.dart';
 import 'package:firebridge/src/models/user/connection.dart';
+import 'package:firebridge/src/models/user/notification.dart';
 import 'package:firebridge/src/models/user/relationship.dart';
 import 'package:firebridge/src/models/user/settings/custom_status.dart';
 import 'package:firebridge/src/models/user/settings/guild_folder.dart';
@@ -206,6 +207,11 @@ class UserManager extends ReadOnlyManager<User> {
     );
   }
 
+  /// Parse a [PushSyncToken] from [raw].
+  PushSyncToken parsePushSyncToken(Map<String, Object?> raw) {
+    return PushSyncToken(raw['token'] as String);
+  }
+
   @override
   Future<User> fetch(Snowflake id) async {
     final route = HttpRoute()..users(id: id.toString());
@@ -382,5 +388,96 @@ class UserManager extends ReadOnlyManager<User> {
     final response = await client.httpHandler.executeSafe(request);
     return parseApplicationRoleConnection(
         response.jsonBody as Map<String, Object?>);
+  }
+
+  /// Registers a GCM/APNs push notification token for the client's device.
+  Future<void> registerNotificationDevice(
+    /// The push notification provider of the device
+    PushNotificationProvider provider,
+
+    /// The push notification token to register
+    String token, {
+    /// The push notification provider of the device
+    PushNotificationProvider? voidProvider,
+
+    /// The push notification token to register
+    PushNotificationProvider? voipToken,
+  }) async {
+    final route = HttpRoute()
+      ..users(id: '@me')
+      ..devices();
+    final request = BasicRequest(route,
+        method: 'POST',
+        body: jsonEncode({
+          'provider': provider.value,
+          'token': token,
+          'void_provider': voidProvider?.value,
+          'voip_token': voipToken?.value,
+        }));
+
+    var resp = await client.httpHandler.executeSafe(request);
+    print("Got response: ${resp.statusCode}, ${resp.jsonBody}");
+  }
+
+  /// Unregisters a GCM/APNs push notification token for the client's device.
+  Future<void> unregisterNotificationDevice(
+    /// The push notification provider of the device
+    PushNotificationProvider provider,
+
+    /// The push notification token to register
+    String token,
+  ) async {
+    final route = HttpRoute()
+      ..users(id: '@me')
+      ..devices();
+    final request = BasicRequest(route,
+        method: 'DELETE',
+        body: jsonEncode({
+          'provider': provider.value,
+          'token': token,
+        }));
+
+    await client.httpHandler.executeSafe(request);
+  }
+
+  Future<PushSyncToken> getDevicePushSyncToken() {
+    final route = HttpRoute()
+      ..users(id: '@me')
+      ..devices()
+      ..syncToken();
+    final request = BasicRequest(route);
+
+    return client.httpHandler.execute(request).then((response) {
+      return parsePushSyncToken(response.jsonBody as Map<String, Object?>);
+    });
+  }
+
+  Future<List<PushSyncToken>> syncDevices(
+    /// The push notification provider of the device
+    PushNotificationProvider provider,
+
+    /// The push notification token to register
+    String token,
+
+    /// Device sync tokens for each account
+    List<PushSyncToken> tokens,
+  ) async {
+    final route = HttpRoute()
+      ..users(id: '@me')
+      ..devices()
+      ..sync();
+    final request = BasicRequest(route,
+        method: 'POST',
+        body: jsonEncode({
+          'provider': provider.value,
+          'token': token,
+          'tokens': tokens.map((e) => e.token).toList(),
+        }));
+
+    final response = await client.httpHandler.executeSafe(request);
+    return parseMany(
+      response.jsonBody as List,
+      (Map<String, Object?> raw) => parsePushSyncToken(raw),
+    );
   }
 }

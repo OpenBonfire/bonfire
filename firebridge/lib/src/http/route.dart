@@ -374,4 +374,13 @@ extension RouteHelpers on HttpRoute {
 
   /// Adds the [`post-data`](https://docs.discord.sex/resources/channel#get-channel-post-data) part to this [HttpRoute].
   void postData() => add(HttpRoutePart('post-data'));
+
+  /// Adds the [`devices`](https://docs.discord.sex/topics/push-notifications#register-device) part to this [HttpRoute].
+  void devices() => add(HttpRoutePart('devices'));
+
+  /// Adds the [`sync-token`](https://docs.discord.sex/topics/push-notifications#register-device) part to this [HttpRoute].
+  void syncToken() => add(HttpRoutePart('sync-token'));
+
+  /// Adds the [`sync`](https://docs.discord.sex/topics/push-notifications#register-device) part to this [HttpRoute].
+  void sync() => add(HttpRoutePart('sync'));
 }
