@@ -25,6 +25,7 @@ class _LoginState extends ConsumerState<CredentialsScreen> {
   @override
   void dispose() {
     print("DISPOSING FIREVIEW");
+
     widget.fireviewController.dispose();
     super.dispose();
   }
@@ -54,14 +55,15 @@ class _LoginState extends ConsumerState<CredentialsScreen> {
               .evaluateJavascript(
                   "(webpackChunkdiscord_app.push([[''],{},e=>{m=[];for(let c in e.c)m.push(e.c[c])}]),m).find(m=>m?.exports?.default?.getToken!==void 0).exports.default.getToken();")
               .then((value) async {
+            // this sucks
+
             print("evaluated and logging in!");
             await ref
                 .read(authProvider.notifier)
                 .loginWithToken((value as String).replaceAll('"', ""));
+            await widget.fireviewController.loadUrl(Uri.parse("about:blank"));
+            await widget.fireviewController.dispose();
           });
-
-          // not a huge fan, but until I figure out how webview_flutter disposal is supposed to work
-          widget.fireviewController.loadUrl(Uri.parse("about:blank"));
         }
       });
     });

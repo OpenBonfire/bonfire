@@ -12,6 +12,7 @@ import 'package:bonfire/features/messaging/components/box/mobile_message_drawer.
 import 'package:bonfire/features/messaging/components/box/popout.dart';
 import 'package:bonfire/features/messaging/components/box/reply/message_reply.dart';
 import 'package:bonfire/features/messaging/components/reactions.dart';
+import 'package:bonfire/shared/components/mobile_drawer.dart';
 import 'package:bonfire/shared/utils/platform.dart';
 import 'package:bonfire/theme/theme.dart';
 import 'package:firebridge/firebridge.dart' hide ButtonStyle;
@@ -98,40 +99,7 @@ class _MessageBoxState extends ConsumerState<MessageBox>
     return false;
   }
 
-  void _showMobileDrawer() {
-    _animationController.forward();
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      transitionAnimationController: _animationController,
-      builder: (BuildContext context) {
-        return GestureDetector(
-          onTap: () {},
-          child: AnimatedBuilder(
-            animation: _animation,
-            builder: (context, child) {
-              return FractionalTranslation(
-                translation: Offset(0.0, 1.0 - _animation.value),
-                child: child,
-              );
-            },
-            child: DraggableScrollableSheet(
-              initialChildSize: 0.5,
-              minChildSize: 0.2,
-              maxChildSize: 0.75,
-              builder: (_, controller) {
-                return MobileMessageDrawer(messageId: widget.messageId);
-              },
-            ),
-          ),
-        );
-      },
-    ).then((_) {
-      print("Drawer dismissed");
-      _animationController.reverse();
-    });
-  }
+  void showCustomRubberBottomSheet(BuildContext context) {}
 
   @override
   Widget build(BuildContext context) {
@@ -193,9 +161,10 @@ class _MessageBoxState extends ConsumerState<MessageBox>
             ),
             onPressed: () {},
             onLongPress: () {
-              if (shouldUseMobileLayout(context)) {
-                _showMobileDrawer();
-              }
+              // if (shouldUseMobileLayout(context)) {
+              //   _showMobileDrawer();
+              // }
+              GlobalDrawer.of(context)!.toggleDrawer();
             },
             child: Stack(
               children: [

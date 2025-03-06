@@ -1,6 +1,6 @@
 import 'package:bonfire/features/user/components/presence_avatar.dart';
 import 'package:bonfire/features/user/controllers/presence.dart';
-import 'package:bonfire/shared/widgets/presence_text.dart';
+import 'package:bonfire/shared/components/presence_text.dart';
 import 'package:bonfire/theme/theme.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
