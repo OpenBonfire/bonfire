@@ -183,25 +183,21 @@ class ChannelMembers extends _$ChannelMembers {
     }
   }
 
-  void updateMemberList(MemberListUpdateOperation operation, Snowflake guildId,
-      List<dynamic> groups) {
+  void updateMemberList(List<MemberListUpdateOperation> operations,
+      Snowflake guildId, List<dynamic> groups) {
     final currentState = ref.read(guildMemberListProvider(guildId)).valueOrNull;
     if (currentState != null) {
       final newGroups = groups.cast<GuildMemberListGroup>();
 
-      // Apply the operation to the member list
       ref
           .read(guildMemberListProvider(guildId).notifier)
-          .applyOperations([operation]);
+          .applyOperations(operations);
 
-      // Get the updated member list
       final updatedMemberList =
           ref.read(guildMemberListProvider(guildId)).valueOrNull?.second ?? [];
 
-      // Create a new Pair with the updated groups and member list
       final newPair = Pair(newGroups, updatedMemberList);
 
-      // Update the state with the new data
       ref.read(guildMemberListProvider(guildId).notifier).setData(
             guildId,
             newPair,

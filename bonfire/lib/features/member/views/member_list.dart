@@ -198,8 +198,6 @@ class MemberScrollViewState extends ConsumerState<MemberScrollView> {
     var groupList = memberListPair?.first ?? [];
     var memberList = memberListPair?.second ?? [];
 
-    print("Length of member list: ${memberList.length}");
-
     return Container(
       child: ScrollConfiguration(
         behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
@@ -210,7 +208,6 @@ class MemberScrollViewState extends ConsumerState<MemberScrollView> {
             // TODO: These should absolutely not be lists of one item
             final item = memberList[index].first;
 
-            // Handle group headers
             if (item is GuildMemberListGroup) {
               return Padding(
                 padding: EdgeInsets.only(
@@ -228,7 +225,7 @@ class MemberScrollViewState extends ConsumerState<MemberScrollView> {
 
             if (item is Member) {
               bool shouldRoundBottom = index == memberList.length - 1 ||
-                  memberList[index + 1] is! Member;
+                  memberList[index + 1].first is GuildMemberListGroup;
 
               return Padding(
                 padding: EdgeInsets.only(
@@ -237,7 +234,8 @@ class MemberScrollViewState extends ConsumerState<MemberScrollView> {
                   member: item,
                   guild: widget.guild,
                   channel: widget.channel,
-                  roundTop: index == 0 || memberList[index - 1] is! Member,
+                  roundTop: index == 0 ||
+                      memberList[index - 1].first is GuildMemberListGroup,
                   roundBottom: shouldRoundBottom,
                 ),
               );
@@ -247,9 +245,9 @@ class MemberScrollViewState extends ConsumerState<MemberScrollView> {
             if (item is List<Member>) {
               return Column(
                 children: item.map<Widget>((member) {
-                  bool shouldRoundBottom = member == item.last ||
-                      (index < memberList.length - 1 &&
-                          memberList[index + 1] is! List<Member>);
+                  bool shouldRoundBottom = member == item.last &&
+                      (index == memberList.length - 1 ||
+                          memberList[index + 1] is GuildMemberListGroup);
 
                   return Padding(
                     padding: EdgeInsets.only(
@@ -262,7 +260,7 @@ class MemberScrollViewState extends ConsumerState<MemberScrollView> {
                       channel: widget.channel,
                       roundTop: member == item.first &&
                           (index == 0 ||
-                              memberList[index - 1] is! List<Member>),
+                              memberList[index - 1] is GuildMemberListGroup),
                       roundBottom: shouldRoundBottom,
                     ),
                   );
