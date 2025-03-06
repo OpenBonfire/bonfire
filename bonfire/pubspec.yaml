@@ -87,7 +87,7 @@ dependencies:
   path: ^1.9.0
   flutter_localization: ^0.2.2
   video_player: ^2.9.2
-  flutter_webrtc: ^0.12.11
+  # flutter_webrtc: ^0.12.11
   crypto: ^3.0.6
   shimmer: ^3.0.0
 

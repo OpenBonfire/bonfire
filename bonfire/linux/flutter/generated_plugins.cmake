@@ -6,7 +6,6 @@ list(APPEND FLUTTER_PLUGIN_LIST
   audioplayers_linux
   file_selector_linux
   flutter_localization
-  flutter_webrtc
   media_kit_libs_linux
   media_kit_video
   url_launcher_linux
