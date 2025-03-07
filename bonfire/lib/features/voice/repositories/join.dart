@@ -17,7 +17,9 @@ class VoiceChannelController extends _$VoiceChannelController {
   StreamSubscription? _voiceStateUpdateSubscription;
   RTCPeerConnection? _peerConnection;
   MediaStream? _localStream;
-  List<Map<String, dynamic>>? _originalMediaSections;
+  String? _originalOfferSdp;
+  List<String> _bundleMids = [];
+  final Map<int, int> _ssrcMap = {};
 
   @override
   VoiceReadyEvent? build() {
@@ -64,7 +66,6 @@ class VoiceChannelController extends _$VoiceChannelController {
         );
 
         _voiceClient!.onVoiceSessionDescription.listen((event) {
-          print("Received Session Description");
           _handleRemoteSdp(event.sdp!);
         });
 
@@ -100,156 +101,203 @@ class VoiceChannelController extends _$VoiceChannelController {
     final configuration = <String, dynamic>{
       'sdpSemantics': 'unified-plan',
       'bundlePolicy': 'max-bundle',
+      'rtcpMuxPolicy': 'require',
       'iceTransportPolicy': 'relay',
     };
 
     _peerConnection = await createPeerConnection(configuration);
 
     _peerConnection!.onIceCandidate = (RTCIceCandidate candidate) {
-      print("ICE candidate: ${candidate.toMap()}");
-      // TODO: Implement sending ICE candidate to Discord
+      // Handle ICE candidates as needed
     };
 
-    _peerConnection!.onConnectionState = (RTCPeerConnectionState state) {
-      print('Connection state change: $state');
-      if (state == RTCPeerConnectionState.RTCPeerConnectionStateFailed) {}
-    };
-
-    Future<void> _handleNegotiation() async {
-      if (_peerConnection == null) return;
-
-      final offer = await _peerConnection!.createOffer({
-        'offerToReceiveAudio': true,
-        'offerToReceiveVideo': true,
-      });
-      print("setting local description");
-      print(offer.sdp);
-      await _peerConnection!.setLocalDescription(offer);
-
-      _voiceClient!.sendVoiceSelectProtocol(
-        VoiceSelectProtocolBuilder(
-          protocol: "webrtc",
-          data: offer.sdp!,
-        ),
-      );
-    }
-
-    _peerConnection!.onRenegotiationNeeded = () async {
-      print("Negotiation needed");
-      await _handleNegotiation();
-    };
-
-    _peerConnection!.onSignalingState = (RTCSignalingState state) {
-      print('Signaling state change: $state');
-    };
-
-    _localStream = await navigator.mediaDevices
-        .getUserMedia({'audio': true, 'video': true});
+    _localStream = await navigator.mediaDevices.getUserMedia({'audio': true});
     _localStream!.getTracks().forEach((track) {
       _peerConnection!.addTrack(track, _localStream!);
     });
 
-    final offer = await _peerConnection!.createOffer({
-      'offerToReceiveAudio': true,
-      'offerToReceiveVideo': true,
-    });
+    // Add transceivers to match JS example
+    for (var i = 0; i < 10; i++) {
+      _peerConnection!.addTransceiver(
+        kind: RTCRtpMediaType.RTCRtpMediaTypeAudio,
+        init: RTCRtpTransceiverInit(direction: TransceiverDirection.RecvOnly),
+      );
+      _peerConnection!.addTransceiver(
+        kind: RTCRtpMediaType.RTCRtpMediaTypeVideo,
+        init: RTCRtpTransceiverInit(direction: TransceiverDirection.RecvOnly),
+      );
+    }
 
-    // Store original media sections from offer
-    final parsedOffer = parse(offer.sdp!);
-    _originalMediaSections =
-        List<Map<String, dynamic>>.from(parsedOffer['media']);
+    final offer = await _peerConnection!.createOffer();
+    _originalOfferSdp = offer.sdp;
+    final modifiedSdp = _patchLocalSdp(offer.sdp!);
 
-    await _peerConnection!.setLocalDescription(offer);
-    print("Created offer:\n${offer.sdp}");
+    print("-- MODIFIED SDP --");
+
+    await _peerConnection!
+        .setLocalDescription(RTCSessionDescription(modifiedSdp, 'offer'));
 
     _voiceClient!.sendVoiceSelectProtocol(
       VoiceSelectProtocolBuilder(
         protocol: "webrtc",
-        data: offer.sdp!,
+        data: modifiedSdp,
       ),
     );
   }
 
-  Future<void> _handleRemoteSdp(String remoteSdp) async {
-    if (_peerConnection == null || _originalMediaSections == null) return;
+  String _patchLocalSdp(String originalSdp) {
+    final parsed = parse(originalSdp);
+    _bundleMids =
+        parsed['media']!.map<String>((m) => m['mid'].toString()).toList();
 
-    final parsedRemote = parse(remoteSdp);
-    final remoteMedia = parsedRemote['media'] ?? [];
+    parsed
+      ..['msidSemantic'] = {'semantic': 'WMS', 'token': '*'}
+      ..['groups'] = [
+        {'type': 'BUNDLE', 'mids': _bundleMids.join(' ')}
+      ]
+      ..['iceOptions'] = 'trickle';
 
-    // Build the full answer SDP using original media structure
-    final answerSdp = {
-      'version': 0,
-      'origin': {
-        'username': '-',
-        'sessionId': DateTime.now().millisecondsSinceEpoch,
-        'sessionVersion': 2,
-        'netType': 'IN',
-        'ipVer': 4,
-        'address': '127.0.0.1'
+    parsed['media'] = parsed['media']!.map((media) {
+      final isAudio = media['type'] == 'audio';
+      final isPrimaryAudio = isAudio && media['mid'] == '0';
+
+      return {
+        ...media,
+        'setup': 'actpass',
+        'direction': isPrimaryAudio ? 'sendrecv' : 'recvonly',
+        'extmap': _getExtMaps(isAudio, isPrimaryAudio),
+        'rtp': _getCodecPayloads(isAudio),
+        'fmtp': _getFmtpParams(isAudio),
+        'rtcpFb': _getRtcpFeedback(isAudio),
+      };
+    }).toList();
+
+    return write(parsed, {'format': 'planB'});
+  }
+
+  List<Map<String, dynamic>> _getExtMaps(bool isAudio, bool isPrimaryAudio) {
+    if (isAudio) {
+      return [
+        {'value': 1, 'uri': 'urn:ietf:params:rtp-hdrext:ssrc-audio-level'},
+        if (isPrimaryAudio)
+          {
+            'value': 2,
+            'uri': 'urn:ietf:params:rtp-hdrext:csrc-audio-level',
+            'direction': 'recvonly'
+          },
+        {'value': 3, 'uri': 'urn:ietf:params:rtp-hdrext:sdes:mid'},
+      ];
+    }
+    return [
+      {'value': 3, 'uri': 'urn:ietf:params:rtp-hdrext:sdes:mid'},
+      {
+        'value': 4,
+        'uri': 'http://www.webrtc.org/experiments/rtp-hdrext/abs-send-time'
       },
+      {'value': 5, 'uri': 'urn:ietf:params:rtp-hdrext:toffset'},
+      {
+        'value': 6,
+        'uri': 'http://www.webrtc.org/experiments/rtp-hdrext/playout-delay',
+        'direction': 'recvonly'
+      },
+      {
+        'value': 7,
+        'uri':
+            'http://www.ietf.org/id/draft-holmer-rmcat-transport-wide-cc-extensions-01'
+      },
+    ];
+  }
+
+  List<Map<String, dynamic>> _getCodecPayloads(bool isAudio) {
+    return isAudio
+        ? [
+            {'payload': 109, 'codec': 'opus', 'rate': 48000, 'encoding': 2},
+            {'payload': 9, 'codec': 'G722', 'rate': 8000},
+            {'payload': 0, 'codec': 'PCMU', 'rate': 8000},
+            {'payload': 8, 'codec': 'PCMA', 'rate': 8000},
+            {'payload': 101, 'codec': 'telephone-event', 'rate': 8000},
+          ]
+        : [
+            {'payload': 126, 'codec': 'H264', 'rate': 90000},
+            {'payload': 127, 'codec': 'rtx', 'rate': 90000},
+          ];
+  }
+
+  List<Map<String, dynamic>> _getFmtpParams(bool isAudio) {
+    return isAudio
+        ? [
+            {
+              'payload': 109,
+              'config': 'maxplaybackrate=48000;stereo=1;useinbandfec=1'
+            },
+            {'payload': 101, 'config': '0-15'},
+          ]
+        : [
+            {
+              'payload': 126,
+              'config':
+                  'profile-level-id=42e01f;level-asymmetry-allowed=1;packetization-mode=1'
+            },
+          ];
+  }
+
+  List<Map<String, dynamic>> _getRtcpFeedback(bool isAudio) {
+    return isAudio
+        ? []
+        : [
+            {'payload': 126, 'type': 'ccm', 'subtype': 'fir'},
+            {'payload': 126, 'type': 'nack'},
+            {'payload': 126, 'type': 'nack', 'subtype': 'pli'},
+            {'payload': 126, 'type': 'goog-remb'},
+            {'payload': 126, 'type': 'transport-cc'},
+          ];
+  }
+
+  Future<void> _handleRemoteSdp(String remoteSdp) async {
+    if (_peerConnection == null || _originalOfferSdp == null) return;
+
+    final answer = _constructAnswerSdp(remoteSdp, _originalOfferSdp!);
+    await _peerConnection!
+        .setRemoteDescription(RTCSessionDescription(answer, 'answer'));
+  }
+
+  String _constructAnswerSdp(String remoteSdp, String originalOfferSdp) {
+    final parsedRemote = parse(remoteSdp);
+    final parsedOffer = parse(originalOfferSdp);
+    final remoteMedia =
+        List<Map<String, dynamic>>.from(parsedRemote['media'] ?? []);
+
+    return write({
+      'version': 0,
+      'origin': parsedOffer['origin'],
       'name': '-',
       'timing': {'start': 0, 'stop': 0},
-      'media': _originalMediaSections!.map((originalMedia) {
-        final mediaType = originalMedia['type'];
-        final mid = originalMedia['mid']?.toString() ?? '0';
-
-        // Find matching remote media by MID (if available)
+      'groups': parsedOffer['groups'],
+      'msidSemantic': parsedOffer['msidSemantic'],
+      'iceOptions': 'trickle',
+      'fingerprint': parsedRemote['fingerprint'],
+      'iceUfrag': parsedRemote['iceUfrag'],
+      'icePwd': parsedRemote['icePwd'],
+      'media': parsedOffer['media']!.map((originalMedia) {
+        final mid = originalMedia['mid'];
         final remote = remoteMedia.firstWhere(
-          (m) => m['mid']?.toString() == mid,
+          (m) => m['mid'] == mid,
           orElse: () => {},
         );
 
-        // Common attributes for all media lines
-        final baseMedia = {
+        return {
           ...originalMedia,
           'iceUfrag': parsedRemote['iceUfrag'],
           'icePwd': parsedRemote['icePwd'],
-          'fingerprint': parsedRemote['fingerprint'],
           'setup': 'passive',
           'candidates': parsedRemote['candidates'],
+          'port': remote['port'] ?? 0,
+          'direction': remote['direction'] ?? 'inactive',
         };
-
-        if (mediaType == 'audio') {
-          return {
-            ...baseMedia,
-            'port': remote['port'] ?? parsedRemote['connection']?['ip'] ?? 0,
-            'protocol': 'UDP/TLS/RTP/SAVPF',
-            'connection':
-                parsedRemote['connection'] ?? {'ip': '0.0.0.0', 'version': 4},
-            'rtcp': {
-              'port': remote['port'] ?? parsedRemote['connection']?['ip'] ?? 0
-            },
-            'direction': 'recvonly',
-            'rtp': originalMedia['rtp'],
-            'fmtp': originalMedia['fmtp'],
-            'extmap': originalMedia['extmap'],
-          };
-        }
-
-        // Video handling (mark inactive but preserve structure)
-        return {
-          ...baseMedia,
-          'port': 0,
-          'protocol': 'UDP/TLS/RTP/SAVPF',
-          'direction': 'inactive',
-          'connection': {'ip': '0.0.0.0', 'version': 4},
-          'rtcp': {'port': 0},
-        };
-      }).toList()
-    };
-
-    // Generate the SDP string
-    final sdpAnswer = write(answerSdp, {'format': 'planB'});
-
-    try {
-      await _peerConnection!.setRemoteDescription(
-        RTCSessionDescription(sdpAnswer, 'answer'),
-      );
-      print("Successfully set remote description");
-    } catch (e) {
-      print("Error setting remote description: $e");
-      print("Constructed SDP Answer:\n$sdpAnswer");
-    }
+      }).toList(),
+    }, {
+      'format': 'planB'
+    });
   }
 
   void leaveVoiceChannel() {
@@ -275,7 +323,6 @@ class VoiceChannelController extends _$VoiceChannelController {
     _localStream = null;
 
     _cancelSubscriptions();
-    _originalMediaSections = null;
     state = null;
   }
 
