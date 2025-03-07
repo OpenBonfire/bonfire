@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:bonfire/features/auth/data/hive.dart';
 import 'package:bonfire/features/notifications/controllers/firebase.dart';
 import 'package:bonfire/features/notifications/controllers/notification.dart';
@@ -12,6 +10,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_keyboard_size/flutter_keyboard_size.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:universal_platform/universal_platform.dart';
 import 'package:video_player_media_kit/video_player_media_kit.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:bonfire/shared/utils/web_utils/web_utils.dart'
@@ -45,21 +44,28 @@ void main() async {
     options: firebaseOptions,
   );
 
-  await initializeNotifications();
-  await setupFirebaseMessaging();
+  // TODO: Add iOS support
+  // Notifications for other platforms like Windows will be added,
+  // but I don't believe any of that is handled via firebase
+  // Because desktop is way less locked down, it probably has
+  // some other notifer endpoint that doesn't rely on the system
+  if (UniversalPlatform.isAndroid) {
+    await initializeNotifications();
+    await setupFirebaseMessaging();
 
-  final messaging = FirebaseMessaging.instance;
-  final settings = await messaging.requestPermission(
-    alert: true,
-    announcement: false,
-    badge: true,
-    carPlay: false,
-    criticalAlert: false,
-    provisional: false,
-    sound: true,
-  );
-  registerBackgroundHandler();
-  print('Notification permissions: ${settings.authorizationStatus}');
+    final messaging = FirebaseMessaging.instance;
+    final settings = await messaging.requestPermission(
+      alert: true,
+      announcement: false,
+      badge: true,
+      carPlay: false,
+      criticalAlert: false,
+      provisional: false,
+      sound: true,
+    );
+    registerBackgroundHandler();
+    print('Notification permissions: ${settings.authorizationStatus}');
+  }
 
   runApp(const ProviderScope(
     child: MaterialApp(
@@ -76,26 +82,6 @@ class MainWindow extends ConsumerStatefulWidget {
 }
 
 class _MainWindowState extends ConsumerState<MainWindow> {
-  @override
-  void initState() {
-    super.initState();
-
-    // flutterLocalNotificationsPlugin.show(
-    //   Random().nextInt(10000000) + 1000,
-    //   "Test Notification",
-    //   "This is a test notification",
-    //   NotificationDetails(
-    //     android: AndroidNotificationDetails(
-    //       channel.id,
-    //       channel.name,
-    //       channelDescription: channel.description,
-    //       icon: 'app_icon',
-    //     ),
-    //   ),
-    //   payload: "test_payload",
-    // );
-  }
-
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
