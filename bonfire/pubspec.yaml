@@ -95,6 +95,7 @@ dependencies:
   firebase_core: ^3.12.1
   flutter_local_notifications: ^18.0.1
   flutter_webrtc: ^0.12.11
+  sdp_transform: ^0.3.2
 
 dependency_overrides:
   http: ^1.2.1

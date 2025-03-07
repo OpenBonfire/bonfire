@@ -4,6 +4,7 @@ import 'package:bonfire/features/auth/data/repositories/discord_auth.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
+import 'package:sdp_transform/sdp_transform.dart';
 
 part 'join.g.dart';
 
@@ -16,6 +17,7 @@ class VoiceChannelController extends _$VoiceChannelController {
   StreamSubscription? _voiceStateUpdateSubscription;
   RTCPeerConnection? _peerConnection;
   MediaStream? _localStream;
+  List<Map<String, dynamic>>? _originalMediaSections;
 
   @override
   VoiceReadyEvent? build() {
@@ -115,16 +117,21 @@ class VoiceChannelController extends _$VoiceChannelController {
 
     Future<void> _handleNegotiation() async {
       if (_peerConnection == null) return;
-      var offer = await _peerConnection!.createOffer({
+
+      final offer = await _peerConnection!.createOffer({
         'offerToReceiveAudio': true,
         'offerToReceiveVideo': true,
       });
-      String sdp = offer.sdp!;
-      sdp = sdp.replaceAll('UDP/TLS/RTP/SAVPF', 'UDP/TLS/RTP/SAVP');
+      print("setting local description");
+      print(offer.sdp);
+      await _peerConnection!.setLocalDescription(offer);
 
-      RTCSessionDescription modifiedOffer =
-          RTCSessionDescription(sdp, offer.type);
-      await _peerConnection!.setLocalDescription(modifiedOffer);
+      _voiceClient!.sendVoiceSelectProtocol(
+        VoiceSelectProtocolBuilder(
+          protocol: "webrtc",
+          data: offer.sdp!,
+        ),
+      );
     }
 
     _peerConnection!.onRenegotiationNeeded = () async {
@@ -142,96 +149,106 @@ class VoiceChannelController extends _$VoiceChannelController {
       _peerConnection!.addTrack(track, _localStream!);
     });
 
-    RTCSessionDescription offer = await _peerConnection!.createOffer({
+    final offer = await _peerConnection!.createOffer({
       'offerToReceiveAudio': true,
       'offerToReceiveVideo': true,
     });
 
-    String sdp = offer.sdp!;
-    sdp = sdp.replaceAll('UDP/TLS/RTP/SAVPF', 'UDP/TLS/RTP/SAVP');
+    // Store original media sections from offer
+    final parsedOffer = parse(offer.sdp!);
+    _originalMediaSections =
+        List<Map<String, dynamic>>.from(parsedOffer['media']);
 
-    RTCSessionDescription modifiedOffer =
-        RTCSessionDescription(sdp, offer.type);
-    await _peerConnection!.setLocalDescription(modifiedOffer);
-
-    print("Created offer:");
-    print(sdp);
+    await _peerConnection!.setLocalDescription(offer);
+    print("Created offer:\n${offer.sdp}");
 
     _voiceClient!.sendVoiceSelectProtocol(
       VoiceSelectProtocolBuilder(
         protocol: "webrtc",
-        data: sdp,
+        data: offer.sdp!,
       ),
     );
   }
 
   Future<void> _handleRemoteSdp(String remoteSdp) async {
-    if (_peerConnection == null) {
-      throw Exception("Peer connection not initialized");
-    }
+    if (_peerConnection == null || _originalMediaSections == null) return;
 
-    print("Received SDP from Discord:");
-    print(remoteSdp);
+    final parsedRemote = parse(remoteSdp);
+    final remoteMedia = parsedRemote['media'] ?? [];
 
-    // this is stupid
-    final lines = remoteSdp.split('\n');
-    String? fingerprint;
-    String? iceUfrag;
-    String? icePwd;
-    String? candidate;
-    String? ip;
-    String? port;
+    // Build the full answer SDP using original media structure
+    final answerSdp = {
+      'version': 0,
+      'origin': {
+        'username': '-',
+        'sessionId': DateTime.now().millisecondsSinceEpoch,
+        'sessionVersion': 2,
+        'netType': 'IN',
+        'ipVer': 4,
+        'address': '127.0.0.1'
+      },
+      'name': '-',
+      'timing': {'start': 0, 'stop': 0},
+      'media': _originalMediaSections!.map((originalMedia) {
+        final mediaType = originalMedia['type'];
+        final mid = originalMedia['mid']?.toString() ?? '0';
 
-    for (var line in lines) {
-      if (line.startsWith('a=fingerprint:')) {
-        fingerprint = line.split(' ')[1];
-      } else if (line.startsWith('a=ice-ufrag:')) {
-        iceUfrag = line.split(':')[1];
-      } else if (line.startsWith('a=ice-pwd:')) {
-        icePwd = line.split(':')[1];
-      } else if (line.startsWith('a=candidate:')) {
-        candidate = line.substring(2);
-        var parts = candidate.split(' ');
-        ip = parts[4];
-        port = parts[5];
-      } else if (line.startsWith('c=IN IP4')) {
-        ip = line.split(' ')[2];
-      } else if (line.startsWith('m=audio')) {
-        port = line.split(' ')[1];
-      }
-    }
+        // Find matching remote media by MID (if available)
+        final remote = remoteMedia.firstWhere(
+          (m) => m['mid']?.toString() == mid,
+          orElse: () => {},
+        );
 
-    // this is less stupid, but still stupid
-    String sdpAnswer = """
-v=0
-o=- ${DateTime.now().millisecondsSinceEpoch} 2 IN IP4 127.0.0.1
-s=-
-t=0 0
-m=audio $port UDP/TLS/RTP/SAVP 111
-c=IN IP4 $ip
-a=rtcp:$port IN IP4 $ip
-a=ice-ufrag:$iceUfrag
-a=ice-pwd:$icePwd
-a=fingerprint:sha-256 $fingerprint
-a=setup:active
-a=mid:0
-a=sendrecv
-a=rtcp-mux
-a=rtpmap:111 opus/48000/2
-a=fmtp:111 minptime=10;useinbandfec=1
-a=candidate:$candidate
-a=end-of-candidates
-""";
+        // Common attributes for all media lines
+        final baseMedia = {
+          ...originalMedia,
+          'iceUfrag': parsedRemote['iceUfrag'],
+          'icePwd': parsedRemote['icePwd'],
+          'fingerprint': parsedRemote['fingerprint'],
+          'setup': 'passive',
+          'candidates': parsedRemote['candidates'],
+        };
+
+        if (mediaType == 'audio') {
+          return {
+            ...baseMedia,
+            'port': remote['port'] ?? parsedRemote['connection']?['ip'] ?? 0,
+            'protocol': 'UDP/TLS/RTP/SAVPF',
+            'connection':
+                parsedRemote['connection'] ?? {'ip': '0.0.0.0', 'version': 4},
+            'rtcp': {
+              'port': remote['port'] ?? parsedRemote['connection']?['ip'] ?? 0
+            },
+            'direction': 'recvonly',
+            'rtp': originalMedia['rtp'],
+            'fmtp': originalMedia['fmtp'],
+            'extmap': originalMedia['extmap'],
+          };
+        }
+
+        // Video handling (mark inactive but preserve structure)
+        return {
+          ...baseMedia,
+          'port': 0,
+          'protocol': 'UDP/TLS/RTP/SAVPF',
+          'direction': 'inactive',
+          'connection': {'ip': '0.0.0.0', 'version': 4},
+          'rtcp': {'port': 0},
+        };
+      }).toList()
+    };
+
+    // Generate the SDP string
+    final sdpAnswer = write(answerSdp, {'format': 'planB'});
 
     try {
       await _peerConnection!.setRemoteDescription(
         RTCSessionDescription(sdpAnswer, 'answer'),
       );
-      print("Remote description set successfully");
+      print("Successfully set remote description");
     } catch (e) {
       print("Error setting remote description: $e");
-      print("Attempted SDP answer:");
-      print(sdpAnswer);
+      print("Constructed SDP Answer:\n$sdpAnswer");
     }
   }
 
@@ -258,7 +275,7 @@ a=end-of-candidates
     _localStream = null;
 
     _cancelSubscriptions();
-
+    _originalMediaSections = null;
     state = null;
   }
 
