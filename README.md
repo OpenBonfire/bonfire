@@ -74,7 +74,7 @@ I'm pretty new to managing public projects, so you'll have to bear with me here.
         - 🟩 Image Attachments
         - 🟩 Video Attachments
         - 🟩 Audio Attachments (with actual mobile playback)
-  - 🟥 Offline Message Scheduling
+  - 🟨 Offline Message Scheduling
   - 🟨 Unreads (*viewable but can't be interacted with*)
   - 🟨 Threads (*usable, but barebones*)
   - 🟨 Member List
