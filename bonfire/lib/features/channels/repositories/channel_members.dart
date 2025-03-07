@@ -76,6 +76,8 @@ class GuildMemberList extends _$GuildMemberList {
           break;
         case MemberListUpdateType.insert:
           if (index != null) {
+            // errors a lot
+            return;
             newMemberList.insert(index, data);
           }
           break;
