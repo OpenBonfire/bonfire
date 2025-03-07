@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 import 'package:bonfire/features/auth/data/repositories/auth.dart';
 import 'package:bonfire/features/auth/data/repositories/discord_auth.dart';
 import 'package:flutter/services.dart';
@@ -31,11 +30,37 @@ class VoiceChannelController extends _$VoiceChannelController {
 
   void handleRemoteSdp(String sdp) async {
     print("Handling remote SDP");
-    print(sdp);
     if (_peerConnection == null) return;
 
-    final desc = RTCSessionDescription(sdp, "answer");
-    await _peerConnection!.setRemoteDescription(desc);
+    final parsedSdp = parse(sdp);
+    final media = parsedSdp["media"][0];
+    final port = media['port'];
+    final _fingerprint = media['fingerprint']["hash"];
+    final fingerprint = "sha-256 $_fingerprint";
+    final icePwd = media['icePwd'];
+    final iceUfrag = media['iceUfrag'];
+    final ip = media['connection']['ip'];
+    final _candidate = media['candidates'][0];
+    final candidate =
+        "${_candidate['foundation']} ${_candidate['component']} ${_candidate['transport']} ${_candidate['priority']} ${_candidate['ip']} ${_candidate['port']} typ host";
+
+    final template = await rootBundle.loadString(
+      'assets/sdps/remote.sdp',
+    );
+
+    // now apply changes to the template
+    // template['media'][0]['port'] = port;
+    // template['media'][0]['fingerprint'] = fingerprint;
+    // template['media'][0]['connection']['ip'] = ip;
+    template.replaceAll("PORT_PLACEHOLDER", "$port");
+    template.replaceAll("FINGERPRINT_PLACEHOLDER", fingerprint);
+    template.replaceAll("IP_PLACEHOLDER", ip);
+    template.replaceAll("ICE_PWD_PLACEHOLDER", icePwd);
+    template.replaceAll("ICE_UFRAG_PLACEHOLDER", iceUfrag);
+    template.replaceAll("CANDIDATE_PLACEHOLDER", candidate);
+
+    // final desc = RTCSessionDescription(sdp, "answer");
+    // await _peerConnection!.setRemoteDescription(desc.sdp!);
   }
 
   Future<void> joinVoiceChannel(Snowflake guildId, Snowflake channelId) async {
@@ -171,24 +196,7 @@ class VoiceChannelController extends _$VoiceChannelController {
       );
     }
 
-    // final parsedGeneratedOffer = parse(generatedOffer.sdp!);
-    // final media = parsedGeneratedOffer["media"];
-    // print(jsonEncode(parsedGeneratedOffer));
-    // final fingerprint = parsedGeneratedOffer["media"][0]['fingerprint'];
-
-    // final localDescriptionFile = await rootBundle.loadString(
-    //   'assets/sdps/local-description.sdp',
-    // );
-    // final localOfferTemplate = parse(localDescriptionFile);
-    // print("Patching fingerprint: $fingerprint");
-    // localOfferTemplate['fingerprint'] = fingerprint;
-    // localOfferTemplate['media'] = media;
-    // final localOffer = write(localOfferTemplate, null);
-
-    // final desc = RTCSessionDescription(generatedOffer.sdp!, "offer");
-    // await _peerConnection!.setLocalDescription(desc);
     await _handleNegotiation();
-    // print("Created offer:\n${offer.sdp}");
   }
 
   void leaveVoiceChannel() {
