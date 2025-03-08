@@ -39,17 +39,16 @@ void main() async {
 
   await setupHive();
 
-  await Firebase.initializeApp(
-    name: 'bonfire',
-    options: firebaseOptions,
-  );
-
   // TODO: Add iOS support
   // Notifications for other platforms like Windows will be added,
   // but I don't believe any of that is handled via firebase
   // Because desktop is way less locked down, it probably has
   // some other notifer endpoint that doesn't rely on the system
   if (UniversalPlatform.isAndroid) {
+    await Firebase.initializeApp(
+      name: 'bonfire',
+      options: firebaseOptions,
+    );
     await initializeNotifications();
     await setupFirebaseMessaging();
 

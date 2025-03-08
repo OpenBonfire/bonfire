@@ -7,6 +7,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:sdp_transform/sdp_transform.dart';
+import 'package:universal_io/io.dart';
 
 part 'join.g.dart';
 
@@ -180,7 +181,8 @@ a=rtcp-mux
           await _initializeWebRTC(event);
         });
       } catch (e) {
-        print("Error connecting to voice gateway: $e");
+        print(
+            "Error connecting to voice gateway: ${(e as WebSocketException).message}");
         state = null;
       } finally {
         _isConnecting = false;

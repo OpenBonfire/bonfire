@@ -58,6 +58,7 @@ class VoiceGateway extends VoiceGatewayManager
       if (event is VoiceHelloEvent) {
         final interval = Duration(milliseconds: event.heartbeatInterval);
         await for (final _ in Stream.periodic(interval)) {
+          print("Sending heartbeat");
           connection.add(VoiceSend(opcode: VoiceOpcode.heartbeat, data: null));
         }
       }
@@ -88,7 +89,7 @@ class VoiceGateway extends VoiceGatewayManager
     connection.add(VoiceSend(
       opcode: VoiceOpcode.speaking,
       data: {
-        "speaking": 5,
+        "speaking": 1 << 0,
         "delay": 0,
         "ssrc": ssrc,
       },
@@ -100,6 +101,7 @@ class VoiceGateway extends VoiceGatewayManager
 
   @override
   Future<void> close() async {
+    print("Closing voice gateway");
     await disconnect();
   }
 
