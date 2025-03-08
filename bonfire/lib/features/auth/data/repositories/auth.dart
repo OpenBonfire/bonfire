@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:bonfire/features/auth/controllers/ready.dart';
 import 'package:bonfire/features/auth/data/headers.dart';
 import 'package:bonfire/features/auth/data/repositories/discord_auth.dart';
 import 'package:bonfire/features/auth/models/auth.dart';
@@ -8,6 +9,8 @@ import 'package:bonfire/features/channels/repositories/channel_members.dart';
 import 'package:bonfire/features/channels/repositories/has_unreads.dart';
 import 'package:bonfire/features/friends/controllers/relationships.dart';
 import 'package:bonfire/features/guild/controllers/guild.dart';
+import 'package:bonfire/features/guild/controllers/role.dart';
+import 'package:bonfire/features/guild/controllers/roles.dart';
 import 'package:bonfire/features/messaging/controllers/message.dart';
 import 'package:bonfire/features/messaging/repositories/messages.dart';
 import 'package:bonfire/features/messaging/repositories/reactions.dart';
@@ -150,6 +153,31 @@ class Auth extends _$Auth {
 
       print("READY!");
 
+      for (var guild in event.guilds) {
+        // channels
+        for (var channel in guild.channels ?? []) {
+          ref
+              .read(channelControllerProvider(channel.id).notifier)
+              .setChannel(channel);
+        }
+
+        // roles
+        List<Snowflake> roleIds = [];
+        for (var role in guild.roleList) {
+          ref.read(roleControllerProvider(role.id).notifier).setRole(role);
+          roleIds.add(role.id);
+        }
+        ref.read(rolesControllerProvider(guild.id).notifier).setRoles(roleIds);
+
+        // we want this backwards in case we have initializers that depend on guild channels
+        // if a flow goes like
+        // get guild -> get channels -> get messages
+        // this would error if we intuitively initialize it first
+        ref.read(guildControllerProvider(guild.id).notifier).setGuild(guild);
+      }
+
+      ref.read(guildsStateProvider.notifier).setGuilds(event.guilds);
+
       ref
           .read(privateMessageHistoryProvider.notifier)
           .setMessageHistory(event.privateChannels);
@@ -167,17 +195,6 @@ class Auth extends _$Auth {
       ref
           .read(selfStatusStateProvider.notifier)
           .setSelfStatus(event.userSettings.status!);
-
-      for (var guild in event.guilds) {
-        for (var channel in guild.channels ?? []) {
-          ref
-              .read(channelControllerProvider(channel.id).notifier)
-              .setChannel(channel);
-        }
-        ref.read(guildControllerProvider(guild.id).notifier).setGuild(guild);
-      }
-
-      ref.read(guildsStateProvider.notifier).setGuilds(event.guilds);
 
       ref
           .read(relationshipControllerProvider.notifier)
@@ -285,6 +302,8 @@ class Auth extends _$Auth {
           .read(messageReactionsProvider(event.messageId).notifier)
           .removeReaction(event.emoji, event.user);
     });
+
+    ref.read(readyControllerProvider.notifier).setReady(true);
 
     return response;
   }

@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:bonfire/features/auth/data/repositories/auth.dart';
 import 'package:bonfire/features/auth/data/repositories/discord_auth.dart';
 import 'package:bonfire/features/guild/controllers/guild.dart';
+import 'package:bonfire/features/guild/controllers/role.dart';
+import 'package:bonfire/features/guild/controllers/roles.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:firebridge_extensions/firebridge_extensions.dart';
 import 'package:firebridge/firebridge.dart';
@@ -13,7 +15,6 @@ part 'channels.g.dart';
 /// A riverpod provider that fetches the channels for the current guild.
 @Riverpod(keepAlive: true)
 class Channels extends _$Channels {
-  Map<UserGuild, Member> selfMembers = {};
   final _cacheManager = CacheManager(
     Config(
       'channel_cache',
@@ -33,12 +34,6 @@ class Channels extends _$Channels {
     }
 
     if (auth != null && auth is AuthUser) {
-      if (selfMembers[guild] == null) {
-        selfMembers[guild] =
-            await auth.client.guilds[guild.id].members.get(auth.client.user.id);
-      }
-
-      var selfMember = selfMembers[guild]!;
       // var rawGuildChannels = await auth.client.guilds.fetchGuildChannels(
       //   guild.id,
       // );
@@ -49,9 +44,45 @@ class Channels extends _$Channels {
 
       List<GuildChannel> guildChannels = [];
 
-      // filter out channels that the user can't vie
+      // print("Member List: ${guild.memberList?.length}");
+      Member? maybeSelf;
+      Member? selfMember;
+      guild.memberList?.forEach((element) {
+        if (element.user?.id == auth.client.user.id) {
+          maybeSelf = element;
+        }
+        // print("Member: ${element.user.username}");
+      });
+
+      if (maybeSelf != null) {
+        print("Found member!");
+        selfMember = maybeSelf;
+      } else {
+        print("Requesting member");
+        selfMember =
+            await auth.client.guilds[guild.id].members.get(auth.client.user.id);
+      }
+
+      var roleIds = ref.watch(rolesControllerProvider(guildId));
+      if (roleIds == null) {
+        print("No role ids");
+      }
+
+      List<Role> roles = [];
+      print("Role ids: $roleIds");
+      for (Snowflake roleId in roleIds!) {
+        var _r = ref.watch(roleControllerProvider(roleId));
+        roles.add(_r!);
+      }
+
+      // filter out channels that the user can't view
       for (var channel in rawGuildChannels) {
-        var permissions = await channel.computePermissionsFor(selfMember);
+        var permissions =
+            await channel.computePermissionsForMemberWithGuildAndRoles(
+          selfMember!,
+          guild,
+          roles,
+        );
         if (permissions.canViewChannel) {
           guildChannels.add(channel);
         }

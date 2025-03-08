@@ -412,6 +412,8 @@ class Guild extends UserGuild {
   /// A list of channels in this guild. Usually only used when recieved via settings.
   final List<GuildChannel>? channels;
 
+  final List<Member>? memberList;
+
   /// {@macro guild}
   /// @nodoc
   Guild({
@@ -459,6 +461,7 @@ class Guild extends UserGuild {
     required this.stickerList,
     required this.safetyAlertsChannelId,
     this.channels,
+    this.memberList,
   });
 
   /// The owner of the guild.

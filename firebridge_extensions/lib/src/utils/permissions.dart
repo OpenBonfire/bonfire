@@ -9,18 +9,18 @@ import 'package:firebridge/firebridge.dart';
 ///
 /// Adapted from https://discord.com/developers/docs/topics/permissions#permission-overwrites
 /// {@endtemplate}
-Future<Permissions> computePermissions(
-  GuildChannel channel,
-  Member member,
-) async {
-  final guild = await channel.guild.get();
+Future<Permissions> computePermissions(GuildChannel channel, Member member,
+    {Guild? guild, List<Role>? roles}) async {
+  final guildInstance = guild ?? await channel.guild.get();
 
   Future<Permissions> computeBasePermissions() async {
-    if (guild.ownerId == member.id) {
+    if (guildInstance.ownerId == member.id) {
       return Permissions.allPermissions;
     }
 
-    final everyoneRole = await guild.roles[guild.id].get();
+    final everyoneRole =
+        (roles?.firstWhere((role) => role.id == guildInstance.id)) ??
+            await guildInstance.roles[guildInstance.id].get();
     Flags<Permissions> permissions = everyoneRole.permissions;
 
     for (final role in member.roles) {
@@ -47,7 +47,7 @@ Future<Permissions> computePermissions(
     Flags<Permissions> permissions = basePermissions;
 
     final everyoneOverwrite = channel.permissionOverwrites
-        .where((overwrite) => overwrite.id == guild.id)
+        .where((overwrite) => overwrite.id == guildInstance.id)
         .singleOrNull;
     if (everyoneOverwrite != null) {
       permissions &= ~everyoneOverwrite.deny;

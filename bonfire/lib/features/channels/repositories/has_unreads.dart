@@ -1,3 +1,4 @@
+import 'package:bonfire/features/channels/controllers/channel.dart';
 import 'package:bonfire/features/me/controllers/settings.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:firebridge/firebridge.dart';
@@ -7,8 +8,14 @@ part 'has_unreads.g.dart';
 @Riverpod(keepAlive: true)
 class HasUnreads extends _$HasUnreads {
   @override
-  Future<bool> build(Channel channel) async {
+  Future<bool> build(Snowflake channelId) async {
     Snowflake? lastMessageId;
+
+    Channel? channel = ref.watch(channelControllerProvider(channelId));
+    if (channel == null) {
+      print("channel is null");
+      return false;
+    }
 
     if (!(channel is GuildTextChannel || channel is GuildAnnouncementChannel)) {
       return false;

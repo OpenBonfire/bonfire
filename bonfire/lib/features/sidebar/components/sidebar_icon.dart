@@ -30,8 +30,7 @@ class SidebarIcon extends ConsumerStatefulWidget {
 class _SidebarIconState extends ConsumerState<SidebarIcon> {
   @override
   Widget build(BuildContext context) {
-    var hasUnreads =
-        ref.watch(guildUnreadsProvider(widget.guild.id)).valueOrNull ?? false;
+    var hasUnreads = ref.watch(guildUnreadsProvider(widget.guild.id));
     var mentions = ref.watch(guildMentionsProvider(widget.guild.id)).value ?? 0;
 
     return SidebarItem(

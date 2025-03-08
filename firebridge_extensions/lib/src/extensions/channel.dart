@@ -24,6 +24,13 @@ extension GuildChannelExtensions on GuildChannel {
   /// {@macro compute_permissions_detail}
   Future<Permissions> computePermissionsFor(PartialMember member) async =>
       await computePermissions(this, await member.get());
+
+  Future<Permissions> computePermissionsForMemberWithGuildAndRoles(
+    Member member,
+    Guild guild,
+    List<Role> roles,
+  ) async =>
+      await computePermissions(this, member, guild: guild, roles: roles);
 }
 
 /// Extensions on [Thread]s.

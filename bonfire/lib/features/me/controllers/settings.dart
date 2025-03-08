@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:bonfire/features/auth/data/repositories/discord_auth.dart';
+import 'package:bonfire/features/channels/repositories/has_unreads.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -28,6 +29,13 @@ class PrivateMessageHistory extends _$PrivateMessageHistory {
   }
 
   void setMessageHistory(List<PrivateChannel> channels) {
+    //     if (readState.channel.id ==
+    //     Snowflake(BigInt.parse("1256245066867933206"))) {
+    //   print("READ STATE: ${readState.lastViewed}");
+    // }
+    // for (var channel in channels) {
+    //   var unread = ref.read(hasUnreadsProvider(channel))
+    // }
     state = channels;
   }
 }

@@ -113,6 +113,8 @@ class GuildManager extends Manager<Guild> {
           raw['channels'] as List? ?? [],
           (Map<String, Object?> raw) =>
               client.channels.parse(raw, guildId: id) as GuildChannel),
+      memberList: maybeParseMany(
+          raw['members'] as List<dynamic>?, this[id].members.parse),
     );
   }
 

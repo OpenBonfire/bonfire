@@ -15,7 +15,6 @@ import 'package:firebridge/src/models/snowflake.dart';
 import 'package:firebridge/src/models/sticker/guild_sticker.dart';
 import 'package:firebridge/src/models/user/user.dart';
 import 'package:firebridge/src/models/voice/voice_state.dart';
-import 'package:firebridge/src/models/gateway/opcode.dart';
 
 /// {@template unavailable_guild_create_event}
 /// Emitted when the client is added to an unavailable guild, or when initially receiving guilds over the Gateway.
