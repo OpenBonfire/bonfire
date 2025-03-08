@@ -3,12 +3,14 @@ import 'package:bonfire/features/auth/data/repositories/discord_auth.dart';
 import 'package:bonfire/features/auth/models/auth.dart';
 import 'package:bonfire/features/auth/views/captcha.dart';
 import 'package:bonfire/features/auth/views/credentials.dart';
+import 'package:bonfire/theme/theme.dart';
 import 'package:fireview/controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hive_ce/hive.dart';
 import 'package:universal_platform/universal_platform.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
@@ -19,11 +21,13 @@ class LoginScreen extends ConsumerStatefulWidget {
 
 class _LoginScreenState extends ConsumerState<LoginScreen> {
   final fireviewController = FireviewController();
-
+  bool? authMissing;
   @override
   void initState() {
     super.initState();
-    _checkAuthToken();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _checkAuthToken();
+    });
   }
 
   void _checkAuthToken() async {
@@ -36,6 +40,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         return;
       }
       ref.read(authProvider.notifier).loginWithToken(token);
+    } else {
+      setState(() {
+        authMissing = true;
+      });
     }
   }
 
@@ -53,6 +61,33 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
     if (UniversalPlatform.isWeb) {
       return const CaptchaView();
+    }
+    if (authMissing == null) {
+      // TODO: Make sick bonfire loading screen
+      return Scaffold(
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text("Loading Bonfire...",
+                  style: Theme.of(context)
+                      .custom
+                      .textTheme
+                      .titleMedium
+                      .copyWith(
+                        color:
+                            Theme.of(context).custom.textTheme.bodyText1.color!,
+                      )),
+              const SizedBox(height: 30),
+              LoadingAnimationWidget.fourRotatingDots(
+                color: Theme.of(context).custom.textTheme.bodyText1.color!,
+                size: 50,
+              ),
+            ],
+          ),
+        ),
+      );
     }
     return CredentialsScreen(fireviewController: fireviewController);
   }
