@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:bonfire/features/auth/data/repositories/auth.dart';
 import 'package:bonfire/features/auth/data/repositories/discord_auth.dart';
 import 'package:flutter/services.dart';
@@ -18,6 +19,8 @@ class VoiceChannelController extends _$VoiceChannelController {
   StreamSubscription? _voiceStateUpdateSubscription;
   RTCPeerConnection? _peerConnection;
   MediaStream? _localStream;
+  RTCSessionDescription? _currentLocalOffer;
+  int? ssrc;
 
   @override
   VoiceReadyEvent? build() {
@@ -32,35 +35,101 @@ class VoiceChannelController extends _$VoiceChannelController {
     print("Handling remote SDP");
     if (_peerConnection == null) return;
 
-    final parsedSdp = parse(sdp);
-    final media = parsedSdp["media"][0];
-    final port = media['port'];
-    final _fingerprint = media['fingerprint']["hash"];
+    final parsedRemoteSdp = parse(sdp);
+    final remoteMedia = parsedRemoteSdp["media"][0];
+
+    final port = remoteMedia['port'];
+    final _fingerprint = remoteMedia['fingerprint']["hash"];
     final fingerprint = "sha-256 $_fingerprint";
-    final icePwd = media['icePwd'];
-    final iceUfrag = media['iceUfrag'];
-    final ip = media['connection']['ip'];
-    final _candidate = media['candidates'][0];
+    final icePwd = remoteMedia['icePwd'];
+    final iceUfrag = remoteMedia['iceUfrag'];
+    final ip = remoteMedia['connection']['ip'];
+    final _candidate = remoteMedia['candidates'][0];
     final candidate =
         "${_candidate['foundation']} ${_candidate['component']} ${_candidate['transport']} ${_candidate['priority']} ${_candidate['ip']} ${_candidate['port']} typ host";
 
-    final template = await rootBundle.loadString(
-      'assets/sdps/remote.sdp',
+    final localDescription = _currentLocalOffer;
+    if (localDescription == null) return;
+
+    final localParsedSdp = parse(localDescription.sdp!);
+
+    final group = localParsedSdp['groups']?.firstWhere(
+      (group) => group['type'] == 'BUNDLE',
+      orElse: () => null,
     );
+    if (group == null) throw Exception("BUNDLE group not found in local SDP");
 
-    // now apply changes to the template
-    // template['media'][0]['port'] = port;
-    // template['media'][0]['fingerprint'] = fingerprint;
-    // template['media'][0]['connection']['ip'] = ip;
-    template.replaceAll("PORT_PLACEHOLDER", "$port");
-    template.replaceAll("FINGERPRINT_PLACEHOLDER", fingerprint);
-    template.replaceAll("IP_PLACEHOLDER", ip);
-    template.replaceAll("ICE_PWD_PLACEHOLDER", icePwd);
-    template.replaceAll("ICE_UFRAG_PLACEHOLDER", iceUfrag);
-    template.replaceAll("CANDIDATE_PLACEHOLDER", candidate);
+    final bundles = (group['mids'] as String).split(' ');
 
-    // final desc = RTCSessionDescription(sdp, "answer");
-    // await _peerConnection!.setRemoteDescription(desc.sdp!);
+    // Start building the remote SDP
+    var remoteSdp = '''
+v=0
+o=- 1420070400000 0 IN IP4 127.0.0.1
+s=-
+t=0 0
+a=msid-semantic: WMS *
+a=group:BUNDLE ${bundles.join(' ')}
+''';
+
+    for (var i = 0; i < localParsedSdp['media'].length; i++) {
+      final localMedia = localParsedSdp['media'][i];
+      final mediaType = localMedia['type'];
+
+      if (mediaType == 'audio') {
+        remoteSdp += '''
+m=audio $port UDP/TLS/RTP/SAVPF 111
+c=IN IP4 $ip
+a=rtpmap:111 opus/48000/2
+a=fmtp:111 minptime=10;useinbandfec=1;usedtx=1
+a=rtcp:$port
+a=rtcp-fb:111 transport-cc
+a=extmap:1 urn:ietf:params:rtp-hdrext:ssrc-audio-level
+a=extmap:3 http://www.ietf.org/id/draft-holmer-rmcat-transport-wide-cc-extensions-01
+a=setup:passive
+a=mid:${bundles[i]}
+a=recvonly
+a=ice-ufrag:$iceUfrag
+a=ice-pwd:$icePwd
+a=fingerprint:$fingerprint
+a=candidate:$candidate
+a=rtcp-mux
+''';
+      } else if (mediaType == 'video') {
+        remoteSdp += '''
+m=video $port UDP/TLS/RTP/SAVPF 102 103
+c=IN IP4 $ip
+a=rtpmap:102 H264/90000
+a=rtpmap:103 rtx/90000
+a=fmtp:102 x-google-max-bitrate=2500;level-asymmetry-allowed=1;packetization-mode=1;profile-level-id=42e01f
+a=fmtp:103 apt=102
+a=rtcp:$port
+a=rtcp-fb:102 ccm fir
+a=rtcp-fb:102 nack
+a=rtcp-fb:102 nack pli
+a=rtcp-fb:102 goog-remb
+a=rtcp-fb:102 transport-cc
+a=extmap:2 http://www.webrtc.org/experiments/rtp-hdrext/abs-send-time
+a=extmap:3 http://www.ietf.org/id/draft-holmer-rmcat-transport-wide-cc-extensions-01
+a=extmap:14 urn:ietf:params:rtp-hdrext:toffset
+a=extmap:13 urn:3gpp:video-orientation
+a=extmap:5 http://www.webrtc.org/experiments/rtp-hdrext/playout-delay
+a=setup:passive
+a=mid:${bundles[i]}
+a=recvonly
+a=ice-ufrag:$iceUfrag
+a=ice-pwd:$icePwd
+a=fingerprint:$fingerprint
+a=candidate:$candidate
+a=rtcp-mux
+''';
+      }
+    }
+
+    // print("Generated Remote SDP:\n$remoteSdp");
+    print("setting description");
+    final desc = RTCSessionDescription(remoteSdp, "answer");
+    await _peerConnection!.setRemoteDescription(desc);
+    print("should be set...");
   }
 
   Future<void> joinVoiceChannel(Snowflake guildId, Snowflake channelId) async {
@@ -83,7 +152,7 @@ class VoiceChannelController extends _$VoiceChannelController {
     void connect() async {
       if (_isConnecting) return;
       _isConnecting = true;
-
+      print("Connecting to voice gateway...");
       try {
         _voiceClient = await Nyxx.connectVoiceGateway(
           VoiceGatewayUser(
@@ -104,7 +173,10 @@ class VoiceChannelController extends _$VoiceChannelController {
         });
 
         _voiceClient!.onReady.listen((event) async {
+          print("Voice client is ready");
+          print(event.port);
           state = event;
+
           await _initializeWebRTC(event);
         });
       } catch (e) {
@@ -132,6 +204,8 @@ class VoiceChannelController extends _$VoiceChannelController {
   }
 
   Future<void> _initializeWebRTC(VoiceReadyEvent event) async {
+    ssrc = event.ssrc;
+    _voiceClient!.sendSpeaking(ssrc!);
     final configuration = <String, dynamic>{
       'sdpSemantics': 'unified-plan',
       'bundlePolicy': 'max-bundle',
@@ -160,7 +234,9 @@ class VoiceChannelController extends _$VoiceChannelController {
 
       print("Offering...");
 
-      await _peerConnection!.setLocalDescription(offer);
+      // print("Local SDP = ${offer.sdp}");
+      _currentLocalOffer = offer;
+      await _peerConnection!.setLocalDescription(_currentLocalOffer!);
 
       _voiceClient!.sendVoiceSelectProtocol(
         VoiceSelectProtocolBuilder(
@@ -195,7 +271,7 @@ class VoiceChannelController extends _$VoiceChannelController {
         init: RTCRtpTransceiverInit(direction: TransceiverDirection.RecvOnly),
       );
     }
-
+    print("Init called");
     await _handleNegotiation();
   }
 

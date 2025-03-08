@@ -83,6 +83,18 @@ class VoiceGateway extends VoiceGatewayManager
     ));
   }
 
+  // TODO: Make a proper builder and stuff
+  Future<void> sendSpeaking(int ssrc) async {
+    connection.add(VoiceSend(
+      opcode: VoiceOpcode.speaking,
+      data: {
+        "speaking": 5,
+        "delay": 0,
+        "ssrc": ssrc,
+      },
+    ));
+  }
+
   @override
   ApiOptions get apiOptions => throw UnimplementedError();
 
