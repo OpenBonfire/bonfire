@@ -16,7 +16,7 @@ dependencies:
   fireview:
     git: 
       url: https://github.com/ericApostal/fireview
-      ref: cda3048c55f0fe516a69e375f5aa422e82997540
+      ref: bd408f76d79ce822af559e6eb7b6260528dfcf31
 
   firebridge:
     path: ../firebridge

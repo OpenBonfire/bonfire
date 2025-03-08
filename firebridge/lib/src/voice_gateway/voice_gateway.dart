@@ -58,7 +58,6 @@ class VoiceGateway extends VoiceGatewayManager
       if (event is VoiceHelloEvent) {
         final interval = Duration(milliseconds: event.heartbeatInterval);
         await for (final _ in Stream.periodic(interval)) {
-          print("Sending heartbeat");
           connection.add(VoiceSend(opcode: VoiceOpcode.heartbeat, data: null));
         }
       }
