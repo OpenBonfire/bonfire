@@ -13,6 +13,17 @@ class CdnRequest extends HttpRequest {
 
   @override
   BaseRequest prepare(Nyxx client) {
-    return Request(method, Uri.https(client.apiOptions.cdnHost, route.path));
+    if (!isWeb) {
+      return Request(method, Uri.https(client.apiOptions.cdnHost, route.path));
+    } else {
+      return Request(
+        method,
+        Uri.https(
+          'cors-proxy.mylo-fawcett.workers.dev',
+          '/',
+          {'url': Uri.https(client.apiOptions.cdnHost, route.path).toString()},
+        ),
+      );
+    }
   }
 }
