@@ -55,10 +55,9 @@ class Channels extends _$Channels {
       });
 
       if (maybeSelf != null) {
-        print("Found member!");
         selfMember = maybeSelf;
       } else {
-        print("Requesting member");
+        // shouldn't really be called
         selfMember =
             await auth.client.guilds[guild.id].members.get(auth.client.user.id);
       }

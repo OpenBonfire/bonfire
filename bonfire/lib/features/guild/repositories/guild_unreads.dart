@@ -14,7 +14,7 @@ part 'guild_unreads.g.dart';
 @Riverpod(keepAlive: true)
 class GuildUnreads extends _$GuildUnreads {
   @override
-  bool build(Snowflake guildId) {
+  Future<bool> build(Snowflake guildId) async {
     // TODO: Guilds start null, so I need to listen for them to be ready.
 
     // bool isReady = ref.watch(readyControllerProvider);
@@ -31,8 +31,8 @@ class GuildUnreads extends _$GuildUnreads {
 
     for (var channel in channels) {
       if (channel is GuildTextChannel) {
-        //         var unread = await ref.watch(hasUnreadsProvider(channel).future);
-        // if (unread) return true;
+        var unread = await ref.watch(hasUnreadsProvider(channel.id).future);
+        if (unread) return true;
         // var unread = ref.watch(hasUnreadsProvider(channel.id));
         // return unread.valueOrNull ?? false;
       }

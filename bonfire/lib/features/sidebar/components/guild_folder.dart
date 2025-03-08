@@ -36,7 +36,7 @@ class GuildFolderWidgetState extends ConsumerState<GuildFolderWidget>
 
   bool _hasUnreadsInFolder(List<UserGuild> folderGuilds, WidgetRef ref) {
     for (var guild in folderGuilds) {
-      if (ref.read(guildUnreadsProvider(guild.id)) ?? false) {
+      if (ref.watch(guildUnreadsProvider(guild.id)).valueOrNull ?? false) {
         return true;
       }
     }
