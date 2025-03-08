@@ -159,10 +159,6 @@ class Auth extends _$Auth {
           .setGuildFolders(event.userSettings.guildFolders!);
 
       for (var readState in event.readStates) {
-        if (readState.channel.id ==
-            Snowflake(BigInt.from(1256245066867933206))) {
-          print("READ STATE: ${readState.lastViewed}");
-        }
         ref
             .read(channelReadStateProvider(readState.channel.id).notifier)
             .setReadState(readState);
