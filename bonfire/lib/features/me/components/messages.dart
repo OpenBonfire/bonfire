@@ -28,8 +28,7 @@ class _MessageViewState extends ConsumerState<MessageView> {
     if (widget.threadId != null) {
       channelId = widget.threadId!;
     }
-    Channel? channel =
-        ref.watch(channelControllerProvider(channelId)).valueOrNull;
+    Channel? channel = ref.watch(channelControllerProvider(channelId));
 
     if (channel is TextChannel) {
       return MessageList(

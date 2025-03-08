@@ -13,16 +13,15 @@ class ChannelController extends _$ChannelController {
   // TODO: We don't need to cache this, we should get it onReady then on the subsequent events
 
   @override
-  Future<Channel?> build(Snowflake channelId) async {
-    var auth = ref.watch(authProvider.notifier).getAuth();
-
-    if (auth is AuthUser) {
-      if (channelId == Snowflake.zero) {
-        return null;
-      }
-      return await auth.client.channels.get(channelId);
+  Channel? build(Snowflake channelId) {
+    if (channelId == Snowflake.zero) {
+      return null;
     }
 
     return null;
+  }
+
+  void setChannel(Channel channel) {
+    state = channel;
   }
 }

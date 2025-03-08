@@ -131,14 +131,9 @@ class _MessageViewState extends ConsumerState<MessageList>
         (context, index) {
           if (isSmartwatch(context) && index == 0) {
             return MessageBar(
-              guildId: ref
-                      .read(guildControllerProvider(widget.guildId))
-                      .valueOrNull
-                      ?.id ??
+              guildId: ref.read(guildControllerProvider(widget.guildId))?.id ??
                   Snowflake.zero,
-              channel: ref
-                  .read(channelControllerProvider(widget.channelId))
-                  .valueOrNull!,
+              channel: ref.read(channelControllerProvider(widget.channelId))!,
             );
           }
 
@@ -170,14 +165,9 @@ class _MessageViewState extends ConsumerState<MessageList>
 
           return MessageBox(
             key: ValueKey(loadedMessages[messageIndex].id.value),
-            guildId: ref
-                    .read(guildControllerProvider(widget.guildId))
-                    .valueOrNull
-                    ?.id ??
+            guildId: ref.read(guildControllerProvider(widget.guildId))?.id ??
                 Snowflake.zero,
-            channel: ref
-                .read(channelControllerProvider(widget.channelId))
-                .valueOrNull!,
+            channel: ref.read(channelControllerProvider(widget.channelId))!,
             messageId: loadedMessages[messageIndex].id,
             showSenderInfo: showAuthor,
           );
@@ -222,11 +212,9 @@ class _MessageViewState extends ConsumerState<MessageList>
     );
 
     String channelName = "";
-    Channel? channel =
-        ref.watch(channelControllerProvider(widget.channelId)).valueOrNull;
+    Channel? channel = ref.watch(channelControllerProvider(widget.channelId));
 
-    Guild? guild =
-        ref.watch(guildControllerProvider(widget.guildId)).valueOrNull;
+    Guild? guild = ref.watch(guildControllerProvider(widget.guildId));
 
     if (channel == null) {
       return const Center(

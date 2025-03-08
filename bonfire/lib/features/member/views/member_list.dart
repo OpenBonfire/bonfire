@@ -56,10 +56,8 @@ class _MemberListState extends ConsumerState<MemberList> {
 
   @override
   Widget build(BuildContext context) {
-    Channel? channel =
-        ref.watch(channelControllerProvider(widget.channelId)).valueOrNull;
-    Guild? guild =
-        ref.watch(guildControllerProvider(widget.guildId)).valueOrNull;
+    Channel? channel = ref.watch(channelControllerProvider(widget.channelId));
+    Guild? guild = ref.watch(guildControllerProvider(widget.guildId));
 
     if (channel == null || guild == null) {
       return const Center(

@@ -44,7 +44,7 @@ class Messages extends _$Messages {
   }) async {
     if (user is AuthUser) {
       if (channelId == Snowflake.zero) return [];
-      var channel = ref.watch(channelControllerProvider(channelId)).value;
+      var channel = ref.watch(channelControllerProvider(channelId));
 
       if (channel == null) return [];
 
@@ -53,7 +53,7 @@ class Messages extends _$Messages {
 
       if (channel is GuildChannel || channel is DmChannel) {
         if (channel is GuildChannel) {
-          guild = ref.watch(guildControllerProvider(channel.guildId)).value;
+          guild = ref.watch(guildControllerProvider(channel.guildId));
           if (guild == null) return [];
           selfMember = await guild.members.get(user!.client.user.id);
           var permissions = await channel.computePermissionsFor(selfMember);
@@ -109,8 +109,8 @@ class Messages extends _$Messages {
     int? limit,
     Snowflake? around,
   }) async {
-    Channel channel =
-        ref.watch(channelControllerProvider(channelId)).valueOrNull!;
+    Channel? channel = ref.watch(channelControllerProvider(channelId));
+    if (channel == null) print("TRIED TO FETCH MESSAGES FOR NULL CHANNEL!");
     List<Message> messages = [];
 
     messages.addAll(loadedMessages);
@@ -121,7 +121,7 @@ class Messages extends _$Messages {
         ) ??
         []);
 
-    if (before?.channel.id == channel.id) {
+    if (before?.channel.id == channel!.id) {
       state = AsyncValue.data(messages);
     }
 
@@ -135,8 +135,7 @@ class Messages extends _$Messages {
   }
 
   void processMessage(Message message) async {
-    Channel? channel =
-        ref.watch(channelControllerProvider(channelId)).valueOrNull;
+    Channel? channel = ref.watch(channelControllerProvider(channelId));
     if (channel == null) return;
 
     ref.read(messageControllerProvider(message.id).notifier).setMessage(

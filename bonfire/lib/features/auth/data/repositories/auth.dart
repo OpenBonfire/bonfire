@@ -3,9 +3,11 @@ import 'dart:convert';
 import 'package:bonfire/features/auth/data/headers.dart';
 import 'package:bonfire/features/auth/data/repositories/discord_auth.dart';
 import 'package:bonfire/features/auth/models/auth.dart';
+import 'package:bonfire/features/channels/controllers/channel.dart';
 import 'package:bonfire/features/channels/repositories/channel_members.dart';
 import 'package:bonfire/features/channels/repositories/has_unreads.dart';
 import 'package:bonfire/features/friends/controllers/relationships.dart';
+import 'package:bonfire/features/guild/controllers/guild.dart';
 import 'package:bonfire/features/messaging/controllers/message.dart';
 import 'package:bonfire/features/messaging/repositories/messages.dart';
 import 'package:bonfire/features/messaging/repositories/reactions.dart';
@@ -169,6 +171,15 @@ class Auth extends _$Auth {
       ref
           .read(selfStatusStateProvider.notifier)
           .setSelfStatus(event.userSettings.status!);
+
+      for (var guild in event.guilds) {
+        for (var channel in guild.channels ?? []) {
+          ref
+              .read(channelControllerProvider(channel.id).notifier)
+              .setChannel(channel);
+        }
+        ref.read(guildControllerProvider(guild.id).notifier).setGuild(guild);
+      }
 
       ref.read(guildsStateProvider.notifier).setGuilds(event.guilds);
 

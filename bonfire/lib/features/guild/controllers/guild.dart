@@ -13,20 +13,16 @@ class GuildController extends _$GuildController {
   Guild? guild;
 
   @override
-  Future<Guild?> build(Snowflake guildId) async {
-    var auth = ref.watch(authProvider.notifier).getAuth();
-
+  Guild? build(Snowflake guildId) {
     if (guildId.isZero) {
       // If the guildId is zero, we are at @me (probably, idk if there's a better way to do this)
       return null;
     }
 
-    if (auth is AuthUser) {
-      var guilds = ref.watch(guildsStateProvider).valueOrNull;
-      if (guilds == null) return null;
-      return guilds.firstWhereOrNull((element) => element.id == guildId);
-    }
-
     return null;
+  }
+
+  void setGuild(Guild guild) {
+    state = guild;
   }
 }

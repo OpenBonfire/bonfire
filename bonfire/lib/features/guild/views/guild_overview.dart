@@ -18,7 +18,7 @@ class GuildOverview extends ConsumerStatefulWidget {
 class _GuildOverviewState extends ConsumerState<GuildOverview> {
   @override
   Widget build(BuildContext context) {
-    var guild = ref.watch(guildControllerProvider(widget.guildId)).value;
+    var guild = ref.watch(guildControllerProvider(widget.guildId));
     String guildTitle = guild?.name ?? "Not in a server";
 
     return SizedBox(

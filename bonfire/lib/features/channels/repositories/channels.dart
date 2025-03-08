@@ -26,7 +26,7 @@ class Channels extends _$Channels {
   Future<List<Channel>> build(Snowflake guildId) async {
     List<Channel> channels = [];
     var auth = ref.watch(authProvider.notifier).getAuth();
-    Guild? guild = ref.watch(guildControllerProvider(guildId)).valueOrNull;
+    Guild? guild = ref.watch(guildControllerProvider(guildId));
 
     if (guild == null) {
       return [];
@@ -85,7 +85,7 @@ class Channels extends _$Channels {
   }
 
   Future<void> saveToCache(List<Channel> channels) async {
-    Guild? guild = ref.watch(guildControllerProvider(guildId)).valueOrNull;
+    Guild? guild = ref.watch(guildControllerProvider(guildId));
     if (guild == null) return;
     var cacheKey = "channels_${guild.id.value}";
     await _cacheManager.putFile(
@@ -97,7 +97,7 @@ class Channels extends _$Channels {
   Future<List<Channel>?> fetchFromCache() async {
     var cacheKey = "channels_${guildId.value}";
     var cacheData = await _cacheManager.getFileFromCache(cacheKey);
-    Guild guild = ref.watch(guildControllerProvider(guildId)).valueOrNull!;
+    Guild guild = ref.watch(guildControllerProvider(guildId))!;
     if (cacheData != null) {
       var decoded = json.decode(utf8.decode(cacheData.file.readAsBytesSync()));
 
