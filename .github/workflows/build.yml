@@ -28,7 +28,7 @@ jobs:
         with:
           workingDir: bonfire
           baseHref: /
-          compileToWasm: false
+          compileToWasm: true
           customArgs: --no-tree-shake-icons
 
   build-android:
