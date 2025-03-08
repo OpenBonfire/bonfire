@@ -59,12 +59,9 @@ class VoiceChannelController extends _$VoiceChannelController {
       orElse: () => null,
     );
     if (group == null) throw Exception("BUNDLE group not found in local SDP");
-
     print("Groups = $group");
-
     final bundles = (group['mids'] as String).split(' ');
 
-    // Start building the remote SDP
     var remoteSdp = '''
 v=0
 o=- 1420070400000 0 IN IP4 127.0.0.1

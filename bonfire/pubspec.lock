@@ -555,8 +555,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: bd408f76d79ce822af559e6eb7b6260528dfcf31
-      resolved-ref: bd408f76d79ce822af559e6eb7b6260528dfcf31
+      ref: "1d29957d18e0d001d681d0801fbfbf7555725f71"
+      resolved-ref: "1d29957d18e0d001d681d0801fbfbf7555725f71"
       url: "https://github.com/ericApostal/fireview"
     source: git
     version: "0.0.1"
