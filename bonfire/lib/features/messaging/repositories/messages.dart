@@ -20,7 +20,6 @@ class Messages extends _$Messages {
   bool listenerRunning = false;
   DateTime lastFetchTime = DateTime.now();
   List<Message> loadedMessages = [];
-  bool subscribed = false;
 
   @override
   Future<List<Message>?> build(Snowflake channelId) async {
@@ -32,22 +31,7 @@ class Messages extends _$Messages {
     }
 
     user = auth;
-    if (!subscribed) {
-      _subscribeToMessages(auth, channelId);
-      subscribed = true;
-    }
-
     return await getMessages();
-  }
-
-  void _subscribeToMessages(AuthUser auth, Snowflake channelId) {
-    // I don't know if I like this paradigm
-    // Maybe I should make a better dispatcher from auth
-    auth.client.onMessageCreate.listen((event) {
-      if (event.message.channelId == channelId) {
-        processMessage(event.message);
-      }
-    });
   }
 
   Timer lockTimer = Timer(Duration.zero, () {});

@@ -4,7 +4,10 @@ import 'package:bonfire/features/auth/data/headers.dart';
 import 'package:bonfire/features/auth/data/repositories/discord_auth.dart';
 import 'package:bonfire/features/auth/models/auth.dart';
 import 'package:bonfire/features/channels/repositories/channel_members.dart';
+import 'package:bonfire/features/channels/repositories/has_unreads.dart';
 import 'package:bonfire/features/friends/controllers/relationships.dart';
+import 'package:bonfire/features/messaging/controllers/message.dart';
+import 'package:bonfire/features/messaging/repositories/messages.dart';
 import 'package:bonfire/features/messaging/repositories/reactions.dart';
 import 'package:bonfire/features/user/controllers/presence.dart';
 import 'package:bonfire/features/voice/repositories/voice_members.dart';
@@ -144,6 +147,7 @@ class Auth extends _$Auth {
       // print("parsed!");
 
       print("READY!");
+
       ref
           .read(privateMessageHistoryProvider.notifier)
           .setMessageHistory(event.privateChannels);
@@ -153,6 +157,10 @@ class Auth extends _$Auth {
           .setGuildFolders(event.userSettings.guildFolders!);
 
       for (var readState in event.readStates) {
+        if (readState.channel.id ==
+            Snowflake(BigInt.from(1256245066867933206))) {
+          print("READ STATE: ${readState.lastViewed}");
+        }
         ref
             .read(channelReadStateProvider(readState.channel.id).notifier)
             .setReadState(readState);
@@ -180,6 +188,16 @@ class Auth extends _$Auth {
             .read(customStatusStateProvider.notifier)
             .setCustomStatus(event.userSettings.customStatus!);
       }
+    });
+
+    client.onMessageCreate.listen((event) {
+      ref
+          .read(messageControllerProvider(event.message.id).notifier)
+          .setMessage(event.message);
+
+      ref
+          .read(messagesProvider(event.message.channelId).notifier)
+          .processMessage(event.message);
     });
 
     client.onPresenceUpdate.listen((event) {
