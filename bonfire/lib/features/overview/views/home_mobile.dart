@@ -44,6 +44,11 @@ class _HomeState extends ConsumerState<HomeMobile>
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       ref.read(navigationBarProvider.notifier).onSideChange(currentPanel);
+      if (widget.channelId == Snowflake.zero) {
+        OverlappingPanelsState? panelsState = _panelsKey.currentState;
+        panelsState!.moveToState(RevealSide.left);
+        ref.read(navigationBarProvider.notifier).onSideChange(RevealSide.left);
+      }
     });
   }
 
