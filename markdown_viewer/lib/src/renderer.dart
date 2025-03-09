@@ -14,7 +14,7 @@ import 'builders/link_builder.dart';
 import 'builders/list_builder.dart';
 import 'builders/paragraph_builder.dart';
 import 'builders/simple_inlines_builder.dart';
-import 'builders/table_bilder.dart';
+import 'builders/table_builder.dart';
 import 'builders/thematic_break_builder.dart';
 import 'definition.dart';
 import 'extensions.dart';

@@ -17,18 +17,6 @@ class ImageAttachment extends ConsumerStatefulWidget {
 
 class _ImageAttachmentState extends ConsumerState<ImageAttachment> {
   @override
-  void initState() {
-    testLoadImage();
-    super.initState();
-  }
-
-  void testLoadImage() async {
-    print("LOADING IMAGE");
-    var resp = (await http.get(widget.attachment.url)).statusCode;
-    print("Status code: $resp");
-  }
-
-  @override
   Widget build(BuildContext context) {
     double aspectRatio = (widget.attachment.width?.toDouble() ?? 1) /
         (widget.attachment.height?.toDouble() ?? 1);

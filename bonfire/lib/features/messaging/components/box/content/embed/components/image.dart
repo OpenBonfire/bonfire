@@ -1,4 +1,5 @@
 import 'package:bonfire/features/messaging/components/box/content/attachment/bounded_content.dart';
+import 'package:bonfire/features/messaging/components/box/content/embed/components/description.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
 
@@ -8,14 +9,21 @@ class ImageEmbed extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double aspectRatio = (embed.thumbnail?.width?.toDouble() ?? 1) /
-        (embed.thumbnail?.height?.toDouble() ?? 1);
+    double aspectRatio = (embed.image!.width?.toDouble() ?? 1) /
+        (embed.image?.height?.toDouble() ?? 1);
 
-    return ClipRRect(
-        borderRadius: BorderRadius.circular(12),
-        child: BoundedContent(
-          aspectRatio: aspectRatio,
-          child: Image.network(embed.url.toString(), fit: BoxFit.cover),
-        ));
+    return Column(
+      children: [
+        ClipRRect(
+            borderRadius: BorderRadius.circular(12),
+            child: BoundedContent(
+              aspectRatio: aspectRatio,
+              child: Image.network(
+                embed.image!.proxiedUrl.toString(),
+                fit: BoxFit.contain,
+              ),
+            )),
+      ],
+    );
   }
 }

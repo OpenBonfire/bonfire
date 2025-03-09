@@ -48,7 +48,7 @@ class DescriptionEmbed extends StatelessWidget {
             ),
             // Content
             Padding(
-              padding: const EdgeInsets.only(left: 8),
+              padding: const EdgeInsets.all(16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
@@ -98,12 +98,15 @@ class DescriptionEmbed extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
                       child: ClipRRect(
-                        borderRadius: BorderRadius.circular(4),
-                        child: Image.network(
-                          embed.image!.url.toString(),
-                          fit: BoxFit.cover,
-                        ),
-                      ),
+                          borderRadius: BorderRadius.circular(4),
+                          child: Image(
+                            image: NetworkImage(
+                              embed.image!.proxiedUrl!.toString(),
+                              webHtmlElementStrategy:
+                                  WebHtmlElementStrategy.prefer,
+                            ),
+                            fit: BoxFit.cover,
+                          )),
                     ),
                   if (embed.footer != null)
                     Padding(

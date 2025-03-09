@@ -16,15 +16,14 @@ class EmbedWidget extends ConsumerStatefulWidget {
 class _EmbedWidgetState extends ConsumerState<EmbedWidget> {
   @override
   Widget build(BuildContext context) {
+    if (widget.embed.title != null || widget.embed.description != null) {
+      return DescriptionEmbed(embed: widget.embed);
+    }
     if (widget.embed.image != null) {
       return ImageEmbed(embed: widget.embed);
     }
     if (widget.embed.video != null) {
       return VideoEmbed(embed: widget.embed);
-    }
-
-    if (widget.embed.title != null || widget.embed.description != null) {
-      return DescriptionEmbed(embed: widget.embed);
     }
 
     print("no embed type found");
