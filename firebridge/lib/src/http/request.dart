@@ -71,23 +71,11 @@ abstract class HttpRequest {
   /// The [client] will be used for authentication if authentication is enabled for this request.
   BaseRequest prepare(Nyxx client);
 
-  Uri _getUri(Nyxx client) => isWeb
-      ? Uri.https(
-          'cors-proxy.mylo-fawcett.workers.dev',
-          '/',
-          {
-            'url': Uri.https(
-              client.apiOptions.host,
-              client.apiOptions.baseUri + route.path,
-              queryParameters.isNotEmpty ? queryParameters : null,
-            ).toString(),
-          },
-        )
-      : Uri.https(
-          client.apiOptions.host,
-          client.apiOptions.baseUri + route.path,
-          queryParameters.isNotEmpty ? queryParameters : null,
-        );
+  Uri _getUri(Nyxx client) => Uri.https(
+        client.apiOptions.host,
+        client.apiOptions.baseUri + route.path,
+        queryParameters.isNotEmpty ? queryParameters : null,
+      );
 
   String _genSuperProps(Map<String, dynamic> object) =>
       base64Encode(utf8.encode(jsonEncode(object)));
@@ -97,18 +85,8 @@ abstract class HttpRequest {
         if (auditLogReason != null) xAuditLogReason: auditLogReason!,
         if (authenticated) authorization: client.apiOptions.authorizationHeader,
         "Accept-Language": "en-US",
-        "Cache-Control": "no-cache",
-        // "Connection": "keep-alive",
-        // "Origin": "https://discord.com",
-        "Pragma": "no-cache",
-        // "Referer": "https://discord.com/channels/@me",
-        // "Sec-CH-UA":
-        //     '"Google Chrome";v="111", "Chromium";v="111", ";Not A Brand";v="99"',
-        // "Sec-CH-UA-Mobile": "?0",
-        // "Sec-CH-UA-Platform": '"Windows"',
-        // "Sec-Fetch-Dest": "empty",
-        // "Sec-Fetch-Mode": "cors",
-        // "Sec-Fetch-Site": "same-origin",
+        // "Cache-Control": "no-cache",
+        // "Pragma": "no-cache",
         "X-Discord-Locale": "en-US",
         "X-Debug-Options": "bugReporterEnabled",
         "X-Super-Properties": _genSuperProps({

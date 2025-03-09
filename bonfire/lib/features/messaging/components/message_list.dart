@@ -46,6 +46,12 @@ class _MessageViewState extends ConsumerState<MessageList>
   void initState() {
     super.initState();
 
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   ref.read(messagesProvider(widget.channelId).notifier).fetchMessages(
+    //       //  limit: 50,
+    //       );
+    // });
+
     _scrollController.addListener(_scrollListener);
 
     _fadeController = AnimationController(

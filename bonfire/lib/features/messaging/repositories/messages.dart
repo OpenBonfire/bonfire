@@ -14,7 +14,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'messages.g.dart';
 
 /// Message provider for fetching messages from the Discord API
-@riverpod
+@Riverpod(keepAlive: true)
 class Messages extends _$Messages {
   AuthUser? user;
   bool listenerRunning = false;
@@ -23,6 +23,10 @@ class Messages extends _$Messages {
 
   @override
   Future<List<Message>?> build(Snowflake channelId) async {
+    if (loadedMessages.isNotEmpty) {
+      return loadedMessages;
+    }
+
     var auth = ref.watch(authProvider.notifier).getAuth();
 
     if (auth is! AuthUser) {
@@ -59,11 +63,8 @@ class Messages extends _$Messages {
           var permissions = await channel.computePermissionsFor(selfMember);
 
           if (permissions.canReadMessageHistory == false) {
-            // I think there's still another permission we're missing here...
-            // It ocassionally still errors
             print(
                 "Error fetching messages in channel ${channel.id}, likely do not have access to channel bozo!");
-
             return [];
           }
         }
@@ -71,10 +72,11 @@ class Messages extends _$Messages {
         if (channel is! TextChannel) {
           print(
               "Error fetching messages in channel ${channel.id}, not a text channel");
-
           return [];
         }
       }
+      print("Getting messages!");
+      print(channel.id);
 
       var messages = await (channel as TextChannel)
           .messages
@@ -162,14 +164,11 @@ class Messages extends _$Messages {
       user = authOutput;
       var textChannel = channel as TextChannel;
       Snowflake? replyTo = ref.read(replyControllerProvider)?.messageId;
-      // bool? shouldMention = ref.read(replyControllerProvider)?.shouldMention;
       await textChannel.sendMessage(
         MessageBuilder(
           content: message,
           attachments: attachments,
           replyId: replyTo,
-          // there's no mention option... might be a bot specific thing
-          // mention: shouldMention,
         ),
       );
       return true;

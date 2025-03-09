@@ -68,7 +68,6 @@ class Channels extends _$Channels {
       }
 
       List<Role> roles = [];
-      print("Role ids: $roleIds");
       for (Snowflake roleId in roleIds!) {
         var _r = ref.watch(roleControllerProvider(roleId));
         roles.add(_r!);
