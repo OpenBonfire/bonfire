@@ -46,6 +46,8 @@ class _MessageViewState extends ConsumerState<MessageList>
   void initState() {
     super.initState();
 
+    print("Loading message list for ${widget.channelId}");
+
     // WidgetsBinding.instance.addPostFrameCallback((_) {
     //   ref.read(messagesProvider(widget.channelId).notifier).fetchMessages(
     //       //  limit: 50,

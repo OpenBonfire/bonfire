@@ -182,6 +182,12 @@ class Auth extends _$Auth {
           .read(privateMessageHistoryProvider.notifier)
           .setMessageHistory(event.privateChannels);
 
+      for (var channel in event.privateChannels) {
+        ref
+            .read(channelControllerProvider(channel.id).notifier)
+            .setChannel(channel);
+      }
+
       ref
           .read(guildFoldersProvider.notifier)
           .setGuildFolders(event.userSettings.guildFolders!);

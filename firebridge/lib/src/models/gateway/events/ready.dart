@@ -1,4 +1,7 @@
 import 'package:firebridge/src/models/application.dart';
+import 'package:firebridge/src/models/channel/channel.dart';
+import 'package:firebridge/src/models/channel/types/dm.dart';
+import 'package:firebridge/src/models/channel/types/group_dm.dart';
 import 'package:firebridge/src/models/gateway/event.dart';
 import 'package:firebridge/src/models/gateway/events/presence.dart';
 import 'package:firebridge/src/models/guild/guild.dart';
@@ -44,7 +47,7 @@ class ReadyEvent extends DispatchEvent {
   final List<ReadState> readStates;
 
   /// The client's private channel.
-  final List<PrivateChannel> privateChannels;
+  final List<Channel> privateChannels;
 
   /// The client's presences.
   final List<PresenceUpdateEvent> presences;

@@ -122,6 +122,7 @@ class ChannelManager extends ReadOnlyManager<Channel> {
   }
 
   DmChannel parseDmChannel(Map<String, Object?> raw, {Snowflake? guildId}) {
+    print("TYPE = ${raw['type']}");
     assert(raw['type'] == ChannelType.dm.value, 'Invalid type for DmChannel');
 
     return DmChannel(
@@ -171,11 +172,14 @@ class ChannelManager extends ReadOnlyManager<Channel> {
     assert(raw['type'] == ChannelType.groupDm.value,
         'Invalid type for GroupDmChannel');
 
+    print("Parsing group dm channel");
+    print(raw);
+
     return GroupDmChannel(
       id: Snowflake.parse(raw['id']!),
       json: raw,
       manager: this,
-      name: raw['name'] as String,
+      name: (raw['name'] as String?) ?? "Placeholder Group Name",
       recipients: parseMany(raw['recipients'] as List, client.users.parse),
       iconHash: raw['icon'] as String?,
       ownerId: Snowflake.parse(raw['owner_id']!),
@@ -569,20 +573,20 @@ class ChannelManager extends ReadOnlyManager<Channel> {
     );
   }
 
-  PrivateChannel parsePrivateChannel(Map<String, Object?> raw) {
-    return PrivateChannel(
-      type: raw['type'] as int,
-      safetyWarnings: raw['safety_warnings'] as List<dynamic>?,
-      recipients: parseMany(
-        raw['recipients'] as List<Object?>,
-        (Map<String, Object?> raw) => client.users.parse(raw),
-      ),
-      lastMessageId: tryParse(raw['last_message_id'], Snowflake.parse),
-      isSpam: raw['is_spam'] as bool?,
-      id: Snowflake.parse(raw['id'] as String),
-      flags: raw['flags'] as int,
-    );
-  }
+  // PrivateChannel parsePrivateChannel(Map<String, Object?> raw) {
+  //   return PrivateChannel(
+  //     type: raw['type'] as int,
+  //     safetyWarnings: raw['safety_warnings'] as List<dynamic>?,
+  //     recipients: parseMany(
+  //       raw['recipients'] as List<Object?>,
+  //       (Map<String, Object?> raw) => client.users.parse(raw),
+  //     ),
+  //     lastMessageId: tryParse(raw['last_message_id'], Snowflake.parse),
+  //     isSpam: raw['is_spam'] as bool?,
+  //     id: Snowflake.parse(raw['id'] as String),
+  //     flags: raw['flags'] as int,
+  //   );
+  // }
 
   @override
   Future<Channel> fetch(Snowflake id) async {

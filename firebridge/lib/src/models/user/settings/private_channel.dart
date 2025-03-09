@@ -1,23 +1,24 @@
-import 'package:firebridge/firebridge.dart';
-import 'package:firebridge/src/utils/to_string_helper/base_impl.dart';
+// import 'package:firebridge/src/models/channel/channel.dart';
+// import 'package:firebridge/src/models/channel/text_channel.dart';
+// import 'package:firebridge/src/models/snowflake.dart';
+// import 'package:firebridge/src/models/user/user.dart';
 
-/// Private channel. Used for direct messaging.
-class PrivateChannel with ToStringHelper {
-  List<dynamic>? safetyWarnings;
-  bool? isSpam;
-  Snowflake? lastMessageId;
-  int type;
-  List<User> recipients;
-  Snowflake id;
-  int flags;
+// /// Private channel. Used for direct messaging.
+// abstract class PrivateChannel extends PartialTextChannel implements Channel {
+//   List<dynamic>? safetyWarnings;
+//   bool? isSpam;
+//   Snowflake? lastMessageId;
+//   List<User> recipients;
+//   int flags;
 
-  PrivateChannel({
-    this.safetyWarnings,
-    this.isSpam,
-    this.lastMessageId,
-    required this.type,
-    required this.recipients,
-    required this.id,
-    required this.flags,
-  });
-}
+//   PrivateChannel({
+//     required super.id,
+//     required super.json,
+//     required super.manager,
+//     this.safetyWarnings,
+//     this.isSpam,
+//     this.lastMessageId,
+//     required this.recipients,
+//     required this.flags,
+//   });
+// }

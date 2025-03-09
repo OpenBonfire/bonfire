@@ -356,7 +356,7 @@ class Gateway extends GatewayManager with EventParser {
               client.user.manager.parseReadState(raw)),
       privateChannels: parseMany(
         raw['private_channels'] as List<Object?>,
-        (Map<String, Object?> raw) => client.channels.parsePrivateChannel(raw),
+        (Map<String, Object?> raw) => client.channels.parse(raw),
       ),
       presences:
           parseMany(raw['presences'] as List<dynamic>, parsePresenceUpdate),

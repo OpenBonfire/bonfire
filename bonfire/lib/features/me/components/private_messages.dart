@@ -132,8 +132,10 @@ class _PrivateMessagesState extends ConsumerState<PrivateMessages> {
 
     // sort by numerical ids
     dms.sort((a, b) {
-      BigInt aLastMessageId = a.lastMessageId?.value ?? BigInt.zero;
-      var bLastMessageId = b.lastMessageId?.value ?? BigInt.zero;
+      BigInt aLastMessageId =
+          (a as TextChannel).lastMessageId?.value ?? BigInt.zero;
+      var bLastMessageId =
+          (b as TextChannel).lastMessageId?.value ?? BigInt.zero;
       return bLastMessageId.compareTo(aLastMessageId);
     });
 

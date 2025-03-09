@@ -11,7 +11,7 @@ import 'package:go_router/go_router.dart';
 import 'package:hive_ce/hive.dart';
 
 class DirectMessageMember extends ConsumerStatefulWidget {
-  final PrivateChannel privateChannel;
+  final Channel privateChannel;
   final Snowflake currentChannelId;
   const DirectMessageMember({
     super.key,
@@ -31,9 +31,17 @@ class _DirectMessageMemberState extends ConsumerState<DirectMessageMember> {
   @override
   Widget build(BuildContext context) {
     bool selected = widget.privateChannel.id == widget.currentChannelId;
+    List<User>? recipients;
 
-    Snowflake userId =
-        widget.privateChannel.recipients.firstOrNull?.id ?? Snowflake.zero;
+    if (widget.privateChannel is DmChannel) {
+      recipients = (widget.privateChannel as DmChannel).recipients;
+    } else if (widget.privateChannel is GroupDmChannel) {
+      recipients = (widget.privateChannel as GroupDmChannel).recipients;
+    } else {
+      print("VERY BAD! Recipients is null");
+    }
+
+    Snowflake userId = recipients!.firstOrNull?.id ?? Snowflake.zero;
 
     PresenceUpdateEvent? presence =
         ref.watch(presenceControllerProvider(userId));
@@ -67,7 +75,7 @@ class _DirectMessageMemberState extends ConsumerState<DirectMessageMember> {
               lastLocation.put("guildId", "@me");
               lastLocation.put(
                   "channelId", widget.privateChannel.id.toString());
-
+              print("routing: ${widget.privateChannel.id.toString()}");
               GoRouter.of(context)
                   .go('/channels/@me/${widget.privateChannel.id}');
 
@@ -83,10 +91,12 @@ class _DirectMessageMemberState extends ConsumerState<DirectMessageMember> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
+                  // TODO: Check type if dm / group dm / etc, and work from there
+                  // I think it'll parse but it might be slightly different from a bot
                   Center(
                     child: PresenceAvatar(
                       initialPresence: presence,
-                      user: widget.privateChannel.recipients.firstOrNull!,
+                      user: recipients.firstOrNull!,
                     ),
                   ),
                   const SizedBox(width: 8),
@@ -96,7 +106,7 @@ class _DirectMessageMemberState extends ConsumerState<DirectMessageMember> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          widget.privateChannel.recipients
+                          recipients
                               .map((e) => e.globalName ?? e.username)
                               .join(', '),
                           style: Theme.of(context).custom.textTheme.subtitle1,
