@@ -1,8 +1,6 @@
 import 'dart:async';
-import 'dart:convert';
 import 'package:bonfire/features/auth/data/repositories/auth.dart';
 import 'package:bonfire/features/auth/data/repositories/discord_auth.dart';
-import 'package:flutter/services.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
@@ -40,14 +38,14 @@ class VoiceChannelController extends _$VoiceChannelController {
     final remoteMedia = parsedRemoteSdp["media"][0];
 
     final port = remoteMedia['port'];
-    final _fingerprint = remoteMedia['fingerprint']["hash"];
-    final fingerprint = "sha-256 $_fingerprint";
+    final fingerprint0 = remoteMedia['fingerprint']["hash"];
+    final fingerprint = "sha-256 $fingerprint0";
     final icePwd = remoteMedia['icePwd'];
     final iceUfrag = remoteMedia['iceUfrag'];
     final ip = remoteMedia['connection']['ip'];
-    final _candidate = remoteMedia['candidates'][0];
+    final candidate0 = remoteMedia['candidates'][0];
     final candidate =
-        "${_candidate['foundation']} ${_candidate['component']} ${_candidate['transport']} ${_candidate['priority']} ${_candidate['ip']} ${_candidate['port']} typ host";
+        "${candidate0['foundation']} ${candidate0['component']} ${candidate0['transport']} ${candidate0['priority']} ${candidate0['ip']} ${candidate0['port']} typ host";
 
     final localDescription = _currentLocalOffer;
     if (localDescription == null) return;
@@ -224,7 +222,7 @@ a=rtcp-mux
       if (state == RTCPeerConnectionState.RTCPeerConnectionStateFailed) {}
     };
 
-    Future<void> _handleNegotiation() async {
+    Future<void> handleNegotiation() async {
       print("Handling...");
       if (_peerConnection == null) return;
 
@@ -249,7 +247,7 @@ a=rtcp-mux
 
     _peerConnection!.onRenegotiationNeeded = () async {
       print("Negotiation needed");
-      await _handleNegotiation();
+      await handleNegotiation();
     };
 
     _peerConnection!.onSignalingState = (RTCSignalingState state) {
@@ -273,7 +271,7 @@ a=rtcp-mux
       );
     }
     print("Init called");
-    await _handleNegotiation();
+    await handleNegotiation();
   }
 
   void leaveVoiceChannel() {

@@ -69,8 +69,8 @@ class Channels extends _$Channels {
 
       List<Role> roles = [];
       for (Snowflake roleId in roleIds!) {
-        var _r = ref.watch(roleControllerProvider(roleId));
-        roles.add(_r!);
+        var r = ref.watch(roleControllerProvider(roleId));
+        roles.add(r!);
       }
 
       // filter out channels that the user can't view

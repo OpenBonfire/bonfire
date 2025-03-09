@@ -35,14 +35,14 @@ class ForumPosts extends _$ForumPosts {
         if (threadData != null) {
           _hasMore = threadData.threads.length == 25;
 
-          threadData.threads.forEach((element) {
+          for (var element in threadData.threads) {
             ref
                 .read(threadChannelProvider(element.id).notifier)
                 .setThreadChannel(element);
-          });
+          }
 
           int idx = 0;
-          threadData.firstMessages.forEach((message) {
+          for (var message in threadData.firstMessages) {
             ref
                 .read(messageControllerProvider(message.id).notifier)
                 .setMessage(message);
@@ -54,7 +54,7 @@ class ForumPosts extends _$ForumPosts {
                 .setFirstMessage(message);
 
             idx++;
-          });
+          }
 
           return threadData;
         }

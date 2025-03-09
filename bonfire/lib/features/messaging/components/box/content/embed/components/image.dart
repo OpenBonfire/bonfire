@@ -1,5 +1,4 @@
 import 'package:bonfire/features/messaging/components/box/content/attachment/bounded_content.dart';
-import 'package:bonfire/features/messaging/components/box/content/embed/components/description.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
 

@@ -52,7 +52,7 @@ class _UserAvatarState extends ConsumerState<UserAvatar> {
     return Shimmer.fromColors(
       baseColor: theme.colorTheme.foreground,
       highlightColor: Colors.white,
-      child: Container(
+      child: const SizedBox(
         width: 35,
         height: 35,
       ),
