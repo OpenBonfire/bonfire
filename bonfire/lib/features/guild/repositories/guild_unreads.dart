@@ -1,11 +1,6 @@
-import 'package:bonfire/features/auth/controllers/ready.dart';
-import 'package:bonfire/features/auth/data/repositories/auth.dart';
-import 'package:bonfire/features/auth/data/repositories/discord_auth.dart';
-import 'package:bonfire/features/auth/models/auth.dart';
 import 'package:bonfire/features/channels/repositories/channels.dart';
 import 'package:bonfire/features/channels/repositories/has_unreads.dart';
 import 'package:bonfire/features/guild/controllers/guild.dart';
-import 'package:bonfire/features/me/controllers/settings.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:firebridge/firebridge.dart';
 

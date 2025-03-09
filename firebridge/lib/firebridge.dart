@@ -224,7 +224,6 @@ export 'src/models/user/settings/user_settings.dart' show UserSettings;
 export 'src/models/user/settings/user_guild_settings.dart'
     show UserGuildSettings;
 export 'src/models/user/settings/read_state.dart' show ReadState;
-export 'src/models/user/settings/private_channel.dart' show PrivateChannel;
 export 'src/models/user/settings/custom_status.dart' show CustomStatus;
 
 export 'src/models/channel/channel.dart'

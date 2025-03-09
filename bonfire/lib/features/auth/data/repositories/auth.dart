@@ -6,7 +6,6 @@ import 'package:bonfire/features/auth/data/repositories/discord_auth.dart';
 import 'package:bonfire/features/auth/models/auth.dart';
 import 'package:bonfire/features/channels/controllers/channel.dart';
 import 'package:bonfire/features/channels/repositories/channel_members.dart';
-import 'package:bonfire/features/channels/repositories/has_unreads.dart';
 import 'package:bonfire/features/friends/controllers/relationships.dart';
 import 'package:bonfire/features/guild/controllers/guild.dart';
 import 'package:bonfire/features/guild/controllers/role.dart';

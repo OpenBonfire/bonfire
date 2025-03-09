@@ -75,7 +75,6 @@ class _DirectMessageMemberState extends ConsumerState<DirectMessageMember> {
               lastLocation.put("guildId", "@me");
               lastLocation.put(
                   "channelId", widget.privateChannel.id.toString());
-              print("routing: ${widget.privateChannel.id.toString()}");
               GoRouter.of(context)
                   .go('/channels/@me/${widget.privateChannel.id}');
 

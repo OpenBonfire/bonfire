@@ -32,8 +32,6 @@ class Messages extends _$Messages {
       return null;
     }
 
-    print("Fetching messages for channel $channelId");
-
     user = auth;
     return await getMessages();
   }
@@ -47,7 +45,6 @@ class Messages extends _$Messages {
     bool disableAck = false,
   }) async {
     if (user is AuthUser) {
-      print("Getting messages");
       if (channelId == Snowflake.zero) return [];
       var channel = ref.watch(channelControllerProvider(channelId));
       if (channel == null) {

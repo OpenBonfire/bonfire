@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:firebridge/src/http/managers/message_manager.dart';
-import 'package:firebridge/src/models/user/settings/private_channel.dart';
 import 'package:http/http.dart' show MultipartFile;
 import 'package:firebridge/src/builders/builder.dart';
 import 'package:firebridge/src/builders/channel/group_dm.dart';
@@ -572,21 +571,6 @@ class ChannelManager extends ReadOnlyManager<Channel> {
           maybeParse(raw['guild_scheduled_event_id'], Snowflake.parse),
     );
   }
-
-  // PrivateChannel parsePrivateChannel(Map<String, Object?> raw) {
-  //   return PrivateChannel(
-  //     type: raw['type'] as int,
-  //     safetyWarnings: raw['safety_warnings'] as List<dynamic>?,
-  //     recipients: parseMany(
-  //       raw['recipients'] as List<Object?>,
-  //       (Map<String, Object?> raw) => client.users.parse(raw),
-  //     ),
-  //     lastMessageId: tryParse(raw['last_message_id'], Snowflake.parse),
-  //     isSpam: raw['is_spam'] as bool?,
-  //     id: Snowflake.parse(raw['id'] as String),
-  //     flags: raw['flags'] as int,
-  //   );
-  // }
 
   @override
   Future<Channel> fetch(Snowflake id) async {

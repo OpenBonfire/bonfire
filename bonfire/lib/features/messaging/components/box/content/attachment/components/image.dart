@@ -1,10 +1,8 @@
 import 'package:bonfire/features/messaging/components/box/content/attachment/bounded_content.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_thumbhash/flutter_thumbhash.dart';
-import 'package:http/http.dart' as http;
 import 'dart:ui';
 
 class ImageAttachment extends ConsumerStatefulWidget {
