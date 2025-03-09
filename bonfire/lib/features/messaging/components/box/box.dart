@@ -163,12 +163,11 @@ class _MessageBoxState extends ConsumerState<MessageBox>
             ),
             onPressed: () {},
             onLongPress: () {
-              // if (shouldUseMobileLayout(context)) {
-              //   _showMobileDrawer();
-              // }
-              GlobalDrawer.of(context)!.toggleDrawer();
-              GlobalDrawer.of(context)!
-                  .setChild(ContextDrawer(messageId: widget.messageId));
+              if (shouldUseMobileLayout(context)) {
+                GlobalDrawer.of(context)!.toggleDrawer();
+                GlobalDrawer.of(context)!
+                    .setChild(ContextDrawer(messageId: widget.messageId));
+              }
             },
             child: Stack(
               children: [
@@ -178,15 +177,17 @@ class _MessageBoxState extends ConsumerState<MessageBox>
                       alignment: Alignment.centerLeft,
                       child: Container(
                         width: 2,
-                        decoration: const BoxDecoration(color: Colors.yellow),
+                        decoration:
+                            const BoxDecoration(color: Color(0Xffe5c07b)),
                       ),
                     ),
                   ),
                 Padding(
                   padding: EdgeInsets.only(
-                    left: mentioned ? 2 : 0,
-                    right: 16,
-                  ),
+                      left: mentioned ? 2 : 0,
+                      right: 16,
+                      top: mentioned ? 8 : 0,
+                      bottom: mentioned ? 4 : 0),
                   child: Column(
                     children: [
                       if (message.referencedMessage != null &&
