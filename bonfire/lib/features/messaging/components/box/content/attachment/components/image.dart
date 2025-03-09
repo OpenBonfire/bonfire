@@ -1,8 +1,10 @@
 import 'package:bonfire/features/messaging/components/box/content/attachment/bounded_content.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_thumbhash/flutter_thumbhash.dart';
+import 'package:http/http.dart' as http;
 import 'dart:ui';
 
 class ImageAttachment extends ConsumerStatefulWidget {
@@ -14,6 +16,18 @@ class ImageAttachment extends ConsumerStatefulWidget {
 }
 
 class _ImageAttachmentState extends ConsumerState<ImageAttachment> {
+  @override
+  void initState() {
+    testLoadImage();
+    super.initState();
+  }
+
+  void testLoadImage() async {
+    print("LOADING IMAGE");
+    var resp = (await http.get(widget.attachment.url)).statusCode;
+    print("Status code: $resp");
+  }
+
   @override
   Widget build(BuildContext context) {
     double aspectRatio = (widget.attachment.width?.toDouble() ?? 1) /
@@ -54,11 +68,17 @@ class _ImageAttachmentState extends ConsumerState<ImageAttachment> {
               return (hash != null)
                   ? FadeInImage(
                       placeholder: hash.toImage(),
-                      image: NetworkImage(urlString),
+                      image: NetworkImage(
+                        urlString,
+                        webHtmlElementStrategy: WebHtmlElementStrategy.prefer,
+                      ),
                       fit: BoxFit.contain,
                     )
-                  : Image.network(
-                      urlString,
+                  : Image(
+                      image: NetworkImage(
+                        urlString,
+                        webHtmlElementStrategy: WebHtmlElementStrategy.prefer,
+                      ),
                       fit: BoxFit.contain,
                     );
             },

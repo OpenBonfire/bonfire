@@ -75,8 +75,6 @@ class Messages extends _$Messages {
           return [];
         }
       }
-      print("Getting messages!");
-      print(channel.id);
 
       var messages = await (channel as TextChannel)
           .messages
