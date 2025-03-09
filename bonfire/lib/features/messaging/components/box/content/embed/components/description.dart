@@ -1,3 +1,4 @@
+import 'package:bonfire/shared/utils/style/markdown/stylesheet.dart';
 import 'package:bonfire/theme/theme.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
@@ -182,22 +183,7 @@ class EmbedMarkdownBox extends StatelessWidget {
           launchUrl(Uri.parse(href), mode: LaunchMode.externalApplication);
         }
       },
-      styleSheet: MarkdownStyle(
-        paragraph: GoogleFonts.publicSans(
-          fontSize: 14,
-          fontWeight: FontWeight.w500,
-        ),
-        codeBlock: GoogleFonts.jetBrainsMono(
-          fontSize: 14,
-        ),
-        codeblockDecoration: BoxDecoration(
-            color: Theme.of(context).custom.colorTheme.foreground,
-            borderRadius: BorderRadius.circular(8)),
-        codeSpan: GoogleFonts.jetBrainsMono(
-          backgroundColor: Theme.of(context).custom.colorTheme.foreground,
-          fontSize: 14,
-        ),
-      ),
+      styleSheet: getMarkdownStyleSheet(context),
     );
   }
 }
