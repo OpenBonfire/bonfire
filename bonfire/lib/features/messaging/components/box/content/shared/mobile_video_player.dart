@@ -23,7 +23,7 @@ class _SimpleVideoPlayerState extends State<SimpleVideoPlayer> {
   @override
   void initState() {
 
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+
         player = Player();
         player!.setVolume(0);
         player!
@@ -37,13 +37,12 @@ player!.stream.completed.listen((completed) {
       });
         player!.play();
         
-    },);
     super.initState();
   }
 
   @override
   void dispose() {
-    player?.dispose();
+    // player?.dispose();
     super.dispose();
   }
 
