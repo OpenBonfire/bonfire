@@ -8,7 +8,7 @@ class MobileVideoAttachment extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MobileVideoPlayer(
+    return SimpleVideoPlayer(
       width: attachment.width!.toDouble(),
       height: attachment.height!.toDouble(),
       url: attachment.url,

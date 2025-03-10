@@ -1,40 +1,49 @@
 import 'package:bonfire/features/messaging/components/box/content/attachment/bounded_content.dart';
 import 'package:flutter/material.dart';
-import 'package:video_player/video_player.dart';
+import 'package:media_kit/media_kit.dart';
+import 'package:media_kit_video/media_kit_video.dart';
 
-class MobileVideoPlayer extends StatefulWidget {
+class SimpleVideoPlayer extends StatefulWidget {
   final double width;
   final double height;
   final Uri url;
-  const MobileVideoPlayer(
+  const SimpleVideoPlayer(
       {super.key,
       required this.width,
       required this.height,
       required this.url});
 
   @override
-  State<StatefulWidget> createState() => VideoEmbedState();
+  State<StatefulWidget> createState() => _SimpleVideoPlayerState();
 }
 
-class VideoEmbedState extends State<MobileVideoPlayer> {
-  late VideoPlayerController _controller;
-
+class _SimpleVideoPlayerState extends State<SimpleVideoPlayer> {
+  Player? player;
+  VideoController? controller;
   @override
   void initState() {
-    _controller = VideoPlayerController.networkUrl(
-      widget.url,
-    )..initialize().then((_) {
-        setState(() {});
-        _controller.setLooping(true);
-        _controller.play();
-      });
 
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+        player = Player();
+        player!.setVolume(0);
+        player!
+            .open(Media(widget.url.toString()), play: true);
+        controller = VideoController(player!);
+player!.stream.completed.listen((completed) {
+        if (completed) {
+          player!.seek(Duration.zero); 
+          player!.play();
+        }
+      });
+        player!.play();
+        
+    },);
     super.initState();
   }
 
   @override
   void dispose() {
-    _controller.dispose();
+    player?.dispose();
     super.dispose();
   }
 
@@ -44,7 +53,13 @@ class VideoEmbedState extends State<MobileVideoPlayer> {
       borderRadius: BorderRadius.circular(12),
       child: BoundedContent(
         aspectRatio: widget.width / widget.height,
-        child: VideoPlayer(_controller),
+        child:                  (controller != null ) ? Video(
+                      controller: controller!,
+                      // disable controls
+                     controls: NoVideoControls,
+                     
+                      fit: BoxFit.contain,
+                    ): const SizedBox()
       ),
     );
   }

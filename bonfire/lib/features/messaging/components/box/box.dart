@@ -40,21 +40,6 @@ class MessageBox extends ConsumerStatefulWidget {
 class _MessageBoxState extends ConsumerState<MessageBox>
     with SingleTickerProviderStateMixin {
   bool _isHovering = false;
-  late AnimationController _animationController;
-  late Animation<double> _animation;
-
-  @override
-  void initState() {
-    super.initState();
-    _animationController = AnimationController(
-      duration: const Duration(milliseconds: 300),
-      vsync: this,
-    );
-    _animation = CurvedAnimation(
-      parent: _animationController,
-      curve: Curves.easeInOut,
-    );
-  }
 
   String dateTimeFormat(DateTime time) {
     String section1;

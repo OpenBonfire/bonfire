@@ -24,19 +24,7 @@ class VideoEmbed extends StatelessWidget {
     }
 
     if (embed.provider?.name == "Tenor") {
-      return UniversalPlatform.isDesktopOrWeb
-          ? DesktopVideoPlayer(
-              width: embed.thumbnail!.width!.toDouble(),
-              height: embed.thumbnail!.height!.toDouble(),
-              url: embed.video!.url!,
-              thumbnailUrl: embed.thumbnail!.url,
-              placeholder: embed.thumbnail!.url.toString(),
-            )
-          // : DesktopVideoPlayer(
-          //     width: embed.thumbnail!.width!.toDouble(),
-          //     height: embed.thumbnail!.height!.toDouble(),
-          //     url: embed.video!.url!);
-          : MobileVideoPlayer(
+      return SimpleVideoPlayer(
               width: embed.thumbnail!.width!.toDouble(),
               height: embed.thumbnail!.height!.toDouble(),
               url: embed.video!.url!,

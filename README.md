@@ -1,3 +1,5 @@
+*What if the Discord client was blazingly fast?*
+
 You can find us on Discord: https://discord.gg/QafRarw25u
 
 # Usage
