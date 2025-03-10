@@ -22,28 +22,25 @@ class _SimpleVideoPlayerState extends State<SimpleVideoPlayer> {
   VideoController? controller;
   @override
   void initState() {
-
-
-        player = Player();
-        player!.setVolume(0);
-        player!
-            .open(Media(widget.url.toString()), play: true);
-        controller = VideoController(player!);
-player!.stream.completed.listen((completed) {
-        if (completed) {
-          player!.seek(Duration.zero); 
-          player!.play();
-        }
-      });
+    player = Player();
+    player!.setVolume(0);
+    player!.open(Media(widget.url.toString()), play: true);
+    controller = VideoController(player!);
+    player!.stream.completed.listen((completed) {
+      if (completed) {
+        player!.seek(Duration.zero);
         player!.play();
-        
+      }
+    });
+    player!.play();
+
     super.initState();
   }
 
   @override
   void dispose() {
-    // player?.dispose();
     super.dispose();
+    player?.dispose();
   }
 
   @override
@@ -51,15 +48,14 @@ player!.stream.completed.listen((completed) {
     return ClipRRect(
       borderRadius: BorderRadius.circular(12),
       child: BoundedContent(
-        aspectRatio: widget.width / widget.height,
-        child:                  (controller != null ) ? Video(
-                      controller: controller!,
-                      // disable controls
-                     controls: NoVideoControls,
-                     
-                      fit: BoxFit.contain,
-                    ): const SizedBox()
-      ),
+          aspectRatio: widget.width / widget.height,
+          child: (controller != null)
+              ? Video(
+                  controller: controller!,
+                  controls: NoVideoControls,
+                  fit: BoxFit.contain,
+                )
+              : const SizedBox()),
     );
   }
 }
