@@ -3,19 +3,11 @@ import 'dart:typed_data';
 import 'package:bonfire/features/auth/data/repositories/auth.dart';
 import 'package:bonfire/features/auth/data/repositories/discord_auth.dart';
 import 'package:bonfire/features/guild/controllers/guild.dart';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:firebridge/firebridge.dart';
 
 part 'guild_icon.g.dart';
-
-// final iconCache = CacheManager(
-//   Config(
-//     'guild_icons',
-//     maxNrOfCacheObjects: 200,
-//   ),
-// );
 
 @Riverpod(keepAlive: true)
 Future<Uint8List?> guildIcon(Ref ref, Snowflake guildId) async {

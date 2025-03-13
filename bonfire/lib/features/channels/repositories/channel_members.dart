@@ -173,6 +173,9 @@ class ChannelMembers extends _$ChannelMembers {
 
   void _updateSubscriptions() {
     if (user is AuthUser) {
+      if (guildId == Snowflake.zero) {
+        return; // when in dms I don't think sending op 37 is required
+      }
       user!.client.updateGuildSubscriptionsBulk(GuildSubscriptionsBulkBuilder()
         ..subscriptions = [
           GuildSubscription(

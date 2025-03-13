@@ -1,6 +1,4 @@
 import 'package:bonfire/features/channels/controllers/channel.dart';
-import 'package:bonfire/features/me/controllers/settings.dart';
-import 'package:bonfire/features/user/components/presence_avatar.dart';
 import 'package:bonfire/features/user/components/user_avatar.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
@@ -23,9 +21,6 @@ class _DmIconState extends ConsumerState<DmIcon> {
     // IDEA: We could include the presence of the user here, unlike Discord which doesn't provide that
     Channel? channel =
         ref.watch(channelControllerProvider(widget.privateChannelId));
-    ReadState? readState =
-        ref.watch(channelReadStateProvider(widget.privateChannelId));
-
     if (channel == null) {
       return const SizedBox();
     }
@@ -41,13 +36,8 @@ class _DmIconState extends ConsumerState<DmIcon> {
 
     User user = recipients!.firstOrNull!;
 
-    return Stack(
-      children: [
-        UserAvatar(
-          user: user,
-          // size: 40,
-        ),
-      ],
+    return UserAvatar(
+      user: user,
     );
   }
 }
