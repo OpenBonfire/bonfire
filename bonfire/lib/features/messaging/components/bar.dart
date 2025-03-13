@@ -1,8 +1,10 @@
+import 'package:bonfire/features/channels/controllers/channel.dart';
 import 'package:bonfire/features/messaging/controllers/reply.dart';
 import 'package:bonfire/features/messaging/repositories/messages.dart';
 import 'package:bonfire/features/messaging/components/box/reply/reply_to.dart';
 import 'package:bonfire/features/messaging/components/typing/typing_view.dart';
 import 'package:bonfire/features/messaging/repositories/permissions.dart';
+import 'package:bonfire/features/notifications/controllers/notification.dart';
 import 'package:bonfire/features/overview/views/overlapping_panels.dart';
 import 'package:bonfire/shared/utils/channel_name.dart';
 import 'package:bonfire/theme/theme.dart';
@@ -217,9 +219,11 @@ class _MessageBarState extends ConsumerState<MessageBar> {
     ReplyState? replyState = ref.watch(replyControllerProvider);
     Permissions? channelPermissions =
         ref.watch(channelPermissionsProvider(widget.channel.id)).valueOrNull;
+    Channel channel = ref.watch(channelControllerProvider(widget.channel.id))!;
 
     String hintText = "You cannot send messages here";
-    if (channelPermissions?.canSendMessages == true) {
+    if ((channelPermissions?.canSendMessages == true) ||
+        channel is! GuildChannel) {
       hintText = isWatch
           ? "#${getChannelName(widget.channel)}"
           : "Message #${getChannelName(widget.channel)}";
@@ -261,7 +265,8 @@ class _MessageBarState extends ConsumerState<MessageBar> {
                           topLeft: Radius.circular(8),
                           bottomLeft: Radius.circular(8),
                         ),
-                        enabled: (channelPermissions?.canAttachFiles == true),
+                        enabled: (channelPermissions?.canAttachFiles == true) ||
+                            channel is! GuildChannel,
                       ),
                     Expanded(
                       child: ConstrainedBox(
