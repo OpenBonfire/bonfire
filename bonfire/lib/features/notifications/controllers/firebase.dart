@@ -61,16 +61,16 @@ void showNotification(RemoteMessage message) async {
 }
 
 Future<void> setupFirebaseMessaging() async {
-  await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
-    alert: true,
-    badge: true,
-    sound: true,
-  );
+  // await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
+  //   alert: true,
+  //   badge: true,
+  //   sound: true,
+  // );
 
-  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-    print('Foreground message received: ${message.messageId}');
-    showNotification(message);
-  });
+  // FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+  //   print('Foreground message received: ${message.messageId}');
+  //   showNotification(message);
+  // });
 }
 
 @pragma('vm:entry-point')

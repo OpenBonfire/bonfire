@@ -14,7 +14,7 @@ class UnreadDms extends _$UnreadDms {
     List<ReadState> unreadDms = [];
 
     for (var channel in privateChannels) {
-      var readState = ref.read(channelReadStateProvider(channel.id));
+      var readState = ref.watch(channelReadStateProvider(channel.id));
       if ((readState?.mentionCount != null) && (readState!.mentionCount!) > 0) {
         unreadDms.add(readState);
       }

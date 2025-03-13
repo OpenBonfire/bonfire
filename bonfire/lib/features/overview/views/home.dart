@@ -28,7 +28,6 @@ class _HomeState extends ConsumerState<GuildMessagingOverview> {
 
   @override
   void initState() {
-    print("REBUILD WIDGET!");
     super.initState();
     selfPanelState = RevealSide.main;
   }

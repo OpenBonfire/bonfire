@@ -28,13 +28,6 @@ class PrivateMessageHistory extends _$PrivateMessageHistory {
   }
 
   void setMessageHistory(List<Channel> channels) {
-    //     if (readState.channel.id ==
-    //     Snowflake(BigInt.parse("1256245066867933206"))) {
-    //   print("READ STATE: ${readState.lastViewed}");
-    // }
-    // for (var channel in channels) {
-    //   var unread = ref.read(hasUnreadsProvider(channel))
-    // }
     state = channels;
   }
 }
@@ -56,6 +49,10 @@ class GuildFolders extends _$GuildFolders {
 @Riverpod(keepAlive: true)
 class ChannelReadState extends _$ChannelReadState {
   AuthUser? user;
+
+  // TODO: When a message is recieved, we need to create a new read state for that channel
+  // when a message is acked, we need to also modify the read state
+  // read states are never updated, you have to re-"calculate" them
 
   @override
   ReadState? build(Snowflake channelId) {
