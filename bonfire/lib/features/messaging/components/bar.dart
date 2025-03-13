@@ -221,6 +221,9 @@ class _MessageBarState extends ConsumerState<MessageBar> {
         ref.watch(channelPermissionsProvider(widget.channel.id)).valueOrNull;
     Channel channel = ref.watch(channelControllerProvider(widget.channel.id))!;
 
+    print("Is not guild channel: ");
+    print(channel is! GuildChannel);
+
     String hintText = "You cannot send messages here";
     if ((channelPermissions?.canSendMessages == true) ||
         channel is! GuildChannel) {
@@ -265,8 +268,9 @@ class _MessageBarState extends ConsumerState<MessageBar> {
                           topLeft: Radius.circular(8),
                           bottomLeft: Radius.circular(8),
                         ),
-                        enabled: (channelPermissions?.canAttachFiles == true) ||
-                            channel is! GuildChannel,
+                        enabled: channel is! GuildChannel ||
+                            (channelPermissions?.canSendMessages == true &&
+                                channelPermissions?.canAttachFiles == true),
                       ),
                     Expanded(
                       child: ConstrainedBox(
