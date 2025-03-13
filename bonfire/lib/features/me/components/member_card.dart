@@ -1,5 +1,3 @@
-import 'package:bonfire/features/channels/repositories/has_unreads.dart';
-import 'package:bonfire/features/me/controllers/settings.dart';
 import 'package:bonfire/features/overview/views/overlapping_panels.dart';
 import 'package:bonfire/features/user/components/presence_avatar.dart';
 import 'package:bonfire/features/user/controllers/presence.dart';

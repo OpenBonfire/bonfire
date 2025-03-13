@@ -1,9 +1,7 @@
 import 'package:bonfire/features/messaging/components/box/content/embed/components/web_video.dart';
-import 'package:bonfire/features/messaging/components/box/content/shared/desktop_video_player.dart';
 import 'package:bonfire/features/messaging/components/box/content/shared/mobile_video_player.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
-import 'package:universal_platform/universal_platform.dart';
 
 class VideoEmbed extends StatelessWidget {
   final Embed embed;
@@ -25,10 +23,10 @@ class VideoEmbed extends StatelessWidget {
 
     if (embed.provider?.name == "Tenor") {
       return SimpleVideoPlayer(
-              width: embed.thumbnail!.width!.toDouble(),
-              height: embed.thumbnail!.height!.toDouble(),
-              url: embed.video!.url!,
-            );
+        width: embed.thumbnail!.width!.toDouble(),
+        height: embed.thumbnail!.height!.toDouble(),
+        url: embed.video!.url!,
+      );
 
       //     url: embed.video!.url!);
     }
