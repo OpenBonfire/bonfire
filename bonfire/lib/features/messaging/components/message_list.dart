@@ -8,7 +8,9 @@ import 'package:bonfire/features/messaging/components/box/box.dart';
 import 'package:bonfire/features/messaging/components/box/channel_header.dart';
 import 'package:bonfire/features/messaging/components/box/message_loading_animation.dart';
 import 'package:bonfire/features/messaging/components/keyboard_buffer.dart';
+import 'package:bonfire/features/messaging/repositories/permissions.dart';
 import 'package:bonfire/shared/utils/channel_name.dart';
+import 'package:bonfire/theme/theme.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -192,6 +194,8 @@ class _MessageViewState extends ConsumerState<MessageList>
   @override
   Widget build(BuildContext context) {
     var messageOutput = ref.watch(messagesProvider(widget.channelId));
+    Permissions? channelPermission =
+        ref.watch(channelPermissionsProvider(widget.channelId)).valueOrNull;
 
     Widget content = Container();
 
@@ -247,11 +251,18 @@ class _MessageViewState extends ConsumerState<MessageList>
               ],
             ),
           ),
-          if (!isSmartwatch(context))
-            MessageBar(
-              guildId: guild?.id ?? Snowflake.zero,
-              channel: channel,
-            ),
+          // if (!isSmartwatch(context))
+          //   (channelPermission?.canSendMessages == false)
+          //       ? const NoMessageSendPermissionPlaceholder()
+          //       : MessageBar(
+          //           guildId: guild?.id ?? Snowflake.zero,
+          //           channel: channel,
+          //         ),
+          //           if (!isSmartwatch(context))
+          MessageBar(
+            guildId: guild?.id ?? Snowflake.zero,
+            channel: channel,
+          ),
           if (!isSmartwatch(context))
             SizedBox(
               height: MediaQuery.of(context).padding.bottom,
@@ -262,3 +273,20 @@ class _MessageViewState extends ConsumerState<MessageList>
     );
   }
 }
+
+class NoMessageSendPermissionPlaceholder extends StatelessWidget {
+  const NoMessageSendPermissionPlaceholder({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        decoration: BoxDecoration(
+            color: Theme.of(context).custom.colorTheme.background));
+  }
+}
+
+// if ((channelPermission?.canSendMessages == false)) {
+//   return Container(
+//       decoration: BoxDecoration(
+//           color: Theme.of(context).custom.colorTheme.background));
+// }

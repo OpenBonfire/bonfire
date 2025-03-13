@@ -62,6 +62,7 @@ void main() async {
       provisional: false,
       sound: true,
     );
+
     registerBackgroundHandler();
     print('Notification permissions: ${settings.authorizationStatus}');
   }

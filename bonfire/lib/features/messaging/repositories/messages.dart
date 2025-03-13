@@ -5,6 +5,8 @@ import 'package:bonfire/features/auth/data/repositories/discord_auth.dart';
 import 'package:bonfire/features/channels/controllers/channel.dart';
 import 'package:bonfire/features/channels/repositories/typing.dart';
 import 'package:bonfire/features/guild/controllers/guild.dart';
+import 'package:bonfire/features/guild/controllers/role.dart';
+import 'package:bonfire/features/guild/controllers/roles.dart';
 import 'package:bonfire/features/me/controllers/settings.dart';
 import 'package:bonfire/features/messaging/controllers/message.dart';
 import 'package:bonfire/features/messaging/controllers/reply.dart';
@@ -54,28 +56,34 @@ class Messages extends _$Messages {
 
       if (channel == null) return [];
 
-      Guild? guild;
-      Member? selfMember;
-
-      if (channel is GuildChannel || channel is DmChannel) {
-        if (channel is GuildChannel) {
-          guild = ref.watch(guildControllerProvider(channel.guildId));
-          if (guild == null) return [];
-          selfMember = await guild.members.get(user!.client.user.id);
-          var permissions = await channel.computePermissionsFor(selfMember);
-
-          if (permissions.canReadMessageHistory == false) {
-            print(
-                "Error fetching messages in channel ${channel.id}, likely do not have access to channel bozo!");
-            return [];
-          }
+      if (channel is GuildChannel) {
+        Member? selfMember;
+        Guild? guild = ref
+            .watch(guildControllerProvider((channel as GuildChannel).guildId))!;
+        List<Snowflake> roleIds =
+            ref.watch(rolesControllerProvider(channel.guildId))!;
+        List<Role> roles = [];
+        for (Snowflake roleId in roleIds) {
+          Role role = ref.watch(roleControllerProvider(roleId))!;
+          roles.add(role);
         }
 
-        if (channel is! TextChannel) {
+        selfMember = await guild.members.get(user!.client.user.id);
+        var permissions =
+            await channel.computePermissionsForMemberWithGuildAndRoles(
+                selfMember, guild, roles);
+
+        if (permissions.canReadMessageHistory == false) {
           print(
-              "Error fetching messages in channel ${channel.id}, not a text channel");
+              "Error fetching messages in channel ${channel.id}, likely do not have access to channel bozo!");
           return [];
         }
+      }
+
+      if (channel is! TextChannel) {
+        print(
+            "Error fetching messages in channel ${channel.id}, not a text channel");
+        return [];
       }
 
       var messages = await (channel as TextChannel)

@@ -2,6 +2,7 @@ import 'package:bonfire/features/messaging/controllers/reply.dart';
 import 'package:bonfire/features/messaging/repositories/messages.dart';
 import 'package:bonfire/features/messaging/components/box/reply/reply_to.dart';
 import 'package:bonfire/features/messaging/components/typing/typing_view.dart';
+import 'package:bonfire/features/messaging/repositories/permissions.dart';
 import 'package:bonfire/features/overview/views/overlapping_panels.dart';
 import 'package:bonfire/shared/utils/channel_name.dart';
 import 'package:bonfire/theme/theme.dart';
@@ -92,22 +93,29 @@ class _MessageBarState extends ConsumerState<MessageBar> {
   }
 
   Widget _messageBarIcon(SvgPicture icon, void Function() onPressed,
-      {Color? backgroundColor, BorderRadius? borderRadius}) {
+      {Color? backgroundColor,
+      BorderRadius? borderRadius,
+      bool enabled = true}) {
+    Color color =
+        backgroundColor ?? Theme.of(context).custom.colorTheme.foreground;
     return Container(
       width: 48,
       height: 48,
       decoration: BoxDecoration(
-        color:
-            backgroundColor ?? Theme.of(context).custom.colorTheme.foreground,
+        color: color,
         borderRadius: borderRadius,
       ),
       child: Material(
         color: Colors.transparent,
-        child: InkWell(
-          onTap: onPressed,
-          borderRadius: borderRadius,
-          child: Center(child: icon),
-        ),
+        child: enabled
+            ? InkWell(
+                onTap: onPressed,
+                borderRadius: borderRadius,
+                child: Center(child: icon),
+              )
+            : Center(
+                child: Opacity(opacity: 0.5, child: icon),
+              ),
       ),
     );
   }
@@ -207,7 +215,15 @@ class _MessageBarState extends ConsumerState<MessageBar> {
   Widget build(BuildContext context) {
     bool isWatch = isSmartwatch(context);
     ReplyState? replyState = ref.watch(replyControllerProvider);
+    Permissions? channelPermissions =
+        ref.watch(channelPermissionsProvider(widget.channel.id)).valueOrNull;
 
+    String hintText = "You cannot send messages here";
+    if (channelPermissions?.canSendMessages == true) {
+      hintText = isWatch
+          ? "#${getChannelName(widget.channel)}"
+          : "Message #${getChannelName(widget.channel)}";
+    }
     return Column(
       children: [
         TypingView(channelId: widget.channel.id),
@@ -245,6 +261,7 @@ class _MessageBarState extends ConsumerState<MessageBar> {
                           topLeft: Radius.circular(8),
                           bottomLeft: Radius.circular(8),
                         ),
+                        enabled: (channelPermissions?.canAttachFiles == true),
                       ),
                     Expanded(
                       child: ConstrainedBox(
@@ -278,14 +295,14 @@ class _MessageBarState extends ConsumerState<MessageBar> {
                                   isDesktop: shouldUseDesktopLayout(context),
                                 ),
                               ],
+                              readOnly:
+                                  channelPermissions?.canSendMessages == false,
                               decoration: InputDecoration(
                                 contentPadding: const EdgeInsets.symmetric(
                                   horizontal: 8,
                                   vertical: 8,
                                 ),
-                                hintText: isWatch
-                                    ? "#${getChannelName(widget.channel)}"
-                                    : "Message #${getChannelName(widget.channel)}",
+                                hintText: hintText,
                                 hintStyle: GoogleFonts.publicSans(
                                   color: Theme.of(context)
                                       .custom
@@ -306,7 +323,9 @@ class _MessageBarState extends ConsumerState<MessageBar> {
                         ),
                       ),
                     ),
-                    if (UniversalPlatform.isMobile || UniversalPlatform.isWeb)
+                    if ((UniversalPlatform.isMobile ||
+                            UniversalPlatform.isWeb) &
+                        (channelPermissions?.canSendMessages != false))
                       _messageBarIcon(
                         SvgPicture.asset(
                           "assets/icons/send.svg",
