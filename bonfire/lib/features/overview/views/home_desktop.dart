@@ -1,4 +1,6 @@
 import 'package:bonfire/features/channels/views/channels.dart';
+import 'package:bonfire/features/friends/views/friends.dart';
+import 'package:bonfire/features/me/components/private_messages.dart';
 import 'package:bonfire/features/member/views/member_list.dart';
 import 'package:bonfire/features/me/components/messages.dart';
 import 'package:bonfire/features/overview/controllers/member_list.dart';
@@ -44,25 +46,29 @@ class _HomeState extends ConsumerState<HomeDesktop> {
             ),
             SizedBox(
               width: 255,
-              child: ChannelsList(
-                guildId: widget.guildId,
-                channelId: widget.channelId,
-              ),
+              child: (widget.guildId != Snowflake.zero)
+                  ? ChannelsList(
+                      guildId: widget.guildId,
+                      channelId: widget.channelId,
+                    )
+                  : PrivateMessages(channelId: widget.channelId),
             ),
             Flexible(
-              child: MessageView(
-                guildId: widget.guildId,
-                channelId: widget.channelId,
-                threadId: widget.threadId,
-              ),
+              child: (widget.channelId != Snowflake.zero)
+                  ? MessageView(
+                      guildId: widget.guildId,
+                      channelId: widget.channelId,
+                      threadId: widget.threadId,
+                    )
+                  : FriendsList(channelId: Snowflake.zero),
             ),
             if (isVisible)
               SizedBox(
                 width: 255,
-                child: MemberList(
-                  guildId: widget.guildId,
-                  channelId: widget.channelId,
-                ),
+                child: (widget.channelId != Snowflake.zero)
+                    ? MemberList(
+                        guildId: widget.guildId, channelId: widget.channelId)
+                    : const SizedBox(),
               )
           ],
         ));

@@ -59,29 +59,19 @@ final routerController = GoRouter(
                 return buildPageWithNoTransition(
                   context: context,
                   state: state,
-                  child: const MessageOverview(),
-                );
-              },
-            ),
-            GoRoute(
-              path: 'channels/@me/:channelId',
-              pageBuilder: (context, state) {
-                Snowflake? channelId;
-                if (state.pathParameters['channelId'] != null) {
-                  channelId =
-                      Snowflake.parse(state.pathParameters['channelId']!);
-                }
-                return buildPageWithNoTransition(
-                  context: context,
-                  state: state,
-                  child: MessageOverview(channelId: channelId),
+                  child: GuildMessagingOverview(
+                    guildId: Snowflake.zero,
+                    channelId: Snowflake.zero,
+                  ),
                 );
               },
             ),
             GoRoute(
               path: 'channels/:guildId/:channelId',
               pageBuilder: (context, state) {
-                final guildId = state.pathParameters['guildId'] ?? '@me';
+                String guildId = state.pathParameters['guildId'] ?? '@me';
+                if (guildId == '@me') guildId = "0";
+
                 final channelId = state.pathParameters['channelId']!;
                 var lastLocation = Hive.box("last-location");
                 lastLocation.put("guildId", guildId);
@@ -99,8 +89,6 @@ final routerController = GoRouter(
                 GoRoute(
                   path: 'threads/:threadId',
                   pageBuilder: (context, state) {
-                    print("threadId: ${state.pathParameters['threadId']}");
-                    print("full path: ${state.fullPath}");
                     final guildId = state.pathParameters['guildId']!;
                     final channelId = state.pathParameters['channelId']!;
                     final threadId = state.pathParameters['threadId']!;

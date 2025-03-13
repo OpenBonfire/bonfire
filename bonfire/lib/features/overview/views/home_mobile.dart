@@ -1,3 +1,5 @@
+import 'package:bonfire/features/friends/views/friends.dart';
+import 'package:bonfire/features/me/components/private_messages.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:bonfire/features/channels/views/channels.dart';
@@ -105,23 +107,33 @@ class _HomeState extends ConsumerState<HomeMobile>
                 children: [
                   Sidebar(guildId: widget.guildId),
                   Expanded(
-                    child: ChannelsList(
-                      guildId: widget.guildId,
-                      channelId: widget.channelId,
-                    ),
+                    child: (widget.guildId != Snowflake.zero)
+                        ? ChannelsList(
+                            guildId: widget.guildId,
+                            channelId: widget.channelId,
+                          )
+                        : PrivateMessages(
+                            channelId: widget.channelId,
+                          ),
                   )
                 ],
               ),
             ),
-            main: MessageView(
-              guildId: widget.guildId,
-              channelId: widget.channelId,
-              threadId: widget.threadId,
-            ),
-            right: MemberList(
-              guildId: widget.guildId,
-              channelId: widget.channelId,
-            ),
+            main: (widget.channelId != Snowflake.zero)
+                ? MessageView(
+                    guildId: widget.guildId,
+                    channelId: widget.channelId,
+                    threadId: widget.threadId,
+                  )
+                : FriendsList(
+                    channelId: Snowflake.zero,
+                  ),
+            right: (widget.channelId != Snowflake.zero)
+                ? MemberList(
+                    guildId: widget.guildId,
+                    channelId: widget.channelId,
+                  )
+                : const SizedBox(),
             restWidth: isSmartwatch(context) ? 0.0 : 24,
           ),
           if (!isSmartwatch(context)) const NavigationBarWidget(),
