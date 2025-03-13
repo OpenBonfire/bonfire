@@ -5,6 +5,7 @@ import 'package:bonfire/features/auth/data/repositories/discord_auth.dart';
 import 'package:bonfire/features/channels/controllers/channel.dart';
 import 'package:bonfire/features/channels/repositories/typing.dart';
 import 'package:bonfire/features/guild/controllers/guild.dart';
+import 'package:bonfire/features/me/controllers/settings.dart';
 import 'package:bonfire/features/messaging/controllers/message.dart';
 import 'package:bonfire/features/messaging/controllers/reply.dart';
 import 'package:firebridge_extensions/firebridge_extensions.dart';
@@ -138,6 +139,32 @@ class Messages extends _$Messages {
   void processMessage(Message message) async {
     Channel? channel = ref.watch(channelControllerProvider(channelId));
     if (channel == null) return;
+
+    ReadState? currentReadState =
+        ref.read(channelReadStateProvider(message.channelId));
+
+    int mentionCount = currentReadState?.mentionCount ?? 0;
+    bool mentionsSelf = false;
+    for (var mention in message.mentions) {
+      if (mention.id == user!.client.user.id) {
+        mentionsSelf = true;
+        break;
+      }
+    }
+
+    if (mentionsSelf || channel is DmChannel || channel is GroupDmChannel) {
+      mentionCount++;
+    }
+
+    ref.read(channelReadStateProvider(message.channelId).notifier).setReadState(
+          ReadState(
+            channel: message.channel,
+            lastMessage: message,
+            lastPinTimestamp: currentReadState?.lastPinTimestamp,
+            mentionCount: mentionCount,
+            lastViewed: currentReadState?.lastViewed,
+          ),
+        );
 
     ref.read(messageControllerProvider(message.id).notifier).setMessage(
           message,

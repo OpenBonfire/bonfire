@@ -213,38 +213,6 @@ class Auth extends _$Auth {
       ref
           .read(messagesProvider(event.message.channelId).notifier)
           .processMessage(event.message);
-
-      ReadState? currentReadState =
-          ref.read(channelReadStateProvider(event.message.channelId));
-
-      int mentionCount = currentReadState?.mentionCount ?? 0;
-      bool mentionsSelf = false;
-      for (var mention in event.message.mentions) {
-        if (mention.id == client.user.id) {
-          mentionsSelf = true;
-          break;
-        }
-      }
-
-      // TODO: Handle dms
-      if (mentionsSelf) mentionCount++;
-
-      if (event.message.channelId == Snowflake.parse('1256245066867933206')) {
-        print("UPDATING STATE FOR TEST ACCOUNT!");
-        print("MENTION COUNT: $mentionCount");
-      }
-
-      ref
-          .read(channelReadStateProvider(event.message.channelId).notifier)
-          .setReadState(
-            ReadState(
-              channel: event.message.channel,
-              lastMessage: event.message,
-              lastPinTimestamp: currentReadState?.lastPinTimestamp,
-              mentionCount: mentionCount,
-              lastViewed: currentReadState?.lastViewed,
-            ),
-          );
     });
 
     client.onPresenceUpdate.listen((event) {
