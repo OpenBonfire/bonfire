@@ -55,34 +55,34 @@ final routerController = GoRouter(
             ),
             GoRoute(
               path: 'channels/@me',
-              pageBuilder: (context, state) {
-                return buildPageWithNoTransition(
-                  context: context,
-                  state: state,
-                  child: GuildMessagingOverview(
-                    guildId: Snowflake.zero,
-                    channelId: Snowflake.zero,
-                  ),
-                );
-              },
+              pageBuilder: (context, state) => CustomTransitionPage(
+                key: const ValueKey('channels_route'),
+                child: GuildMessagingOverview(
+                  guildId: Snowflake.zero,
+                  channelId: Snowflake.zero,
+                ),
+                transitionsBuilder:
+                    (context, animation, secondaryAnimation, child) => child,
+              ),
             ),
             GoRoute(
               path: 'channels/:guildId/:channelId',
               pageBuilder: (context, state) {
-                String guildId = state.pathParameters['guildId'] ?? '@me';
-                if (guildId == '@me') guildId = "0";
-
+                String guildId = state.pathParameters['guildId'] ?? '0';
+                if (guildId == "@me") guildId = "0";
                 final channelId = state.pathParameters['channelId']!;
-                var lastLocation = Hive.box("last-location");
+                final lastLocation = Hive.box("last-location");
                 lastLocation.put("guildId", guildId);
                 lastLocation.put("channelId", channelId);
-                return buildPageWithNoTransition(
-                  context: context,
-                  state: state,
+
+                return CustomTransitionPage(
+                  key: const ValueKey('channels_route'),
                   child: GuildMessagingOverview(
                     guildId: Snowflake.parse(guildId),
                     channelId: Snowflake.parse(channelId),
                   ),
+                  transitionsBuilder:
+                      (context, animation, secondaryAnimation, child) => child,
                 );
               },
               routes: [
@@ -92,18 +92,23 @@ final routerController = GoRouter(
                     final guildId = state.pathParameters['guildId']!;
                     final channelId = state.pathParameters['channelId']!;
                     final threadId = state.pathParameters['threadId']!;
-                    var lastLocation = Hive.box("last-location");
-                    lastLocation.put("guildId", guildId);
-                    lastLocation.put("channelId", channelId);
-                    lastLocation.put("threadId", threadId);
-                    return buildPageWithNoTransition(
-                      context: context,
-                      state: state,
+                    final lastLocation = Hive.box("last-location");
+                    lastLocation.putAll({
+                      "guildId": guildId,
+                      "channelId": channelId,
+                      "threadId": threadId
+                    });
+
+                    return CustomTransitionPage(
+                      key: const ValueKey('channels_route'),
                       child: GuildMessagingOverview(
                         guildId: Snowflake.parse(guildId),
                         channelId: Snowflake.parse(channelId),
                         threadId: Snowflake.parse(threadId),
                       ),
+                      transitionsBuilder:
+                          (context, animation, secondaryAnimation, child) =>
+                              child,
                     );
                   },
                 ),
@@ -115,29 +120,3 @@ final routerController = GoRouter(
     ),
   ],
 );
-
-CustomTransitionPage buildPageWithDefaultTransition<T>({
-  required BuildContext context,
-  required GoRouterState state,
-  required Widget child,
-}) {
-  return CustomTransitionPage<T>(
-    key: state.pageKey,
-    child: child,
-    transitionsBuilder: (context, animation, secondaryAnimation, child) =>
-        FadeTransition(opacity: animation, child: child),
-  );
-}
-
-CustomTransitionPage buildPageWithNoTransition<T>({
-  required BuildContext context,
-  required GoRouterState state,
-  required Widget child,
-}) {
-  return CustomTransitionPage<T>(
-    key: state.pageKey,
-    child: child,
-    transitionsBuilder: (context, animation, secondaryAnimation, child) =>
-        child,
-  );
-}
