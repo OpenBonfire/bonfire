@@ -152,7 +152,8 @@ class Messages extends _$Messages {
       }
     }
 
-    if (mentionsSelf || channel is DmChannel || channel is GroupDmChannel) {
+    if ((mentionsSelf || channel is DmChannel || channel is GroupDmChannel) &&
+        message.author.id != user!.client.user.id) {
       mentionCount++;
     }
 
