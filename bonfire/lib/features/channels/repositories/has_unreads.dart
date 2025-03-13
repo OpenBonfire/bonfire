@@ -17,10 +17,12 @@ class HasUnreads extends _$HasUnreads {
       return false;
     }
 
-    if (!(channel is GuildTextChannel || channel is GuildAnnouncementChannel)) {
-      return false;
-    }
+    // if (!(channel is GuildTextChannel || channel is GuildAnnouncementChannel)) {
+    //   return false;
+    // }
 
+    // wait hold on why can't we just do pings?
+    // print("has unreads ...");
     if (channel is GuildTextChannel) {
       lastMessageId = channel.lastMessageId;
     } else if (channel is GuildAnnouncementChannel) {
@@ -30,6 +32,7 @@ class HasUnreads extends _$HasUnreads {
     }
 
     var readState = ref.watch(channelReadStateProvider(channel.id));
+
     var lastReadMessage = readState?.lastMessage;
     var lastChannelMessageId = lastMessageId;
 

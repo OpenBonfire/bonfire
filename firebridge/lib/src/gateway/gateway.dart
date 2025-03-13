@@ -1462,7 +1462,6 @@ class Gateway extends GatewayManager with EventParser {
 
   /// Update the current guild subscription
   void updateGuildSubscriptionsBulk(GuildSubscriptionsBulkBuilder builder) {
-    print("Updating subscriptions: ${builder.build()}");
     for (final shard in shards) {
       shard.add(
           Send(opcode: Opcode.guildSubscriptionsBulk, data: builder.build()));

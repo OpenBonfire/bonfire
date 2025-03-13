@@ -1,13 +1,17 @@
 import 'package:bonfire/features/guild/repositories/guilds.dart';
 import 'package:bonfire/features/me/controllers/settings.dart';
+import 'package:bonfire/features/sidebar/components/dm_icon.dart';
 import 'package:bonfire/features/sidebar/components/guild_folder.dart';
 import 'package:bonfire/features/sidebar/components/messages_icon.dart';
 import 'package:bonfire/features/sidebar/components/sidebar_icon.dart';
+import 'package:bonfire/features/sidebar/components/sidebar_item.dart';
+import 'package:bonfire/features/sidebar/controllers/unread_dms.dart';
 import 'package:bonfire/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:bonfire/shared/utils/platform.dart';
+import 'package:go_router/go_router.dart';
 import 'package:universal_platform/universal_platform.dart';
 
 class Sidebar extends ConsumerStatefulWidget {
@@ -76,6 +80,38 @@ class _SidebarState extends ConsumerState<Sidebar> {
     return items;
   }
 
+  List<Widget> _buildUnreadDmList() {
+    List<ReadState>? unreadDms = ref.watch(unreadDmsProvider);
+    String? _channelId = GoRouter.of(context)
+        .routerDelegate
+        .currentConfiguration
+        .pathParameters['channelId'];
+
+    Snowflake? channelId;
+    if (_channelId != null) {
+      channelId = Snowflake.parse(_channelId);
+    }
+
+    if (unreadDms == null || unreadDms.isEmpty) {
+      return [];
+    }
+
+    return unreadDms.map((readState) {
+      // TODO: The selected guildId should really be extracted from the route
+      return Padding(
+          padding: EdgeInsets.only(bottom: iconSpacing),
+          child: SidebarItem(
+            selected: channelId == readState.channel.id,
+            mentions: readState.mentionCount ?? 0,
+            onTap: () {
+              print("tapped dm!");
+              GoRouter.of(context).go('/channels/@me/${readState.channel.id}');
+            },
+            child: DmIcon(privateChannelId: readState.channel.id),
+          ));
+    }).toList();
+  }
+
   @override
   Widget build(BuildContext context) {
     var guildWatch = ref.watch(guildsProvider);
@@ -131,15 +167,16 @@ class _SidebarState extends ConsumerState<Sidebar> {
                         if (UniversalPlatform.isDesktopOrWeb)
                           const SizedBox(height: 8),
                         Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 2),
+                          padding: const EdgeInsets.symmetric(vertical: 0),
                           child: MessagesIcon(
                             selected: widget.guildId == Snowflake.zero,
                           ),
                         ),
+                        const SizedBox(height: 8),
+                        ..._buildUnreadDmList(),
                         Padding(
                           padding: const EdgeInsets.symmetric(
                             horizontal: 12,
-                            vertical: 8,
                           ),
                           child: Container(
                             height: 2,
@@ -147,6 +184,7 @@ class _SidebarState extends ConsumerState<Sidebar> {
                                 Theme.of(context).custom.colorTheme.foreground,
                           ),
                         ),
+                        const SizedBox(height: 8),
                         ..._buildGuildList(guildList, guildFolders),
                         SizedBox(height: bottomPadding + navbarHeight)
                       ],

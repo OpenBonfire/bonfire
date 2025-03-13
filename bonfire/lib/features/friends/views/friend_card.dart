@@ -22,7 +22,7 @@ class _FriendCardState extends ConsumerState<FriendCard> {
   Widget build(BuildContext context) {
     PresenceUpdateEvent? presence =
         ref.watch(presenceControllerProvider(widget.relationship.user.id));
-    print(widget.relationship.user.username);
+
     // var privateMessages = ref.watch(privateMessageHistoryProvider);
     // print(privateMessages.first.recipients.first);
 

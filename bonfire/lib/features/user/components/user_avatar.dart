@@ -9,9 +9,11 @@ import 'package:shimmer/shimmer.dart';
 
 class UserAvatar extends ConsumerStatefulWidget {
   final User user;
+  final Size? size;
   const UserAvatar({
     super.key,
     required this.user,
+    this.size,
   });
 
   @override
@@ -26,8 +28,8 @@ class _UserAvatarState extends ConsumerState<UserAvatar> {
     final avatarAsync = ref.watch(userAvatarProvider(widget.user));
 
     return SizedBox(
-      width: 35,
-      height: 35,
+      width: widget.size?.width,
+      height: widget.size?.height,
       child: avatarAsync.when(
         loading: () => _buildShimmerEffect(),
         error: (error, stackTrace) => _buildFallbackWidget(),

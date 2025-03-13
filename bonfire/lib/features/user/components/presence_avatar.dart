@@ -79,6 +79,7 @@ class _PresenceAvatarState extends State<PresenceAvatar> {
         Center(
           child: UserAvatar(
             user: widget.user,
+            size: const Size(35, 35),
           ),
         ),
         Positioned(

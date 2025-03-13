@@ -21,9 +21,9 @@ A modern alternative to the Discord client. Use Discord without ever having to t
 - 🟥 iOS
 - 🟩 Windows
 - 🟥 MacOS
-- 🟨 Linux 
+- 🟩 Linux 
 - 🟨 WearOS (All major android smartwatches)
-- 🟨 Web
+- 🟩 Web
 
 ## Contributor Note
 ***We are looking for Flutter developers with iOS / macOS devices***. Bonfire can definitely be run on them, but I do not have any to test with, so I cannot add support. MacOS is very close (adding Webview broke the CI, but otherwise runs fine). I have not tested iOS, but there are no major reasons why it should not work. Once the login is revamped to support QR code login, Web and WearOS, and Linux will return as supported.
@@ -46,7 +46,7 @@ To start, lemmie outline a few things.
 
 Mobile is just a different beast due to the difficult nature of modifying packed binaries. While the Desktop client can be fixed relatively easily because it's possible to inject javascript directly into the application, mobile would require modifying the binary ahead of time to patch in your changes. This is extremely difficult due to the locked-down nature of apps (if you'd like to see an example of this approach, check out ReVanced). Instead of trying to hack together patches for an already broken and slow client, we have decided to tackle creating a full re-implementation of the Discord client using the flutter framework!
 
-## Usage Samples - *Note: The app changes fast! These experiences may have improved / changed recently.*
+## Usage Samples - *Note: The app changes fast! These have improved / changed recently.*
 - [Scrolling Demo](https://imgur.com/a/gFivaVV)
 - [Channel Switch Demo](https://imgur.com/a/IVhby8W)
 - [Messaging / General Usage](https://vimeo.com/958731239?share=copy)
@@ -77,7 +77,7 @@ I'm pretty new to managing public projects, so you'll have to bear with me here.
         - 🟩 Video Attachments
         - 🟩 Audio Attachments (with actual mobile playback)
   - 🟨 Offline Message Scheduling
-  - 🟨 Unreads (*viewable but can't be interacted with*)
+  - 🟨 Unreads (*a bit buggy*)
   - 🟨 Threads (*usable, but barebones*)
   - 🟨 Member List
     - 🟩 Base View

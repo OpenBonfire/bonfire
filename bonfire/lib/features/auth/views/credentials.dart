@@ -57,11 +57,10 @@ class _LoginState extends ConsumerState<CredentialsScreen> {
               .then((value) async {
             // this sucks
 
-            print("evaluated and logging in!");
             await ref
                 .read(authProvider.notifier)
                 .loginWithToken((value as String).replaceAll('"', ""));
-            print("should be loading url");
+
             await widget.fireviewController.loadUrl(Uri.parse("about:blank"));
             await widget.fireviewController.dispose();
           });

@@ -26,7 +26,7 @@ class _EmbedWidgetState extends ConsumerState<EmbedWidget> {
       return VideoEmbed(embed: widget.embed);
     }
 
-    print("no embed type found");
+    // todo: handle other embed types
 
     return Container();
   }

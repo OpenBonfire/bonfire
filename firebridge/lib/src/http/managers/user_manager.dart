@@ -415,8 +415,7 @@ class UserManager extends ReadOnlyManager<User> {
           'voip_token': voipToken?.value,
         }));
 
-    var resp = await client.httpHandler.executeSafe(request);
-    print("Got response: ${resp.statusCode}, ${resp.jsonBody}");
+    await client.httpHandler.executeSafe(request);
   }
 
   /// Unregisters a GCM/APNs push notification token for the client's device.

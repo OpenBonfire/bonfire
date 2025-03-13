@@ -121,7 +121,6 @@ class ChannelManager extends ReadOnlyManager<Channel> {
   }
 
   DmChannel parseDmChannel(Map<String, Object?> raw, {Snowflake? guildId}) {
-    print("TYPE = ${raw['type']}");
     assert(raw['type'] == ChannelType.dm.value, 'Invalid type for DmChannel');
 
     return DmChannel(
@@ -170,9 +169,6 @@ class ChannelManager extends ReadOnlyManager<Channel> {
       {Snowflake? guildId}) {
     assert(raw['type'] == ChannelType.groupDm.value,
         'Invalid type for GroupDmChannel');
-
-    print("Parsing group dm channel");
-    print(raw);
 
     return GroupDmChannel(
       id: Snowflake.parse(raw['id']!),

@@ -90,8 +90,6 @@ class Auth extends _$Auth {
   /// Authenticate client with Discord [token]
   Future<AuthResponse> loginWithToken(String token) async {
     print("LOGGING IN WITH TOKEN!");
-    // log stacktracks
-    print(StackTrace.current);
     AuthResponse response = AuthNotStarted();
 
     var client = await Nyxx.connectGatewayWithOptions(
@@ -115,23 +113,11 @@ class Auth extends _$Auth {
     state = authResponse!;
 
     void testPushNotifications() async {
-      print("Testing push notifications...");
-
       final fcmToken = await FirebaseMessaging.instance.getToken();
-      print("FCM TOKEN: $fcmToken");
-
       client.users
           .registerNotificationDevice(PushNotificationProvider.gcm, fcmToken!);
 
-      FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-        print('Got a message whilst in the foreground!');
-        print('Message data: ${jsonEncode(message.data)}');
-
-        if (message.notification != null) {
-          print(
-              'Message also contained a notification: ${message.notification}');
-        }
-      });
+      FirebaseMessaging.onMessage.listen((RemoteMessage message) {});
       // FirebaseMessaging.onBackgroundMessage((message) async {
       //   print("Handling a background message: ${message.messageId}");
       // });
