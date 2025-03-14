@@ -1,3 +1,4 @@
+import 'package:bonfire/shared/utils/platform.dart';
 import 'package:bonfire/shared/utils/style/markdown/stylesheet.dart';
 import 'package:bonfire/theme/theme.dart';
 import 'package:firebridge/firebridge.dart';
@@ -161,7 +162,7 @@ class EmbedMarkdownBox extends StatelessWidget {
       enableSubscript: false,
       enableFootnote: false,
       enableImageSize: false,
-      selectable: true,
+      selectable: shouldUseDesktopLayout(context),
       enableKbd: false,
       syntaxExtensions: const [],
       elementBuilders: const [],

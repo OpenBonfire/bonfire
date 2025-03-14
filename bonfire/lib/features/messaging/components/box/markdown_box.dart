@@ -1,4 +1,5 @@
 import 'package:bonfire/features/messaging/components/box/mention_syntax.dart';
+import 'package:bonfire/shared/utils/platform.dart';
 import 'package:bonfire/shared/utils/style/markdown/stylesheet.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
@@ -28,7 +29,7 @@ class _MessageMarkdownBoxState extends State<MessageMarkdownBox> {
         enableSubscript: false,
         enableFootnote: false,
         enableImageSize: false,
-        selectable: true,
+        selectable: shouldUseDesktopLayout(context),
         enableKbd: false,
         syntaxExtensions: const [
           // DiscordMentionSyntax(),
