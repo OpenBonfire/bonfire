@@ -28,7 +28,7 @@ class _MessageMarkdownBoxState extends State<MessageMarkdownBox> {
         enableSubscript: false,
         enableFootnote: false,
         enableImageSize: false,
-        selectable: false,
+        selectable: true,
         enableKbd: false,
         syntaxExtensions: const [
           // DiscordMentionSyntax(),

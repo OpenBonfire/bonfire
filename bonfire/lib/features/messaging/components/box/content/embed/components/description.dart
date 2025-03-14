@@ -161,7 +161,7 @@ class EmbedMarkdownBox extends StatelessWidget {
       enableSubscript: false,
       enableFootnote: false,
       enableImageSize: false,
-      selectable: false,
+      selectable: true,
       enableKbd: false,
       syntaxExtensions: const [],
       elementBuilders: const [],
