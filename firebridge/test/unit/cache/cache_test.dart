@@ -15,7 +15,7 @@ void main() {
       final cache =
           Cache<MockSnowflakeEntity>(MockNyxx(), 'test', CacheConfig());
 
-      final entity = MockSnowflakeEntity(id: Snowflake.zero, json: {});
+      final entity = MockSnowflakeEntity(id: Snowflake.zero);
 
       cache[entity.id] = entity;
 
@@ -31,16 +31,13 @@ void main() {
       final cache = Cache<MockSnowflakeEntity>(
           MockNyxx(), 'test', CacheConfig(maxSize: 3));
 
-      final entity1 =
-          MockSnowflakeEntity(id: Snowflake(BigInt.from(1)), json: {});
-      final entity2 =
-          MockSnowflakeEntity(id: Snowflake(BigInt.from(2)), json: {});
-      final entity3 =
-          MockSnowflakeEntity(id: Snowflake(BigInt.from(3)), json: {});
-      final entity4 =
-          MockSnowflakeEntity(id: Snowflake(BigInt.from(4)), json: {});
-      final entity5 =
-          MockSnowflakeEntity(id: Snowflake(BigInt.from(5)), json: {});
+      final entity1 = MockSnowflakeEntity(id: Snowflake(BigInt.from(1)));
+      final entity2 = MockSnowflakeEntity(
+        id: Snowflake(BigInt.from(2)),
+      );
+      final entity3 = MockSnowflakeEntity(id: Snowflake(BigInt.from(3)));
+      final entity4 = MockSnowflakeEntity(id: Snowflake(BigInt.from(4)));
+      final entity5 = MockSnowflakeEntity(id: Snowflake(BigInt.from(5)));
 
       for (final entity in [entity1, entity2, entity3, entity4, entity5]) {
         cache[entity.id] = entity;
@@ -55,16 +52,11 @@ void main() {
       final cache = Cache<MockSnowflakeEntity>(
           MockNyxx(), 'test', CacheConfig(maxSize: 3));
 
-      final entity1 =
-          MockSnowflakeEntity(id: Snowflake(BigInt.from(1)), json: {});
-      final entity2 =
-          MockSnowflakeEntity(id: Snowflake(BigInt.from(2)), json: {});
-      final entity3 =
-          MockSnowflakeEntity(id: Snowflake(BigInt.from(3)), json: {});
-      final entity4 =
-          MockSnowflakeEntity(id: Snowflake(BigInt.from(4)), json: {});
-      final entity5 =
-          MockSnowflakeEntity(id: Snowflake(BigInt.from(5)), json: {});
+      final entity1 = MockSnowflakeEntity(id: Snowflake(BigInt.from(1)));
+      final entity2 = MockSnowflakeEntity(id: Snowflake(BigInt.from(2)));
+      final entity3 = MockSnowflakeEntity(id: Snowflake(BigInt.from(3)));
+      final entity4 = MockSnowflakeEntity(id: Snowflake(BigInt.from(4)));
+      final entity5 = MockSnowflakeEntity(id: Snowflake(BigInt.from(5)));
 
       for (final entity in [entity1, entity2, entity3, entity4, entity5]) {
         cache[entity.id] = entity;
@@ -91,16 +83,11 @@ void main() {
       final cache = Cache<MockSnowflakeEntity>(MockNyxx(), 'test',
           CacheConfig(shouldCache: (e) => e.id.value > BigInt.from(3)));
 
-      final entity1 =
-          MockSnowflakeEntity(id: Snowflake(BigInt.from(1)), json: {});
-      final entity2 =
-          MockSnowflakeEntity(id: Snowflake(BigInt.from(2)), json: {});
-      final entity3 =
-          MockSnowflakeEntity(id: Snowflake(BigInt.from(3)), json: {});
-      final entity4 =
-          MockSnowflakeEntity(id: Snowflake(BigInt.from(4)), json: {});
-      final entity5 =
-          MockSnowflakeEntity(id: Snowflake(BigInt.from(5)), json: {});
+      final entity1 = MockSnowflakeEntity(id: Snowflake(BigInt.from(1)));
+      final entity2 = MockSnowflakeEntity(id: Snowflake(BigInt.from(2)));
+      final entity3 = MockSnowflakeEntity(id: Snowflake(BigInt.from(3)));
+      final entity4 = MockSnowflakeEntity(id: Snowflake(BigInt.from(4)));
+      final entity5 = MockSnowflakeEntity(id: Snowflake(BigInt.from(5)));
 
       for (final entity in [entity1, entity2, entity3, entity4, entity5]) {
         cache[entity.id] = entity;
@@ -120,7 +107,7 @@ void main() {
       final cache1 = Cache<MockSnowflakeEntity>(client, 'test', CacheConfig());
       final cache2 = Cache<MockSnowflakeEntity>(client, 'test', CacheConfig());
 
-      final entity = MockSnowflakeEntity(id: Snowflake.zero, json: {});
+      final entity = MockSnowflakeEntity(id: Snowflake.zero);
 
       cache1[entity.id] = entity;
       expect(cache2[entity.id], equals(entity));
@@ -132,7 +119,7 @@ void main() {
       final cache2 =
           Cache<MockSnowflakeEntity>(MockNyxx(), 'test', CacheConfig());
 
-      final entity = MockSnowflakeEntity(id: Snowflake.zero, json: {});
+      final entity = MockSnowflakeEntity(id: Snowflake.zero);
 
       cache1[entity.id] = entity;
       expect(cache2.containsKey(entity.id), isFalse);

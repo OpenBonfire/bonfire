@@ -26,8 +26,7 @@ void main() {
     test('get only calls API when entity is not cached', () {
       final manager = MockManager(CacheConfig(), MockNyxx());
 
-      manager.cache[Snowflake.zero] =
-          MockSnowflakeEntity(id: Snowflake.zero, json: {});
+      manager.cache[Snowflake.zero] = MockSnowflakeEntity(id: Snowflake.zero);
 
       expect(() => manager.get(Snowflake.zero), returnsNormally);
     });

@@ -20,7 +20,6 @@ class ChannelPermissions extends _$ChannelPermissions {
     if (auth is! AuthUser) return null;
     user = auth;
 
-    // TODO: This is wrong. It could also be a DM channel, but that's an easier permission model.
     Channel channel = ref.watch(channelControllerProvider(channelId))!;
     if (channel is! GuildChannel) return null;
 
@@ -44,7 +43,7 @@ class ChannelPermissions extends _$ChannelPermissions {
     if (maybeSelf != null) {
       selfMember = maybeSelf;
     } else {
-      // shouldn't really be called
+      // shouldn't ever be called
       selfMember =
           await auth.client.guilds[guild.id].members.get(auth.client.user.id);
     }

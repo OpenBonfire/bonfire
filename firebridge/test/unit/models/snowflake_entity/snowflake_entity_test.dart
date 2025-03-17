@@ -23,17 +23,16 @@ class MockSnowflakeEntityManager
 void main() {
   group('SnowflakeEntity', () {
     test('equality', () {
-      final entity1 = MockSnowflakeEntity(id: Snowflake(BigInt.one), json: {});
-      final entity2 = MockSnowflakeEntity(id: Snowflake(BigInt.one), json: {});
+      final entity1 = MockSnowflakeEntity(id: Snowflake(BigInt.one));
+      final entity2 = MockSnowflakeEntity(id: Snowflake(BigInt.one));
 
       expect(entity1, equals(entity2));
       expect(entity1.hashCode, equals(entity2.hashCode));
     });
 
     test('equality with partial entities', () {
-      final entity = MockSnowflakeEntity(id: Snowflake(BigInt.one), json: {});
-      final partial =
-          PartialMockSnowflakeEntity(id: Snowflake(BigInt.one), json: {});
+      final entity = MockSnowflakeEntity(id: Snowflake(BigInt.one));
+      final partial = PartialMockSnowflakeEntity(id: Snowflake(BigInt.one));
 
       expect(entity, equals(partial));
       expect(partial, equals(entity));
@@ -41,10 +40,8 @@ void main() {
     });
 
     test('equality between partial entities', () {
-      final partial1 =
-          PartialMockSnowflakeEntity(id: Snowflake(BigInt.one), json: {});
-      final partial2 =
-          PartialMockSnowflakeEntity(id: Snowflake(BigInt.one), json: {});
+      final partial1 = PartialMockSnowflakeEntity(id: Snowflake(BigInt.one));
+      final partial2 = PartialMockSnowflakeEntity(id: Snowflake(BigInt.one));
 
       expect(partial1, equals(partial2));
       expect(partial1.hashCode, equals(partial2.hashCode));
