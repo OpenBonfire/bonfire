@@ -38,7 +38,6 @@ class GuildCategory extends Channel implements GuildChannel {
   /// @nodoc
   GuildCategory({
     required super.id,
-    required super.json,
     required super.manager,
     required this.guildId,
     required this.isNsfw,

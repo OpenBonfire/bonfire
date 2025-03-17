@@ -26,7 +26,6 @@ class CommandPermissions extends SnowflakeEntity<CommandPermissions> {
   /// @nodoc
   CommandPermissions({
     required super.id,
-    required super.json,
     required this.manager,
     required this.applicationId,
     required this.guildId,

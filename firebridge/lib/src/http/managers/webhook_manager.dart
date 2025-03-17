@@ -24,13 +24,12 @@ class WebhookManager extends Manager<Webhook> {
 
   @override
   PartialWebhook operator [](Snowflake id) =>
-      PartialWebhook(id: id, json: {}, manager: this);
+      PartialWebhook(id: id, manager: this);
 
   @override
   Webhook parse(Map<String, Object?> raw) {
     return Webhook(
       id: Snowflake.parse(raw['id']!),
-      json: raw,
       manager: this,
       type: WebhookType.parse(raw['type'] as int),
       guildId: maybeParse(raw['guild_id'], Snowflake.parse),
@@ -44,7 +43,6 @@ class WebhookManager extends Manager<Webhook> {
         raw['source_guild'],
         (Map<String, Object?> raw) => PartialGuild(
           id: Snowflake.parse(raw['id']!),
-          json: raw,
           manager: client.guilds,
         ),
       ),
@@ -52,7 +50,6 @@ class WebhookManager extends Manager<Webhook> {
         raw['source_channel'],
         (Map<String, Object?> raw) => PartialChannel(
           id: Snowflake.parse(raw['id']!),
-          json: raw,
           manager: client.channels,
         ),
       ),
@@ -64,7 +61,6 @@ class WebhookManager extends Manager<Webhook> {
   WebhookAuthor parseWebhookAuthor(Map<String, Object?> raw) {
     return WebhookAuthor(
       id: Snowflake.parse(raw['id']!),
-      json: raw,
       manager: this,
       avatarHash: raw['avatar'] as String?,
       username: raw['username'] as String,

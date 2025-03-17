@@ -84,7 +84,6 @@ class PublicThread extends TextChannel implements Thread {
   /// @nodoc
   PublicThread({
     required super.id,
-    required super.json,
     required super.manager,
     required this.appliedTags,
     required this.approximateMemberCount,

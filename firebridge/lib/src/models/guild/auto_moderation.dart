@@ -18,8 +18,7 @@ class PartialAutoModerationRule
 
   /// Create a new [PartialAutoModerationRule].
   /// @nodoc
-  PartialAutoModerationRule(
-      {required super.id, required super.json, required this.manager});
+  PartialAutoModerationRule({required super.id, required this.manager});
 }
 
 /// {@template auto_moderation_rule}
@@ -60,7 +59,6 @@ class AutoModerationRule extends PartialAutoModerationRule {
   /// @nodoc
   AutoModerationRule({
     required super.id,
-    required super.json,
     required super.manager,
     required this.guildId,
     required this.name,

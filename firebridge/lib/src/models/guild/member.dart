@@ -17,8 +17,7 @@ class PartialMember extends WritableSnowflakeEntity<Member> {
 
   /// Create a new [PartialMember].
   /// @nodoc
-  PartialMember(
-      {required super.id, required super.json, required this.manager});
+  PartialMember({required super.id, required this.manager});
 
   /// Add a role to this member.
   Future<void> addRole(Snowflake roleId, {String? auditLogReason}) =>
@@ -105,7 +104,6 @@ class Member extends PartialMember {
   /// @nodoc
   Member({
     required super.id,
-    required super.json,
     required super.manager,
     required this.user,
     required this.nick,

@@ -103,7 +103,7 @@ class PartialGuild extends WritableSnowflakeEntity<Guild> {
 
   /// Create a new [PartialGuild].
   /// @nodoc
-  PartialGuild({required super.id, required super.json, required this.manager});
+  PartialGuild({required super.id, required this.manager});
 
   @override
   Future<Guild> fetch({bool? withCounts}) =>
@@ -280,7 +280,6 @@ class UserGuild extends PartialGuild {
   /// @nodoc
   UserGuild({
     required super.id,
-    required super.json,
     required super.manager,
     required this.name,
     required this.iconHash,
@@ -418,7 +417,6 @@ class Guild extends UserGuild {
   /// @nodoc
   Guild({
     required super.id,
-    required super.json,
     required super.manager,
     required super.name,
     required super.iconHash,

@@ -20,13 +20,12 @@ class ScheduledEventManager extends Manager<ScheduledEvent> {
 
   @override
   PartialScheduledEvent operator [](Snowflake id) =>
-      PartialScheduledEvent(id: id, json: {}, manager: this);
+      PartialScheduledEvent(id: id, manager: this);
 
   @override
   ScheduledEvent parse(Map<String, Object?> raw) {
     return ScheduledEvent(
       id: Snowflake.parse(raw['id']!),
-      json: raw,
       manager: this,
       guildId: Snowflake.parse(raw['guild_id']!),
       channelId: maybeParse(raw['channel_id'], Snowflake.parse),

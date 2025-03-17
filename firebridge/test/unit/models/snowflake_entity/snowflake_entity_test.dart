@@ -8,12 +8,12 @@ class PartialMockSnowflakeEntity
   final MockSnowflakeEntityManager manager = MockSnowflakeEntityManager();
 
   /// @nodoc
-  PartialMockSnowflakeEntity({required super.id, required super.json});
+  PartialMockSnowflakeEntity({required super.id});
 }
 
 class MockSnowflakeEntity extends PartialMockSnowflakeEntity {
   /// @nodoc
-  MockSnowflakeEntity({required super.id, required super.json});
+  MockSnowflakeEntity({required super.id});
 }
 
 class MockSnowflakeEntityManager

@@ -33,13 +33,12 @@ abstract class ApplicationCommandManager extends Manager<ApplicationCommand> {
 
   @override
   PartialApplicationCommand operator [](Snowflake id) =>
-      PartialApplicationCommand(id: id, json: {}, manager: this);
+      PartialApplicationCommand(id: id, manager: this);
 
   @override
   ApplicationCommand parse(Map<String, Object?> raw) {
     return ApplicationCommand(
       id: Snowflake.parse(raw['id']!),
-      json: raw,
       manager: this,
       type: ApplicationCommandType.parse(raw['type'] as int? ?? 1),
       applicationId: Snowflake.parse(raw['application_id']!),
@@ -239,7 +238,6 @@ class GuildApplicationCommandManager extends ApplicationCommandManager {
   CommandPermissions parseCommandPermissions(Map<String, Object?> raw) {
     return CommandPermissions(
       manager: this,
-      json: raw,
       id: Snowflake.parse(raw['id']!),
       applicationId: Snowflake.parse(raw['application_id']!),
       guildId: Snowflake.parse(raw['guild_id']!),
@@ -298,7 +296,7 @@ class GuildApplicationCommandManager extends ApplicationCommandManager {
             manager: this,
             // TODO: This might be bad... I'm not sure how to handle json here.
             // I guess it doesn't really matter if parse doesn't exist.
-            json: {},
+
             id: id,
             applicationId: applicationId,
             guildId: guildId,

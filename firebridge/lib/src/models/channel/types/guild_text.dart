@@ -63,7 +63,6 @@ class GuildTextChannel extends TextChannel
   /// @nodoc
   GuildTextChannel({
     required super.id,
-    required super.json,
     required super.manager,
     required this.topic,
     required this.defaultAutoArchiveDuration,

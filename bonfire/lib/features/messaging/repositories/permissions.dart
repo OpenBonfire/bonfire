@@ -6,7 +6,6 @@ import 'package:bonfire/features/guild/controllers/role.dart';
 import 'package:bonfire/features/guild/controllers/roles.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:firebridge_extensions/firebridge_extensions.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'permissions.g.dart';

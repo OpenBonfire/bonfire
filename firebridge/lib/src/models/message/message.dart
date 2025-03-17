@@ -37,8 +37,7 @@ class PartialMessage extends WritableSnowflakeEntity<Message> {
 
   /// {@macro partial_message}
   /// @nodoc
-  PartialMessage(
-      {required super.id, required this.manager, required super.json});
+  PartialMessage({required super.id, required this.manager});
 
   /// The channel this message was sent in.
   PartialTextChannel get channel =>
@@ -220,7 +219,6 @@ class Message extends PartialMessage {
   /// @nodoc
   Message({
     required super.id,
-    required super.json,
     required super.manager,
     required this.author,
     required this.content,

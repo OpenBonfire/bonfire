@@ -15,7 +15,7 @@ class PartialUser extends ManagedSnowflakeEntity<User> {
 
   /// Create a new [PartialUser].
   /// @nodoc
-  PartialUser({required super.id, required super.json, required this.manager});
+  PartialUser({required super.id, required this.manager});
 }
 
 /// {@template user}
@@ -77,7 +77,6 @@ class User extends PartialUser
   /// @nodoc
   User({
     required super.manager,
-    required super.json,
     required super.id,
     required this.username,
     required this.discriminator,

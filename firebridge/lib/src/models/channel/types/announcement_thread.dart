@@ -80,7 +80,6 @@ class AnnouncementThread extends TextChannel implements Thread {
   /// @nodoc
   AnnouncementThread({
     required super.id,
-    required super.json,
     required super.manager,
     required this.appliedTags,
     required this.approximateMemberCount,

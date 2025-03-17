@@ -208,7 +208,6 @@ void main() {
                         id: Snowflake.zero,
                         manager: client.guilds[Snowflake.zero].emojis,
                         name: '❤️',
-                        json: {},
                       ),
                     ),
                     SelectMenuOptionBuilder(label: 'Three', value: '3'),

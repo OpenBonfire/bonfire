@@ -18,8 +18,7 @@ class EmojiManager extends Manager<Emoji> {
       : super(identifier: '$guildId.emojis');
 
   @override
-  PartialEmoji operator [](Snowflake id) =>
-      PartialEmoji(id: id, json: {}, manager: this);
+  PartialEmoji operator [](Snowflake id) => PartialEmoji(id: id, manager: this);
 
   @override
   Emoji parse(Map<String, Object?> raw) {
@@ -27,15 +26,11 @@ class EmojiManager extends Manager<Emoji> {
 
     if (isUnicode) {
       return TextEmoji(
-          name: raw['name'] as String,
-          manager: this,
-          id: Snowflake.zero,
-          json: raw);
+          name: raw['name'] as String, manager: this, id: Snowflake.zero);
     }
 
     return GuildEmoji(
       id: Snowflake.parse(raw['id']!),
-      json: raw,
       manager: this,
       user: maybeParse(raw['user'], client.users.parse),
       isAnimated: raw['animated'] as bool?,

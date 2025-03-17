@@ -22,7 +22,6 @@ class ChannelMention extends PartialChannel {
   /// @nodoc
   ChannelMention({
     required super.id,
-    required super.json,
     required super.manager,
     required this.guildId,
     required this.type,

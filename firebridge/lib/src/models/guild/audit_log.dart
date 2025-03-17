@@ -16,8 +16,7 @@ class PartialAuditLogEntry extends ManagedSnowflakeEntity<AuditLogEntry> {
 
   /// Create a new [PartialAuditLogEntry].
   /// @nodoc
-  PartialAuditLogEntry(
-      {required super.id, required super.json, required this.manager});
+  PartialAuditLogEntry({required super.id, required this.manager});
 }
 
 /// {@template audit_log_entry}
@@ -46,7 +45,6 @@ class AuditLogEntry extends PartialAuditLogEntry {
   /// @nodoc
   AuditLogEntry({
     required super.id,
-    required super.json,
     required super.manager,
     required this.targetId,
     required this.changes,

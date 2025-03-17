@@ -18,7 +18,6 @@ class MockSnowflakeEntity extends WritableSnowflakeEntity<MockSnowflakeEntity>
     with Fake {
   MockSnowflakeEntity({
     required super.id,
-    required super.json,
   });
 }
 

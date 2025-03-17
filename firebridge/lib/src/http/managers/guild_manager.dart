@@ -39,8 +39,7 @@ class GuildManager extends Manager<Guild> {
   GuildManager(super.config, super.client) : super(identifier: 'guilds');
 
   @override
-  PartialGuild operator [](Snowflake id) =>
-      PartialGuild(id: id, json: {}, manager: this);
+  PartialGuild operator [](Snowflake id) => PartialGuild(id: id, manager: this);
 
   @override
   Guild parse(Map<String, Object?> raw) {
@@ -58,7 +57,7 @@ class GuildManager extends Manager<Guild> {
 
     return Guild(
       id: id,
-      json: raw,
+
       manager: this,
       name: (raw['name'] as String?) ?? "Guild name borked",
       iconHash: (raw['icon'] ?? raw['icon_hash']) as String?,
@@ -123,7 +122,6 @@ class GuildManager extends Manager<Guild> {
     final id = Snowflake.parse(raw['id']!);
     return UserGuild(
       id: id,
-      json: raw,
       manager: this,
       name: raw['name'] as String,
       iconHash: raw['icon'] as String?,
@@ -223,7 +221,6 @@ class GuildManager extends Manager<Guild> {
 
     return GuildPreview(
       id: id,
-      json: raw,
       manager: this,
       name: raw['name'] as String,
       iconHash: raw['icon'] as String?,
@@ -274,14 +271,12 @@ class GuildManager extends Manager<Guild> {
       channels: parseMany(
         raw['channels'] as List,
         (Map<String, Object?> raw) => PartialChannel(
-            json: raw,
-            id: Snowflake.parse(raw['id']!),
-            manager: client.channels),
+            id: Snowflake.parse(raw['id']!), manager: client.channels),
       ),
       users: parseMany(
         raw['members'] as List,
-        (Map<String, Object?> raw) => PartialUser(
-            id: Snowflake.parse(raw['id']!), json: raw, manager: client.users),
+        (Map<String, Object?> raw) =>
+            PartialUser(id: Snowflake.parse(raw['id']!), manager: client.users),
       ),
       presenceCount: raw['presence_count'] as int,
     );

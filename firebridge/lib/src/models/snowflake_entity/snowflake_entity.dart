@@ -10,11 +10,10 @@ abstract class SnowflakeEntity<T extends SnowflakeEntity<T>>
     with ToStringHelper {
   /// The id of this entity.
   final Snowflake id;
-  final Map<String, Object?> json;
 
   /// Create a new [SnowflakeEntity].
   /// @nodoc
-  SnowflakeEntity({required this.id, required this.json});
+  SnowflakeEntity({required this.id});
 
   /// If this entity exists in the manager's cache, return the cached instance. Otherwise, [fetch]
   /// this entity and return it.
@@ -42,7 +41,7 @@ abstract class ManagedSnowflakeEntity<T extends ManagedSnowflakeEntity<T>>
 
   /// Create a new [ManagedSnowflakeEntity];
   /// @nodoc
-  ManagedSnowflakeEntity({required super.id, required super.json});
+  ManagedSnowflakeEntity({required super.id});
 
   @override
   Future<T> get() => manager.get(id);
@@ -59,7 +58,7 @@ abstract class WritableSnowflakeEntity<T extends WritableSnowflakeEntity<T>>
 
   /// Create a new [WritableSnowflakeEntity].
   /// @nodoc
-  WritableSnowflakeEntity({required super.id, required super.json});
+  WritableSnowflakeEntity({required super.id});
 
   /// Update this entity using the provided builder and return the updated entity.
   Future<T> update(covariant UpdateBuilder<T> builder) =>

@@ -10,8 +10,7 @@ class PartialGuildSticker extends WritableSnowflakeEntity<GuildSticker> {
   final GuildStickerManager manager;
 
   /// @nodoc
-  PartialGuildSticker(
-      {required super.id, required super.json, required this.manager});
+  PartialGuildSticker({required super.id, required this.manager});
 
   /// Update this sticker, returning the updated sticker.
   ///
@@ -76,7 +75,6 @@ class GuildSticker extends PartialGuildSticker with Sticker {
   /// @nodoc
   GuildSticker({
     required super.id,
-    required super.json,
     required super.manager,
     required this.name,
     required this.description,

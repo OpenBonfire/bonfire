@@ -248,7 +248,6 @@ class InteractionManager {
             Snowflake.parse(key),
             PartialChannel(
                 id: Snowflake.parse((value as Map<String, Object?>)['id']!),
-                json: raw,
                 manager: client.channels),
           ),
         ),
@@ -260,7 +259,6 @@ class InteractionManager {
             Snowflake.parse(key),
             PartialMessage(
                 id: Snowflake.parse((value as Map<String, Object?>)['id']!),
-                json: raw,
                 manager: (client.channels[channelId ?? Snowflake.zero]
                         as PartialTextChannel)
                     .messages),

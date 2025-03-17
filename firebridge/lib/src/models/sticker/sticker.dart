@@ -90,10 +90,7 @@ class StickerItem extends SnowflakeEntity<StickerItem> {
   /// {@macro sticker_item}
   /// @nodoc
   StickerItem(
-      {required super.id,
-      required super.json,
-      required this.name,
-      required this.formatType});
+      {required super.id, required this.name, required this.formatType});
 
   @override
   Future<StickerItem> fetch() => get();

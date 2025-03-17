@@ -17,13 +17,12 @@ class AutoModerationManager extends Manager<AutoModerationRule> {
 
   @override
   PartialAutoModerationRule operator [](Snowflake id) =>
-      PartialAutoModerationRule(id: id, json: {}, manager: this);
+      PartialAutoModerationRule(id: id, manager: this);
 
   @override
   AutoModerationRule parse(Map<String, Object?> raw) {
     return AutoModerationRule(
       id: Snowflake.parse(raw['id']!),
-      json: raw,
       manager: this,
       guildId: Snowflake.parse(raw['guild_id']!),
       name: raw['name'] as String,

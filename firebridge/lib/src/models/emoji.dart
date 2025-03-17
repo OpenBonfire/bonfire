@@ -13,7 +13,7 @@ class PartialEmoji extends WritableSnowflakeEntity<Emoji> {
 
   /// Create a new [PartialEmoji].
   /// @nodoc
-  PartialEmoji({required super.id, required super.json, required this.manager});
+  PartialEmoji({required super.id, required this.manager});
 }
 
 /// An emoji. Either a [TextEmoji] or a [GuildEmoji].
@@ -24,7 +24,6 @@ abstract class Emoji extends PartialEmoji {
   /// @nodoc
   Emoji({
     required super.id,
-    required super.json,
     required super.manager,
   });
 }
@@ -37,7 +36,6 @@ class TextEmoji extends Emoji {
   /// @nodoc
   TextEmoji({
     required super.id,
-    required super.json,
     required super.manager,
     required this.name,
   });
@@ -73,7 +71,6 @@ class GuildEmoji extends Emoji {
   /// @nodoc
   GuildEmoji({
     required super.id,
-    required super.json,
     required super.manager,
     required this.name,
     required this.roleIds,

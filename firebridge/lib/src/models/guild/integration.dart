@@ -12,8 +12,7 @@ class PartialIntegration extends ManagedSnowflakeEntity<Integration> {
 
   /// Create a new [PartialIntegration].
   /// @nodoc
-  PartialIntegration(
-      {required super.id, required super.json, required this.manager});
+  PartialIntegration({required super.id, required this.manager});
 
   /// Delete this integration.
   Future<void> delete({String? auditLogReason}) =>
@@ -73,7 +72,6 @@ class Integration extends PartialIntegration {
   /// @nodoc
   Integration({
     required super.id,
-    required super.json,
     required super.manager,
     required this.name,
     required this.type,

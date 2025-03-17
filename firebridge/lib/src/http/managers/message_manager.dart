@@ -41,7 +41,7 @@ class MessageManager extends Manager<Message> {
 
   @override
   PartialMessage operator [](Snowflake id) =>
-      PartialMessage(id: id, json: {}, manager: this);
+      PartialMessage(id: id, manager: this);
 
   @override
   Message parse(Map<String, Object?> raw, {Snowflake? guildId}) {
@@ -53,7 +53,6 @@ class MessageManager extends Manager<Message> {
     final webhookId = maybeParse(raw['webhook_id'], Snowflake.parse);
     return Message(
       id: Snowflake.parse(raw['id']!),
-      json: raw,
       manager: this,
       author: (webhookId == null
               ? client.users.parse(raw['author'] as Map<String, Object?>)
@@ -113,7 +112,6 @@ class MessageManager extends Manager<Message> {
   ChannelMention parseChannelMention(Map<String, Object?> raw) {
     return ChannelMention(
       id: Snowflake.parse(raw['id']!),
-      json: raw,
       manager: client.channels,
       guildId: Snowflake.parse(raw['guild_id']!),
       type: ChannelType.parse(raw['type'] as int),

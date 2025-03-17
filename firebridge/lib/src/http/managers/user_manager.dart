@@ -38,8 +38,7 @@ class UserManager extends ReadOnlyManager<User> {
   UserManager(super.config, super.client) : super(identifier: 'users');
 
   @override
-  PartialUser operator [](Snowflake id) =>
-      PartialUser(id: id, json: {}, manager: this);
+  PartialUser operator [](Snowflake id) => PartialUser(id: id, manager: this);
 
   @override
   User parse(Map<String, Object?> raw) {
@@ -52,7 +51,6 @@ class UserManager extends ReadOnlyManager<User> {
     return User(
       manager: this,
       id: Snowflake.parse(raw['id']!),
-      json: raw,
       username: raw['username'] as String,
       discriminator: raw['discriminator'] as String,
       globalName: raw['global_name'] as String?,
@@ -85,7 +83,7 @@ class UserManager extends ReadOnlyManager<User> {
         raw['integrations'],
         (Map<String, Object?> raw) => PartialIntegration(
           id: Snowflake.parse(raw['id']!),
-          json: raw,
+
           // TODO: Can we know what guild the integrations are from?
           manager: client.guilds[Snowflake.zero].integrations,
         ),
@@ -153,7 +151,6 @@ class UserManager extends ReadOnlyManager<User> {
       partialGuild: tryParse(raw['guild_id'], (String raw) {
         return PartialGuild(
           id: Snowflake.parse(raw),
-          json: {},
           manager: client.guilds,
         );
       }),
@@ -172,13 +169,11 @@ class UserManager extends ReadOnlyManager<User> {
       lastMessage: (raw['last_message_id'] != null)
           ? PartialMessage(
               id: Snowflake.parse(raw['last_message_id'].toString()),
-              json: {},
               manager: (client.channels[Snowflake.zero] as PartialTextChannel)
                   .messages)
           : null,
       channel: PartialChannel(
         id: Snowflake.parse(raw['id'] as String),
-        json: {},
         manager: client.channels,
       ),
       flags: raw['flags'] as int,

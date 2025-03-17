@@ -8,7 +8,6 @@ import 'package:bonfire/features/messaging/components/box/box.dart';
 import 'package:bonfire/features/messaging/components/box/channel_header.dart';
 import 'package:bonfire/features/messaging/components/box/message_loading_animation.dart';
 import 'package:bonfire/features/messaging/components/keyboard_buffer.dart';
-import 'package:bonfire/features/messaging/repositories/permissions.dart';
 import 'package:bonfire/shared/utils/channel_name.dart';
 import 'package:bonfire/theme/theme.dart';
 import 'package:firebridge/firebridge.dart';
@@ -194,8 +193,6 @@ class _MessageViewState extends ConsumerState<MessageList>
   @override
   Widget build(BuildContext context) {
     var messageOutput = ref.watch(messagesProvider(widget.channelId));
-    Permissions? channelPermission =
-        ref.watch(channelPermissionsProvider(widget.channelId)).valueOrNull;
 
     Widget content = Container();
 

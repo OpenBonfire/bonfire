@@ -138,8 +138,6 @@ class GuildsState extends _$GuildsState {
   }
 
   void setGuilds(List<Guild> guilds) {
-    _cacheManager.putFile(
-        cacheKey, utf8.encode(json.encode(guilds.map((e) => e.json).toList())));
     state = AsyncValue.data(guilds);
   }
 }

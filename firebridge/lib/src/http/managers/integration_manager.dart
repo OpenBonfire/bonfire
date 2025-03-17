@@ -18,13 +18,12 @@ class IntegrationManager extends ReadOnlyManager<Integration> {
 
   @override
   PartialIntegration operator [](Snowflake id) =>
-      PartialIntegration(id: id, json: {}, manager: this);
+      PartialIntegration(id: id, manager: this);
 
   @override
   Integration parse(Map<String, Object?> raw) {
     return Integration(
       id: Snowflake.parse(raw['id']!),
-      json: raw,
       manager: this,
       name: raw['name'] as String,
       type: raw['type'] as String,

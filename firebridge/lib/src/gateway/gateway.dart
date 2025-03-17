@@ -1,9 +1,7 @@
 import 'dart:async';
-import 'dart:convert';
 import 'package:firebridge/src/builders/guild/channel_statuses.dart';
 import 'package:firebridge/src/builders/guild/guild_subscriptions_bulk.dart';
 import 'package:firebridge/src/models/discord_color.dart';
-import 'package:firebridge/src/models/gateway/events/notification.dart';
 import 'package:firebridge/src/models/gateway/events/relationship.dart';
 import 'package:firebridge/src/models/gateway/events/settings.dart';
 import 'package:firebridge/src/models/guild/member_list_group.dart';
@@ -496,7 +494,6 @@ class Gateway extends GatewayManager with EventParser {
   ThreadDeleteEvent parseThreadDelete(Map<String, Object?> raw) {
     final thread = PartialChannel(
       id: Snowflake.parse(raw['id']!),
-      json: raw,
       manager: client.channels,
     );
 
@@ -572,9 +569,7 @@ class Gateway extends GatewayManager with EventParser {
       return UnavailableGuildCreateEvent(
           gateway: this,
           guild: PartialGuild(
-              id: Snowflake.parse(raw['id']!),
-              json: raw,
-              manager: client.guilds));
+              id: Snowflake.parse(raw['id']!), manager: client.guilds));
     }
 
     final guild = client.guilds.parse(raw);
@@ -626,7 +621,7 @@ class Gateway extends GatewayManager with EventParser {
 
     return GuildDeleteEvent(
       gateway: this,
-      guild: PartialGuild(id: id, json: raw, manager: client.guilds),
+      guild: PartialGuild(id: id, manager: client.guilds),
       isUnavailable: raw['unavailable'] as bool? ?? false,
       deletedGuild: client.guilds.cache[id],
     );
@@ -806,7 +801,6 @@ class Gateway extends GatewayManager with EventParser {
     if (id != null) {
       role = PartialRole(
         id: Snowflake(id),
-        json: {},
         manager: client.guilds[guildId].roles,
       );
     }
@@ -1043,7 +1037,6 @@ class Gateway extends GatewayManager with EventParser {
         raw['member'],
         (Map<String, Object?> raw) => PartialMember(
           id: message.author.id,
-          json: raw,
           manager: MemberManager(client.options.memberCacheConfig, client,
               guildId: guildId!),
         ),
@@ -1066,7 +1059,6 @@ class Gateway extends GatewayManager with EventParser {
         raw['member'],
         (Map<String, Object?> _) => PartialMember(
           id: Snowflake.parse((raw['author'] as Map<String, Object?>)['id']!),
-          json: raw,
           manager: client.guilds[guildId!].members,
         ),
       ),
@@ -1181,8 +1173,8 @@ class Gateway extends GatewayManager with EventParser {
       gateway: this,
       user: maybeParse(
         raw['user'],
-        (Map<String, Object?> raw) => PartialUser(
-            id: Snowflake.parse(raw['id']!), json: raw, manager: client.users),
+        (Map<String, Object?> raw) =>
+            PartialUser(id: Snowflake.parse(raw['id']!), manager: client.users),
       ),
       guildId: maybeParse(raw['guild_id'], Snowflake.parse),
       status: maybeParse(raw['status'], UserStatus.parse),
@@ -1219,12 +1211,10 @@ class Gateway extends GatewayManager with EventParser {
           readState: ReadState(
         channel: PartialChannel(
             id: Snowflake.parse(channelUnreadUpdate["id"]! as String),
-            json: {},
             manager: client.channels),
         lastMessage: PartialMessage(
           id: Snowflake.parse(
               channelUnreadUpdate["last_message_id"]! as String),
-          json: {},
           manager: (client.channels[
                       Snowflake.parse(channelUnreadUpdate["id"]! as String)]
                   as PartialTextChannel)
@@ -1247,12 +1237,10 @@ class Gateway extends GatewayManager with EventParser {
         readState: ReadState(
           channel: PartialChannel(
               id: Snowflake.parse(raw["channel_id"]!),
-              json: {},
               manager: client.channels),
           // version: raw["version"] as int,
           lastMessage: PartialMessage(
               id: Snowflake.parse(raw["message_id"]!),
-              json: {},
               manager: (client.channels[Snowflake.parse(raw["channel_id"]!)]
                       as PartialTextChannel)
                   .messages),

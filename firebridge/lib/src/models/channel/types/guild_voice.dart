@@ -63,7 +63,6 @@ class GuildVoiceChannel extends TextChannel
   /// @nodoc
   GuildVoiceChannel({
     required super.id,
-    required super.json,
     required super.manager,
     required this.bitrate,
     required this.guildId,

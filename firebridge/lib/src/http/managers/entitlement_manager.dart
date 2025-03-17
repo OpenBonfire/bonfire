@@ -21,13 +21,12 @@ class EntitlementManager extends ReadOnlyManager<Entitlement> {
 
   @override
   PartialEntitlement operator [](Snowflake id) =>
-      PartialEntitlement(manager: this, json: {}, id: id);
+      PartialEntitlement(manager: this, id: id);
 
   @override
   Entitlement parse(Map<String, Object?> raw) {
     return Entitlement(
       manager: this,
-      json: raw,
       id: Snowflake.parse(raw['id']!),
       skuId: Snowflake.parse(raw['sku_id']!),
       userId: maybeParse(raw['user_id'], Snowflake.parse),

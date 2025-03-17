@@ -6,7 +6,7 @@ import '../../mocks/client.dart';
 
 class MockSnowflakeEntity extends ManagedSnowflakeEntity<MockSnowflakeEntity>
     with Fake {
-  MockSnowflakeEntity({required super.id, required super.json});
+  MockSnowflakeEntity({required super.id});
 }
 
 void main() {

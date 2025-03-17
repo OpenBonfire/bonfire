@@ -21,14 +21,13 @@ class GuildStickerManager extends Manager<GuildSticker> {
 
   @override
   PartialGuildSticker operator [](Snowflake id) =>
-      PartialGuildSticker(id: id, json: {}, manager: this);
+      PartialGuildSticker(id: id, manager: this);
 
   @override
   GuildSticker parse(Map<String, Object?> raw) {
     return GuildSticker(
       manager: this,
       id: Snowflake.parse(raw['id']!),
-      json: raw,
       name: raw['name'] as String,
       description: raw['description'] as String?,
       tags: raw['tags'] as String,
@@ -130,13 +129,12 @@ class GlobalStickerManager extends ReadOnlyManager<GlobalSticker> {
 
   @override
   PartialGlobalSticker operator [](Snowflake id) =>
-      PartialGlobalSticker(id: id, json: {}, manager: this);
+      PartialGlobalSticker(id: id, manager: this);
 
   @override
   GlobalSticker parse(Map<String, Object?> raw) {
     return GlobalSticker(
       manager: this,
-      json: raw,
       id: Snowflake.parse(raw['id']!),
       packId: Snowflake.parse(raw['pack_id']!),
       name: raw['name'] as String,
@@ -156,7 +154,6 @@ class GlobalStickerManager extends ReadOnlyManager<GlobalSticker> {
   StickerItem parseStickerItem(Map<String, Object?> raw) {
     return StickerItem(
       id: Snowflake.parse(raw['id']!),
-      json: raw,
       name: raw['name'] as String,
       formatType: StickerFormatType.parse(raw['format_type'] as int),
     );
@@ -165,7 +162,6 @@ class GlobalStickerManager extends ReadOnlyManager<GlobalSticker> {
   StickerPack parseStickerPack(Map<String, Object?> raw) {
     return StickerPack(
       id: Snowflake.parse(raw['id']!),
-      json: raw,
       manager: this,
       stickers: (raw['stickers'] as List)
           .map((e) => parse(e as Map<String, Object?>))

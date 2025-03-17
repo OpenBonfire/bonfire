@@ -58,8 +58,7 @@ class Messages extends _$Messages {
 
       if (channel is GuildChannel) {
         Member? selfMember;
-        Guild? guild = ref
-            .watch(guildControllerProvider((channel as GuildChannel).guildId))!;
+        Guild? guild = ref.watch(guildControllerProvider((channel).guildId))!;
         List<Snowflake> roleIds =
             ref.watch(rolesControllerProvider(channel.guildId))!;
         List<Role> roles = [];
@@ -86,8 +85,7 @@ class Messages extends _$Messages {
         return [];
       }
 
-      var messages = await (channel as TextChannel)
-          .messages
+      var messages = await channel.messages
           .fetchMany(limit: count ?? 50, before: before, around: around);
 
       if (before == null && around == null) {

@@ -74,7 +74,6 @@ class GuildMediaChannel extends Channel
   /// @nodoc
   GuildMediaChannel({
     required super.id,
-    required super.json,
     required super.manager,
     required this.topic,
     required this.rateLimitPerUser,

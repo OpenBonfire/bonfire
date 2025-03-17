@@ -22,14 +22,12 @@ class RoleManager extends Manager<Role> {
       : super(identifier: '$guildId.roles');
 
   @override
-  PartialRole operator [](Snowflake id) =>
-      PartialRole(id: id, json: {}, manager: this);
+  PartialRole operator [](Snowflake id) => PartialRole(id: id, manager: this);
 
   @override
   Role parse(Map<String, Object?> raw) {
     return Role(
       id: Snowflake.parse(raw['id']!),
-      json: raw,
       manager: this,
       name: raw['name'] as String,
       color: DiscordColor(raw['color'] as int),

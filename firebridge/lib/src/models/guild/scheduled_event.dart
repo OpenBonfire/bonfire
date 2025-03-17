@@ -17,8 +17,7 @@ class PartialScheduledEvent extends WritableSnowflakeEntity<ScheduledEvent> {
 
   /// Create a new [PartialScheduledEvent].
   /// @nodoc
-  PartialScheduledEvent(
-      {required super.id, required super.json, required this.manager});
+  PartialScheduledEvent({required super.id, required this.manager});
 
   /// List the users that have followed this event.
   Future<List<ScheduledEventUser>> listUsers(
@@ -85,7 +84,6 @@ class ScheduledEvent extends PartialScheduledEvent {
   /// @nodoc
   ScheduledEvent({
     required super.id,
-    required super.json,
     required super.manager,
     required this.guildId,
     required this.channelId,

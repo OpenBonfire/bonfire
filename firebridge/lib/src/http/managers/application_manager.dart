@@ -38,16 +38,13 @@ class ApplicationManager {
       bot: maybeParse(
           raw['bot'],
           (Map<String, Object?> raw) => PartialUser(
-              id: Snowflake.parse(raw['id']!),
-              json: raw,
-              manager: client.users)),
+              id: Snowflake.parse(raw['id']!), manager: client.users)),
       termsOfServiceUrl: maybeParse(raw['terms_of_service_url'], Uri.parse),
       privacyPolicyUrl: maybeParse(raw['privacy_policy_url'], Uri.parse),
       owner: maybeParse(
         raw['owner'],
         (Map<String, Object?> raw) => PartialUser(
           id: Snowflake.parse(raw['id']!),
-          json: raw,
           manager: client.users,
         ),
       ),
@@ -57,9 +54,7 @@ class ApplicationManager {
       guild: maybeParse(
           raw['guild'],
           (Map<String, Object?> raw) => PartialGuild(
-              id: Snowflake.parse(raw['id']!),
-              json: raw,
-              manager: client.guilds)),
+              id: Snowflake.parse(raw['id']!), manager: client.guilds)),
       primarySkuId: maybeParse(raw['primary_sku_id'], Snowflake.parse),
       slug: raw['slug'] as String?,
       coverImageHash: raw['cover_image'] as String?,
@@ -106,7 +101,6 @@ class ApplicationManager {
       teamId: Snowflake.parse(raw['team_id']!),
       user: PartialUser(
           id: Snowflake.parse((raw['user'] as Map<String, Object?>)['id']!),
-          json: raw,
           manager: client.users),
       role: TeamMemberRole.parse(raw['role'] as String),
     );

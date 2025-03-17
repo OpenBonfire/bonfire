@@ -86,7 +86,6 @@ class PrivateThread extends TextChannel implements Thread {
   /// @nodoc
   PrivateThread({
     required super.id,
-    required super.json,
     required super.manager,
     required this.isInvitable,
     required this.appliedTags,

@@ -33,7 +33,6 @@ class StickerPack extends SnowflakeEntity<StickerPack> {
   /// {@macro sticker_pack}
   StickerPack(
       {required super.id,
-      required super.json,
       required this.manager,
       required this.stickers,
       required this.name,

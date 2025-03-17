@@ -17,8 +17,7 @@ class PartialApplicationCommand
 
   /// Create a new [PartialApplicationCommand].
   /// @nodoc
-  PartialApplicationCommand(
-      {required super.id, required super.json, required this.manager});
+  PartialApplicationCommand({required super.id, required this.manager});
 
   /// Fetch the permissions for this command in a given guild.
   Future<CommandPermissions> fetchPermissions(Snowflake guildId) =>
@@ -78,7 +77,6 @@ class ApplicationCommand extends PartialApplicationCommand {
   /// @nodoc
   ApplicationCommand({
     required super.id,
-    required super.json,
     required super.manager,
     required this.type,
     required this.applicationId,

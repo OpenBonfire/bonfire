@@ -76,7 +76,6 @@ class ForumChannel extends Channel implements GuildChannel, ThreadsOnlyChannel {
   /// @nodoc
   ForumChannel({
     required super.id,
-    required super.json,
     required super.manager,
     required this.defaultLayout,
     required this.topic,

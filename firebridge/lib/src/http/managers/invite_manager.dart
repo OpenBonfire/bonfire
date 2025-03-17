@@ -22,8 +22,8 @@ class InviteManager {
   Invite parse(Map<String, Object?> raw) {
     final guild = maybeParse(
       raw['guild'],
-      (Map<String, Object?> raw) => PartialGuild(
-          id: Snowflake.parse(raw['id']!), json: raw, manager: client.guilds),
+      (Map<String, Object?> raw) =>
+          PartialGuild(id: Snowflake.parse(raw['id']!), manager: client.guilds),
     );
 
     return Invite(
@@ -31,7 +31,6 @@ class InviteManager {
       guild: guild,
       channel: PartialChannel(
           id: Snowflake.parse((raw['channel'] as Map<String, Object?>)['id']!),
-          json: raw,
           manager: client.channels),
       inviter: maybeParse(raw['inviter'], client.users.parse),
       targetType: maybeParse(raw['target_type'], TargetType.parse),

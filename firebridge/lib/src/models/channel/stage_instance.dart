@@ -33,7 +33,6 @@ class StageInstance extends SnowflakeEntity<StageInstance> {
   /// @nodoc
   StageInstance({
     required super.id,
-    required super.json,
     required this.manager,
     required this.guildId,
     required this.channelId,

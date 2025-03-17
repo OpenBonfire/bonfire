@@ -43,7 +43,6 @@ class GroupDmChannel extends TextChannel {
   /// @nodoc
   GroupDmChannel({
     required super.id,
-    required super.json,
     required super.manager,
     required this.name,
     required this.recipients,

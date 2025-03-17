@@ -9,6 +9,5 @@ class DirectoryChannel extends Channel {
 
   /// {@macro directory_channel}
   /// @nodoc
-  DirectoryChannel(
-      {required super.id, required super.json, required super.manager});
+  DirectoryChannel({required super.id, required super.manager});
 }

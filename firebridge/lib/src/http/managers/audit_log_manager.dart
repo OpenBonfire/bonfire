@@ -16,13 +16,12 @@ class AuditLogManager extends ReadOnlyManager<AuditLogEntry> {
 
   @override
   PartialAuditLogEntry operator [](Snowflake id) =>
-      PartialAuditLogEntry(id: id, json: {}, manager: this);
+      PartialAuditLogEntry(id: id, manager: this);
 
   @override
   AuditLogEntry parse(Map<String, Object?> raw) {
     return AuditLogEntry(
       id: Snowflake.parse(raw['id']!),
-      json: raw,
       manager: this,
       targetId: maybeParse(raw['target_id'], Snowflake.parse),
       changes: maybeParseMany(raw['changes'], parseAuditLogChange),

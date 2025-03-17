@@ -12,8 +12,7 @@ class PartialEntitlement extends ManagedSnowflakeEntity<Entitlement> {
 
   /// Create a new [PartialEntitlement].
   /// @nodoc
-  PartialEntitlement(
-      {required this.manager, required super.json, required super.id});
+  PartialEntitlement({required this.manager, required super.id});
 }
 
 /// {@template entitlement}
@@ -48,7 +47,6 @@ class Entitlement extends PartialEntitlement {
   /// @nodoc
   Entitlement({
     required super.manager,
-    required super.json,
     required super.id,
     required this.skuId,
     required this.userId,
@@ -66,8 +64,6 @@ class Entitlement extends PartialEntitlement {
       : PartialUser(
           id: userId!,
           manager: manager.client.users,
-          // might be a problem...
-          json: {'id': userId},
         );
 
   /// The guild this entitlement is for.
@@ -76,7 +72,6 @@ class Entitlement extends PartialEntitlement {
       : PartialGuild(
           id: guildId!,
           manager: manager.client.guilds,
-          json: {'id': guildId},
         );
 
   /// The application this entitlement is for.

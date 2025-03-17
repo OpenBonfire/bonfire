@@ -13,8 +13,7 @@ class PartialTextChannel extends PartialChannel {
 
   /// Create a new [PartialTextChannel].
   /// @nodoc
-  PartialTextChannel(
-      {required super.id, required super.json, required super.manager});
+  PartialTextChannel({required super.id, required super.manager});
 
   /// Send a message to this channel.
   ///
@@ -52,7 +51,7 @@ abstract class TextChannel extends PartialTextChannel implements Channel {
   DateTime? get lastPinTimestamp;
 
   /// @nodoc
-  TextChannel({required super.id, required super.json, required super.manager});
+  TextChannel({required super.id, required super.manager});
 
   /// The last message sent in this channel, or `null` if no messages have been sent.
   PartialMessage? get lastMessage;

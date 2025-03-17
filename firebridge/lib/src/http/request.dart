@@ -5,9 +5,6 @@ import 'package:http/http.dart' hide MultipartRequest;
 import 'package:firebridge/src/client.dart';
 import 'package:firebridge/src/http/route.dart';
 
-import 'package:firebridge/src/utils/is_web_web.dart'
-    if (dart.library.io) 'package:firebridge/src/utils/is_web_io.dart';
-
 /// An HTTP request to be made against the API.
 ///
 /// {@template http_request}

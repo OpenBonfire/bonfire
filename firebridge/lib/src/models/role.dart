@@ -17,7 +17,7 @@ class PartialRole extends WritableSnowflakeEntity<Role> {
 
   /// Create a new [PartialRole].
   /// @nodoc
-  PartialRole({required super.id, required super.json, required this.manager});
+  PartialRole({required super.id, required this.manager});
 
   /// Update this role, returning the updated role.
   ///
@@ -81,7 +81,6 @@ class Role extends PartialRole implements CommandOptionMentionable<Role> {
   /// @nodoc
   Role({
     required super.id,
-    required super.json,
     required super.manager,
     required this.name,
     required this.color,
