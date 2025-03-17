@@ -18,9 +18,9 @@ A modern alternative to the Discord client. Use Discord without ever having to t
 
 ## Platform Support (all are targets, but not all are supported yet)
 - 🟩 Android
-- 🟥 iOS
+- 🟩 iOS
 - 🟩 Windows
-- 🟥 MacOS
+- 🟥 MacOS (Broken but hypothetically very close to working)
 - 🟩 Linux 
 - 🟨 WearOS (All major android smartwatches)
 - 🟩 Web
