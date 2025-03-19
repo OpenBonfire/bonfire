@@ -273,65 +273,78 @@ jobs:
           with:
             name: bonfire-ios-archive
             path: bonfire/ios/build/Runner.xcarchive
-  build-macos:
-    runs-on: macos-latest
+  build-linux-arm:
+    runs-on: ubuntu-latest
     steps:
       - name: Clone repository
         uses: actions/checkout@v2
         with:
           submodules: recursive
-          
+
       - name: Set up Java 17
         uses: actions/setup-java@v2
         with:
           java-version: '17'
           distribution: 'adopt'
-          
+
+      - name: Install system dependencies for ARM
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y \
+            ninja-build \
+            libgtk-3-dev:arm64 \
+            libgstreamer1.0-dev:arm64 \
+            libgstreamer-plugins-base1.0-dev:arm64 \
+            libunwind-dev:arm64 \
+            libmpv-dev:arm64 \
+            mpv:arm64 \
+            cmake \
+            pkg-config \
+            xclip \
+            libx11-dev:arm64 \
+            libxrandr-dev:arm64 \
+            libxinerama-dev:arm64 \
+            libxcursor-dev:arm64 \
+            libxfixes-dev:arm64 \
+            libnss3-dev:arm64 \
+            libnspr4-dev:arm64 \
+            libatk1.0-dev:arm64 \
+            libatk-bridge2.0-dev:arm64 \
+            libdrm-dev:arm64 \
+            libgbm-dev:arm64 \
+            libasound2-dev:arm64 \
+            libvulkan-dev:arm64 \
+            g++-aarch64-linux-gnu \
+            qemu-user-static
+
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
           channel: stable
-          
-      - name: Enable macOS Desktop
-        run: flutter config --enable-macos-desktop
-          
+
       - name: Install dependencies
         working-directory: ./bonfire
         run: flutter pub get
-        
+
       - name: Run code generation
         working-directory: ./bonfire
         run: dart run build_runner build --delete-conflicting-outputs
-        
-      - name: Build macOS
+
+      - name: Update CMakeLists.txt for ARM
         working-directory: ./bonfire
-        run: flutter build macos --release --no-tree-shake-icons -v
-          
-      - name: Create DMG (Optional)
         run: |
-          brew install create-dmg
-          create-dmg \
-            --volname "Bonfire" \
-            --volicon "bonfire/macos/Runner/Assets.xcassets/AppIcon.appiconset/app_icon_1024.png" \
-            --window-pos 200 120 \
-            --window-size 800 400 \
-            --icon-size 100 \
-            --icon "Bonfire.app" 200 190 \
-            --hide-extension "Bonfire.app" \
-            --app-drop-link 600 185 \
-            "bonfire/build/macos/Build/Products/Release/Bonfire.dmg" \
-            "bonfire/build/macos/Build/Products/Release/Bonfire.app"
-        continue-on-error: true
-          
-      - name: Upload macOS App
+          sed -i 's/target_link_libraries(${BINARY_NAME} PRIVATE PkgConfig::GTK/target_link_libraries(${BINARY_NAME} PRIVATE PkgConfig::GTK vulkan/' linux/CMakeLists.txt
+
+      - name: Build Linux ARM
+        working-directory: ./bonfire
+        env:
+          CC: aarch64-linux-gnu-gcc
+          CXX: aarch64-linux-gnu-g++
+          LD_LIBRARY_PATH: /usr/lib/aarch64-linux-gnu:$LD_LIBRARY_PATH
+        run: flutter build linux --target-platform=linux-arm64 --no-tree-shake-icons -v
+
+      - name: Upload Linux ARM Executable
         uses: actions/upload-artifact@v4
         with:
-          name: bonfire-macos-app
-          path: bonfire/build/macos/Build/Products/Release/Bonfire.app
-          
-      - name: Upload macOS DMG
-        uses: actions/upload-artifact@v4
-        with:
-          name: bonfire-macos-dmg
-          path: bonfire/build/macos/Build/Products/Release/Bonfire.dmg
-        continue-on-error: true
+          name: bonfire-linux-arm
+          path: bonfire/build/linux/arm64/release/bundle/

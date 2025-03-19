@@ -39,7 +39,10 @@ bool shouldUseDesktopLayout(BuildContext context) {
 
   bool isDesktop = UniversalPlatform.isDesktop;
 
-  return isLargeScreen || isDesktop || isLandscape;
+  // temporary solution to support postmarketos / etc on mobile
+  bool isLinux = UniversalPlatform.isLinux;
+
+  return isLargeScreen || (isDesktop && !isLinux) || isLandscape;
 }
 
 bool shouldUseMobileLayout(BuildContext context) {
