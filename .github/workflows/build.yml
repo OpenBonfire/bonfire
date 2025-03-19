@@ -287,35 +287,36 @@ jobs:
           java-version: '17'
           distribution: 'adopt'
 
-      - name: Install system dependencies for ARM
+      - name: Add ARM64 architecture
         run: |
-          sudo apt-get update -y
+          sudo dpkg --add-architecture arm64
+          sudo apt-get update
+
+      - name: Install cross-compilation tools
+        run: |
           sudo apt-get install -y \
+            gcc-aarch64-linux-gnu \
+            g++-aarch64-linux-gnu \
             ninja-build \
+            cmake \
+            pkg-config \
+            qemu-user-static
+
+      - name: Install cross-library dependencies
+        run: |
+          sudo apt-get install -y \
             libgtk-3-dev:arm64 \
             libgstreamer1.0-dev:arm64 \
             libgstreamer-plugins-base1.0-dev:arm64 \
-            libunwind-dev:arm64 \
-            libmpv-dev:arm64 \
-            mpv:arm64 \
-            cmake \
-            pkg-config \
-            xclip \
+            libvulkan-dev:arm64 \
             libx11-dev:arm64 \
             libxrandr-dev:arm64 \
             libxinerama-dev:arm64 \
             libxcursor-dev:arm64 \
-            libxfixes-dev:arm64 \
+            libxi-dev:arm64 \
             libnss3-dev:arm64 \
-            libnspr4-dev:arm64 \
             libatk1.0-dev:arm64 \
-            libatk-bridge2.0-dev:arm64 \
-            libdrm-dev:arm64 \
-            libgbm-dev:arm64 \
-            libasound2-dev:arm64 \
-            libvulkan-dev:arm64 \
-            g++-aarch64-linux-gnu \
-            qemu-user-static
+            libgbm-dev:arm64
 
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
@@ -330,21 +331,28 @@ jobs:
         working-directory: ./bonfire
         run: dart run build_runner build --delete-conflicting-outputs
 
-      - name: Update CMakeLists.txt for ARM
+      - name: Configure cross-compilation
         working-directory: ./bonfire
         run: |
-          sed -i 's/target_link_libraries(${BINARY_NAME} PRIVATE PkgConfig::GTK/target_link_libraries(${BINARY_NAME} PRIVATE PkgConfig::GTK vulkan/' linux/CMakeLists.txt
+          flutter config --enable-linux-desktop
+          echo "Building for ARM64..."
+          export CC=aarch64-linux-gnu-gcc
+          export CXX=aarch64-linux-gnu-g++
+          export AR=aarch64-linux-gnu-ar
+          export LD=aarch64-linux-gnu-ld
 
-      - name: Build Linux ARM
+      - name: Build Linux ARM64
         working-directory: ./bonfire
-        env:
-          CC: aarch64-linux-gnu-gcc
-          CXX: aarch64-linux-gnu-g++
-          LD_LIBRARY_PATH: /usr/lib/aarch64-linux-gnu:$LD_LIBRARY_PATH
-        run: flutter build linux --target-platform=linux-arm64 --no-tree-shake-icons -v
+        run: |
+          flutter build linux \
+            --target-platform=linux-arm64 \
+            --no-tree-shake-icons \
+            -v \
+            --target-sysroot=/usr/aarch64-linux-gnu \
+            --linux-arch=arm64
 
-      - name: Upload Linux ARM Executable
+      - name: Upload Linux ARM64 Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: bonfire-linux-arm
+          name: bonfire-linux-arm64
           path: bonfire/build/linux/arm64/release/bundle/
