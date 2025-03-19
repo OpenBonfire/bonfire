@@ -188,10 +188,10 @@ jobs:
         working-directory: ./bonfire
         run: dart run build_runner build --delete-conflicting-outputs
 
-      - name: Update CMakeLists.txt
-        working-directory: ./bonfire
-        run: |
-          sed -i 's/target_link_libraries(${BINARY_NAME} PRIVATE PkgConfig::GTK/target_link_libraries(${BINARY_NAME} PRIVATE PkgConfig::GTK vulkan/' linux/CMakeLists.txt
+      # - name: Update CMakeLists.txt
+      #   working-directory: ./bonfire
+      #   run: |
+      #     sed -i 's/target_link_libraries(${BINARY_NAME} PRIVATE PkgConfig::GTK/target_link_libraries(${BINARY_NAME} PRIVATE PkgConfig::GTK vulkan/' linux/CMakeLists.txt
 
       - name: Build Linux
         working-directory: ./bonfire
@@ -273,46 +273,3 @@ jobs:
           with:
             name: bonfire-ios-archive
             path: bonfire/ios/build/Runner.xcarchive
-  build-linux-arm:
-    runs-on: ubuntu-latest
-    container: ghcr.io/clickclickonsal/flutter-cross:3.16.0
-    steps:
-      - name: Clone repository
-        uses: actions/checkout@v2
-        with:
-          submodules: recursive
-
-      - name: Set up Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          channel: stable
-
-      - name: Install dependencies
-        working-directory: ./bonfire
-        run: |
-          flutter pub get
-          dart run build_runner build --delete-conflicting-outputs
-
-      - name: Configure cross-build
-        working-directory: ./bonfire
-        run: |
-          flutter config --enable-linux-desktop
-          echo "Preparing ARM64 build environment..."
-          sudo mkdir -p /usr/aarch64-linux-gnu
-          sudo ln -s /usr/include /usr/aarch64-linux-gnu/include
-
-      - name: Build Linux ARM64
-        working-directory: ./bonfire
-        run: |
-          flutter build linux \
-            --target-platform=linux-arm64 \
-            --no-tree-shake-icons \
-            -v \
-            --target-sysroot=/usr/aarch64-linux-gnu \
-            --linux-arch=arm64
-
-      - name: Upload Artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: bonfire-linux-arm64
-          path: bonfire/build/linux/arm64/release/bundle/
