@@ -89,8 +89,8 @@ class _PresenceAvatarState extends State<PresenceAvatar> {
           ),
         ),
         Positioned(
-          right: 0,
-          bottom: 0,
+          right: widget.size != null ? (widget.size! / 20) : 0,
+          bottom: widget.size != null ? (widget.size! / 20) : 0,
           child: getStatusIcon(
             initialPresence?.clientStatus,
             initialPresence?.status ?? UserStatus.offline,
