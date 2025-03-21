@@ -1,5 +1,6 @@
 import 'package:bonfire/features/authenticator/data/repositories/auth.dart';
 import 'package:bonfire/features/authenticator/data/repositories/discord_auth.dart';
+import 'package:bonfire/features/user/controllers/presence.dart';
 import 'package:bonfire/shared/models/pair.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:firebridge/firebridge.dart';
@@ -200,6 +201,18 @@ class ChannelMembers extends _$ChannelMembers {
 
       final updatedMemberList =
           ref.read(guildMemberListProvider(guildId)).valueOrNull?.second ?? [];
+
+      for (final itemList in updatedMemberList) {
+        for (final item in itemList) {
+          if (item is Member) {
+            if (item.initialPresence != null) {
+              ref
+                  .read(presenceControllerProvider(item.user!.id).notifier)
+                  .setPresence(item.initialPresence!);
+            }
+          }
+        }
+      }
 
       final newPair = Pair(newGroups, updatedMemberList);
 

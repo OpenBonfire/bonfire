@@ -10,7 +10,6 @@ import 'package:firebridge/src/builders/guild/widget.dart';
 import 'package:firebridge/src/builders/image.dart';
 import 'package:firebridge/src/builders/voice.dart';
 import 'package:firebridge/src/http/managers/manager.dart';
-import 'package:firebridge/src/http/managers/voice_manager.dart';
 import 'package:firebridge/src/http/request.dart';
 import 'package:firebridge/src/http/route.dart';
 import 'package:firebridge/src/models/channel/channel.dart';

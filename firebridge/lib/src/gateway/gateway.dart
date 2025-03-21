@@ -90,14 +90,6 @@ class Gateway extends GatewayManager with EventParser {
       final event = message.event;
       if (event is! RawDispatchEvent) continue;
 
-      // var goofyEvent = (message.event as RawDispatchEvent);
-      // if (goofyEvent.name == "READY") {
-      //   print(jsonEncode(goofyEvent.payload));
-      // }
-      if (event.name == "READY") {
-        // print((message.event as RawDispatchEvent).payload.keys);
-      }
-      //print(jsonEncode((message.event as RawDispatchEvent).payload));
       final parsedEvent = parseDispatchEvent(event);
       // Update the cache as needed.
       client.updateCacheWith(parsedEvent);

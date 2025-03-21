@@ -6,7 +6,13 @@ import 'package:flutter/material.dart';
 class PresenceAvatar extends StatefulWidget {
   final User user;
   final PresenceUpdateEvent? initialPresence;
-  const PresenceAvatar({super.key, required this.user, this.initialPresence});
+  final double? size;
+  const PresenceAvatar({
+    super.key,
+    required this.user,
+    this.initialPresence,
+    this.size,
+  });
 
   @override
   State<PresenceAvatar> createState() => _PresenceAvatarState();
@@ -14,7 +20,7 @@ class PresenceAvatar extends StatefulWidget {
 
 class _PresenceAvatarState extends State<PresenceAvatar> {
   Widget getStatusIcon(ClientStatus? clientStatus, UserStatus overallStatus) {
-    const double iconSize = 14;
+    double iconSize = widget.size != null ? (widget.size! / 5) : 14;
     Color statusColor;
     IconData statusIcon;
     ShapeBorder containerShape;
@@ -75,11 +81,11 @@ class _PresenceAvatarState extends State<PresenceAvatar> {
     return Stack(
       alignment: Alignment.center,
       children: [
-        const SizedBox(width: 38, height: 38),
+        // const SizedBox(width: 38, height: 38),
         Center(
           child: UserAvatar(
             user: widget.user,
-            size: const Size(35, 35),
+            size: widget.size ?? 35,
           ),
         ),
         Positioned(

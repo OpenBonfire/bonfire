@@ -219,7 +219,7 @@ class UserManager extends ReadOnlyManager<User> {
       bannerHash: raw['banner'] as String?,
       // TODO: I think this is a DiscordColor. Cast to it as such.
       accentColor: raw['accent_color'] as int?,
-      themeColors: raw['theme_colors'] as List<List<int>>?,
+      themeColors: raw['theme_colors'] as List<dynamic>?,
       popoutAnimationParticleType:
           tryParse(raw['popout_animation_particle_type'], Snowflake.parse),
       // TODO: parse emojis

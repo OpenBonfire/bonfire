@@ -181,7 +181,6 @@ extension CacheUpdates on NyxxRest {
           }(),
         StickerPack(:final stickers) => stickers.forEach(updateCacheWith),
         ReadyEvent(:final user, :final guilds) => () {
-            // print("UPDATING!!!");
             updateCacheWith(user);
             guilds.forEach(updateCacheWith);
           }(),

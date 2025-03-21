@@ -2,8 +2,6 @@ import 'package:bonfire/features/authenticator/data/repositories/auth.dart';
 import 'package:bonfire/features/authenticator/data/repositories/discord_auth.dart';
 import 'package:bonfire/features/channels/controllers/channel.dart';
 import 'package:bonfire/features/guild/controllers/guild.dart';
-import 'package:bonfire/features/guild/controllers/role.dart';
-import 'package:bonfire/features/guild/controllers/roles.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:firebridge_extensions/firebridge_extensions.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -24,45 +22,10 @@ class ChannelPermissions extends _$ChannelPermissions {
     if (channel is! GuildChannel) return null;
 
     Guild guild = ref.watch(guildControllerProvider(channel.guildId))!;
-    List<Snowflake> roleIds =
-        ref.watch(rolesControllerProvider(channel.guildId))!;
-    List<Role> roles = [];
-    for (Snowflake roleId in roleIds) {
-      Role role = ref.watch(roleControllerProvider(roleId))!;
-      roles.add(role);
-    }
+    final selfMember = guild.memberList!
+        .firstWhere((element) => element.user?.id == auth.client.user.id);
 
-    // print(
-    //     "Roles from cache: ${user!.client.guilds.cache[channel.guildId]?.roles.cache.length}");
-
-    // print(
-    //     "Self from cache: ${user!.client.guilds.cache[channel.guildId]?.members.cache[user!.client.user.id]}");
-
-    // print("Got member list");
-    // print(guild.memberList);
-
-    Member? maybeSelf;
-    Member? selfMember;
-    guild.memberList?.forEach((element) {
-      if (element.user?.id == auth.client.user.id) {
-        maybeSelf = element;
-      }
-    });
-
-    if (maybeSelf != null) {
-      selfMember = maybeSelf;
-    } else {
-      // shouldn't ever be called
-      selfMember =
-          await auth.client.guilds[guild.id].members.get(auth.client.user.id);
-    }
-
-    Permissions permissions =
-        await channel.computePermissionsForMemberWithGuildAndRoles(
-      selfMember!,
-      guild,
-      roles,
-    );
+    Permissions permissions = await channel.computePermissionsFor(selfMember);
 
     return permissions;
   }

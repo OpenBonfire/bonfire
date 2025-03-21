@@ -8,7 +8,8 @@ class ProfileMetadata with ToStringHelper {
   final String? bio;
   final String? bannerHash;
   final int? accentColor;
-  final List<List<int>>? themeColors;
+// final List<List<int>>? themeColors;
+  final List<dynamic>? themeColors;
   final Snowflake? popoutAnimationParticleType;
   final Emoji? emoji;
   final ProfileEffect? profileEffect;
