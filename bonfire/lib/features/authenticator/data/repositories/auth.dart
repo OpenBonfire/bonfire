@@ -1,9 +1,9 @@
 import 'dart:convert';
 
-import 'package:bonfire/features/auth/controllers/ready.dart';
-import 'package:bonfire/features/auth/data/headers.dart';
-import 'package:bonfire/features/auth/data/repositories/discord_auth.dart';
-import 'package:bonfire/features/auth/models/auth.dart';
+import 'package:bonfire/features/authenticator/controllers/ready.dart';
+import 'package:bonfire/features/authenticator/data/headers.dart';
+import 'package:bonfire/features/authenticator/data/repositories/discord_auth.dart';
+import 'package:bonfire/features/authenticator/models/auth.dart';
 import 'package:bonfire/features/channels/controllers/channel.dart';
 import 'package:bonfire/features/channels/repositories/channel_members.dart';
 import 'package:bonfire/features/friends/controllers/relationships.dart';

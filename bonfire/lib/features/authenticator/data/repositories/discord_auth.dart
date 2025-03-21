@@ -1,4 +1,4 @@
-import 'package:bonfire/features/auth/models/auth.dart';
+import 'package:bonfire/features/authenticator/models/auth.dart';
 import 'package:firebridge/firebridge.dart';
 
 class AuthUser extends AuthResponse {

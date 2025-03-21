@@ -1,5 +1,5 @@
-import 'package:bonfire/features/auth/data/repositories/auth.dart';
-import 'package:bonfire/features/auth/data/repositories/discord_auth.dart';
+import 'package:bonfire/features/authenticator/data/repositories/auth.dart';
+import 'package:bonfire/features/authenticator/data/repositories/discord_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:firebridge/firebridge.dart';

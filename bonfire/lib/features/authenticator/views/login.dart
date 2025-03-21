@@ -1,8 +1,8 @@
-import 'package:bonfire/features/auth/data/repositories/auth.dart';
-import 'package:bonfire/features/auth/data/repositories/discord_auth.dart';
-import 'package:bonfire/features/auth/models/auth.dart';
-import 'package:bonfire/features/auth/views/captcha.dart';
-import 'package:bonfire/features/auth/views/credentials.dart';
+import 'package:bonfire/features/authenticator/data/repositories/auth.dart';
+import 'package:bonfire/features/authenticator/data/repositories/discord_auth.dart';
+import 'package:bonfire/features/authenticator/models/auth.dart';
+import 'package:bonfire/features/authenticator/views/captcha.dart';
+import 'package:bonfire/features/authenticator/views/credentials.dart';
 import 'package:bonfire/theme/theme.dart';
 import 'package:fireview/controller.dart';
 import 'package:flutter/material.dart';

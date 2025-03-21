@@ -1,10 +1,10 @@
-import 'package:bonfire/features/auth/views/switcher.dart';
+import 'package:bonfire/features/authenticator/views/switcher.dart';
 import 'package:bonfire/theme/theme.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:bonfire/features/auth/views/login.dart';
-import 'package:bonfire/features/auth/views/mfa.dart';
+import 'package:bonfire/features/authenticator/views/login.dart';
+import 'package:bonfire/features/authenticator/views/mfa.dart';
 import 'package:bonfire/features/overview/views/navigation_frame.dart';
 import 'package:bonfire/features/overview/views/home.dart';
 import 'package:hive_ce/hive.dart';

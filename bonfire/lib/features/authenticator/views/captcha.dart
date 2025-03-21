@@ -1,4 +1,4 @@
-import 'package:bonfire/features/auth/data/repositories/auth.dart';
+import 'package:bonfire/features/authenticator/data/repositories/auth.dart';
 import 'package:bonfire/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

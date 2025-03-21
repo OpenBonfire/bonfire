@@ -1,5 +1,5 @@
-import 'package:bonfire/features/auth/data/repositories/auth.dart';
-import 'package:bonfire/features/auth/models/auth.dart';
+import 'package:bonfire/features/authenticator/data/repositories/auth.dart';
+import 'package:bonfire/features/authenticator/models/auth.dart';
 import 'package:bonfire/shared/components/confirm_button.dart';
 import 'package:bonfire/theme/text_theme.dart';
 import 'package:bonfire/theme/theme.dart';
