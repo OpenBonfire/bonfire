@@ -32,6 +32,15 @@ class ChannelPermissions extends _$ChannelPermissions {
       roles.add(role);
     }
 
+    // print(
+    //     "Roles from cache: ${user!.client.guilds.cache[channel.guildId]?.roles.cache.length}");
+
+    // print(
+    //     "Self from cache: ${user!.client.guilds.cache[channel.guildId]?.members.cache[user!.client.user.id]}");
+
+    // print("Got member list");
+    // print(guild.memberList);
+
     Member? maybeSelf;
     Member? selfMember;
     guild.memberList?.forEach((element) {

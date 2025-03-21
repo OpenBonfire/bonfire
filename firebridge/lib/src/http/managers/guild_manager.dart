@@ -45,19 +45,17 @@ class GuildManager extends Manager<Guild> {
   Guild parse(Map<String, Object?> raw) {
     final id = Snowflake.parse(raw['id']!);
 
-    List<dynamic>? voiceStates = raw["voice_states"] as List<dynamic>?;
+    // List<dynamic>? voiceStates = raw["voice_states"] as List<dynamic>?;
 
-    if (voiceStates != null) {
-      // I *think* this is how this works?
-      for (var voiceState in voiceStates) {
-        client.updateCacheWith(VoiceManager(client)
-            .parseVoiceState(voiceState as Map<String, dynamic>, guildId: id));
-      }
-    }
-
+    // if (voiceStates != null) {
+    //   // I *think* this is how this works?
+    //   for (var voiceState in voiceStates) {
+    //     client.updateCacheWith(VoiceManager(client)
+    //         .parseVoiceState(voiceState as Map<String, dynamic>, guildId: id));
+    //   }
+    // }
     return Guild(
       id: id,
-
       manager: this,
       name: (raw['name'] as String?) ?? "Guild name borked",
       iconHash: (raw['icon'] ?? raw['icon_hash']) as String?,

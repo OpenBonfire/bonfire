@@ -49,6 +49,7 @@ extension CacheUpdates on NyxxRest {
   /// Update the caches for this client using [entity] by registering (or removing, if [entity] is a delete event) any cacheable entities reachable from [entity].
   void updateCacheWith(Object? entity) => switch (entity) {
         // "Root" types - with their own cache
+        // Events
 
         VoiceState() => () {
             // ignore: deprecated_member_use_from_same_package
@@ -91,6 +92,7 @@ extension CacheUpdates on NyxxRest {
           }(),
         Guild() => () {
             entity.manager.cache[entity.id] = entity;
+            entity.memberList?.forEach(updateCacheWith);
 
             entity.roleList.forEach(updateCacheWith);
             entity.emojiList.forEach(updateCacheWith);
@@ -178,19 +180,11 @@ extension CacheUpdates on NyxxRest {
             updateCacheWith(member);
           }(),
         StickerPack(:final stickers) => stickers.forEach(updateCacheWith),
-
-        // Events
-
-        ReadyEvent(
-          :final user,
-          :final guilds,
-          :final presences,
-        ) =>
-          () {
+        ReadyEvent(:final user, :final guilds) => () {
+            // print("UPDATING!!!");
             updateCacheWith(user);
             guilds.forEach(updateCacheWith);
-            presences.forEach(updateCacheWith);
-          },
+          }(),
         ResumedEvent() => null,
         ApplicationCommandPermissionsUpdateEvent(:final permissions) =>
           updateCacheWith(permissions),

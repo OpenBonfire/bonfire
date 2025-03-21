@@ -101,6 +101,7 @@ class Gateway extends GatewayManager with EventParser {
       final parsedEvent = parseDispatchEvent(event);
       // Update the cache as needed.
       client.updateCacheWith(parsedEvent);
+
       yield parsedEvent;
     }
   })).asBroadcastStream();
@@ -359,8 +360,10 @@ class Gateway extends GatewayManager with EventParser {
       presences:
           parseMany(raw['presences'] as List<dynamic>, parsePresenceUpdate),
       totalShards: (raw['shard'] as List<Object?>?)?[1] as int?,
-      relationships: parseMany(raw['relationships'] as List<Object?>,
-          (Map<String, Object?> raw) => client.users.parseRelationship(raw)),
+      relationships: parseMany(
+        raw['relationships'] as List<Object?>,
+        (Map<String, Object?> raw) => client.users.parseRelationship(raw),
+      ),
     );
   }
 

@@ -286,6 +286,9 @@ extension RouteHelpers on HttpRoute {
   /// Adds the [`member`](https://discord.com/developers/docs/resources/user#get-current-user-guild-member) part to this [HttpRoute].
   void member() => add(HttpRoutePart("member"));
 
+  /// Adds the [`profile`](https://docs.discord.sex/resources/user#query-string-params) part to this [HttpRoute].
+  void profile() => add(HttpRoutePart("profile"));
+
   /// Adds the [`vanity-url`](https://discord.com/developers/docs/resources/guild#get-guild-vanity-url) part to this [HttpRoute].
   void vanityUrl() => add(HttpRoutePart('vanity-url'));
 

@@ -21,6 +21,9 @@ import 'package:firebridge/src/models/snowflake.dart';
 import 'package:firebridge/src/models/user/application_role_connection.dart';
 import 'package:firebridge/src/models/user/connection.dart';
 import 'package:firebridge/src/models/user/notification.dart';
+import 'package:firebridge/src/models/user/profile_badge.dart';
+import 'package:firebridge/src/models/user/profile_effect.dart';
+import 'package:firebridge/src/models/user/profile_metadata.dart';
 import 'package:firebridge/src/models/user/relationship.dart';
 import 'package:firebridge/src/models/user/settings/custom_status.dart';
 import 'package:firebridge/src/models/user/settings/guild_folder.dart';
@@ -28,6 +31,7 @@ import 'package:firebridge/src/models/user/settings/read_state.dart';
 import 'package:firebridge/src/models/user/settings/user_guild_settings.dart';
 import 'package:firebridge/src/models/user/settings/user_settings.dart';
 import 'package:firebridge/src/models/user/user.dart';
+import 'package:firebridge/src/models/user/user_profile.dart';
 import 'package:firebridge/src/utils/cache_helpers.dart';
 import 'package:firebridge/src/utils/date.dart';
 import 'package:firebridge/src/utils/parsing_helpers.dart';
@@ -207,6 +211,54 @@ class UserManager extends ReadOnlyManager<User> {
     return PushSyncToken(raw['token'] as String);
   }
 
+  ProfileMetadata parseProfileMetadata(Map<String, Object?> raw) {
+    return ProfileMetadata(
+      guildId: tryParse(raw['guild_id'], Snowflake.parse),
+      pronouns: raw['pronouns'] as String,
+      bio: raw['bio'] as String?,
+      bannerHash: raw['banner'] as String?,
+      // TODO: I think this is a DiscordColor. Cast to it as such.
+      accentColor: raw['accent_color'] as int?,
+      themeColors: raw['theme_colors'] as List<List<int>>?,
+      popoutAnimationParticleType:
+          tryParse(raw['popout_animation_particle_type'], Snowflake.parse),
+      // TODO: parse emojis
+      // emoji: tryParse(raw['emoji'], client.),
+      profileEffect:
+          tryParse(raw['profile_effect'], (Map<String, Object?> raw) {
+        return ProfileEffect(
+          id: Snowflake.parse(raw['id'] as String),
+          expiresAt: DateTime.parse(raw['expires_at'] as String),
+        );
+      }),
+    );
+  }
+
+  ProfileBadge parseProfileBadge(Map<String, Object?> raw) {
+    return ProfileBadge(
+      id: raw['id'] as String,
+      description: raw['description'] as String,
+      iconHash: raw['icon'] as String,
+      link: tryParse(raw['link'], Uri.parse),
+    );
+  }
+
+  UserProfile parseUserProfile(Map<String, Object?> raw) {
+    return UserProfile(
+      user: parse(raw['user'] as Map<String, Object?>),
+      userProfile:
+          parseProfileMetadata(raw['user_profile'] as Map<String, Object?>),
+      badges: parseMany(
+        raw['badges'] as List<Object?>,
+        (Object? raw) => parseProfileBadge(raw as Map<String, Object?>),
+      ),
+      guildBadges: parseMany(
+        raw['guild_badges'] as List<Object?>,
+        (Object? raw) => parseProfileBadge(raw as Map<String, Object?>),
+      ),
+    );
+  }
+
   @override
   Future<User> fetch(Snowflake id) async {
     final route = HttpRoute()..users(id: id.toString());
@@ -285,6 +337,19 @@ class UserManager extends ReadOnlyManager<User> {
 
     client.updateCacheWith(member);
     return member;
+  }
+
+  /// Fetch a user's profile
+  Future<UserProfile> fetchUserProfile(Snowflake userId) async {
+    final route = HttpRoute()
+      ..users(id: userId.toString())
+      ..profile();
+    final request = BasicRequest(route);
+
+    final response = await client.httpHandler.executeSafe(request);
+    final profile = client.users
+        .parseUserProfile(response.jsonBody as Map<String, Object?>);
+    return profile;
   }
 
   /// Leave a guild.
