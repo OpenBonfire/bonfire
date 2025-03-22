@@ -1,6 +1,8 @@
 import 'package:bonfire/features/guild/repositories/member.dart';
 import 'package:bonfire/features/member/components/member_popout.dart';
 import 'package:bonfire/features/user/components/presence_avatar.dart';
+import 'package:bonfire/shared/components/drawer/mobile_drawer.dart';
+import 'package:bonfire/shared/utils/platform.dart';
 import 'package:bonfire/shared/utils/role_color.dart';
 import 'package:bonfire/shared/components/presence_text.dart';
 import 'package:bonfire/theme/theme.dart';
@@ -42,15 +44,22 @@ class _MemberCardState extends ConsumerState<MemberCard> {
       children: [
         OutlinedButton(
           onPressed: () {
-            // pop open member popout card
-            showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return Dialog(
-                    backgroundColor: const Color.fromARGB(0, 0, 0, 0),
-                    child: UserPopoutCard(widget.member.user!.id),
-                  );
-                });
+            if (shouldUseDesktopLayout(context)) {
+              showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return Dialog(
+                      backgroundColor: const Color.fromARGB(0, 0, 0, 0),
+                      child: UserPopoutCard(widget.member.user!.id),
+                    );
+                  });
+            } else {
+              // open drawer
+              GlobalDrawer.of(context)!
+                  .setChild(UserPopoutCard(widget.member.user!.id));
+
+              GlobalDrawer.of(context)!.toggleDrawer();
+            }
           },
           style: OutlinedButton.styleFrom(
             minimumSize: Size.zero,

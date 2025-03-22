@@ -17,13 +17,13 @@ class GlobalDrawer extends StatefulWidget {
 
 class GlobalDrawerState extends State<GlobalDrawer>
     with SingleTickerProviderStateMixin {
-  late RubberAnimationController _controller;
+  late RubberAnimationController controller;
   Widget? child;
 
   @override
   void initState() {
     super.initState();
-    _controller = RubberAnimationController(
+    controller = RubberAnimationController(
       initialValue: 0,
       duration: const Duration(milliseconds: 150),
       upperBoundValue: AnimationControllerValue(percentage: 0.7),
@@ -37,17 +37,17 @@ class GlobalDrawerState extends State<GlobalDrawer>
 
   void toggleDrawer() {
     setState(() {
-      if (_controller.value.round() == 0) {
-        _controller.halfExpand();
+      if (controller.value.round() == 0) {
+        controller.halfExpand();
       } else {
-        _controller.collapse();
+        controller.collapse();
       }
     });
   }
 
   void closeDrawer() {
     setState(() {
-      _controller.collapse();
+      controller.collapse();
     });
   }
 
@@ -59,7 +59,7 @@ class GlobalDrawerState extends State<GlobalDrawer>
 
   @override
   void dispose() {
-    _controller.dispose();
+    controller.dispose();
     super.dispose();
   }
 
@@ -89,10 +89,13 @@ class GlobalDrawerState extends State<GlobalDrawer>
                     ),
                   ],
                 ),
-                child: child,
+                child: SizedBox(
+                  height: MediaQuery.of(context).size.height,
+                  child: child,
+                ),
               ),
             ),
-            animationController: _controller,
+            animationController: controller,
           ),
         ],
       ),
