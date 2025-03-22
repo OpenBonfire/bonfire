@@ -54,7 +54,7 @@ class CustomTextTheme {
   final bodyText2 = TextStyle(
     fontSize: 14,
     fontFamily: _family,
-    color: const Color(0xFF585F6A),
+    color: const Color(0xFFBDBDBD),
     fontWeight: FontWeight.w600,
   );
   final caption = TextStyle(

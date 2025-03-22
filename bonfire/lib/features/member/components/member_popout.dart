@@ -15,6 +15,7 @@ import 'package:firebridge/firebridge.dart' hide Builder;
 import 'package:flutter/material.dart';
 import 'package:flutter_prism/flutter_prism.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:markdown_viewer/markdown_viewer.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -160,17 +161,20 @@ class _UserInfoTabViewState extends ConsumerState<UserInfoTabView>
         children: [
           SizedBox(
             width: double.infinity,
-            child: TabBar(
-              controller: _tabController,
-              labelPadding: const EdgeInsets.symmetric(horizontal: 8.0),
-              indicatorSize: TabBarIndicatorSize.tab,
-              indicatorColor: Theme.of(context).custom.colorTheme.blurple,
-              labelColor: Colors.white,
-              tabs: const [
-                Tab(text: "About"),
-                Tab(text: "Mutual Friends"),
-                Tab(text: "Mutual Servers"),
-              ],
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: TabBar(
+                controller: _tabController,
+                labelPadding: const EdgeInsets.symmetric(horizontal: 8.0),
+                indicatorSize: TabBarIndicatorSize.tab,
+                indicatorColor: Theme.of(context).custom.colorTheme.blurple,
+                labelColor: Colors.white,
+                tabs: const [
+                  Tab(text: "About"),
+                  Tab(text: "Mutual Friends"),
+                  Tab(text: "Mutual Servers"),
+                ],
+              ),
             ),
           ),
           // I really hate this method of laying out, but it's all I can come up with
@@ -189,7 +193,9 @@ class _UserInfoTabViewState extends ConsumerState<UserInfoTabView>
                   guildId: widget.guildId,
                 ),
                 MutualFriends(widget.userProfile),
-                const Center(child: Text("Mutual Servers Content")),
+                const Center(
+                    child: Text(
+                        "I'll add the guild card soon I just gotta make the buttons and stuff")),
               ],
             ),
           )
@@ -271,6 +277,12 @@ class _AboutUserTabState extends ConsumerState<AboutUserTab> {
         .watch(getMemberProvider(widget.guildId, widget.userProfile.user.id))
         .valueOrNull;
 
+    if (member == null) {
+      return LoadingAnimationWidget.fallingDot(
+          color: Theme.of(context).custom.colorTheme.deselectedChannelText,
+          size: 24);
+    }
+
     return Container(
       decoration: BoxDecoration(
         color: Theme.of(context).custom.colorTheme.background,
@@ -287,48 +299,56 @@ class _AboutUserTabState extends ConsumerState<AboutUserTab> {
             ),
             Row(
               children: [
-                for (var roleId in member!.roleIds)
-                  Builder(builder: (context) {
-                    // print("looking for role ${roleId}");
-                    var role = ref.watch(roleControllerProvider(roleId))!;
-                    return OutlinedButton(
-                        style: OutlinedButton.styleFrom(
-                          minimumSize: Size.zero,
-                          padding: const EdgeInsets.all(4),
-                          side: const BorderSide(
-                            color: Colors.transparent,
-                            width: 0,
+                for (var roleId in member.roleIds)
+                  Padding(
+                    padding: const EdgeInsets.all(2),
+                    child: Builder(builder: (context) {
+                      // print("looking for role ${roleId}");
+                      var role = ref.watch(roleControllerProvider(roleId))!;
+                      return OutlinedButton(
+                          style: OutlinedButton.styleFrom(
+                            minimumSize: Size.zero,
+                            padding: const EdgeInsets.all(4),
+                            side: const BorderSide(
+                              color: Colors.transparent,
+                              width: 0,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(4),
+                            ),
+                            foregroundColor: Theme.of(context)
+                                .custom
+                                .colorTheme
+                                .selectedChannelText,
+                            backgroundColor:
+                                Theme.of(context).custom.colorTheme.foreground,
                           ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(4),
-                          ),
-                          foregroundColor: Theme.of(context)
-                              .custom
-                              .colorTheme
-                              .selectedChannelText,
-                          backgroundColor:
-                              Theme.of(context).custom.colorTheme.foreground,
-                        ),
-                        onPressed: () {},
-                        child: Row(
-                          children: [
-                            Container(
-                              width: 12,
-                              height: 12,
-                              decoration: BoxDecoration(
-                                color: Color.fromARGB(255, role.color.r,
-                                    role.color.g, role.color.b),
-                                borderRadius: BorderRadius.circular(2),
+                          onPressed: () {},
+                          child: Row(
+                            children: [
+                              Container(
+                                width: 12,
+                                height: 12,
+                                decoration: BoxDecoration(
+                                  color: Color.fromARGB(255, role.color.r,
+                                      role.color.g, role.color.b),
+                                  borderRadius: BorderRadius.circular(2),
+                                ),
                               ),
-                            ),
-                            Text(
-                              role.name,
-                              style:
-                                  Theme.of(context).custom.textTheme.bodyText1,
-                            ),
-                          ],
-                        ));
-                  }),
+                              Padding(
+                                padding: const EdgeInsets.all(2),
+                                child: Text(
+                                  role.name,
+                                  style: Theme.of(context)
+                                      .custom
+                                      .textTheme
+                                      .bodyText2,
+                                ),
+                              ),
+                            ],
+                          ));
+                    }),
+                  ),
               ],
             )
           ],
@@ -347,8 +367,11 @@ class _AboutUserTabState extends ConsumerState<AboutUserTab> {
         right: 8.0,
       ),
       children: [
-        bioCard(bio ?? ""),
-        const SizedBox(height: 12),
+        if (bio != "")
+          Padding(
+            padding: const EdgeInsets.only(bottom: 12),
+            child: bioCard(bio ?? ""),
+          ),
         rolesCard(),
       ],
     );
