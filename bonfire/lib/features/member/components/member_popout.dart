@@ -128,6 +128,7 @@ class UserInfoTabView extends ConsumerStatefulWidget {
 class _UserInfoTabViewState extends ConsumerState<UserInfoTabView>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
+  // Function()? _drawerListener;
   double drawerHeight = 0;
 
   @override
@@ -137,18 +138,21 @@ class _UserInfoTabViewState extends ConsumerState<UserInfoTabView>
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (shouldUseMobileLayout(context)) {
-        GlobalDrawer.of(context)!.controller.addListener(() {
-          setState(() {
-            drawerHeight = GlobalDrawer.of(context)!.controller.value;
-          });
-        });
+        GlobalDrawer.of(context)!.controller.addListener(_drawerListener);
       }
+    });
+  }
+
+  void _drawerListener() {
+    setState(() {
+      drawerHeight = GlobalDrawer.of(context)!.controller.value;
     });
   }
 
   @override
   void dispose() {
     _tabController.dispose();
+    GlobalDrawer.of(context)?.controller.removeListener(_drawerListener);
     super.dispose();
   }
 
@@ -297,11 +301,14 @@ class _AboutUserTabState extends ConsumerState<AboutUserTab> {
               "Roles",
               style: Theme.of(context).custom.textTheme.titleSmall,
             ),
-            Row(
+            Wrap(
+              spacing: 6,
+              // I cannot explain this, and I am very sorry it was ever written
+              runSpacing: -12,
               children: [
                 for (var roleId in member.roleIds)
                   Padding(
-                    padding: const EdgeInsets.all(2),
+                    padding: const EdgeInsets.all(0),
                     child: Builder(builder: (context) {
                       // print("looking for role ${roleId}");
                       var role = ref.watch(roleControllerProvider(roleId))!;
@@ -324,28 +331,32 @@ class _AboutUserTabState extends ConsumerState<AboutUserTab> {
                                 Theme.of(context).custom.colorTheme.foreground,
                           ),
                           onPressed: () {},
-                          child: Row(
-                            children: [
-                              Container(
-                                width: 12,
-                                height: 12,
-                                decoration: BoxDecoration(
-                                  color: Color.fromARGB(255, role.color.r,
-                                      role.color.g, role.color.b),
-                                  borderRadius: BorderRadius.circular(2),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 4, vertical: 2),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Container(
+                                  width: 12,
+                                  height: 12,
+                                  decoration: BoxDecoration(
+                                    color: Color.fromARGB(255, role.color.r,
+                                        role.color.g, role.color.b),
+                                    shape: BoxShape.circle,
+                                  ),
                                 ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(2),
-                                child: Text(
-                                  role.name,
-                                  style: Theme.of(context)
-                                      .custom
-                                      .textTheme
-                                      .bodyText2,
-                                ),
-                              ),
-                            ],
+                                const SizedBox(width: 6),
+                                Text(role.name,
+                                    style: Theme.of(context)
+                                        .custom
+                                        .textTheme
+                                        .caption
+                                        .copyWith(
+                                          fontWeight: FontWeight.w600,
+                                        )),
+                              ],
+                            ),
                           ));
                     }),
                   ),
@@ -361,10 +372,11 @@ class _AboutUserTabState extends ConsumerState<AboutUserTab> {
   Widget build(BuildContext context) {
     final bio = widget.userProfile.userProfile.bio;
     return ListView(
-      padding: const EdgeInsets.only(
+      padding: EdgeInsets.only(
         top: 8.0,
         left: 8.0,
         right: 8.0,
+        bottom: MediaQuery.of(context).padding.bottom,
       ),
       children: [
         if (bio != "")

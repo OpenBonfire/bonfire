@@ -26,8 +26,8 @@ class GlobalDrawerState extends State<GlobalDrawer>
     controller = RubberAnimationController(
       initialValue: 0,
       duration: const Duration(milliseconds: 150),
-      upperBoundValue: AnimationControllerValue(percentage: 0.7),
-      halfBoundValue: AnimationControllerValue(percentage: 0.4),
+      upperBoundValue: AnimationControllerValue(percentage: 0.85),
+      halfBoundValue: AnimationControllerValue(percentage: 0.55),
       lowerBoundValue: AnimationControllerValue(percentage: 0),
       // springDescription:
       //     const SpringDescription(damping: 0.1, stiffness: 50, mass: 50),
