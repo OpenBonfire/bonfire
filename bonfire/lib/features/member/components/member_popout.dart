@@ -309,8 +309,7 @@ class _AboutUserTabState extends ConsumerState<AboutUserTab> {
             ),
             Wrap(
               spacing: 6,
-              // I cannot explain this, and I am very sorry it was ever written
-              runSpacing: -12,
+              runSpacing: 6,
               children: [
                 for (var roleId in member.roleIds)
                   Padding(
