@@ -13,6 +13,7 @@ import 'package:bonfire/theme/theme.dart';
 import 'package:collection/collection.dart';
 import 'package:firebridge/firebridge.dart' hide Builder;
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_prism/flutter_prism.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
@@ -144,6 +145,8 @@ class _UserInfoTabViewState extends ConsumerState<UserInfoTabView>
   }
 
   void _drawerListener() {
+    final drawer = GlobalDrawer.of(context);
+    if (drawer == null) return;
     setState(() {
       drawerHeight = GlobalDrawer.of(context)!.controller.value;
     });
@@ -173,6 +176,9 @@ class _UserInfoTabViewState extends ConsumerState<UserInfoTabView>
                 indicatorSize: TabBarIndicatorSize.tab,
                 indicatorColor: Theme.of(context).custom.colorTheme.blurple,
                 labelColor: Colors.white,
+                onTap: (index) {
+                  HapticFeedback.lightImpact();
+                },
                 tabs: const [
                   Tab(text: "About"),
                   Tab(text: "Mutual Friends"),

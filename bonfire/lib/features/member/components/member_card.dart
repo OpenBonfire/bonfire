@@ -8,6 +8,7 @@ import 'package:bonfire/shared/components/presence_text.dart';
 import 'package:bonfire/theme/theme.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class MemberCard extends ConsumerStatefulWidget {
@@ -44,6 +45,7 @@ class _MemberCardState extends ConsumerState<MemberCard> {
       children: [
         OutlinedButton(
           onPressed: () {
+            HapticFeedback.mediumImpact();
             if (shouldUseDesktopLayout(context)) {
               showDialog(
                   context: context,
