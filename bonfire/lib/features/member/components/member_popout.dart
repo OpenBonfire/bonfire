@@ -131,11 +131,16 @@ class _UserInfoTabViewState extends ConsumerState<UserInfoTabView>
   late TabController _tabController;
   // Function()? _drawerListener;
   double drawerHeight = 0;
+  bool showMutuals = false;
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 3, vsync: this);
+
+    showMutuals = widget.userProfile.mutualFriendsCount != null &&
+        widget.userProfile.mutualFriendsCount! > 0;
+
+    _tabController = TabController(length: showMutuals ? 3 : 2, vsync: this);
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (shouldUseMobileLayout(context)) {
@@ -179,10 +184,10 @@ class _UserInfoTabViewState extends ConsumerState<UserInfoTabView>
                 onTap: (index) {
                   HapticFeedback.lightImpact();
                 },
-                tabs: const [
-                  Tab(text: "About"),
-                  Tab(text: "Mutual Friends"),
-                  Tab(text: "Mutual Servers"),
+                tabs: [
+                  const Tab(text: "About"),
+                  if (showMutuals) const Tab(text: "Mutual Friends"),
+                  const Tab(text: "Mutual Servers"),
                 ],
               ),
             ),
@@ -202,7 +207,7 @@ class _UserInfoTabViewState extends ConsumerState<UserInfoTabView>
                   widget.userProfile,
                   guildId: widget.guildId,
                 ),
-                MutualFriends(widget.userProfile),
+                if (showMutuals) MutualFriends(widget.userProfile),
                 const Center(
                     child: Text(
                         "I'll add the guild card soon I just gotta make the buttons and stuff")),
