@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:bonfire/features/friends/views/friend_card.dart';
 import 'package:bonfire/features/member/repositories/user_profile.dart';
 import 'package:bonfire/features/user/components/presence_avatar.dart';
@@ -158,11 +160,13 @@ class _UserInfoTabViewState extends ConsumerState<UserInfoTabView>
             ),
           ),
           // I really hate this method of laying out, but it's all I can come up with
-          // it won't lay out when using any other method, like expanded, flex, etc
+          // it won't lay out when using any other method, like expanded, flex, etc.
+
           SizedBox(
             height: shouldUseDesktopLayout(context)
                 ? 332
-                : (drawerHeight * MediaQuery.of(context).size.height) - 318,
+                : max(
+                    drawerHeight * MediaQuery.of(context).size.height - 318, 0),
             child: TabBarView(
               controller: _tabController,
               children: [
