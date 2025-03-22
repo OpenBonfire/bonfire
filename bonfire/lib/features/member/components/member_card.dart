@@ -58,8 +58,12 @@ class _MemberCardState extends ConsumerState<MemberCard> {
                   });
             } else {
               // open drawer
-              GlobalDrawer.of(context)!.setChild(UserPopoutCard(widget.guild.id,
-                  guildId: widget.member.user!.id));
+              GlobalDrawer.of(context)!.setChild(
+                UserPopoutCard(
+                  widget.member.user!.id,
+                  guildId: widget.guild.id,
+                ),
+              );
 
               GlobalDrawer.of(context)!.toggleDrawer();
             }
