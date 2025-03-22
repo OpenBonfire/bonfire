@@ -34,7 +34,7 @@ class _FriendsListState extends ConsumerState<FriendsList> {
           itemCount: relationships.length,
           itemBuilder: (BuildContext context, int index) {
             return FriendCard(
-              relationship: relationships[index],
+              user: relationships[index].user,
             );
           },
         ),

@@ -13,12 +13,17 @@ class UserUpdateBuilder extends UpdateBuilder<User> {
   /// New user's banner.
   ImageBuilder? banner;
 
-  UserUpdateBuilder({this.username, this.avatar = sentinelImageBuilder, this.banner = sentinelImageBuilder});
+  UserUpdateBuilder(
+      {this.username,
+      this.avatar = sentinelImageBuilder,
+      this.banner = sentinelImageBuilder});
 
   @override
   Map<String, Object?> build() => {
         if (username != null) 'username': username!,
-        if (!identical(avatar, sentinelImageBuilder)) 'avatar': avatar?.buildDataString(),
-        if (!identical(banner, sentinelImageBuilder)) 'banner': banner?.buildDataString(),
+        if (!identical(avatar, sentinelImageBuilder))
+          'avatar': avatar?.buildDataString(),
+        if (!identical(banner, sentinelImageBuilder))
+          'banner': banner?.buildDataString(),
       };
 }

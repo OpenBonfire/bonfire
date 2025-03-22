@@ -7,10 +7,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class FriendCard extends ConsumerStatefulWidget {
-  final Relationship relationship;
+  final User user;
   const FriendCard({
     super.key,
-    required this.relationship,
+    required this.user,
   });
 
   @override
@@ -21,7 +21,7 @@ class _FriendCardState extends ConsumerState<FriendCard> {
   @override
   Widget build(BuildContext context) {
     PresenceUpdateEvent? presence =
-        ref.watch(presenceControllerProvider(widget.relationship.user.id));
+        ref.watch(presenceControllerProvider(widget.user.id));
 
     // var privateMessages = ref.watch(privateMessageHistoryProvider);
     // print(privateMessages.first.recipients.first);
@@ -55,7 +55,7 @@ class _FriendCardState extends ConsumerState<FriendCard> {
             Padding(
               padding: const EdgeInsets.all(8),
               child: PresenceAvatar(
-                user: widget.relationship.user,
+                user: widget.user,
                 initialPresence: presence,
               ),
             ),
@@ -65,12 +65,12 @@ class _FriendCardState extends ConsumerState<FriendCard> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    widget.relationship.user.username,
+                    widget.user.username,
                     style: Theme.of(context).custom.textTheme.subtitle1,
                     overflow: TextOverflow.ellipsis,
                   ),
                   PresenceText(
-                    userid: widget.relationship.user.id,
+                    userid: widget.user.id,
                     initialPresence: presence,
                   ),
                 ],

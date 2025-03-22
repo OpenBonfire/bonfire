@@ -256,6 +256,35 @@ class UserManager extends ReadOnlyManager<User> {
         raw['guild_badges'] as List<Object?>,
         (Object? raw) => parseProfileBadge(raw as Map<String, Object?>),
       ),
+      mutualFriends: parseMany(
+        raw['mutual_friends'] as List<dynamic>? ?? [],
+        (Object? raw) => parse(raw as Map<String, Object?>),
+      ),
+      mutualFriendsCount: raw['mutual_friends_count'] as int?,
+      legacyUsername: raw['legacy_username'] as String?,
+      connections: tryParseMany(
+        raw['connections'] as List<Connection>?,
+        (Object? raw) => parseConnection(raw as Map<String, Object?>),
+      ),
+      applicationRoleConnections: tryParseMany(
+        raw['application_role_connections'] as List<ApplicationRoleConnection>?,
+        (Object? raw) => parseApplicationRoleConnection(
+          raw as Map<String, Object?>,
+        ),
+      ),
+      // TODO: Parse applications
+      // application: tryParse(
+      //   raw['application'] as Map<String, Object?>?,
+      //   (Map<String, Object?> raw) =>
+      // ),
+      // TODO: Make NitroType
+      premiumType: raw['premium_type'] as num?,
+      premiumSince: (raw['premium_since'] != null)
+          ? DateTime.parse(raw['premium_since'] as String)
+          : null,
+      premiumGuildSince: (raw['premium_guild_since'] != null)
+          ? DateTime.parse(raw['premium_guild_since'] as String)
+          : null,
     );
   }
 
@@ -340,11 +369,30 @@ class UserManager extends ReadOnlyManager<User> {
   }
 
   /// Fetch a user's profile
-  Future<UserProfile> fetchUserProfile(Snowflake userId) async {
+  Future<UserProfile> fetchUserProfile(
+    Snowflake userId, {
+    bool withMutualGuilds = false,
+    bool withMutualFriends = false,
+    bool withMutualFriendsCount = false,
+    String? friendToken,
+    Snowflake? guildId,
+    Snowflake? connectionsRoleId,
+    Snowflake? joinRequestId,
+  }) async {
     final route = HttpRoute()
       ..users(id: userId.toString())
       ..profile();
-    final request = BasicRequest(route);
+    final request = BasicRequest(route, queryParameters: {
+      "type": "popout",
+      "with_mutual_guilds": withMutualGuilds.toString(),
+      "with_mutual_friends": withMutualFriends.toString(),
+      "with_mutual_friends_count": withMutualFriendsCount.toString(),
+      if (friendToken != null) "friend_token": friendToken,
+      if (guildId != null) "guild_id": guildId.toString(),
+      if (connectionsRoleId != null)
+        "connections_role_id": connectionsRoleId.toString(),
+      if (joinRequestId != null) "join_request_id": joinRequestId.toString()
+    });
 
     final response = await client.httpHandler.executeSafe(request);
     final profile = client.users

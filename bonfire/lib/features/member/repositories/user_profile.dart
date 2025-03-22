@@ -12,6 +12,11 @@ class UserProfileController extends _$UserProfileController {
     var auth = ref.watch(authProvider.notifier).getAuth();
     if (auth is! AuthUser) return null;
 
-    return await auth.client.users.fetchUserProfile(userId);
+    return await auth.client.users.fetchUserProfile(
+      userId,
+      withMutualFriends: true,
+      withMutualFriendsCount: true,
+      withMutualGuilds: true,
+    );
   }
 }

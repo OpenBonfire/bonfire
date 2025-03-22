@@ -22,7 +22,7 @@ class UserProfile with ToStringHelper {
   final List<ProfileBadge> guildBadges;
   final String? legacyUsername;
   final List<MutualGuild>? mutualGuilds;
-  final List<PartialUser>? mutualFriends;
+  final List<User>? mutualFriends;
   final num? mutualFriendsCount;
   final List<Connection>? connections;
   final List<ApplicationRoleConnection>? applicationRoleConnections;
