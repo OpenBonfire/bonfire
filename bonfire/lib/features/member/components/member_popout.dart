@@ -42,53 +42,50 @@ class _UserPopoutCardState extends ConsumerState<UserPopoutCard> {
         child: (profile != null)
             ? Stack(
                 children: [
-                  Flexible(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        if (banner != null)
-                          Image.network(
-                            "${banner.url}?size=480",
-                            fit: BoxFit.cover,
-                            width: double.infinity,
-                            height: 150,
-                          )
-                        else
-                          Container(
-                            height: 150,
-                            decoration: BoxDecoration(
-                              color: (profile.userProfile.accentColor != null)
-                                  ? Color(profile.userProfile.accentColor!)
-                                      .withAlpha(255)
-                                  : theme.colorTheme.background,
-                            ),
-                          ),
-                        const SizedBox(height: 50),
-                        Padding(
-                          padding: const EdgeInsets.all(12),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                profile.guildMember?.nick ??
-                                    profile.user.globalName ??
-                                    profile.user.username,
-                                style: Theme.of(context)
-                                    .custom
-                                    .textTheme
-                                    .titleMedium,
-                              ),
-                              Text(
-                                profile.user.username,
-                                style:
-                                    Theme.of(context).custom.textTheme.caption,
-                              ),
-                            ],
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      if (banner != null)
+                        Image.network(
+                          "${banner.url}?size=480",
+                          fit: BoxFit.cover,
+                          width: double.infinity,
+                          height: 150,
+                        )
+                      else
+                        Container(
+                          height: 150,
+                          decoration: BoxDecoration(
+                            color: (profile.userProfile.accentColor != null)
+                                ? Color(profile.userProfile.accentColor!)
+                                    .withAlpha(255)
+                                : theme.colorTheme.background,
                           ),
                         ),
-                        Expanded(child: UserInfoTabView(profile)),
-                      ],
-                    ),
+                      const SizedBox(height: 50),
+                      Padding(
+                        padding: const EdgeInsets.all(12),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              profile.guildMember?.nick ??
+                                  profile.user.globalName ??
+                                  profile.user.username,
+                              style: Theme.of(context)
+                                  .custom
+                                  .textTheme
+                                  .titleMedium,
+                            ),
+                            Text(
+                              profile.user.username,
+                              style: Theme.of(context).custom.textTheme.caption,
+                            ),
+                          ],
+                        ),
+                      ),
+                      Expanded(child: UserInfoTabView(profile)),
+                    ],
                   ),
                   Positioned(
                     top: 100,
@@ -154,8 +151,8 @@ class _UserInfoTabViewState extends ConsumerState<UserInfoTabView>
               labelColor: Colors.white,
               tabs: const [
                 Tab(text: "About"),
-                Tab(text: "Mutual Servers"),
                 Tab(text: "Mutual Friends"),
+                Tab(text: "Mutual Servers"),
               ],
             ),
           ),
@@ -171,8 +168,8 @@ class _UserInfoTabViewState extends ConsumerState<UserInfoTabView>
               controller: _tabController,
               children: [
                 const Center(child: Text("About Content")),
-                const Center(child: Text("Mutual Servers Content")),
                 MutualFriends(widget.userProfile),
+                const Center(child: Text("Mutual Servers Content")),
               ],
             ),
           )
