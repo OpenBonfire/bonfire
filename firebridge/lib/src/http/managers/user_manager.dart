@@ -256,6 +256,15 @@ class UserManager extends ReadOnlyManager<User> {
         raw['guild_badges'] as List<Object?>,
         (Object? raw) => parseProfileBadge(raw as Map<String, Object?>),
       ),
+      guildMember: tryParse(
+        raw['guild_member'] as Map<String, Object?>?,
+        (Map<String, Object?> raw) => client
+            .guilds[Snowflake.parse(raw['guild_id'] as String)].members
+            .parse(
+          raw,
+          userId: client.user.id,
+        ),
+      ),
       mutualFriends: parseMany(
         raw['mutual_friends'] as List<dynamic>? ?? [],
         (Object? raw) => parse(raw as Map<String, Object?>),

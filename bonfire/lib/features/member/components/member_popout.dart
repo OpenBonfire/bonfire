@@ -1,20 +1,27 @@
 import 'dart:math';
 
 import 'package:bonfire/features/friends/views/friend_card.dart';
+import 'package:bonfire/features/guild/controllers/role.dart';
+import 'package:bonfire/features/guild/repositories/member.dart';
 import 'package:bonfire/features/member/repositories/user_profile.dart';
 import 'package:bonfire/features/user/components/presence_avatar.dart';
 import 'package:bonfire/features/user/controllers/presence.dart';
 import 'package:bonfire/shared/components/drawer/mobile_drawer.dart';
 import 'package:bonfire/shared/utils/platform.dart';
+import 'package:bonfire/shared/utils/style/markdown/stylesheet.dart';
 import 'package:bonfire/theme/theme.dart';
 import 'package:collection/collection.dart';
 import 'package:firebridge/firebridge.dart' hide Builder;
 import 'package:flutter/material.dart';
+import 'package:flutter_prism/flutter_prism.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:markdown_viewer/markdown_viewer.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class UserPopoutCard extends ConsumerStatefulWidget {
   final Snowflake userId;
-  const UserPopoutCard(this.userId, {super.key});
+  final Snowflake guildId;
+  const UserPopoutCard(this.userId, {super.key, required this.guildId});
 
   @override
   ConsumerState<UserPopoutCard> createState() => _UserPopoutCardState();
@@ -84,7 +91,11 @@ class _UserPopoutCardState extends ConsumerState<UserPopoutCard> {
                           ],
                         ),
                       ),
-                      Expanded(child: UserInfoTabView(profile)),
+                      Expanded(
+                          child: UserInfoTabView(
+                        profile,
+                        guildId: widget.guildId,
+                      )),
                     ],
                   ),
                   Positioned(
@@ -106,7 +117,8 @@ class _UserPopoutCardState extends ConsumerState<UserPopoutCard> {
 
 class UserInfoTabView extends ConsumerStatefulWidget {
   final UserProfile userProfile;
-  const UserInfoTabView(this.userProfile, {super.key});
+  final Snowflake guildId;
+  const UserInfoTabView(this.userProfile, {super.key, required this.guildId});
 
   @override
   ConsumerState<UserInfoTabView> createState() => _UserInfoTabViewState();
@@ -121,10 +133,15 @@ class _UserInfoTabViewState extends ConsumerState<UserInfoTabView>
   void initState() {
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
-    GlobalDrawer.of(context)!.controller.addListener(() {
-      setState(() {
-        drawerHeight = GlobalDrawer.of(context)!.controller.value;
-      });
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (shouldUseMobileLayout(context)) {
+        GlobalDrawer.of(context)!.controller.addListener(() {
+          setState(() {
+            drawerHeight = GlobalDrawer.of(context)!.controller.value;
+          });
+        });
+      }
     });
   }
 
@@ -167,7 +184,10 @@ class _UserInfoTabViewState extends ConsumerState<UserInfoTabView>
             child: TabBarView(
               controller: _tabController,
               children: [
-                const Center(child: Text("About Content")),
+                AboutUserTab(
+                  widget.userProfile,
+                  guildId: widget.guildId,
+                ),
                 MutualFriends(widget.userProfile),
                 const Center(child: Text("Mutual Servers Content")),
               ],
@@ -175,6 +195,162 @@ class _UserInfoTabViewState extends ConsumerState<UserInfoTabView>
           )
         ],
       ),
+    );
+  }
+}
+
+class AboutUserTab extends ConsumerStatefulWidget {
+  final UserProfile userProfile;
+  final Snowflake guildId;
+  const AboutUserTab(this.userProfile, {super.key, required this.guildId});
+
+  @override
+  ConsumerState<AboutUserTab> createState() => _AboutUserTabState();
+}
+
+class _AboutUserTabState extends ConsumerState<AboutUserTab> {
+  Widget bioCard(String bio) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Theme.of(context).custom.colorTheme.background,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      padding: const EdgeInsets.all(12),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "About Me",
+            style: Theme.of(context).custom.textTheme.titleSmall,
+          ),
+          const SizedBox(height: 8),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              MarkdownViewer(
+                bio,
+                enableTaskList: true,
+                enableSuperscript: false,
+                enableSubscript: false,
+                enableFootnote: false,
+                enableImageSize: false,
+                selectable: shouldUseDesktopLayout(context),
+                enableKbd: false,
+                syntaxExtensions: const [],
+                elementBuilders: const [],
+                highlightBuilder: (text, language, infoString) {
+                  final prism = Prism(
+                    style: Theme.of(context).brightness == Brightness.dark
+                        ? const PrismStyle.dark()
+                        : const PrismStyle(),
+                  );
+                  try {
+                    var rendered = prism.render(text, language ?? 'plain');
+                    return rendered;
+                  } catch (e) {
+                    return <TextSpan>[TextSpan(text: text)];
+                  }
+                },
+                onTapLink: (href, title) {
+                  if (href != null) {
+                    launchUrl(Uri.parse(href),
+                        mode: LaunchMode.externalApplication);
+                  }
+                },
+                styleSheet: getMarkdownStyleSheet(context),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget rolesCard() {
+    final member = ref
+        .watch(getMemberProvider(widget.guildId, widget.userProfile.user.id))
+        .valueOrNull;
+
+    return Container(
+      decoration: BoxDecoration(
+        color: Theme.of(context).custom.colorTheme.background,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(12),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "Roles",
+              style: Theme.of(context).custom.textTheme.titleSmall,
+            ),
+            Row(
+              children: [
+                for (var roleId in member!.roleIds)
+                  Builder(builder: (context) {
+                    // print("looking for role ${roleId}");
+                    var role = ref.watch(roleControllerProvider(roleId))!;
+                    return OutlinedButton(
+                        style: OutlinedButton.styleFrom(
+                          minimumSize: Size.zero,
+                          padding: const EdgeInsets.all(4),
+                          side: const BorderSide(
+                            color: Colors.transparent,
+                            width: 0,
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                          foregroundColor: Theme.of(context)
+                              .custom
+                              .colorTheme
+                              .selectedChannelText,
+                          backgroundColor:
+                              Theme.of(context).custom.colorTheme.foreground,
+                        ),
+                        onPressed: () {},
+                        child: Row(
+                          children: [
+                            Container(
+                              width: 12,
+                              height: 12,
+                              decoration: BoxDecoration(
+                                color: Color.fromARGB(255, role.color.r,
+                                    role.color.g, role.color.b),
+                                borderRadius: BorderRadius.circular(2),
+                              ),
+                            ),
+                            Text(
+                              role.name,
+                              style:
+                                  Theme.of(context).custom.textTheme.bodyText1,
+                            ),
+                          ],
+                        ));
+                  }),
+              ],
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final bio = widget.userProfile.userProfile.bio;
+    return ListView(
+      padding: const EdgeInsets.only(
+        top: 8.0,
+        left: 8.0,
+        right: 8.0,
+      ),
+      children: [
+        bioCard(bio ?? ""),
+        const SizedBox(height: 12),
+        rolesCard(),
+      ],
     );
   }
 }
