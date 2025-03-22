@@ -24,6 +24,9 @@ class Messages extends _$Messages {
 
   @override
   Future<List<Message>?> build(Snowflake channelId) async {
+    // I want it to reload if we re-auth; this might not work
+    ref.watch(authProvider);
+
     if (loadedMessages.isNotEmpty) {
       return loadedMessages;
     }

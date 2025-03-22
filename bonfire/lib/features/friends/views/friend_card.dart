@@ -65,7 +65,7 @@ class _FriendCardState extends ConsumerState<FriendCard> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    widget.user.username,
+                    widget.user.globalName ?? widget.user.username,
                     style: Theme.of(context).custom.textTheme.subtitle1,
                     overflow: TextOverflow.ellipsis,
                   ),
