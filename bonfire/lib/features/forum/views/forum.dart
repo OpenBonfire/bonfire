@@ -32,7 +32,7 @@ class _ForumViewState extends ConsumerState<ForumView> {
 
   void _onScroll() {
     if (_scrollController.position.pixels >=
-        _scrollController.position.maxScrollExtent - 1000) {
+        _scrollController.position.maxScrollExtent - 100) {
       final channel = ref.read(forumsProvider(widget.channelId)).valueOrNull;
       if (channel != null) {
         final forumPosts = ref.read(forumPostsProvider(channel.id).notifier);
