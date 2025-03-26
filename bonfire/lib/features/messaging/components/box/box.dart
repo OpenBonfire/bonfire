@@ -133,7 +133,7 @@ class _MessageBoxState extends ConsumerState<MessageBox>
             style: OutlinedButton.styleFrom(
               padding: EdgeInsets.zero,
               backgroundColor: mentioned
-                  ? Colors.yellow.withOpacity(0.1)
+                  ? const Color.fromARGB(255, 252, 218, 155).withOpacity(0.1)
                   : Colors.transparent,
               minimumSize: Size.zero,
               tapTargetSize: MaterialTapTargetSize.shrinkWrap,
@@ -160,8 +160,8 @@ class _MessageBoxState extends ConsumerState<MessageBox>
                       alignment: Alignment.centerLeft,
                       child: Container(
                         width: 2,
-                        decoration:
-                            const BoxDecoration(color: Color(0Xffe5c07b)),
+                        decoration: const BoxDecoration(
+                            color: Color.fromARGB(255, 252, 218, 155)),
                       ),
                     ),
                   ),

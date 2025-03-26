@@ -65,7 +65,7 @@ class ReactionWidget extends ConsumerWidget {
         borderRadius: BorderRadius.circular(8),
         color: reaction.me
             ? theme.colorTheme.blurple.withValues(alpha: 0.2)
-            : null,
+            : theme.colorTheme.foreground,
         border: Border.all(
           color: reaction.me
               ? theme.colorTheme.blurple
@@ -100,13 +100,15 @@ class ReactionWidget extends ConsumerWidget {
               (reaction.emoji is TextEmoji)
                   ? SizedBox(
                       child: Text((reaction.emoji as TextEmoji).name,
-                          style:
-                              Theme.of(context).custom.textTheme.titleMedium),
+                          style: Theme.of(context).custom.textTheme.bodyText1),
                     )
-                  : Image.network(
-                      (reaction.emoji as GuildEmoji).image.url.toString(),
-                      width: 20,
-                      height: 20,
+                  : ClipRRect(
+                      borderRadius: BorderRadius.circular(4),
+                      child: Image.network(
+                        (reaction.emoji as GuildEmoji).image.url.toString(),
+                        width: 20,
+                        height: 20,
+                      ),
                     ),
               const SizedBox(width: 4),
               Text(
