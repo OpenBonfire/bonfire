@@ -58,14 +58,14 @@ class _ImageAttachmentState extends ConsumerState<ImageAttachment> {
                         urlString,
                         webHtmlElementStrategy: WebHtmlElementStrategy.prefer,
                       ),
-                      fit: BoxFit.contain,
+                      fit: BoxFit.scaleDown,
                     )
                   : Image(
                       image: NetworkImage(
                         urlString,
                         webHtmlElementStrategy: WebHtmlElementStrategy.prefer,
                       ),
-                      fit: BoxFit.contain,
+                      fit: BoxFit.scaleDown,
                     );
             },
           ),
