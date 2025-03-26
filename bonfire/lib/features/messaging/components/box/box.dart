@@ -123,93 +123,113 @@ class _MessageBoxState extends ConsumerState<MessageBox>
 
     bool mentioned = mentionsSelf(message);
 
+    Widget buildBoxContent() {
+      return Stack(
+        children: [
+          if (mentioned)
+            Positioned.fill(
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Container(
+                  width: 2,
+                  decoration: const BoxDecoration(
+                      color: Color.fromARGB(255, 252, 218, 155)),
+                ),
+              ),
+            ),
+          Padding(
+            padding: EdgeInsets.only(
+                left: mentioned ? 2 : 0,
+                right: 16,
+                top: mentioned ? 8 : 0,
+                bottom: mentioned ? 4 : 0),
+            child: Column(
+              children: [
+                if (message.referencedMessage != null && !isSmartwatch(context))
+                  Padding(
+                    padding: const EdgeInsets.only(top: 4),
+                    child: MessageReply(
+                      guildId: widget.guildId,
+                      channel: widget.channel,
+                      parentMessage: message,
+                    ),
+                  ),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 4),
+                  child: _buildMessageLayout(
+                    context,
+                    name!,
+                    textColor,
+                    message,
+                    roleIcon,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          if (_isHovering)
+            Positioned(
+              top: 0,
+              right: 0,
+              child: OverlayEntry(
+                maintainState: true,
+                builder: (context) => ContextPopout(
+                  messageId: message.id,
+                ),
+              ).builder(context),
+            ),
+        ],
+      );
+    }
+
+    Color boxColor = Colors.transparent;
+    if (_isHovering) {
+      boxColor =
+          Theme.of(context).custom.colorTheme.foreground.withOpacity(0.3);
+    }
+
+    if (mentioned) {
+      boxColor = const Color.fromARGB(255, 252, 218, 155).withOpacity(0.1);
+    }
+
     return MouseRegion(
       onEnter: (_) => setState(() => _isHovering = true),
       onExit: (_) => setState(() => _isHovering = false),
       child: Column(
         children: [
           SizedBox(height: widget.showSenderInfo ? 16 : 0),
-          OutlinedButton(
-            style: OutlinedButton.styleFrom(
-              padding: EdgeInsets.zero,
-              backgroundColor: mentioned
-                  ? const Color.fromARGB(255, 252, 218, 155).withOpacity(0.1)
-                  : Colors.transparent,
-              minimumSize: Size.zero,
-              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-              side: BorderSide.none,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(0),
-              ),
-              // change hover / select color to white
-              foregroundColor: Theme.of(context).custom.colorTheme.foreground,
-            ),
-            onPressed: () {},
-            onLongPress: () {
-              if (shouldUseMobileLayout(context)) {
-                GlobalDrawer.of(context)!.toggleDrawer();
-                GlobalDrawer.of(context)!
-                    .setChild(ContextDrawer(messageId: widget.messageId));
-              }
-            },
-            child: Stack(
-              children: [
-                if (mentioned)
-                  Positioned.fill(
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Container(
-                        width: 2,
-                        decoration: const BoxDecoration(
-                            color: Color.fromARGB(255, 252, 218, 155)),
-                      ),
+          shouldUseMobileLayout(context)
+              ? OutlinedButton(
+                  style: OutlinedButton.styleFrom(
+                    padding: EdgeInsets.zero,
+                    backgroundColor: boxColor,
+                    minimumSize: Size.zero,
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    side: BorderSide.none,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(0),
                     ),
+                    // change hover / select color to white
+                    foregroundColor:
+                        Theme.of(context).custom.colorTheme.foreground,
                   ),
-                Padding(
-                  padding: EdgeInsets.only(
-                      left: mentioned ? 2 : 0,
-                      right: 16,
-                      top: mentioned ? 8 : 0,
-                      bottom: mentioned ? 4 : 0),
-                  child: Column(
-                    children: [
-                      if (message.referencedMessage != null &&
-                          !isSmartwatch(context))
-                        Padding(
-                          padding: const EdgeInsets.only(top: 4),
-                          child: MessageReply(
-                            guildId: widget.guildId,
-                            channel: widget.channel,
-                            parentMessage: message,
-                          ),
-                        ),
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 4),
-                        child: _buildMessageLayout(
-                          context,
-                          name,
-                          textColor,
-                          message,
-                          roleIcon,
-                        ),
-                      ),
-                    ],
+                  onPressed: () {},
+                  onLongPress: () {
+                    if (shouldUseMobileLayout(context)) {
+                      GlobalDrawer.of(context)!.toggleDrawer();
+                      GlobalDrawer.of(context)!
+                          .setChild(ContextDrawer(messageId: widget.messageId));
+                    }
+                  },
+                  child: buildBoxContent(),
+                )
+              : Container(
+                  decoration: BoxDecoration(
+                    color: boxColor,
+                    borderRadius: BorderRadius.circular(8),
                   ),
-                ),
-                if (_isHovering)
-                  Positioned(
-                    top: 0,
-                    right: 0,
-                    child: OverlayEntry(
-                      maintainState: true,
-                      builder: (context) => ContextPopout(
-                        messageId: message.id,
-                      ),
-                    ).builder(context),
-                  ),
-              ],
-            ),
-          ),
+                  child: buildBoxContent(),
+                )
         ],
       ),
     );
