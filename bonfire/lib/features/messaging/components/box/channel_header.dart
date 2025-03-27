@@ -47,17 +47,34 @@ class _ChannelHeaderState extends ConsumerState<ChannelHeader> {
                       alignment: Alignment.bottomLeft,
                       child: Padding(
                         padding: const EdgeInsets.only(bottom: 8),
-                        child: Text(
-                          "# ${widget.channelName}",
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 1,
-                          softWrap: false,
-                          style: GoogleFonts.publicSans(
-                            fontSize: 16,
-                            letterSpacing: 0.4,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.white,
-                          ),
+                        child: Row(
+                          children: [
+                            Text(
+                              "# ${widget.channelName}",
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                              softWrap: false,
+                              style: GoogleFonts.publicSans(
+                                fontSize: 16,
+                                letterSpacing: 0.4,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.white,
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            Text(
+                              "# ${widget.channelName}",
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                              softWrap: false,
+                              style: GoogleFonts.publicSans(
+                                fontSize: 14.5,
+                                letterSpacing: 0.4,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ),

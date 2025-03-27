@@ -46,7 +46,7 @@ class CustomTextTheme {
     color: const Color(0xFF585F6A),
   );
   final bodyText1 = TextStyle(
-    fontSize: 14,
+    fontSize: 15,
     fontFamily: _family,
     color: const Color.fromARGB(255, 255, 255, 255),
     fontWeight: FontWeight.w600,

@@ -10,6 +10,7 @@ import 'package:firebridge/src/builders/guild/widget.dart';
 import 'package:firebridge/src/builders/image.dart';
 import 'package:firebridge/src/builders/voice.dart';
 import 'package:firebridge/src/http/managers/manager.dart';
+import 'package:firebridge/src/http/managers/message_manager.dart';
 import 'package:firebridge/src/http/request.dart';
 import 'package:firebridge/src/http/route.dart';
 import 'package:firebridge/src/models/channel/channel.dart';
@@ -24,6 +25,7 @@ import 'package:firebridge/src/models/guild/template.dart';
 import 'package:firebridge/src/models/guild/welcome_screen.dart';
 import 'package:firebridge/src/models/invite/invite.dart';
 import 'package:firebridge/src/models/locale.dart';
+import 'package:firebridge/src/models/message/message.dart';
 import 'package:firebridge/src/models/permissions.dart';
 import 'package:firebridge/src/models/snowflake.dart';
 import 'package:firebridge/src/models/user/user.dart';
@@ -900,5 +902,23 @@ class GuildManager extends Manager<Guild> {
     // Templates aren't cached, so we don't need to remove it from any cache, but it still contains a nested user object we can cache.
     client.updateCacheWith(template);
     return template;
+  }
+
+  Future<List<Message>> searchMessages(Snowflake id, String query) async {
+    final route = HttpRoute()
+      ..guilds(id: id.toString())
+      ..messages()
+      ..search();
+
+    final request = BasicRequest(route, queryParameters: {'content': query});
+    final messages = await client.httpHandler.execute(request);
+
+    return parseMany(
+        messages.jsonBody['messages'] as List,
+        (Map<String, Object?> raw) => MessageManager(
+              client.options.messageCacheConfig,
+              client,
+              channelId: Snowflake.parse(raw['channel_id']!),
+            ).parse(raw));
   }
 }
