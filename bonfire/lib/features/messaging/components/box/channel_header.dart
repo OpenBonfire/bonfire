@@ -25,6 +25,16 @@ class _ChannelHeaderState extends ConsumerState<ChannelHeader> {
 
     String channelName = "";
     String? channelTopic;
+
+    if (channel is DmChannel) {
+      String name = "";
+      for (var recipient in channel.recipients) {
+        name += "${recipient.globalName ?? recipient.username}, ";
+      }
+
+      channelName = name.substring(0, name.length - 2);
+    }
+
     if (channel is GuildChannel) {
       channelName = channel.name;
     }

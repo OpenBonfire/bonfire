@@ -155,7 +155,7 @@ class _MessageBoxState extends ConsumerState<MessageBox>
                     ),
                   ),
                 Padding(
-                  padding: const EdgeInsets.only(bottom: 4),
+                  padding: const EdgeInsets.only(bottom: 0),
                   child: _buildMessageLayout(
                     context,
                     name!,
@@ -355,7 +355,7 @@ class _MessageBoxState extends ConsumerState<MessageBox>
                 attachment: attachment,
               ),
             )),
-        const SizedBox(height: 4),
+        // const SizedBox(height: 4),
         MessageReactions(
           guildId: widget.guildId,
           messageId: widget.messageId,

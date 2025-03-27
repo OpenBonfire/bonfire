@@ -32,16 +32,19 @@ class _MessageReactionsState extends ConsumerState<MessageReactions> {
       return Container();
     }
 
-    return Wrap(
-      spacing: 4,
-      runSpacing: 4,
-      children: [
-        for (var reaction in reactions)
-          ReactionWidget(
-            reaction: reaction,
-            messageId: widget.messageId,
-          ),
-      ],
+    return Padding(
+      padding: const EdgeInsets.only(top: 4),
+      child: Wrap(
+        spacing: 4,
+        runSpacing: 4,
+        children: [
+          for (var reaction in reactions)
+            ReactionWidget(
+              reaction: reaction,
+              messageId: widget.messageId,
+            ),
+        ],
+      ),
     );
   }
 }
