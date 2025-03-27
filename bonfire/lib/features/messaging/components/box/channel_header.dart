@@ -1,13 +1,17 @@
 import 'dart:ui';
+import 'package:bonfire/features/channels/controllers/channel.dart';
+import 'package:bonfire/features/notifications/controllers/notification.dart';
 import 'package:bonfire/features/overview/controllers/member_list.dart';
 import 'package:bonfire/shared/utils/platform.dart';
+import 'package:bonfire/theme/theme.dart';
+import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class ChannelHeader extends ConsumerStatefulWidget {
-  final String channelName;
-  const ChannelHeader({super.key, required this.channelName});
+  final Snowflake channelId;
+  const ChannelHeader({super.key, required this.channelId});
 
   @override
   ConsumerState<ChannelHeader> createState() => _ChannelHeaderState();
@@ -16,7 +20,23 @@ class ChannelHeader extends ConsumerStatefulWidget {
 class _ChannelHeaderState extends ConsumerState<ChannelHeader> {
   @override
   Widget build(BuildContext context) {
+    Channel? channel = ref.watch(channelControllerProvider(widget.channelId));
     double topPadding = MediaQuery.of(context).padding.top;
+
+    String channelName = "";
+    String? channelTopic;
+    if (channel is GuildChannel) {
+      channelName = channel.name;
+    }
+
+    if (channel is GuildTextChannel) {
+      channelTopic = channel.topic;
+    }
+
+    if (channel == null) {
+      return const Text("Channel not found");
+    }
+
     return Container(
       decoration: BoxDecoration(
         boxShadow: [
@@ -48,9 +68,10 @@ class _ChannelHeaderState extends ConsumerState<ChannelHeader> {
                       child: Padding(
                         padding: const EdgeInsets.only(bottom: 8),
                         child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
                             Text(
-                              "# ${widget.channelName}",
+                              "# $channelName",
                               overflow: TextOverflow.ellipsis,
                               maxLines: 1,
                               softWrap: false,
@@ -62,16 +83,19 @@ class _ChannelHeaderState extends ConsumerState<ChannelHeader> {
                               ),
                             ),
                             const SizedBox(width: 8),
-                            Text(
-                              "# ${widget.channelName}",
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 1,
-                              softWrap: false,
-                              style: GoogleFonts.publicSans(
-                                fontSize: 14.5,
-                                letterSpacing: 0.4,
-                                fontWeight: FontWeight.w600,
-                                color: Colors.white,
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.only(bottom: 2),
+                                child: Text(
+                                  channelTopic ?? "",
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
+                                  softWrap: false,
+                                  style: Theme.of(context)
+                                      .custom
+                                      .textTheme
+                                      .caption,
+                                ),
                               ),
                             ),
                           ],

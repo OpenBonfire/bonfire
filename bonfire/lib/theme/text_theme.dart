@@ -60,6 +60,8 @@ class CustomTextTheme {
   final caption = TextStyle(
     fontSize: 12,
     fontFamily: _family,
+    fontWeight: FontWeight.w500,
+    color: const Color(0xFFBDBDBD),
   );
   final bold = TextStyle(
     fontWeight: FontWeight.w500,

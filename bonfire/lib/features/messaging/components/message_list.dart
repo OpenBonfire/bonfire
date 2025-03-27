@@ -218,7 +218,6 @@ class _MessageViewState extends ConsumerState<MessageList>
       },
     );
 
-    String channelName = "";
     Channel? channel = ref.watch(channelControllerProvider(widget.channelId));
 
     Guild? guild = ref.watch(guildControllerProvider(widget.guildId));
@@ -228,8 +227,6 @@ class _MessageViewState extends ConsumerState<MessageList>
         child: CircularProgressIndicator(),
       );
     }
-
-    channelName = getChannelName(channel);
 
     return Scaffold(
       body: Column(
@@ -244,7 +241,9 @@ class _MessageViewState extends ConsumerState<MessageList>
                       child: content,
                     )),
                 if (!isSmartwatch(context))
-                  ChannelHeader(channelName: channelName),
+                  ChannelHeader(
+                    channelId: channel.id,
+                  ),
               ],
             ),
           ),

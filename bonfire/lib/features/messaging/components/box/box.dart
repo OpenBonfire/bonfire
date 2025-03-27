@@ -185,7 +185,7 @@ class _MessageBoxState extends ConsumerState<MessageBox>
     Color boxColor = Colors.transparent;
     if (_isHovering) {
       boxColor =
-          Theme.of(context).custom.colorTheme.foreground.withOpacity(0.3);
+          Theme.of(context).custom.colorTheme.foreground.withOpacity(0.8);
     }
 
     if (mentioned) {

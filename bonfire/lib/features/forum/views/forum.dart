@@ -87,7 +87,7 @@ class _ForumViewState extends ConsumerState<ForumView> {
                   ),
                 ),
                 ChannelHeader(
-                  channelName: channel.name,
+                  channelId: channel.id,
                 ),
               ],
             );
