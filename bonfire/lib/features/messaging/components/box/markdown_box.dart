@@ -31,11 +31,11 @@ class _MessageMarkdownBoxState extends State<MessageMarkdownBox> {
         enableImageSize: false,
         selectable: shouldUseDesktopLayout(context),
         enableKbd: false,
-        syntaxExtensions: const [
+        syntaxExtensions: [
           // DiscordMentionSyntax(),
         ],
         elementBuilders: [
-          DiscordMentionBuilder(),
+          // DiscordMentionBuilder(),
         ], highlightBuilder: (text, language, infoString) {
       final prism = Prism(
           style: Theme.of(context).brightness == Brightness.dark

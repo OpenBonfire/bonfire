@@ -54,18 +54,20 @@ class _ImageAttachmentState extends ConsumerState<ImageAttachment> {
               return (hash != null)
                   ? FadeInImage(
                       placeholder: hash.toImage(),
+                      width: widget.attachment.width?.toDouble(),
+                      height: widget.attachment.height?.toDouble(),
                       image: NetworkImage(
                         urlString,
                         webHtmlElementStrategy: WebHtmlElementStrategy.prefer,
                       ),
-                      fit: BoxFit.scaleDown,
+                      fit: BoxFit.contain,
                     )
                   : Image(
                       image: NetworkImage(
                         urlString,
                         webHtmlElementStrategy: WebHtmlElementStrategy.prefer,
                       ),
-                      fit: BoxFit.scaleDown,
+                      fit: BoxFit.contain,
                     );
             },
           ),
