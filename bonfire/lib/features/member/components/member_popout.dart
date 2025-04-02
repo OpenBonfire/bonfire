@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:bonfire/features/friends/views/friend_card.dart';
@@ -6,6 +7,7 @@ import 'package:bonfire/features/guild/repositories/member.dart';
 import 'package:bonfire/features/member/repositories/user_profile.dart';
 import 'package:bonfire/features/user/components/presence_avatar.dart';
 import 'package:bonfire/features/user/controllers/presence.dart';
+import 'package:bonfire/features/user/repositories/profile_effects.dart';
 import 'package:bonfire/shared/components/drawer/mobile_drawer.dart';
 import 'package:bonfire/shared/utils/platform.dart';
 import 'package:bonfire/shared/utils/style/markdown/stylesheet.dart';
@@ -32,86 +34,221 @@ class UserPopoutCard extends ConsumerStatefulWidget {
 class _UserPopoutCardState extends ConsumerState<UserPopoutCard> {
   @override
   Widget build(BuildContext context) {
+    final profileEffects = ref.watch(profileEffectsProvider).valueOrNull;
+
     final theme = Theme.of(context).custom;
     final profile =
         ref.watch(userProfileControllerProvider(widget.userId)).valueOrNull;
+
+    final effect = profile?.userProfile.profileEffect;
+    ProfileEffectConfig? selectedProfileConfig;
+
+    for (ProfileEffectConfig profileEffect in profileEffects ?? []) {
+      if (profileEffect.id == effect?.id) {
+        selectedProfileConfig = profileEffect;
+      }
+    }
+
     final banner = profile?.user.banner;
 
     PresenceUpdateEvent? presence =
         ref.watch(presenceControllerProvider(widget.userId));
 
+    // print(selectedProfileConfig?.effects.first.src);
     return ClipRRect(
       borderRadius: BorderRadius.circular(20),
-      child: Container(
-        decoration: BoxDecoration(
-          color: theme.colorTheme.foreground,
-        ),
-        width: 500,
-        height: 650,
-        child: (profile != null)
-            ? Stack(
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+      child: Stack(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              color: theme.colorTheme.foreground,
+            ),
+            width: 500,
+            height: 650,
+            child: (profile != null)
+                ? Stack(
                     children: [
-                      if (banner != null)
-                        Image.network(
-                          "${banner.url}?size=480",
-                          fit: BoxFit.cover,
-                          width: double.infinity,
-                          height: 150,
-                        )
-                      else
-                        Container(
-                          height: 150,
-                          decoration: BoxDecoration(
-                            color: (profile.userProfile.accentColor != null)
-                                ? Color(profile.userProfile.accentColor!)
-                                    .withAlpha(255)
-                                : theme.colorTheme.background,
-                          ),
-                        ),
-                      const SizedBox(height: 50),
-                      Padding(
-                        padding: const EdgeInsets.all(12),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              profile.guildMember?.nick ??
-                                  profile.user.globalName ??
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          if (banner != null)
+                            Image.network(
+                              "${banner.url}?size=480",
+                              fit: BoxFit.cover,
+                              width: double.infinity,
+                              height: 150,
+                            )
+                          else
+                            Container(
+                              height: 150,
+                              decoration: BoxDecoration(
+                                color: (profile.userProfile.accentColor != null)
+                                    ? Color(profile.userProfile.accentColor!)
+                                        .withAlpha(255)
+                                    : theme.colorTheme.background,
+                              ),
+                            ),
+                          const SizedBox(height: 50),
+                          Padding(
+                            padding: const EdgeInsets.all(12),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  profile.guildMember?.nick ??
+                                      profile.user.globalName ??
+                                      profile.user.username,
+                                  style: Theme.of(context)
+                                      .custom
+                                      .textTheme
+                                      .titleMedium,
+                                ),
+                                Text(
                                   profile.user.username,
-                              style: Theme.of(context)
-                                  .custom
-                                  .textTheme
-                                  .titleMedium,
+                                  style: Theme.of(context)
+                                      .custom
+                                      .textTheme
+                                      .caption,
+                                ),
+                              ],
                             ),
-                            Text(
-                              profile.user.username,
-                              style: Theme.of(context).custom.textTheme.caption,
-                            ),
-                          ],
+                          ),
+                          Expanded(
+                              child: UserInfoTabView(
+                            profile,
+                            guildId: widget.guildId,
+                          )),
+                        ],
+                      ),
+                      Positioned(
+                        top: 100,
+                        left: 20,
+                        child: PresenceAvatar(
+                          user: profile.user,
+                          size: 100,
+                          initialPresence: presence,
                         ),
                       ),
-                      Expanded(
-                          child: UserInfoTabView(
-                        profile,
-                        guildId: widget.guildId,
-                      )),
                     ],
-                  ),
-                  Positioned(
-                    top: 100,
-                    left: 20,
-                    child: PresenceAvatar(
-                      user: profile.user,
-                      size: 100,
-                      initialPresence: presence,
-                    ),
-                  ),
-                ],
-              )
-            : Container(),
+                  )
+                : Container(),
+          ),
+          if (selectedProfileConfig != null)
+            PopoutEffectAnimation(selectedProfileConfig)
+        ],
+      ),
+    );
+  }
+}
+
+class PopoutEffectAnimation extends StatefulWidget {
+  final ProfileEffectConfig profileEffectConfig;
+  const PopoutEffectAnimation(this.profileEffectConfig, {super.key});
+
+  @override
+  State<PopoutEffectAnimation> createState() => _PopoutEffectAnimationState();
+}
+
+class _PopoutEffectAnimationState extends State<PopoutEffectAnimation>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _opacityAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _setupAnimation();
+  }
+
+  void _setupAnimation() {
+    final effect = widget.profileEffectConfig.effects.first;
+    final startTime = effect.start;
+    final duration = effect.duration;
+    const fadeOutDuration = 3000; // 3 second fade out
+
+    // Total animation duration
+    final totalDuration = startTime + duration + fadeOutDuration;
+
+    _controller = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: totalDuration),
+    );
+
+    // Simple opacity tween with manual control over phases
+    _opacityAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(
+        parent: _controller,
+        curve: Interval(0, (startTime + duration) / totalDuration),
+        reverseCurve: Interval(0, fadeOutDuration / totalDuration),
+      ),
+    );
+
+    _controller.forward();
+  }
+
+  @override
+  void didUpdateWidget(PopoutEffectAnimation oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.profileEffectConfig != oldWidget.profileEffectConfig) {
+      _resetAnimation();
+    }
+  }
+
+  void _resetAnimation() {
+    _controller.dispose();
+    _setupAnimation();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Positioned.fill(
+      child: IgnorePointer(
+        child: AnimatedBuilder(
+          animation: _controller,
+          builder: (context, child) {
+            final value = _controller.value;
+            final effect = widget.profileEffectConfig.effects.first;
+            final startTime = effect.start;
+            final duration = effect.duration;
+            const fadeOutDuration = 1500;
+            final totalDuration = startTime + duration + fadeOutDuration;
+
+            double opacity = 0.0;
+
+            if (value < startTime / totalDuration) {
+              opacity = 0.0;
+            } else if (value < (startTime + 200) / totalDuration) {
+              opacity = (value * totalDuration - startTime) / 200;
+            } else if (value < (startTime + duration) / totalDuration) {
+              opacity = 1.0;
+            } else {
+              opacity = 1.0 -
+                  (value * totalDuration - startTime - duration) /
+                      fadeOutDuration;
+            }
+
+            return Opacity(
+              opacity: opacity,
+              child: child,
+            );
+          },
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              image: DecorationImage(
+                image:
+                    NetworkImage(widget.profileEffectConfig.effects.first.src),
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+        ),
       ),
     );
   }

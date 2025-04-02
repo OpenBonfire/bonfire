@@ -228,7 +228,7 @@ class UserManager extends ReadOnlyManager<User> {
           tryParse(raw['profile_effect'], (Map<String, Object?> raw) {
         return ProfileEffect(
           id: Snowflake.parse(raw['id'] as String),
-          expiresAt: DateTime.parse(raw['expires_at'] as String),
+          expiresAt: DateTime.tryParse(raw['expires_at'] as String? ?? ""),
         );
       }),
     );
@@ -241,6 +241,52 @@ class UserManager extends ReadOnlyManager<User> {
       iconHash: raw['icon'] as String,
       link: tryParse(raw['link'], Uri.parse),
     );
+  }
+
+  ProfileEffectPosition parseProfileEffectPosition(Map<String, Object?> raw) {
+    return ProfileEffectPosition(
+      x: raw["x"] as int,
+      y: raw["y"] as int,
+    );
+  }
+
+  ProfileEffectAnimation parseProfileEffectAnimation(Map<String, Object?> raw) {
+    return ProfileEffectAnimation(
+        src: raw["src"] as String,
+        loop: raw["loop"] as bool,
+        height: raw["height"] as int,
+        width: raw["width"] as int,
+        duration: raw["duration"] as int,
+        start: raw["start"] as int,
+        loopDelay: raw["loopDelay"] as int,
+        position:
+            parseProfileEffectPosition(raw["position"] as Map<String, Object?>),
+        zIndex: raw["zIndex"] as int);
+  }
+
+  ProfileEffectConfig parseProfileEffectConfig(Map<String, Object?> raw) {
+    return ProfileEffectConfig(
+      id: Snowflake.parse(raw["id"] as String),
+      type: raw["type"] as int,
+      skuId: raw["sku_id"] as String,
+      title: raw["title"] as String,
+      description: raw["description"] as String,
+      accessibilityLabel: raw["accessibilityLabel"] as String,
+      animationType: raw["animationType"] as int,
+      thumnbnailPreviewSrc: raw["thumbnailPreviewSrc"] as String,
+      reducedMotionSrc: raw["reducedMotionSrc"] as String,
+      effects: parseMany(
+        raw["effects"] as List<dynamic>,
+        (Object? raw) =>
+            parseProfileEffectAnimation(raw as Map<String, Object?>),
+      ),
+    );
+  }
+
+  ProfileEffect parseProfileEffect(Map<String, Object?> raw) {
+    return ProfileEffect(
+        id: Snowflake.parse(raw["id"] as String),
+        expiresAt: DateTime.tryParse(raw["expires_at"] as String? ?? ""));
   }
 
   UserProfile parseUserProfile(Map<String, Object?> raw) {
@@ -295,6 +341,18 @@ class UserManager extends ReadOnlyManager<User> {
           ? DateTime.parse(raw['premium_guild_since'] as String)
           : null,
     );
+  }
+
+  Future<List<ProfileEffectConfig>> fetchProfileEffects() async {
+    final route = HttpRoute()..userProfileEffects();
+    final request = BasicRequest(route);
+
+    final response = await client.httpHandler.executeSafe(request);
+    final profileEffectConfig = parseMany(
+        response.jsonBody["profile_effect_configs"] as List<dynamic>,
+        (Map<String, Object?> raw) => parseProfileEffectConfig(raw));
+
+    return profileEffectConfig;
   }
 
   @override

@@ -1,4 +1,5 @@
-import 'package:firebridge/firebridge.dart';
+import 'package:firebridge/src/models/emoji.dart';
+import 'package:firebridge/src/models/snowflake.dart';
 import 'package:firebridge/src/models/user/profile_effect.dart';
 import 'package:firebridge/src/utils/to_string_helper/to_string_helper.dart';
 

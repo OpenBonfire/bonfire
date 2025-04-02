@@ -5,6 +5,7 @@ import 'package:bonfire/shared/utils/role_color.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:http/http.dart' as http;
 
@@ -41,8 +42,7 @@ Future<Uint8List?> roleIcon(
 }
 
 @riverpod
-Future<Color> roleColor(
-    RoleColorRef ref, Snowflake guildId, Snowflake authorId) async {
+Future<Color> roleColor(Ref ref, Snowflake guildId, Snowflake authorId) async {
   var member = ref.watch(getMemberProvider(guildId, authorId)).valueOrNull;
   List<Role>? roles = ref.watch(getGuildRolesProvider(guildId)).valueOrNull;
   if (member == null || roles == null) return Colors.white;

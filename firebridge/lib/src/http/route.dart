@@ -386,4 +386,7 @@ extension RouteHelpers on HttpRoute {
 
   /// Adds the [`sync`](https://docs.discord.sex/topics/push-notifications#register-device) part to this [HttpRoute].
   void sync() => add(HttpRoutePart('sync'));
+
+  /// Adds the ['user-profile-effects'](https://docs.discord.sex/resources/user#user-profile-effects) part to this [HttpRoute].
+  void userProfileEffects() => add(HttpRoutePart('user-profile-effects'));
 }

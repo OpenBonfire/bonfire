@@ -1,6 +1,7 @@
 import 'package:bonfire/features/guild/repositories/member.dart';
 import 'package:bonfire/features/member/components/member_popout.dart';
 import 'package:bonfire/features/user/components/presence_avatar.dart';
+import 'package:bonfire/features/user/repositories/profile_effects.dart';
 import 'package:bonfire/shared/components/drawer/mobile_drawer.dart';
 import 'package:bonfire/shared/utils/platform.dart';
 import 'package:bonfire/shared/utils/role_color.dart';
@@ -35,7 +36,6 @@ class _MemberCardState extends ConsumerState<MemberCard> {
   Widget build(BuildContext context) {
     var roles =
         ref.watch(getGuildRolesProvider(widget.guild.id)).valueOrNull ?? [];
-
     PresenceUpdateEvent? initialPresence = widget.member.initialPresence;
 
     double borderRadiusTop = widget.roundTop ? 20 : 0;

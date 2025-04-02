@@ -216,6 +216,12 @@ export 'src/models/user/connection.dart'
     show Connection, ConnectionType, ConnectionVisibility;
 export 'src/models/user/user.dart' show PartialUser, User, UserFlags, NitroType;
 export 'src/models/user/user_profile.dart' show UserProfile;
+export 'src/models/user/profile_effect.dart'
+    show
+        ProfileEffect,
+        ProfileEffectPosition,
+        ProfileEffectAnimation,
+        ProfileEffectConfig;
 export 'src/models/user/notification.dart'
     show PushNotificationProvider, PushSyncToken;
 export 'src/models/user/relationship.dart' show Relationship;

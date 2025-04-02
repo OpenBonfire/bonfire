@@ -54,7 +54,7 @@ final _customTheme = CustomThemeData(isDarkTheme: false);
 final _customDarkTheme = CustomThemeData(isDarkTheme: true);
 final _darkTheme = ThemeData(
   brightness: Brightness.dark,
-  dialogTheme: DialogTheme(
+  dialogTheme: DialogThemeData(
     shape: RoundedRectangleBorder(
       side: const BorderSide(color: Colors.transparent),
       borderRadius: BorderRadius.circular(4.0),

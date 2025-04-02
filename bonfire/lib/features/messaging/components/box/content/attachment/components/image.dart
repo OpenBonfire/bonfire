@@ -24,16 +24,6 @@ class _ImageAttachmentState extends ConsumerState<ImageAttachment> {
       hash = ThumbHash.fromBase64(widget.attachment.placeholder!);
     }
     String urlString = widget.attachment.url.toString();
-
-    // For the web proxy, but this doesn't work... Maybe it doesn't like this specific proxy?
-    // Uri url = Uri.parse(widget.attachment.url.toString());
-
-    // if (url.host == "cdn.discordapp.com") {
-    //   urlString = Uri.https("cors-proxy.mylo-fawcett.workers.dev", "/", {
-    //     'url': urlString,
-    //   }).toString();
-    // }
-
     return GestureDetector(
       onTap: () {
         Navigator.of(context).push(
