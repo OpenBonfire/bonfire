@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:math';
 
 import 'package:bonfire/features/friends/views/friend_card.dart';
@@ -55,87 +54,90 @@ class _UserPopoutCardState extends ConsumerState<UserPopoutCard> {
         ref.watch(presenceControllerProvider(widget.userId));
 
     // print(selectedProfileConfig?.effects.first.src);
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(20),
-      child: Stack(
-        children: [
-          Container(
-            decoration: BoxDecoration(
-              color: theme.colorTheme.foreground,
-            ),
-            width: 500,
-            height: 650,
-            child: (profile != null)
-                ? Stack(
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          if (banner != null)
-                            Image.network(
-                              "${banner.url}?size=480",
-                              fit: BoxFit.cover,
-                              width: double.infinity,
-                              height: 150,
-                            )
-                          else
-                            Container(
-                              height: 150,
-                              decoration: BoxDecoration(
-                                color: (profile.userProfile.accentColor != null)
-                                    ? Color(profile.userProfile.accentColor!)
-                                        .withAlpha(255)
-                                    : theme.colorTheme.background,
+    return Container(
+      decoration: BoxDecoration(
+        color: theme.colorTheme.foreground,
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(20),
+        child: Stack(
+          children: [
+            Container(
+              width: 500,
+              height: 650,
+              child: (profile != null)
+                  ? Stack(
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            if (banner != null)
+                              Image.network(
+                                "${banner.url}?size=480",
+                                fit: BoxFit.cover,
+                                width: double.infinity,
+                                height: 150,
+                              )
+                            else
+                              Container(
+                                height: 150,
+                                decoration: BoxDecoration(
+                                  color: (profile.userProfile.accentColor !=
+                                          null)
+                                      ? Color(profile.userProfile.accentColor!)
+                                          .withAlpha(255)
+                                      : theme.colorTheme.background,
+                                ),
+                              ),
+                            const SizedBox(height: 50),
+                            Padding(
+                              padding: const EdgeInsets.all(12),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    profile.guildMember?.nick ??
+                                        profile.user.globalName ??
+                                        profile.user.username,
+                                    style: Theme.of(context)
+                                        .custom
+                                        .textTheme
+                                        .titleMedium,
+                                  ),
+                                  Text(
+                                    profile.user.username,
+                                    style: Theme.of(context)
+                                        .custom
+                                        .textTheme
+                                        .caption,
+                                  ),
+                                ],
                               ),
                             ),
-                          const SizedBox(height: 50),
-                          Padding(
-                            padding: const EdgeInsets.all(12),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  profile.guildMember?.nick ??
-                                      profile.user.globalName ??
-                                      profile.user.username,
-                                  style: Theme.of(context)
-                                      .custom
-                                      .textTheme
-                                      .titleMedium,
-                                ),
-                                Text(
-                                  profile.user.username,
-                                  style: Theme.of(context)
-                                      .custom
-                                      .textTheme
-                                      .caption,
-                                ),
-                              ],
-                            ),
-                          ),
-                          Expanded(
-                              child: UserInfoTabView(
-                            profile,
-                            guildId: widget.guildId,
-                          )),
-                        ],
-                      ),
-                      Positioned(
-                        top: 100,
-                        left: 20,
-                        child: PresenceAvatar(
-                          user: profile.user,
-                          size: 100,
-                          initialPresence: presence,
+                            Expanded(
+                                child: UserInfoTabView(
+                              profile,
+                              guildId: widget.guildId,
+                            )),
+                          ],
                         ),
-                      ),
-                    ],
-                  )
-                : Container(),
-          ),
-          if (selectedProfileConfig != null)
-            PopoutEffectAnimation(selectedProfileConfig)
-        ],
+                        Positioned(
+                          top: 100,
+                          left: 20,
+                          child: PresenceAvatar(
+                            user: profile.user,
+                            size: 100,
+                            initialPresence: presence,
+                          ),
+                        ),
+                      ],
+                    )
+                  : Container(),
+            ),
+            if (selectedProfileConfig != null)
+              PopoutEffectAnimation(selectedProfileConfig)
+          ],
+        ),
       ),
     );
   }
@@ -242,8 +244,10 @@ class _PopoutEffectAnimationState extends State<PopoutEffectAnimation>
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
               image: DecorationImage(
-                image:
-                    NetworkImage(widget.profileEffectConfig.effects.first.src),
+                image: NetworkImage(
+                  widget.profileEffectConfig.effects.first.src,
+                  webHtmlElementStrategy: WebHtmlElementStrategy.prefer,
+                ),
                 fit: BoxFit.cover,
               ),
             ),
