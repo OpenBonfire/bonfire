@@ -1,10 +1,12 @@
 import 'package:bonfire/features/authenticator/data/repositories/auth.dart';
 import 'package:bonfire/features/authenticator/data/repositories/discord_auth.dart';
 import 'package:bonfire/features/authenticator/models/auth.dart';
+import 'package:bonfire/features/authenticator/qr/auth_by_qrcode.dart';
 import 'package:bonfire/features/authenticator/views/captcha.dart';
 import 'package:bonfire/features/authenticator/views/credentials.dart';
+import 'package:bonfire/shared/utils/platform.dart';
 import 'package:bonfire/theme/theme.dart';
-import 'package:fireview/controller.dart';
+// import 'package:fireview/controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -20,7 +22,7 @@ class LoginScreen extends ConsumerStatefulWidget {
 }
 
 class _LoginScreenState extends ConsumerState<LoginScreen> {
-  final fireviewController = FireviewController();
+  // final fireviewController = FireviewController();
   bool? authMissing;
   @override
   void initState() {
@@ -33,6 +35,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   void _checkAuthToken() async {
     var auth = await Hive.openBox('auth');
     var token = auth.get('token');
+
+    setState(() {
+      authMissing = true;
+    });
 
     if (token != null) {
       var client = ref.read(authProvider.notifier).getAuth();
@@ -60,7 +66,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     });
 
     if (UniversalPlatform.isWeb) {
-      return const CaptchaView();
+      return const TokenLoginWidget();
     }
     if (authMissing == null) {
       // TODO: Make sick bonfire loading screen
@@ -89,7 +95,23 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         ),
       );
     }
-    return CredentialsScreen(fireviewController: fireviewController);
+
+    return Scaffold(
+        body: Center(
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          if (!isSmartwatch(context) && UniversalPlatform.isMobile)
+            const Expanded(child: WebviewLoginScreen()),
+          if (!UniversalPlatform.isMobile) const TokenLoginWidget(),
+          if (!isSmartwatch(context) && !shouldUseMobileLayout(context))
+            const SizedBox(width: 30),
+          if (!shouldUseMobileLayout(context) || isSmartwatch(context))
+            const AuthByQRcode(),
+        ],
+      ),
+    ));
   }
 
   void _navigateToLastLocation() async {

@@ -13,10 +13,10 @@ dependencies:
   flutter_web_plugins:
     sdk: flutter
 
-  fireview:
-    git: 
-      url: https://github.com/ericApostal/fireview
-      ref: 1d29957d18e0d001d681d0801fbfbf7555725f71
+  # fireview:
+  #   git: 
+  #     url: https://github.com/ericApostal/fireview
+  #     ref: 1d29957d18e0d001d681d0801fbfbf7555725f71
 
   firebridge:
     path: ../firebridge
@@ -91,6 +91,10 @@ dependencies:
   flutter_webrtc: ^0.12.11
   sdp_transform: ^0.3.2
   webcrypto: ^0.5.8
+  web_socket_channel: ^3.0.2
+  qr_flutter: ^4.1.0
+  cached_network_image: ^3.4.1
+  webview_flutter: ^4.10.0
 
 dependency_overrides:
   http: ^1.2.1

@@ -16,8 +16,6 @@
 #include <permission_handler_windows/permission_handler_windows_plugin.h>
 #include <url_launcher_windows/url_launcher_windows.h>
 #include <webcrypto/webcrypto_plugin.h>
-#include <webview_cef/webview_cef_plugin_c_api.h>
-#include <webview_windows/webview_windows_plugin.h>
 
 void RegisterPlugins(flutter::PluginRegistry* registry) {
   AudioplayersWindowsPluginRegisterWithRegistrar(
@@ -40,8 +38,4 @@ void RegisterPlugins(flutter::PluginRegistry* registry) {
       registry->GetRegistrarForPlugin("UrlLauncherWindows"));
   WebcryptoPluginRegisterWithRegistrar(
       registry->GetRegistrarForPlugin("WebcryptoPlugin"));
-  WebviewCefPluginCApiRegisterWithRegistrar(
-      registry->GetRegistrarForPlugin("WebviewCefPluginCApi"));
-  WebviewWindowsPluginRegisterWithRegistrar(
-      registry->GetRegistrarForPlugin("WebviewWindowsPlugin"));
 }

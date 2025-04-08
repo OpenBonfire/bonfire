@@ -54,15 +54,15 @@ class _UserPopoutCardState extends ConsumerState<UserPopoutCard> {
         ref.watch(presenceControllerProvider(widget.userId));
 
     // print(selectedProfileConfig?.effects.first.src);
-    return Container(
-      decoration: BoxDecoration(
-        color: theme.colorTheme.foreground,
-      ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(20),
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(20),
+      child: Container(
+        decoration: BoxDecoration(
+          color: theme.colorTheme.foreground,
+        ),
         child: Stack(
           children: [
-            Container(
+            SizedBox(
               width: 500,
               height: 650,
               child: (profile != null)
