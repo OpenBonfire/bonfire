@@ -353,7 +353,7 @@ class _AuthRemoteState extends State<AuthRemote> {
                       color: theme.custom.colorTheme.buttonIcon1),
                   eyeStyle: QrEyeStyle(
                     eyeShape: QrEyeShape.circle,
-                    color: theme.custom.colorTheme.blurple,
+                    color: theme.custom.colorTheme.buttonIcon1,
                   ),
                   backgroundColor: theme.custom.colorTheme.foreground,
                   data: widget.nfingerprint!,
