@@ -65,9 +65,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       }
     });
 
-    if (UniversalPlatform.isWeb) {
-      return const TokenLoginWidget();
-    }
     if (authMissing == null) {
       // TODO: Make sick bonfire loading screen
       return Scaffold(
@@ -106,7 +103,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         children: [
           if (!isSmartwatch(context) && UniversalPlatform.isMobile)
             const Expanded(child: WebviewLoginScreen()),
-          if (!UniversalPlatform.isMobile) const TokenLoginWidget(),
+          if (!UniversalPlatform.isMobile || UniversalPlatform.isWeb)
+            const TokenLoginWidget(),
           if (!isSmartwatch(context) && !shouldUseMobileLayout(context))
             const SizedBox(width: 30),
           if (isSmartwatch(context))

@@ -1,7 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
+import 'package:universal_io/io.dart';
 import 'dart:math';
 
 import 'package:bonfire/features/authenticator/data/repositories/auth.dart';
@@ -363,10 +363,7 @@ class _AuthRemoteState extends State<AuthRemote> {
             ),
           ]);
     } else if (widget.step == AuthByQRcode.LOGIN_STATE_DEFAULT) {
-      w = const SizedBox(
-          // width: 220,
-          // height: 220.0,
-          child: Center(child: CircularProgressIndicator()));
+      w = const SizedBox(child: Center(child: CircularProgressIndicator()));
     } else if (widget.step == AuthByQRcode.LOGIN_STATE_USER_PROFILE) {
       w = Column(children: [
         Container(
