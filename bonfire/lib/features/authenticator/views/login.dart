@@ -96,6 +96,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       );
     }
 
+    final theme = Theme.of(context);
+
     return Scaffold(
         body: Center(
       child: Row(
@@ -107,8 +109,50 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           if (!UniversalPlatform.isMobile) const TokenLoginWidget(),
           if (!isSmartwatch(context) && !shouldUseMobileLayout(context))
             const SizedBox(width: 30),
-          if (!shouldUseMobileLayout(context) || isSmartwatch(context))
-            const AuthByQRcode(),
+          if (isSmartwatch(context))
+            const Expanded(
+                child: Padding(
+              padding: EdgeInsets.all(24),
+              child: AuthByQRcode(),
+            )),
+          if (!shouldUseMobileLayout(context) && !isSmartwatch(context))
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const SizedBox(
+                  width: 250,
+                  height: 250,
+                  child: AuthByQRcode(),
+                ),
+                // if (!isSmartwatch(context))
+                Column(
+                  children: [
+                    const SizedBox(height: 10),
+                    Text("Login with QR-code",
+                        style: theme.textTheme.bodyMedium!.copyWith(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                            color: Colors.white)),
+                    const SizedBox(height: 10),
+                    SizedBox(
+                      child: RichText(
+                        textAlign: TextAlign.center,
+                        text: TextSpan(
+                          text: 'Scan code with your ',
+                          style: theme.textTheme.bodyMedium,
+                          children: const <TextSpan>[
+                            TextSpan(
+                                text: 'Discord mobile app',
+                                style: TextStyle(fontWeight: FontWeight.bold)),
+                            TextSpan(text: ' to login in.'),
+                          ],
+                        ),
+                      ),
+                    )
+                  ],
+                )
+              ],
+            ),
         ],
       ),
     ));

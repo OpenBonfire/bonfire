@@ -290,7 +290,8 @@ class _AuthByQRcodeState extends ConsumerState<AuthByQRcode> {
 
         _reconnect();
       });
-    } catch (e) {
+    } catch (e, st) {
+      debugPrint("some error: $st");
       debugPrint(e.toString());
     }
   }
@@ -338,52 +339,33 @@ class _AuthRemoteState extends State<AuthRemote> {
     debugPrint("AuthRemote=${widget.step}, userData=${widget.userData}");
 
     if (widget.step == AuthByQRcode.LOGIN_STATE_QR_CODE) {
-      w = Column(children: [
-        Container(
-          width: 200,
-          height: 200,
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.all(Radius.circular(12)),
-          ),
-          child: Center(
-            child: QrImageView(
-              padding: const EdgeInsets.all(4.0),
-              backgroundColor: Colors.white,
-              data: widget.nfingerprint!,
-              version: QrVersions.auto,
-              size: 190,
+      w = Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Center(
+              child: ClipRRect(
+                borderRadius: const BorderRadius.all(Radius.circular(24)),
+                child: QrImageView(
+                  padding: const EdgeInsets.all(16.0),
+                  dataModuleStyle: QrDataModuleStyle(
+                      dataModuleShape: QrDataModuleShape.circle,
+                      color: theme.custom.colorTheme.buttonIcon1),
+                  eyeStyle: QrEyeStyle(
+                    eyeShape: QrEyeShape.circle,
+                    color: theme.custom.colorTheme.blurple,
+                  ),
+                  backgroundColor: theme.custom.colorTheme.foreground,
+                  data: widget.nfingerprint!,
+                  version: QrVersions.auto,
+                ),
+              ),
             ),
-          ),
-        ),
-        const SizedBox(height: 10),
-        Text("Login with QR-code",
-            style: theme.textTheme.bodyMedium!.copyWith(
-                fontWeight: FontWeight.bold,
-                fontSize: 18,
-                color: Colors.white)),
-        const SizedBox(height: 10),
-        SizedBox(
-          width: 220.0,
-          child: RichText(
-            textAlign: TextAlign.center,
-            text: TextSpan(
-              text: 'Scan code with your ',
-              style: DefaultTextStyle.of(context).style,
-              children: const <TextSpan>[
-                TextSpan(
-                    text: 'Discord mobile app',
-                    style: TextStyle(fontWeight: FontWeight.bold)),
-                TextSpan(text: ' to login in.'),
-              ],
-            ),
-          ),
-        )
-      ]);
+          ]);
     } else if (widget.step == AuthByQRcode.LOGIN_STATE_DEFAULT) {
       w = const SizedBox(
-          width: 220,
-          height: 220.0,
+          // width: 220,
+          // height: 220.0,
           child: Center(child: CircularProgressIndicator()));
     } else if (widget.step == AuthByQRcode.LOGIN_STATE_USER_PROFILE) {
       w = Column(children: [
@@ -443,7 +425,7 @@ class _AuthRemoteState extends State<AuthRemote> {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        const SizedBox(height: 20),
+        // const SizedBox(height: 20),
         w,
       ],
     );

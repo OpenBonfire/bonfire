@@ -10,7 +10,6 @@ class DiscordKeyPair {
     KeyPair<RsaOaepPrivateKey, RsaOaepPublicKey> keyPair =
         await RsaOaepPrivateKey.generateKey(
       2048,
-      // BigInt.from(3),
       BigInt.from(65537),
       Hash.sha256,
     );
