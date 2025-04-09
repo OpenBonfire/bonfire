@@ -17,37 +17,43 @@ void handleEvents(Ref ref, NyxxGateway client) {
   client.onCacheUpdate.listen((entity) {
     switch (entity) {
       case Channel channel:
-        // print("is a channel!");
         ref
             .read(channelControllerProvider(channel.id).notifier)
             .setChannel(channel);
+        break;
+      case Guild guild:
+        ref.read(guildControllerProvider(guild.id).notifier).setGuild(guild);
+        // This existing alone scares me a bit. Should we be making all of firebridge riverpod?
+        List<Snowflake> roleIds = [];
+        for (var role in guild.roleList) {
+          ref.read(roleControllerProvider(role.id).notifier).setRole(role);
+          roleIds.add(role.id);
+        }
+        ref.read(rolesControllerProvider(guild.id).notifier).setRoles(roleIds);
+        break;
+
+      case Role role:
+        // ref.read(roleControllerProvider(role.id).notifier).setRole(role);
         break;
     }
   });
 
   client.onReady.listen((event) {
-    for (var guild in event.guilds) {
-      // channels
-      // for (var channel in guild.channels ?? []) {
-      //   ref
-      //       .read(channelControllerProvider(channel.id).notifier)
-      //       .setChannel(channel);
-      // }
+    // for (var guild in event.guilds) {
+    //   // roles
+    //   List<Snowflake> roleIds = [];
+    //   for (var role in guild.roleList) {
+    //     ref.read(roleControllerProvider(role.id).notifier).setRole(role);
+    //     roleIds.add(role.id);
+    //   }
+    //   ref.read(rolesControllerProvider(guild.id).notifier).setRoles(roleIds);
 
-      // roles
-      List<Snowflake> roleIds = [];
-      for (var role in guild.roleList) {
-        ref.read(roleControllerProvider(role.id).notifier).setRole(role);
-        roleIds.add(role.id);
-      }
-      ref.read(rolesControllerProvider(guild.id).notifier).setRoles(roleIds);
-
-      // we want this backwards in case we have initializers that depend on guild channels
-      // if a flow goes like
-      // get guild -> get channels -> get messages
-      // this would error if we intuitively initialize it first
-      ref.read(guildControllerProvider(guild.id).notifier).setGuild(guild);
-    }
+    //   // we want this backwards in case we have initializers that depend on guild channels
+    //   // if a flow goes like
+    //   // get guild -> get channels -> get messages
+    //   // this would error if we intuitively initialize it first
+    //   ref.read(guildControllerProvider(guild.id).notifier).setGuild(guild);
+    // }
 
     ref.read(guildsStateProvider.notifier).setGuilds(event.guilds);
 
