@@ -35,7 +35,7 @@ void handleEvents(Ref ref, NyxxGateway client) {
         ref.read(rolesControllerProvider(guild.id).notifier).setRoles(roleIds);
         break;
 
-      case Role role:
+      case Role _:
         // causes a "flash" when used in conjunction with setting the role ids
         // ref.read(roleControllerProvider(role.id).notifier).setRole(role);
         break;

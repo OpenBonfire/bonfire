@@ -1,8 +1,5 @@
-import 'dart:convert';
-
 import 'package:bonfire/features/authenticator/repositories/discord_auth.dart';
 import 'package:firebridge/firebridge.dart';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'settings.g.dart';
@@ -15,8 +12,6 @@ event does it provide an initial state, so this isn't really proper convention.
 tldr: We need to make seperate controllers for each feature within the feature folder.
 I am already doing that with friends.
 */
-
-final DefaultCacheManager _cacheManager = DefaultCacheManager();
 
 @Riverpod(keepAlive: true)
 class PrivateMessageHistory extends _$PrivateMessageHistory {

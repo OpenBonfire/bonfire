@@ -85,7 +85,9 @@ class Auth extends _$Auth {
         GatewayApiOptions(
           token: token,
           intents: GatewayIntents.all,
-          compression: GatewayCompression.none,
+          compression: UniversalPlatform.isWeb
+              ? GatewayCompression.none
+              : GatewayCompression.transport,
         ),
         GatewayClientOptions(
           plugins: [

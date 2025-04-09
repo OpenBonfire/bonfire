@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:firebridge/src/cache_mixin.dart';
 import 'package:firebridge/src/client.dart';
 import 'package:firebridge/src/models/channel/channel.dart';

@@ -1,12 +1,10 @@
 import 'package:bonfire/features/authenticator/repositories/auth.dart';
 import 'package:bonfire/features/authenticator/repositories/discord_auth.dart';
-import 'package:bonfire/features/authenticator/models/auth.dart';
 import 'package:bonfire/features/authenticator/qr/auth_by_qrcode.dart';
 import 'package:bonfire/features/authenticator/views/captcha.dart';
 import 'package:bonfire/features/authenticator/views/credentials.dart';
 import 'package:bonfire/shared/utils/platform.dart';
 import 'package:bonfire/theme/theme.dart';
-// import 'package:fireview/controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -27,6 +25,15 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   @override
   void initState() {
     super.initState();
+    ref.listenManual(authProvider, (a, b) {
+      if (b is AuthUser) {
+        b.client.onReady.listen((_) {
+          print("User is Ready!");
+          _navigateToLastLocation();
+        });
+      }
+    });
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _checkAuthToken();
     });
@@ -35,10 +42,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   void _checkAuthToken() async {
     var auth = await Hive.openBox('auth');
     var token = auth.get('token');
-
-    setState(() {
-      authMissing = true;
-    });
 
     if (token != null) {
       var client = ref.read(authProvider.notifier).getAuth();
@@ -55,16 +58,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var auth = ref.watch(authProvider);
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (auth is MFARequired) {
-        context.go('/mfa');
-      } else if (auth is AuthUser) {
-        _navigateToLastLocation();
-      }
-    });
-
     if (authMissing == null) {
       // TODO: Make sick bonfire loading screen
       return Scaffold(

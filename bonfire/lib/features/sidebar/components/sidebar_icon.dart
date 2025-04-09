@@ -1,7 +1,7 @@
-import 'package:bonfire/features/guild/repositories/guild_icon.dart';
 import 'package:bonfire/features/guild/repositories/guild_mentions.dart';
 import 'package:bonfire/features/guild/repositories/guild_unreads.dart';
 import 'package:bonfire/features/sidebar/components/sidebar_item.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:bonfire/theme/theme.dart';
@@ -66,9 +66,11 @@ class _SidebarIconState extends ConsumerState<SidebarIcon> {
   Widget _buildGuildIcon() {
     return Consumer(
       builder: (context, ref, _) {
-        var icon = ref.watch(guildIconProvider(widget.guild.id)).valueOrNull;
-        if (icon != null) {
-          return Image.memory(icon);
+        if (widget.guild.icon != null) {
+          return CachedNetworkImage(
+            imageUrl: widget.guild.icon!.url.toString(),
+            cacheKey: widget.guild.iconHash!,
+          );
         } else {
           String iconText = widget.guild.name
               .split(" ")
