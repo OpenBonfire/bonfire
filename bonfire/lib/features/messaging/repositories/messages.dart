@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bonfire/features/authenticator/data/repositories/auth.dart';
 import 'package:bonfire/features/authenticator/data/repositories/discord_auth.dart';
 import 'package:bonfire/features/channels/controllers/channel.dart';
+import 'package:bonfire/features/channels/repositories/channel_repo.dart';
 import 'package:bonfire/features/channels/repositories/typing.dart';
 import 'package:bonfire/features/guild/controllers/guild.dart';
 import 'package:bonfire/features/guild/controllers/role.dart';
@@ -53,10 +54,15 @@ class Messages extends _$Messages {
   }) async {
     if (user is AuthUser) {
       if (channelId == Snowflake.zero) return [];
-      var channel = ref.watch(channelControllerProvider(channelId));
+      var channel =
+          await ref.watch(channelRepositoryProvider(channelId).future);
+
+      // print(channelId);
       if (channel == null) {
         debugPrint("Tried to request messages from a null channel.");
-      }
+      } else {}
+      // debugPrint("CHANNEL IN MESSAGES: ${channel.runtimeType}");
+      // print(channel is GuildChannel);
 
       if (channel == null) return [];
 
@@ -109,7 +115,8 @@ class Messages extends _$Messages {
               message,
             );
       }
-
+      // print("got messages for ${channel.runtimeType}");
+      // print(messages);
       return messages;
     } else {
       return null;
@@ -121,7 +128,8 @@ class Messages extends _$Messages {
     int? limit,
     Snowflake? around,
   }) async {
-    Channel? channel = ref.watch(channelControllerProvider(channelId));
+    Channel? channel =
+        ref.watch(channelRepositoryProvider(channelId)).valueOrNull;
     if (channel == null)
       debugPrint("TRIED TO FETCH MESSAGES FOR NULL CHANNEL!");
     List<Message> messages = [];

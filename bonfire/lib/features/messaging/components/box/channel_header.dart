@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:bonfire/features/channels/controllers/channel.dart';
+import 'package:bonfire/features/channels/repositories/channel_repo.dart';
 import 'package:bonfire/features/overview/controllers/member_list.dart';
 import 'package:bonfire/shared/utils/platform.dart';
 import 'package:bonfire/theme/theme.dart';
@@ -19,7 +20,8 @@ class ChannelHeader extends ConsumerStatefulWidget {
 class _ChannelHeaderState extends ConsumerState<ChannelHeader> {
   @override
   Widget build(BuildContext context) {
-    Channel? channel = ref.watch(channelControllerProvider(widget.channelId));
+    Channel? channel =
+        ref.watch(channelRepositoryProvider(widget.channelId)).valueOrNull;
     double topPadding = MediaQuery.of(context).padding.top;
 
     String channelName = "";

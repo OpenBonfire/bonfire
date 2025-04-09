@@ -88,6 +88,7 @@ final routerController = GoRouter(
                 GoRoute(
                   path: 'threads/:threadId',
                   pageBuilder: (context, state) {
+                    print("Navigating to thread route");
                     final guildId = state.pathParameters['guildId']!;
                     final channelId = state.pathParameters['channelId']!;
                     final threadId = state.pathParameters['threadId']!;
@@ -99,7 +100,7 @@ final routerController = GoRouter(
                     });
 
                     return CustomTransitionPage(
-                      key: const ValueKey('channels_route'),
+                      key: const ValueKey('threads_route'),
                       child: GuildMessagingOverview(
                         guildId: Snowflake.parse(guildId),
                         channelId: Snowflake.parse(channelId),

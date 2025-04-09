@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bonfire/features/channels/controllers/channel.dart';
+import 'package:bonfire/features/channels/repositories/channel_repo.dart';
 import 'package:bonfire/features/guild/controllers/guild.dart';
 import 'package:bonfire/features/messaging/repositories/messages.dart';
 import 'package:bonfire/features/messaging/components/bar.dart';
@@ -135,12 +136,17 @@ class _MessageViewState extends ConsumerState<MessageList>
           return idx;
         },
         (context, index) {
+          final channel = ref
+              .watch(channelRepositoryProvider(widget.channelId))
+              .valueOrNull;
+
+          if (channel == null) return const SizedBox.shrink();
           if (isSmartwatch(context) && index == 0) {
             return MessageBar(
-              guildId: ref.read(guildControllerProvider(widget.guildId))?.id ??
-                  Snowflake.zero,
-              channel: ref.read(channelControllerProvider(widget.channelId))!,
-            );
+                guildId:
+                    ref.read(guildControllerProvider(widget.guildId))?.id ??
+                        Snowflake.zero,
+                channel: channel);
           }
 
           final messageIndex = isSmartwatch(context) ? index - 1 : index;
@@ -168,12 +174,11 @@ class _MessageViewState extends ConsumerState<MessageList>
               lastScrollMessage == null) {
             firstBatchLastMessage = loadedMessages[messageIndex];
           }
-
           return MessageBox(
             key: ValueKey(loadedMessages[messageIndex].id.value),
             guildId: ref.read(guildControllerProvider(widget.guildId))?.id ??
                 Snowflake.zero,
-            channel: ref.read(channelControllerProvider(widget.channelId))!,
+            channel: channel,
             messageId: loadedMessages[messageIndex].id,
             showSenderInfo: showAuthor,
           );
@@ -197,6 +202,7 @@ class _MessageViewState extends ConsumerState<MessageList>
 
     messageOutput.when(
       data: (messages) {
+        print("got data for messages");
         loadedMessages = messages ?? [];
         _fadeController.forward();
         content = _buildMessageList();
@@ -217,7 +223,8 @@ class _MessageViewState extends ConsumerState<MessageList>
       },
     );
 
-    Channel? channel = ref.watch(channelControllerProvider(widget.channelId));
+    Channel? channel =
+        ref.watch(channelRepositoryProvider(widget.channelId)).valueOrNull;
 
     Guild? guild = ref.watch(guildControllerProvider(widget.guildId));
 

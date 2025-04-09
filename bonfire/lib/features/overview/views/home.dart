@@ -29,11 +29,13 @@ class _HomeState extends ConsumerState<GuildMessagingOverview> {
   @override
   void initState() {
     super.initState();
+    print("initializing");
     selfPanelState = RevealSide.main;
   }
 
   @override
   void didUpdateWidget(GuildMessagingOverview oldWidget) {
+    print("did update widget");
     super.didUpdateWidget(oldWidget);
     if (widget.guildId != oldWidget.guildId ||
         widget.channelId != oldWidget.channelId ||

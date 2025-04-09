@@ -30,6 +30,7 @@ class _HomeState extends ConsumerState<HomeDesktop> {
 
   @override
   void initState() {
+    print("init home desktop");
     super.initState();
   }
 

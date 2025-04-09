@@ -1,4 +1,5 @@
 import 'package:bonfire/features/channels/controllers/channel.dart';
+import 'package:bonfire/features/channels/repositories/channel_repo.dart';
 import 'package:bonfire/features/forum/views/forum.dart';
 import 'package:bonfire/features/messaging/components/message_list.dart';
 import 'package:firebridge/firebridge.dart';
@@ -28,8 +29,8 @@ class _MessageViewState extends ConsumerState<MessageView> {
     if (widget.threadId != null) {
       channelId = widget.threadId!;
     }
-    Channel? channel = ref.watch(channelControllerProvider(channelId));
-
+    // 1207535985198633030
+    final channel = ref.watch(channelRepositoryProvider(channelId)).valueOrNull;
     if (channel is TextChannel) {
       return MessageList(
         guildId: widget.guildId,
