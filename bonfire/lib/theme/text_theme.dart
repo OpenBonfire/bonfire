@@ -7,7 +7,7 @@ class CustomTextTheme {
   final titleLarge = TextStyle(
     fontSize: 36,
     fontFamily: _family,
-    fontWeight: FontWeight.w600,
+    fontWeight: FontWeight.w500,
   );
   final titleLargeBold = TextStyle(
     fontSize: 36,
@@ -17,16 +17,16 @@ class CustomTextTheme {
   final titleMedium = TextStyle(
     fontSize: 20,
     fontFamily: _family,
-    fontWeight: FontWeight.w600,
+    fontWeight: FontWeight.w500,
   );
   final titleSmall = TextStyle(
     fontSize: 15,
     fontFamily: _family,
-    fontWeight: FontWeight.w600,
+    fontWeight: FontWeight.w500,
   );
   final labelLarge = TextStyle(
     fontSize: 18,
-    fontWeight: FontWeight.w600,
+    fontWeight: FontWeight.w500,
     fontFamily: _family,
   );
   final subtitle1 = TextStyle(
@@ -36,12 +36,12 @@ class CustomTextTheme {
       color: const Color(0xFFBDBDBD));
   final subtitle2 = TextStyle(
     fontSize: 14,
-    fontWeight: FontWeight.w600,
+    fontWeight: FontWeight.w500,
     fontFamily: _family,
   );
   final subtitle3 = TextStyle(
     fontSize: 14,
-    fontWeight: FontWeight.w600,
+    fontWeight: FontWeight.w500,
     fontFamily: _family,
     color: const Color(0xFF585F6A),
   );
@@ -49,13 +49,13 @@ class CustomTextTheme {
     fontSize: 15,
     fontFamily: _family,
     color: const Color.fromARGB(255, 255, 255, 255),
-    fontWeight: FontWeight.w600,
+    fontWeight: FontWeight.w500,
   );
   final bodyText2 = TextStyle(
     fontSize: 14,
     fontFamily: _family,
     color: const Color(0xFFBDBDBD),
-    fontWeight: FontWeight.w600,
+    fontWeight: FontWeight.w500,
   );
   final caption = TextStyle(
     fontSize: 12,
