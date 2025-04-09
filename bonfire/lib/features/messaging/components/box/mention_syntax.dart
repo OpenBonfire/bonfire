@@ -81,7 +81,7 @@ class DiscordMentionBuilder extends MarkdownElementBuilder {
                 "Unknown User",
             username = "@$username"
           },
-          loading: () => debugPrint('Loading member...'),
+          loading: () => {},
           error: (error, stackTrace) =>
               debugPrint('Error loading member: $error'),
         );

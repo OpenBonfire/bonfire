@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:bonfire/features/authenticator/repositories/auth.dart';
 import 'package:bonfire/features/authenticator/repositories/discord_auth.dart';
 import 'package:bonfire/features/channels/controllers/channel.dart';
-import 'package:bonfire/features/channels/repositories/channel_repo.dart';
 import 'package:bonfire/features/channels/repositories/typing.dart';
 import 'package:bonfire/features/guild/controllers/guild.dart';
 import 'package:bonfire/features/guild/controllers/role.dart';

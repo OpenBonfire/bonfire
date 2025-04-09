@@ -2,6 +2,7 @@ import 'package:bonfire/features/channels/controllers/channel.dart';
 import 'package:bonfire/features/channels/repositories/channel_members.dart';
 import 'package:bonfire/features/friends/controllers/relationships.dart';
 import 'package:bonfire/features/guild/controllers/guild.dart';
+import 'package:bonfire/features/guild/controllers/guilds.dart';
 import 'package:bonfire/features/guild/controllers/role.dart';
 import 'package:bonfire/features/guild/controllers/roles.dart';
 import 'package:bonfire/features/me/controllers/settings.dart';
@@ -9,6 +10,7 @@ import 'package:bonfire/features/messaging/controllers/message.dart';
 import 'package:bonfire/features/messaging/repositories/messages.dart';
 import 'package:bonfire/features/messaging/repositories/reactions.dart';
 import 'package:bonfire/features/user/controllers/presence.dart';
+import 'package:bonfire/features/user/controllers/user.dart';
 import 'package:bonfire/features/voice/repositories/voice_members.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -21,6 +23,7 @@ void handleEvents(Ref ref, NyxxGateway client) {
             .read(channelControllerProvider(channel.id).notifier)
             .setChannel(channel);
         break;
+
       case Guild guild:
         ref.read(guildControllerProvider(guild.id).notifier).setGuild(guild);
         // This existing alone scares me a bit. Should we be making all of firebridge riverpod?
@@ -33,29 +36,25 @@ void handleEvents(Ref ref, NyxxGateway client) {
         break;
 
       case Role role:
+        // causes a "flash" when used in conjunction with setting the role ids
         // ref.read(roleControllerProvider(role.id).notifier).setRole(role);
+        break;
+
+      case User user:
+        ref.read(userControllerProvider(user.id).notifier).setUser(user);
+        break;
+
+      case Message message:
+        // print("Message update: ${message.id}");
+        ref
+            .read(messageControllerProvider(message.id).notifier)
+            .setMessage(message);
         break;
     }
   });
 
   client.onReady.listen((event) {
-    // for (var guild in event.guilds) {
-    //   // roles
-    //   List<Snowflake> roleIds = [];
-    //   for (var role in guild.roleList) {
-    //     ref.read(roleControllerProvider(role.id).notifier).setRole(role);
-    //     roleIds.add(role.id);
-    //   }
-    //   ref.read(rolesControllerProvider(guild.id).notifier).setRoles(roleIds);
-
-    //   // we want this backwards in case we have initializers that depend on guild channels
-    //   // if a flow goes like
-    //   // get guild -> get channels -> get messages
-    //   // this would error if we intuitively initialize it first
-    //   ref.read(guildControllerProvider(guild.id).notifier).setGuild(guild);
-    // }
-
-    ref.read(guildsStateProvider.notifier).setGuilds(event.guilds);
+    ref.read(guildsControllerProvider.notifier).setGuilds(event.guilds);
 
     ref
         .read(privateMessageHistoryProvider.notifier)
@@ -99,10 +98,16 @@ void handleEvents(Ref ref, NyxxGateway client) {
     }
   });
 
+  client.onMessageUpdate.listen((event) {
+    // ref
+    //     .read(messageControllerProvider(event.message.id).notifier)
+    //     .editMessage(event.oldMessage!);
+  });
+
   client.onMessageCreate.listen((event) {
-    ref
-        .read(messageControllerProvider(event.message.id).notifier)
-        .setMessage(event.message);
+    // ref
+    //     .read(messageControllerProvider(event.message.id).notifier)
+    //     .setMessage(event.message);
 
     ref
         .read(messagesProvider(event.message.channelId).notifier)

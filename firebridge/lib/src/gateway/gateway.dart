@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:firebridge/src/builders/guild/channel_statuses.dart';
 import 'package:firebridge/src/builders/guild/guild_subscriptions_bulk.dart';
 import 'package:firebridge/src/models/discord_color.dart';
@@ -1058,7 +1059,11 @@ class Gateway extends GatewayManager with EventParser {
         ),
       ),
       mentions: maybeParseMany(raw['mentions'], client.users.parse),
-      message: (client.channels[channelId] as PartialTextChannel).messages[id],
+      message: MessageManager(
+        client.options.messageCacheConfig,
+        client,
+        channelId: channelId,
+      ).parse(raw),
       oldMessage:
           (client.channels[channelId] as PartialTextChannel).messages.cache[id],
     );

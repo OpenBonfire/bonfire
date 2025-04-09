@@ -120,27 +120,27 @@ class CustomStatusState extends _$CustomStatusState {
   }
 }
 
-@Riverpod(keepAlive: true)
-class GuildsState extends _$GuildsState {
-  AuthUser? user;
-  var cacheKey = "guilds";
+// @Riverpod(keepAlive: true)
+// class GuildsState extends _$GuildsState {
+//   AuthUser? user;
+//   var cacheKey = "guilds";
 
-  @override
-  FutureOr<List<Guild>?> build() async {
-    var cacheData = await _cacheManager.getFileFromCache(cacheKey);
+//   @override
+//   FutureOr<List<Guild>?> build() async {
+//     var cacheData = await _cacheManager.getFileFromCache(cacheKey);
 
-    if (cacheData != null) {
-      var decoded = json.decode(utf8.decode(cacheData.file.readAsBytesSync()));
-      var mapped = (decoded.map((e) => user!.client.guilds.parse(e)).toList());
-      return List<Guild>.from(mapped);
-    }
-    return null;
-  }
+//     if (cacheData != null) {
+//       var decoded = json.decode(utf8.decode(cacheData.file.readAsBytesSync()));
+//       var mapped = (decoded.map((e) => user!.client.guilds.parse(e)).toList());
+//       return List<Guild>.from(mapped);
+//     }
+//     return null;
+//   }
 
-  void setGuilds(List<Guild> guilds) {
-    state = AsyncValue.data(guilds);
-  }
-}
+//   void setGuilds(List<Guild> guilds) {
+//     state = AsyncValue.data(guilds);
+//   }
+// }
 
 // @Riverpod(keepAlive: true)
 // class VoiceStates extends _$VoiceStates {

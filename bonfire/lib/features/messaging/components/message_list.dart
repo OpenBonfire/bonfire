@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:bonfire/features/channels/controllers/channel.dart';
-import 'package:bonfire/features/channels/repositories/channel_repo.dart';
 import 'package:bonfire/features/guild/controllers/guild.dart';
 import 'package:bonfire/features/messaging/repositories/messages.dart';
 import 'package:bonfire/features/messaging/components/bar.dart';
@@ -74,7 +73,7 @@ class _MessageViewState extends ConsumerState<MessageList>
     }
 
     if (_scrollController.position.pixels >=
-        _scrollController.position.maxScrollExtent - 1000) {
+        _scrollController.position.maxScrollExtent - 3000) {
       if (!_isLoadingMore) {
         _debounceTimer?.cancel();
         _debounceTimer = Timer(const Duration(milliseconds: 300), () {

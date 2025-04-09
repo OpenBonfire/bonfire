@@ -1,5 +1,4 @@
 import 'package:bonfire/features/channels/controllers/channel.dart';
-import 'package:bonfire/features/channels/repositories/channel_repo.dart';
 import 'package:bonfire/features/messaging/controllers/reply.dart';
 import 'package:bonfire/features/messaging/repositories/messages.dart';
 import 'package:bonfire/features/messaging/components/box/reply/reply_to.dart';

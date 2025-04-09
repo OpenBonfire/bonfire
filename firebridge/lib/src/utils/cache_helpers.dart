@@ -96,9 +96,9 @@ extension CacheUpdates on NyxxRest {
       Guild() => () {
           entity.manager.cache[entity.id] = entity;
           entity.memberList?.forEach(updateCacheWith);
+          entity.roleList.forEach(updateCacheWith);
           entity.channels?.forEach(updateCacheWith);
 
-          entity.roleList.forEach(updateCacheWith);
           entity.emojiList.forEach(updateCacheWith);
           entity.stickerList.forEach(updateCacheWith);
         }(),
@@ -284,8 +284,7 @@ extension CacheUpdates on NyxxRest {
           mentions.forEach(updateCacheWith);
         }(),
       MessageUpdateEvent(:final message, :final mentions) => () {
-          // We only get a partial message, but we know it invalidates the message currently in the cache. So we remove the cached message.
-          message.manager.cache.remove(message.id);
+          updateCacheWith(message);
           mentions?.forEach(updateCacheWith);
         }(),
       MessageDeleteEvent(:final id, :final channel) =>

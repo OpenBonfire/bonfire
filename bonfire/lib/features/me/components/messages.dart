@@ -1,5 +1,4 @@
 import 'package:bonfire/features/channels/controllers/channel.dart';
-import 'package:bonfire/features/channels/repositories/channel_repo.dart';
 import 'package:bonfire/features/forum/views/forum.dart';
 import 'package:bonfire/features/messaging/components/message_list.dart';
 import 'package:firebridge/firebridge.dart';

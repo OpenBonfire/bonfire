@@ -1,7 +1,7 @@
 import 'package:bonfire/features/authenticator/repositories/auth.dart';
 import 'package:bonfire/features/authenticator/repositories/discord_auth.dart';
 import 'package:bonfire/features/guild/controllers/guild.dart';
-import 'package:bonfire/features/me/controllers/settings.dart';
+import 'package:bonfire/features/guild/controllers/guilds.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter/foundation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -21,8 +21,7 @@ class VoiceMembers extends _$VoiceMembers {
     if (authOutput is AuthUser) {
       user = authOutput;
       Guild voiceGuild = ref
-          .watch(guildsStateProvider)
-          .valueOrNull!
+          .watch(guildsControllerProvider)!
           .firstWhere((element) => element.id == guildId);
 
       var allStates = voiceGuild.voiceStates.entries.toList();

@@ -1,5 +1,6 @@
 import 'package:bonfire/features/authenticator/repositories/auth.dart';
 import 'package:bonfire/features/authenticator/repositories/discord_auth.dart';
+import 'package:bonfire/features/guild/controllers/guilds.dart';
 import 'package:bonfire/features/me/controllers/settings.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
@@ -15,12 +16,11 @@ class GuildMentions extends _$GuildMentions {
     var user = ref.watch(authProvider.notifier).getAuth();
     if (user is! AuthUser) return 0;
 
-    AsyncValue<List<Guild>?> guilds = ref.watch(guildsStateProvider);
+    List<Guild>? guilds = ref.watch(guildsControllerProvider);
 
     // we want to retrieve the guild from settings as it
     // has all of the channels
-    var currentGuild =
-        guilds.valueOrNull?.firstWhereOrNull((g) => g.id == guildId);
+    var currentGuild = guilds?.firstWhereOrNull((g) => g.id == guildId);
     var channels = currentGuild?.channels ?? [];
 
     if (currentGuild == null) return 0;
