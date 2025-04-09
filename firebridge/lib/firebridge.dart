@@ -132,6 +132,7 @@ export 'src/builders/application.dart'
         ApplicationIntegrationTypeConfigurationBuilder;
 
 export 'src/cache/cache.dart' show Cache, CacheConfig;
+export 'src/cache_mixin.dart' show CacheMixin;
 
 export 'src/http/bucket.dart' show HttpBucket;
 export 'src/http/handler.dart' show HttpHandler, RateLimitInfo;

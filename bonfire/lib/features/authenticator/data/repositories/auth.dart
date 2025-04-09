@@ -139,6 +139,9 @@ class Auth extends _$Auth {
 
       debugPrint("READY!");
 
+      client.onCacheUpdate.listen((event) {
+        // debugPrint("Cache update: $event");
+      });
       for (var guild in event.guilds) {
         // channels
         for (var channel in guild.channels ?? []) {

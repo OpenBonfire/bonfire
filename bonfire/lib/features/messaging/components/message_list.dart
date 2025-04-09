@@ -32,6 +32,7 @@ class MessageList extends ConsumerStatefulWidget {
 
 class _MessageViewState extends ConsumerState<MessageList>
     with SingleTickerProviderStateMixin {
+  Timer? _debounceTimer;
   final ScrollController _scrollController = ScrollController();
   List<Message> loadedMessages = [];
   Message? lastScrollMessage;
@@ -46,18 +47,10 @@ class _MessageViewState extends ConsumerState<MessageList>
   @override
   void initState() {
     super.initState();
-
-    // WidgetsBinding.instance.addPostFrameCallback((_) {
-    //   ref.read(messagesProvider(widget.channelId).notifier).fetchMessages(
-    //       //  limit: 50,
-    //       );
-    // });
-
     _scrollController.addListener(_scrollListener);
 
     _fadeController = AnimationController(
       duration: const Duration(milliseconds: 0),
-      // reverseDuration: const Duration(milliseconds: 300),
       vsync: this,
     );
     _fadeAnimation =
@@ -69,17 +62,27 @@ class _MessageViewState extends ConsumerState<MessageList>
     _scrollController.removeListener(_scrollListener);
     _scrollController.dispose();
     _fadeController.dispose();
+    _debounceTimer?.cancel();
     super.dispose();
   }
 
   void _scrollListener() {
     if (_scrollController.position.pixels == 0) {
-      loadedMessages.first.manager.acknowledge(loadedMessages.first.id);
+      if (loadedMessages.isNotEmpty) {
+        loadedMessages.first.manager.acknowledge(loadedMessages.first.id);
+      }
     }
-    if (!_isLoadingMore &&
-        _scrollController.position.pixels >=
-            _scrollController.position.maxScrollExtent - 5000) {
-      _loadMoreMessages();
+
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent - 1000) {
+      if (!_isLoadingMore) {
+        _debounceTimer?.cancel();
+        _debounceTimer = Timer(const Duration(milliseconds: 300), () {
+          if (!_isLoadingMore) {
+            _loadMoreMessages();
+          }
+        });
+      }
     }
   }
 
@@ -202,7 +205,6 @@ class _MessageViewState extends ConsumerState<MessageList>
 
     messageOutput.when(
       data: (messages) {
-        print("got data for messages");
         loadedMessages = messages ?? [];
         _fadeController.forward();
         content = _buildMessageList();
@@ -253,14 +255,6 @@ class _MessageViewState extends ConsumerState<MessageList>
               ],
             ),
           ),
-          // if (!isSmartwatch(context))
-          //   (channelPermission?.canSendMessages == false)
-          //       ? const NoMessageSendPermissionPlaceholder()
-          //       : MessageBar(
-          //           guildId: guild?.id ?? Snowflake.zero,
-          //           channel: channel,
-          //         ),
-          //           if (!isSmartwatch(context))
           MessageBar(
             guildId: guild?.id ?? Snowflake.zero,
             channel: channel,
@@ -286,9 +280,3 @@ class NoMessageSendPermissionPlaceholder extends StatelessWidget {
             color: Theme.of(context).custom.colorTheme.background));
   }
 }
-
-// if ((channelPermission?.canSendMessages == false)) {
-//   return Container(
-//       decoration: BoxDecoration(
-//           color: Theme.of(context).custom.colorTheme.background));
-// }

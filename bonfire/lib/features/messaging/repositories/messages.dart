@@ -61,8 +61,6 @@ class Messages extends _$Messages {
       if (channel == null) {
         debugPrint("Tried to request messages from a null channel.");
       } else {}
-      // debugPrint("CHANNEL IN MESSAGES: ${channel.runtimeType}");
-      // print(channel is GuildChannel);
 
       if (channel == null) return [];
 
