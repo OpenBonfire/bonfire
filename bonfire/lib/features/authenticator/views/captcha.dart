@@ -46,7 +46,7 @@ class _TokenLoginWidgetState extends ConsumerState<TokenLoginWidget> {
               style: GoogleFonts.publicSans(
                 fontSize: 28,
                 fontWeight: FontWeight.bold,
-                color: Theme.of(context).custom.colorTheme.selectedChannelText,
+                color: Theme.of(context).custom.colorTheme.dirtyWhite,
               ),
             ),
             const SizedBox(height: 16),
@@ -54,18 +54,17 @@ class _TokenLoginWidgetState extends ConsumerState<TokenLoginWidget> {
               "Due to recent restrictions put in place by Discord, I currently have disabled credential-based login. You must log in via QR code, or input your token.",
               style: GoogleFonts.publicSans(
                 fontSize: 16,
-                color:
-                    Theme.of(context).custom.colorTheme.deselectedChannelText,
+                color: Theme.of(context).custom.colorTheme.gray,
               ),
               softWrap: true,
             ),
             const SizedBox(height: 24),
             TextSelectionTheme(
               data: TextSelectionThemeData(
-                cursorColor: Theme.of(context).custom.colorTheme.blurple,
-                selectionColor: Theme.of(context).custom.colorTheme.blurple,
+                cursorColor: Theme.of(context).custom.colorTheme.primary,
+                selectionColor: Theme.of(context).custom.colorTheme.primary,
                 selectionHandleColor:
-                    Theme.of(context).custom.colorTheme.blurple,
+                    Theme.of(context).custom.colorTheme.primary,
               ),
               child: TextField(
                 controller: _tokenController,
@@ -75,10 +74,7 @@ class _TokenLoginWidgetState extends ConsumerState<TokenLoginWidget> {
                   hintText: 'Enter your token here',
                   hintStyle: GoogleFonts.publicSans(
                     fontSize: 16,
-                    color: Theme.of(context)
-                        .custom
-                        .colorTheme
-                        .deselectedChannelText,
+                    color: Theme.of(context).custom.colorTheme.gray,
                   ),
                   filled: true,
                   fillColor: Theme.of(context).custom.colorTheme.background,
@@ -88,16 +84,12 @@ class _TokenLoginWidgetState extends ConsumerState<TokenLoginWidget> {
                   ),
                   prefixIcon: Icon(
                     Icons.vpn_key,
-                    color: Theme.of(context)
-                        .custom
-                        .colorTheme
-                        .deselectedChannelText,
+                    color: Theme.of(context).custom.colorTheme.gray,
                   ),
                 ),
                 style: GoogleFonts.publicSans(
                   fontSize: 16,
-                  color:
-                      Theme.of(context).custom.colorTheme.selectedChannelText,
+                  color: Theme.of(context).custom.colorTheme.dirtyWhite,
                 ),
               ),
             ),
@@ -110,7 +102,7 @@ class _TokenLoginWidgetState extends ConsumerState<TokenLoginWidget> {
                 }
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: Theme.of(context).custom.colorTheme.blurple,
+                backgroundColor: Theme.of(context).custom.colorTheme.primary,
                 foregroundColor: Colors.white,
                 padding: const EdgeInsets.symmetric(vertical: 16),
                 shape: RoundedRectangleBorder(

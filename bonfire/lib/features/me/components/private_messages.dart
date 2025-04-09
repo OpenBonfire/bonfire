@@ -63,8 +63,8 @@ class _TopButtonState extends ConsumerState<TopButton> {
               borderRadius: BorderRadius.circular(4),
             ),
             foregroundColor: selected
-                ? Theme.of(context).custom.colorTheme.selectedChannelText
-                : Theme.of(context).custom.colorTheme.deselectedChannelText,
+                ? Theme.of(context).custom.colorTheme.dirtyWhite
+                : Theme.of(context).custom.colorTheme.gray,
             backgroundColor: selected
                 ? Theme.of(context).custom.colorTheme.foreground
                 : Colors.transparent),
@@ -82,8 +82,8 @@ class _TopButtonState extends ConsumerState<TopButton> {
               child: Icon(
                 Icons.people,
                 color: selected
-                    ? Theme.of(context).custom.colorTheme.selectedChannelText
-                    : Theme.of(context).custom.colorTheme.deselectedChannelText,
+                    ? Theme.of(context).custom.colorTheme.dirtyWhite
+                    : Theme.of(context).custom.colorTheme.gray,
               ),
             ),
             Expanded(
@@ -146,10 +146,7 @@ class _PrivateMessagesState extends ConsumerState<PrivateMessages> {
               width: double.infinity,
               child: Container(
                   decoration: BoxDecoration(
-                      color: Theme.of(context)
-                          .custom
-                          .colorTheme
-                          .channelListBackground,
+                      color: Theme.of(context).custom.colorTheme.background,
                       borderRadius: const BorderRadius.only(
                         topLeft: Radius.circular(24),
                         bottomLeft: Radius.circular(24),

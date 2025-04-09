@@ -130,7 +130,7 @@ class _AudioAttachmentState extends State<AudioAttachment> {
                       child: Expanded(
                         child: Slider(
                           activeColor:
-                              Theme.of(context).custom.colorTheme.blurple,
+                              Theme.of(context).custom.colorTheme.primary,
                           onChanged: (value) {
                             final duration = _duration;
                             if (duration == null) {

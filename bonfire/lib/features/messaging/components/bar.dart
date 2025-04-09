@@ -276,11 +276,11 @@ class _MessageBarState extends ConsumerState<MessageBar> {
                         child: TextSelectionTheme(
                           data: TextSelectionThemeData(
                             cursorColor:
-                                Theme.of(context).custom.colorTheme.blurple,
+                                Theme.of(context).custom.colorTheme.primary,
                             selectionColor:
-                                Theme.of(context).custom.colorTheme.blurple,
+                                Theme.of(context).custom.colorTheme.primary,
                             selectionHandleColor:
-                                Theme.of(context).custom.colorTheme.blurple,
+                                Theme.of(context).custom.colorTheme.primary,
                           ),
                           child: KeyboardListener(
                             focusNode: FocusNode(),
@@ -309,10 +309,8 @@ class _MessageBarState extends ConsumerState<MessageBar> {
                                 ),
                                 hintText: hintText,
                                 hintStyle: GoogleFonts.publicSans(
-                                  color: Theme.of(context)
-                                      .custom
-                                      .colorTheme
-                                      .messageBarHintText,
+                                  color:
+                                      Theme.of(context).custom.colorTheme.gray,
                                   fontWeight: FontWeight.w600,
                                 ),
                                 border: InputBorder.none,
@@ -339,7 +337,7 @@ class _MessageBarState extends ConsumerState<MessageBar> {
                         ),
                         _sendMessage,
                         backgroundColor:
-                            Theme.of(context).custom.colorTheme.blurple,
+                            Theme.of(context).custom.colorTheme.primary,
                         borderRadius: const BorderRadius.only(
                           topRight: Radius.circular(8),
                           bottomRight: Radius.circular(8),

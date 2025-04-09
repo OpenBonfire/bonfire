@@ -40,7 +40,7 @@ class _ContextDrawerState extends ConsumerState<ContextDrawer> {
           BonfireDrawerButton(
             text: 'Edit',
             icon: Icons.edit,
-            color: Theme.of(context).custom.colorTheme.selectedChannelText,
+            color: Theme.of(context).custom.colorTheme.dirtyWhite,
             roundTop: false,
             onTap: () {},
           ),
@@ -48,21 +48,21 @@ class _ContextDrawerState extends ConsumerState<ContextDrawer> {
           BonfireDrawerButton(
             text: 'Copy Text',
             icon: Icons.copy_rounded,
-            color: Theme.of(context).custom.colorTheme.selectedChannelText,
+            color: Theme.of(context).custom.colorTheme.dirtyWhite,
             onTap: () {},
           ),
           const SizedBox(height: 16),
           BonfireDrawerButton(
             text: 'Copy Message ID',
             icon: Icons.developer_board_rounded,
-            color: Theme.of(context).custom.colorTheme.selectedChannelText,
+            color: Theme.of(context).custom.colorTheme.dirtyWhite,
             roundBottom: false,
             onTap: () {},
           ),
           BonfireDrawerButton(
             text: 'Copy Message Link',
             icon: Icons.link_rounded,
-            color: Theme.of(context).custom.colorTheme.selectedChannelText,
+            color: Theme.of(context).custom.colorTheme.dirtyWhite,
             roundTop: false,
             onTap: () {},
           ),

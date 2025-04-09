@@ -67,11 +67,11 @@ class ReactionWidget extends ConsumerWidget {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
         color: reaction.me
-            ? theme.colorTheme.blurple.withValues(alpha: 0.2)
+            ? theme.colorTheme.primary.withValues(alpha: 0.2)
             : theme.colorTheme.foreground,
         border: Border.all(
           color: reaction.me
-              ? theme.colorTheme.blurple
+              ? theme.colorTheme.primary
               : theme.colorTheme.foreground,
         ),
       ),

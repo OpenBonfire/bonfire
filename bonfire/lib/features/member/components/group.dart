@@ -42,6 +42,6 @@ class _HeaderCardState extends ConsumerState<GroupHeader> {
         style: GoogleFonts.publicSans(
             fontSize: 14,
             fontWeight: FontWeight.w600,
-            color: Theme.of(context).custom.colorTheme.buttonIcon1));
+            color: Theme.of(context).custom.colorTheme.dirtyWhite));
   }
 }

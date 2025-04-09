@@ -87,7 +87,7 @@ class _ChannelsListState extends ConsumerState<ChannelsList> {
       child: Container(
         height: double.infinity,
         decoration: BoxDecoration(
-          color: Theme.of(context).custom.colorTheme.channelListBackground,
+          color: Theme.of(context).custom.colorTheme.background,
           borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(24),
             topRight: Radius.circular(8),

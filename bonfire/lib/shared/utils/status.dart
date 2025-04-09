@@ -14,6 +14,6 @@ Color getStatusColor(BuildContext context, UserStatus status) {
     case UserStatus.dnd:
       return Theme.of(context).custom.colorTheme.red;
     case UserStatus.offline:
-      return Theme.of(context).custom.colorTheme.darkButtonBackground;
+      return Theme.of(context).custom.colorTheme.background;
   }
 }

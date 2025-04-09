@@ -120,14 +120,8 @@ class _ChannelButtonState extends ConsumerState<ChannelButton> {
                           borderRadius: BorderRadius.circular(4),
                         ),
                         foregroundColor: selected
-                            ? Theme.of(context)
-                                .custom
-                                .colorTheme
-                                .selectedChannelText
-                            : Theme.of(context)
-                                .custom
-                                .colorTheme
-                                .deselectedChannelText,
+                            ? Theme.of(context).custom.colorTheme.dirtyWhite
+                            : Theme.of(context).custom.colorTheme.gray,
                         backgroundColor: selected
                             ? Theme.of(context).custom.colorTheme.foreground
                             : Colors.transparent),
@@ -167,11 +161,8 @@ class _ChannelButtonState extends ConsumerState<ChannelButton> {
                                     ? Theme.of(context)
                                         .custom
                                         .colorTheme
-                                        .selectedChannelText
-                                    : Theme.of(context)
-                                        .custom
-                                        .colorTheme
-                                        .deselectedChannelText,
+                                        .dirtyWhite
+                                    : Theme.of(context).custom.colorTheme.gray,
                                 size: 20,
                               ),
                               const SizedBox(width: 8),
@@ -194,11 +185,11 @@ class _ChannelButtonState extends ConsumerState<ChannelButton> {
                                                   ? Theme.of(context)
                                                       .custom
                                                       .colorTheme
-                                                      .selectedChannelText
+                                                      .dirtyWhite
                                                   : Theme.of(context)
                                                       .custom
                                                       .colorTheme
-                                                      .deselectedChannelText),
+                                                      .gray),
                                     ),
                                   ),
                                   // const Spacer(),

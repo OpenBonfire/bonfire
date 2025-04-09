@@ -117,7 +117,7 @@ class _DownloadAttachmentState extends State<DownloadAttachment> {
                   color: Theme.of(context)
                       .custom
                       .colorTheme
-                      .blurple
+                      .primary
                       .withOpacity(opacity),
                 ),
               ),

@@ -37,7 +37,7 @@ class _CategoryState extends State<Category> {
               width: double.infinity,
               child: Text(widget.category.name,
                   style: GoogleFonts.publicSans(
-                    color: Theme.of(context).custom.colorTheme.channelCategory,
+                    color: Theme.of(context).custom.colorTheme.gray,
                     fontSize: 14,
                     fontWeight: FontWeight.w500,
                   )),

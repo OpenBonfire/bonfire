@@ -25,7 +25,7 @@ class _GuildOverviewState extends ConsumerState<GuildOverview> {
         width: double.infinity,
         child: Container(
           decoration: BoxDecoration(
-              color: Theme.of(context).custom.colorTheme.channelListBackground,
+              color: Theme.of(context).custom.colorTheme.background,
               borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(15), topRight: Radius.circular(8)),
               border: Border(

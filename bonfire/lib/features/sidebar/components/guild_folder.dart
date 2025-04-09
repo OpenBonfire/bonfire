@@ -200,7 +200,7 @@ class GuildFolderWidgetState extends ConsumerState<GuildFolderWidget>
                                       : Theme.of(context)
                                           .custom
                                           .colorTheme
-                                          .blurple
+                                          .primary
                                           .withOpacity(0.5),
                                   borderRadius: BorderRadius.circular(16),
                                 ),
@@ -241,7 +241,7 @@ class GuildFolderWidgetState extends ConsumerState<GuildFolderWidget>
                                         Theme.of(context)
                                             .custom
                                             .colorTheme
-                                            .blurple
+                                            .primary
                                             .value,
                                       ),
                               ),

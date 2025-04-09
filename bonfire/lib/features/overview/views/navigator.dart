@@ -67,7 +67,7 @@ class _BarWidgetState extends ConsumerState<NavigationBarWidget> {
       children: [
         Container(
           decoration: BoxDecoration(
-            color: Theme.of(context).custom.colorTheme.navbarBackground,
+            color: Theme.of(context).custom.colorTheme.darkGray,
             border: Border(
               top: BorderSide(
                 color: Theme.of(context).custom.colorTheme.foreground,
@@ -106,7 +106,7 @@ class _BarWidgetState extends ConsumerState<NavigationBarWidget> {
         ),
         Container(
           decoration: BoxDecoration(
-            color: Theme.of(context).custom.colorTheme.navbarBackground,
+            color: Theme.of(context).custom.colorTheme.darkGray,
           ),
           height: MediaQuery.of(context).padding.bottom,
         )
@@ -156,8 +156,8 @@ class NavigatorIcon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final color = selected
-        ? Theme.of(context).custom.colorTheme.navbarIconSelected
-        : Theme.of(context).custom.colorTheme.navbarIconDeselected;
+        ? Theme.of(context).custom.colorTheme.dirtyWhite
+        : Theme.of(context).custom.colorTheme.gray;
 
     return InkWell(
       onTap: () {

@@ -43,8 +43,7 @@ class _FriendCardState extends ConsumerState<FriendCard> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(4),
           ),
-          foregroundColor:
-              Theme.of(context).custom.colorTheme.selectedChannelText,
+          foregroundColor: Theme.of(context).custom.colorTheme.dirtyWhite,
           backgroundColor: Theme.of(context).custom.colorTheme.foreground,
         ),
         onPressed: () {},

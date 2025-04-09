@@ -44,7 +44,7 @@ class DescriptionEmbed extends StatelessWidget {
                           embed.color!.b,
                           1,
                         )
-                      : Theme.of(context).custom.colorTheme.blurple,
+                      : Theme.of(context).custom.colorTheme.primary,
                 ),
               ),
             ),

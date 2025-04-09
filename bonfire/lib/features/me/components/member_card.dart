@@ -62,8 +62,8 @@ class _DirectMessageMemberState extends ConsumerState<DirectMessageMember> {
                   borderRadius: BorderRadius.circular(4),
                 ),
                 foregroundColor: selected
-                    ? Theme.of(context).custom.colorTheme.selectedChannelText
-                    : Theme.of(context).custom.colorTheme.deselectedChannelText,
+                    ? Theme.of(context).custom.colorTheme.dirtyWhite
+                    : Theme.of(context).custom.colorTheme.gray,
                 backgroundColor: selected
                     ? Theme.of(context).custom.colorTheme.foreground
                     : Colors.transparent),

@@ -108,10 +108,7 @@ class UserCard extends ConsumerWidget {
                       Text(
                         customStatus?.text ?? status?.value ?? "Offline",
                         style: GoogleFonts.publicSans(
-                          color: Theme.of(context)
-                              .custom
-                              .colorTheme
-                              .deselectedChannelText,
+                          color: Theme.of(context).custom.colorTheme.gray,
                           fontWeight: FontWeight.w400,
                           fontSize: 12,
                         ),

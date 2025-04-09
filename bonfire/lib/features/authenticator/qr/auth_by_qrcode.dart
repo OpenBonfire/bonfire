@@ -350,10 +350,10 @@ class _AuthRemoteState extends State<AuthRemote> {
                   padding: const EdgeInsets.all(16.0),
                   dataModuleStyle: QrDataModuleStyle(
                       dataModuleShape: QrDataModuleShape.circle,
-                      color: theme.custom.colorTheme.buttonIcon1),
+                      color: theme.custom.colorTheme.dirtyWhite),
                   eyeStyle: QrEyeStyle(
                     eyeShape: QrEyeShape.circle,
-                    color: theme.custom.colorTheme.buttonIcon1,
+                    color: theme.custom.colorTheme.dirtyWhite,
                   ),
                   backgroundColor: theme.custom.colorTheme.foreground,
                   data: widget.nfingerprint!,

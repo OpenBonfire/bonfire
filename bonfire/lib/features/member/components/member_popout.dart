@@ -320,7 +320,7 @@ class _UserInfoTabViewState extends ConsumerState<UserInfoTabView>
                 controller: _tabController,
                 labelPadding: const EdgeInsets.symmetric(horizontal: 8.0),
                 indicatorSize: TabBarIndicatorSize.tab,
-                indicatorColor: Theme.of(context).custom.colorTheme.blurple,
+                indicatorColor: Theme.of(context).custom.colorTheme.primary,
                 labelColor: Colors.white,
                 onTap: (index) {
                   HapticFeedback.lightImpact();
@@ -436,8 +436,7 @@ class _AboutUserTabState extends ConsumerState<AboutUserTab> {
 
     if (member == null) {
       return LoadingAnimationWidget.fallingDot(
-          color: Theme.of(context).custom.colorTheme.deselectedChannelText,
-          size: 24);
+          color: Theme.of(context).custom.colorTheme.gray, size: 24);
     }
 
     return Container(
@@ -475,10 +474,8 @@ class _AboutUserTabState extends ConsumerState<AboutUserTab> {
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(4),
                             ),
-                            foregroundColor: Theme.of(context)
-                                .custom
-                                .colorTheme
-                                .selectedChannelText,
+                            foregroundColor:
+                                Theme.of(context).custom.colorTheme.dirtyWhite,
                             backgroundColor:
                                 Theme.of(context).custom.colorTheme.foreground,
                           ),
@@ -592,8 +589,7 @@ class _MutualFriendsInlineState extends ConsumerState<MutualFriendsInline> {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(4),
         ),
-        foregroundColor:
-            Theme.of(context).custom.colorTheme.selectedChannelText,
+        foregroundColor: Theme.of(context).custom.colorTheme.dirtyWhite,
         backgroundColor: Theme.of(context).custom.colorTheme.foreground,
       ),
       onPressed: () {},

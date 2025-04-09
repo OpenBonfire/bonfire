@@ -43,8 +43,7 @@ class _VoiceMemberCardState extends ConsumerState<VoiceMemberCard> {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12),
             ),
-            foregroundColor:
-                Theme.of(context).custom.colorTheme.deselectedChannelText,
+            foregroundColor: Theme.of(context).custom.colorTheme.gray,
             backgroundColor: Colors.transparent,
           ),
           onPressed: () {},
@@ -89,7 +88,7 @@ class _VoiceMemberCardState extends ConsumerState<VoiceMemberCard> {
                                         color: Theme.of(context)
                                             .custom
                                             .colorTheme
-                                            .deselectedChannelText),
+                                            .gray),
                               ),
                               const Spacer(),
                             ],

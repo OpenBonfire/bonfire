@@ -85,8 +85,7 @@ class _MemberCardState extends ConsumerState<MemberCard> {
                 bottomRight: Radius.circular(borderRadiusBottom),
               ),
             ),
-            foregroundColor:
-                Theme.of(context).custom.colorTheme.selectedChannelText,
+            foregroundColor: Theme.of(context).custom.colorTheme.dirtyWhite,
             backgroundColor: Theme.of(context).custom.colorTheme.foreground,
           ),
           child: Padding(
@@ -139,8 +138,7 @@ class _MemberCardState extends ConsumerState<MemberCard> {
               child: Container(
                 height: 0.1,
                 decoration: BoxDecoration(
-                  color:
-                      Theme.of(context).custom.colorTheme.deselectedChannelText,
+                  color: Theme.of(context).custom.colorTheme.gray,
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(borderRadiusTop),
                     topRight: Radius.circular(borderRadiusTop),

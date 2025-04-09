@@ -44,8 +44,7 @@ class _BonfireDrawerButtonState extends ConsumerState<BonfireDrawerButton> {
             shape: RoundedRectangleBorder(
               borderRadius: borderRadius,
             ),
-            foregroundColor:
-                Theme.of(context).custom.colorTheme.selectedChannelText,
+            foregroundColor: Theme.of(context).custom.colorTheme.dirtyWhite,
             backgroundColor: Theme.of(context).custom.colorTheme.foreground),
         onPressed: () {
           GlobalDrawer.of(context)?.closeDrawer();
