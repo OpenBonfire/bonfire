@@ -1,5 +1,6 @@
 import 'package:bonfire/features/authenticator/data/repositories/auth.dart';
 import 'package:bonfire/features/authenticator/data/repositories/discord_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:firebridge/firebridge.dart';
@@ -45,7 +46,7 @@ class Guilds extends _$Guilds {
       state = AsyncValue.data(fetchedGuilds);
       return fetchedGuilds;
     } else {
-      print("Not an auth user. This is probably very bad.");
+      debugPrint("Not an auth user. This is probably very bad.");
     }
     return guilds;
   }

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:bonfire/features/authenticator/data/repositories/auth.dart';
 import 'package:bonfire/features/authenticator/data/repositories/discord_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
@@ -31,7 +32,7 @@ class VoiceChannelController extends _$VoiceChannelController {
   }
 
   void handleRemoteSdp(String sdp) async {
-    print("Handling remote SDP");
+    debugPrint("Handling remote SDP");
     if (_peerConnection == null) return;
 
     final parsedRemoteSdp = parse(sdp);
@@ -57,7 +58,7 @@ class VoiceChannelController extends _$VoiceChannelController {
       orElse: () => null,
     );
     if (group == null) throw Exception("BUNDLE group not found in local SDP");
-    print("Groups = $group");
+    debugPrint("Groups = $group");
     final bundles = (group['mids'] as String).split(' ');
 
     var remoteSdp = '''
@@ -123,11 +124,11 @@ a=rtcp-mux
       }
     }
 
-    // print("Generated Remote SDP:\n$remoteSdp");
-    print("setting description");
+    // debugPrint("Generated Remote SDP:\n$remoteSdp");
+    debugPrint("setting description");
     final desc = RTCSessionDescription(remoteSdp, "answer");
     await _peerConnection!.setRemoteDescription(desc);
-    print("should be set...");
+    debugPrint("should be set...");
   }
 
   Future<void> joinVoiceChannel(Snowflake guildId, Snowflake channelId) async {
@@ -150,7 +151,7 @@ a=rtcp-mux
     void connect() async {
       if (_isConnecting) return;
       _isConnecting = true;
-      print("Connecting to voice gateway...");
+      debugPrint("Connecting to voice gateway...");
       try {
         _voiceClient = await Nyxx.connectVoiceGateway(
           VoiceGatewayUser(
@@ -166,19 +167,19 @@ a=rtcp-mux
         );
 
         _voiceClient!.onVoiceSessionDescription.listen((event) {
-          print("Received Session Description");
+          debugPrint("Received Session Description");
           handleRemoteSdp(event.sdp!);
         });
 
         _voiceClient!.onReady.listen((event) async {
-          print("Voice client is ready");
-          print(event.port);
+          debugPrint("Voice client is ready");
+          debugPrint(event.port.toString());
           state = event;
 
           await _initializeWebRTC(event);
         });
       } catch (e) {
-        print(
+        debugPrint(
             "Error connecting to voice gateway: ${(e as WebSocketException).message}");
         state = null;
       } finally {
@@ -214,16 +215,16 @@ a=rtcp-mux
     _peerConnection = await createPeerConnection(configuration);
 
     _peerConnection!.onIceCandidate = (RTCIceCandidate candidate) {
-      print("ICE candidate: ${candidate.toMap()}");
+      debugPrint("ICE candidate: ${candidate.toMap()}");
     };
 
     _peerConnection!.onConnectionState = (RTCPeerConnectionState state) {
-      print('Connection state change: $state');
+      debugPrint('Connection state change: $state');
       if (state == RTCPeerConnectionState.RTCPeerConnectionStateFailed) {}
     };
 
     Future<void> handleNegotiation() async {
-      print("Handling...");
+      debugPrint("Handling...");
       if (_peerConnection == null) return;
 
       final offer = await _peerConnection!.createOffer({
@@ -231,9 +232,9 @@ a=rtcp-mux
         'offerToReceiveVideo': true,
       });
 
-      print("Offering...");
+      debugPrint("Offering...");
 
-      // print("Local SDP = ${offer.sdp}");
+      // debugPrint("Local SDP = ${offer.sdp}");
       _currentLocalOffer = offer;
       await _peerConnection!.setLocalDescription(_currentLocalOffer!);
 
@@ -246,12 +247,12 @@ a=rtcp-mux
     }
 
     _peerConnection!.onRenegotiationNeeded = () async {
-      print("Negotiation needed");
+      debugPrint("Negotiation needed");
       await handleNegotiation();
     };
 
     _peerConnection!.onSignalingState = (RTCSignalingState state) {
-      print('Signaling state change: $state');
+      debugPrint('Signaling state change: $state');
     };
 
     _localStream = await navigator.mediaDevices
@@ -270,7 +271,7 @@ a=rtcp-mux
         init: RTCRtpTransceiverInit(direction: TransceiverDirection.RecvOnly),
       );
     }
-    print("Init called");
+    debugPrint("Init called");
     await handleNegotiation();
   }
 

@@ -18,11 +18,11 @@ class GuildUnreads extends _$GuildUnreads {
     // }
     Guild? guild = ref.watch(guildControllerProvider(guildId));
     if (guild == null) {
-      // print("Guild is null");
+      // debugPrint("Guild is null");
       return false;
     }
     var channels = ref.watch(channelsProvider(guildId)).valueOrNull ?? [];
-    // print("GOT CHANNELS: ${channels.length}");
+    // debugPrint("GOT CHANNELS: ${channels.length}");
 
     for (var channel in channels) {
       if (channel is GuildTextChannel) {

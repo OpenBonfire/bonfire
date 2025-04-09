@@ -24,11 +24,11 @@ class DiscordKeyPair {
     return _btoa(exportKey);
   }
 
-  static Future<String> publicKeyFingerprint(
+  static Future<String> publicKeyFingerdebugPrint(
       KeyPair<RsaOaepPrivateKey, RsaOaepPublicKey> keyPair) async {
     Uint8List exportKey = await keyPair.publicKey.exportSpkiKey();
 
-    return _fingerprint(exportKey);
+    return _fingerdebugPrint(exportKey);
   }
 
   static Future<String> decryptEncodedCiphertext(
@@ -91,7 +91,7 @@ class DiscordKeyPair {
     return _atob(str);
   }
 
-  static Future<String> _fingerprint(Uint8List bytes) async {
+  static Future<String> _fingerdebugPrint(Uint8List bytes) async {
     final digest = await Hash.sha256.digestBytes(bytes);
 
     return _serialize(digest);

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:universal_io/io.dart';
 import 'dart:math';
 import 'dart:typed_data';
@@ -83,32 +84,32 @@ Future<WebSocketChannel> createWebSocket(Uri url) async {
         (socket) => WebSocket.fromUpgradedSocket(socket, serverSide: false));
   });
 
-  print("ttt ${ttt}");
+  debugPrint("ttt ${ttt}");
 
   final WebSocket tt = ttt;
 
   WebSocketChannel channel = IOWebSocketChannel(tt);
 
-  print("Print ${tt} ${channel}");
+  debugPrint("Print ${tt} ${channel}");
 
   return channel;
 
   // try {
   //   await channel.ready;
 
-  //   print("Ready");
+  //   debugPrint("Ready");
 
   //   channel.stream.listen((data) {
   //     final map = jsonDecode(data) as Map<String, dynamic>;
 
-  //     print("${map}");
+  //     debugPrint("${map}");
   //   }, onError: (error) {
-  //     print(error);
+  //     debugPrint(error);
   //   }, onDone: () {
-  //     print("Connection closed ${channel.closeCode}, ${channel.closeReason}");
+  //     debugPrint("Connection closed ${channel.closeCode}, ${channel.closeReason}");
   //   });
   // } catch (e) {
-  //   print(e.toString());
+  //   debugPrint(e.toString());
   // }
 }
 

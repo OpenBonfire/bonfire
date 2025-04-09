@@ -43,9 +43,9 @@ class _ThreadCardState extends ConsumerState<ThreadCard> {
         splashColor: Colors.white,
         borderRadius: BorderRadius.circular(8),
         onTap: () {
-          print("should navigate");
-          print("${widget.channelId}/${thread.id}");
-          // print(thread.);
+          debugPrint("should navigate");
+          debugPrint("${widget.channelId}/${thread.id}");
+          // debugPrint(thread.);
           // context.go("/channels/${thread.guildId}/${thread.id}/");
           context.go(
               "/channels/${thread.guildId}/${widget.channelId}/threads/${thread.id}/");

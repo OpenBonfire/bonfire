@@ -53,7 +53,7 @@ class _UserPopoutCardState extends ConsumerState<UserPopoutCard> {
     PresenceUpdateEvent? presence =
         ref.watch(presenceControllerProvider(widget.userId));
 
-    // print(selectedProfileConfig?.effects.first.src);
+    // debugPrint(selectedProfileConfig?.effects.first.src);
     return ClipRRect(
       borderRadius: BorderRadius.circular(20),
       child: Container(
@@ -451,7 +451,7 @@ class _AboutUserTabState extends ConsumerState<AboutUserTab> {
                   Padding(
                     padding: const EdgeInsets.all(0),
                     child: Builder(builder: (context) {
-                      // print("looking for role ${roleId}");
+                      // debugPrint("looking for role ${roleId}");
                       var role = ref.watch(roleControllerProvider(roleId))!;
                       return OutlinedButton(
                           style: OutlinedButton.styleFrom(

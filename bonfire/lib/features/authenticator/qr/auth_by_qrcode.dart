@@ -114,7 +114,7 @@ class _AuthByQRcodeState extends ConsumerState<AuthByQRcode> {
       final token = await DiscordKeyPair.decryptEncodedCiphertext(
           keyPair, encrypted_token);
 
-      print("Got token: $token");
+      debugPrint("Got token: $token");
 
       ref.read(authProvider.notifier).loginWithToken(token);
 
@@ -126,10 +126,10 @@ class _AuthByQRcodeState extends ConsumerState<AuthByQRcode> {
     } catch (e, _) {
       //   }on DioError catch (e) { <<<<< IN THIS LINE
       //   if(e.response.statusCode == 404){
-      //     print(e.response.statusCode);
+      //     debugPrint(e.response.statusCode);
       //   }else{
-      //     print(e.message);
-      //     print(e.request);
+      //     debugPrint(e.message);
+      //     debugPrint(e.request);
       //   }
       // }
 
@@ -180,7 +180,8 @@ class _AuthByQRcodeState extends ConsumerState<AuthByQRcode> {
 
       debugPrint("Elapsed.3=${getTimeNow() - start0}");
 
-      final fingerprint = await DiscordKeyPair.publicKeyFingerprint(keyPair);
+      final fingerprint =
+          await DiscordKeyPair.publicKeyFingerdebugPrint(keyPair);
 
       debugPrint("Elapsed.4=${getTimeNow() - start0}");
 

@@ -7,7 +7,8 @@ void main() async {
   final client = await Nyxx.connectGateway(
     Platform.environment['TOKEN']!,
     GatewayIntents.guildMessages | GatewayIntents.messageContent,
-    options: GatewayClientOptions(plugins: [logging, cliIntegration, pagination]),
+    options:
+        GatewayClientOptions(plugins: [logging, cliIntegration, pagination]),
   );
 
   // Get an emoji by its unicode character...
@@ -19,13 +20,15 @@ void main() async {
 
   // Get information about a text emoji!
   final heartEmojiInformation = await heartEmoji.getDefinition();
-  print('The primary name of ${heartEmojiInformation.surrogates} is ${heartEmojiInformation.primaryName}');
+  print(
+      'The primary name of ${heartEmojiInformation.surrogates} is ${heartEmojiInformation.primaryName}');
 
   // Sanitizing content makes it safe to send to Discord without triggering any mentions
   client.onMessageCreate.listen((event) async {
     if (event.message.content.startsWith('!sanitize')) {
       event.message.channel.sendMessage(MessageBuilder(
-        content: 'Sanitized content: ${await sanitizeContent(event.message.content, channel: event.message.channel)}',
+        content:
+            'Sanitized content: ${await sanitizeContent(event.message.content, channel: event.message.channel)}',
       ));
     }
   });

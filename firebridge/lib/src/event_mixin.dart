@@ -36,11 +36,11 @@ mixin EventMixin implements Nyxx {
   ///
   /// The following two code examples are equivalent:
   /// ```dart
-  /// client.on<MessageCreateEvent>((event) => print(event.message.content));
+  /// client.on<MessageCreateEvent>((event) => debugPrint(event.message.content));
   /// ```
   ///
   /// ```dart
-  /// client.onMessageCreate.listen((event) => print(event.message.content));
+  /// client.onMessageCreate.listen((event) => debugPrint(event.message.content));
   /// ```
   StreamSubscription<T> on<T extends DispatchEvent>(
           void Function(T event) onData) =>

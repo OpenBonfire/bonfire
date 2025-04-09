@@ -181,7 +181,7 @@ class MemberScrollViewState extends ConsumerState<MemberScrollView> {
 
     int nextUpperBound = nextLowerBound + 99;
 
-    print("Loading next range: $nextLowerBound - $nextUpperBound");
+    debugPrint("Loading next range: $nextLowerBound - $nextUpperBound");
     channelMembersNotifier.loadMemberRange(nextLowerBound, nextUpperBound);
 
     Future.delayed(const Duration(milliseconds: 500), () {

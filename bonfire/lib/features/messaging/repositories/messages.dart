@@ -12,6 +12,7 @@ import 'package:bonfire/features/messaging/controllers/message.dart';
 import 'package:bonfire/features/messaging/controllers/reply.dart';
 import 'package:firebridge_extensions/firebridge_extensions.dart';
 import 'package:firebridge/firebridge.dart';
+import 'package:flutter/foundation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'messages.g.dart';
@@ -34,7 +35,7 @@ class Messages extends _$Messages {
     var auth = ref.watch(authProvider.notifier).getAuth();
 
     if (auth is! AuthUser) {
-      print("bad auth!");
+      debugPrint("bad auth!");
       return null;
     }
 
@@ -54,7 +55,7 @@ class Messages extends _$Messages {
       if (channelId == Snowflake.zero) return [];
       var channel = ref.watch(channelControllerProvider(channelId));
       if (channel == null) {
-        print("Tried to request messages from a null channel.");
+        debugPrint("Tried to request messages from a null channel.");
       }
 
       if (channel == null) return [];
@@ -76,14 +77,14 @@ class Messages extends _$Messages {
                 selfMember, guild, roles);
 
         if (permissions.canReadMessageHistory == false) {
-          print(
+          debugPrint(
               "Error fetching messages in channel ${channel.id}, likely do not have access to channel bozo!");
           return [];
         }
       }
 
       if (channel is! TextChannel) {
-        print(
+        debugPrint(
             "Error fetching messages in channel ${channel.id}, not a text channel");
         return [];
       }
@@ -121,7 +122,8 @@ class Messages extends _$Messages {
     Snowflake? around,
   }) async {
     Channel? channel = ref.watch(channelControllerProvider(channelId));
-    if (channel == null) print("TRIED TO FETCH MESSAGES FOR NULL CHANNEL!");
+    if (channel == null)
+      debugPrint("TRIED TO FETCH MESSAGES FOR NULL CHANNEL!");
     List<Message> messages = [];
 
     messages.addAll(loadedMessages);

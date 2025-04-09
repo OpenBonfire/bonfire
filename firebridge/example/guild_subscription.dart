@@ -11,21 +11,21 @@ void main() async {
   );
 
   client.onMessageCreate.listen((event) async {
-    // print("GOT MESSAGE!");
-    // print(DiscordDateUtils.packLastViewed(DateTime.now()));
+    // debugPrint("GOT MESSAGE!");
+    // debugPrint(DiscordDateUtils.packLastViewed(DateTime.now()));
     event.message.manager.acknowledge(event.message.id);
   });
 
   client.onChannelUnread.listen((event) async {
-    // print("got unread!");
-    // print(event.channelUnreadUpdates.first.readState.lastViewed);
+    // debugPrint("got unread!");
+    // debugPrint(event.channelUnreadUpdates.first.readState.lastViewed);
   });
 
   client.onMessageAck.listen((event) async {
-    // print("got ack!");
-    // print(event.channel);
-    // print("GOT ACK!");
-    // print(event.messageId);
+    // debugPrint("got ack!");
+    // debugPrint(event.channel);
+    // debugPrint("GOT ACK!");
+    // debugPrint(event.messageId);
   });
 
   client.onRelationshipAdd.listen((event) async {
@@ -45,7 +45,7 @@ void main() async {
 
   client.onReady.listen((event) async {
     print("Client Ready");
-    // print("Ready!");
+    // debugPrint("Ready!");
 
     // Snowflake guildId = Snowflake(BigInt.from(603970300668805120));
     // Snowflake channelId = Snowflake(BigInt.from(1085672960695746600));
@@ -54,6 +54,6 @@ void main() async {
     // ForumChannel channel = await client.channels.get(channelId) as ForumChannel;
     // var singleThread = await channel.manager
     //     .getThreadPostData(channelId, [Snowflake.parse(1152257066656858184)]);
-    // print(singleThread.first.firstMessage);
+    // debugPrint(singleThread.first.firstMessage);
   });
 }

@@ -45,7 +45,7 @@ class _MessageMarkdownBoxState extends State<MessageMarkdownBox> {
         var rendered = prism.render(text, language ?? 'plain');
         return rendered;
       } catch (e) {
-        print('MessageMarkdownBox: Error in highlightBuilder: $e');
+        debugPrint('MessageMarkdownBox: Error in highlightBuilder: $e');
         return <TextSpan>[TextSpan(text: text)];
       }
     }, onTapLink: (href, title) {

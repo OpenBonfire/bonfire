@@ -104,7 +104,7 @@ class _SidebarState extends ConsumerState<Sidebar> {
             selected: channelId == readState.channel.id,
             mentions: readState.mentionCount ?? 0,
             onTap: () {
-              print("tapped dm!");
+              debugPrint("tapped dm!");
               GoRouter.of(context).go('/channels/@me/${readState.channel.id}');
             },
             child: DmIcon(privateChannelId: readState.channel.id),
@@ -126,7 +126,7 @@ class _SidebarState extends ConsumerState<Sidebar> {
           guildList = guilds;
         },
         error: (data, trace) {
-          print("ERROR11111111111");
+          debugPrint("ERROR11111111111");
         },
         loading: () {});
 

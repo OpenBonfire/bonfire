@@ -13,17 +13,17 @@ void main() async {
   // client.onMessageCreate.listen((event) async {
   //   if (event.message.content.contains('nyxx_firebridge')) {
   //     var memberList = await members.toList();
-  //     print(memberList);
+  //     debugPrint(memberList);
   //   }
   // });
 
   client.onGuildMemberListUpdate.listen((event) async {
-    // print("new event just dropped");
-    // print(event);
+    // debugPrint("new event just dropped");
+    // debugPrint(event);
   });
 
   // var memberList = await members.toList();
-  // print(memberList);
+  // debugPrint(memberList);
 
   // client.onMessageCreate.listen((event) async {
   //   if (event.message.content.contains('nyxx_firebridge')) {

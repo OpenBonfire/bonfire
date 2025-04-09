@@ -1,5 +1,6 @@
 import 'package:bonfire/features/channels/controllers/channel.dart';
 import 'package:bonfire/features/me/controllers/settings.dart';
+import 'package:flutter/foundation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:firebridge/firebridge.dart';
 
@@ -13,7 +14,7 @@ class HasUnreads extends _$HasUnreads {
 
     Channel? channel = ref.watch(channelControllerProvider(channelId));
     if (channel == null) {
-      print("channel is null");
+      debugPrint("channel is null");
       return false;
     }
 
@@ -22,7 +23,7 @@ class HasUnreads extends _$HasUnreads {
     // }
 
     // wait hold on why can't we just do pings?
-    // print("has unreads ...");
+    // debugPrint("has unreads ...");
     if (channel is GuildTextChannel) {
       lastMessageId = channel.lastMessageId;
     } else if (channel is GuildAnnouncementChannel) {
@@ -45,9 +46,9 @@ class HasUnreads extends _$HasUnreads {
     if (lastChannelMessageId == null) return false;
     if (lastReadMessage == null) return true;
 
-    // print("computing using comparison");
-    // print(lastChannelMessageId);
-    // print(lastReadMessage.id);
+    // debugPrint("computing using comparison");
+    // debugPrint(lastChannelMessageId);
+    // debugPrint(lastReadMessage.id);
 
     return (lastChannelMessageId > lastReadMessage.id) &&
         lastReadMessage.id != lastChannelMessageId;

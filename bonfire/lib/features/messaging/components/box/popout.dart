@@ -49,18 +49,18 @@ class _ContextPopoutState extends ConsumerState<ContextPopout> {
             shouldMention: false,
           ),
         );
-        print("Replying to message");
+        debugPrint("Replying to message");
       } else if (result == "edit") {
-        print("Editing message");
+        debugPrint("Editing message");
       } else if (result == "addReaction") {
-        print("Adding reaction");
+        debugPrint("Adding reaction");
       } else if (result == "report") {
-        print("Reporting message");
+        debugPrint("Reporting message");
       } else if (result == "delete") {
-        print("Deleting message");
+        debugPrint("Deleting message");
       }
     });
-    print("_showPopupMenu called");
+    debugPrint("_showPopupMenu called");
   }
 
   List<PopupMenuEntry<String>> _buildMenuItems(BuildContext context) {

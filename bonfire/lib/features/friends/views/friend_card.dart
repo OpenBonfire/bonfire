@@ -24,7 +24,7 @@ class _FriendCardState extends ConsumerState<FriendCard> {
         ref.watch(presenceControllerProvider(widget.user.id));
 
     // var privateMessages = ref.watch(privateMessageHistoryProvider);
-    // print(privateMessages.first.recipients.first);
+    // debugPrint(privateMessages.first.recipients.first);
 
     // I need a way of getting the dm channel ID from the user ID
     // var dm = privateMessages.first.recipients

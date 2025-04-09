@@ -5,6 +5,7 @@ import 'package:bonfire/features/authenticator/data/repositories/discord_auth.da
 import 'package:bonfire/features/guild/controllers/guild.dart';
 import 'package:bonfire/features/guild/controllers/role.dart';
 import 'package:bonfire/features/guild/controllers/roles.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:firebridge_extensions/firebridge_extensions.dart';
 import 'package:firebridge/firebridge.dart';
@@ -44,14 +45,14 @@ class Channels extends _$Channels {
 
       List<GuildChannel> guildChannels = [];
 
-      // print("Member List: ${guild.memberList?.length}");
+      // debugPrint("Member List: ${guild.memberList?.length}");
       Member? maybeSelf;
       Member? selfMember;
       guild.memberList?.forEach((element) {
         if (element.user?.id == auth.client.user.id) {
           maybeSelf = element;
         }
-        // print("Member: ${element.user.username}");
+        // debugPrint("Member: ${element.user.username}");
       });
 
       if (maybeSelf != null) {
@@ -64,7 +65,7 @@ class Channels extends _$Channels {
 
       var roleIds = ref.watch(rolesControllerProvider(guildId));
       if (roleIds == null) {
-        print("No role ids");
+        debugPrint("No role ids");
       }
 
       List<Role> roles = [];
@@ -134,8 +135,8 @@ class Channels extends _$Channels {
     //   try {
     //     ref.read(messagesProvider.notifier).runPreCacheRoutine(channel);
     //   } catch (e) {
-    //     print("error while pre-caching!");
-    //     print(e);
+    //     debugPrint("error while pre-caching!");
+    //     debugPrint(e);
     //   }
     // }
   }

@@ -3,6 +3,7 @@ import 'package:bonfire/features/authenticator/data/repositories/discord_auth.da
 import 'package:bonfire/features/guild/controllers/guild.dart';
 import 'package:bonfire/features/me/controllers/settings.dart';
 import 'package:firebridge/firebridge.dart';
+import 'package:flutter/foundation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'voice_members.g.dart';
@@ -43,7 +44,7 @@ class VoiceMembers extends _$VoiceMembers {
   void processVoiceStateUpdate(VoiceStateUpdateEvent event) {
     Guild? voiceGuild = ref.watch(guildControllerProvider(guildId));
     if (voiceGuild == null) {
-      print("bad guild ($guildId), cannot process voice state update");
+      debugPrint("bad guild ($guildId), cannot process voice state update");
       return;
     }
 

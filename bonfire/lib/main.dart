@@ -17,7 +17,7 @@ import 'package:bonfire/shared/utils/web_utils/web_utils.dart'
     if (dart.library.io) 'package:bonfire/shared/utils/web_utils/non_web_utils.dart';
 
 void main() async {
-  print("Starting app...");
+  debugPrint("Starting app...");
 
   initializePlatform();
 
@@ -64,7 +64,7 @@ void main() async {
     );
 
     registerBackgroundHandler();
-    print('Notification permissions: ${settings.authorizationStatus}');
+    debugPrint('Notification permissions: ${settings.authorizationStatus}');
   }
 
   runApp(const ProviderScope(

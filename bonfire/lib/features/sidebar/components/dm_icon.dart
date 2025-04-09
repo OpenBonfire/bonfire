@@ -31,7 +31,7 @@ class _DmIconState extends ConsumerState<DmIcon> {
     } else if (widget is GroupDmChannel) {
       recipients = (channel as GroupDmChannel).recipients;
     } else {
-      print("VERY BAD! Recipients is null");
+      debugPrint("VERY BAD! Recipients is null");
     }
 
     User user = recipients!.firstOrNull!;

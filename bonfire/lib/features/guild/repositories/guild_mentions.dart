@@ -2,6 +2,7 @@ import 'package:bonfire/features/authenticator/data/repositories/auth.dart';
 import 'package:bonfire/features/authenticator/data/repositories/discord_auth.dart';
 import 'package:bonfire/features/me/controllers/settings.dart';
 import 'package:collection/collection.dart';
+import 'package:flutter/foundation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:firebridge/firebridge.dart';
 
@@ -38,8 +39,8 @@ class GuildMentions extends _$GuildMentions {
         mentions += readState.mentionCount ?? 0;
         // }
       } catch (err, stacktrace) {
-        print(stacktrace);
-        print("Error fetching channel: $err");
+        debugPrint(stacktrace.toString());
+        debugPrint("Error fetching channel: $err");
         continue;
       }
     }

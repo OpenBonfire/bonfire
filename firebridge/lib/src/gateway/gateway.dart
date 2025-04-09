@@ -838,7 +838,7 @@ class Gateway extends GatewayManager with EventParser {
         items.add(parseGuildMemberListGroup(item));
       } else if (item.containsKey("user")) {
         // is a member
-        // print(item);
+        // debugPrint(item);
         if (raw['presence'] != null) {
           // fire a gateway presence update event
           // client.gateway.events.
@@ -850,7 +850,7 @@ class Gateway extends GatewayManager with EventParser {
         ));
       }
     });
-    // print(items);
+    // debugPrint(items);
     return items;
   }
 

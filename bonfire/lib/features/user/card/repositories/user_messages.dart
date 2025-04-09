@@ -14,19 +14,19 @@ class UserMessages extends _$UserMessages {
     var authOutput = ref.watch(authProvider.notifier).getAuth();
     if (authOutput is AuthUser) {
       user = authOutput;
-      // print("LISTING CHANNELS!");
+      // debugPrint("LISTING CHANNELS!");
 
       // try {
       //   var channels = await user!.client.channels.listDmChannels();
-      //   print("GOT CHANNNELS");
-      //   print(channels);
+      //   debugPrint("GOT CHANNNELS");
+      //   debugPrint(channels);
       // } catch (e) {
-      //   print("ERROR GETTING CHANNELS");
-      //   print(e);
+      //   debugPrint("ERROR GETTING CHANNELS");
+      //   debugPrint(e);
       // }
 
-      // print("GOT CHANNNELS1");
-      // print(channels);
+      // debugPrint("GOT CHANNNELS1");
+      // debugPrint(channels);
     }
   }
 }

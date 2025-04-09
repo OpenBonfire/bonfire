@@ -20,7 +20,7 @@ Hello **Markdown**!
    ```dart
    // Dart language.
    void main() {
-     print('Hello, World!');
+     debugPrint('Hello, World!');
    }
    ```
 - [x] Easy to custom, for example:

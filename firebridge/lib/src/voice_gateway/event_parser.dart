@@ -5,8 +5,8 @@ import 'package:firebridge/src/models/voice_gateway/opcode.dart';
 /// Handles all connections to do with voice and video calling that are not present in the main gateway.
 mixin class VoiceEventParser {
   VoiceGatewayEvent parseVoiceGatewayEvent(Map<String, Object?> raw) {
-    print("Recieved raw event");
-    print(raw);
+    // print("Recieved raw event");
+    // print(raw);
     final mapping = {
       VoiceOpcode.ready.value: parseReady,
       VoiceOpcode.selectProtocol.value: parseSelectProtocol,

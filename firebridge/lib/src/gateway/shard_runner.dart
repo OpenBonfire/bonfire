@@ -113,7 +113,7 @@ class ShardRunner {
             //   sendIdentify();
             //   hasSentIdentify = true;
             // } else {
-            //   print("WANTS TO IDENTIFY BUT WAS BLOCKED!");
+            //   debugPrint("WANTS TO IDENTIFY BUT WAS BLOCKED!");
             // }
           }
 
@@ -197,10 +197,10 @@ class ShardRunner {
           }
         } catch (error, stackTrace) {
           // TODO: Some sort of reconnect? Just so there isn't too much log spam.
-          // print("Catching error: $error");
+          // debugPrint("Catching error: $error");
           controller.add(ErrorReceived(error: error, stackTrace: stackTrace));
         } finally {
-          // print("CLOSING!");
+          // debugPrint("CLOSING!");
           // Reset connection properties.
           connection?.close();
           connection = null;

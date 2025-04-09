@@ -17,6 +17,7 @@ import 'package:bonfire/features/user/controllers/presence.dart';
 import 'package:bonfire/features/voice/repositories/voice_members.dart';
 import 'package:bonfire/features/me/controllers/settings.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:firebridge/firebridge.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -89,7 +90,7 @@ class Auth extends _$Auth {
 
   /// Authenticate client with Discord [token]
   Future<AuthResponse> loginWithToken(String token) async {
-    print("LOGGING IN WITH TOKEN!");
+    debugPrint("LOGGING IN WITH TOKEN!");
     AuthResponse response = AuthNotStarted();
 
     var client = await Nyxx.connectGatewayWithOptions(
@@ -119,7 +120,7 @@ class Auth extends _$Auth {
 
       FirebaseMessaging.onMessage.listen((RemoteMessage message) {});
       // FirebaseMessaging.onBackgroundMessage((message) async {
-      //   print("Handling a background message: ${message.messageId}");
+      //   debugPrint("Handling a background message: ${message.messageId}");
       // });
     }
 
@@ -129,14 +130,14 @@ class Auth extends _$Auth {
 
       if (UniversalPlatform.isMobile) testPushNotifications();
 
-      // print("Closing!!");
+      // debugPrint("Closing!!");
       // client.close();
       // final notificationData =
       //     client.gateway.parseNotificationCreated(testData);
 
-      // print("parsed!");
+      // debugPrint("parsed!");
 
-      print("READY!");
+      debugPrint("READY!");
 
       for (var guild in event.guilds) {
         // channels

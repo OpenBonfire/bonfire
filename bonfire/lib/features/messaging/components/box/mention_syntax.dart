@@ -81,8 +81,9 @@ class DiscordMentionBuilder extends MarkdownElementBuilder {
                 "Unknown User",
             username = "@$username"
           },
-          loading: () => print('Loading member...'),
-          error: (error, stackTrace) => print('Error loading member: $error'),
+          loading: () => debugPrint('Loading member...'),
+          error: (error, stackTrace) =>
+              debugPrint('Error loading member: $error'),
         );
       }
 
@@ -92,8 +93,9 @@ class DiscordMentionBuilder extends MarkdownElementBuilder {
             data: (role) {
               username = "@${role.name}";
             },
-            loading: () => print('Loading role...'),
-            error: (error, stackTrace) => print('Error loading role: $error'));
+            loading: () => debugPrint('Loading role...'),
+            error: (error, stackTrace) =>
+                debugPrint('Error loading role: $error'));
       }
 
       if (type == "#") {

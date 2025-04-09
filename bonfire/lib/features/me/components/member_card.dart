@@ -38,7 +38,7 @@ class _DirectMessageMemberState extends ConsumerState<DirectMessageMember> {
     } else if (widget.privateChannel is GroupDmChannel) {
       recipients = (widget.privateChannel as GroupDmChannel).recipients;
     } else {
-      print("VERY BAD! Recipients is null");
+      debugPrint("VERY BAD! Recipients is null");
     }
 
     Snowflake userId = recipients!.firstOrNull?.id ?? Snowflake.zero;

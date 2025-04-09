@@ -81,8 +81,8 @@ class _ChannelButtonState extends ConsumerState<ChannelButton> {
     }, loading: () {
       return false;
     }, error: (error, stack) {
-      print(stack);
-      print("Error: $error");
+      debugPrint(stack.toString());
+      debugPrint("Error: $error");
       return false;
     });
 

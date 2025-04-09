@@ -5,6 +5,7 @@ import 'package:bonfire/features/notifications/controllers/notification.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebridge/firebridge.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:hive_ce/hive.dart';
 
@@ -23,7 +24,7 @@ void showNotification(RemoteMessage message) async {
   var token = auth.get('token');
 
   if (token == null) {
-    print("Saved token is null which doesn't make a lot of sense...");
+    debugPrint("Saved token is null which doesn't make a lot of sense...");
     return;
   }
 
@@ -43,7 +44,7 @@ void showNotification(RemoteMessage message) async {
   final notificationData =
       client.gateway.parseNotificationCreated(message.data);
 
-  print("parsed!");
+  debugPrint("parsed!");
 
   flutterLocalNotificationsPlugin.show(
     notification.hashCode,
@@ -68,7 +69,7 @@ Future<void> setupFirebaseMessaging() async {
   // );
 
   // FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-  //   print('Foreground message received: ${message.messageId}');
+  //   debugPrint('Foreground message received: ${message.messageId}');
   //   showNotification(message);
   // });
 }
@@ -79,7 +80,7 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await initializeNotifications();
   await setupHive();
   showNotification(message);
-  print('Background message handled: ${jsonEncode(message.data)}');
+  debugPrint('Background message handled: ${jsonEncode(message.data)}');
 }
 
 void registerBackgroundHandler() {

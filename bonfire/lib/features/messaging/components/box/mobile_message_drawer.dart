@@ -130,26 +130,26 @@ class MobileMessageDrawer extends ConsumerWidget {
       ),
     );
     Navigator.of(ref.context).pop();
-    print("Replying to message");
+    debugPrint("Replying to message");
   }
 
   void _handleEdit(BuildContext context) {
     Navigator.of(context).pop();
-    print("Editing message");
+    debugPrint("Editing message");
   }
 
   void _handleAddReaction(BuildContext context) {
     Navigator.of(context).pop();
-    print("Adding reaction");
+    debugPrint("Adding reaction");
   }
 
   void _handleReport(BuildContext context) {
     Navigator.of(context).pop();
-    print("Reporting message");
+    debugPrint("Reporting message");
   }
 
   void _handleDelete(BuildContext context) {
     Navigator.of(context).pop();
-    print("Deleting message");
+    debugPrint("Deleting message");
   }
 }
