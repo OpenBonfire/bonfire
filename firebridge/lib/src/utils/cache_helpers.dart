@@ -49,8 +49,6 @@ import 'package:firebridge/src/models/voice/voice_state.dart';
 import 'package:firebridge/src/models/webhook.dart';
 
 extension CacheUpdates on NyxxRest {
-  // StreamController<Object?> get onCacheUpdate => StreamController<Object?>();
-
   /// Update the caches for this client using [entity] by registering (or removing, if [entity] is a delete event) any cacheable entities reachable from [entity].
   void updateCacheWith(Object? entity) {
     notifyCacheUpdate(entity);
@@ -98,6 +96,7 @@ extension CacheUpdates on NyxxRest {
       Guild() => () {
           entity.manager.cache[entity.id] = entity;
           entity.memberList?.forEach(updateCacheWith);
+          entity.channels?.forEach(updateCacheWith);
 
           entity.roleList.forEach(updateCacheWith);
           entity.emojiList.forEach(updateCacheWith);

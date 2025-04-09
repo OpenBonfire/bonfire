@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:bonfire/features/authenticator/data/repositories/auth.dart';
-import 'package:bonfire/features/authenticator/data/repositories/discord_auth.dart';
+import 'package:bonfire/features/authenticator/repositories/auth.dart';
+import 'package:bonfire/features/authenticator/repositories/discord_auth.dart';
 import 'package:bonfire/features/channels/controllers/channel.dart';
 import 'package:bonfire/features/channels/repositories/channel_repo.dart';
 import 'package:bonfire/features/channels/repositories/typing.dart';
@@ -54,8 +54,7 @@ class Messages extends _$Messages {
   }) async {
     if (user is AuthUser) {
       if (channelId == Snowflake.zero) return [];
-      var channel =
-          await ref.watch(channelRepositoryProvider(channelId).future);
+      var channel = ref.watch(channelControllerProvider(channelId));
 
       // print(channelId);
       if (channel == null) {
@@ -126,8 +125,7 @@ class Messages extends _$Messages {
     int? limit,
     Snowflake? around,
   }) async {
-    Channel? channel =
-        ref.watch(channelRepositoryProvider(channelId)).valueOrNull;
+    Channel? channel = ref.watch(channelControllerProvider(channelId));
     if (channel == null)
       debugPrint("TRIED TO FETCH MESSAGES FOR NULL CHANNEL!");
     List<Message> messages = [];

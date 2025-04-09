@@ -1,5 +1,5 @@
-import 'package:bonfire/features/authenticator/data/repositories/auth.dart';
-import 'package:bonfire/features/authenticator/data/repositories/discord_auth.dart';
+import 'package:bonfire/features/authenticator/repositories/auth.dart';
+import 'package:bonfire/features/authenticator/repositories/discord_auth.dart';
 import 'package:bonfire/features/authenticator/models/auth.dart';
 import 'package:bonfire/features/authenticator/qr/auth_by_qrcode.dart';
 import 'package:bonfire/features/authenticator/views/captcha.dart';

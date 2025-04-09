@@ -4,7 +4,7 @@ import 'dart:convert';
 import 'package:universal_io/io.dart';
 import 'dart:math';
 
-import 'package:bonfire/features/authenticator/data/repositories/auth.dart';
+import 'package:bonfire/features/authenticator/repositories/auth.dart';
 import 'package:bonfire/features/authenticator/qr/key_pair.dart';
 import 'package:bonfire/features/authenticator/qr/ws_impl.dart';
 import 'package:bonfire/theme/theme.dart';

@@ -1,4 +1,4 @@
-import 'package:bonfire/features/authenticator/data/hive.dart';
+import 'package:bonfire/features/authenticator/utils/hive.dart';
 import 'package:bonfire/features/notifications/controllers/firebase.dart';
 import 'package:bonfire/features/notifications/controllers/notification.dart';
 import 'package:bonfire/router/controller.dart';

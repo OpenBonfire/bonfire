@@ -1,5 +1,5 @@
-import 'package:bonfire/features/authenticator/data/repositories/auth.dart';
-import 'package:bonfire/features/authenticator/data/repositories/discord_auth.dart';
+import 'package:bonfire/features/authenticator/repositories/auth.dart';
+import 'package:bonfire/features/authenticator/repositories/discord_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';

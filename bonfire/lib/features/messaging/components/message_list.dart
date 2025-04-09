@@ -139,9 +139,8 @@ class _MessageViewState extends ConsumerState<MessageList>
           return idx;
         },
         (context, index) {
-          final channel = ref
-              .watch(channelRepositoryProvider(widget.channelId))
-              .valueOrNull;
+          final channel =
+              ref.watch(channelControllerProvider(widget.channelId));
 
           if (channel == null) return const SizedBox.shrink();
           if (isSmartwatch(context) && index == 0) {
@@ -225,8 +224,7 @@ class _MessageViewState extends ConsumerState<MessageList>
       },
     );
 
-    Channel? channel =
-        ref.watch(channelRepositoryProvider(widget.channelId)).valueOrNull;
+    Channel? channel = ref.watch(channelControllerProvider(widget.channelId));
 
     Guild? guild = ref.watch(guildControllerProvider(widget.guildId));
 

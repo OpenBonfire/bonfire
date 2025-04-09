@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'package:bonfire/features/authenticator/data/repositories/auth.dart';
-import 'package:bonfire/features/authenticator/data/repositories/discord_auth.dart';
+import 'package:bonfire/features/authenticator/repositories/auth.dart';
+import 'package:bonfire/features/authenticator/repositories/discord_auth.dart';
 import 'package:bonfire/features/guild/controllers/guild.dart';
 import 'package:bonfire/features/guild/controllers/role.dart';
 import 'package:bonfire/features/guild/controllers/roles.dart';

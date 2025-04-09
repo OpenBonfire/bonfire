@@ -219,8 +219,7 @@ class _MessageBarState extends ConsumerState<MessageBar> {
     ReplyState? replyState = ref.watch(replyControllerProvider);
     Permissions? channelPermissions =
         ref.watch(channelPermissionsProvider(widget.channel.id)).valueOrNull;
-    Channel? channel =
-        ref.watch(channelRepositoryProvider(widget.channel.id)).valueOrNull;
+    Channel? channel = ref.watch(channelControllerProvider(widget.channel.id));
     if (channel == null) return const SizedBox.shrink();
 
     String hintText = "You cannot send messages here";

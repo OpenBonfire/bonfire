@@ -1,4 +1,4 @@
-import 'package:bonfire/features/authenticator/data/repositories/discord_auth.dart';
+import 'package:bonfire/features/authenticator/repositories/discord_auth.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'auth.freezed.dart';
