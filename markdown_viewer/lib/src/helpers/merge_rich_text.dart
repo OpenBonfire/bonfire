@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 List<Widget> mergeRichText(
   List<Widget> children, {
@@ -51,7 +52,9 @@ List<Widget> mergeRichText(
 
       final mergedSpan = _mergeSimilarTextSpans(children);
       inlineStack.add(richTextBuilder(mergedSpan, textAlign));
-    } else if (child is Text || child is DefaultTextStyle) {
+    } else if (child is Text ||
+        child is DefaultTextStyle ||
+        child is Consumer) {
       inlineStack.add(child);
     } else {
       popInlineWidgets();

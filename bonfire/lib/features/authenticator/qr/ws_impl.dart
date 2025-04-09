@@ -85,7 +85,7 @@ Future<WebSocketChannel> createWebSocket(Uri url) async {
 
   print("ttt ${ttt}");
 
-  final WebSocket tt = ttt as WebSocket;
+  final WebSocket tt = ttt;
 
   WebSocketChannel channel = IOWebSocketChannel(tt);
 

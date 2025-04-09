@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'ast.dart';
 import 'builders/blockquote_builder.dart';
@@ -210,9 +211,12 @@ class MarkdownRenderer implements NodeVisitor {
   void visitText(MarkdownText text) {
     final parent = _tree.last;
     final builder = _builders[parent.type]!;
-    final textContent = _keepLineEndingsWhen == null
-        ? text.text.replaceAll('\n', ' ')
-        : text.text;
+    // no idea why they did this, but it only makeas it kinda bad
+    // final textContent = _keepLineEndingsWhen == null
+    //     ? text.text.replaceAll('\n', ' ')
+    //     : text.text;
+
+    final textContent = text.text;
     var textSpan = builder.buildText(textContent, parent);
 
     if (_gestureRecognizers.isNotEmpty) {
@@ -324,11 +328,7 @@ class _TreeElement extends MarkdownTreeElement {
 }
 
 void _checkInlineWidget(Widget widget) {
-  final allowedInlineWidgets = [
-    RichText,
-    Text,
-    DefaultTextStyle,
-  ];
+  final allowedInlineWidgets = [RichText, Text, DefaultTextStyle, Consumer];
 
   assert(
     allowedInlineWidgets.contains(widget.runtimeType),

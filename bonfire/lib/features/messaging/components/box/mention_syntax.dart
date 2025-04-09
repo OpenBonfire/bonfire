@@ -1,4 +1,11 @@
+import 'package:bonfire/features/channels/controllers/channel.dart';
+import 'package:bonfire/features/guild/repositories/member.dart';
+import 'package:bonfire/features/member/utils/show_member_dialog.dart';
+import 'package:bonfire/theme/theme.dart';
+import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:markdown_viewer/markdown_viewer.dart';
 
 class DiscordMentionSyntax extends MdInlineSyntax {
@@ -25,9 +32,10 @@ class DiscordMentionBuilder extends MarkdownElementBuilder {
   DiscordMentionBuilder()
       : super(
           textStyle: TextStyle(
-            color: const Color(0xFF5865F2),
-            fontWeight: FontWeight.bold,
-            backgroundColor: const Color(0xFF5865F2).withOpacity(0.3),
+            color: const Color(0xff2448BE),
+            fontWeight: FontWeight.w500,
+            fontSize: 14.5,
+            backgroundColor: const Color(0xff2448BE).withOpacity(0.2),
           ),
         );
 
@@ -38,28 +46,96 @@ class DiscordMentionBuilder extends MarkdownElementBuilder {
   List<String> get matchTypes => ['discord_mention'];
 
   @override
-  Widget? buildWidget(MarkdownTreeElement element, MarkdownTreeElement parent) {
-    final type = element.attributes['type'];
-    final id = element.attributes['id'];
-    final mentionText = _getMentionText(type!, id!);
-
-    return Text(
-      mentionText,
-      style: textStyle,
-    );
+  void init(MarkdownElement element) {
+    super.init(element);
   }
 
-  String _getMentionText(String type, String id) {
-    switch (type) {
-      case '@':
-      case '@!':
-        return '@User Not Implemented';
-      case '@&':
-        return '@Role Not Implemented';
-      case '#':
-        return '#channel';
-      default:
-        return '@Unknown';
-    }
+  @override
+  Widget? buildWidget(MarkdownTreeElement element, MarkdownTreeElement parent) {
+    final type = element.attributes['type'];
+    final id = Snowflake.parse(element.attributes['id']!);
+
+    bool isMember = false;
+    bool isChannel = false;
+
+    return Consumer(builder: (context, ref, child) {
+      final guildId = Snowflake.parse(GoRouter.of(context)
+              .routerDelegate
+              .currentConfiguration
+              .pathParameters['guildId'] ??
+          '0');
+
+      String username = "loading?";
+      if (type == "@") {
+        isMember = true;
+        final member = ref.watch(getMemberProvider(
+          guildId,
+          id,
+        ));
+
+        member.when(
+          data: (member) => {
+            username = username = member?.nick ??
+                member?.user?.globalName ??
+                member?.user?.username ??
+                "Unknown User",
+            username = "@$username"
+          },
+          loading: () => print('Loading member...'),
+          error: (error, stackTrace) => print('Error loading member: $error'),
+        );
+      }
+
+      if (type == "@&") {
+        final role = ref.watch(getRoleProvider(guildId, id));
+        role.when(
+            data: (role) {
+              username = "@${role.name}";
+            },
+            loading: () => print('Loading role...'),
+            error: (error, stackTrace) => print('Error loading role: $error'));
+      }
+
+      if (type == "#") {
+        isChannel = true;
+        final channel =
+            ref.watch(channelControllerProvider(id)) as GuildChannel?;
+        if (channel != null) {
+          username = "#${channel.name}";
+        }
+      }
+
+      return InkWell(
+        borderRadius: BorderRadius.circular(4),
+        onTap: () {
+          if (isMember) {
+            showMemberDialog(context, id, guildId);
+          } else if (isChannel) {
+            context.go('/channels/$guildId/$id');
+          }
+        },
+        child: Padding(
+          padding: const EdgeInsets.only(top: 2),
+          child: Container(
+            decoration: BoxDecoration(
+              color:
+                  Theme.of(context).custom.colorTheme.primary.withOpacity(0.2),
+              borderRadius: BorderRadius.circular(4),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.only(left: 2, right: 2),
+              child: Text(
+                username,
+                style: Theme.of(context).custom.textTheme.bodyText1.merge(
+                      const TextStyle(
+                        color: Color.fromARGB(255, 79, 115, 234),
+                      ),
+                    ),
+              ),
+            ),
+          ),
+        ),
+      );
+    });
   }
 }

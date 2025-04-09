@@ -4,7 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:markdown_viewer/markdown_viewer.dart';
 
 MarkdownStyle getMarkdownStyleSheet(BuildContext context) {
-  const textColor = const Color.fromARGB(255, 235, 235, 235);
+  const textColor = Color.fromARGB(255, 235, 235, 235);
   return MarkdownStyle(
     paragraph: GoogleFonts.publicSans(
       fontSize: 14.5,

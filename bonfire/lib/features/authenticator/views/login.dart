@@ -156,10 +156,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     ));
   }
 
-  void _navigateToLastLocation() async {
-    var lastLocation = await Hive.openBox("last-location");
+  void _navigateToLastLocation() {
+    var lastLocation = Hive.box("last-location");
     String? guildId = lastLocation.get("guildId");
     String? channelId = lastLocation.get("channelId");
-    context.pushReplacement('/channels/${guildId ?? '0'}/${channelId ?? '0'}');
+    context.go('/channels/${guildId ?? '0'}/${channelId ?? '0'}');
   }
 }

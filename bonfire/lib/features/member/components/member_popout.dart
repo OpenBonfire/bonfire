@@ -154,7 +154,6 @@ class PopoutEffectAnimation extends StatefulWidget {
 class _PopoutEffectAnimationState extends State<PopoutEffectAnimation>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
-  late Animation<double> _opacityAnimation;
 
   @override
   void initState() {
@@ -174,15 +173,6 @@ class _PopoutEffectAnimationState extends State<PopoutEffectAnimation>
     _controller = AnimationController(
       vsync: this,
       duration: Duration(milliseconds: totalDuration),
-    );
-
-    // Simple opacity tween with manual control over phases
-    _opacityAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(
-        parent: _controller,
-        curve: Interval(0, (startTime + duration) / totalDuration),
-        reverseCurve: Interval(0, fadeOutDuration / totalDuration),
-      ),
     );
 
     _controller.forward();

@@ -123,7 +123,7 @@ class _AuthByQRcodeState extends ConsumerState<AuthByQRcode> {
       //   channel?.sink.close();
       //   context.goNamed('Server');
       // });
-    } catch (e, st) {
+    } catch (e, _) {
       //   }on DioError catch (e) { <<<<< IN THIS LINE
       //   if(e.response.statusCode == 404){
       //     print(e.response.statusCode);
@@ -243,10 +243,10 @@ class _AuthByQRcodeState extends ConsumerState<AuthByQRcode> {
             _acceptTicket(keyPair, ticket);
           }
         } else if (map["op"] == "pending_finish") {
-          final encrypted_user_payload = map["encrypted_user_payload"];
+          // final encrypted_user_payload = map["encrypted_user_payload"];
 
-          final userData0 = await DiscordKeyPair.decodeEncodedUserRecord(
-              keyPair, encrypted_user_payload);
+          // final userData0 = await DiscordKeyPair.decodeEncodedUserRecord(
+          //     keyPair, encrypted_user_payload);
 
           // debugPrint("userData=${userData0}");
 
@@ -255,10 +255,10 @@ class _AuthByQRcodeState extends ConsumerState<AuthByQRcode> {
           //   userData = userData0;
           // });
         } else if (map["op"] == "finish") {
-          final encrypted_token = map["encrypted_token"];
+          // final encrypted_token = map["encrypted_token"];
 
-          final n = await DiscordKeyPair.decryptEncodedCiphertext(
-              keyPair, encrypted_token);
+          // final n = await DiscordKeyPair.decryptEncodedCiphertext(
+          //     keyPair, encrypted_token);
 
           //
         } else if (map["op"] == "cancel") {

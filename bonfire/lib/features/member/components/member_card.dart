@@ -1,15 +1,11 @@
 import 'package:bonfire/features/guild/repositories/member.dart';
-import 'package:bonfire/features/member/components/member_popout.dart';
+import 'package:bonfire/features/member/utils/show_member_dialog.dart';
 import 'package:bonfire/features/user/components/presence_avatar.dart';
-import 'package:bonfire/features/user/repositories/profile_effects.dart';
-import 'package:bonfire/shared/components/drawer/mobile_drawer.dart';
-import 'package:bonfire/shared/utils/platform.dart';
 import 'package:bonfire/shared/utils/role_color.dart';
 import 'package:bonfire/shared/components/presence_text.dart';
 import 'package:bonfire/theme/theme.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class MemberCard extends ConsumerStatefulWidget {
@@ -45,30 +41,7 @@ class _MemberCardState extends ConsumerState<MemberCard> {
       children: [
         OutlinedButton(
           onPressed: () {
-            HapticFeedback.mediumImpact();
-            if (shouldUseDesktopLayout(context)) {
-              showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return Dialog(
-                      backgroundColor: const Color.fromARGB(0, 0, 0, 0),
-                      child: UserPopoutCard(
-                        widget.member.user!.id,
-                        guildId: widget.guild.id,
-                      ),
-                    );
-                  });
-            } else {
-              // open drawer
-              GlobalDrawer.of(context)!.setChild(
-                UserPopoutCard(
-                  widget.member.user!.id,
-                  guildId: widget.guild.id,
-                ),
-              );
-
-              GlobalDrawer.of(context)!.toggleDrawer();
-            }
+            showMemberDialog(context, widget.member.user!.id, widget.guild.id);
           },
           style: OutlinedButton.styleFrom(
             minimumSize: Size.zero,
