@@ -68,9 +68,6 @@ class DiscordMentionBuilder extends MarkdownElementBuilder {
 
       Snowflake guildId = Snowflake.parse(rawGuildId ?? '0');
       if (rawGuildId == "@me") {
-      } else {
-        // quite shitty; this will send a network request that fails
-        // I need to use a different provider to get the user object
         guildId = Snowflake.zero;
       }
 

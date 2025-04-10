@@ -30,9 +30,7 @@ class _ChannelHeaderState extends ConsumerState<ChannelHeader> {
       return const Text("Channel not found");
     }
 
-    print("getting channel name");
     channelName = getChannelName(channel);
-    print(channelName);
 
     return Container(
       decoration: BoxDecoration(
