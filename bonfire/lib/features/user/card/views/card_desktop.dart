@@ -36,7 +36,20 @@ class UserCard extends ConsumerWidget {
         padding: WidgetStateProperty.all(EdgeInsets.zero),
       ),
       onPressed: () {
-        GoRouter.of(context).go("/switcher/model");
+        showDialog(
+            context: context,
+            builder: (context) {
+              return Dialog(
+                backgroundColor: Theme.of(context).custom.colorTheme.foreground,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: SizedBox(
+                  width: 300,
+                  height: 400,
+                ),
+              );
+            });
       },
       child: Container(
         decoration: BoxDecoration(
