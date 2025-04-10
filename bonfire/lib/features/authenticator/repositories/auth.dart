@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:bonfire/features/authenticator/controllers/ready.dart';
+import 'package:bonfire/features/authenticator/models/added_account.dart';
 import 'package:bonfire/features/authenticator/utils/headers.dart';
 import 'package:bonfire/features/authenticator/repositories/discord_auth.dart';
 import 'package:bonfire/features/authenticator/models/auth.dart';
@@ -101,11 +102,23 @@ class Auth extends _$Auth {
 
     // Save and notify state
     authResponse = AuthUser(token: token, client: client);
+
     state = authResponse!;
 
     handleEvents(ref, client);
 
     ref.read(readyControllerProvider.notifier).setReady(true);
+
+    final user = (await client.user.get());
+    final addedAccountsBox = Hive.box('added-accounts');
+
+    final addedAccount = AddedAccount(
+      userId: client.user.id.toString(),
+      token: token,
+      username: user.username,
+      avatar: user.avatar.url.toString(),
+    );
+    addedAccountsBox.put(client.user.id.toString(), addedAccount.toJson());
 
     return response;
   }

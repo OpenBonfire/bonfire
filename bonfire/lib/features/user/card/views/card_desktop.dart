@@ -1,5 +1,7 @@
 import 'dart:typed_data';
 
+import 'package:bonfire/features/authenticator/components/local_account_switcher.dart';
+import 'package:bonfire/features/authenticator/components/platform_login.dart';
 import 'package:bonfire/features/me/controllers/settings.dart';
 import 'package:bonfire/features/user/card/repositories/self_user.dart';
 import 'package:bonfire/features/user/card/repositories/user_avatar.dart';
@@ -40,15 +42,12 @@ class UserCard extends ConsumerWidget {
             context: context,
             builder: (context) {
               return Dialog(
-                backgroundColor: Theme.of(context).custom.colorTheme.foreground,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: SizedBox(
-                  width: 300,
-                  height: 400,
-                ),
-              );
+                  backgroundColor:
+                      Theme.of(context).custom.colorTheme.background,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(24),
+                  ),
+                  child: const LocalAccountSwitcherScreen());
             });
       },
       child: Container(
