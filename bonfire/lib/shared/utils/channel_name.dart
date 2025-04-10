@@ -9,5 +9,15 @@ String getChannelName(Channel channel) {
 
     return name.substring(0, name.length - 2);
   }
+
+  if (channel is GroupDmChannel) {
+    String name = "";
+    for (var recipient in channel.recipients) {
+      name += "${recipient.globalName ?? recipient.username}, ";
+    }
+
+    return name.substring(0, name.length - 2);
+  }
+
   return (channel as GuildChannel).name;
 }

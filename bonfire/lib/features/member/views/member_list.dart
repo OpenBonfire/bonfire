@@ -1,3 +1,4 @@
+import 'package:bonfire/shared/utils/channel_name.dart';
 import 'package:bonfire/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -48,10 +49,6 @@ class _MemberListState extends ConsumerState<MemberList> {
             )),
       ),
     );
-  }
-
-  String getChannelName(Channel channel) {
-    return (channel as GuildChannel).name;
   }
 
   @override
