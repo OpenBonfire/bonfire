@@ -10,7 +10,7 @@ We now offer nightly builds! Please check out the [github actions](https://githu
 **NOTE**: Bonfire is in it's very early stages of development. It is absolutely NOT ready for regular usage.
 
 # Bonfire
-![bonfire graphic frame(2)](https://github.com/user-attachments/assets/ee6ae271-5ad7-4613-a1e8-f4a1f2aaa186)
+![bonfire graphic frame](https://github.com/user-attachments/assets/75d9de58-3bd3-4605-a409-798fd4ba3643)
 
 
 ## About
@@ -38,7 +38,7 @@ To start, lemmie outline a few things.
 
 - Our goal here isn't to undermine Discord's monetization- we understand that Discord is a company with bills to pay and employees to feed. Our goal is to create a client that just doesn't suck. It's easy to take a platform like Discord for granted. Yes it has it's problems (I know that more than anyone), but they really have created a cool product, and it's something I'd like to improve as a user.
 
-- Are you a mobile client? Desktop client? Sort of both. Bonfire is a mobile-first client. All of the features we are adding right now are 100% intended for mobile, but because we are using Flutter it's possible to build Bonfire on other platforms. In fact, it currently works just about the same on Windows / MacOS / Linux / Web as it does on mobile (it just needs to be re-themed and re-formatted to look nice).
+- Are you a mobile client? Desktop client? Sort of both. Bonfire is a mobile-first client. All of the features we are adding right now are 100% intended for mobile, but because we are using Flutter it's possible to build Bonfire on other platforms. In fact, it currently works just about the same on Windows / MacOS / Linux / Web as it does on mobile.
 
 - Perhaps, extensions? Well yes (in the future). The goal is that Bonfire can be modified to your liking, much like using Vencord and such. It would work very different from a developer standpoint, but having a built-in plugin marketplace would definitely be cool, although yes, quite difficult. It won't be a focus until the client is at a point I'd consider release-ready.
 
@@ -54,31 +54,30 @@ Mobile is just a different beast due to the difficult nature of modifying packed
 # Developing
 ## General Info
 I'm pretty new to managing public projects, so you'll have to bear with me here. For starters, there's a few projects that OpenBonfire uses and maintains, which can be found in our org. Let's just talk about the big ones.
-- [firebridge](https://github.com/OpenBonfire/firebridge): A fork of nyxx (a bot API for Dart) that allows the usage of user tokens. This is very unfinished, and needs a load of work to be done.
-- [fireview](https://github.com/OpenBonfire/fireview): A cross-platform webview API that combines multiple webview frameworks. Again, this is not very great and needs a lot of work. This one is a much easier implementation though, I just haven't had the time.
+- Firebridge: A fork of nyxx (a bot API for Dart) that allows the usage of user tokens. This is very unfinished, and needs a load of work to be done.
+- [fireview](https://github.com/OpenBonfire/fireview): A cross-platform webview API that combines multiple webview frameworks. Again, this is not very great and needs a lot of work. This one is a much easier implementation though, I just haven't had the time. I intend on using this later, but I currently due not due to various conflicts on Windows and Linux.
 
 ## Progress *not exhaustive, there's a lot of stuff to do*
 - 🟨 Login
   - 🟩 WebView-based login
   - 🟨 Web Login (you have to input your token manually)
   - 🟥 WearOS login support (you have to compile yourself with the token hard-coded)
-
 - 🟨 Messaging
   - 🟩 Sending Messages
   - 🟩 Cache Messages
-  - 🟨 Message View
+  - 🟨 Message View (missing bidirectional requests)
   - 🟨 Context Actions (edit, delete, etc)
   - 🟨 Event Actions (edit, delete, etc)
-  - 🟨 Embeds
+  - 🟩 Embeds
      - 🟩 Youtube embeds
      - 🟩 Tenor videos
      - 🟩 Attachments
         - 🟩 Image Attachments
         - 🟩 Video Attachments
         - 🟩 Audio Attachments (with actual mobile playback)
-  - 🟨 Offline Message Scheduling
+  - 🟩 Notifications
   - 🟨 Unreads (*a bit buggy*)
-  - 🟨 Threads (*usable, but barebones*)
+  - 🟥 Threads
   - 🟨 Member List
     - 🟩 Base View
     - 🟩 Networking (handled in firebridge, tricky due to Discord's sharding)

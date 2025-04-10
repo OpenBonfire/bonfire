@@ -26,7 +26,9 @@ class _AttachmentWidgetState extends State<AttachmentWidget> {
       return ImageAttachment(attachment: widget.attachment);
     }
 
-    if (contentType == "video") {
+    if (contentType == "video" &&
+        widget.attachment.width != null &&
+        widget.attachment.height != null) {
       if (UniversalPlatform.isDesktopOrWeb) {
         return DesktopVideoAttachment(
           attachment: widget.attachment,

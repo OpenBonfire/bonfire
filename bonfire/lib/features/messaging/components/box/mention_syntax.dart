@@ -59,13 +59,18 @@ class DiscordMentionBuilder extends MarkdownElementBuilder {
     bool isChannel = false;
 
     return Consumer(builder: (context, ref, child) {
-      final guildId = Snowflake.parse(GoRouter.of(context)
-              .routerDelegate
-              .currentConfiguration
-              .pathParameters['guildId'] ??
-          '0');
+      final rawGuildId = GoRouter.of(context)
+          .routerDelegate
+          .currentConfiguration
+          .pathParameters['guildId'];
 
       String username = "loading?";
+
+      Snowflake guildId = Snowflake.parse(rawGuildId ?? '0');
+      if (rawGuildId == "@me") {
+        guildId = Snowflake.zero;
+      }
+
       if (type == "@") {
         isMember = true;
         final member = ref.watch(getMemberProvider(

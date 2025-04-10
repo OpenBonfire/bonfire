@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:bonfire/features/channels/controllers/channel.dart';
 import 'package:bonfire/features/overview/controllers/member_list.dart';
+import 'package:bonfire/shared/utils/channel_name.dart';
 import 'package:bonfire/shared/utils/platform.dart';
 import 'package:bonfire/theme/theme.dart';
 import 'package:firebridge/firebridge.dart';
@@ -25,26 +26,11 @@ class _ChannelHeaderState extends ConsumerState<ChannelHeader> {
     String channelName = "";
     String? channelTopic;
 
-    if (channel is DmChannel) {
-      String name = "";
-      for (var recipient in channel.recipients) {
-        name += "${recipient.globalName ?? recipient.username}, ";
-      }
-
-      channelName = name.substring(0, name.length - 2);
-    }
-
-    if (channel is GuildChannel) {
-      channelName = channel.name;
-    }
-
-    if (channel is GuildTextChannel) {
-      channelTopic = channel.topic;
-    }
-
     if (channel == null) {
       return const Text("Channel not found");
     }
+
+    channelName = getChannelName(channel);
 
     return Container(
       decoration: BoxDecoration(
