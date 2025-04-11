@@ -124,7 +124,7 @@ class Auth extends _$Auth {
     final addedAccount = AddedAccount(
       userId: client.user.id.toString(),
       token: token,
-      username: user.username,
+      username: user.globalName ?? user.username,
       avatar: user.avatar.url.toString(),
     );
     addedAccountsBox.put(client.user.id.toString(), addedAccount.toJson());

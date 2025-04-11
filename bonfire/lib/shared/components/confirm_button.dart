@@ -16,11 +16,24 @@ class ConfirmButton extends StatefulWidget {
 class _ConfirmButtonState extends State<ConfirmButton> {
   @override
   Widget build(BuildContext context) {
-    return CupertinoButton(
+    return OutlinedButton(
       onPressed: widget.onPressed,
+      style: OutlinedButton.styleFrom(
+        minimumSize: Size.zero,
+        padding: const EdgeInsets.all(0),
+        side: const BorderSide(
+          color: Colors.transparent,
+          width: 0,
+        ),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+        foregroundColor: Theme.of(context).custom.colorTheme.dirtyWhite,
+        backgroundColor: Theme.of(context).custom.colorTheme.foreground,
+      ),
       child: Container(
         height: 60,
-        width: 400,
+        width: double.infinity,
         decoration: BoxDecoration(
           color: Theme.of(context).custom.colorTheme.primary,
           borderRadius: BorderRadius.circular(12),
