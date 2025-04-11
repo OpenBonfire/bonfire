@@ -45,7 +45,7 @@ class Messages extends _$Messages {
       // I think this is kinda useless but we'll see I guess
       if (!_isInitialLoad && _messageCache.isNotEmpty) {
         _authDebounceTimer?.cancel();
-        _authDebounceTimer = Timer(const Duration(milliseconds: 0), () {
+        _authDebounceTimer = Timer(const Duration(milliseconds: 1000), () {
           _messageCache.clear();
           _fetchInitialMessages();
         });

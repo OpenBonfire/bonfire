@@ -1,4 +1,3 @@
-import 'package:bonfire/features/authenticator/components/local_account_switcher.dart';
 import 'package:bonfire/features/authenticator/utils/switcher.dart';
 import 'package:bonfire/features/overview/controllers/navigation_bar.dart';
 import 'package:bonfire/features/user/card/repositories/self_user.dart';
@@ -106,7 +105,7 @@ class _BarWidgetState extends ConsumerState<NavigationBarWidget> {
                   Padding(
                     padding: const EdgeInsets.only(bottom: 8.0),
                     child: InkWell(
-                      child: PresenceAvatar(userId: user.id, size: 32),
+                      child: PresenceAvatar(user: user, size: 32),
                       onTap: () async {
                         HapticFeedback.lightImpact();
                         showAccountSwitcherDialog(

@@ -95,7 +95,7 @@ class _DirectMessageMemberState extends ConsumerState<DirectMessageMember> {
                   Center(
                     child: PresenceAvatar(
                       initialPresence: presence,
-                      userId: recipients.firstOrNull!.id,
+                      user: recipients.firstOrNull!,
                     ),
                   ),
                   const SizedBox(width: 8),

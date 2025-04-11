@@ -6,12 +6,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class PresenceAvatar extends ConsumerStatefulWidget {
-  final Snowflake userId;
+  final User user;
   final PresenceUpdateEvent? initialPresence;
   final double? size;
   const PresenceAvatar({
     super.key,
-    required this.userId,
+    required this.user,
     this.initialPresence,
     this.size,
   });
@@ -80,15 +80,13 @@ class _PresenceAvatarState extends ConsumerState<PresenceAvatar> {
   @override
   Widget build(BuildContext context) {
     var initialPresence = widget.initialPresence;
-    final user = ref.watch(userControllerProvider(widget.userId));
-    if (user == null) return const SizedBox.shrink();
     return Stack(
       alignment: Alignment.center,
       children: [
         // const SizedBox(width: 38, height: 38),
         Center(
           child: UserAvatar(
-            user: user,
+            user: widget.user,
             size: widget.size ?? 35,
           ),
         ),

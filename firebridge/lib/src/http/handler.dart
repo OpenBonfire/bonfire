@@ -272,9 +272,8 @@ class HttpHandler {
     if (parsedResponse.statusCode == 429) {
       try {
         final responseBody = parsedResponse.jsonBody;
-        final retryAfter = Duration(
-            milliseconds:
-                ((responseBody["retry_after"] as double) * 1000).ceil());
+        // ((responseBody["retry_after"] as double) * 1000).ceil());
+        final retryAfter = Duration(milliseconds: (5 * 1000).ceil());
         final isGlobal = responseBody["global"] as bool;
 
         if (isGlobal) {

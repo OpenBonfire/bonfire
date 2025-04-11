@@ -125,7 +125,7 @@ class _UserPopoutCardState extends ConsumerState<UserPopoutCard> {
                           top: 100,
                           left: 20,
                           child: PresenceAvatar(
-                            userId: profile.user.id,
+                            user: profile.user,
                             size: 100,
                             initialPresence: presence,
                           ),
@@ -603,7 +603,7 @@ class _MutualFriendsInlineState extends ConsumerState<MutualFriendsInline> {
                             child: Padding(
                               padding: const EdgeInsets.all(1),
                               child: PresenceAvatar(
-                                userId: e.id,
+                                user: e,
                                 size: 20,
                               ),
                             ),
