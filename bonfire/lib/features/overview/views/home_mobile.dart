@@ -134,7 +134,7 @@ class _HomeState extends ConsumerState<HomeMobile>
                     channelId: widget.channelId,
                   )
                 : const SizedBox(),
-            restWidth: isSmartwatch(context) ? 0.0 : 24,
+            restWidth: isSmartwatch(context) ? 0.0 : 0.0,
           ),
           if (!isSmartwatch(context)) const NavigationBarWidget(),
           if (isSmartwatch(context))

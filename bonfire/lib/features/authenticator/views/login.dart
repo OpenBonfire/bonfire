@@ -1,17 +1,12 @@
 import 'package:bonfire/features/authenticator/repositories/auth.dart';
 import 'package:bonfire/features/authenticator/repositories/discord_auth.dart';
-import 'package:bonfire/features/authenticator/qr/auth_by_qrcode.dart';
-import 'package:bonfire/features/authenticator/views/captcha.dart';
-import 'package:bonfire/features/authenticator/views/credentials.dart';
 import 'package:bonfire/features/authenticator/components/platform_login.dart';
-import 'package:bonfire/shared/utils/platform.dart';
 import 'package:bonfire/theme/theme.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hive_ce/hive.dart';
-import 'package:universal_platform/universal_platform.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {

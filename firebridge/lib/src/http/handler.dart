@@ -271,14 +271,8 @@ class HttpHandler {
 
     if (parsedResponse.statusCode == 429) {
       try {
-        final responseBody = parsedResponse.jsonBody;
-        // ((responseBody["retry_after"] as double) * 1000).ceil());
-        final retryAfter = Duration(milliseconds: (5 * 1000).ceil());
-        final isGlobal = responseBody["global"] as bool;
-
-        if (isGlobal) {
-          _globalReset = DateTime.now().add(retryAfter);
-        }
+        final retryAfter = Duration(milliseconds: (3000).ceil());
+        final isGlobal = false;
 
         _onRateLimitController.add((
           request: request,

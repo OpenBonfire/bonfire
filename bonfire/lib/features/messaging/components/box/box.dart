@@ -93,7 +93,7 @@ class _MessageBoxState extends ConsumerState<MessageBox>
 
     String? name = ref
             .watch(messageAuthorNameProvider(
-                widget.guildId, widget.channel, message!.author))
+                widget.guildId, widget.channel, message.author))
             .valueOrNull ??
         message.author.username;
 

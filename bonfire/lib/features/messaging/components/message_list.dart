@@ -76,12 +76,12 @@ class _MessageViewState extends ConsumerState<MessageList>
     super.didUpdateWidget(oldWidget);
 
     if (oldWidget.channelId != widget.channelId) {
+      _scrollController.jumpTo(0);
       _refreshForChannelChange();
     }
   }
 
   void _refreshForChannelChange() {
-    // Force provider to refresh when channel changes
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(messagesProvider(widget.channelId).notifier).refreshMessages();
       _oldestLoadedMessage = null;
