@@ -8,7 +8,7 @@ part 'guild.g.dart';
 
 @Riverpod(keepAlive: true)
 Future<Uri?> guildBannerUrl(Ref ref, Snowflake guildId) async {
-  var authOutput = ref.watch(authProvider.notifier).getAuth();
+  var authOutput = ref.watch(authProvider);
 
   if (authOutput is AuthUser) {
     // (await authOutput.client.guilds.get(guildId)).rulesChannel

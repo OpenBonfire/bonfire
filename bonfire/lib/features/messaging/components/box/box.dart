@@ -89,6 +89,7 @@ class _MessageBoxState extends ConsumerState<MessageBox>
   @override
   Widget build(BuildContext context) {
     Message? message = ref.watch(messageControllerProvider(widget.messageId));
+    if (message == null) return const SizedBox.shrink();
 
     String? name = ref
             .watch(messageAuthorNameProvider(

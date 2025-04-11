@@ -12,19 +12,21 @@ part 'forum_posts.g.dart';
 class ForumPosts extends _$ForumPosts {
   int _currentOffset = 0;
   bool _hasMore = true;
+  AuthUser? authUser;
 
   @override
   Future<List<ThreadList?>> build(Snowflake channelId) async {
+    var auth = ref.watch(authProvider);
+    if (auth is AuthUser) authUser = auth;
+
     _currentOffset = 0;
     _hasMore = true;
     return [await _fetchThreads(channelId)];
   }
 
   Future<ThreadList?> _fetchThreads(Snowflake channelId) async {
-    var auth = ref.watch(authProvider.notifier).getAuth();
-
-    if (auth is AuthUser) {
-      Channel channel = await auth.client.channels.get(channelId);
+    if (authUser is AuthUser) {
+      Channel channel = await authUser!.client.channels.get(channelId);
       if (channel is ForumChannel) {
         ThreadList? threadData = await channel.manager.searchThreads(
           channel.id,

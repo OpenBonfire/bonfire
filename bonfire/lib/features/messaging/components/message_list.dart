@@ -95,7 +95,7 @@ class _MessageViewState extends ConsumerState<MessageList>
 
     lastScrollMessage = lastScrollMessage ?? firstBatchLastMessage!;
     List<Message>? recents = await ref
-        .read(messagesProvider(widget.channelId).notifier)
+        .watch(messagesProvider(widget.channelId).notifier)
         .fetchMessages(
           before: lastScrollMessage!,
           limit: 50,

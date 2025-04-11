@@ -11,7 +11,7 @@ class UserMessages extends _$UserMessages {
 
   @override
   Future<void> build() async {
-    var authOutput = ref.watch(authProvider.notifier).getAuth();
+    var authOutput = ref.watch(authProvider);
     if (authOutput is AuthUser) {
       user = authOutput;
       // debugPrint("LISTING CHANNELS!");

@@ -21,6 +21,7 @@ class Auth extends _$Auth {
   NyxxGateway? client;
   AuthResponse? authResponse;
   bool hasSentInit = false;
+  bool isHandlingEvents = false;
 
   @override
   AuthResponse? build() {
@@ -82,6 +83,11 @@ class Auth extends _$Auth {
     debugPrint("LOGGING IN WITH TOKEN!");
     AuthResponse response = AuthNotStarted();
 
+    if (authResponse is AuthUser) {
+      print("is auth user so is closing!");
+      await (authResponse as AuthUser).client.close();
+    }
+
     var client = await Nyxx.connectGatewayWithOptions(
         GatewayApiOptions(
           token: token,
@@ -105,7 +111,10 @@ class Auth extends _$Auth {
 
     state = authResponse!;
 
+    // if (!isHandlingEvents) {
     handleEvents(ref, client);
+    //   isHandlingEvents = true;
+    // }
 
     ref.read(readyControllerProvider.notifier).setReady(true);
 

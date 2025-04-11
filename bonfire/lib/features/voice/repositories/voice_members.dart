@@ -17,7 +17,7 @@ class VoiceMembers extends _$VoiceMembers {
     Snowflake guildId, {
     Snowflake? channelId,
   }) async {
-    var authOutput = ref.watch(authProvider.notifier).getAuth();
+    var authOutput = ref.watch(authProvider);
     if (authOutput is AuthUser) {
       user = authOutput;
       Guild voiceGuild = ref

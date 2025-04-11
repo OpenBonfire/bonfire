@@ -1,3 +1,4 @@
+import 'package:bonfire/features/guild/controllers/guilds.dart';
 import 'package:bonfire/features/guild/repositories/guilds.dart';
 import 'package:bonfire/features/me/controllers/settings.dart';
 import 'package:bonfire/features/sidebar/components/dm_icon.dart';
@@ -114,21 +115,13 @@ class _SidebarState extends ConsumerState<Sidebar> {
 
   @override
   Widget build(BuildContext context) {
-    var guildWatch = ref.watch(guildsProvider);
+    var guildWatch = ref.watch(guildsControllerProvider);
     var guildFoldersWatch = ref.watch(guildFoldersProvider);
 
     double bottomPadding = MediaQuery.of(context).padding.bottom;
     double navbarHeight = shouldUseMobileLayout(context) ? 40 : 0;
 
-    List<UserGuild> guildList = [];
-    guildWatch.when(
-        data: (guilds) {
-          guildList = guilds;
-        },
-        error: (data, trace) {
-          debugPrint("ERROR11111111111");
-        },
-        loading: () {});
+    List<UserGuild> guildList = guildWatch ?? [];
 
     List<GuildFolder>? guildFolders = guildFoldersWatch;
 

@@ -45,7 +45,7 @@ class _WebviewLoginScreenState extends ConsumerState<WebviewLoginScreen> {
 
       webviewController
           .setNavigationDelegate(NavigationDelegate(onUrlChange: (change) {
-        var client = ref.read(authProvider.notifier).getAuth();
+        var client = ref.read(authProvider);
         if (client is AuthUser) {
           return;
         }

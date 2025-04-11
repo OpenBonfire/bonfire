@@ -14,7 +14,7 @@ class Typing extends _$Typing {
 
   @override
   Future<List<dynamic>> build(Snowflake channelId) async {
-    var auth = ref.watch(authProvider.notifier).getAuth();
+    var auth = ref.watch(authProvider);
     if (auth is AuthUser) {
       auth.client.onTypingStart.listen((event) async {
         if (event.channelId == channelId) {

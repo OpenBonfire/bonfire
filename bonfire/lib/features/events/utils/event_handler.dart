@@ -54,6 +54,7 @@ void handleEvents(Ref ref, NyxxGateway client) {
   });
 
   client.onReady.listen((event) {
+    print("setting guilds to ${event.guilds.length} guilds");
     ref.read(guildsControllerProvider.notifier).setGuilds(event.guilds);
 
     ref

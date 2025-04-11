@@ -18,7 +18,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'messages.g.dart';
 
 /// Message provider for fetching messages from the Discord API
-@Riverpod(keepAlive: true)
+@riverpod
 class Messages extends _$Messages {
   AuthUser? user;
   List<Message> loadedMessages = [];
@@ -26,13 +26,11 @@ class Messages extends _$Messages {
   @override
   Future<List<Message>?> build(Snowflake channelId) async {
     // I want it to reload if we re-auth; this might not work
-    ref.watch(authProvider);
+    var auth = ref.watch(authProvider);
 
     if (loadedMessages.isNotEmpty) {
       return loadedMessages;
     }
-
-    var auth = ref.watch(authProvider.notifier).getAuth();
 
     if (auth is! AuthUser) {
       debugPrint("bad auth!");
@@ -54,8 +52,6 @@ class Messages extends _$Messages {
     if (user is AuthUser) {
       if (channelId == Snowflake.zero) return [];
       var channel = ref.watch(channelControllerProvider(channelId));
-
-      // print(channelId);
       if (channel == null) {
         debugPrint("Tried to request messages from a null channel.");
       } else {}
@@ -111,8 +107,6 @@ class Messages extends _$Messages {
               message,
             );
       }
-      // print("got messages for ${channel.runtimeType}");
-      // print(messages);
       return messages;
     } else {
       return null;
@@ -200,7 +194,7 @@ class Messages extends _$Messages {
     String message, {
     List<AttachmentBuilder>? attachments,
   }) async {
-    var authOutput = ref.watch(authProvider.notifier).getAuth();
+    var authOutput = ref.watch(authProvider);
     if (authOutput is AuthUser) {
       user = authOutput;
       var textChannel = channel as TextChannel;

@@ -12,7 +12,7 @@ class MessageController extends _$MessageController {
   NyxxGateway? client;
   @override
   Message? build(Snowflake messageId) {
-    AuthResponse? user = ref.watch(authProvider.notifier).getAuth();
+    AuthResponse? user = ref.watch(authProvider);
     if (user is! AuthUser) return null;
 
     client = user.client;

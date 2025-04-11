@@ -11,7 +11,7 @@ part 'guild_icon.g.dart';
 
 @Riverpod(keepAlive: true)
 Future<Uint8List?> guildIcon(Ref ref, Snowflake guildId) async {
-  var user = ref.watch(authProvider.notifier).getAuth();
+  var user = ref.watch(authProvider);
   if (user is! AuthUser) return null;
 
   Guild guild = ref.watch(guildControllerProvider(guildId))!;

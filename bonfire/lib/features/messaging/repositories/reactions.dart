@@ -14,7 +14,7 @@ class MessageReactions extends _$MessageReactions {
   List<Reaction>? build(
     Snowflake messageId,
   ) {
-    var auth = ref.watch(authProvider.notifier).getAuth();
+    var auth = ref.watch(authProvider);
 
     if (auth is AuthUser) {
       user = auth;

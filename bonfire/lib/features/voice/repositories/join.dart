@@ -24,7 +24,7 @@ class VoiceChannelController extends _$VoiceChannelController {
 
   @override
   VoiceReadyEvent? build() {
-    var authUser = ref.watch(authProvider.notifier).getAuth();
+    var authUser = ref.watch(authProvider);
     if (authUser is AuthUser) {
       user = authUser;
     }

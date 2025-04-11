@@ -13,7 +13,7 @@ part 'guild_mentions.g.dart';
 class GuildMentions extends _$GuildMentions {
   @override
   Future<int> build(Snowflake guildId) async {
-    var user = ref.watch(authProvider.notifier).getAuth();
+    var user = ref.watch(authProvider);
     if (user is! AuthUser) return 0;
 
     List<Guild>? guilds = ref.watch(guildsControllerProvider);

@@ -6,6 +6,7 @@ import 'package:bonfire/features/authenticator/views/credentials.dart';
 import 'package:bonfire/features/authenticator/components/platform_login.dart';
 import 'package:bonfire/shared/utils/platform.dart';
 import 'package:bonfire/theme/theme.dart';
+import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -21,6 +22,7 @@ class LoginScreen extends ConsumerStatefulWidget {
 }
 
 class _LoginScreenState extends ConsumerState<LoginScreen> {
+  NyxxGateway? client;
   // final fireviewController = FireviewController();
   bool? authMissing;
   @override
@@ -28,6 +30,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     super.initState();
     ref.listenManual(authProvider, (a, b) {
       if (b is AuthUser) {
+        client = b.client;
         b.client.onReady.listen((_) {
           print("User is Ready!");
           _navigateToLastLocation();
@@ -45,7 +48,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     var token = auth.get('token');
 
     if (token != null) {
-      var client = ref.read(authProvider.notifier).getAuth();
+      // var client = ref.watch(authProvider);
       if (client is AuthUser) {
         return;
       }

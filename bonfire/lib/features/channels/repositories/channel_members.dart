@@ -114,7 +114,7 @@ class ChannelMembers extends _$ChannelMembers {
 
   @override
   Future<Pair<List<GuildMemberListGroup>, List<dynamic>>?> build() async {
-    var authOutput = ref.watch(authProvider.notifier).getAuth();
+    var authOutput = ref.watch(authProvider);
     if (authOutput is AuthUser) {
       user = authOutput;
     }
