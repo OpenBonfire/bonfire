@@ -54,7 +54,7 @@ class _FriendCardState extends ConsumerState<FriendCard> {
             Padding(
               padding: const EdgeInsets.all(8),
               child: PresenceAvatar(
-                user: widget.user,
+                userId: widget.user.id,
                 initialPresence: presence,
               ),
             ),

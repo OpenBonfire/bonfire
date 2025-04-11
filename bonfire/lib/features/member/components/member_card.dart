@@ -70,7 +70,7 @@ class _MemberCardState extends ConsumerState<MemberCard> {
                   height: 58,
                 ),
                 PresenceAvatar(
-                  user: widget.member.user!,
+                  userId: widget.member.user!.id,
                   initialPresence: initialPresence,
                 ),
                 const SizedBox(width: 8),

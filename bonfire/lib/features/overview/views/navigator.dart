@@ -1,8 +1,13 @@
+import 'package:bonfire/features/authenticator/components/local_account_switcher.dart';
+import 'package:bonfire/features/authenticator/utils/switcher.dart';
 import 'package:bonfire/features/overview/controllers/navigation_bar.dart';
+import 'package:bonfire/features/user/card/repositories/self_user.dart';
+import 'package:bonfire/features/user/components/presence_avatar.dart';
 import 'package:bonfire/shared/utils/platform.dart';
 import 'package:bonfire/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:bonfire/features/overview/views/overlapping_panels.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
@@ -63,6 +68,8 @@ class _BarWidgetState extends ConsumerState<NavigationBarWidget> {
 
     if (shouldUseDesktopLayout(context)) return Container();
 
+    final user = ref.watch(selfUserProvider).valueOrNull;
+
     return Column(
       children: [
         Container(
@@ -80,6 +87,7 @@ class _BarWidgetState extends ConsumerState<NavigationBarWidget> {
             padding: const EdgeInsets.only(top: 10, left: 18, right: 18),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 NavigatorIcon(
                   path: '/channels/$guildId/$channelId',
@@ -88,18 +96,24 @@ class _BarWidgetState extends ConsumerState<NavigationBarWidget> {
                   selected: isHome,
                 ),
                 NavigatorIcon(
-                  path: '/channels/@me',
-                  iconAsset: 'assets/icons/messages.svg',
-                  label: 'Messages',
-                  selected: isMessages,
-                ),
-                NavigatorIcon(
                   path: '/overview/notifications',
                   iconAsset: 'assets/icons/notifications.svg',
                   label: 'Notifications',
-                  selected:
-                      isNotifications, // This is never selected in the current setup
+                  selected: isNotifications,
                 ),
+                // this should just be a custom thing
+                if (user != null)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 8.0),
+                    child: InkWell(
+                      child: PresenceAvatar(userId: user.id, size: 32),
+                      onTap: () async {
+                        HapticFeedback.lightImpact();
+                        showAccountSwitcherDialog(
+                            context, GoRouter.of(context));
+                      },
+                    ),
+                  ),
               ],
             ),
           ),
@@ -142,14 +156,16 @@ class _BarWidgetState extends ConsumerState<NavigationBarWidget> {
 class NavigatorIcon extends StatelessWidget {
   final String iconAsset;
   final String label;
-  final String path;
+  final String? path;
+  final Function()? onTap;
   final bool selected;
 
   const NavigatorIcon({
     super.key,
     required this.iconAsset,
     required this.label,
-    required this.path,
+    this.path,
+    this.onTap,
     required this.selected,
   });
 
@@ -161,7 +177,9 @@ class NavigatorIcon extends StatelessWidget {
 
     return InkWell(
       onTap: () {
-        GoRouter.of(context).push(path);
+        HapticFeedback.lightImpact();
+        if (path != null) GoRouter.of(context).push(path!);
+        if (onTap != null) onTap!();
       },
       splashFactory: NoSplash.splashFactory,
       splashColor: Colors.transparent,

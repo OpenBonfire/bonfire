@@ -1,24 +1,26 @@
 import 'package:bonfire/features/user/components/user_avatar.dart';
+import 'package:bonfire/features/user/controllers/user.dart';
 import 'package:bonfire/theme/theme.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class PresenceAvatar extends StatefulWidget {
-  final User user;
+class PresenceAvatar extends ConsumerStatefulWidget {
+  final Snowflake userId;
   final PresenceUpdateEvent? initialPresence;
   final double? size;
   const PresenceAvatar({
     super.key,
-    required this.user,
+    required this.userId,
     this.initialPresence,
     this.size,
   });
 
   @override
-  State<PresenceAvatar> createState() => _PresenceAvatarState();
+  ConsumerState<PresenceAvatar> createState() => _PresenceAvatarState();
 }
 
-class _PresenceAvatarState extends State<PresenceAvatar> {
+class _PresenceAvatarState extends ConsumerState<PresenceAvatar> {
   Widget getStatusIcon(ClientStatus? clientStatus, UserStatus overallStatus) {
     double iconSize = widget.size != null ? (widget.size! / 5) : 14;
     Color statusColor;
@@ -78,13 +80,15 @@ class _PresenceAvatarState extends State<PresenceAvatar> {
   @override
   Widget build(BuildContext context) {
     var initialPresence = widget.initialPresence;
+    final user = ref.watch(userControllerProvider(widget.userId));
+    if (user == null) return const SizedBox.shrink();
     return Stack(
       alignment: Alignment.center,
       children: [
         // const SizedBox(width: 38, height: 38),
         Center(
           child: UserAvatar(
-            user: widget.user,
+            user: user,
             size: widget.size ?? 35,
           ),
         ),

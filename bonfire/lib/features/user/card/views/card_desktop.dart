@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:bonfire/features/authenticator/components/local_account_switcher.dart';
 import 'package:bonfire/features/authenticator/components/platform_login.dart';
+import 'package:bonfire/features/authenticator/utils/switcher.dart';
 import 'package:bonfire/features/me/controllers/settings.dart';
 import 'package:bonfire/features/user/card/repositories/self_user.dart';
 import 'package:bonfire/features/user/card/repositories/user_avatar.dart';
@@ -38,17 +39,7 @@ class UserCard extends ConsumerWidget {
         padding: WidgetStateProperty.all(EdgeInsets.zero),
       ),
       onPressed: () {
-        showDialog(
-            context: context,
-            builder: (context) {
-              return Dialog(
-                  backgroundColor:
-                      Theme.of(context).custom.colorTheme.background,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(24),
-                  ),
-                  child: const LocalAccountSwitcherScreen());
-            });
+        showAccountSwitcherDialog(context, GoRouter.of(context));
       },
       child: Container(
         decoration: BoxDecoration(
@@ -83,10 +74,12 @@ class UserCard extends ConsumerWidget {
                         width: 40,
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(10),
-                          child: Image.memory(
-                            avatar ?? Uint8List(0),
-                            fit: BoxFit.cover,
-                          ),
+                          child: (avatar != null)
+                              ? Image.memory(
+                                  avatar,
+                                  fit: BoxFit.cover,
+                                )
+                              : const SizedBox.shrink(),
                         ),
                       ),
                       Positioned(
