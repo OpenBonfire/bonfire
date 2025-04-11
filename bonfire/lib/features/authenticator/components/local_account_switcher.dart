@@ -36,12 +36,13 @@ class _LocalAccountSwitcherScreenState
         b.client.onReady.listen((_) {
           print("User is Ready!");
           // _navigateToLastLocation();
-          setState(() {
-            isLoading = false;
-          });
+
           // if is mounted
           if (mounted) {
             Navigator.pop(context);
+            setState(() {
+              isLoading = false;
+            });
           }
         });
       }
