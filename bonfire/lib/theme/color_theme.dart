@@ -13,6 +13,18 @@ class AppColorsDark {
   static const yellow = Color(0xFFFEE75C);
 }
 
+class AppColorsAmoled {
+  static const background = Color(0xFF000000);
+  static const foreground = Color(0xFF14161A);
+  static const dirtyWhite = Color(0xFFE4E5E8);
+  static const gray = Color(0xFF818491);
+  static const darkGray = Color(0xFF18191f);
+  static const primary = Color(0xff2448BE);
+  static const red = Color(0xFFED4245);
+  static const green = Color(0xFF57F287);
+  static const yellow = Color(0xFFFEE75C);
+}
+
 class ColorTheme {
   final Color background;
   final Color foreground;

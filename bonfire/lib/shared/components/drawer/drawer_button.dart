@@ -32,7 +32,7 @@ class _BonfireDrawerButtonState extends ConsumerState<BonfireDrawerButton> {
       top: widget.roundTop ? const Radius.circular(12) : Radius.zero,
       bottom: widget.roundBottom ? const Radius.circular(12) : Radius.zero,
     );
-    final CustomThemeData theme = Theme.of(context).custom;
+    final theme = Theme.of(context).custom;
     return OutlinedButton(
         style: OutlinedButton.styleFrom(
             minimumSize: Size.zero,

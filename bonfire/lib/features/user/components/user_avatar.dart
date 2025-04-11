@@ -50,7 +50,7 @@ class _UserAvatarState extends ConsumerState<UserAvatar> {
 
   // TODO: makle this actually work
   Widget _buildShimmerEffect() {
-    CustomThemeData theme = Theme.of(context).custom;
+    final theme = Theme.of(context).custom;
     return Shimmer.fromColors(
       baseColor: theme.colorTheme.foreground,
       highlightColor: Colors.white,

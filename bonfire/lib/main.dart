@@ -83,6 +83,18 @@ class MainWindow extends ConsumerStatefulWidget {
 
 class _MainWindowState extends ConsumerState<MainWindow> {
   @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final initialTheme =
+          (UniversalPlatform.isMobile) ? ThemeType.amoled : ThemeType.dark;
+
+      ref.read(themeTypeProvider.notifier).state = initialTheme;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       systemNavigationBarColor: Colors.transparent,
@@ -91,6 +103,8 @@ class _MainWindowState extends ConsumerState<MainWindow> {
       systemStatusBarContrastEnforced: false,
       systemNavigationBarContrastEnforced: false,
     ));
+
+    final theme = ref.watch(themeDataProvider);
 
     return Scaffold(
       backgroundColor: Colors.transparent,
@@ -102,8 +116,8 @@ class _MainWindowState extends ConsumerState<MainWindow> {
                 child: KeyboardSizeProvider(
                   child: MaterialApp.router(
                     title: 'Bonfire',
-                    theme: ref.read(darkThemeProvider),
-                    darkTheme: ref.read(darkThemeProvider),
+                    theme: theme,
+                    darkTheme: theme,
                     routerConfig: routerController,
                   ),
                 ),
