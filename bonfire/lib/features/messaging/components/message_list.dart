@@ -33,12 +33,12 @@ class _MessageViewState extends ConsumerState<MessageList>
     with SingleTickerProviderStateMixin {
   Timer? _debounceTimer;
   final ScrollController _scrollController = ScrollController();
-  List<Message> loadedMessages = [];
-  Message? lastScrollMessage;
-  Message? firstBatchLastMessage;
-  Logger logger = Logger("MessageView");
+  final Logger logger = Logger("MessageView");
   bool _isLoadingMore = false;
-  bool sentInitialAck = false;
+  bool _isLoadingNewer = false;
+  Message? _oldestLoadedMessage;
+  Message? _newestLoadedMessage;
+  double? _previousMaxScrollExtent;
 
   late AnimationController _fadeController;
   late Animation<double> _fadeAnimation;
@@ -67,52 +67,108 @@ class _MessageViewState extends ConsumerState<MessageList>
 
   void _scrollListener() {
     if (_scrollController.position.pixels == 0) {
-      if (loadedMessages.isNotEmpty) {
-        loadedMessages.first.manager.acknowledge(loadedMessages.first.id);
+      final messages = ref.read(messagesProvider(widget.channelId)).valueOrNull;
+      if (messages != null && messages.isNotEmpty) {
+        messages.first.manager.acknowledge(messages.first.id);
       }
     }
 
     if (_scrollController.position.pixels >=
-        _scrollController.position.maxScrollExtent - 3000) {
-      if (!_isLoadingMore) {
+        _scrollController.position.maxScrollExtent - 300) {
+      if (!_isLoadingMore && _oldestLoadedMessage != null) {
         _debounceTimer?.cancel();
         _debounceTimer = Timer(const Duration(milliseconds: 300), () {
-          if (!_isLoadingMore) {
-            _loadMoreMessages();
-          }
+          _loadOlderMessages();
         });
       }
     }
+
+    if (_scrollController.position.pixels <= 300 &&
+        _scrollController.position.pixels > 0) {
+      if (!_isLoadingNewer && _newestLoadedMessage != null) {
+        _debounceTimer?.cancel();
+        _debounceTimer = Timer(const Duration(milliseconds: 300), () {
+          _loadNewerMessages();
+        });
+      }
+    }
+
+    _previousMaxScrollExtent = _scrollController.position.maxScrollExtent;
   }
 
-  Future<void> _loadMoreMessages() async {
-    if (firstBatchLastMessage == null) return;
-    if (_isLoadingMore) return;
+  Future<void> _loadOlderMessages() async {
+    if (_isLoadingMore || _oldestLoadedMessage == null) return;
 
     setState(() {
       _isLoadingMore = true;
     });
 
-    lastScrollMessage = lastScrollMessage ?? firstBatchLastMessage!;
-    List<Message>? recents = await ref
-        .watch(messagesProvider(widget.channelId).notifier)
-        .fetchMessages(
-          before: lastScrollMessage!,
-          limit: 50,
-          around: widget.threadId,
-        );
+    try {
+      await ref
+          .read(messagesProvider(widget.channelId).notifier)
+          .fetchMessagesBefore(_oldestLoadedMessage!, limit: 50);
 
-    if (recents.isNotEmpty) {
-      if (lastScrollMessage?.id != recents.last.id) {
-        setState(() {
-          lastScrollMessage = recents.last;
-        });
-      }
+      _updateOldestAndNewestMessages();
+    } catch (e) {
+      logger.severe("Error loading older messages", e);
+    } finally {
+      setState(() {
+        _isLoadingMore = false;
+      });
     }
-    _isLoadingMore = false;
+  }
+
+  Future<void> _loadNewerMessages() async {
+    if (_isLoadingNewer || _newestLoadedMessage == null) return;
+
+    setState(() {
+      _isLoadingNewer = true;
+    });
+
+    try {
+      await ref
+          .read(messagesProvider(widget.channelId).notifier)
+          .fetchMessagesAfter(_newestLoadedMessage!, limit: 30);
+
+      _updateOldestAndNewestMessages();
+    } catch (e) {
+      logger.severe("Error loading newer messages", e);
+    } finally {
+      setState(() {
+        _isLoadingNewer = false;
+      });
+    }
+  }
+
+  void _updateOldestAndNewestMessages() {
+    final messages = ref.read(messagesProvider(widget.channelId)).valueOrNull;
+    if (messages == null || messages.isEmpty) return;
+
+    _newestLoadedMessage = messages.first;
+    _oldestLoadedMessage = messages.last;
+
+    if (_previousMaxScrollExtent != null &&
+        _previousMaxScrollExtent !=
+            _scrollController.position.maxScrollExtent) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        final delta = _scrollController.position.maxScrollExtent -
+            _previousMaxScrollExtent!;
+        if (delta > 0) {
+          _scrollController.jumpTo(_scrollController.offset + delta);
+        }
+      });
+    }
   }
 
   Widget _buildMessageList() {
+    final messages =
+        ref.watch(messagesProvider(widget.channelId)).valueOrNull ?? [];
+
+    if (messages.isNotEmpty) {
+      _newestLoadedMessage = messages.first;
+      _oldestLoadedMessage = messages.last;
+    }
+
     return ListView.custom(
       controller: _scrollController,
       reverse: true,
@@ -129,10 +185,10 @@ class _MessageViewState extends ConsumerState<MessageList>
         right: 0,
       ),
       childrenDelegate: SliverChildBuilderDelegate(
-        childCount: loadedMessages.length + (isSmartwatch(context) ? 1 : 0),
+        childCount: messages.length + (isSmartwatch(context) ? 1 : 0),
         findChildIndexCallback: (Key key) {
           final ValueKey<BigInt> valueKey = key as ValueKey<BigInt>;
-          var idx = loadedMessages
+          var idx = messages
               .indexWhere((message) => message.id.value == valueKey.value);
           if (idx == -1) return null;
           return idx;
@@ -153,9 +209,9 @@ class _MessageViewState extends ConsumerState<MessageList>
           final messageIndex = isSmartwatch(context) ? index - 1 : index;
           bool showAuthor = true;
 
-          if (messageIndex + 1 < loadedMessages.length) {
-            Message currentMessage = loadedMessages[messageIndex];
-            Message lastMessage = loadedMessages[messageIndex + 1];
+          if (messageIndex + 1 < messages.length) {
+            Message currentMessage = messages[messageIndex];
+            Message lastMessage = messages[messageIndex + 1];
 
             showAuthor = lastMessage.author.id != currentMessage.author.id;
 
@@ -171,16 +227,13 @@ class _MessageViewState extends ConsumerState<MessageList>
           } else {
             showAuthor = true;
           }
-          if (messageIndex == loadedMessages.length - 1 &&
-              lastScrollMessage == null) {
-            firstBatchLastMessage = loadedMessages[messageIndex];
-          }
+
           return MessageBox(
-            key: ValueKey(loadedMessages[messageIndex].id.value),
+            key: ValueKey(messages[messageIndex].id.value),
             guildId: ref.read(guildControllerProvider(widget.guildId))?.id ??
                 Snowflake.zero,
             channel: channel,
-            messageId: loadedMessages[messageIndex].id,
+            messageId: messages[messageIndex].id,
             showSenderInfo: showAuthor,
           );
         },
@@ -190,32 +243,27 @@ class _MessageViewState extends ConsumerState<MessageList>
 
   Widget _buildLoadingList() {
     return ListView.builder(
-      itemCount: 10, // Show 10 loading placeholders
+      itemCount: 10,
       itemBuilder: (context, index) => const MessageLoadingAnimation(),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    var messageOutput = ref.watch(messagesProvider(widget.channelId));
-
+    final messageOutput = ref.watch(messagesProvider(widget.channelId));
     Widget content = Container();
 
     messageOutput.when(
       data: (messages) {
-        loadedMessages = messages ?? [];
         _fadeController.forward();
         content = _buildMessageList();
       },
       loading: () {
-        loadedMessages = [];
-        // we could also reverse it, but that doesn't look as good imo
         _fadeController.reverse();
         content = _buildLoadingList();
       },
       error: (error, stack) {
         logger.severe("Error loading messages", error, stack);
-        loadedMessages = [];
         _fadeController.forward();
         content = Center(
           child: Text('Error loading messages: ${error.toString()}'),
@@ -223,9 +271,8 @@ class _MessageViewState extends ConsumerState<MessageList>
       },
     );
 
-    Channel? channel = ref.watch(channelControllerProvider(widget.channelId));
-
-    Guild? guild = ref.watch(guildControllerProvider(widget.guildId));
+    final channel = ref.watch(channelControllerProvider(widget.channelId));
+    final guild = ref.watch(guildControllerProvider(widget.guildId));
 
     if (channel == null) {
       return const Center(
