@@ -204,7 +204,7 @@ class _MessageViewState extends ConsumerState<MessageList>
           final delta = _scrollController.position.maxScrollExtent -
               _previousMaxScrollExtent!;
           if (delta > 0) {
-            _scrollController.jumpTo(_scrollController.offset + delta);
+            // _scrollController.jumpTo(_scrollController.offset + delta);
           }
         }
       });
