@@ -323,6 +323,10 @@ class _MessageBoxState extends ConsumerState<MessageBox>
                   fontSize: 11,
                 ),
               ),
+              if (message.editedTimestamp != null)
+                TextSpan(
+                    text: " (edited)",
+                    style: Theme.of(context).custom.textTheme.caption),
             ],
           ),
         ),
@@ -331,8 +335,8 @@ class _MessageBoxState extends ConsumerState<MessageBox>
             padding: const EdgeInsets.only(left: 6),
             child: Image.memory(
               roleIcon,
-              width: 20,
-              height: 20,
+              width: 18,
+              height: 18,
             ),
           ),
       ],
