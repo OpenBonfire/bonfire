@@ -287,6 +287,7 @@ class _MessageViewState extends ConsumerState<MessageList>
             channel: channel,
             messageId: messages[messageIndex].id,
             showSenderInfo: showAuthor,
+            scrollController: _scrollController,
           );
         },
       ),

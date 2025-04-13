@@ -5,7 +5,9 @@ import 'package:flutter/material.dart';
 
 class VideoEmbed extends StatelessWidget {
   final Embed embed;
-  const VideoEmbed({super.key, required this.embed});
+  final ScrollController scrollController;
+  const VideoEmbed(
+      {super.key, required this.embed, required this.scrollController});
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +28,8 @@ class VideoEmbed extends StatelessWidget {
         width: embed.thumbnail!.width!.toDouble(),
         height: embed.thumbnail!.height!.toDouble(),
         url: embed.video!.url!,
+        scrollController: scrollController,
+        thumbnail: embed.thumbnail!,
       );
 
       //     url: embed.video!.url!);

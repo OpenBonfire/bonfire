@@ -25,12 +25,14 @@ class MessageBox extends ConsumerStatefulWidget {
   final bool showSenderInfo;
   final Snowflake guildId;
   final Channel channel;
+  final ScrollController scrollController;
   const MessageBox({
+    super.key,
     required this.guildId,
     required this.channel,
-    super.key,
     required this.messageId,
     required this.showSenderInfo,
+    required this.scrollController,
   });
 
   @override
@@ -351,6 +353,7 @@ class _MessageBoxState extends ConsumerState<MessageBox>
         ...message.embeds.map((embed) => Padding(
               padding: const EdgeInsets.only(top: 8),
               child: EmbedWidget(
+                scrollController: widget.scrollController,
                 embed: embed,
               ),
             )),

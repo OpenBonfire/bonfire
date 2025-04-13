@@ -7,7 +7,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class EmbedWidget extends ConsumerStatefulWidget {
   final Embed embed;
-  const EmbedWidget({super.key, required this.embed});
+  final ScrollController scrollController;
+  const EmbedWidget(
+      {super.key, required this.embed, required this.scrollController});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _EmbedWidgetState();
@@ -23,7 +25,8 @@ class _EmbedWidgetState extends ConsumerState<EmbedWidget> {
       return ImageEmbed(embed: widget.embed);
     }
     if (widget.embed.video != null) {
-      return VideoEmbed(embed: widget.embed);
+      return VideoEmbed(
+          embed: widget.embed, scrollController: widget.scrollController);
     }
 
     // todo: handle other embed types
