@@ -71,13 +71,13 @@ class _LocalAccountSwitcherScreenState
     }
     return Container(
       padding: EdgeInsets.only(
-          top: padding.top + 8,
-          left: 12,
-          right: 12,
-          bottom: padding.bottom + 8),
+          top: padding.top + 24,
+          left: 24,
+          right: 24,
+          bottom: padding.bottom + 24),
       decoration: BoxDecoration(
         color: Theme.of(context).custom.colorTheme.background,
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(24),
       ),
       child: Column(
         children: [
@@ -86,9 +86,11 @@ class _LocalAccountSwitcherScreenState
               children: [
                 Text(
                   "Switch Account",
-                  style: theme.textTheme.titleLargeBold,
+                  style: theme.textTheme.titleMedium.copyWith(
+                      color: theme.colorTheme.dirtyWhite,
+                      fontWeight: FontWeight.w600),
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 24),
                 ...addedAccounts.map((account) {
                   return Padding(
                     padding: const EdgeInsets.only(bottom: 4),
