@@ -111,13 +111,24 @@ class _LocalAccountSwitcherScreenState
           const Spacer(),
           ConfirmButton(
               onPressed: () {
-                Navigator.pop(context);
-                showDialog(
-                  context: context,
-                  builder: (context) {
-                    return const Dialog(child: PlatformLoginWidget());
-                  },
-                );
+                if (shouldUseMobileLayout(context)) {
+                  Navigator.of(context).push(
+                    PageRouteBuilder(
+                      opaque: true,
+                      pageBuilder: (_, __, ___) => Material(
+                          color: Theme.of(context).custom.colorTheme.background,
+                          child: const PlatformLoginWidget()),
+                    ),
+                  );
+                } else {
+                  Navigator.pop(context);
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return const Dialog(child: PlatformLoginWidget());
+                    },
+                  );
+                }
               },
               text: "Add Account"),
         ],

@@ -45,11 +45,8 @@ class _WebviewLoginScreenState extends ConsumerState<WebviewLoginScreen> {
 
       webviewController
           .setNavigationDelegate(NavigationDelegate(onUrlChange: (change) {
-        var client = ref.read(authProvider);
-        if (client is AuthUser) {
-          return;
-        }
-        if (change.url == "https://discord.com/channels/@me") {
+        print("URL: ${change.url}");
+        if (change.url?.contains("@me") ?? false) {
           webviewController
               .runJavaScriptReturningResult(
                   "(webpackChunkdiscord_app.push([[''],{},e=>{m=[];for(let c in e.c)m.push(e.c[c])}]),m).find(m=>m?.exports?.default?.getToken!==void 0).exports.default.getToken();")

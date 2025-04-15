@@ -100,10 +100,10 @@ class _MessageViewState extends ConsumerState<MessageList>
   }
 
   void _scrollListener() {
-    // Acknowledge messages when scrolled to top (newest messages)
     if (_scrollController.position.pixels == 0) {
       final messages = ref.read(messagesProvider(widget.channelId)).valueOrNull;
       if (messages != null && messages.isNotEmpty) {
+        // TODO: This spams. We should check the read state or something to only do this once.
         messages.first.manager.acknowledge(messages.first.id);
       }
     }
@@ -225,6 +225,7 @@ class _MessageViewState extends ConsumerState<MessageList>
       controller: _scrollController,
       reverse: true,
       shrinkWrap: true,
+      cacheExtent: 20000,
       padding: EdgeInsets.only(
         bottom: 12,
         top: isSmartwatch(context)

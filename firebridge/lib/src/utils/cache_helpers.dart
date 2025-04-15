@@ -101,7 +101,10 @@ extension CacheUpdates on NyxxRest {
           entity.stickerList.forEach(updateCacheWith);
         }(),
       // I really thought roles would be here.
-      GuildMemberListUpdateEvent() => null,
+      GuildMemberListUpdateEvent() => () {
+          // TODO: It's kinda complicated to parse this
+          // but you need to do a runtime type check to see if it's a user
+        }(),
       Member() => () {
           entity.manager.cache[entity.id] = entity;
 
