@@ -91,6 +91,7 @@ class Auth extends _$Auth {
     var client = await Nyxx.connectGatewayWithOptions(
         GatewayApiOptions(
           token: token,
+          // totalShards: 1,
           intents: GatewayIntents.all,
           compression: UniversalPlatform.isWeb
               ? GatewayCompression.none
@@ -98,7 +99,7 @@ class Auth extends _$Auth {
         ),
         GatewayClientOptions(
           plugins: [
-            Logging(logLevel: Level.SEVERE),
+            Logging(logLevel: Level.INFO),
           ],
         ));
 
