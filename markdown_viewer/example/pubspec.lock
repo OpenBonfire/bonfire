@@ -57,6 +57,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.19.1"
+  combine:
+    dependency: transitive
+    description:
+      name: combine
+      sha256: c16464b55d140871fbab5b37909e1808c2f020e46f9ba7deca59d40faabb6008
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.5.7"
   crypto:
     dependency: transitive
     description:
@@ -408,4 +416,4 @@ packages:
     version: "1.2.5"
 sdks:
   dart: ">=3.7.0-0 <4.0.0"
-  flutter: ">=3.18.0-18.0.pre.54"
+  flutter: ">=3.22.2"

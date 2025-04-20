@@ -13,11 +13,6 @@ dependencies:
   flutter_web_plugins:
     sdk: flutter
 
-  # fireview:
-  #   git: 
-  #     url: https://github.com/ericApostal/fireview
-  #     ref: 1d29957d18e0d001d681d0801fbfbf7555725f71
-
   firebridge:
     path: ../firebridge
 
@@ -96,7 +91,6 @@ dependencies:
   cached_network_image: ^3.4.1
   webview_flutter: ^4.10.0
   insta_image_viewer: ^1.0.4
-  combine: ^0.5.7
 
 dependency_overrides:
   http: ^1.2.1

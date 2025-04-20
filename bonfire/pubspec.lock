@@ -274,13 +274,14 @@ packages:
     source: hosted
     version: "1.19.1"
   combine:
-    dependency: "direct main"
+    dependency: transitive
     description:
-      name: combine
-      sha256: c16464b55d140871fbab5b37909e1808c2f020e46f9ba7deca59d40faabb6008
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.5.7"
+      path: "."
+      ref: "9a38d6bd658506be971c8ea071e5ee55514837b0"
+      resolved-ref: "9a38d6bd658506be971c8ea071e5ee55514837b0"
+      url: "https://github.com/EricApostal/combine"
+    source: git
+    version: "0.5.8"
   convert:
     dependency: transitive
     description:

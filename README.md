@@ -46,11 +46,6 @@ To start, lemmie outline a few things.
 
 Mobile is just a different beast due to the difficult nature of modifying packed binaries. While the Desktop client can be fixed relatively easily because it's possible to inject javascript directly into the application, mobile would require modifying the binary ahead of time to patch in your changes. This is extremely difficult due to the locked-down nature of apps (if you'd like to see an example of this approach, check out ReVanced). Instead of trying to hack together patches for an already broken and slow client, we have decided to tackle creating a full re-implementation of the Discord client using the flutter framework!
 
-## Usage Samples - *Note: The app changes fast! These have improved / changed recently.*
-- [Scrolling Demo](https://imgur.com/a/gFivaVV)
-- [Channel Switch Demo](https://imgur.com/a/IVhby8W)
-- [Messaging / General Usage](https://vimeo.com/958731239?share=copy)
-
 # Developing
 ## General Info
 I'm pretty new to managing public projects, so you'll have to bear with me here. For starters, there's a few projects that OpenBonfire uses and maintains, which can be found in our org. Let's just talk about the big ones.
@@ -80,7 +75,7 @@ I'm pretty new to managing public projects, so you'll have to bear with me here.
   - 🟥 Threads
   - 🟨 Member List
     - 🟩 Base View
-    - 🟩 Networking (handled in firebridge, tricky due to Discord's sharding)
+    - 🟩 Networking (handled in firebridge, tricky due to Discord's event system)
     - 🟥 Member Search
 - 🟨 Friends
 - 🟨 Guilds
@@ -108,11 +103,9 @@ You may encounter issues on Linux (usually with packaging)
 2. **various media kit build errors**: You need `mpv` / `mpv-devel`. Fedora will require you to follow the fix for build issue 1.
 3. **symbol lookup error: /lib64/libmpv.so.2: undefined symbol: vkCreateXlibSurfaceKHR** You need to run `export LD_LIBRARY_PATH=/lib64:$LD_LIBRARY_PATH` in the same terminal you run bonfire from. This path should correspond to the location that libmpv is stored. I am looking to implement a proper fix for this.
 
-There is also a fun error on Linux that will happen due to the WebView library. Essentially, you will have to handle the libmpv dependency chain yourself. I will automate this in the future, but I don't have a great fix for this at the moment.
-
 Don't forget to run `dart run build_runner watch` before developing! This is required when using freezed and riverpod.
 
 ## A quick note for contributors.
 We are looking for contributors! I would absolutely love to get this project completed, but it's pretty difficult time-wise. The pacing when I have time to work on it goes pretty fast though, so more people pitching in would be fantastic!
 
-Some of my code might not be great. This is the largest Flutter app I've made by far, so you'll have to bear with me here. Some of the code (looking at you `repositories/messages.dart`) may not be the best. I am absolutely not opposed to full restructuring if it's reasonable, just bring it up with me first.
+Some of my code might not be great. This is the largest Flutter app I've made by far, so you'll have to bear with me here.
