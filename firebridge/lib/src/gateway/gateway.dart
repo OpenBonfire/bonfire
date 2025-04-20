@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 import 'package:firebridge/src/builders/guild/channel_statuses.dart';
 import 'package:firebridge/src/builders/guild/guild_subscriptions_bulk.dart';
 import 'package:firebridge/src/models/discord_color.dart';

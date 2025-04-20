@@ -23,6 +23,7 @@ dependencies:
   web_socket_channel: ^3.0.1
   stream_channel: ^2.1.2
   websocket_universal: ^1.2.5
+  combine: ^0.5.7
 
 dev_dependencies:
   test: ^1.22.0

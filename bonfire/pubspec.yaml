@@ -96,6 +96,7 @@ dependencies:
   cached_network_image: ^3.4.1
   webview_flutter: ^4.10.0
   insta_image_viewer: ^1.0.4
+  combine: ^0.5.7
 
 dependency_overrides:
   http: ^1.2.1

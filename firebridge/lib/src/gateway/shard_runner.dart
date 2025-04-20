@@ -2,17 +2,15 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
 
-import 'package:web_socket_channel/web_socket_channel.dart';
-import 'package:universal_io/io.dart';
-
 import 'package:eterl/eterl.dart';
-import 'package:archive/archive.dart';
 import 'package:firebridge/src/api_options.dart';
 import 'package:firebridge/src/errors.dart';
 import 'package:firebridge/src/gateway/event_parser.dart';
 import 'package:firebridge/src/gateway/message.dart';
 import 'package:firebridge/src/models/gateway/event.dart';
 import 'package:firebridge/src/models/gateway/opcode.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
+import 'package:universal_io/io.dart';
 
 /// An internal class that contains the logic for running a shard.
 ///
@@ -33,11 +31,17 @@ class ShardRunner {
   /// The current active connection.
   ShardConnection? connection;
 
+  // Add messages to this controller for them to be sent back to the main isolate.
+  final StreamController<ShardMessage> controller = StreamController();
+
   /// Whether the last heartbeat was ACKed.
   bool lastHeartbeatAcked = true;
 
   /// The stopwatch timing the interval between a heartbeat being sent and a heartbeat ACK being received.
   Stopwatch? heartbeatStopwatch;
+
+  /// The interval between two heartbeats.
+  Duration? heartbeatInterval;
 
   /// Whether the current connection can be resumed.
   bool canResume = false;
@@ -58,23 +62,66 @@ class ShardRunner {
   ShardRunner(this.data);
 
   /// Run the shard runner.
-  Stream<ShardMessage> run(Stream<GatewayMessage> messages) {
-    final controller = StreamController<ShardMessage>();
+  Stream<ShardMessage> run(Stream<GatewayMessage> messages) async* {
+    // sendHandler is responsible for handling requests for this shard to send messages to the Gateway.
+    // It is paused whenever this shard isn't ready to send messages.
+    final sendController = StreamController<Send>();
+    final sendHandler = sendController.stream.listen((e) async {
+      try {
+        await connection!.add(e);
+      } catch (error, s) {
+        controller.add(ErrorReceived(error: error, stackTrace: s));
 
-    // The subscription to the control messages stream.
-    // This subscription is paused whenever the shard is not successfully connected,.
-    final controlSubscription = messages.listen((message) {
-      if (message is Send) {
-        connection!.add(message);
-      }
-
-      if (message is Dispose) {
-        print("message is Dispose!");
-        disposing = true;
-        connection!.close();
+        // Prevent the recursive call to add() from looping too often.
+        await Future.delayed(Duration(milliseconds: 100));
+        // Try to send the event again, unless we are disposing (in which case the controller will be closed).
+        if (!sendController.isClosed) {
+          sendController.add(e);
+        }
       }
     })
       ..pause();
+
+    // identifyController serves as a notification system for Identify messages.
+    // Any Identify messages received are added to this stream.
+    final identifyController = StreamController<Identify>.broadcast();
+
+    // startCompleter is completed when the Gateway instance is ready for this shard to start.
+    final startCompleter = Completer<StartShard>();
+
+    final messageHandler = messages.listen((message) {
+      if (message is Send) {
+        sendController.add(message);
+      } else if (message is Identify) {
+        identifyController.add(message);
+      } else if (message is Dispose) {
+        disposing = true;
+        connection?.close();
+
+        // We might get a dispose request while we are waiting to identify.
+        // Add an error to the identify stream so we break out of the wait.
+        identifyController.addError(
+          Exception('Out of remaining session starts'),
+          StackTrace.current,
+        );
+
+        // We need to start the shard to jump ahead to the check for exiting the shard.
+        if (!startCompleter.isCompleted) {
+          startCompleter.complete(StartShard());
+        }
+      } else if (message is StartShard) {
+        if (startCompleter.isCompleted) {
+          controller.add(ErrorReceived(
+            error: StateError(
+                'Received StartShard when shard was already started'),
+            stackTrace: StackTrace.current,
+          ));
+          return;
+        }
+
+        startCompleter.complete(message);
+      }
+    });
 
     /// The main connection loop.
     ///
@@ -82,17 +129,21 @@ class ShardRunner {
     Future<void> asyncRun() async {
       while (true) {
         try {
+          // Check for dispose requests. If we should be disposing, exit the loop.
+          // Do this now instead of after the connection is closed in case we get
+          // a dispose request before the shard is even started.
+          if (disposing) {
+            controller.add(Disconnecting(reason: 'Dispose requested'));
+            return;
+          }
+
           // Initialize lastHeartbeatAcked to `true` so we don't immediately disconnect in heartbeat().
           lastHeartbeatAcked = true;
-
-          // Pause the control subscription until we are connected.
-          if (!controlSubscription.isPaused) {
-            controlSubscription.pause();
-          }
 
           // Open the websocket connection.
           connection =
               await ShardConnection.connect(gatewayUri.toString(), this);
+          connection!.onSent.listen(controller.add);
 
           // Obtain the heartbeat interval from the HELLO event and start heartbeating.
           final hello = await connection!.first;
@@ -101,29 +152,25 @@ class ShardRunner {
           }
           controller.add(EventReceived(event: hello));
 
-          startHeartbeat(hello.heartbeatInterval);
+          heartbeatInterval = hello.heartbeatInterval;
+          startHeartbeat();
 
           // If we can resume (the connection loop was restarted) and we have the information needed, try to resume.
           // Otherwise, identify.
           if (canResume && seq != null && sessionId != null) {
-            sendResume();
+            await sendResume();
           } else {
-            sendIdentify();
-            // if (!hasSentIdentify) {
-            //   sendIdentify();
-            //   hasSentIdentify = true;
-            // } else {
-            //   debugPrint("WANTS TO IDENTIFY BUT WAS BLOCKED!");
-            // }
+            // Request to identify and wait for the confirmation.
+            controller.add(RequestingIdentify());
+            await identifyController.stream.first;
+
+            await sendIdentify();
           }
 
-          canResume = false;
-
-          // We are connected, start handling control messages.
-          controlSubscription.resume();
+          canResume = true;
 
           // Handle events from the connection & forward them to the result controller.
-          final subscription = connection!.listen((event) {
+          final subscription = connection!.listen((event) async {
             if (event is RawDispatchEvent) {
               seq = event.seq;
 
@@ -137,25 +184,33 @@ class ShardRunner {
                 });
 
                 sessionId = event.payload['session_id'] as String;
+
+                // We are connected, start handling send requests.
+                sendHandler.resume();
+              } else if (event.name == 'RESUMED') {
+                sendHandler.resume();
               }
             } else if (event is ReconnectEvent) {
-              canResume = true;
-              connection!.close();
+              controller.add(Reconnecting(reason: 'Reconnect requested'));
+              connection!.close(4000);
             } else if (event is InvalidSessionEvent) {
-              print("invalid session!");
-              if (event.isResumable) {
-                canResume = true;
-              } else {
+              if (!event.isResumable) {
                 canResume = false;
                 gatewayUri = originalGatewayUri;
               }
 
-              connection!.close();
+              controller.add(Reconnecting(reason: 'Session invalidated'));
+              connection!.close(4000);
             } else if (event is HeartbeatAckEvent) {
               lastHeartbeatAcked = true;
               heartbeatStopwatch = null;
             } else if (event is HeartbeatEvent) {
-              connection!.add(Send(opcode: Opcode.heartbeat, data: seq));
+              try {
+                await connection!
+                    .add(Send(opcode: Opcode.heartbeat, data: seq));
+              } on StateError {
+                // ignore: Connection closed while adding event.
+              }
             }
 
             controller.add(EventReceived(event: event));
@@ -164,83 +219,86 @@ class ShardRunner {
           // Wait for the current connection to end, either due to a remote close or due to us disconnecting.
           await subscription.asFuture();
 
-          // If the disconnect was triggered by a dispose, don't try to reconnect. Exit the loop.
-          if (disposing) {
-            controller.add(Disconnecting(reason: 'Dispose requested'));
-            return;
-          }
+          // Check if we can resume based on close code if the connection was closed by Discord.
+          if (connection!.localCloseCode == null) {
+            final remoteCloseCode = connection!.remoteCloseCode;
 
-          // Check if we can resume based on close code.
-          // A manual close where we set closeCode earlier would have a close code of 1000, so this
-          // doesn't change closeCode if we set it manually.
-          // 1001 is the close code used for a ping failure, so include it in the resumable codes.
-          const resumableCodes = [
-            null,
-            1001,
-            4000,
-            4001,
-            4002,
-            4003,
-            4007,
-            4008,
-            4009
-          ];
-          final closeCode = connection!.closeCode;
-          canResume = canResume || resumableCodes.contains(closeCode);
+            if (remoteCloseCode == 1005 || remoteCloseCode == 1006) {
+              controller
+                  .add(Reconnecting(reason: 'Gateway connection was closed'));
+            } else {
+              // https://discord.com/developers/docs/topics/opcodes-and-status-codes#gateway-gateway-close-event-codes
+              const newSessionCodes = [4007, 4009];
+              const errorCodes = [4004, 4010, 4011, 4012, 4013, 4014];
 
-          // If we encounter a fatal error, exit the shard.
-          if (!canResume && (closeCode ?? 0) >= 4000) {
-            print("is a fatal errror!");
-            controller.add(
-                Disconnecting(reason: 'Received error close code: $closeCode'));
-            return;
+              if (errorCodes.contains(remoteCloseCode)) {
+                controller.add(Disconnecting(
+                    reason: 'Received error close code: $remoteCloseCode'));
+                return;
+              }
+
+              canResume = !newSessionCodes.contains(remoteCloseCode);
+
+              controller.add(Reconnecting(
+                  reason: 'Connection was closed with code $remoteCloseCode'));
+            }
           }
         } catch (error, stackTrace) {
-          // TODO: Some sort of reconnect? Just so there isn't too much log spam.
-          // debugPrint("Catching error: $error");
           controller.add(ErrorReceived(error: error, stackTrace: stackTrace));
+          // Prevents the while-true loop from looping too often when no internet is available.
+          await Future.delayed(Duration(milliseconds: 100));
+
+          controller.add(Reconnecting(reason: 'Error on Gateway connection'));
         } finally {
-          // debugPrint("CLOSING!");
+          // Pause the send subscription until we are connected again.
+          // The handler may already be paused if the error occurred before we had identified.
+          if (!sendHandler.isPaused) {
+            sendHandler.pause();
+          }
+
           // Reset connection properties.
-          connection?.close();
+          await connection?.close(4000);
           connection = null;
           heartbeatTimer?.cancel();
           heartbeatTimer = null;
           heartbeatStopwatch = null;
+          heartbeatInterval = null;
         }
       }
     }
 
+    await startCompleter.future;
     asyncRun().then((_) {
-      print("closing");
       controller.close();
-      controlSubscription.cancel();
+      sendController.close();
+      identifyController.close();
+      messageHandler.cancel();
     });
 
-    return controller.stream;
+    yield* controller.stream;
   }
 
   void heartbeat() {
     if (!lastHeartbeatAcked) {
+      controller.add(Reconnecting(reason: 'Missed heartbeat'));
       connection!.close(4000);
       return;
     }
 
     connection!.add(Send(opcode: Opcode.heartbeat, data: seq));
     lastHeartbeatAcked = false;
-    heartbeatStopwatch = Stopwatch()..start();
   }
 
-  void startHeartbeat(Duration heartbeatInterval) {
-    heartbeatTimer = Timer(heartbeatInterval * Random().nextDouble(), () {
+  void startHeartbeat() {
+    heartbeatTimer = Timer(heartbeatInterval! * Random().nextDouble(), () {
       heartbeat();
 
-      heartbeatTimer = Timer.periodic(heartbeatInterval, (_) => heartbeat());
+      heartbeatTimer = Timer.periodic(heartbeatInterval!, (_) => heartbeat());
     });
   }
 
-  void sendIdentify() {
-    connection!.add(Send(
+  Future<void> sendIdentify() async {
+    await connection!.add(Send(
       opcode: Opcode.identify,
       data: {
         'token': data.apiOptions.token,
@@ -264,9 +322,9 @@ class ShardRunner {
     ));
   }
 
-  void sendResume() {
+  Future<void> sendResume() async {
     assert(sessionId != null && seq != null);
-    connection!.add(Send(
+    await connection!.add(Send(
       opcode: Opcode.resume,
       data: {
         'token': data.apiOptions.token,
@@ -277,52 +335,115 @@ class ShardRunner {
   }
 }
 
+/// Handles parsing/encoding & compression/decompression of events on a WebSocketChannel connection to the Gateway.
 class ShardConnection extends Stream<GatewayEvent> implements StreamSink<Send> {
+  /// The number of messages that can be sent per [rateLimitDuration].
+  // https://discord.com/developers/docs/topics/gateway#rate-limiting
+  static const rateLimitCount = 120;
+
+  /// The duration after which the rate limit resets.
+  static const rateLimitDuration = Duration(seconds: 60);
+
+  /// The connection to the Gateway.
   final WebSocketChannel channel;
-  late final StreamController<GatewayEvent> _controller;
+
+  /// A stream of parsed events received from the Gateway.
+  final Stream<GatewayEvent> events;
+
+  /// The [ShardRunner] that created this connection.
   final ShardRunner runner;
 
-  int? get closeCode => _closeCode;
-  int? _closeCode;
+  /// The code used to close this connection, or `null` if this connection is open or was closed by the remote server.
+  int? localCloseCode;
 
-  final Completer<void> _doneCompleter = Completer();
+  /// The code used to close this connection by the remote server, or `null` if this connection is open or was closed by calling [close].
+  int? _remoteCloseCode;
+  int? get remoteCloseCode => localCloseCode == null ? _remoteCloseCode : null;
 
-  ShardConnection(this.channel, Stream<GatewayEvent> events, this.runner) {
-    _controller = StreamController<GatewayEvent>.broadcast();
+  /// A stream on which [Sent] events are added.
+  Stream<Sent> get onSent => _sentController.stream;
+  final StreamController<Sent> _sentController = StreamController();
 
-    events.listen(
-      _controller.add,
-      onError: _controller.addError,
-      onDone: () {
-        _closeCode = channel.closeCode ?? 1000;
-        _doneCompleter.complete();
-        _controller.close();
-      },
-    );
+  /// The predicted number of heartbeats per [rateLimitDuration].
+  ///
+  /// The [rateLimitCount] is reduced by this value for any non heartbeat event so heartbeats can always be sent immediately.
+  int get rateLimitHeartbeatReservation => (rateLimitDuration.inMicroseconds /
+          runner.heartbeatInterval!.inMicroseconds)
+      .ceil();
+
+  /// The number of events sent in the current [rateLimitDuration].
+  int _currentRateLimitCount = 0;
+
+  /// A completer that completes once the current [rateLimitDuration] has passed.
+  Completer<void> _currentRateLimitEnd = Completer<void>();
+
+  /// Handles resetting [_currentRateLimitCount] and [_currentRateLimitEnd].
+  late final Timer _rateLimitResetTimer;
+
+  /// A completer that is completed when the connection is closed.
+  final Completer<void> _closeCompleter = Completer<void>();
+
+  ShardConnection(this.channel, this.events, this.runner) {
+    _rateLimitResetTimer = Timer.periodic(rateLimitDuration, (timer) {
+      _currentRateLimitCount = 0;
+      _currentRateLimitEnd.complete();
+      _currentRateLimitEnd = Completer<void>();
+    });
+
+    channel.sink.done.then((_) {
+      _rateLimitResetTimer.cancel();
+
+      // Attempt to extract the close code from the WebSocketChannel
+      final webSocketCloseCode = channel.closeCode;
+      if (webSocketCloseCode != null) {
+        _remoteCloseCode = webSocketCloseCode;
+      }
+
+      if (!_currentRateLimitEnd.isCompleted) {
+        _currentRateLimitEnd
+          // Don't report an uncaught async error for the future.
+          ..future.ignore()
+          ..completeError(
+              StateError('Connection is closed'), StackTrace.current);
+      }
+      _sentController.close();
+      if (!_closeCompleter.isCompleted) {
+        _closeCompleter.complete();
+      }
+    });
   }
 
   static Future<ShardConnection> connect(
       String gatewayUri, ShardRunner runner) async {
     final channel = WebSocketChannel.connect(Uri.parse(gatewayUri));
-
     // Wait for the connection to be established
     await channel.ready;
 
-    final uncompressedStream = switch (runner.data.apiOptions.compression) {
-      GatewayCompression.transport =>
-        decompressTransport(channel.stream.cast<List<int>>()),
-      GatewayCompression.payload => decompressPayloads(channel.stream),
-      GatewayCompression.none => channel.stream,
-    };
+    Stream<dynamic> uncompressedStream;
+    switch (runner.data.apiOptions.compression) {
+      case GatewayCompression.transport:
+        uncompressedStream =
+            decompressTransport(channel.stream.cast<List<int>>());
+        break;
+      case GatewayCompression.payload:
+        uncompressedStream = decompressPayloads(channel.stream);
+        break;
+      case GatewayCompression.none:
+        uncompressedStream = channel.stream;
+        break;
+    }
 
-    final dataStream = switch (runner.data.apiOptions.payloadFormat) {
-      GatewayPayloadFormat.json => parseJson(uncompressedStream),
-      GatewayPayloadFormat.etf =>
-        parseEtf(uncompressedStream.cast<List<int>>()),
-    };
+    Stream<dynamic> dataStream;
+    switch (runner.data.apiOptions.payloadFormat) {
+      case GatewayPayloadFormat.json:
+        dataStream = parseJson(uncompressedStream);
+        break;
+      case GatewayPayloadFormat.etf:
+        dataStream = parseEtf(uncompressedStream.cast<List<int>>());
+        break;
+    }
 
     final parser = EventParser();
-    // logging.logger.info('Connected to gateway');
     final eventStream = dataStream.cast<Map<String, Object?>>().map((event) =>
         parser.parseGatewayEvent(event,
             heartbeatLatency: runner.heartbeatStopwatch?.elapsed));
@@ -337,16 +458,12 @@ class ShardConnection extends Stream<GatewayEvent> implements StreamSink<Send> {
     void Function()? onDone,
     bool? cancelOnError,
   }) {
-    return _controller.stream.listen(
-      onData,
-      onError: onError,
-      onDone: onDone,
-      cancelOnError: cancelOnError,
-    );
+    return events.listen(onData,
+        cancelOnError: cancelOnError, onDone: onDone, onError: onError);
   }
 
   @override
-  void add(Send event) {
+  Future<void> add(Send event) async {
     final payload = {
       'op': event.opcode.value,
       'd': event.data,
@@ -357,22 +474,45 @@ class ShardConnection extends Stream<GatewayEvent> implements StreamSink<Send> {
       GatewayPayloadFormat.etf => eterl.pack(payload),
     };
 
+    final rateLimitLimit =
+        event.opcode == Opcode.heartbeat ? 0 : rateLimitHeartbeatReservation;
+    while (rateLimitCount - _currentRateLimitCount <= rateLimitLimit) {
+      try {
+        await _currentRateLimitEnd.future;
+      } catch (e) {
+        // Swap out stack trace so the error message makes more sense.
+        Error.throwWithStackTrace(e, StackTrace.current);
+      }
+    }
+
+    if (event.opcode == Opcode.heartbeat) {
+      runner.heartbeatStopwatch = Stopwatch()..start();
+    }
+
+    _currentRateLimitCount++;
     channel.sink.add(encoded);
+    _sentController.add(Sent(payload: event));
   }
 
   @override
-  void addError(Object error, [StackTrace? stackTrace]) {
-    channel.sink.addError(error, stackTrace);
-  }
+  void addError(Object error, [StackTrace? stackTrace]) =>
+      channel.sink.addError(error, stackTrace);
 
   @override
   Future<void> addStream(Stream<Send> stream) => stream.forEach(add);
 
   @override
-  Future<void> close([int? code]) => channel.sink.close(code ?? 1000);
+  Future<void> close([int code = 1000]) async {
+    localCloseCode ??= code;
+
+    // We could map the reason but this works fine for now
+    await channel.sink.close(code, '');
+
+    return done;
+  }
 
   @override
-  Future<void> get done => _doneCompleter.future;
+  Future<void> get done => _closeCompleter.future;
 }
 
 Stream<dynamic> decompressTransport(Stream<List<int>> raw) {
@@ -396,7 +536,7 @@ Stream<dynamic> decompressPayloads(Stream<dynamic> raw) => raw.map((message) {
       if (message is String) {
         return message;
       } else {
-        return ZLibDecoder().decodeBytes(message as List<int>);
+        return zlib.decode(message as List<int>);
       }
     });
 
@@ -409,3 +549,17 @@ Stream<dynamic> parseJson(Stream<dynamic> raw) => raw.map((message) {
 
 Stream<dynamic> parseEtf(Stream<List<int>> raw) =>
     raw.transform(eterl.unpacker());
+
+// This is a placeholder for the zlib class, which would need to be implemented or imported
+class zlib {
+  static List<int> decode(List<int> data) {
+    // Implementation needed
+    return [];
+  }
+}
+
+// Constants needed for WebSocket status codes that were provided by dart:io WebSocket
+class WebSocketStatus {
+  static const int noStatusReceived = 1005;
+  static const int abnormalClosure = 1006;
+}

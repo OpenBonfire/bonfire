@@ -104,7 +104,9 @@ class _MainWindowState extends ConsumerState<MainWindow> {
       systemNavigationBarContrastEnforced: false,
     ));
 
-    final theme = ref.watch(themeDataProvider);
+    final theme = ref.watch(themeDataProvider).copyWith(
+          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        );
 
     return Scaffold(
       backgroundColor: Colors.transparent,

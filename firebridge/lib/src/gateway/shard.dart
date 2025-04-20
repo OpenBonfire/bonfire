@@ -1,12 +1,12 @@
 import 'dart:async';
 
+import 'package:combine/combine.dart';
+import 'package:firebridge/src/builders/guild/channel_statuses.dart';
+import 'package:firebridge/src/builders/guild/guild_subscriptions_bulk.dart';
 import 'package:logging/logging.dart';
 import 'package:firebridge/src/api_options.dart';
 import 'package:firebridge/src/builders/voice.dart';
-import 'package:firebridge/src/builders/guild/channel_statuses.dart';
-import 'package:firebridge/src/builders/guild/guild_subscriptions_bulk.dart';
 import 'package:firebridge/src/client.dart';
-import 'package:firebridge/src/errors.dart';
 import 'package:firebridge/src/gateway/message.dart';
 import 'package:firebridge/src/gateway/shard_runner.dart';
 import 'package:firebridge/src/models/gateway/event.dart';
@@ -20,37 +20,21 @@ class Shard extends Stream<ShardMessage> implements StreamSink<GatewayMessage> {
   /// The ID of this shard.
   final int id;
 
-  /// The isolate this shard's handler is running in.
-  Never get isolate => throw JsDisabledError('Shard.isolate');
-
-  /// A future that completes once the shard runner exits.
-  @Deprecated('Only present for JS support')
-  // ignore: non_constant_identifier_names
-  final Future<void> JS_ONLY_exitFuture;
-
-  /// The stream on which events from the runner are received.
-  final Stream<dynamic> receiveStream;
-
-  final StreamController<ShardMessage> _rawReceiveController =
-      StreamController();
-  final StreamController<ShardMessage> _transformedReceiveController =
-      StreamController.broadcast();
-
-  /// The port on which events are sent to the runner.
-  Never get sendPort => throw JsDisabledError('Shard.sendPort');
-
-  /// A sink to which events are added to be sent to the runner.
-  @Deprecated('Only present for JS support')
-  // ignore: non_constant_identifier_names
-  final Sink<dynamic> JS_ONLY_sendSink;
-
-  final StreamController<GatewayMessage> _sendController = StreamController();
+  /// The CombineInfo for this shard's runner.
+  final CombineInfo combineInfo;
 
   /// The client this [Shard] is for.
   final NyxxGateway client;
 
   /// The logger used by this shard.
   Logger get logger => Logger('${client.options.loggerName}.Shards[$id]');
+
+  final StreamController<ShardMessage> _rawReceiveController =
+      StreamController();
+  final StreamController<ShardMessage> _transformedReceiveController =
+      StreamController.broadcast();
+
+  final StreamController<GatewayMessage> _sendController = StreamController();
 
   final Completer<void> _doneCompleter = Completer();
 
@@ -62,17 +46,14 @@ class Shard extends Stream<ShardMessage> implements StreamSink<GatewayMessage> {
   Duration get latency => _latency;
 
   /// Create a new [Shard].
-  Shard(this.id, this.JS_ONLY_exitFuture, this.receiveStream,
-      this.JS_ONLY_sendSink, this.client) {
+  Shard(this.id, this.combineInfo, this.client) {
     client.initialized.then((_) {
       final sendStream = client.options.plugins.fold(
         _sendController.stream,
         (previousValue, plugin) =>
             plugin.interceptGatewayMessages(this, previousValue),
       );
-
-      // ignore: deprecated_member_use_from_same_package
-      sendStream.listen(JS_ONLY_sendSink.add,
+      sendStream.listen((event) => combineInfo.messenger.send(event),
           cancelOnError: false, onDone: close);
 
       final transformedReceiveStream = client.options.plugins.fold(
@@ -83,7 +64,12 @@ class Shard extends Stream<ShardMessage> implements StreamSink<GatewayMessage> {
       transformedReceiveStream.pipe(_transformedReceiveController);
     });
 
-    receiveStream.cast<ShardMessage>().pipe(_rawReceiveController);
+    // Listen to messages from the Combine worker
+    combineInfo.messenger.messages.listen((message) {
+      if (message is ShardMessage) {
+        _rawReceiveController.add(message);
+      }
+    });
 
     final subscription = listen((message) {
       if (message is Sent) {
@@ -96,6 +82,8 @@ class Shard extends Stream<ShardMessage> implements StreamSink<GatewayMessage> {
             'Error: ${message.error}', message.error, message.stackTrace);
       } else if (message is Disconnecting) {
         logger.info('Disconnecting: ${message.reason}');
+      } else if (message is Reconnecting) {
+        logger.info('Reconnecting: ${message.reason}');
       } else if (message is EventReceived) {
         final event = message.event;
 
@@ -104,16 +92,13 @@ class Shard extends Stream<ShardMessage> implements StreamSink<GatewayMessage> {
 
           switch (event) {
             case InvalidSessionEvent(:final isResumable):
-              logger.finest('Resumable: $isResumable');
               if (isResumable) {
-                logger.info('Reconnecting: invalid session');
+                logger.finest('Resumable: $isResumable');
               } else {
-                logger.warning('Reconnecting: unresumable invalid session');
+                logger.warning('Resumable: $isResumable');
               }
             case HelloEvent(:final heartbeatInterval):
               logger.finest('Heartbeat Interval: $heartbeatInterval');
-            case ReconnectEvent():
-              logger.info('Reconnecting: reconnect requested');
             case HeartbeatAckEvent(:final latency):
               _latency = latency;
             default:
@@ -153,29 +138,55 @@ class Shard extends Stream<ShardMessage> implements StreamSink<GatewayMessage> {
       NyxxGateway client) async {
     final logger = Logger('${client.options.loggerName}.Shards[$id]');
 
-    logger.info('Connecting to Gateway');
+    logger.fine('Spawning shard runner');
 
-    final sendSink = StreamController<dynamic>();
-    final receiveStream = sendSink.stream.asBroadcastStream();
-
-    final exitFuture = _isolateMain(_IsolateSpawnData(
+    // Define the data structure for the worker
+    final shardData = _CombineShardData(
       totalShards: totalShards,
       id: id,
       apiOptions: apiOptions,
       originalConnectionUri: connectionUri,
-      sendSink: sendSink,
-    ));
+    );
 
-    exitFuture.then((_) {
-      logger.info('Shard exited');
+    // Create the Combine worker
+    final combineInfo = await Combine().spawn(
+      (context) async {
+        final data = context.argument as _CombineShardData;
+        final messenger = context.messenger;
 
-      sendSink.close();
-    });
+        // Create the shard runner and handle communication
+        final runner = ShardRunner(data);
 
-    final sendPort = await receiveStream.first as Sink<dynamic>;
+        // Create a controller for incoming messages from the main thread
+        final incomingController = StreamController<GatewayMessage>();
+
+        // Listen for messages from the main thread
+        messenger.messages.listen((message) {
+          if (message is GatewayMessage) {
+            incomingController.add(message);
+          }
+        });
+
+        // Process messages from the runner and send them back to the main thread
+        runner.run(incomingController.stream).listen(
+          (message) {
+            try {
+              messenger.send(message);
+            } catch (e, st) {
+              messenger
+                  .send(ErrorReceived(error: e.toString(), stackTrace: st));
+            }
+          },
+          onDone: () => incomingController.close(),
+        );
+      },
+      argument: shardData,
+      debugName: "Shard #$id runner",
+    );
 
     logger.fine('Shard runner ready');
-    return Shard(id, exitFuture, receiveStream, sendPort, client);
+
+    return Shard(id, combineInfo, client);
   }
 
   /// Update the client's voice state on this shard.
@@ -183,7 +194,6 @@ class Shard extends Stream<ShardMessage> implements StreamSink<GatewayMessage> {
     add(Send(opcode: Opcode.voiceStateUpdate, data: {
       'guild_id': guildId.toString(),
       ...builder.build(),
-      'flags': 2, // idk
     }));
   }
 
@@ -219,6 +229,7 @@ class Shard extends Stream<ShardMessage> implements StreamSink<GatewayMessage> {
     } else if (event is Identify) {
       logger.info('Connecting to Gateway');
     }
+
     _sendController.add(event);
   }
 
@@ -244,17 +255,17 @@ class Shard extends Stream<ShardMessage> implements StreamSink<GatewayMessage> {
 
       _sendController.close();
       // _rawReceiveController and _transformedReceiveController are closed by the piped
-      // receive port stream being closed.
+      // receive streams being closed.
 
-      // Give the isolate time to shut down cleanly, but kill it if it takes too long.
+      // Give the combine worker time to shut down cleanly
       try {
         // Wait for disconnection confirmation.
         await firstWhere((message) => message is Disconnecting)
             .then(drain)
             .timeout(const Duration(seconds: 5));
       } on TimeoutException {
-        logger.warning('Isolate took too long to shut down, killing it');
-        throw JsDisabledError('shard isolate killing');
+        logger.warning('Combine worker took too long to shut down, killing it');
+        combineInfo.isolate.kill();
       }
     }
 
@@ -270,44 +281,15 @@ class Shard extends Stream<ShardMessage> implements StreamSink<GatewayMessage> {
       throw UnimplementedError();
 
   @override
-  Future<void> addStream(Stream<GatewayMessage> stream) {
-    return stream.forEach(add);
-  }
+  Future<void> addStream(Stream<GatewayMessage> stream) => stream.forEach(add);
 }
 
-class _IsolateSpawnData extends ShardData {
-  final Sink<dynamic> sendSink;
-
-  _IsolateSpawnData({
+/// Data class for Combine worker spawning
+class _CombineShardData extends ShardData {
+  _CombineShardData({
     required super.totalShards,
     required super.id,
     required super.apiOptions,
     required super.originalConnectionUri,
-    required this.sendSink,
   });
-}
-
-Future<void> _isolateMain(_IsolateSpawnData data) async {
-  final sendSink = StreamController<dynamic>();
-  data.sendSink.add(sendSink);
-
-  final runner = ShardRunner(data);
-
-  final subscription =
-      runner.run(sendSink.stream.cast<GatewayMessage>()).listen(
-    (message) {
-      try {
-        data.sendSink.add(message);
-      } on ArgumentError {
-        // The only message with anything custom should be ErrorReceived
-        assert(message is ErrorReceived);
-        message = message as ErrorReceived;
-        data.sendSink.add(ErrorReceived(
-            error: message.error.toString(), stackTrace: message.stackTrace));
-      }
-    },
-    onDone: () => sendSink.close(),
-  );
-
-  return subscription.asFuture();
 }
