@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:bonfire/features/guild/repositories/member.dart';
 import 'package:bonfire/features/messaging/components/box/context_drawer.dart';
 import 'package:bonfire/features/messaging/controllers/message.dart';
+import 'package:bonfire/features/messaging/controllers/reply.dart';
 import 'package:bonfire/features/messaging/repositories/name.dart';
 import 'package:bonfire/features/messaging/repositories/role_icon.dart';
 import 'package:bonfire/features/messaging/components/box/avatar.dart';
@@ -17,6 +18,7 @@ import 'package:bonfire/shared/utils/platform.dart';
 import 'package:bonfire/theme/theme.dart';
 import 'package:firebridge/firebridge.dart' hide ButtonStyle;
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -202,29 +204,42 @@ class _MessageBoxState extends ConsumerState<MessageBox>
         children: [
           SizedBox(height: widget.showSenderInfo ? 16 : 0),
           shouldUseMobileLayout(context)
-              ? OutlinedButton(
-                  style: OutlinedButton.styleFrom(
-                    padding: EdgeInsets.zero,
-                    backgroundColor: boxColor,
-                    minimumSize: Size.zero,
-                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                    side: BorderSide.none,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(0),
-                    ),
-                    // change hover / select color to white
-                    foregroundColor:
-                        Theme.of(context).custom.colorTheme.foreground,
-                  ),
-                  onPressed: () {},
-                  onLongPress: () {
-                    if (shouldUseMobileLayout(context)) {
-                      GlobalDrawer.of(context)!.toggleDrawer();
-                      GlobalDrawer.of(context)!
-                          .setChild(ContextDrawer(messageId: widget.messageId));
-                    }
+              ? GestureDetector(
+                  onDoubleTap: () {
+                    HapticFeedback.mediumImpact();
+                    ref
+                        .read(replyControllerProvider.notifier)
+                        .setMessageReply(ReplyState(
+                          messageId: widget.messageId,
+                          shouldMention: true,
+                        ));
                   },
-                  child: buildBoxContent(),
+                  child: OutlinedButton(
+                    style: OutlinedButton.styleFrom(
+                      padding: EdgeInsets.zero,
+                      backgroundColor: boxColor,
+                      minimumSize: Size.zero,
+                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      side: BorderSide.none,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(0),
+                      ),
+                      // change hover / select color to white
+                      foregroundColor:
+                          Theme.of(context).custom.colorTheme.foreground,
+                    ),
+                    onPressed: () {},
+                    // on double tap
+
+                    onLongPress: () {
+                      if (shouldUseMobileLayout(context)) {
+                        GlobalDrawer.of(context)!.toggleDrawer();
+                        GlobalDrawer.of(context)!.setChild(
+                            ContextDrawer(messageId: widget.messageId));
+                      }
+                    },
+                    child: buildBoxContent(),
+                  ),
                 )
               : Container(
                   decoration: BoxDecoration(

@@ -1,3 +1,4 @@
+import 'package:bonfire/features/messaging/controllers/reply.dart';
 import 'package:bonfire/shared/components/drawer/drawer_button.dart';
 import 'package:bonfire/theme/theme.dart';
 import 'package:firebridge/firebridge.dart';
@@ -27,7 +28,10 @@ class _ContextDrawerState extends ConsumerState<ContextDrawer> {
             icon: Icons.reply,
             color: Colors.white,
             roundBottom: false,
-            onTap: () {},
+            onTap: () {
+              ref.read(replyControllerProvider.notifier).setMessageReply(
+                  ReplyState(messageId: widget.messageId, shouldMention: true));
+            },
           ),
           BonfireDrawerButton(
             text: 'Delete',

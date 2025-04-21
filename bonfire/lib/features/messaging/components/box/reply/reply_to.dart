@@ -3,6 +3,7 @@ import 'package:bonfire/features/messaging/controllers/reply.dart';
 import 'package:bonfire/theme/theme.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -55,14 +56,32 @@ class _ReplyToState extends ConsumerState<ReplyTo> {
                 ),
               ),
               const Spacer(),
-              IconButton(
-                icon: const Icon(Icons.close),
-                color: Colors.white,
+              OutlinedButton(
+                style: OutlinedButton.styleFrom(
+                  minimumSize: Size.zero,
+                  padding: const EdgeInsets.all(4),
+                  side: const BorderSide(
+                    color: Colors.transparent,
+                    width: 0,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  foregroundColor:
+                      Theme.of(context).custom.colorTheme.dirtyWhite,
+                  backgroundColor:
+                      Theme.of(context).custom.colorTheme.foreground,
+                ),
                 onPressed: () {
+                  HapticFeedback.lightImpact();
                   ref
                       .read(replyControllerProvider.notifier)
                       .setMessageReply(null);
                 },
+                child: const Icon(
+                  Icons.close_rounded,
+                  size: 18,
+                ),
               ),
             ],
           ),
