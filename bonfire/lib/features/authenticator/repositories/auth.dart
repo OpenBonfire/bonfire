@@ -99,7 +99,7 @@ class Auth extends _$Auth {
         ),
         GatewayClientOptions(
           plugins: [
-            Logging(logLevel: Level.INFO),
+            Logging(logLevel: Level.SEVERE),
           ],
         ));
 
@@ -166,12 +166,5 @@ class Auth extends _$Auth {
   /// Submit sms authentication with [phoneToken]
   Future<bool> submitPhoneAuth(String phoneToken) async {
     return true;
-  }
-
-  /// Get the current authentication state
-  ///
-  /// Returns [AuthResponse] if authenticated, otherwise null
-  AuthResponse? getAuth() {
-    return authResponse;
   }
 }

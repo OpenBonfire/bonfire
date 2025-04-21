@@ -276,10 +276,11 @@ packages:
   combine:
     dependency: transitive
     description:
-      name: combine
-      sha256: "548476e2b314699e02345842b560d62d0090c49052b1464da607e09121a9d07b"
-      url: "https://pub.dev"
-    source: hosted
+      path: "."
+      ref: "4dc44d700ac43d0ce5f7903e07bddbecfc1d168c"
+      resolved-ref: "4dc44d700ac43d0ce5f7903e07bddbecfc1d168c"
+      url: "https://github.com/ericapostal/combine"
+    source: git
     version: "0.5.8"
   convert:
     dependency: transitive

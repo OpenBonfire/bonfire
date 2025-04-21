@@ -215,7 +215,6 @@ class _MessageViewState extends ConsumerState<MessageList>
     final messages =
         ref.watch(messagesProvider(widget.channelId)).valueOrNull ?? [];
 
-    // Update oldest and newest message references
     if (messages.isNotEmpty) {
       _newestLoadedMessage = messages.first;
       _oldestLoadedMessage = messages.last;

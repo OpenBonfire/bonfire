@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:bonfire/features/friends/views/friend_card.dart';
 import 'package:bonfire/features/guild/controllers/role.dart';
 import 'package:bonfire/features/guild/repositories/member.dart';
@@ -63,8 +61,8 @@ class _UserPopoutCardState extends ConsumerState<UserPopoutCard> {
         child: Stack(
           children: [
             SizedBox(
-              width: 500,
-              height: 650,
+              width: (shouldUseDesktopLayout(context)) ? 500 : null,
+              height: (shouldUseDesktopLayout(context)) ? 650 : null,
               child: (profile != null)
                   ? Stack(
                       children: [
@@ -327,23 +325,23 @@ class _UserInfoTabViewState extends ConsumerState<UserInfoTabView>
           // I really hate this method of laying out, but it's all I can come up with
           // it won't lay out when using any other method, like expanded, flex, etc.
 
-          SizedBox(
-            height: shouldUseDesktopLayout(context)
-                ? 332
-                : max(
-                    drawerHeight * MediaQuery.of(context).size.height - 318, 0),
-            child: TabBarView(
-              controller: _tabController,
-              children: [
-                AboutUserTab(
-                  widget.userProfile,
-                  guildId: widget.guildId,
-                ),
-                if (friendsCount > 0) MutualFriends(widget.userProfile),
-                const Center(
-                    child: Text(
-                        "I'll add the guild card soon I just gotta make the buttons and stuff")),
-              ],
+          // TODO: I gotta make the child of the TabBar not scrollable, and instead just have the entire thing scrollable
+
+          Expanded(
+            child: SizedBox(
+              child: TabBarView(
+                controller: _tabController,
+                children: [
+                  AboutUserTab(
+                    widget.userProfile,
+                    guildId: widget.guildId,
+                  ),
+                  if (friendsCount > 0) MutualFriends(widget.userProfile),
+                  const Center(
+                      child: Text(
+                          "I'll add the guild card soon I just gotta make the buttons and stuff")),
+                ],
+              ),
             ),
           )
         ],
@@ -362,8 +360,40 @@ class AboutUserTab extends ConsumerStatefulWidget {
 }
 
 class _AboutUserTabState extends ConsumerState<AboutUserTab> {
-  Widget bioCard(String bio) {
+  @override
+  Widget build(BuildContext context) {
+    final bio = widget.userProfile.userProfile.bio;
+
+    return Padding(
+      padding: EdgeInsets.only(
+        top: 8,
+        left: 8,
+        right: 8,
+        bottom: MediaQuery.of(context).padding.bottom + 8,
+      ),
+      child: Column(
+        children: [
+          if (bio != "")
+            Padding(
+              padding: const EdgeInsets.only(bottom: 12),
+              child: _BioCard(bio ?? ""),
+            ),
+          _RolesCard(
+              guildId: widget.guildId, userId: widget.userProfile.user.id),
+        ],
+      ),
+    );
+  }
+}
+
+class _BioCard extends ConsumerWidget {
+  final String bio;
+  const _BioCard(this.bio);
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
     return Container(
+      width: double.infinity,
       decoration: BoxDecoration(
         color: Theme.of(context).custom.colorTheme.background,
         borderRadius: BorderRadius.circular(12),
@@ -418,11 +448,16 @@ class _AboutUserTabState extends ConsumerState<AboutUserTab> {
       ),
     );
   }
+}
 
-  Widget rolesCard() {
-    final member = ref
-        .watch(getMemberProvider(widget.guildId, widget.userProfile.user.id))
-        .valueOrNull;
+class _RolesCard extends ConsumerWidget {
+  final Snowflake guildId;
+  final Snowflake userId;
+  const _RolesCard({required this.guildId, required this.userId});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final member = ref.watch(getMemberProvider(guildId, userId)).valueOrNull;
 
     if (member == null) {
       return LoadingAnimationWidget.fallingDot(
@@ -430,6 +465,7 @@ class _AboutUserTabState extends ConsumerState<AboutUserTab> {
     }
 
     return Container(
+      width: double.infinity,
       decoration: BoxDecoration(
         color: Theme.of(context).custom.colorTheme.background,
         borderRadius: BorderRadius.circular(12),
@@ -506,27 +542,6 @@ class _AboutUserTabState extends ConsumerState<AboutUserTab> {
       ),
     );
   }
-
-  @override
-  Widget build(BuildContext context) {
-    final bio = widget.userProfile.userProfile.bio;
-    return ListView(
-      padding: EdgeInsets.only(
-        top: 8.0,
-        left: 8.0,
-        right: 8.0,
-        bottom: MediaQuery.of(context).padding.bottom,
-      ),
-      children: [
-        if (bio != "")
-          Padding(
-            padding: const EdgeInsets.only(bottom: 12),
-            child: bioCard(bio ?? ""),
-          ),
-        rolesCard(),
-      ],
-    );
-  }
 }
 
 class MutualFriends extends ConsumerStatefulWidget {
@@ -540,13 +555,15 @@ class MutualFriends extends ConsumerStatefulWidget {
 class _MutualFriendsState extends ConsumerState<MutualFriends> {
   @override
   Widget build(BuildContext context) {
-    return ListView(
+    return SingleChildScrollView(
       padding: EdgeInsets.only(
           top: 8.0, bottom: MediaQuery.of(context).padding.bottom),
-      children: [
-        for (var mutualFriend in widget.userProfile.mutualFriends!)
-          FriendCard(user: mutualFriend)
-      ],
+      child: Column(
+        children: [
+          for (var mutualFriend in widget.userProfile.mutualFriends!)
+            FriendCard(user: mutualFriend)
+        ],
+      ),
     );
   }
 }

@@ -24,7 +24,10 @@ dependencies:
   web_socket_channel: ^3.0.1
   stream_channel: ^2.1.2
   websocket_universal: ^1.2.5
-  combine: ^0.5.8
+  combine:
+    git:
+      url: https://github.com/ericapostal/combine
+      ref: 4dc44d700ac43d0ce5f7903e07bddbecfc1d168c
 
 dev_dependencies:
   test: ^1.22.0
