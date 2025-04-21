@@ -813,14 +813,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.3.0"
-  insta_image_viewer:
-    dependency: "direct main"
-    description:
-      name: insta_image_viewer
-      sha256: "5c3150415d19945ee7eb9a986ed636219e384164e53a4854e8c6f3dbb3b3e197"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.4"
   internet_file:
     dependency: "direct main"
     description:
