@@ -276,11 +276,10 @@ packages:
   combine:
     dependency: transitive
     description:
-      path: "."
-      ref: "9a38d6bd658506be971c8ea071e5ee55514837b0"
-      resolved-ref: "9a38d6bd658506be971c8ea071e5ee55514837b0"
-      url: "https://github.com/EricApostal/combine"
-    source: git
+      name: combine
+      sha256: "548476e2b314699e02345842b560d62d0090c49052b1464da607e09121a9d07b"
+      url: "https://pub.dev"
+    source: hosted
     version: "0.5.8"
   convert:
     dependency: transitive

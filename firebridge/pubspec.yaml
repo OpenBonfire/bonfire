@@ -24,10 +24,7 @@ dependencies:
   web_socket_channel: ^3.0.1
   stream_channel: ^2.1.2
   websocket_universal: ^1.2.5
-  combine:
-    git: # until https://github.com/Maksimka101/combine/pull/29 is merged
-      url: https://github.com/EricApostal/combine
-      ref: 9a38d6bd658506be971c8ea071e5ee55514837b0
+  combine: ^0.5.8
 
 dev_dependencies:
   test: ^1.22.0

@@ -61,10 +61,10 @@ packages:
     dependency: transitive
     description:
       name: combine
-      sha256: c16464b55d140871fbab5b37909e1808c2f020e46f9ba7deca59d40faabb6008
+      sha256: "548476e2b314699e02345842b560d62d0090c49052b1464da607e09121a9d07b"
       url: "https://pub.dev"
     source: hosted
-    version: "0.5.7"
+    version: "0.5.8"
   crypto:
     dependency: transitive
     description:
