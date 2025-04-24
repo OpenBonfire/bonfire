@@ -111,7 +111,7 @@ class _MessageViewState extends ConsumerState<MessageList>
     // Load older messages when approaching bottom
     if (_scrollController.hasClients &&
         _scrollController.position.pixels >=
-            _scrollController.position.maxScrollExtent - 300) {
+            _scrollController.position.maxScrollExtent - 5000) {
       if (!_isLoadingMore && _oldestLoadedMessage != null) {
         _debounceTimer?.cancel();
         _debounceTimer = Timer(const Duration(milliseconds: 300), () {

@@ -36,7 +36,6 @@ class _ChannelsListState extends ConsumerState<ChannelsList> {
     List<Channel> channelsWithoutParent = [];
     Map<GuildChannel, List<GuildChannel>> categoryMap = {};
 
-    // Group channels by category and filter the ones without parents
     for (var channel in channels) {
       if (channel.type == ChannelType.guildCategory) {
         categoryMap[channel as GuildChannel] = [];
@@ -53,26 +52,6 @@ class _ChannelsListState extends ConsumerState<ChannelsList> {
         } else if (categoryMap[parentChannel] != null) {
           categoryMap[parentChannel]!.add(guildChannel);
         }
-      }
-    }
-
-    Widget buildChannelButton(int index) {
-      if (index < channelsWithoutParent.length) {
-        var channel = channelsWithoutParent[index];
-        return ChannelButton(
-            currentChannelId: widget.channelId,
-            currentGuildId: widget.guildId,
-            channel: channel as GuildChannel);
-      } else {
-        var categoryIndex = index - channelsWithoutParent.length;
-        var category = categoryMap.keys.elementAt(categoryIndex);
-        var children = categoryMap[category] ?? [];
-        return Category(
-          guildId: widget.guildId,
-          channelId: widget.channelId,
-          category: category,
-          children: children,
-        );
       }
     }
 
@@ -103,12 +82,56 @@ class _ChannelsListState extends ConsumerState<ChannelsList> {
           children: [
             Expanded(
               child: Builder(builder: (context) {
-                var colItems = <Widget>[];
-                for (var i = 0;
-                    i < channelsWithoutParent.length + categoryMap.length;
-                    i++) {
-                  colItems.add(buildChannelButton(i));
+                List<Widget> listItems = [];
+
+                if (guildBannerUrl != null) {
+                  listItems.add(
+                    SizedBox(
+                      height: 150,
+                      child: Image.network(
+                        "$guildBannerUrl?size=512",
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  );
                 }
+
+                listItems.add(
+                  StickyHeader(
+                    header: GuildOverview(guildId: widget.guildId),
+                    content: const SizedBox(height: 8),
+                  ),
+                );
+
+                for (var channel in channelsWithoutParent) {
+                  listItems.add(
+                    ChannelButton(
+                      currentChannelId: widget.channelId,
+                      currentGuildId: widget.guildId,
+                      channel: channel as GuildChannel,
+                    ),
+                  );
+                }
+
+                categoryMap.forEach((category, children) {
+                  listItems.add(
+                    Category(
+                      guildId: widget.guildId,
+                      channelId: widget.channelId,
+                      category: category,
+                      children: children,
+                    ),
+                  );
+                });
+
+                if (shouldUseMobileLayout(context)) {
+                  listItems.add(
+                    SizedBox(
+                      height: MediaQuery.of(context).padding.bottom + 50,
+                    ),
+                  );
+                }
+
                 return ClipRRect(
                   borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(24),
@@ -118,36 +141,11 @@ class _ChannelsListState extends ConsumerState<ChannelsList> {
                     behavior: ScrollConfiguration.of(context)
                         .copyWith(scrollbars: false),
                     child: ListView(
-                        key: ValueKey(
-                            widget.guildId.toString()), // Key based on guild ID
-                        controller: scrollController,
-                        padding: EdgeInsets.zero,
-                        children: [
-                          (guildBannerUrl != null)
-                              ? SizedBox(
-                                  height: 150,
-                                  child: Image.network(
-                                    "$guildBannerUrl?size=512",
-                                    fit: BoxFit.cover,
-                                  ))
-                              : Container(),
-                          StickyHeader(
-                            header: GuildOverview(guildId: widget.guildId),
-                            content: Padding(
-                              padding: const EdgeInsets.only(top: 8.0),
-                              child: Column(
-                                children: colItems,
-                              ),
-                            ),
-                          ),
-                          shouldUseMobileLayout(context)
-                              ? SizedBox(
-                                  height:
-                                      MediaQuery.of(context).padding.bottom +
-                                          50,
-                                )
-                              : const SizedBox(),
-                        ]),
+                      key: ValueKey(widget.guildId.toString()),
+                      controller: scrollController,
+                      padding: EdgeInsets.zero,
+                      children: listItems,
+                    ),
                   ),
                 );
               }),
@@ -156,10 +154,7 @@ class _ChannelsListState extends ConsumerState<ChannelsList> {
                 ? const Padding(
                     padding:
                         EdgeInsets.only(left: 8.0, right: 8.0, bottom: 8.0),
-                    child: UserCard(
-                        // guildId: widget.guildId,
-                        // channelId: widget.channelId,
-                        ),
+                    child: UserCard(),
                   )
                 : const SizedBox(),
           ],
