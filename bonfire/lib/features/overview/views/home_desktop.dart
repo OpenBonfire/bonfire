@@ -41,7 +41,7 @@ class _HomeState extends ConsumerState<HomeDesktop> {
   @override
   Widget build(BuildContext context) {
     bool isVisible = ref.watch(memberListVisibilityProvider);
-    double channelListWidth = ref.watch(channelListWidthProvider);
+    int channelListWidth = ref.watch(channelListWidthProvider);
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -53,7 +53,7 @@ class _HomeState extends ConsumerState<HomeDesktop> {
                 guildId: widget.guildId,
               ),
               SizedBox(
-                width: channelListWidth,
+                width: channelListWidth.toDouble(),
                 child: (widget.guildId != Snowflake.zero)
                     ? ChannelsList(
                         guildId: widget.guildId,
@@ -88,11 +88,11 @@ class _HomeState extends ConsumerState<HomeDesktop> {
               onHorizontalDragUpdate: (details) {
                 final RenderBox box = context.findRenderObject() as RenderBox;
                 final localPosition = box.globalToLocal(details.globalPosition);
-                final newWidth = localPosition.dx - sidebarWidth;
+                final newWidth = (localPosition.dx - sidebarWidth).toInt();
 
                 if (newWidth >= minChannelListWidth &&
                     newWidth <= maxChannelListWidth) {
-                  ref.read(channelListWidthProvider.notifier).state = newWidth;
+                  ref.read(channelListWidthProvider.notifier).setSize(newWidth);
                 }
               },
               child: MouseRegion(

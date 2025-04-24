@@ -53,7 +53,7 @@ class _TypingViewState extends ConsumerState<TypingView> {
                     TextSpan(
                       text: name,
                       style: GoogleFonts.publicSans(
-                        fontSize: 13,
+                        fontSize: 11.5,
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
                       ),
@@ -61,7 +61,7 @@ class _TypingViewState extends ConsumerState<TypingView> {
                     TextSpan(
                       text: sep,
                       style: GoogleFonts.publicSans(
-                        fontSize: 13,
+                        fontSize: 11.5,
                         color: Colors.white,
                       ),
                     ),
@@ -84,8 +84,9 @@ class _TypingViewState extends ConsumerState<TypingView> {
               padding: const EdgeInsets.only(left: 1.75),
               child: Text(
                 ' ${typingOutput.length == 1 ? 'is' : 'are'} typing...',
+                overflow: TextOverflow.ellipsis,
                 style: GoogleFonts.publicSans(
-                  fontSize: 13,
+                  fontSize: 11.5,
                   color: Colors.white,
                 ),
               ),

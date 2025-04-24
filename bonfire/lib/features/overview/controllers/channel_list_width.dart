@@ -5,11 +5,11 @@ part 'channel_list_width.g.dart';
 @Riverpod(keepAlive: true)
 class ChannelListWidth extends _$ChannelListWidth {
   @override
-  double build() {
-    return 255.0;
+  int build() {
+    return 255;
   }
 
-  void setSize(double size) {
+  void setSize(int size) {
     state = size;
   }
 }
