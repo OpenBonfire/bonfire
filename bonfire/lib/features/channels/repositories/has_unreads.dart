@@ -18,12 +18,6 @@ class HasUnreads extends _$HasUnreads {
       return false;
     }
 
-    // if (!(channel is GuildTextChannel || channel is GuildAnnouncementChannel)) {
-    //   return false;
-    // }
-
-    // wait hold on why can't we just do pings?
-    // debugPrint("has unreads ...");
     if (channel is GuildTextChannel) {
       lastMessageId = channel.lastMessageId;
     } else if (channel is GuildAnnouncementChannel) {
@@ -37,20 +31,21 @@ class HasUnreads extends _$HasUnreads {
     var lastReadMessage = readState?.lastMessage;
     var lastChannelMessageId = lastMessageId;
 
-    // TODO: lastChannelMessageId is null *if* the last message is an application
-    // command. I think it's a bug with application parsing (or something, unsure)
-    // Validate to make sure that this is reproducable as I say it is.
+    // if (channelId == Snowflake.parse(1320481167102967869)) {
+    //   print("Last Read Message = ${lastReadMessage?.id}");
+    //   print("Last Channel Message = $lastChannelMessageId");
+    //   print("Last viewed: ${readState?.lastViewed?.millisecondsSinceEpoch}");
+    //   print(lastChannelMessageId!.timestamp.millisecondsSinceEpoch >
+    //       readState!.lastViewed!.millisecondsSinceEpoch);
 
-    // update: I don't think that's true. Some channels with 1 message also don't work correctly.
+    //   print(lastChannelMessageId.timestamp.millisecondsSinceEpoch -
+    //       readState.lastViewed!.millisecondsSinceEpoch);
+    // }
 
     if (lastChannelMessageId == null) return false;
     if (lastReadMessage == null) return true;
 
-    // debugPrint("computing using comparison");
-    // debugPrint(lastChannelMessageId);
-    // debugPrint(lastReadMessage.id);
-
-    return (lastChannelMessageId > lastReadMessage.id) &&
-        lastReadMessage.id != lastChannelMessageId;
+    return (readState!.lastViewed!.millisecondsSinceEpoch <
+        lastChannelMessageId.timestamp.millisecondsSinceEpoch);
   }
 }

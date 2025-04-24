@@ -104,7 +104,7 @@ class _MessageViewState extends ConsumerState<MessageList>
       final messages = ref.read(messagesProvider(widget.channelId)).valueOrNull;
       if (messages != null && messages.isNotEmpty) {
         // TODO: This spams. We should check the read state or something to only do this once.
-        messages.first.manager.acknowledge(messages.first.id);
+        // messages.first.manager.acknowledge(messages.first.id);
       }
     }
 
