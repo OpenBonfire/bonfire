@@ -29,7 +29,7 @@ jobs:
           workingDir: bonfire
           baseHref: /
           compileToWasm: true
-          # customArgs: --no-tree-shake-icons
+          customArgs: --no-tree-shake-icons
 
   build-android:
     runs-on: ubuntu-latest
@@ -70,7 +70,7 @@ jobs:
 
       - name: Build Android App Bundle
         working-directory: ./bonfire
-        run: flutter build appbundle -v
+        run: flutter build appbundle --no-tree-shake-icons -v
 
       - name: Upload App Bundle
         uses: actions/upload-artifact@v4
@@ -229,7 +229,7 @@ jobs:
         - name: Build iOS
           working-directory: ./bonfire
           run: |
-            flutter build ios --release --no-codesign -v
+            flutter build ios --release --no-tree-shake-icons --no-codesign -v
             
         - name: Archive iOS build artifacts
           run: |
