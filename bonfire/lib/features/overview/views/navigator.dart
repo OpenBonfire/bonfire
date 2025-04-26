@@ -1,4 +1,4 @@
-import 'package:bonfire/features/authenticator/utils/switcher.dart';
+import 'package:bonfire/features/authentication/utils/switcher.dart';
 import 'package:bonfire/features/overview/controllers/navigation_bar.dart';
 import 'package:bonfire/features/user/card/repositories/self_user.dart';
 import 'package:bonfire/features/user/components/presence_avatar.dart';

@@ -4,9 +4,9 @@ import 'dart:convert';
 import 'package:universal_io/io.dart';
 import 'dart:math';
 
-import 'package:bonfire/features/authenticator/repositories/auth.dart';
-import 'package:bonfire/features/authenticator/qr/key_pair.dart';
-import 'package:bonfire/features/authenticator/qr/ws_impl.dart';
+import 'package:bonfire/features/authentication/repositories/auth.dart';
+import 'package:bonfire/features/authentication/qr/key_pair.dart';
+import 'package:bonfire/features/authentication/qr/ws_impl.dart';
 import 'package:bonfire/theme/theme.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';

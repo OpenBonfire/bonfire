@@ -1,4 +1,4 @@
-import 'package:bonfire/features/authenticator/components/local_account_switcher.dart';
+import 'package:bonfire/features/authentication/components/local_account_switcher.dart';
 import 'package:bonfire/shared/utils/platform.dart';
 import 'package:bonfire/theme/theme.dart';
 import 'package:flutter/material.dart';

@@ -76,7 +76,9 @@ class ReactionWidget extends ConsumerWidget {
         ),
       ),
       child: InkWell(
-        onTap: () async {
+        onTap: () {
+          print("Tapped");
+          HapticFeedback.lightImpact();
           final message = ref.read(messageControllerProvider(messageId));
           if (reaction.me) {
             message!.deleteOwnReaction(
@@ -84,8 +86,6 @@ class ReactionWidget extends ConsumerWidget {
           } else {
             message!.react(ReactionBuilder.fromEmoji(reaction.emoji as Emoji));
           }
-
-          HapticFeedback.lightImpact();
         },
         borderRadius: BorderRadius.circular(8),
         child: Padding(

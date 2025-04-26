@@ -1,8 +1,8 @@
-import 'package:bonfire/features/authenticator/components/platform_login.dart';
-import 'package:bonfire/features/authenticator/controllers/added_accounts.dart';
-import 'package:bonfire/features/authenticator/models/added_account.dart';
-import 'package:bonfire/features/authenticator/repositories/auth.dart';
-import 'package:bonfire/features/authenticator/repositories/discord_auth.dart';
+import 'package:bonfire/features/authentication/components/platform_login.dart';
+import 'package:bonfire/features/authentication/controllers/added_accounts.dart';
+import 'package:bonfire/features/authentication/models/added_account.dart';
+import 'package:bonfire/features/authentication/repositories/auth.dart';
+import 'package:bonfire/features/authentication/repositories/discord_auth.dart';
 import 'package:bonfire/shared/components/confirm_button.dart';
 import 'package:bonfire/shared/utils/platform.dart';
 import 'package:bonfire/theme/theme.dart';

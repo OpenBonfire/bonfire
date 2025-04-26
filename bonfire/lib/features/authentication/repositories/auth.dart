@@ -1,10 +1,10 @@
 import 'dart:convert';
 
-import 'package:bonfire/features/authenticator/controllers/ready.dart';
-import 'package:bonfire/features/authenticator/models/added_account.dart';
-import 'package:bonfire/features/authenticator/utils/headers.dart';
-import 'package:bonfire/features/authenticator/repositories/discord_auth.dart';
-import 'package:bonfire/features/authenticator/models/auth.dart';
+import 'package:bonfire/features/authentication/controllers/ready.dart';
+import 'package:bonfire/features/authentication/models/added_account.dart';
+import 'package:bonfire/features/authentication/utils/headers.dart';
+import 'package:bonfire/features/authentication/repositories/discord_auth.dart';
+import 'package:bonfire/features/authentication/models/auth.dart';
 import 'package:bonfire/features/events/utils/event_handler.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;

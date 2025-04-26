@@ -1,4 +1,4 @@
-import 'package:bonfire/features/authenticator/models/added_account.dart';
+import 'package:bonfire/features/authentication/models/added_account.dart';
 import 'package:hive_ce/hive.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 

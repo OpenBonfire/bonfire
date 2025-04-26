@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:bonfire/features/authenticator/utils/hive.dart';
+import 'package:bonfire/features/authentication/utils/hive.dart';
 import 'package:bonfire/features/notifications/controllers/notification.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';

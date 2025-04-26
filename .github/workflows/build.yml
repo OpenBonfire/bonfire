@@ -29,7 +29,7 @@ jobs:
           workingDir: bonfire
           baseHref: /
           compileToWasm: true
-          customArgs: --no-tree-shake-icons
+          # customArgs: --no-tree-shake-icons
 
   build-android:
     runs-on: ubuntu-latest
@@ -60,7 +60,7 @@ jobs:
 
       - name: Build Android APK
         working-directory: ./bonfire
-        run: flutter build apk --no-tree-shake-icons -v
+        run: flutter build apk -v
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
@@ -70,7 +70,7 @@ jobs:
 
       - name: Build Android App Bundle
         working-directory: ./bonfire
-        run: flutter build appbundle --no-tree-shake-icons -v
+        run: flutter build appbundle -v
 
       - name: Upload App Bundle
         uses: actions/upload-artifact@v4
@@ -114,7 +114,7 @@ jobs:
         working-directory: ./bonfire
         env:
           CMAKE_ASM_NASM_COMPILER: "C:\Program Files\NASM\nasm.exe"
-        run: flutter build windows --no-tree-shake-icons -v
+        run: flutter build windows -v
 
       - name: Upload Windows Executable
         uses: actions/upload-artifact@v4
@@ -186,7 +186,7 @@ jobs:
         working-directory: ./bonfire
         env:
           LD_LIBRARY_PATH: /usr/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH
-        run: flutter build linux --no-tree-shake-icons -v
+        run: flutter build linux -v
 
       - name: Upload Linux Executable
         uses: actions/upload-artifact@v4
@@ -229,7 +229,7 @@ jobs:
         - name: Build iOS
           working-directory: ./bonfire
           run: |
-            flutter build ios --release --no-codesign --no-tree-shake-icons -v
+            flutter build ios --release --no-codesign -v
             
         - name: Archive iOS build artifacts
           run: |

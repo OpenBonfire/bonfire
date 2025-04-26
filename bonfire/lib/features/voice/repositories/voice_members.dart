@@ -1,5 +1,5 @@
-import 'package:bonfire/features/authenticator/repositories/auth.dart';
-import 'package:bonfire/features/authenticator/repositories/discord_auth.dart';
+import 'package:bonfire/features/authentication/repositories/auth.dart';
+import 'package:bonfire/features/authentication/repositories/discord_auth.dart';
 import 'package:bonfire/features/guild/controllers/guild.dart';
 import 'package:bonfire/features/guild/controllers/guilds.dart';
 import 'package:firebridge/firebridge.dart';

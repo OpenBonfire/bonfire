@@ -1,6 +1,6 @@
-import 'package:bonfire/features/authenticator/qr/auth_by_qrcode.dart';
-import 'package:bonfire/features/authenticator/views/captcha.dart';
-import 'package:bonfire/features/authenticator/views/credentials.dart';
+import 'package:bonfire/features/authentication/qr/auth_by_qrcode.dart';
+import 'package:bonfire/features/authentication/views/captcha.dart';
+import 'package:bonfire/features/authentication/views/credentials.dart';
 import 'package:bonfire/shared/utils/platform.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

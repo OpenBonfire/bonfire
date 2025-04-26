@@ -1,4 +1,4 @@
-import 'package:bonfire/features/authenticator/repositories/discord_auth.dart';
+import 'package:bonfire/features/authentication/repositories/discord_auth.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 

@@ -1,6 +1,6 @@
-import 'package:bonfire/features/authenticator/repositories/auth.dart';
-import 'package:bonfire/features/authenticator/repositories/discord_auth.dart';
-import 'package:bonfire/features/authenticator/components/platform_login.dart';
+import 'package:bonfire/features/authentication/repositories/auth.dart';
+import 'package:bonfire/features/authentication/repositories/discord_auth.dart';
+import 'package:bonfire/features/authentication/components/platform_login.dart';
 import 'package:bonfire/theme/theme.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
