@@ -60,7 +60,7 @@ jobs:
 
       - name: Build Android APK
         working-directory: ./bonfire
-        run: flutter build apk -v
+        run: flutter build apk --no-tree-shake-icons -v
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
