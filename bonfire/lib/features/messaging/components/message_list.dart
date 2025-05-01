@@ -224,7 +224,6 @@ class _MessageViewState extends ConsumerState<MessageList>
       controller: _scrollController,
       reverse: true,
       shrinkWrap: true,
-      cacheExtent: 20000,
       padding: EdgeInsets.only(
         bottom: 12,
         top: isSmartwatch(context)
