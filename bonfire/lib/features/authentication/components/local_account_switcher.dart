@@ -61,7 +61,7 @@ class _LocalAccountSwitcherScreenState
   Widget build(BuildContext context) {
     final theme = Theme.of(context).custom;
     final padding = shouldUseMobileLayout(context)
-        ? MediaQuery.of(context).padding
+        ? MediaQuery.paddingOf(context)
         : EdgeInsets.zero;
     final addedAccounts = ref.watch(addedAccountsControllerProvider);
     if (isLoading) {

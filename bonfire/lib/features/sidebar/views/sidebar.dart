@@ -118,7 +118,7 @@ class _SidebarState extends ConsumerState<Sidebar> {
     var guildWatch = ref.watch(guildsControllerProvider);
     var guildFoldersWatch = ref.watch(guildFoldersProvider);
 
-    double bottomPadding = MediaQuery.of(context).padding.bottom;
+    double bottomPadding = MediaQuery.paddingOf(context).bottom;
     double navbarHeight = shouldUseMobileLayout(context) ? 40 : 0;
 
     List<UserGuild> guildList = guildWatch ?? [];

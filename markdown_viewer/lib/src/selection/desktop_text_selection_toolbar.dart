@@ -38,7 +38,9 @@ class DesktopTextSelectionToolbarCustom extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final mediaQuery = MediaQuery.of(context);
+    final padding = MediaQuery.paddingOf(context);
+    final size = MediaQuery.sizeOf(context);
+
     final localizations = MaterialLocalizations.of(context);
     final items = [
       if (handleCopy != null)
@@ -63,8 +65,8 @@ class DesktopTextSelectionToolbarCustom extends StatelessWidget {
     final midpointAnchor = Offset(
       clampDouble(
         selectionMidpoint.dx - globalEditableRegion.left,
-        mediaQuery.padding.left,
-        mediaQuery.size.width - mediaQuery.padding.right,
+        padding.left,
+        size.width - padding.right,
       ),
       selectionMidpoint.dy - globalEditableRegion.top,
     );
@@ -109,9 +111,9 @@ class _DesktopTextSelectionToolbar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     assert(debugCheckHasMediaQuery(context));
-    final mediaQuery = MediaQuery.of(context);
+    final padding = MediaQuery.paddingOf(context);
 
-    final paddingAbove = mediaQuery.padding.top + _kToolbarScreenPadding;
+    final paddingAbove = padding.top + _kToolbarScreenPadding;
     final Offset localAdjustment = Offset(_kToolbarScreenPadding, paddingAbove);
 
     return Padding(

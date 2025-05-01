@@ -1,5 +1,4 @@
 import 'package:bonfire/features/authentication/repositories/auth.dart';
-import 'package:bonfire/features/authentication/repositories/discord_auth.dart';
 import 'package:bonfire/theme/text_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -68,7 +67,7 @@ class _WebviewLoginScreenState extends ConsumerState<WebviewLoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    double bottomPadding = MediaQuery.of(context).padding.bottom;
+    double bottomPadding = MediaQuery.paddingOf(context).bottom;
 
     return Stack(
       children: [

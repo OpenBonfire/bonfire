@@ -102,7 +102,7 @@ class _HomeState extends ConsumerState<HomeMobile>
               ref.read(navigationBarProvider.notifier).onSideChange(value);
             },
             left: SizedBox(
-              width: MediaQuery.of(context).size.width,
+              width: MediaQuery.sizeOf(context).width,
               child: Row(
                 children: [
                   Sidebar(guildId: widget.guildId),

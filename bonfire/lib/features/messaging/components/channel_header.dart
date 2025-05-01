@@ -21,7 +21,7 @@ class _ChannelHeaderState extends ConsumerState<ChannelHeader> {
   @override
   Widget build(BuildContext context) {
     Channel? channel = ref.watch(channelControllerProvider(widget.channelId));
-    double topPadding = MediaQuery.of(context).padding.top;
+    double topPadding = MediaQuery.paddingOf(context).top;
 
     String channelName = "";
     String? channelTopic;

@@ -85,7 +85,7 @@ class _AudioAttachmentState extends State<AudioAttachment> {
       // TODO: Overlapping Panels doesn't like when we use the swipe gesture.
       child: SizedBox(
         height: 100,
-        width: min(800, MediaQuery.of(context).size.width - 90),
+        width: min(800, MediaQuery.sizeOf(context).width - 90),
         child: Container(
           decoration: BoxDecoration(
             color: Theme.of(context).custom.colorTheme.foreground,

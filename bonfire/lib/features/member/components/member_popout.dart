@@ -369,7 +369,7 @@ class _AboutUserTabState extends ConsumerState<AboutUserTab> {
         top: 8,
         left: 8,
         right: 8,
-        bottom: MediaQuery.of(context).padding.bottom + 8,
+        bottom: MediaQuery.paddingOf(context).bottom + 8,
       ),
       child: Column(
         children: [
@@ -557,7 +557,7 @@ class _MutualFriendsState extends ConsumerState<MutualFriends> {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       padding: EdgeInsets.only(
-          top: 8.0, bottom: MediaQuery.of(context).padding.bottom),
+          top: 8.0, bottom: MediaQuery.paddingOf(context).bottom),
       child: Column(
         children: [
           for (var mutualFriend in widget.userProfile.mutualFriends!)

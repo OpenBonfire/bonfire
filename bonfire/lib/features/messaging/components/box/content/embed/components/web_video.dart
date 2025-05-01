@@ -23,7 +23,7 @@ class _WebVideoState extends ConsumerState<WebVideo> {
         ? SizedBox(
             width: min(
                 min(widget.embed.thumbnail!.width!.toDouble(),
-                    MediaQuery.of(context).size.width - 90),
+                    MediaQuery.sizeOf(context).width - 90),
                 500),
             height: height,
             // child: Webview(
@@ -65,7 +65,7 @@ class _WebVideoState extends ConsumerState<WebVideo> {
         widget.embed.thumbnail!.height!.toDouble();
     double width = min(
         min(widget.embed.thumbnail!.width!.toDouble(),
-            MediaQuery.of(context).size.width - 90),
+            MediaQuery.sizeOf(context).width - 90),
         500);
 
     height = width / aspect;

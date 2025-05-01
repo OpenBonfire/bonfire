@@ -82,8 +82,8 @@ class _ForumViewState extends ConsumerState<ForumView> {
                     );
                   },
                   padding: EdgeInsets.only(
-                    top: MediaQuery.of(context).padding.top + 60,
-                    bottom: MediaQuery.of(context).padding.bottom,
+                    top: MediaQuery.paddingOf(context).top + 60,
+                    bottom: MediaQuery.paddingOf(context).bottom,
                   ),
                 ),
                 ChannelHeader(

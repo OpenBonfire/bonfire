@@ -22,7 +22,7 @@ class _TokenLoginWidgetState extends ConsumerState<TokenLoginWidget> {
   Widget build(BuildContext context) {
     return ConstrainedBox(
       constraints: BoxConstraints(
-        maxWidth: min(MediaQuery.of(context).size.width - 20, 400),
+        maxWidth: min(MediaQuery.sizeOf(context).width - 20, 400),
       ),
       child: Container(
         padding: const EdgeInsets.all(32),

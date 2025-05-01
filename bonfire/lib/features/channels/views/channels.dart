@@ -27,7 +27,7 @@ class _ChannelsListState extends ConsumerState<ChannelsList> {
 
   @override
   Widget build(BuildContext context) {
-    var topPadding = (MediaQuery.of(context).padding.top) +
+    var topPadding = (MediaQuery.paddingOf(context).top) +
         (UniversalPlatform.isDesktopOrWeb ? 8 : 0);
 
     var channelWatch = ref.watch(channelsProvider(widget.guildId));
@@ -127,7 +127,7 @@ class _ChannelsListState extends ConsumerState<ChannelsList> {
                 if (shouldUseMobileLayout(context)) {
                   listItems.add(
                     SizedBox(
-                      height: MediaQuery.of(context).padding.bottom + 50,
+                      height: MediaQuery.paddingOf(context).bottom + 50,
                     ),
                   );
                 }

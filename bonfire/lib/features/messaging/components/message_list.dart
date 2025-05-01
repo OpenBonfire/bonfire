@@ -230,8 +230,7 @@ class _MessageViewState extends ConsumerState<MessageList>
         top: isSmartwatch(context)
             ? 0
             : 50 +
-                MediaQuery.of(context)
-                    .viewPadding
+                MediaQuery.viewPaddingOf(context)
                     .top, // add the height of the channel header
         left: 0,
         right: 0,
@@ -390,7 +389,7 @@ class _MessageViewState extends ConsumerState<MessageList>
           ),
           if (!isSmartwatch(context))
             SizedBox(
-              height: MediaQuery.of(context).padding.bottom,
+              height: MediaQuery.paddingOf(context).bottom,
             ),
           if (!isSmartwatch(context)) const KeyboardBuffer()
         ],

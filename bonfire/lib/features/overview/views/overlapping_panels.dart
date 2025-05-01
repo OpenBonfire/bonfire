@@ -107,7 +107,7 @@ class OverlappingPanelsState extends State<OverlappingPanels>
   }
 
   void moveToState(RevealSide side) {
-    final mediaWidth = MediaQuery.of(context).size.width;
+    final mediaWidth = MediaQuery.sizeOf(context).width;
     double goal;
 
     switch (side) {
@@ -130,7 +130,7 @@ class OverlappingPanelsState extends State<OverlappingPanels>
   }
 
   void _onApplyTranslation() {
-    final mediaWidth = MediaQuery.of(context).size.width;
+    final mediaWidth = MediaQuery.sizeOf(context).width;
 
     double averagedDelta = (_lastDelta + _lastLastDelta) / 2;
 
@@ -182,7 +182,7 @@ class OverlappingPanelsState extends State<OverlappingPanels>
   }
 
   void reveal(RevealSide direction) {
-    final mediaWidth = MediaQuery.of(context).size.width;
+    final mediaWidth = MediaQuery.sizeOf(context).width;
     final multiplier = (direction == RevealSide.left ? 1 : -1);
     final goal = _calculateGoal(mediaWidth, multiplier);
     _animateToPosition(goal, widget.revealDuration, widget.revealCurve);

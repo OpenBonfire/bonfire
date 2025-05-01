@@ -21,8 +21,8 @@ import 'package:universal_platform/universal_platform.dart';
 import 'package:flutter/material.dart';
 
 bool isSmartwatch(BuildContext context) {
-  double screenWidth = MediaQuery.of(context).size.width;
-  double screenHeight = MediaQuery.of(context).size.height;
+  double screenWidth = MediaQuery.sizeOf(context).width;
+  double screenHeight = MediaQuery.sizeOf(context).height;
   bool isSmallScreen = screenWidth < 250 && screenHeight < 250;
 
   bool isAndroid = UniversalPlatform.isAndroid;
@@ -31,8 +31,8 @@ bool isSmartwatch(BuildContext context) {
 }
 
 bool shouldUseDesktopLayout(BuildContext context) {
-  double screenWidth = MediaQuery.of(context).size.width;
-  double screenHeight = MediaQuery.of(context).size.height;
+  double screenWidth = MediaQuery.sizeOf(context).width;
+  double screenHeight = MediaQuery.sizeOf(context).height;
   bool isLargeScreen = screenWidth > 1000 && screenHeight > 1000;
 
   bool isLandscape = screenWidth > screenHeight;

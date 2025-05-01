@@ -121,7 +121,7 @@ class _BarWidgetState extends ConsumerState<NavigationBarWidget> {
           decoration: BoxDecoration(
             color: Theme.of(context).custom.colorTheme.darkGray,
           ),
-          height: MediaQuery.of(context).padding.bottom,
+          height: MediaQuery.paddingOf(context).bottom,
         )
       ],
     );
@@ -134,7 +134,7 @@ class _BarWidgetState extends ConsumerState<NavigationBarWidget> {
 
     return AnimatedPositioned(
       duration: const Duration(milliseconds: 300),
-      bottom: visible ? 0 : -80 - MediaQuery.of(context).padding.bottom,
+      bottom: visible ? 0 : -80 - MediaQuery.paddingOf(context).bottom,
       left: 0,
       right: 0,
       curve: Curves.ease,
