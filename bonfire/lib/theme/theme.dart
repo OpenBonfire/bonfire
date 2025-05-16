@@ -15,17 +15,6 @@ class BonfireThemeExtension extends ThemeExtension<BonfireThemeExtension> {
     required this.red,
     required this.green,
     required this.yellow,
-    // required this.bodyMedium!,
-    // required this.bodyText2,
-    // required this.caption,
-    // required this.bold,
-    // required this.titleLarge,
-    // required this.titleLargeBold,
-    // required this.titleMedium,
-    // required this.titleSmall,
-    // required this.subtitle1,
-    // required this.subtitle2,
-    // required this.subtitle3,
   });
 
   final Color foreground;
@@ -37,18 +26,6 @@ class BonfireThemeExtension extends ThemeExtension<BonfireThemeExtension> {
   final Color red;
   final Color green;
   final Color yellow;
-
-  // final TextTheme bodyText1;
-  // final TextTheme bodyText2;
-  // final TextTheme caption;
-  // final TextTheme bold;
-  // final TextTheme titleLarge;
-  // final TextTheme titleLargeBold;
-  // final TextTheme titleMedium;
-  // final TextTheme titleSmall;
-  // final TextTheme subtitle1;
-  // final TextTheme subtitle2;
-  // final TextTheme subtitle3;
 
   @override
   ThemeExtension<BonfireThemeExtension> copyWith() {

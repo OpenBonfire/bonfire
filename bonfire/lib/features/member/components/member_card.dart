@@ -85,11 +85,8 @@ class _MemberCardState extends ConsumerState<MemberCard> {
                             widget.member.user?.username ??
                             "Unknown",
                         softWrap: false,
-                        style: Theme.of(context)
-                            .textTheme
-                            .labelMedium!
-                            .copyWith(
-                                color: getRoleColor(widget.member, roles)),
+                        style: Theme.of(context).textTheme.labelLarge!.copyWith(
+                            color: getRoleColor(widget.member, roles)),
                       ),
                       PresenceText(
                         userid: widget.member.user!.id,

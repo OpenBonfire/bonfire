@@ -100,75 +100,92 @@ class _MainWindowState extends ConsumerState<MainWindow> {
 
     String family = GoogleFonts.publicSans().fontFamily!;
 
-    final theme = ThemeData.dark().copyWith(
-        textTheme: TextTheme(
-          displayLarge: TextStyle(
-            fontSize: 36,
-            fontFamily: family,
-            fontWeight: FontWeight.w500,
-          ),
-          displayMedium: TextStyle(
-            fontSize: 20,
-            fontFamily: family,
-            fontWeight: FontWeight.w500,
-          ),
-          displaySmall: TextStyle(
-            fontSize: 15,
-            fontFamily: family,
-            fontWeight: FontWeight.w500,
-          ),
-          titleLarge: TextStyle(
-            fontSize: 36,
-            fontFamily: family,
-            fontWeight: FontWeight.w500,
-          ),
-          titleMedium: TextStyle(
-            fontSize: 20,
-            fontFamily: family,
-            fontWeight: FontWeight.w500,
-          ),
-          titleSmall: TextStyle(
-            fontSize: 15,
-            fontFamily: family,
-            fontWeight: FontWeight.w500,
-          ),
-          headlineLarge: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.w500,
-            fontFamily: family,
-          ),
-          labelMedium: TextStyle(
-            fontSize: 12,
-            fontFamily: family,
-            fontWeight: FontWeight.w500,
-            color: const Color(0xFFBDBDBD),
-          ),
-          bodyLarge: TextStyle(
-            fontSize: 15,
-            fontFamily: family,
-            color: const Color.fromARGB(255, 255, 255, 255),
-            fontWeight: FontWeight.w500,
-          ),
-          bodyMedium: TextStyle(
-            fontSize: 14,
-            fontFamily: family,
-            color: const Color(0xFFBDBDBD),
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-        extensions: [
-          const BonfireThemeExtension(
-            foreground: AppColorsDark.foreground,
-            background: AppColorsDark.background,
-            dirtyWhite: AppColorsDark.dirtyWhite,
-            gray: AppColorsDark.gray,
-            darkGray: AppColorsDark.darkGray,
-            primary: AppColorsDark.primary,
-            red: AppColorsDark.red,
-            green: AppColorsDark.green,
-            yellow: AppColorsDark.yellow,
-          )
-        ]);
+    final textTheme = TextTheme(
+      displayLarge: TextStyle(
+        fontSize: 36,
+        fontFamily: family,
+        fontWeight: FontWeight.w500,
+      ),
+      displayMedium: TextStyle(
+        fontSize: 20,
+        fontFamily: family,
+        fontWeight: FontWeight.w500,
+      ),
+      displaySmall: TextStyle(
+        fontSize: 15,
+        fontFamily: family,
+        fontWeight: FontWeight.w500,
+      ),
+      titleLarge: TextStyle(
+        fontSize: 36,
+        fontFamily: family,
+        fontWeight: FontWeight.w500,
+      ),
+      titleMedium: TextStyle(
+        fontSize: 20,
+        fontFamily: family,
+        fontWeight: FontWeight.w500,
+      ),
+      titleSmall: TextStyle(
+        fontSize: 15,
+        fontFamily: family,
+        fontWeight: FontWeight.w500,
+      ),
+      headlineLarge: TextStyle(
+        fontSize: 18,
+        fontWeight: FontWeight.w500,
+        fontFamily: family,
+      ),
+      labelLarge: TextStyle(
+          fontSize: 15,
+          fontWeight: FontWeight.w500,
+          fontFamily: family,
+          color: const Color(0xFFBDBDBD)),
+      labelMedium: TextStyle(
+        fontSize: 12,
+        fontFamily: family,
+        fontWeight: FontWeight.w500,
+        color: const Color(0xFFBDBDBD),
+      ),
+      bodyLarge: TextStyle(
+        fontSize: 15,
+        fontFamily: family,
+        color: const Color.fromARGB(255, 255, 255, 255),
+        fontWeight: FontWeight.w500,
+      ),
+      bodyMedium: TextStyle(
+        fontSize: 14,
+        fontFamily: family,
+        color: const Color(0xFFBDBDBD),
+        fontWeight: FontWeight.w500,
+      ),
+    );
+
+    final theme = ThemeData.dark().copyWith(textTheme: textTheme, extensions: [
+      UniversalPlatform.isMobile
+          ? const BonfireThemeExtension(
+              foreground: AppColorsAmoled.foreground,
+              background: AppColorsAmoled.background,
+              dirtyWhite: AppColorsAmoled.dirtyWhite,
+              gray: AppColorsAmoled.gray,
+              darkGray: AppColorsAmoled.darkGray,
+              primary: AppColorsAmoled.primary,
+              red: AppColorsAmoled.red,
+              green: AppColorsAmoled.green,
+              yellow: AppColorsAmoled.yellow,
+            )
+          : const BonfireThemeExtension(
+              foreground: AppColorsDark.foreground,
+              background: AppColorsDark.background,
+              dirtyWhite: AppColorsDark.dirtyWhite,
+              gray: AppColorsDark.gray,
+              darkGray: AppColorsDark.darkGray,
+              primary: AppColorsDark.primary,
+              red: AppColorsDark.red,
+              green: AppColorsDark.green,
+              yellow: AppColorsDark.yellow,
+            )
+    ]);
 
     return Scaffold(
       backgroundColor: Colors.transparent,

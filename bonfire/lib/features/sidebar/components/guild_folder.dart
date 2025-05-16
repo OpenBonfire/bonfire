@@ -146,11 +146,15 @@ class GuildFolderWidgetState extends ConsumerState<GuildFolderWidget>
     int totalMentions = _getTotalMentionsInFolder(folderGuilds, ref);
 
     // TODO: WHAT THE FUCK
-    setState(() {
-      if (hasUnreadsInFolder && !_isExpanded) {
-        _iconHeight = 8;
-      }
-    });
+    // setState(() {
+    //   if (hasUnreadsInFolder && !_isExpanded) {
+    //     _iconHeight = 8;
+    //   }
+    // });
+
+    if (hasUnreadsInFolder && !_isExpanded) {
+      _iconHeight = 8;
+    }
 
     final bonfireTheme = BonfireThemeExtension.of(context);
 
