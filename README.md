@@ -16,85 +16,79 @@ We now offer nightly builds! Please check out the [github actions](https://githu
 ## About
 A modern alternative to the Discord client. Use Discord without ever having to touch the mobile Discord client.
 
-## Platform Support (all are targets, but not all are supported yet)
-- 🟩 Android
-- 🟩 iOS
-- 🟩 Windows
-- 🟥 MacOS (Broken but hypothetically very close to working)
-- 🟩 Linux 
-- 🟨 WearOS (All major android smartwatches)
-- 🟩 Web
+## Platform Support
+| Platform   | Support Level | Notes                                                                 |
+|------------|---------------|-----------------------------------------------------------------------|
+| Android    | 🟩 Supported  | Fully functional                                                     |
+| iOS        | 🟩 Supported  | Functional but needs testing                                         |
+| Windows    | 🟩 Supported  | Fully functional                                                     |
+| MacOS      | 🟥 Broken     | Hypothetically close to working but needs fixes                      |
+| Linux      | 🟩 Supported  | Fully functional                                                     |
+| WearOS     | 🟨 Partial    | Works but requires manual token input                                |
+| Web        | 🟩 Supported  | Functional but requires token login                                  |
 
 ## Contributor Note
-***We are looking for Flutter developers with iOS / macOS devices***. Bonfire can definitely be run on them, but I do not have any to test with, so I cannot add support. MacOS is very close (adding Webview broke the CI, but otherwise runs fine). I have not tested iOS, but there are no major reasons why it should not work. Once the login is revamped to support QR code login, Web and WearOS, and Linux will return as supported.
+***We are looking for Flutter developers with macOS devices***. Bonfire can definitely be run on macOS, but I do not have any apple devices to test with, so I cannot add support.
 
-Because we are using flutter instead of react native, it's possible to cross-compile to platforms other than mobile! The build currently runs on Windows, MacOS, Android, Linux, and now Web! I am unable to test on MacOS and iOS, so consider those builds very experimental.
 
 ## General Goals / Ethic
-To start, lemmie outline a few things.
+To start, lets outline a few things.
 - This is not a seperate platform. You login with Discord, you are using all of Discord's features, but through the interface we've made instead of through Discord's.
 
 - **This is against TOS**. Don't do use this unless you have some risk tolerance. *I have never gotten banned in the development of Bonfire, but that isn't to say it can't happen*.
 
-- Our goal here isn't to undermine Discord's monetization- we understand that Discord is a company with bills to pay and employees to feed. Our goal is to create a client that just doesn't suck. It's easy to take a platform like Discord for granted. Yes it has it's problems (I know that more than anyone), but they really have created a cool product, and it's something I'd like to improve as a user.
+- Bonfire is for all platforms. The goal motivation for the project is mobile, as that's where current modding is far worse, however it works great on Web, Windows and Linux as well!
 
-- Are you a mobile client? Desktop client? Sort of both. Bonfire is a mobile-first client. All of the features we are adding right now are 100% intended for mobile, but because we are using Flutter it's possible to build Bonfire on other platforms. In fact, it currently works just about the same on Windows / MacOS / Linux / Web as it does on mobile.
-
-- Perhaps, extensions? Well yes (in the future). The goal is that Bonfire can be modified to your liking, much like using Vencord and such. It would work very different from a developer standpoint, but having a built-in plugin marketplace would definitely be cool, although yes, quite difficult. It won't be a focus until the client is at a point I'd consider release-ready.
-
-## Why not the BetterDiscord / Vencord Approach?
-
-Mobile is just a different beast due to the difficult nature of modifying packed binaries. While the Desktop client can be fixed relatively easily because it's possible to inject javascript directly into the application, mobile would require modifying the binary ahead of time to patch in your changes. This is extremely difficult due to the locked-down nature of apps (if you'd like to see an example of this approach, check out ReVanced). Instead of trying to hack together patches for an already broken and slow client, we have decided to tackle creating a full re-implementation of the Discord client using the flutter framework!
+- **Extensions are planned**. We plan on using (wasm_run)[https://github.com/juancastillo0/wasm_run] to allow for users to extend the functionality of Bonfire to their liking, and we also plan on hosting a marketplace where users can publish their plugins / download the plugins other people make.
 
 # Developing
 ## General Info
-I'm pretty new to managing public projects, so you'll have to bear with me here. For starters, there's a few projects that OpenBonfire uses and maintains, which can be found in our org. Let's just talk about the big ones.
-- Firebridge: A fork of nyxx (a bot API for Dart) that allows the usage of user tokens. This is very unfinished, and needs a load of work to be done.
-- [fireview](https://github.com/OpenBonfire/fireview): A cross-platform webview API that combines multiple webview frameworks. Again, this is not very great and needs a lot of work. This one is a much easier implementation though, I just haven't had the time. I intend on using this later, but I currently due not due to various conflicts on Windows and Linux.
+Tthere's a few projects that OpenBonfire uses and maintains, which can be found in our org. Let's just talk about the big ones.
+- [firebridge](https://github.com/OpenBonfire/bonfire/tree/main/firebridge): A fork of nyxx (a bot API for Dart) that allows the usage of user tokens. This is where most of the networking logic happens.
+- [fireview](https://github.com/OpenBonfire/fireview): A cross-platform webview API that combines multiple webview frameworks. We recently switched away from this because of conflicts on Windows and Linux. Ideally this is what we use in the future.
 
-## Progress *not exhaustive, there's a lot of stuff to do*
-- 🟨 Login
-  - 🟩 WebView-based login
-  - 🟨 Web Login (you have to input your token manually)
-  - 🟥 WearOS login support (you have to compile yourself with the token hard-coded)
-- 🟨 Messaging
-  - 🟩 Sending Messages
-  - 🟩 Cache Messages
-  - 🟨 Message View (missing bidirectional requests)
-  - 🟨 Context Actions (edit, delete, etc)
-  - 🟨 Event Actions (edit, delete, etc)
-  - 🟩 Embeds
-     - 🟩 Youtube embeds
-     - 🟩 Tenor videos
-     - 🟩 Attachments
-        - 🟩 Image Attachments
-        - 🟩 Video Attachments
-        - 🟩 Audio Attachments (with actual mobile playback)
-  - 🟩 Notifications
-  - 🟨 Unreads (*a bit buggy*)
-  - 🟥 Threads
-  - 🟨 Member List
-    - 🟩 Base View
-    - 🟩 Networking (handled in firebridge, tricky due to Discord's event system)
-    - 🟥 Member Search
-- 🟨 Friends
-- 🟨 Guilds
-  - 🟩 Guild List
-  - 🟩 Guild Networking
-  - 🟩 Guild Organization
-    - 🟩 Guild Order
-    - 🟩 Guild Names
-    - 🟩 Guild Folders
+## Progress
 
-**I am set on adding voice / video / etc, but it is very difficult**
-- 🟥 Voice Chat
-- 🟥 Camera Chat
-- 🟥 Screen Sharing
+| Feature Category       | Sub-feature                | Status      | Notes                                                                 |
+|------------------------|----------------------------|-------------|-----------------------------------------------------------------------|
+| **Login**              | WebView-based login        | 🟩 Complete |                                                                       |
+|                        | Web Login                  | 🟨 Partial  | Requires manual token input                                          |
+|                        | WearOS login support       | 🟥 Missing  | Requires compiling with hard-coded token                              |
+| **Messaging**          | Sending Messages           | 🟩 Complete |                                                                       |
+|                        | Cache Messages             | 🟩 Complete |                                                                       |
+|                        | Message View               | 🟨 Partial  | Missing bidirectional requests                                       |
+|                        | Context Actions            | 🟨 Partial  | Edit, delete, etc. partially implemented                             |
+|                        | Event Actions              | 🟨 Partial  | Edit, delete, etc. partially implemented                             |
+|                        | Embeds                     | 🟩 Complete |                                                                       |
+|                        | → YouTube embeds           | 🟩 Complete |                                                                       |
+|                        | → Tenor videos             | 🟩 Complete |                                                                       |
+|                        | → Attachments              | 🟩 Complete |                                                                       |
+|                        | →→ Image Attachments       | 🟩 Complete |                                                                       |
+|                        | →→ Video Attachments       | 🟩 Complete |                                                                       |
+|                        | →→ Audio Attachments       | 🟩 Complete | With mobile playback support                                         |
+|                        | Notifications              | 🟩 Complete |                                                                       |
+|                        | Unreads                    | 🟨 Partial  | Somewhat buggy                                                       |
+|                        | Threads                    | 🟥 Missing  |                                                                       |
+|                        | Member List                | 🟨 Partial  |                                                                       |
+|                        | → Base View                | 🟩 Complete |                                                                       |
+|                        | → Networking               | 🟩 Complete | Handled in firebridge                                                |
+|                        | → Member Search            | 🟥 Missing  |                                                                       |
+| **Friends**            |                            | 🟨 Partial  |                                                                       |
+| **Guilds**             | Guild List                 | 🟩 Complete |                                                                       |
+|                        | Guild Networking           | 🟩 Complete |                                                                       |
+|                        | Guild Organization         | 🟩 Complete |                                                                       |
+|                        | → Guild Order              | 🟩 Complete |                                                                       |
+|                        | → Guild Names              | 🟩 Complete |                                                                       |
+|                        | → Guild Folders            | 🟩 Complete |                                                                       |
+| **Voice/Video**        | Voice Chat                 | 🟥 Missing  | Planned but difficult to implement                                   |
+|                        | Camera Chat                | 🟥 Missing  | Planned but difficult to implement                                   |
+|                        | Screen Sharing             | 🟥 Missing  | Planned but difficult to implement                                   |
 
+*Not exhaustive - there's a lot of stuff to do*
 ## Building
 - Clone Bonfire
 - Run `flutter pub run`
-- Run `dart run build_runner watch --delete-conflicting-outputs` in a seperate terminal
+- Run `dart run build_runner watch -d` in a seperate terminal
 - You are on your way!
 
 ## Build issues (mostly linux)
@@ -107,5 +101,3 @@ Don't forget to run `dart run build_runner watch` before developing! This is req
 
 ## A quick note for contributors.
 We are looking for contributors! I would absolutely love to get this project completed, but it's pretty difficult time-wise. The pacing when I have time to work on it goes pretty fast though, so more people pitching in would be fantastic!
-
-Some of my code might not be great. This is the largest Flutter app I've made by far, so you'll have to bear with me here.
