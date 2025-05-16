@@ -120,16 +120,19 @@ class _MainWindowState extends ConsumerState<MainWindow> {
         fontSize: 36,
         fontFamily: family,
         fontWeight: FontWeight.w500,
+        color: Colors.white,
       ),
       titleMedium: TextStyle(
         fontSize: 20,
         fontFamily: family,
         fontWeight: FontWeight.w500,
+        color: Colors.white,
       ),
       titleSmall: TextStyle(
         fontSize: 15,
         fontFamily: family,
         fontWeight: FontWeight.w500,
+        color: Colors.white,
       ),
       headlineLarge: TextStyle(
         fontSize: 18,

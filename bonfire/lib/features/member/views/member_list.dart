@@ -1,5 +1,3 @@
-import 'package:bonfire/features/overview/controllers/navigation_bar.dart';
-import 'package:bonfire/features/overview/views/overlapping_panels.dart';
 import 'package:bonfire/shared/utils/channel_name.dart';
 import 'package:bonfire/theme/theme.dart';
 import 'package:flutter/material.dart';
