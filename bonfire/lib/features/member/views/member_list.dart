@@ -1,3 +1,5 @@
+import 'package:bonfire/features/overview/controllers/navigation_bar.dart';
+import 'package:bonfire/features/overview/views/overlapping_panels.dart';
 import 'package:bonfire/shared/utils/channel_name.dart';
 import 'package:bonfire/theme/theme.dart';
 import 'package:flutter/material.dart';
@@ -138,6 +140,8 @@ class MemberScrollViewState extends ConsumerState<MemberScrollView> {
   void initState() {
     super.initState();
     _router = GoRouter.of(context);
+    // OverlappingPanelsState? panels = OverlappingPanels.of(context);
+
     _router.routerDelegate.addListener(_onRouteChanged);
     _scrollController.addListener(_onScroll);
     ref
@@ -194,6 +198,9 @@ class MemberScrollViewState extends ConsumerState<MemberScrollView> {
     var memberList = memberListPair?.second ?? [];
 
     return Container(
+      decoration: BoxDecoration(
+        color: BonfireThemeExtension.of(context).background,
+      ),
       child: ScrollConfiguration(
         behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
         child: ListView.builder(

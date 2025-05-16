@@ -73,6 +73,11 @@ class OverlappingPanelsState extends State<OverlappingPanels>
   bool _ignoreGestures = false;
   late HorizontalDragGestureRecognizer _panelDragRecognizer;
 
+  final ValueNotifier<double> _positionNotifier = ValueNotifier(0.0);
+
+  /// The current position of the panel
+  ValueNotifier<double> get position => _positionNotifier;
+
   @override
   void initState() {
     super.initState();
@@ -100,9 +105,12 @@ class OverlappingPanelsState extends State<OverlappingPanels>
     super.dispose();
   }
 
+  AnimationController get animationController => _animationController;
+
   void _updateTranslate() {
     setState(() {
       _translate = _animation.value;
+      position.value = _translate;
     });
   }
 
@@ -194,6 +202,7 @@ class OverlappingPanelsState extends State<OverlappingPanels>
       if (newTranslate < 0 && widget.right != null ||
           newTranslate > 0 && widget.left != null) {
         _translate = newTranslate;
+        position.value = _translate;
       }
     });
   }

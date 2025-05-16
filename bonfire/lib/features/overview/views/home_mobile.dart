@@ -35,6 +35,9 @@ class _HomeState extends ConsumerState<HomeMobile>
       GlobalKey<OverlappingPanelsState>();
   late AnimationController _animationController;
   late Animation<double> _animation;
+  bool showMemberList = false;
+  bool showChannelList = false;
+  // double panelPosition = 0.0;
 
   @override
   void initState() {
@@ -46,10 +49,41 @@ class _HomeState extends ConsumerState<HomeMobile>
     _animation = Tween<double>(begin: 1, end: 0).animate(_animationController);
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      OverlappingPanelsState? panelsState = _panelsKey.currentState;
+      panelsState!.position.addListener(() {
+        final panelPosition = panelsState.position.value;
+        if (panelPosition < 0) {
+          if (showMemberList == false) {
+            setState(() {
+              showMemberList = true;
+            });
+          }
+        } else {
+          if (showMemberList == true) {
+            setState(() {
+              showMemberList = false;
+            });
+          }
+        }
+
+        if (panelPosition <= 0) {
+          if (showChannelList == true) {
+            setState(() {
+              showChannelList = false;
+            });
+          }
+        } else {
+          if (showChannelList == false) {
+            setState(() {
+              showChannelList = true;
+            });
+          }
+        }
+      });
+
       ref.read(navigationBarProvider.notifier).onSideChange(currentPanel);
       if (widget.channelId == Snowflake.zero) {
-        OverlappingPanelsState? panelsState = _panelsKey.currentState;
-        panelsState!.moveToState(RevealSide.left);
+        panelsState.moveToState(RevealSide.left);
         ref.read(navigationBarProvider.notifier).onSideChange(RevealSide.left);
       }
     });
@@ -100,24 +134,26 @@ class _HomeState extends ConsumerState<HomeMobile>
             });
             ref.read(navigationBarProvider.notifier).onSideChange(value);
           },
-          left: SizedBox(
-            width: MediaQuery.sizeOf(context).width,
-            child: Row(
-              children: [
-                Sidebar(guildId: widget.guildId),
-                Expanded(
-                  child: (widget.guildId != Snowflake.zero)
-                      ? ChannelsList(
-                          guildId: widget.guildId,
-                          channelId: widget.channelId,
-                        )
-                      : PrivateMessages(
-                          channelId: widget.channelId,
-                        ),
+          left: (showChannelList)
+              ? SizedBox(
+                  width: MediaQuery.sizeOf(context).width,
+                  child: Row(
+                    children: [
+                      Sidebar(guildId: widget.guildId),
+                      Expanded(
+                        child: (widget.guildId != Snowflake.zero)
+                            ? ChannelsList(
+                                guildId: widget.guildId,
+                                channelId: widget.channelId,
+                              )
+                            : PrivateMessages(
+                                channelId: widget.channelId,
+                              ),
+                      )
+                    ],
+                  ),
                 )
-              ],
-            ),
-          ),
+              : const SizedBox.shrink(),
           main: (widget.channelId != Snowflake.zero)
               ? MessageView(
                   guildId: widget.guildId,
@@ -127,7 +163,7 @@ class _HomeState extends ConsumerState<HomeMobile>
               : FriendsList(
                   channelId: Snowflake.zero,
                 ),
-          right: (widget.channelId != Snowflake.zero)
+          right: (widget.channelId != Snowflake.zero && (showMemberList))
               ? MemberList(
                   guildId: widget.guildId,
                   channelId: widget.channelId,

@@ -363,34 +363,38 @@ class _MessageViewState extends ConsumerState<MessageList>
       );
     }
 
-    return Column(
-      children: [
-        Expanded(
-          child: Stack(
-            children: [
-              FadeTransition(
-                  opacity: _fadeAnimation,
-                  child: Align(
-                    alignment: Alignment.bottomLeft,
-                    child: content,
-                  )),
-              if (!isSmartwatch(context))
-                ChannelHeader(
-                  channelId: channel.id,
-                ),
-            ],
+    return Container(
+      decoration:
+          BoxDecoration(color: BonfireThemeExtension.of(context).background),
+      child: Column(
+        children: [
+          Expanded(
+            child: Stack(
+              children: [
+                FadeTransition(
+                    opacity: _fadeAnimation,
+                    child: Align(
+                      alignment: Alignment.bottomLeft,
+                      child: content,
+                    )),
+                if (!isSmartwatch(context))
+                  ChannelHeader(
+                    channelId: channel.id,
+                  ),
+              ],
+            ),
           ),
-        ),
-        MessageBar(
-          guildId: guild?.id ?? Snowflake.zero,
-          channel: channel,
-        ),
-        if (!isSmartwatch(context))
-          SizedBox(
-            height: MediaQuery.paddingOf(context).bottom,
+          MessageBar(
+            guildId: guild?.id ?? Snowflake.zero,
+            channel: channel,
           ),
-        if (!isSmartwatch(context)) const KeyboardBuffer()
-      ],
+          if (!isSmartwatch(context))
+            SizedBox(
+              height: MediaQuery.paddingOf(context).bottom,
+            ),
+          if (!isSmartwatch(context)) const KeyboardBuffer()
+        ],
+      ),
     );
   }
 }
