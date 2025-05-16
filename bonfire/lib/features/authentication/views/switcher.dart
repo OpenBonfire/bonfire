@@ -20,8 +20,8 @@ class _LoginScreenState extends ConsumerState<AccountSwitcherModel> {
     // GoRouter.of(context).go("/switcher");
     return Scaffold(
       body: Container(
-        decoration: BoxDecoration(
-            color: Theme.of(context).custom.colorTheme.foreground),
+        decoration:
+            BoxDecoration(color: BonfireThemeExtension.of(context).foreground),
         width: 100,
         height: 100,
       ),

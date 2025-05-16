@@ -44,7 +44,7 @@ final routerController = GoRouter(
                       body: Center(
                         child: Text(
                           'Coming Soon',
-                          style: Theme.of(context).custom.textTheme.titleMedium,
+                          style: Theme.of(context).textTheme.titleMedium,
                         ),
                       ),
                     )),

@@ -28,14 +28,14 @@ class _ConfirmButtonState extends State<ConfirmButton> {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
         ),
-        foregroundColor: Theme.of(context).custom.colorTheme.dirtyWhite,
-        backgroundColor: Theme.of(context).custom.colorTheme.foreground,
+        foregroundColor: BonfireThemeExtension.of(context).dirtyWhite,
+        backgroundColor: BonfireThemeExtension.of(context).foreground,
       ),
       child: Container(
         height: 60,
         width: double.infinity,
         decoration: BoxDecoration(
-          color: Theme.of(context).custom.colorTheme.primary,
+          color: BonfireThemeExtension.of(context).primary,
           borderRadius: BorderRadius.circular(12),
         ),
         child: Center(

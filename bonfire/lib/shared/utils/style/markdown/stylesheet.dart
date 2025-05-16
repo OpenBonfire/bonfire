@@ -15,10 +15,10 @@ MarkdownStyle getMarkdownStyleSheet(BuildContext context) {
       fontSize: 14,
     ),
     codeblockDecoration: BoxDecoration(
-        color: Theme.of(context).custom.colorTheme.foreground,
+        color: BonfireThemeExtension.of(context).foreground,
         borderRadius: BorderRadius.circular(8)),
     codeSpan: GoogleFonts.jetBrainsMono(
-      backgroundColor: Theme.of(context).custom.colorTheme.foreground,
+      backgroundColor: BonfireThemeExtension.of(context).foreground,
       fontSize: 14,
     ),
     list: GoogleFonts.publicSans(

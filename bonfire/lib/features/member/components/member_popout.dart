@@ -33,7 +33,9 @@ class _UserPopoutCardState extends ConsumerState<UserPopoutCard> {
   Widget build(BuildContext context) {
     final profileEffects = ref.watch(profileEffectsProvider).valueOrNull;
 
-    final theme = Theme.of(context).custom;
+    final theme = Theme.of(context);
+    final bonfireTheme = BonfireThemeExtension.of(context);
+
     final profile =
         ref.watch(userProfileControllerProvider(widget.userId)).valueOrNull;
 
@@ -56,7 +58,7 @@ class _UserPopoutCardState extends ConsumerState<UserPopoutCard> {
       borderRadius: BorderRadius.circular(20),
       child: Container(
         decoration: BoxDecoration(
-          color: theme.colorTheme.foreground,
+          color: bonfireTheme.foreground,
         ),
         child: Stack(
           children: [
@@ -84,7 +86,7 @@ class _UserPopoutCardState extends ConsumerState<UserPopoutCard> {
                                           null)
                                       ? Color(profile.userProfile.accentColor!)
                                           .withAlpha(255)
-                                      : theme.colorTheme.background,
+                                      : bonfireTheme.background,
                                 ),
                               ),
                             const SizedBox(height: 50),
@@ -97,17 +99,13 @@ class _UserPopoutCardState extends ConsumerState<UserPopoutCard> {
                                     profile.guildMember?.nick ??
                                         profile.user.globalName ??
                                         profile.user.username,
-                                    style: Theme.of(context)
-                                        .custom
-                                        .textTheme
-                                        .titleMedium,
+                                    style:
+                                        Theme.of(context).textTheme.titleMedium,
                                   ),
                                   Text(
                                     profile.user.username,
-                                    style: Theme.of(context)
-                                        .custom
-                                        .textTheme
-                                        .caption,
+                                    style:
+                                        Theme.of(context).textTheme.labelMedium,
                                   ),
                                 ],
                               ),
@@ -308,7 +306,7 @@ class _UserInfoTabViewState extends ConsumerState<UserInfoTabView>
                 controller: _tabController,
                 labelPadding: const EdgeInsets.symmetric(horizontal: 8.0),
                 indicatorSize: TabBarIndicatorSize.tab,
-                indicatorColor: Theme.of(context).custom.colorTheme.primary,
+                indicatorColor: BonfireThemeExtension.of(context).primary,
                 labelColor: Colors.white,
                 onTap: (index) {
                   HapticFeedback.lightImpact();
@@ -395,7 +393,7 @@ class _BioCard extends ConsumerWidget {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        color: Theme.of(context).custom.colorTheme.background,
+        color: BonfireThemeExtension.of(context).background,
         borderRadius: BorderRadius.circular(12),
       ),
       padding: const EdgeInsets.all(12),
@@ -404,7 +402,7 @@ class _BioCard extends ConsumerWidget {
         children: [
           Text(
             "About Me",
-            style: Theme.of(context).custom.textTheme.titleSmall,
+            style: Theme.of(context).textTheme.titleSmall,
           ),
           const SizedBox(height: 8),
           Column(
@@ -461,13 +459,13 @@ class _RolesCard extends ConsumerWidget {
 
     if (member == null) {
       return LoadingAnimationWidget.fallingDot(
-          color: Theme.of(context).custom.colorTheme.gray, size: 24);
+          color: BonfireThemeExtension.of(context).gray, size: 24);
     }
 
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        color: Theme.of(context).custom.colorTheme.background,
+        color: BonfireThemeExtension.of(context).background,
         borderRadius: BorderRadius.circular(12),
       ),
       child: Padding(
@@ -477,7 +475,7 @@ class _RolesCard extends ConsumerWidget {
           children: [
             Text(
               "Roles",
-              style: Theme.of(context).custom.textTheme.titleSmall,
+              style: Theme.of(context).textTheme.titleSmall,
             ),
             Wrap(
               spacing: 6,
@@ -501,9 +499,9 @@ class _RolesCard extends ConsumerWidget {
                               borderRadius: BorderRadius.circular(4),
                             ),
                             foregroundColor:
-                                Theme.of(context).custom.colorTheme.dirtyWhite,
+                                BonfireThemeExtension.of(context).dirtyWhite,
                             backgroundColor:
-                                Theme.of(context).custom.colorTheme.foreground,
+                                BonfireThemeExtension.of(context).foreground,
                           ),
                           onPressed: () {},
                           child: Padding(
@@ -524,9 +522,8 @@ class _RolesCard extends ConsumerWidget {
                                 const SizedBox(width: 6),
                                 Text(role.name,
                                     style: Theme.of(context)
-                                        .custom
                                         .textTheme
-                                        .caption
+                                        .labelMedium!
                                         .copyWith(
                                           fontWeight: FontWeight.w600,
                                         )),
@@ -585,6 +582,8 @@ class _MutualFriendsInlineState extends ConsumerState<MutualFriendsInline> {
 
     int idx = 0;
 
+    final bonfireTheme = BonfireThemeExtension.of(context);
+
     return OutlinedButton(
       style: OutlinedButton.styleFrom(
         minimumSize: Size.zero,
@@ -596,8 +595,8 @@ class _MutualFriendsInlineState extends ConsumerState<MutualFriendsInline> {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(4),
         ),
-        foregroundColor: Theme.of(context).custom.colorTheme.dirtyWhite,
-        backgroundColor: Theme.of(context).custom.colorTheme.foreground,
+        foregroundColor: BonfireThemeExtension.of(context).dirtyWhite,
+        backgroundColor: BonfireThemeExtension.of(context).foreground,
       ),
       onPressed: () {},
       child: Row(
@@ -611,10 +610,7 @@ class _MutualFriendsInlineState extends ConsumerState<MutualFriendsInline> {
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(20),
                                 border: Border.all(
-                                  color: Theme.of(context)
-                                      .custom
-                                      .colorTheme
-                                      .background,
+                                  color: bonfireTheme.background,
                                   width: 2,
                                 )),
                             child: Padding(
@@ -633,7 +629,7 @@ class _MutualFriendsInlineState extends ConsumerState<MutualFriendsInline> {
               padding: const EdgeInsets.only(left: 4.0),
               child: Text(
                 "$mutualCount Mutual Friends",
-                style: Theme.of(context).custom.textTheme.caption,
+                style: Theme.of(context).textTheme.labelMedium,
               ),
             )
         ],

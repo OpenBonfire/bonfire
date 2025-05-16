@@ -46,13 +46,14 @@ class _DownloadAttachmentState extends State<DownloadAttachment> {
 
   @override
   Widget build(BuildContext context) {
+    final bonfireTheme = BonfireThemeExtension.of(context);
     return ClipRRect(
       borderRadius: BorderRadius.circular(12),
       child: Container(
         height: 60,
         width: 300,
         decoration: BoxDecoration(
-          color: Theme.of(context).custom.colorTheme.foreground,
+          color: BonfireThemeExtension.of(context).foreground,
         ),
         child: Stack(
           children: [
@@ -114,11 +115,7 @@ class _DownloadAttachmentState extends State<DownloadAttachment> {
                 width: 300 * downloadPercentage,
                 height: 8,
                 decoration: BoxDecoration(
-                  color: Theme.of(context)
-                      .custom
-                      .colorTheme
-                      .primary
-                      .withOpacity(opacity),
+                  color: bonfireTheme.primary.withOpacity(opacity),
                 ),
               ),
             )

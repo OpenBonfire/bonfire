@@ -86,10 +86,8 @@ class _ChannelHeaderState extends ConsumerState<ChannelHeader> {
                                   overflow: TextOverflow.ellipsis,
                                   maxLines: 1,
                                   softWrap: false,
-                                  style: Theme.of(context)
-                                      .custom
-                                      .textTheme
-                                      .caption,
+                                  style:
+                                      Theme.of(context).textTheme.labelMedium,
                                 ),
                               ),
                             ),

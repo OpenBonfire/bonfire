@@ -22,7 +22,7 @@ class DescriptionEmbed extends StatelessWidget {
       borderRadius: const BorderRadius.all(Radius.circular(12)),
       child: Container(
         decoration: BoxDecoration(
-          color: Theme.of(context).custom.colorTheme.foreground,
+          color: BonfireThemeExtension.of(context).foreground,
           borderRadius: const BorderRadius.only(
             topRight: Radius.circular(12),
             bottomRight: Radius.circular(12),
@@ -44,7 +44,7 @@ class DescriptionEmbed extends StatelessWidget {
                           embed.color!.b,
                           1,
                         )
-                      : Theme.of(context).custom.colorTheme.primary,
+                      : BonfireThemeExtension.of(context).primary,
                 ),
               ),
             ),

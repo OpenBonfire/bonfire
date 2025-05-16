@@ -43,7 +43,7 @@
 //         Container(
 //           height: 30,
 //           decoration: BoxDecoration(
-//             color: Theme.of(context).custom.colorTheme.foreground,
+//             color: BonfireThemeExtension.of(context).foreground,
 //             boxShadow: const [
 //               BoxShadow(
 //                 color: Colors.black26,
@@ -97,7 +97,7 @@
 //   Widget build(BuildContext context) {
 //     return IconButton(
 //       icon: Icon(
-//         color: Theme.of(context).custom.colorTheme.messageBarActivatedIcon,
+//         color: BonfireThemeExtension.of(context).messageBarActivatedIcon,
 //         Icons.remove,
 //         size: 18,
 //       ),
@@ -148,7 +148,7 @@
 //       icon: Icon(
 //         Icons.close,
 //         size: 18,
-//         color: Theme.of(context).custom.colorTheme.messageBarActivatedIcon,
+//         color: BonfireThemeExtension.of(context).messageBarActivatedIcon,
 //       ),
 //       onPressed: () {
 //         appWindow.close();

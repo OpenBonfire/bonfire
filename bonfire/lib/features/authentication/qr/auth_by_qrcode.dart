@@ -333,6 +333,7 @@ class AuthRemote extends StatefulWidget {
 class _AuthRemoteState extends State<AuthRemote> {
   @override
   Widget build(BuildContext context) {
+    final bonfireTheme = BonfireThemeExtension.of(context);
     final theme = Theme.of(context);
 
     Widget w;
@@ -351,12 +352,12 @@ class _AuthRemoteState extends State<AuthRemote> {
                   padding: const EdgeInsets.all(16.0),
                   dataModuleStyle: QrDataModuleStyle(
                       dataModuleShape: QrDataModuleShape.circle,
-                      color: theme.custom.colorTheme.dirtyWhite),
+                      color: bonfireTheme.dirtyWhite),
                   eyeStyle: QrEyeStyle(
                     eyeShape: QrEyeShape.circle,
-                    color: theme.custom.colorTheme.dirtyWhite,
+                    color: bonfireTheme.dirtyWhite,
                   ),
-                  backgroundColor: theme.custom.colorTheme.foreground,
+                  backgroundColor: bonfireTheme.foreground,
                   data: widget.nfingerprint!,
                   version: QrVersions.auto,
                 ),
@@ -379,7 +380,7 @@ class _AuthRemoteState extends State<AuthRemote> {
             ),
             borderRadius: const BorderRadius.all(Radius.circular(50.0)),
             border: Border.all(
-              color: Theme.of(context).custom.colorTheme.background,
+              color: BonfireThemeExtension.of(context).background,
               width: 6.0,
             ),
           ),

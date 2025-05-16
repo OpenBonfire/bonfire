@@ -18,7 +18,7 @@ class _KeyboardBufferState extends State<KeyboardBuffer> {
       builder: (context, screenHeight, child) {
         return Container(
           decoration: BoxDecoration(
-              color: Theme.of(context).custom.colorTheme.background),
+              color: BonfireThemeExtension.of(context).background),
           height: screenHeight.keyboardHeight,
         );
       },

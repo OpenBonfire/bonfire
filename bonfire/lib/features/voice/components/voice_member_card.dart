@@ -28,6 +28,8 @@ class _VoiceMemberCardState extends ConsumerState<VoiceMemberCard> {
     User? user = ref.watch(getUserFromIdProvider(widget.userId)).valueOrNull;
     Uint8List? icon = ref.watch(userIconProvider(widget.userId)).value;
 
+    final bonfireTheme = BonfireThemeExtension.of(context);
+
     return SizedBox(
       height: 35,
       child: Padding(
@@ -43,7 +45,7 @@ class _VoiceMemberCardState extends ConsumerState<VoiceMemberCard> {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12),
             ),
-            foregroundColor: Theme.of(context).custom.colorTheme.gray,
+            foregroundColor: BonfireThemeExtension.of(context).gray,
             backgroundColor: Colors.transparent,
           ),
           onPressed: () {},
@@ -81,14 +83,9 @@ class _VoiceMemberCardState extends ConsumerState<VoiceMemberCard> {
                                 softWrap: false,
                                 textAlign: TextAlign.left,
                                 style: Theme.of(context)
-                                    .custom
                                     .textTheme
-                                    .bodyText1
-                                    .copyWith(
-                                        color: Theme.of(context)
-                                            .custom
-                                            .colorTheme
-                                            .gray),
+                                    .bodyMedium!
+                                    .copyWith(color: bonfireTheme.gray),
                               ),
                               const Spacer(),
                             ],

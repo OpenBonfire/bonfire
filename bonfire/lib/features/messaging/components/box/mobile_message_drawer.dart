@@ -17,7 +17,7 @@ class MobileMessageDrawer extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Container(
       decoration: BoxDecoration(
-        color: Theme.of(context).custom.colorTheme.background,
+        color: BonfireThemeExtension.of(context).background,
         borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
       ),
       child: SingleChildScrollView(
@@ -39,8 +39,7 @@ class MobileMessageDrawer extends ConsumerWidget {
         width: 40,
         height: 4,
         decoration: BoxDecoration(
-          color:
-              Theme.of(context).custom.colorTheme.foreground.withOpacity(0.5),
+          color: BonfireThemeExtension.of(context).foreground.withOpacity(0.5),
           borderRadius: BorderRadius.circular(2),
         ),
       ),

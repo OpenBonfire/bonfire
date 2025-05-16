@@ -98,7 +98,7 @@ class _MessageBarState extends ConsumerState<MessageBar> {
       BorderRadius? borderRadius,
       bool enabled = true}) {
     Color color =
-        backgroundColor ?? Theme.of(context).custom.colorTheme.foreground;
+        backgroundColor ?? BonfireThemeExtension.of(context).foreground;
     return Container(
       width: 48,
       height: 48,
@@ -243,7 +243,7 @@ class _MessageBarState extends ConsumerState<MessageBar> {
                 ),
               Container(
                 decoration: BoxDecoration(
-                    color: Theme.of(context).custom.colorTheme.foreground,
+                    color: BonfireThemeExtension.of(context).foreground,
                     borderRadius: (replyState == null)
                         ? BorderRadius.circular(8)
                         : const BorderRadius.only(
@@ -277,11 +277,11 @@ class _MessageBarState extends ConsumerState<MessageBar> {
                         child: TextSelectionTheme(
                           data: TextSelectionThemeData(
                             cursorColor:
-                                Theme.of(context).custom.colorTheme.primary,
+                                BonfireThemeExtension.of(context).primary,
                             selectionColor:
-                                Theme.of(context).custom.colorTheme.primary,
+                                BonfireThemeExtension.of(context).primary,
                             selectionHandleColor:
-                                Theme.of(context).custom.colorTheme.primary,
+                                BonfireThemeExtension.of(context).primary,
                           ),
                           child: KeyboardListener(
                             focusNode: FocusNode(),
@@ -310,8 +310,7 @@ class _MessageBarState extends ConsumerState<MessageBar> {
                                 ),
                                 hintText: hintText,
                                 hintStyle: GoogleFonts.publicSans(
-                                  color:
-                                      Theme.of(context).custom.colorTheme.gray,
+                                  color: BonfireThemeExtension.of(context).gray,
                                   fontWeight: FontWeight.w600,
                                 ),
                                 border: InputBorder.none,
@@ -338,7 +337,7 @@ class _MessageBarState extends ConsumerState<MessageBar> {
                         ),
                         _sendMessage,
                         backgroundColor:
-                            Theme.of(context).custom.colorTheme.primary,
+                            BonfireThemeExtension.of(context).primary,
                         borderRadius: const BorderRadius.only(
                           topRight: Radius.circular(8),
                           bottomRight: Radius.circular(8),
@@ -377,7 +376,7 @@ class AttachmentPreview extends StatelessWidget {
           width: 100,
           height: 100,
           decoration: BoxDecoration(
-            color: Theme.of(context).custom.colorTheme.foreground,
+            color: BonfireThemeExtension.of(context).foreground,
             borderRadius: BorderRadius.circular(8),
           ),
           child: isImage

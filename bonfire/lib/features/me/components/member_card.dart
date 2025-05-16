@@ -62,10 +62,10 @@ class _DirectMessageMemberState extends ConsumerState<DirectMessageMember> {
                   borderRadius: BorderRadius.circular(4),
                 ),
                 foregroundColor: selected
-                    ? Theme.of(context).custom.colorTheme.dirtyWhite
-                    : Theme.of(context).custom.colorTheme.gray,
+                    ? BonfireThemeExtension.of(context).dirtyWhite
+                    : BonfireThemeExtension.of(context).gray,
                 backgroundColor: selected
-                    ? Theme.of(context).custom.colorTheme.foreground
+                    ? BonfireThemeExtension.of(context).foreground
                     : Colors.transparent),
             onPressed: () {
               HapticFeedback.selectionClick();
@@ -108,7 +108,7 @@ class _DirectMessageMemberState extends ConsumerState<DirectMessageMember> {
                           recipients
                               .map((e) => e.globalName ?? e.username)
                               .join(', '),
-                          style: Theme.of(context).custom.textTheme.subtitle1,
+                          style: Theme.of(context).textTheme.labelMedium,
                           overflow: TextOverflow.ellipsis,
                         ),
                         PresenceText(

@@ -8,12 +8,12 @@ import 'package:flutter/material.dart';
 Color getStatusColor(BuildContext context, UserStatus status) {
   switch (status) {
     case UserStatus.online:
-      return Theme.of(context).custom.colorTheme.green;
+      return BonfireThemeExtension.of(context).green;
     case UserStatus.idle:
-      return Theme.of(context).custom.colorTheme.yellow;
+      return BonfireThemeExtension.of(context).yellow;
     case UserStatus.dnd:
-      return Theme.of(context).custom.colorTheme.red;
+      return BonfireThemeExtension.of(context).red;
     case UserStatus.offline:
-      return Theme.of(context).custom.colorTheme.background;
+      return BonfireThemeExtension.of(context).background;
   }
 }

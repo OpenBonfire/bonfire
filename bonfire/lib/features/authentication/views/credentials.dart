@@ -76,7 +76,7 @@ class _WebviewLoginScreenState extends ConsumerState<WebviewLoginScreen> {
             const SizedBox(height: 40),
             Text(
               "Welcome Back!",
-              style: CustomTextTheme().titleLarge,
+              style: Theme.of(context).textTheme.titleLarge!,
             ),
             Text(
               "Let's get ya signed in",

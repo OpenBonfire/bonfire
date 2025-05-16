@@ -83,7 +83,7 @@ class _SidebarItemState extends ConsumerState<SidebarItem>
                   width: widget.mini ? 16 : 49,
                   height: widget.mini ? 16 : 49,
                   decoration: BoxDecoration(
-                    color: Theme.of(context).custom.colorTheme.foreground,
+                    color: BonfireThemeExtension.of(context).foreground,
                     borderRadius: BorderRadius.circular(
                         widget.mini ? 25 : _radiusAnimation.value),
                   ),
@@ -113,7 +113,7 @@ class _SidebarItemState extends ConsumerState<SidebarItem>
               bottom: -3,
               child: Container(
                 decoration: BoxDecoration(
-                  color: Theme.of(context).custom.colorTheme.background,
+                  color: BonfireThemeExtension.of(context).background,
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Padding(
@@ -152,21 +152,21 @@ class _SidebarItemState extends ConsumerState<SidebarItem>
       width: 16,
       height: 16,
       decoration: BoxDecoration(
-        color: Theme.of(context).custom.colorTheme.background,
+        color: BonfireThemeExtension.of(context).background,
         borderRadius: BorderRadius.circular(20),
       ),
       child: Stack(
         children: [
           Container(
             decoration: BoxDecoration(
-              color: Theme.of(context).custom.colorTheme.red,
+              color: BonfireThemeExtension.of(context).red,
               borderRadius: BorderRadius.circular(20),
             ),
           ),
           Center(
             child: Text(
               count.toString(),
-              style: Theme.of(context).custom.textTheme.bodyText1.copyWith(
+              style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                     fontSize: 11,
                     fontWeight: FontWeight.w600,
                     color: Colors.white,

@@ -58,8 +58,8 @@ class _MemberCardState extends ConsumerState<MemberCard> {
                 bottomRight: Radius.circular(borderRadiusBottom),
               ),
             ),
-            foregroundColor: Theme.of(context).custom.colorTheme.dirtyWhite,
-            backgroundColor: Theme.of(context).custom.colorTheme.foreground,
+            foregroundColor: BonfireThemeExtension.of(context).dirtyWhite,
+            backgroundColor: BonfireThemeExtension.of(context).foreground,
           ),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 4),
@@ -86,9 +86,8 @@ class _MemberCardState extends ConsumerState<MemberCard> {
                             "Unknown",
                         softWrap: false,
                         style: Theme.of(context)
-                            .custom
                             .textTheme
-                            .subtitle1
+                            .labelMedium!
                             .copyWith(
                                 color: getRoleColor(widget.member, roles)),
                       ),
@@ -111,7 +110,7 @@ class _MemberCardState extends ConsumerState<MemberCard> {
               child: Container(
                 height: 0.1,
                 decoration: BoxDecoration(
-                  color: Theme.of(context).custom.colorTheme.gray,
+                  color: BonfireThemeExtension.of(context).gray,
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(borderRadiusTop),
                     topRight: Radius.circular(borderRadiusTop),

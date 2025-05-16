@@ -189,8 +189,7 @@ class _MessageBoxState extends ConsumerState<MessageBox>
 
     Color boxColor = Colors.transparent;
     if (_isHovering) {
-      boxColor =
-          Theme.of(context).custom.colorTheme.foreground.withOpacity(0.8);
+      boxColor = BonfireThemeExtension.of(context).foreground.withOpacity(0.8);
     }
 
     if (mentioned) {
@@ -226,7 +225,7 @@ class _MessageBoxState extends ConsumerState<MessageBox>
                       ),
                       // change hover / select color to white
                       foregroundColor:
-                          Theme.of(context).custom.colorTheme.foreground,
+                          BonfireThemeExtension.of(context).foreground,
                     ),
                     onPressed: () {},
                     // on double tap
@@ -343,7 +342,7 @@ class _MessageBoxState extends ConsumerState<MessageBox>
               if (message.editedTimestamp != null)
                 TextSpan(
                     text: " (edited)",
-                    style: Theme.of(context).custom.textTheme.caption),
+                    style: Theme.of(context).textTheme.labelMedium),
             ],
           ),
         ),

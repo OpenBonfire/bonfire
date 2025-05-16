@@ -66,17 +66,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text("Loading Bonfire...",
-                  style: Theme.of(context)
-                      .custom
-                      .textTheme
-                      .titleMedium
-                      .copyWith(
-                        color:
-                            Theme.of(context).custom.textTheme.bodyText1.color!,
+                  style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                        color: Theme.of(context).textTheme.bodyMedium!.color!,
                       )),
               const SizedBox(height: 30),
               LoadingAnimationWidget.fourRotatingDots(
-                color: Theme.of(context).custom.textTheme.bodyText1.color!,
+                color: Theme.of(context).textTheme.bodyMedium!.color!,
                 size: 50,
               ),
             ],

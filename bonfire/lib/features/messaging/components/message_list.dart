@@ -224,7 +224,6 @@ class _MessageViewState extends ConsumerState<MessageList>
       controller: _scrollController,
       reverse: true,
       shrinkWrap: true,
-      cacheExtent: 20000,
       padding: EdgeInsets.only(
         bottom: 12,
         top: isSmartwatch(context)
@@ -365,6 +364,7 @@ class _MessageViewState extends ConsumerState<MessageList>
     }
 
     return Scaffold(
+      backgroundColor: BonfireThemeExtension.of(context).background,
       body: Column(
         children: [
           Expanded(
@@ -404,7 +404,7 @@ class NoMessageSendPermissionPlaceholder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        decoration: BoxDecoration(
-            color: Theme.of(context).custom.colorTheme.background));
+        decoration:
+            BoxDecoration(color: BonfireThemeExtension.of(context).background));
   }
 }

@@ -77,7 +77,7 @@ class GlobalDrawerState extends State<GlobalDrawer>
                 width: double.infinity,
                 height: double.infinity,
                 decoration: BoxDecoration(
-                  color: Theme.of(context).custom.colorTheme.background,
+                  color: BonfireThemeExtension.of(context).background,
                   borderRadius:
                       const BorderRadius.vertical(top: Radius.circular(16)),
                   boxShadow: [

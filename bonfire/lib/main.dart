@@ -2,6 +2,7 @@ import 'package:bonfire/features/authentication/utils/hive.dart';
 import 'package:bonfire/features/notifications/controllers/firebase.dart';
 import 'package:bonfire/features/notifications/controllers/notification.dart';
 import 'package:bonfire/router/controller.dart';
+import 'package:bonfire/theme/color_theme.dart';
 import 'package:bonfire/theme/theme.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
@@ -10,6 +11,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_keyboard_size/flutter_keyboard_size.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:universal_platform/universal_platform.dart';
 import 'package:video_player_media_kit/video_player_media_kit.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -83,18 +85,6 @@ class MainWindow extends ConsumerStatefulWidget {
 
 class _MainWindowState extends ConsumerState<MainWindow> {
   @override
-  void initState() {
-    super.initState();
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      final initialTheme =
-          (UniversalPlatform.isMobile) ? ThemeType.amoled : ThemeType.dark;
-
-      ref.read(themeTypeProvider.notifier).state = initialTheme;
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       systemNavigationBarColor: Colors.transparent,
@@ -104,9 +94,81 @@ class _MainWindowState extends ConsumerState<MainWindow> {
       systemNavigationBarContrastEnforced: false,
     ));
 
-    final theme = ref.watch(themeDataProvider).copyWith(
-          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-        );
+    // final theme = ref.watch(themeDataProvider).copyWith(
+    //       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+    //     );
+
+    String family = GoogleFonts.publicSans().fontFamily!;
+
+    final theme = ThemeData.dark().copyWith(
+        textTheme: TextTheme(
+          displayLarge: TextStyle(
+            fontSize: 36,
+            fontFamily: family,
+            fontWeight: FontWeight.w500,
+          ),
+          displayMedium: TextStyle(
+            fontSize: 20,
+            fontFamily: family,
+            fontWeight: FontWeight.w500,
+          ),
+          displaySmall: TextStyle(
+            fontSize: 15,
+            fontFamily: family,
+            fontWeight: FontWeight.w500,
+          ),
+          titleLarge: TextStyle(
+            fontSize: 36,
+            fontFamily: family,
+            fontWeight: FontWeight.w500,
+          ),
+          titleMedium: TextStyle(
+            fontSize: 20,
+            fontFamily: family,
+            fontWeight: FontWeight.w500,
+          ),
+          titleSmall: TextStyle(
+            fontSize: 15,
+            fontFamily: family,
+            fontWeight: FontWeight.w500,
+          ),
+          headlineLarge: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.w500,
+            fontFamily: family,
+          ),
+          labelMedium: TextStyle(
+            fontSize: 12,
+            fontFamily: family,
+            fontWeight: FontWeight.w500,
+            color: const Color(0xFFBDBDBD),
+          ),
+          bodyLarge: TextStyle(
+            fontSize: 15,
+            fontFamily: family,
+            color: const Color.fromARGB(255, 255, 255, 255),
+            fontWeight: FontWeight.w500,
+          ),
+          bodyMedium: TextStyle(
+            fontSize: 14,
+            fontFamily: family,
+            color: const Color(0xFFBDBDBD),
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        extensions: [
+          const BonfireThemeExtension(
+            foreground: AppColorsDark.foreground,
+            background: AppColorsDark.background,
+            dirtyWhite: AppColorsDark.dirtyWhite,
+            gray: AppColorsDark.gray,
+            darkGray: AppColorsDark.darkGray,
+            primary: AppColorsDark.primary,
+            red: AppColorsDark.red,
+            green: AppColorsDark.green,
+            yellow: AppColorsDark.yellow,
+          )
+        ]);
 
     return Scaffold(
       backgroundColor: Colors.transparent,

@@ -40,13 +40,13 @@ class _MFAPageState extends ConsumerState<MFAPage> {
           Container(
             height: 60,
             decoration: BoxDecoration(
-              color: Theme.of(context).custom.colorTheme.foreground,
+              color: BonfireThemeExtension.of(context).foreground,
               borderRadius: BorderRadius.circular(12),
             ),
             child: Center(
               child: TextFormField(
                 autovalidateMode: AutovalidateMode.onUserInteraction,
-                style: CustomTextTheme().bodyText1,
+                style: Theme.of(context).textTheme.bodyMedium!,
                 controller: controller,
                 autofillHints: const [AutofillHints.oneTimeCode],
                 autocorrect: false,
@@ -100,7 +100,7 @@ class _MFAPageState extends ConsumerState<MFAPage> {
                     children: [
                       Text(
                         "Multi Factor Authentication",
-                        style: CustomTextTheme().titleLarge,
+                        style: Theme.of(context).textTheme.titleLarge,
                         textAlign: TextAlign.center,
                       ),
                       const SizedBox(height: 30),

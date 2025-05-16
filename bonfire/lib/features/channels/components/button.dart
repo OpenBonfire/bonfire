@@ -36,7 +36,7 @@ class _ChannelButtonState extends ConsumerState<ChannelButton> {
       width: 23,
       height: 23,
       decoration: BoxDecoration(
-        color: Theme.of(context).custom.colorTheme.background,
+        color: BonfireThemeExtension.of(context).background,
         borderRadius: BorderRadius.circular(20),
       ),
       child: Stack(
@@ -45,7 +45,7 @@ class _ChannelButtonState extends ConsumerState<ChannelButton> {
             padding: const EdgeInsets.all(3),
             child: Container(
               decoration: BoxDecoration(
-                color: Theme.of(context).custom.colorTheme.red,
+                color: BonfireThemeExtension.of(context).red,
                 borderRadius: BorderRadius.circular(20),
               ),
             ),
@@ -55,7 +55,7 @@ class _ChannelButtonState extends ConsumerState<ChannelButton> {
             child: Center(
               child: Text(
                 count.toString(),
-                style: Theme.of(context).custom.textTheme.bodyText1.copyWith(
+                style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                       fontSize: 11,
                       fontWeight: FontWeight.w600,
                       color: Colors.white,
@@ -74,6 +74,8 @@ class _ChannelButtonState extends ConsumerState<ChannelButton> {
     bool selected = widget.channel.id == widget.currentChannelId;
     var readState = ref.watch(channelReadStateProvider(widget.channel.id));
     int mentionCount = readState?.mentionCount ?? 0;
+
+    final bonfireTheme = BonfireThemeExtension.of(context);
 
     bool hasUnreads =
         ref.watch(hasUnreadsProvider(widget.channel.id)).when(data: (data) {
@@ -120,10 +122,10 @@ class _ChannelButtonState extends ConsumerState<ChannelButton> {
                           borderRadius: BorderRadius.circular(4),
                         ),
                         foregroundColor: selected
-                            ? Theme.of(context).custom.colorTheme.dirtyWhite
-                            : Theme.of(context).custom.colorTheme.gray,
+                            ? BonfireThemeExtension.of(context).dirtyWhite
+                            : BonfireThemeExtension.of(context).gray,
                         backgroundColor: selected
-                            ? Theme.of(context).custom.colorTheme.foreground
+                            ? BonfireThemeExtension.of(context).foreground
                             : Colors.transparent),
                     onPressed: () {
                       if (widget.channel is GuildVoiceChannel) {
@@ -158,11 +160,8 @@ class _ChannelButtonState extends ConsumerState<ChannelButton> {
                                 BonfireIcons
                                     .channelIcons[widget.channel.type]!.icon,
                                 color: (selected || hasUnreads)
-                                    ? Theme.of(context)
-                                        .custom
-                                        .colorTheme
-                                        .dirtyWhite
-                                    : Theme.of(context).custom.colorTheme.gray,
+                                    ? bonfireTheme.dirtyWhite
+                                    : BonfireThemeExtension.of(context).gray,
                                 size: 20,
                               ),
                               const SizedBox(width: 8),
@@ -177,19 +176,12 @@ class _ChannelButtonState extends ConsumerState<ChannelButton> {
                                       softWrap: false,
                                       textAlign: TextAlign.left,
                                       style: Theme.of(context)
-                                          .custom
                                           .textTheme
-                                          .bodyText2
+                                          .bodyMedium!
                                           .copyWith(
                                               color: (selected || hasUnreads)
-                                                  ? Theme.of(context)
-                                                      .custom
-                                                      .colorTheme
-                                                      .dirtyWhite
-                                                  : Theme.of(context)
-                                                      .custom
-                                                      .colorTheme
-                                                      .gray),
+                                                  ? bonfireTheme.dirtyWhite
+                                                  : bonfireTheme.gray),
                                     ),
                                   ),
                                   // const Spacer(),

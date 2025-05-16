@@ -40,7 +40,7 @@ class _ContextPopoutState extends ConsumerState<ContextPopout> {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
       ),
-      color: Theme.of(context).custom.colorTheme.foreground,
+      color: BonfireThemeExtension.of(context).foreground,
     ).then((String? result) {
       if (result == "reply") {
         replyController.setMessageReply(
@@ -122,7 +122,7 @@ class _ContextPopoutState extends ConsumerState<ContextPopout> {
           width: 32,
           height: 32,
           decoration: BoxDecoration(
-            color: Theme.of(context).custom.colorTheme.background,
+            color: BonfireThemeExtension.of(context).background,
             borderRadius: BorderRadius.circular(4),
           ),
           child: const Icon(

@@ -25,12 +25,12 @@ class _GuildOverviewState extends ConsumerState<GuildOverview> {
         width: double.infinity,
         child: Container(
           decoration: BoxDecoration(
-              color: Theme.of(context).custom.colorTheme.background,
+              color: BonfireThemeExtension.of(context).background,
               borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(15), topRight: Radius.circular(8)),
               border: Border(
                   bottom: BorderSide(
-                      color: Theme.of(context).custom.colorTheme.foreground,
+                      color: BonfireThemeExtension.of(context).foreground,
                       width: 1.0))),
           child: Column(
             children: [
@@ -44,9 +44,10 @@ class _GuildOverviewState extends ConsumerState<GuildOverview> {
                         child: Text(
                           overflow: TextOverflow.ellipsis,
                           guildTitle,
-                          style: CustomTextTheme().titleSmall.copyWith(
-                                color: Colors.white,
-                              ),
+                          style:
+                              Theme.of(context).textTheme.titleSmall!.copyWith(
+                                    color: Colors.white,
+                                  ),
                         ),
                       ),
                     ),

@@ -28,7 +28,7 @@ class _ReplyToState extends ConsumerState<ReplyTo> {
     return Container(
         height: 40,
         decoration: BoxDecoration(
-          color: Theme.of(context).custom.colorTheme.foreground,
+          color: BonfireThemeExtension.of(context).foreground,
           borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(8),
             topRight: Radius.circular(8),
@@ -67,10 +67,8 @@ class _ReplyToState extends ConsumerState<ReplyTo> {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  foregroundColor:
-                      Theme.of(context).custom.colorTheme.dirtyWhite,
-                  backgroundColor:
-                      Theme.of(context).custom.colorTheme.foreground,
+                  foregroundColor: BonfireThemeExtension.of(context).dirtyWhite,
+                  backgroundColor: BonfireThemeExtension.of(context).foreground,
                 ),
                 onPressed: () {
                   HapticFeedback.lightImpact();

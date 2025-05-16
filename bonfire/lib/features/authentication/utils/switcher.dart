@@ -10,7 +10,7 @@ void showAccountSwitcherDialog(BuildContext context, GoRouter router) {
       PageRouteBuilder(
         opaque: true,
         pageBuilder: (_, __, ___) => Material(
-          color: Theme.of(context).custom.colorTheme.background,
+          color: BonfireThemeExtension.of(context).background,
           child: LocalAccountSwitcherScreen(router),
         ),
       ),
@@ -19,7 +19,7 @@ void showAccountSwitcherDialog(BuildContext context, GoRouter router) {
     showDialog(
       context: context,
       builder: (context) => Dialog(
-        backgroundColor: Theme.of(context).custom.colorTheme.background,
+        backgroundColor: BonfireThemeExtension.of(context).background,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(24),
         ),

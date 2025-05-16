@@ -32,7 +32,7 @@ class _BonfireDrawerButtonState extends ConsumerState<BonfireDrawerButton> {
       top: widget.roundTop ? const Radius.circular(12) : Radius.zero,
       bottom: widget.roundBottom ? const Radius.circular(12) : Radius.zero,
     );
-    final theme = Theme.of(context).custom;
+    final theme = Theme.of(context);
     return OutlinedButton(
         style: OutlinedButton.styleFrom(
             minimumSize: Size.zero,
@@ -44,8 +44,8 @@ class _BonfireDrawerButtonState extends ConsumerState<BonfireDrawerButton> {
             shape: RoundedRectangleBorder(
               borderRadius: borderRadius,
             ),
-            foregroundColor: Theme.of(context).custom.colorTheme.dirtyWhite,
-            backgroundColor: Theme.of(context).custom.colorTheme.foreground),
+            foregroundColor: BonfireThemeExtension.of(context).dirtyWhite,
+            backgroundColor: BonfireThemeExtension.of(context).foreground),
         onPressed: () {
           GlobalDrawer.of(context)?.closeDrawer();
           widget.onTap();
@@ -62,8 +62,8 @@ class _BonfireDrawerButtonState extends ConsumerState<BonfireDrawerButton> {
             children: [
               Icon(widget.icon, color: widget.color),
               Text(widget.text,
-                  style:
-                      theme.textTheme.titleSmall.copyWith(color: widget.color)),
+                  style: theme.textTheme.titleSmall!
+                      .copyWith(color: widget.color)),
             ],
           ),
         )));

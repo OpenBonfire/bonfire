@@ -127,10 +127,10 @@ class _SidebarState extends ConsumerState<Sidebar> {
 
     return Container(
       decoration: BoxDecoration(
-        color: Theme.of(context).custom.colorTheme.background,
+        color: BonfireThemeExtension.of(context).background,
         border: Border(
           right: BorderSide(
-            color: Theme.of(context).custom.colorTheme.foreground,
+            color: BonfireThemeExtension.of(context).foreground,
             width: 1,
           ),
         ),
@@ -173,8 +173,7 @@ class _SidebarState extends ConsumerState<Sidebar> {
                           ),
                           child: Container(
                             height: 2,
-                            color:
-                                Theme.of(context).custom.colorTheme.foreground,
+                            color: BonfireThemeExtension.of(context).foreground,
                           ),
                         ),
                         const SizedBox(height: 8),

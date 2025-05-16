@@ -30,16 +30,16 @@ class _PresenceAvatarState extends ConsumerState<PresenceAvatar> {
 
     switch (overallStatus) {
       case UserStatus.online:
-        statusColor = Theme.of(context).custom.colorTheme.green;
+        statusColor = BonfireThemeExtension.of(context).green;
         break;
       case UserStatus.idle:
-        statusColor = Theme.of(context).custom.colorTheme.yellow;
+        statusColor = BonfireThemeExtension.of(context).yellow;
         break;
       case UserStatus.dnd:
-        statusColor = Theme.of(context).custom.colorTheme.red;
+        statusColor = BonfireThemeExtension.of(context).red;
         break;
       case UserStatus.offline:
-        statusColor = Theme.of(context).custom.colorTheme.foreground;
+        statusColor = BonfireThemeExtension.of(context).foreground;
     }
 
     if (clientStatus?.mobile == overallStatus) {
@@ -63,7 +63,7 @@ class _PresenceAvatarState extends ConsumerState<PresenceAvatar> {
 
     return Container(
       decoration: ShapeDecoration(
-        color: Theme.of(context).custom.colorTheme.background,
+        color: BonfireThemeExtension.of(context).background,
         shape: containerShape,
       ),
       child: Padding(

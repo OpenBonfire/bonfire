@@ -43,7 +43,7 @@ class UserCard extends ConsumerWidget {
       },
       child: Container(
         decoration: BoxDecoration(
-          color: Theme.of(context).custom.colorTheme.foreground,
+          color: BonfireThemeExtension.of(context).foreground,
           borderRadius: BorderRadius.circular(10),
         ),
         child: Padding(
@@ -113,7 +113,7 @@ class UserCard extends ConsumerWidget {
                       Text(
                         customStatus?.text ?? status?.value ?? "Offline",
                         style: GoogleFonts.publicSans(
-                          color: Theme.of(context).custom.colorTheme.gray,
+                          color: BonfireThemeExtension.of(context).gray,
                           fontWeight: FontWeight.w400,
                           fontSize: 12,
                         ),

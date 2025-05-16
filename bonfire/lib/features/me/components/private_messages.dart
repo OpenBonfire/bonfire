@@ -63,10 +63,10 @@ class _TopButtonState extends ConsumerState<TopButton> {
               borderRadius: BorderRadius.circular(4),
             ),
             foregroundColor: selected
-                ? Theme.of(context).custom.colorTheme.dirtyWhite
-                : Theme.of(context).custom.colorTheme.gray,
+                ? BonfireThemeExtension.of(context).dirtyWhite
+                : BonfireThemeExtension.of(context).gray,
             backgroundColor: selected
-                ? Theme.of(context).custom.colorTheme.foreground
+                ? BonfireThemeExtension.of(context).foreground
                 : Colors.transparent),
         onPressed: () {
           HapticFeedback.selectionClick();
@@ -82,8 +82,8 @@ class _TopButtonState extends ConsumerState<TopButton> {
               child: Icon(
                 Icons.people,
                 color: selected
-                    ? Theme.of(context).custom.colorTheme.dirtyWhite
-                    : Theme.of(context).custom.colorTheme.gray,
+                    ? BonfireThemeExtension.of(context).dirtyWhite
+                    : BonfireThemeExtension.of(context).gray,
               ),
             ),
             Expanded(
@@ -95,7 +95,7 @@ class _TopButtonState extends ConsumerState<TopButton> {
                     padding: const EdgeInsets.all(12),
                     child: Text(
                       "Friends",
-                      style: Theme.of(context).custom.textTheme.subtitle1,
+                      style: Theme.of(context).textTheme.labelMedium,
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
@@ -139,6 +139,8 @@ class _PrivateMessagesState extends ConsumerState<PrivateMessages> {
       return bLastMessageId.compareTo(aLastMessageId);
     });
 
+    final bonfireTheme = BonfireThemeExtension.of(context);
+
     return Scaffold(
       body: Padding(
           padding: EdgeInsets.only(left: 8, top: topPadding, bottom: 0),
@@ -146,18 +148,14 @@ class _PrivateMessagesState extends ConsumerState<PrivateMessages> {
               width: double.infinity,
               child: Container(
                   decoration: BoxDecoration(
-                      color: Theme.of(context).custom.colorTheme.background,
+                      color: BonfireThemeExtension.of(context).background,
                       borderRadius: const BorderRadius.only(
                         topLeft: Radius.circular(24),
                         bottomLeft: Radius.circular(24),
                       ),
                       border: Border(
                           bottom: BorderSide(
-                              color: Theme.of(context)
-                                  .custom
-                                  .colorTheme
-                                  .foreground,
-                              width: 1.0))),
+                              color: bonfireTheme.foreground, width: 1.0))),
                   child: Column(
                     children: [
                       Expanded(

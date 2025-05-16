@@ -125,15 +125,14 @@ class DiscordMentionBuilder extends MarkdownElementBuilder {
           padding: const EdgeInsets.only(top: 2),
           child: Container(
             decoration: BoxDecoration(
-              color:
-                  Theme.of(context).custom.colorTheme.primary.withOpacity(0.2),
+              color: BonfireThemeExtension.of(context).primary.withOpacity(0.2),
               borderRadius: BorderRadius.circular(4),
             ),
             child: Padding(
               padding: const EdgeInsets.only(left: 2, right: 2),
               child: Text(
                 username,
-                style: Theme.of(context).custom.textTheme.bodyText1.merge(
+                style: Theme.of(context).textTheme.bodyMedium!.merge(
                       const TextStyle(
                         color: Color.fromARGB(255, 79, 115, 234),
                       ),

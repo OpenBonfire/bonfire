@@ -60,19 +60,18 @@ class ReactionWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final theme = Theme.of(context).custom;
+    final theme = Theme.of(context);
+    final bonfireTheme = BonfireThemeExtension.of(context);
 
     return Container(
       height: 32,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
         color: reaction.me
-            ? theme.colorTheme.primary.withValues(alpha: 0.2)
-            : theme.colorTheme.foreground,
+            ? bonfireTheme.primary.withValues(alpha: 0.2)
+            : bonfireTheme.foreground,
         border: Border.all(
-          color: reaction.me
-              ? theme.colorTheme.primary
-              : theme.colorTheme.foreground,
+          color: reaction.me ? bonfireTheme.primary : bonfireTheme.foreground,
         ),
       ),
       child: InkWell(
@@ -103,7 +102,7 @@ class ReactionWidget extends ConsumerWidget {
               (reaction.emoji is TextEmoji)
                   ? SizedBox(
                       child: Text((reaction.emoji as TextEmoji).name,
-                          style: Theme.of(context).custom.textTheme.bodyText1),
+                          style: Theme.of(context).textTheme.bodyMedium!),
                     )
                   : ClipRRect(
                       borderRadius: BorderRadius.circular(4),
@@ -116,7 +115,7 @@ class ReactionWidget extends ConsumerWidget {
               const SizedBox(width: 4),
               Text(
                 reaction.count.toString(),
-                style: Theme.of(context).custom.textTheme.bodyText1,
+                style: Theme.of(context).textTheme.bodyMedium!,
                 textAlign: TextAlign.center,
               ),
             ],

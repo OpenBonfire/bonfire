@@ -90,7 +90,7 @@ class GuildFolderWidgetState extends ConsumerState<GuildFolderWidget>
       width: 23,
       height: 23,
       decoration: BoxDecoration(
-        color: Theme.of(context).custom.colorTheme.background,
+        color: BonfireThemeExtension.of(context).background,
         borderRadius: BorderRadius.circular(20),
       ),
       child: Stack(
@@ -99,7 +99,7 @@ class GuildFolderWidgetState extends ConsumerState<GuildFolderWidget>
             padding: const EdgeInsets.all(3),
             child: Container(
               decoration: BoxDecoration(
-                color: Theme.of(context).custom.colorTheme.red,
+                color: BonfireThemeExtension.of(context).red,
                 borderRadius: BorderRadius.circular(20),
               ),
             ),
@@ -109,7 +109,7 @@ class GuildFolderWidgetState extends ConsumerState<GuildFolderWidget>
             child: Center(
               child: Text(
                 count.toString(),
-                style: Theme.of(context).custom.textTheme.bodyText1.copyWith(
+                style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                       fontSize: 11,
                       fontWeight: FontWeight.w600,
                       color: Colors.white,
@@ -145,11 +145,14 @@ class GuildFolderWidgetState extends ConsumerState<GuildFolderWidget>
     bool hasUnreadsInFolder = _hasUnreadsInFolder(folderGuilds, ref);
     int totalMentions = _getTotalMentionsInFolder(folderGuilds, ref);
 
+    // TODO: WHAT THE FUCK
     setState(() {
       if (hasUnreadsInFolder && !_isExpanded) {
         _iconHeight = 8;
       }
     });
+
+    final bonfireTheme = BonfireThemeExtension.of(context);
 
     return Stack(
       children: [
@@ -158,7 +161,7 @@ class GuildFolderWidgetState extends ConsumerState<GuildFolderWidget>
             height: (boxHeight <= 10) ? 0 : boxHeight + 50 - 8,
             width: 50,
             decoration: BoxDecoration(
-              color: Theme.of(context).custom.colorTheme.foreground,
+              color: BonfireThemeExtension.of(context).foreground,
               borderRadius: BorderRadius.circular(36),
             ),
           ),
@@ -197,11 +200,7 @@ class GuildFolderWidgetState extends ConsumerState<GuildFolderWidget>
                                                   .toString(),
                                               radix: 10))
                                           .withOpacity(0.5)
-                                      : Theme.of(context)
-                                          .custom
-                                          .colorTheme
-                                          .primary
-                                          .withOpacity(0.5),
+                                      : bonfireTheme.primary.withOpacity(0.5),
                                   borderRadius: BorderRadius.circular(16),
                                 ),
                                 width: 50,
@@ -232,19 +231,13 @@ class GuildFolderWidgetState extends ConsumerState<GuildFolderWidget>
                             opacity: _expandAnimation.value,
                             child: Center(
                               child: FolderIcon(
-                                color: (widget.guildFolder.color != null)
-                                    ? Color(int.parse(
-                                            widget.guildFolder.color.toString(),
-                                            radix: 10))
-                                        .withOpacity(1)
-                                    : Color(
-                                        Theme.of(context)
-                                            .custom
-                                            .colorTheme
-                                            .primary
-                                            .value,
-                                      ),
-                              ),
+                                  color: (widget.guildFolder.color != null)
+                                      ? Color(int.parse(
+                                              widget.guildFolder.color
+                                                  .toString(),
+                                              radix: 10))
+                                          .withOpacity(1)
+                                      : bonfireTheme.primary),
                             ),
                           ),
                           if (totalMentions > 0 && !_isExpanded)

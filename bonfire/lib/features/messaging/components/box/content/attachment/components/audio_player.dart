@@ -88,7 +88,7 @@ class _AudioAttachmentState extends State<AudioAttachment> {
         width: min(800, MediaQuery.sizeOf(context).width - 90),
         child: Container(
           decoration: BoxDecoration(
-            color: Theme.of(context).custom.colorTheme.foreground,
+            color: BonfireThemeExtension.of(context).foreground,
             borderRadius: BorderRadius.circular(8),
           ),
           child: Padding(
@@ -130,7 +130,7 @@ class _AudioAttachmentState extends State<AudioAttachment> {
                       child: Expanded(
                         child: Slider(
                           activeColor:
-                              Theme.of(context).custom.colorTheme.primary,
+                              BonfireThemeExtension.of(context).primary,
                           onChanged: (value) {
                             final duration = _duration;
                             if (duration == null) {

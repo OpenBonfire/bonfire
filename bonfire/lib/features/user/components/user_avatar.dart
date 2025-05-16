@@ -50,9 +50,9 @@ class _UserAvatarState extends ConsumerState<UserAvatar> {
 
   // TODO: makle this actually work
   Widget _buildShimmerEffect() {
-    final theme = Theme.of(context).custom;
+    final bonfireTheme = BonfireThemeExtension.of(context);
     return Shimmer.fromColors(
-      baseColor: theme.colorTheme.foreground,
+      baseColor: bonfireTheme.foreground,
       highlightColor: Colors.white,
       child: const SizedBox(
         width: 35,

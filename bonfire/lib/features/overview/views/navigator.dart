@@ -73,10 +73,10 @@ class _BarWidgetState extends ConsumerState<NavigationBarWidget> {
       children: [
         Container(
           decoration: BoxDecoration(
-            color: Theme.of(context).custom.colorTheme.darkGray,
+            color: BonfireThemeExtension.of(context).darkGray,
             border: Border(
               top: BorderSide(
-                color: Theme.of(context).custom.colorTheme.foreground,
+                color: BonfireThemeExtension.of(context).foreground,
                 width: 1,
               ),
             ),
@@ -119,7 +119,7 @@ class _BarWidgetState extends ConsumerState<NavigationBarWidget> {
         ),
         Container(
           decoration: BoxDecoration(
-            color: Theme.of(context).custom.colorTheme.darkGray,
+            color: BonfireThemeExtension.of(context).darkGray,
           ),
           height: MediaQuery.paddingOf(context).bottom,
         )
@@ -171,8 +171,8 @@ class NavigatorIcon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final color = selected
-        ? Theme.of(context).custom.colorTheme.dirtyWhite
-        : Theme.of(context).custom.colorTheme.gray;
+        ? BonfireThemeExtension.of(context).dirtyWhite
+        : BonfireThemeExtension.of(context).gray;
 
     return InkWell(
       onTap: () {
@@ -193,14 +193,14 @@ class NavigatorIcon extends StatelessWidget {
               height: 25,
             ),
             DefaultTextStyle(
-              style: Theme.of(context).custom.textTheme.subtitle2.copyWith(
+              style: Theme.of(context).textTheme.labelMedium!.copyWith(
                     fontSize: 9,
                     color: color,
                   ),
               child: Text(
                 label,
                 textAlign: TextAlign.center,
-                style: Theme.of(context).custom.textTheme.subtitle2.copyWith(
+                style: Theme.of(context).textTheme.labelMedium!.copyWith(
                       fontSize: 9,
                       color: color,
                     ),

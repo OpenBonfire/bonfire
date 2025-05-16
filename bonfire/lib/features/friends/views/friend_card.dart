@@ -43,8 +43,8 @@ class _FriendCardState extends ConsumerState<FriendCard> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(4),
           ),
-          foregroundColor: Theme.of(context).custom.colorTheme.dirtyWhite,
-          backgroundColor: Theme.of(context).custom.colorTheme.foreground,
+          foregroundColor: BonfireThemeExtension.of(context).dirtyWhite,
+          backgroundColor: BonfireThemeExtension.of(context).foreground,
         ),
         onPressed: () {},
         child: Row(
@@ -65,7 +65,7 @@ class _FriendCardState extends ConsumerState<FriendCard> {
                 children: [
                   Text(
                     widget.user.globalName ?? widget.user.username,
-                    style: Theme.of(context).custom.textTheme.subtitle1,
+                    style: Theme.of(context).textTheme.labelMedium,
                     overflow: TextOverflow.ellipsis,
                   ),
                   PresenceText(

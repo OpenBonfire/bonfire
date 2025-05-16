@@ -59,7 +59,9 @@ class _LocalAccountSwitcherScreenState
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context).custom;
+    final bonfireTheme = BonfireThemeExtension.of(context);
+    final theme = Theme.of(context);
+
     final padding = shouldUseMobileLayout(context)
         ? MediaQuery.paddingOf(context)
         : EdgeInsets.zero;
@@ -76,7 +78,7 @@ class _LocalAccountSwitcherScreenState
           right: 24,
           bottom: padding.bottom + 24),
       decoration: BoxDecoration(
-        color: Theme.of(context).custom.colorTheme.background,
+        color: BonfireThemeExtension.of(context).background,
         borderRadius: BorderRadius.circular(24),
       ),
       child: Column(
@@ -86,8 +88,8 @@ class _LocalAccountSwitcherScreenState
               children: [
                 Text(
                   "Switch Account",
-                  style: theme.textTheme.titleMedium.copyWith(
-                      color: theme.colorTheme.dirtyWhite,
+                  style: theme.textTheme.titleMedium!.copyWith(
+                      color: bonfireTheme.dirtyWhite,
                       fontWeight: FontWeight.w600),
                 ),
                 const SizedBox(height: 24),
@@ -116,7 +118,7 @@ class _LocalAccountSwitcherScreenState
                     PageRouteBuilder(
                       opaque: true,
                       pageBuilder: (_, __, ___) => Material(
-                          color: Theme.of(context).custom.colorTheme.background,
+                          color: BonfireThemeExtension.of(context).background,
                           child: const PlatformLoginWidget()),
                     ),
                   );
@@ -156,8 +158,8 @@ class _LocalAccountCard extends ConsumerWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
         ),
-        foregroundColor: Theme.of(context).custom.colorTheme.dirtyWhite,
-        backgroundColor: Theme.of(context).custom.colorTheme.foreground,
+        foregroundColor: BonfireThemeExtension.of(context).dirtyWhite,
+        backgroundColor: BonfireThemeExtension.of(context).foreground,
       ),
       child: SizedBox(
         width: double.infinity,
@@ -171,7 +173,7 @@ class _LocalAccountCard extends ConsumerWidget {
                       child: CachedNetworkImage(imageUrl: account.avatar))),
               const SizedBox(width: 12),
               Text(account.username,
-                  style: Theme.of(context).custom.textTheme.titleSmall),
+                  style: Theme.of(context).textTheme.titleSmall),
             ],
           ),
         ),

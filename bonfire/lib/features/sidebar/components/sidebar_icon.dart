@@ -77,15 +77,14 @@ class _SidebarIconState extends ConsumerState<SidebarIcon> {
               .map((word) => word.isNotEmpty ? word[0] : '')
               .join();
           return Container(
-            color: Theme.of(context).custom.colorTheme.foreground,
+            color: BonfireThemeExtension.of(context).foreground,
             child: Center(
               child: Text(
                 iconText,
                 overflow: TextOverflow.ellipsis,
                 style: Theme.of(context)
-                    .custom
                     .textTheme
-                    .titleSmall
+                    .titleSmall!
                     .copyWith(fontSize: widget.mini ? 3 : 12),
               ),
             ),

@@ -38,7 +38,7 @@ class _PresenceTextState extends ConsumerState<PresenceText> {
         maxLines: 1,
         text: TextSpan(
           style: GoogleFonts.publicSans(
-            color: Theme.of(context).custom.colorTheme.gray,
+            color: BonfireThemeExtension.of(context).gray,
             fontWeight: FontWeight.w400,
             fontSize: 13,
           ),

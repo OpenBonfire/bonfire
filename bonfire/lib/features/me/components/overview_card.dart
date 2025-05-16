@@ -20,7 +20,7 @@ class OverviewCard extends StatelessWidget {
                   child: Text(
                     overflow: TextOverflow.ellipsis,
                     "Messages",
-                    style: CustomTextTheme().titleSmall.copyWith(
+                    style: Theme.of(context).textTheme.titleSmall!.copyWith(
                           color: Colors.white,
                         ),
                   ),

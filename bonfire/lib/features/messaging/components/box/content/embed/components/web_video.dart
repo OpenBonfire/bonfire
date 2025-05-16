@@ -76,13 +76,13 @@ class _WebVideoState extends ConsumerState<WebVideo> {
         borderRadius: BorderRadius.circular(8),
         child: Container(
           decoration: BoxDecoration(
-            color: Theme.of(context).custom.colorTheme.red,
+            color: BonfireThemeExtension.of(context).red,
           ),
           child: Padding(
             padding: const EdgeInsets.only(left: 5),
             child: Container(
               decoration: BoxDecoration(
-                color: Theme.of(context).custom.colorTheme.foreground,
+                color: BonfireThemeExtension.of(context).foreground,
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -96,9 +96,8 @@ class _WebVideoState extends ConsumerState<WebVideo> {
                             widget.embed.provider?.name ?? "Provider not found",
                             textAlign: TextAlign.start,
                             style: Theme.of(context)
-                                .custom
                                 .textTheme
-                                .bodyText2
+                                .bodyMedium!
                                 .copyWith(
                                     color: const Color.fromARGB(
                                         255, 172, 172, 172),
@@ -107,9 +106,8 @@ class _WebVideoState extends ConsumerState<WebVideo> {
                         Text(widget.embed.title ?? "Title not found",
                             textAlign: TextAlign.start,
                             style: Theme.of(context)
-                                .custom
                                 .textTheme
-                                .bodyText2
+                                .bodyMedium!
                                 .copyWith(fontSize: 14)),
                       ],
                     ),

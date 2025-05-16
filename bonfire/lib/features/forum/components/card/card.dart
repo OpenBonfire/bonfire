@@ -33,13 +33,15 @@ class _ThreadCardState extends ConsumerState<ThreadCard> {
 
     Message? previewMessage = ref.watch(firstMessageProvider(widget.threadId));
 
+    final bonfireTheme = BonfireThemeExtension.of(context);
+
     return Container(
       decoration: BoxDecoration(
-        color: Theme.of(context).custom.colorTheme.foreground,
+        color: BonfireThemeExtension.of(context).foreground,
         borderRadius: BorderRadius.circular(8),
       ),
       child: InkWell(
-        // hoverColor: Theme.of(context).custom.colorTheme.foreground,
+        // hoverColor: BonfireThemeExtension.of(context).foreground,
         splashColor: Colors.white,
         borderRadius: BorderRadius.circular(8),
         onTap: () {
@@ -60,7 +62,7 @@ class _ThreadCardState extends ConsumerState<ThreadCard> {
                   children: [
                     Text(
                       thread.name,
-                      style: Theme.of(context).custom.textTheme.titleSmall,
+                      style: Theme.of(context).textTheme.titleSmall,
                     ),
                     if (previewMessage != null)
                       ConstrainedBox(
@@ -68,7 +70,7 @@ class _ThreadCardState extends ConsumerState<ThreadCard> {
                             const BoxConstraints(maxHeight: 50, minHeight: 0),
                         child: Text(
                           previewMessage.content,
-                          style: Theme.of(context).custom.textTheme.bodyText2,
+                          style: Theme.of(context).textTheme.bodyMedium,
                           overflow: TextOverflow.ellipsis,
                           maxLines: 2,
                         ),
