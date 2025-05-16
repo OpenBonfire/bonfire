@@ -65,40 +65,38 @@ class GlobalDrawerState extends State<GlobalDrawer>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
-        children: [
-          widget.child,
-          RubberBottomSheet(
-            lowerLayer: Container(),
-            upperLayer: Scaffold(
-              backgroundColor: Colors.transparent,
-              body: Container(
-                width: double.infinity,
-                height: double.infinity,
-                decoration: BoxDecoration(
-                  color: BonfireThemeExtension.of(context).background,
-                  borderRadius:
-                      const BorderRadius.vertical(top: Radius.circular(16)),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.1),
-                      spreadRadius: 0,
-                      blurRadius: 10,
-                      offset: const Offset(0, -2),
-                    ),
-                  ],
-                ),
-                child: SizedBox(
-                  height: MediaQuery.sizeOf(context).height,
-                  child: child,
-                ),
+    return Stack(
+      children: [
+        widget.child,
+        RubberBottomSheet(
+          lowerLayer: Container(),
+          upperLayer: Scaffold(
+            backgroundColor: Colors.transparent,
+            body: Container(
+              width: double.infinity,
+              height: double.infinity,
+              decoration: BoxDecoration(
+                color: BonfireThemeExtension.of(context).background,
+                borderRadius:
+                    const BorderRadius.vertical(top: Radius.circular(16)),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.1),
+                    spreadRadius: 0,
+                    blurRadius: 10,
+                    offset: const Offset(0, -2),
+                  ),
+                ],
+              ),
+              child: SizedBox(
+                height: MediaQuery.sizeOf(context).height,
+                child: child,
               ),
             ),
-            animationController: controller,
           ),
-        ],
-      ),
+          animationController: controller,
+        ),
+      ],
     );
   }
 }

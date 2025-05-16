@@ -42,15 +42,13 @@ class _MessageViewState extends ConsumerState<MessageView> {
       return const Center(child: CircularProgressIndicator());
     }
 
-    return Scaffold(
-      body: Center(
-          child: Text(
-        'Select a channel',
-        style: GoogleFonts.publicSans(
-          fontSize: 24,
-          fontWeight: FontWeight.w600,
-        ),
-      )),
-    );
+    return Center(
+        child: Text(
+      'Select a channel',
+      style: GoogleFonts.publicSans(
+        fontSize: 24,
+        fontWeight: FontWeight.w600,
+      ),
+    ));
   }
 }

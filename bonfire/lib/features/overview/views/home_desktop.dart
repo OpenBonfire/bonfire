@@ -43,69 +43,66 @@ class _HomeState extends ConsumerState<HomeDesktop> {
     bool isVisible = ref.watch(memberListVisibilityProvider);
     int channelListWidth = ref.watch(channelListWidthProvider);
 
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: Stack(
-        children: [
-          Row(
-            children: [
-              Sidebar(
-                guildId: widget.guildId,
-              ),
+    return Stack(
+      children: [
+        Row(
+          children: [
+            Sidebar(
+              guildId: widget.guildId,
+            ),
+            SizedBox(
+              width: channelListWidth.toDouble(),
+              child: (widget.guildId != Snowflake.zero)
+                  ? ChannelsList(
+                      guildId: widget.guildId,
+                      channelId: widget.channelId,
+                    )
+                  : PrivateMessages(channelId: widget.channelId),
+            ),
+            Flexible(
+              child: (widget.channelId != Snowflake.zero)
+                  ? MessageView(
+                      guildId: widget.guildId,
+                      channelId: widget.channelId,
+                      threadId: widget.threadId,
+                    )
+                  : FriendsList(channelId: Snowflake.zero),
+            ),
+            if (isVisible)
               SizedBox(
-                width: channelListWidth.toDouble(),
-                child: (widget.guildId != Snowflake.zero)
-                    ? ChannelsList(
-                        guildId: widget.guildId,
-                        channelId: widget.channelId,
-                      )
-                    : PrivateMessages(channelId: widget.channelId),
-              ),
-              Flexible(
+                width: 255,
                 child: (widget.channelId != Snowflake.zero)
-                    ? MessageView(
-                        guildId: widget.guildId,
-                        channelId: widget.channelId,
-                        threadId: widget.threadId,
-                      )
-                    : FriendsList(channelId: Snowflake.zero),
-              ),
-              if (isVisible)
-                SizedBox(
-                  width: 255,
-                  child: (widget.channelId != Snowflake.zero)
-                      ? MemberList(
-                          guildId: widget.guildId, channelId: widget.channelId)
-                      : const SizedBox(),
-                )
-            ],
-          ),
-          Positioned(
-            left: sidebarWidth + channelListWidth,
-            top: 0,
-            bottom: 0,
-            child: GestureDetector(
-              onHorizontalDragUpdate: (details) {
-                final RenderBox box = context.findRenderObject() as RenderBox;
-                final localPosition = box.globalToLocal(details.globalPosition);
-                final newWidth = (localPosition.dx - sidebarWidth).toInt();
+                    ? MemberList(
+                        guildId: widget.guildId, channelId: widget.channelId)
+                    : const SizedBox(),
+              )
+          ],
+        ),
+        Positioned(
+          left: sidebarWidth + channelListWidth,
+          top: 0,
+          bottom: 0,
+          child: GestureDetector(
+            onHorizontalDragUpdate: (details) {
+              final RenderBox box = context.findRenderObject() as RenderBox;
+              final localPosition = box.globalToLocal(details.globalPosition);
+              final newWidth = (localPosition.dx - sidebarWidth).toInt();
 
-                if (newWidth >= minChannelListWidth &&
-                    newWidth <= maxChannelListWidth) {
-                  ref.read(channelListWidthProvider.notifier).setSize(newWidth);
-                }
-              },
-              child: MouseRegion(
-                cursor: SystemMouseCursors.resizeLeftRight,
-                child: Container(
-                  width: 4,
-                  // color: Theme.of(context).dividerColor.withOpacity(0.3),
-                ),
+              if (newWidth >= minChannelListWidth &&
+                  newWidth <= maxChannelListWidth) {
+                ref.read(channelListWidthProvider.notifier).setSize(newWidth);
+              }
+            },
+            child: MouseRegion(
+              cursor: SystemMouseCursors.resizeLeftRight,
+              child: Container(
+                width: 4,
+                // color: Theme.of(context).dividerColor.withOpacity(0.3),
               ),
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

@@ -85,51 +85,49 @@ class _MFAPageState extends ConsumerState<MFAPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Column(
-          children: [
-            Expanded(
-              child: SingleChildScrollView(
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "Multi Factor Authentication",
-                        style: Theme.of(context).textTheme.titleLarge,
-                        textAlign: TextAlign.center,
+    return Center(
+      child: Column(
+        children: [
+          Expanded(
+            child: SingleChildScrollView(
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Multi Factor Authentication",
+                      style: Theme.of(context).textTheme.titleLarge,
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 30),
+                    Text(
+                      "Enter your second factor code. This can be found in your authenticator app.",
+                      style: GoogleFonts.publicSans(
+                        color: const Color(0xFFC8C8C8),
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
                       ),
-                      const SizedBox(height: 30),
-                      Text(
-                        "Enter your second factor code. This can be found in your authenticator app.",
-                        style: GoogleFonts.publicSans(
-                          color: const Color(0xFFC8C8C8),
-                          fontSize: 18,
-                          fontWeight: FontWeight.w600,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: 30),
-                      mfaBox(),
-                      const SizedBox(height: 40),
-                    ],
-                  ),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 30),
+                    mfaBox(),
+                    const SizedBox(height: 40),
+                  ],
                 ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(16),
-              child: ConfirmButton(
-                text: "Sign In",
-                onPressed: submitMFA,
-              ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: ConfirmButton(
+              text: "Sign In",
+              onPressed: submitMFA,
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

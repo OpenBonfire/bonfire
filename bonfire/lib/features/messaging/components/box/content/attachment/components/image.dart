@@ -149,29 +149,27 @@ class _FullscreenImageViewState extends State<FullscreenImageView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.transparent,
-      body: GestureDetector(
-        onTap: () => Navigator.of(context).pop(),
-        child: InteractiveViewer(
-          transformationController: _controller,
-          minScale: 0.5,
-          maxScale: 5,
-          child: GestureDetector(
-            onDoubleTapDown: _handleDoubleTapDown,
-            onDoubleTap: _handleDoubleTap,
-            child: Center(
-                child: (widget.placeholder != null)
-                    ? FadeInImage(
-                        placeholder: widget.placeholder!.toImage(),
-                        image: NetworkImage(widget.imageUrl),
-                        fit: BoxFit.contain,
-                      )
-                    : Image.network(
-                        widget.imageUrl,
-                        fit: BoxFit.contain,
-                      )),
-          ),
+    // TODO: Do we need this scaffold?
+    return GestureDetector(
+      onTap: () => Navigator.of(context).pop(),
+      child: InteractiveViewer(
+        transformationController: _controller,
+        minScale: 0.5,
+        maxScale: 5,
+        child: GestureDetector(
+          onDoubleTapDown: _handleDoubleTapDown,
+          onDoubleTap: _handleDoubleTap,
+          child: Center(
+              child: (widget.placeholder != null)
+                  ? FadeInImage(
+                      placeholder: widget.placeholder!.toImage(),
+                      image: NetworkImage(widget.imageUrl),
+                      fit: BoxFit.contain,
+                    )
+                  : Image.network(
+                      widget.imageUrl,
+                      fit: BoxFit.contain,
+                    )),
         ),
       ),
     );

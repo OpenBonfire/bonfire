@@ -141,42 +141,40 @@ class _PrivateMessagesState extends ConsumerState<PrivateMessages> {
 
     final bonfireTheme = BonfireThemeExtension.of(context);
 
-    return Scaffold(
-      body: Padding(
-          padding: EdgeInsets.only(left: 8, top: topPadding, bottom: 0),
-          child: SizedBox(
-              width: double.infinity,
-              child: Container(
-                  decoration: BoxDecoration(
-                      color: BonfireThemeExtension.of(context).background,
-                      borderRadius: const BorderRadius.only(
-                        topLeft: Radius.circular(24),
-                        bottomLeft: Radius.circular(24),
-                      ),
-                      border: Border(
-                          bottom: BorderSide(
-                              color: bonfireTheme.foreground, width: 1.0))),
-                  child: Column(
-                    children: [
-                      Expanded(
-                        child: ListView.builder(
-                          padding: EdgeInsets.only(bottom: bottomPadding),
-                          itemCount: dms.length,
-                          itemBuilder: (context, index) {
-                            if (index == 0) {
-                              return TopButtons(
-                                channelId: widget.channelId,
-                              );
-                            }
-                            return DirectMessageMember(
-                              privateChannel: dms[index - 1],
-                              currentChannelId: widget.channelId,
+    return Padding(
+        padding: EdgeInsets.only(left: 8, top: topPadding, bottom: 0),
+        child: SizedBox(
+            width: double.infinity,
+            child: Container(
+                decoration: BoxDecoration(
+                    color: BonfireThemeExtension.of(context).background,
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(24),
+                      bottomLeft: Radius.circular(24),
+                    ),
+                    border: Border(
+                        bottom: BorderSide(
+                            color: bonfireTheme.foreground, width: 1.0))),
+                child: Column(
+                  children: [
+                    Expanded(
+                      child: ListView.builder(
+                        padding: EdgeInsets.only(bottom: bottomPadding),
+                        itemCount: dms.length,
+                        itemBuilder: (context, index) {
+                          if (index == 0) {
+                            return TopButtons(
+                              channelId: widget.channelId,
                             );
-                          },
-                        ),
+                          }
+                          return DirectMessageMember(
+                            privateChannel: dms[index - 1],
+                            currentChannelId: widget.channelId,
+                          );
+                        },
                       ),
-                    ],
-                  )))),
-    );
+                    ),
+                  ],
+                ))));
   }
 }

@@ -86,75 +86,71 @@ class _HomeState extends ConsumerState<HomeMobile>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      backgroundColor: BonfireThemeExtension.of(context).background,
-      body: Stack(
-        children: [
-          OverlappingPanels(
-            key: _panelsKey,
-            onSideChange: (value) {
-              FocusScope.of(context).unfocus();
-              setState(() {
-                currentPanel = value;
-                if (value != RevealSide.left) {
-                  _animationController.reverse();
-                }
-              });
-              ref.read(navigationBarProvider.notifier).onSideChange(value);
-            },
-            left: SizedBox(
-              width: MediaQuery.sizeOf(context).width,
-              child: Row(
-                children: [
-                  Sidebar(guildId: widget.guildId),
-                  Expanded(
-                    child: (widget.guildId != Snowflake.zero)
-                        ? ChannelsList(
-                            guildId: widget.guildId,
-                            channelId: widget.channelId,
-                          )
-                        : PrivateMessages(
-                            channelId: widget.channelId,
-                          ),
-                  )
-                ],
-              ),
+    return Stack(
+      children: [
+        OverlappingPanels(
+          key: _panelsKey,
+          onSideChange: (value) {
+            FocusScope.of(context).unfocus();
+            setState(() {
+              currentPanel = value;
+              if (value != RevealSide.left) {
+                _animationController.reverse();
+              }
+            });
+            ref.read(navigationBarProvider.notifier).onSideChange(value);
+          },
+          left: SizedBox(
+            width: MediaQuery.sizeOf(context).width,
+            child: Row(
+              children: [
+                Sidebar(guildId: widget.guildId),
+                Expanded(
+                  child: (widget.guildId != Snowflake.zero)
+                      ? ChannelsList(
+                          guildId: widget.guildId,
+                          channelId: widget.channelId,
+                        )
+                      : PrivateMessages(
+                          channelId: widget.channelId,
+                        ),
+                )
+              ],
             ),
-            main: (widget.channelId != Snowflake.zero)
-                ? MessageView(
-                    guildId: widget.guildId,
-                    channelId: widget.channelId,
-                    threadId: widget.threadId,
-                  )
-                : FriendsList(
-                    channelId: Snowflake.zero,
-                  ),
-            right: (widget.channelId != Snowflake.zero)
-                ? MemberList(
-                    guildId: widget.guildId,
-                    channelId: widget.channelId,
-                  )
-                : const SizedBox(),
-            restWidth: isSmartwatch(context) ? 0.0 : 0.0,
           ),
-          if (!isSmartwatch(context)) const NavigationBarWidget(),
-          if (isSmartwatch(context))
-            Positioned(
-              top: 15,
-              left: 15,
-              child: FadeTransition(
-                opacity: _animation,
-                child: FloatingActionButton(
-                  mini: true,
-                  backgroundColor: Colors.black.withOpacity(0.5),
-                  onPressed: _cyclePanel,
-                  child: const Icon(Icons.arrow_back, color: Colors.white),
+          main: (widget.channelId != Snowflake.zero)
+              ? MessageView(
+                  guildId: widget.guildId,
+                  channelId: widget.channelId,
+                  threadId: widget.threadId,
+                )
+              : FriendsList(
+                  channelId: Snowflake.zero,
                 ),
+          right: (widget.channelId != Snowflake.zero)
+              ? MemberList(
+                  guildId: widget.guildId,
+                  channelId: widget.channelId,
+                )
+              : const SizedBox(),
+          restWidth: isSmartwatch(context) ? 0.0 : 0.0,
+        ),
+        if (!isSmartwatch(context)) const NavigationBarWidget(),
+        if (isSmartwatch(context))
+          Positioned(
+            top: 15,
+            left: 15,
+            child: FadeTransition(
+              opacity: _animation,
+              child: FloatingActionButton(
+                mini: true,
+                backgroundColor: Colors.black.withOpacity(0.5),
+                onPressed: _cyclePanel,
+                child: const Icon(Icons.arrow_back, color: Colors.white),
               ),
             ),
-        ],
-      ),
+          ),
+      ],
     );
   }
 }

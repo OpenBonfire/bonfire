@@ -48,71 +48,67 @@ class _ForumViewState extends ConsumerState<ForumView> {
     final channel = ref.watch(forumsProvider(widget.channelId)).valueOrNull;
 
     if (channel == null) {
-      return const Scaffold(
-        body: Center(
-          child: CircularProgressIndicator(),
-        ),
+      return const Center(
+        child: CircularProgressIndicator(),
       );
     }
 
     final postsAsync = ref.watch(forumPostsProvider(channel.id));
 
-    return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-        child: postsAsync.when(
-          data: (threadLists) {
-            // Combine all threads from the list of ThreadLists
-            threads = threadLists.expand((threadList) {
-              return threadList?.threads ?? [] as List<Channel>;
-            }).toList();
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+      child: postsAsync.when(
+        data: (threadLists) {
+          // Combine all threads from the list of ThreadLists
+          threads = threadLists.expand((threadList) {
+            return threadList?.threads ?? [] as List<Channel>;
+          }).toList();
 
-            return Stack(
-              children: [
-                ListView.builder(
-                  controller: _scrollController,
-                  itemCount: threads.length,
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding: const EdgeInsets.only(bottom: 8.0),
-                      child: ThreadCard(
-                        threadId: threads[index].id,
-                        channelId: channel.id,
-                      ),
-                    );
-                  },
-                  padding: EdgeInsets.only(
-                    top: MediaQuery.paddingOf(context).top + 60,
-                    bottom: MediaQuery.paddingOf(context).bottom,
-                  ),
+          return Stack(
+            children: [
+              ListView.builder(
+                controller: _scrollController,
+                itemCount: threads.length,
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 8.0),
+                    child: ThreadCard(
+                      threadId: threads[index].id,
+                      channelId: channel.id,
+                    ),
+                  );
+                },
+                padding: EdgeInsets.only(
+                  top: MediaQuery.paddingOf(context).top + 60,
+                  bottom: MediaQuery.paddingOf(context).bottom,
                 ),
-                ChannelHeader(
-                  channelId: channel.id,
+              ),
+              ChannelHeader(
+                channelId: channel.id,
+              ),
+            ],
+          );
+        },
+        loading: () => threads.isEmpty
+            ? const Center(child: CircularProgressIndicator())
+            : ListView.builder(
+                controller: _scrollController,
+                itemCount: threads.length,
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 8.0),
+                    child: ThreadCard(
+                      channelId: threads[index].id,
+                      threadId: threads[index].id,
+                    ),
+                  );
+                },
+                padding: const EdgeInsets.only(
+                  top: 8,
                 ),
-              ],
-            );
-          },
-          loading: () => threads.isEmpty
-              ? const Center(child: CircularProgressIndicator())
-              : ListView.builder(
-                  controller: _scrollController,
-                  itemCount: threads.length,
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding: const EdgeInsets.only(bottom: 8.0),
-                      child: ThreadCard(
-                        channelId: threads[index].id,
-                        threadId: threads[index].id,
-                      ),
-                    );
-                  },
-                  padding: const EdgeInsets.only(
-                    top: 8,
-                  ),
-                ),
-          error: (error, stack) => Center(
-            child: Text('Error: $error'),
-          ),
+              ),
+        error: (error, stack) => Center(
+          child: Text('Error: $error'),
         ),
       ),
     );

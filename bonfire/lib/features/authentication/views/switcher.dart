@@ -18,13 +18,11 @@ class _LoginScreenState extends ConsumerState<AccountSwitcherModel> {
   @override
   Widget build(BuildContext context) {
     // GoRouter.of(context).go("/switcher");
-    return Scaffold(
-      body: Container(
-        decoration:
-            BoxDecoration(color: BonfireThemeExtension.of(context).foreground),
-        width: 100,
-        height: 100,
-      ),
+    return Container(
+      decoration:
+          BoxDecoration(color: BonfireThemeExtension.of(context).foreground),
+      width: 100,
+      height: 100,
     );
   }
 }

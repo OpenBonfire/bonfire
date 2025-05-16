@@ -59,28 +59,26 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   Widget build(BuildContext context) {
     if (authMissing == null) {
       // TODO: Make sick bonfire loading screen
-      return Scaffold(
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text("Loading Bonfire...",
-                  style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                        color: Theme.of(context).textTheme.bodyMedium!.color!,
-                      )),
-              const SizedBox(height: 30),
-              LoadingAnimationWidget.fourRotatingDots(
-                color: Theme.of(context).textTheme.bodyMedium!.color!,
-                size: 50,
-              ),
-            ],
-          ),
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text("Loading Bonfire...",
+                style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                      color: Theme.of(context).textTheme.bodyMedium!.color!,
+                    )),
+            const SizedBox(height: 30),
+            LoadingAnimationWidget.fourRotatingDots(
+              color: Theme.of(context).textTheme.bodyMedium!.color!,
+              size: 50,
+            ),
+          ],
         ),
       );
     }
 
-    return const Scaffold(body: Center(child: PlatformLoginWidget()));
+    return const Center(child: PlatformLoginWidget());
   }
 
   void _navigateToLastLocation() {
