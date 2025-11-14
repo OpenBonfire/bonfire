@@ -22,13 +22,10 @@ A modern alternative to the Discord client. Use Discord without ever having to t
 | Android    | 🟩 Supported  | Fully functional                                                     |
 | iOS        | 🟩 Supported  | Functional but needs testing                                         |
 | Windows    | 🟩 Supported  | Fully functional                                                     |
-| MacOS      | 🟥 Broken     | Hypothetically close to working but needs fixes                      |
+| MacOS      | 🟩 Supported     | Hypothetically close to working but needs fixes                      |
 | Linux      | 🟩 Supported  | Fully functional                                                     |
 | WearOS     | 🟨 Partial    | Works but requires manual token input                                |
 | Web        | 🟩 Supported  | Functional but requires token login                                  |
-
-## Contributor Note
-***We are looking for Flutter developers with macOS devices***. Bonfire can definitely be run on macOS, but I do not have any apple devices to test with, so I cannot add support.
 
 
 ## General Goals / Ethic
@@ -43,7 +40,7 @@ To start, lets outline a few things.
 
 # Developing
 ## General Info
-Tthere's a few projects that OpenBonfire uses and maintains, which can be found in our org. Let's just talk about the big ones.
+There's a few projects that OpenBonfire uses and maintains, which can be found in our org. Let's just talk about the big ones.
 - [firebridge](https://github.com/OpenBonfire/bonfire/tree/main/firebridge): A fork of nyxx (a bot API for Dart) that allows the usage of user tokens. This is where most of the networking logic happens.
 - [fireview](https://github.com/OpenBonfire/fireview): A cross-platform webview API that combines multiple webview frameworks. We recently switched away from this because of conflicts on Windows and Linux. Ideally this is what we use in the future.
 
@@ -97,7 +94,7 @@ You may encounter issues on Linux (usually with packaging)
 2. **various media kit build errors**: You need `mpv` / `mpv-devel`. Fedora will require you to follow the fix for build issue 1.
 3. **symbol lookup error: /lib64/libmpv.so.2: undefined symbol: vkCreateXlibSurfaceKHR** You need to run `export LD_LIBRARY_PATH=/lib64:$LD_LIBRARY_PATH` in the same terminal you run bonfire from. This path should correspond to the location that libmpv is stored. I am looking to implement a proper fix for this.
 
-Don't forget to run `dart run build_runner watch` before developing! This is required when using freezed and riverpod.
+Don't forget to run `dart run build_runner watch -d` before developing! This is required when using freezed and riverpod.
 
 ## A quick note for contributors.
 We are looking for contributors! I would absolutely love to get this project completed, but it's pretty difficult time-wise. The pacing when I have time to work on it goes pretty fast though, so more people pitching in would be fantastic!

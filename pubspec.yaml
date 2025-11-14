@@ -5,7 +5,7 @@ publish_to: "none"
 version: 1.0.0+1
 
 environment:
-  sdk: ">=3.0.0 <3.22.3"
+  sdk: ^3.10.0
 
 dependencies:
   flutter:
@@ -14,13 +14,13 @@ dependencies:
     sdk: flutter
 
   firebridge:
-    path: ../firebridge
+    path: packages/firebridge
 
   markdown_viewer:
-    path: ../markdown_viewer
+    path: packages/markdown_viewer
 
   firebridge_extensions:
-    path: ../firebridge_extensions
+    path: packages/firebridge_extensions
 
   google_fonts: ^6.2.1
   flutter_riverpod: ^2.5.1
