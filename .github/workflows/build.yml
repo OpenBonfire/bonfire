@@ -47,9 +47,6 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
-      - name: Run code generation
-        run: dart run build_runner build --delete-conflicting-outputs
-
       - name: Build Android APK
         run: flutter build apk --no-tree-shake-icons -v
 
@@ -94,9 +91,6 @@ jobs:
 
       - name: Install dependencies
         run: flutter pub get
-
-      - name: Run code generation
-        run: dart run build_runner build --delete-conflicting-outputs
 
       - name: Build Windows
         env:
@@ -159,9 +153,6 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
-      - name: Run code generation
-        run: dart run build_runner build --delete-conflicting-outputs
-
       # - name: Update CMakeLists.txt
       #   run: |
       #     sed -i 's/target_link_libraries(${BINARY_NAME} PRIVATE PkgConfig::GTK/target_link_libraries(${BINARY_NAME} PRIVATE PkgConfig::GTK vulkan/' linux/CMakeLists.txt
@@ -197,10 +188,7 @@ jobs:
             
         - name: Install dependencies
           run: flutter pub get
-          
-        - name: Run code generation
-          run: dart run build_runner build --delete-conflicting-outputs
-          
+        
         - name: Setup Ruby for Fastlane
           uses: ruby/setup-ruby@v1
           with:
