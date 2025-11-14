@@ -16,8 +16,6 @@ jobs:
           channel: stable
       - name: Install dependencies
         run: flutter pub get
-      - name: Run code generation
-        run: dart run build_runner build --delete-conflicting-outputs
       - name: Create CNAME file
         run: echo "app.openbonfire.dev" > web/CNAME
       - name: Build and deploy
