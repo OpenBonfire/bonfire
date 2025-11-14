@@ -15,18 +15,14 @@ jobs:
         with:
           channel: stable
       - name: Install dependencies
-        working-directory: ./bonfire
         run: flutter pub get
       - name: Run code generation
-        working-directory: ./bonfire
         run: dart run build_runner build --delete-conflicting-outputs
       - name: Create CNAME file
-        working-directory: ./bonfire
         run: echo "app.openbonfire.dev" > web/CNAME
       - name: Build and deploy
         uses: OpenBonfire/flutter-gh-pages@main
         with:
-          workingDir: bonfire
           baseHref: /
           compileToWasm: true
           customArgs: --no-tree-shake-icons
@@ -51,15 +47,12 @@ jobs:
           channel: stable
 
       - name: Install dependencies
-        working-directory: ./bonfire
         run: flutter pub get
 
       - name: Run code generation
-        working-directory: ./bonfire
         run: dart run build_runner build --delete-conflicting-outputs
 
       - name: Build Android APK
-        working-directory: ./bonfire
         run: flutter build apk --no-tree-shake-icons -v
 
       - name: Upload APK
@@ -69,7 +62,6 @@ jobs:
           path: bonfire/build/app/outputs/flutter-apk/app-release.apk
 
       - name: Build Android App Bundle
-        working-directory: ./bonfire
         run: flutter build appbundle --no-tree-shake-icons -v
 
       - name: Upload App Bundle
@@ -103,15 +95,12 @@ jobs:
           channel: stable
 
       - name: Install dependencies
-        working-directory: ./bonfire
         run: flutter pub get
 
       - name: Run code generation
-        working-directory: ./bonfire
         run: dart run build_runner build --delete-conflicting-outputs
 
       - name: Build Windows
-        working-directory: ./bonfire
         env:
           CMAKE_ASM_NASM_COMPILER: "C:\Program Files\NASM\nasm.exe"
         run: flutter build windows -v
@@ -170,20 +159,16 @@ jobs:
           channel: stable
 
       - name: Install dependencies
-        working-directory: ./bonfire
         run: flutter pub get
 
       - name: Run code generation
-        working-directory: ./bonfire
         run: dart run build_runner build --delete-conflicting-outputs
 
       # - name: Update CMakeLists.txt
-      #   working-directory: ./bonfire
       #   run: |
       #     sed -i 's/target_link_libraries(${BINARY_NAME} PRIVATE PkgConfig::GTK/target_link_libraries(${BINARY_NAME} PRIVATE PkgConfig::GTK vulkan/' linux/CMakeLists.txt
 
       - name: Build Linux
-        working-directory: ./bonfire
         env:
           LD_LIBRARY_PATH: /usr/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH
         run: flutter build linux -v
@@ -213,11 +198,9 @@ jobs:
             channel: stable
             
         - name: Install dependencies
-          working-directory: ./bonfire
           run: flutter pub get
           
         - name: Run code generation
-          working-directory: ./bonfire
           run: dart run build_runner build --delete-conflicting-outputs
           
         - name: Setup Ruby for Fastlane
@@ -227,7 +210,6 @@ jobs:
             bundler-cache: true
             
         - name: Build iOS
-          working-directory: ./bonfire
           run: |
             flutter build ios --release --no-tree-shake-icons --no-codesign -v
             
@@ -245,7 +227,7 @@ jobs:
                       CODE_SIGNING_ALLOWED=NO
                       
         - name: Create IPA file
-          working-directory: ./bonfire/ios
+          working-directory: ./ios
           run: |
             mkdir -p Payload
             cp -R build/Runner.xcarchive/Products/Applications/Runner.app Payload
