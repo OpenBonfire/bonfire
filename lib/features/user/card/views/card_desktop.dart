@@ -21,7 +21,7 @@ class UserCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    User? user = ref.watch(selfUserProvider).valueOrNull;
+    User? user = ref.watch(selfUserProvider).value;
     UserStatus? status = ref.watch(selfStatusStateProvider);
     CustomStatus? customStatus = ref.watch(customStatusStateProvider);
     VoiceReadyEvent? voiceReady = ref.watch(voiceChannelControllerProvider);
@@ -30,14 +30,12 @@ class UserCard extends ConsumerWidget {
     String name = "";
 
     if (user != null) {
-      avatar = ref.watch(userAvatarProvider(user)).valueOrNull;
+      avatar = ref.watch(userAvatarProvider(user)).value;
       name = user.globalName ?? user.username;
     }
 
     return TextButton(
-      style: ButtonStyle(
-        padding: WidgetStateProperty.all(EdgeInsets.zero),
-      ),
+      style: ButtonStyle(padding: WidgetStateProperty.all(EdgeInsets.zero)),
       onPressed: () {
         showAccountSwitcherDialog(context, GoRouter.of(context));
       },
@@ -58,11 +56,9 @@ class UserCard extends ConsumerWidget {
                       padding: const EdgeInsets.only(bottom: 4),
                       child: Container(
                         height: 0.1,
-                        decoration: const BoxDecoration(
-                          color: Colors.white,
-                        ),
+                        decoration: const BoxDecoration(color: Colors.white),
                       ),
-                    )
+                    ),
                   ],
                 ),
               Row(
@@ -75,10 +71,7 @@ class UserCard extends ConsumerWidget {
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(10),
                           child: (avatar != null)
-                              ? Image.memory(
-                                  avatar,
-                                  fit: BoxFit.cover,
-                                )
+                              ? Image.memory(avatar, fit: BoxFit.cover)
                               : const SizedBox.shrink(),
                         ),
                       ),
@@ -90,7 +83,9 @@ class UserCard extends ConsumerWidget {
                           width: 12,
                           decoration: BoxDecoration(
                             color: getStatusColor(
-                                context, status ?? UserStatus.offline),
+                              context,
+                              status ?? UserStatus.offline,
+                            ),
                             borderRadius: BorderRadius.circular(6),
                           ),
                         ),

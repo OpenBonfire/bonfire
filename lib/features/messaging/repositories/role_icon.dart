@@ -13,17 +13,17 @@ part 'role_icon.g.dart';
 
 // role icon cache using flutter_cache_manager
 var roleIconCache = CacheManager(
-  Config(
-    'role_icon_cache',
-    maxNrOfCacheObjects: 1000,
-  ),
+  Config('role_icon_cache', maxNrOfCacheObjects: 1000),
 );
 
 @Riverpod(keepAlive: true)
 Future<Uint8List?> roleIcon(
-    RoleIconRef ref, Snowflake guildId, Snowflake authorId) async {
-  var member = ref.watch(getMemberProvider(guildId, authorId)).valueOrNull;
-  List<Role>? roles = ref.watch(getGuildRolesProvider(guildId)).valueOrNull;
+  Ref ref,
+  Snowflake guildId,
+  Snowflake authorId,
+) async {
+  var member = ref.watch(getMemberProvider(guildId, authorId)).value;
+  List<Role>? roles = ref.watch(getGuildRolesProvider(guildId)).value;
   if (member == null || roles == null) return null;
 
   String? url = getRoleIconUrl(member, roles);
@@ -43,8 +43,8 @@ Future<Uint8List?> roleIcon(
 
 @riverpod
 Future<Color> roleColor(Ref ref, Snowflake guildId, Snowflake authorId) async {
-  var member = ref.watch(getMemberProvider(guildId, authorId)).valueOrNull;
-  List<Role>? roles = ref.watch(getGuildRolesProvider(guildId)).valueOrNull;
+  var member = ref.watch(getMemberProvider(guildId, authorId)).value;
+  List<Role>? roles = ref.watch(getGuildRolesProvider(guildId)).value;
   if (member == null || roles == null) return Colors.white;
 
   return getRoleColor(member, roles);

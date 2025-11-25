@@ -6,180 +6,104 @@ part of 'channels.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$channelsHash() => r'3ee8db13955eb2ed7ba4696bfe8ff3c601daba93';
-
-/// Copied from Dart SDK
-class _SystemHash {
-  _SystemHash._();
-
-  static int combine(int hash, int value) {
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + value);
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + ((0x0007ffff & hash) << 10));
-    return hash ^ (hash >> 6);
-  }
-
-  static int finish(int hash) {
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + ((0x03ffffff & hash) << 3));
-    // ignore: parameter_assignments
-    hash = hash ^ (hash >> 11);
-    return 0x1fffffff & (hash + ((0x00003fff & hash) << 15));
-  }
-}
-
-abstract class _$Channels extends BuildlessAsyncNotifier<List<Channel>> {
-  late final Snowflake guildId;
-
-  FutureOr<List<Channel>> build(
-    Snowflake guildId,
-  );
-}
-
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
 /// A riverpod provider that fetches the channels for the current guild.
-///
-/// Copied from [Channels].
+
 @ProviderFor(Channels)
-const channelsProvider = ChannelsFamily();
+const channelsProvider = ChannelsFamily._();
 
 /// A riverpod provider that fetches the channels for the current guild.
-///
-/// Copied from [Channels].
-class ChannelsFamily extends Family<AsyncValue<List<Channel>>> {
+final class ChannelsProvider
+    extends $AsyncNotifierProvider<Channels, List<Channel>> {
   /// A riverpod provider that fetches the channels for the current guild.
-  ///
-  /// Copied from [Channels].
-  const ChannelsFamily();
+  const ChannelsProvider._({
+    required ChannelsFamily super.from,
+    required Snowflake super.argument,
+  }) : super(
+         retry: null,
+         name: r'channelsProvider',
+         isAutoDispose: false,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
 
-  /// A riverpod provider that fetches the channels for the current guild.
-  ///
-  /// Copied from [Channels].
-  ChannelsProvider call(
-    Snowflake guildId,
-  ) {
-    return ChannelsProvider(
-      guildId,
-    );
+  @override
+  String debugGetCreateSourceHash() => _$channelsHash();
+
+  @override
+  String toString() {
+    return r'channelsProvider'
+        ''
+        '($argument)';
   }
 
+  @$internal
   @override
-  ChannelsProvider getProviderOverride(
-    covariant ChannelsProvider provider,
-  ) {
-    return call(
-      provider.guildId,
-    );
-  }
-
-  static const Iterable<ProviderOrFamily>? _dependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
-
-  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
-      _allTransitiveDependencies;
-
-  @override
-  String? get name => r'channelsProvider';
-}
-
-/// A riverpod provider that fetches the channels for the current guild.
-///
-/// Copied from [Channels].
-class ChannelsProvider
-    extends AsyncNotifierProviderImpl<Channels, List<Channel>> {
-  /// A riverpod provider that fetches the channels for the current guild.
-  ///
-  /// Copied from [Channels].
-  ChannelsProvider(
-    Snowflake guildId,
-  ) : this._internal(
-          () => Channels()..guildId = guildId,
-          from: channelsProvider,
-          name: r'channelsProvider',
-          debugGetCreateSourceHash:
-              const bool.fromEnvironment('dart.vm.product')
-                  ? null
-                  : _$channelsHash,
-          dependencies: ChannelsFamily._dependencies,
-          allTransitiveDependencies: ChannelsFamily._allTransitiveDependencies,
-          guildId: guildId,
-        );
-
-  ChannelsProvider._internal(
-    super._createNotifier, {
-    required super.name,
-    required super.dependencies,
-    required super.allTransitiveDependencies,
-    required super.debugGetCreateSourceHash,
-    required super.from,
-    required this.guildId,
-  }) : super.internal();
-
-  final Snowflake guildId;
-
-  @override
-  FutureOr<List<Channel>> runNotifierBuild(
-    covariant Channels notifier,
-  ) {
-    return notifier.build(
-      guildId,
-    );
-  }
-
-  @override
-  Override overrideWith(Channels Function() create) {
-    return ProviderOverride(
-      origin: this,
-      override: ChannelsProvider._internal(
-        () => create()..guildId = guildId,
-        from: from,
-        name: null,
-        dependencies: null,
-        allTransitiveDependencies: null,
-        debugGetCreateSourceHash: null,
-        guildId: guildId,
-      ),
-    );
-  }
-
-  @override
-  AsyncNotifierProviderElement<Channels, List<Channel>> createElement() {
-    return _ChannelsProviderElement(this);
-  }
+  Channels create() => Channels();
 
   @override
   bool operator ==(Object other) {
-    return other is ChannelsProvider && other.guildId == guildId;
+    return other is ChannelsProvider && other.argument == argument;
   }
 
   @override
   int get hashCode {
-    var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, guildId.hashCode);
-
-    return _SystemHash.finish(hash);
+    return argument.hashCode;
   }
 }
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-mixin ChannelsRef on AsyncNotifierProviderRef<List<Channel>> {
-  /// The parameter `guildId` of this provider.
-  Snowflake get guildId;
-}
+String _$channelsHash() => r'3ee8db13955eb2ed7ba4696bfe8ff3c601daba93';
 
-class _ChannelsProviderElement
-    extends AsyncNotifierProviderElement<Channels, List<Channel>>
-    with ChannelsRef {
-  _ChannelsProviderElement(super.provider);
+/// A riverpod provider that fetches the channels for the current guild.
+
+final class ChannelsFamily extends $Family
+    with
+        $ClassFamilyOverride<
+          Channels,
+          AsyncValue<List<Channel>>,
+          List<Channel>,
+          FutureOr<List<Channel>>,
+          Snowflake
+        > {
+  const ChannelsFamily._()
+    : super(
+        retry: null,
+        name: r'channelsProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: false,
+      );
+
+  /// A riverpod provider that fetches the channels for the current guild.
+
+  ChannelsProvider call(Snowflake guildId) =>
+      ChannelsProvider._(argument: guildId, from: this);
 
   @override
-  Snowflake get guildId => (origin as ChannelsProvider).guildId;
+  String toString() => r'channelsProvider';
 }
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
+
+/// A riverpod provider that fetches the channels for the current guild.
+
+abstract class _$Channels extends $AsyncNotifier<List<Channel>> {
+  late final _$args = ref.$arg as Snowflake;
+  Snowflake get guildId => _$args;
+
+  FutureOr<List<Channel>> build(Snowflake guildId);
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build(_$args);
+    final ref = this.ref as $Ref<AsyncValue<List<Channel>>, List<Channel>>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<AsyncValue<List<Channel>>, List<Channel>>,
+              AsyncValue<List<Channel>>,
+              Object?,
+              Object?
+            >;
+    element.handleValue(ref, created);
+  }
+}

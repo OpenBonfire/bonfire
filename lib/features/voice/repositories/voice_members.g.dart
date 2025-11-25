@@ -6,195 +6,115 @@ part of 'voice_members.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$voiceMembersHash() => r'48dc14b3cbb21f1ff26a94aecba8bc3b7cf0b7aa';
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
 
-/// Copied from Dart SDK
-class _SystemHash {
-  _SystemHash._();
+@ProviderFor(VoiceMembers)
+const voiceMembersProvider = VoiceMembersFamily._();
 
-  static int combine(int hash, int value) {
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + value);
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + ((0x0007ffff & hash) << 10));
-    return hash ^ (hash >> 6);
+final class VoiceMembersProvider
+    extends
+        $AsyncNotifierProvider<
+          VoiceMembers,
+          List<MapEntry<Snowflake, VoiceState>>?
+        > {
+  const VoiceMembersProvider._({
+    required VoiceMembersFamily super.from,
+    required (Snowflake, {Snowflake? channelId}) super.argument,
+  }) : super(
+         retry: null,
+         name: r'voiceMembersProvider',
+         isAutoDispose: false,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
+
+  @override
+  String debugGetCreateSourceHash() => _$voiceMembersHash();
+
+  @override
+  String toString() {
+    return r'voiceMembersProvider'
+        ''
+        '$argument';
   }
 
-  static int finish(int hash) {
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + ((0x03ffffff & hash) << 3));
-    // ignore: parameter_assignments
-    hash = hash ^ (hash >> 11);
-    return 0x1fffffff & (hash + ((0x00003fff & hash) << 15));
+  @$internal
+  @override
+  VoiceMembers create() => VoiceMembers();
+
+  @override
+  bool operator ==(Object other) {
+    return other is VoiceMembersProvider && other.argument == argument;
+  }
+
+  @override
+  int get hashCode {
+    return argument.hashCode;
   }
 }
 
+String _$voiceMembersHash() => r'48dc14b3cbb21f1ff26a94aecba8bc3b7cf0b7aa';
+
+final class VoiceMembersFamily extends $Family
+    with
+        $ClassFamilyOverride<
+          VoiceMembers,
+          AsyncValue<List<MapEntry<Snowflake, VoiceState>>?>,
+          List<MapEntry<Snowflake, VoiceState>>?,
+          FutureOr<List<MapEntry<Snowflake, VoiceState>>?>,
+          (Snowflake, {Snowflake? channelId})
+        > {
+  const VoiceMembersFamily._()
+    : super(
+        retry: null,
+        name: r'voiceMembersProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: false,
+      );
+
+  VoiceMembersProvider call(Snowflake guildId, {Snowflake? channelId}) =>
+      VoiceMembersProvider._(
+        argument: (guildId, channelId: channelId),
+        from: this,
+      );
+
+  @override
+  String toString() => r'voiceMembersProvider';
+}
+
 abstract class _$VoiceMembers
-    extends BuildlessAsyncNotifier<List<MapEntry<Snowflake, VoiceState>>?> {
-  late final Snowflake guildId;
-  late final Snowflake? channelId;
+    extends $AsyncNotifier<List<MapEntry<Snowflake, VoiceState>>?> {
+  late final _$args = ref.$arg as (Snowflake, {Snowflake? channelId});
+  Snowflake get guildId => _$args.$1;
+  Snowflake? get channelId => _$args.channelId;
 
   FutureOr<List<MapEntry<Snowflake, VoiceState>>?> build(
     Snowflake guildId, {
     Snowflake? channelId,
   });
-}
-
-/// See also [VoiceMembers].
-@ProviderFor(VoiceMembers)
-const voiceMembersProvider = VoiceMembersFamily();
-
-/// See also [VoiceMembers].
-class VoiceMembersFamily
-    extends Family<AsyncValue<List<MapEntry<Snowflake, VoiceState>>?>> {
-  /// See also [VoiceMembers].
-  const VoiceMembersFamily();
-
-  /// See also [VoiceMembers].
-  VoiceMembersProvider call(
-    Snowflake guildId, {
-    Snowflake? channelId,
-  }) {
-    return VoiceMembersProvider(
-      guildId,
-      channelId: channelId,
-    );
-  }
-
+  @$mustCallSuper
   @override
-  VoiceMembersProvider getProviderOverride(
-    covariant VoiceMembersProvider provider,
-  ) {
-    return call(
-      provider.guildId,
-      channelId: provider.channelId,
-    );
-  }
-
-  static const Iterable<ProviderOrFamily>? _dependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
-
-  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
-      _allTransitiveDependencies;
-
-  @override
-  String? get name => r'voiceMembersProvider';
-}
-
-/// See also [VoiceMembers].
-class VoiceMembersProvider extends AsyncNotifierProviderImpl<VoiceMembers,
-    List<MapEntry<Snowflake, VoiceState>>?> {
-  /// See also [VoiceMembers].
-  VoiceMembersProvider(
-    Snowflake guildId, {
-    Snowflake? channelId,
-  }) : this._internal(
-          () => VoiceMembers()
-            ..guildId = guildId
-            ..channelId = channelId,
-          from: voiceMembersProvider,
-          name: r'voiceMembersProvider',
-          debugGetCreateSourceHash:
-              const bool.fromEnvironment('dart.vm.product')
-                  ? null
-                  : _$voiceMembersHash,
-          dependencies: VoiceMembersFamily._dependencies,
-          allTransitiveDependencies:
-              VoiceMembersFamily._allTransitiveDependencies,
-          guildId: guildId,
-          channelId: channelId,
-        );
-
-  VoiceMembersProvider._internal(
-    super._createNotifier, {
-    required super.name,
-    required super.dependencies,
-    required super.allTransitiveDependencies,
-    required super.debugGetCreateSourceHash,
-    required super.from,
-    required this.guildId,
-    required this.channelId,
-  }) : super.internal();
-
-  final Snowflake guildId;
-  final Snowflake? channelId;
-
-  @override
-  FutureOr<List<MapEntry<Snowflake, VoiceState>>?> runNotifierBuild(
-    covariant VoiceMembers notifier,
-  ) {
-    return notifier.build(
-      guildId,
-      channelId: channelId,
-    );
-  }
-
-  @override
-  Override overrideWith(VoiceMembers Function() create) {
-    return ProviderOverride(
-      origin: this,
-      override: VoiceMembersProvider._internal(
-        () => create()
-          ..guildId = guildId
-          ..channelId = channelId,
-        from: from,
-        name: null,
-        dependencies: null,
-        allTransitiveDependencies: null,
-        debugGetCreateSourceHash: null,
-        guildId: guildId,
-        channelId: channelId,
-      ),
-    );
-  }
-
-  @override
-  AsyncNotifierProviderElement<VoiceMembers,
-      List<MapEntry<Snowflake, VoiceState>>?> createElement() {
-    return _VoiceMembersProviderElement(this);
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return other is VoiceMembersProvider &&
-        other.guildId == guildId &&
-        other.channelId == channelId;
-  }
-
-  @override
-  int get hashCode {
-    var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, guildId.hashCode);
-    hash = _SystemHash.combine(hash, channelId.hashCode);
-
-    return _SystemHash.finish(hash);
+  void runBuild() {
+    final created = build(_$args.$1, channelId: _$args.channelId);
+    final ref =
+        this.ref
+            as $Ref<
+              AsyncValue<List<MapEntry<Snowflake, VoiceState>>?>,
+              List<MapEntry<Snowflake, VoiceState>>?
+            >;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<
+                AsyncValue<List<MapEntry<Snowflake, VoiceState>>?>,
+                List<MapEntry<Snowflake, VoiceState>>?
+              >,
+              AsyncValue<List<MapEntry<Snowflake, VoiceState>>?>,
+              Object?,
+              Object?
+            >;
+    element.handleValue(ref, created);
   }
 }
-
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-mixin VoiceMembersRef
-    on AsyncNotifierProviderRef<List<MapEntry<Snowflake, VoiceState>>?> {
-  /// The parameter `guildId` of this provider.
-  Snowflake get guildId;
-
-  /// The parameter `channelId` of this provider.
-  Snowflake? get channelId;
-}
-
-class _VoiceMembersProviderElement extends AsyncNotifierProviderElement<
-    VoiceMembers, List<MapEntry<Snowflake, VoiceState>>?> with VoiceMembersRef {
-  _VoiceMembersProviderElement(super.provider);
-
-  @override
-  Snowflake get guildId => (origin as VoiceMembersProvider).guildId;
-  @override
-  Snowflake? get channelId => (origin as VoiceMembersProvider).channelId;
-}
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

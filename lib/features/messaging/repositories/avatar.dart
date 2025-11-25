@@ -7,7 +7,7 @@ import 'package:http/http.dart' as http;
 part 'avatar.g.dart';
 
 @Riverpod(keepAlive: true)
-Future<Uint8List?> memberAvatar(MemberAvatarRef ref, Member member) async {
+Future<Uint8List?> memberAvatar(Ref ref, Member member) async {
   // String? hash = member.user!.avatarHash;
   // if (hash != null) {
   //   var cached = await fetchMemberAvatarFromCache(hash);

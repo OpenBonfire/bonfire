@@ -6,181 +6,112 @@ part of 'guild.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$guildControllerHash() => r'1d07c57a0de36bbe057044d5d21dbbff446388ba';
-
-/// Copied from Dart SDK
-class _SystemHash {
-  _SystemHash._();
-
-  static int combine(int hash, int value) {
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + value);
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + ((0x0007ffff & hash) << 10));
-    return hash ^ (hash >> 6);
-  }
-
-  static int finish(int hash) {
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + ((0x03ffffff & hash) << 3));
-    // ignore: parameter_assignments
-    hash = hash ^ (hash >> 11);
-    return 0x1fffffff & (hash + ((0x00003fff & hash) << 15));
-  }
-}
-
-abstract class _$GuildController extends BuildlessNotifier<Guild?> {
-  late final Snowflake guildId;
-
-  Guild? build(
-    Snowflake guildId,
-  );
-}
-
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
 /// Fetches the current guild from [guildid].
-///
-/// Copied from [GuildController].
+
 @ProviderFor(GuildController)
-const guildControllerProvider = GuildControllerFamily();
+const guildControllerProvider = GuildControllerFamily._();
 
 /// Fetches the current guild from [guildid].
-///
-/// Copied from [GuildController].
-class GuildControllerFamily extends Family<Guild?> {
+final class GuildControllerProvider
+    extends $NotifierProvider<GuildController, Guild?> {
   /// Fetches the current guild from [guildid].
-  ///
-  /// Copied from [GuildController].
-  const GuildControllerFamily();
+  const GuildControllerProvider._({
+    required GuildControllerFamily super.from,
+    required Snowflake super.argument,
+  }) : super(
+         retry: null,
+         name: r'guildControllerProvider',
+         isAutoDispose: false,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
 
-  /// Fetches the current guild from [guildid].
-  ///
-  /// Copied from [GuildController].
-  GuildControllerProvider call(
-    Snowflake guildId,
-  ) {
-    return GuildControllerProvider(
-      guildId,
-    );
+  @override
+  String debugGetCreateSourceHash() => _$guildControllerHash();
+
+  @override
+  String toString() {
+    return r'guildControllerProvider'
+        ''
+        '($argument)';
   }
 
+  @$internal
   @override
-  GuildControllerProvider getProviderOverride(
-    covariant GuildControllerProvider provider,
-  ) {
-    return call(
-      provider.guildId,
-    );
-  }
+  GuildController create() => GuildController();
 
-  static const Iterable<ProviderOrFamily>? _dependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
-
-  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
-      _allTransitiveDependencies;
-
-  @override
-  String? get name => r'guildControllerProvider';
-}
-
-/// Fetches the current guild from [guildid].
-///
-/// Copied from [GuildController].
-class GuildControllerProvider
-    extends NotifierProviderImpl<GuildController, Guild?> {
-  /// Fetches the current guild from [guildid].
-  ///
-  /// Copied from [GuildController].
-  GuildControllerProvider(
-    Snowflake guildId,
-  ) : this._internal(
-          () => GuildController()..guildId = guildId,
-          from: guildControllerProvider,
-          name: r'guildControllerProvider',
-          debugGetCreateSourceHash:
-              const bool.fromEnvironment('dart.vm.product')
-                  ? null
-                  : _$guildControllerHash,
-          dependencies: GuildControllerFamily._dependencies,
-          allTransitiveDependencies:
-              GuildControllerFamily._allTransitiveDependencies,
-          guildId: guildId,
-        );
-
-  GuildControllerProvider._internal(
-    super._createNotifier, {
-    required super.name,
-    required super.dependencies,
-    required super.allTransitiveDependencies,
-    required super.debugGetCreateSourceHash,
-    required super.from,
-    required this.guildId,
-  }) : super.internal();
-
-  final Snowflake guildId;
-
-  @override
-  Guild? runNotifierBuild(
-    covariant GuildController notifier,
-  ) {
-    return notifier.build(
-      guildId,
-    );
-  }
-
-  @override
-  Override overrideWith(GuildController Function() create) {
-    return ProviderOverride(
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(Guild? value) {
+    return $ProviderOverride(
       origin: this,
-      override: GuildControllerProvider._internal(
-        () => create()..guildId = guildId,
-        from: from,
-        name: null,
-        dependencies: null,
-        allTransitiveDependencies: null,
-        debugGetCreateSourceHash: null,
-        guildId: guildId,
-      ),
+      providerOverride: $SyncValueProvider<Guild?>(value),
     );
-  }
-
-  @override
-  NotifierProviderElement<GuildController, Guild?> createElement() {
-    return _GuildControllerProviderElement(this);
   }
 
   @override
   bool operator ==(Object other) {
-    return other is GuildControllerProvider && other.guildId == guildId;
+    return other is GuildControllerProvider && other.argument == argument;
   }
 
   @override
   int get hashCode {
-    var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, guildId.hashCode);
-
-    return _SystemHash.finish(hash);
+    return argument.hashCode;
   }
 }
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-mixin GuildControllerRef on NotifierProviderRef<Guild?> {
-  /// The parameter `guildId` of this provider.
-  Snowflake get guildId;
-}
+String _$guildControllerHash() => r'1d07c57a0de36bbe057044d5d21dbbff446388ba';
 
-class _GuildControllerProviderElement
-    extends NotifierProviderElement<GuildController, Guild?>
-    with GuildControllerRef {
-  _GuildControllerProviderElement(super.provider);
+/// Fetches the current guild from [guildid].
+
+final class GuildControllerFamily extends $Family
+    with
+        $ClassFamilyOverride<
+          GuildController,
+          Guild?,
+          Guild?,
+          Guild?,
+          Snowflake
+        > {
+  const GuildControllerFamily._()
+    : super(
+        retry: null,
+        name: r'guildControllerProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: false,
+      );
+
+  /// Fetches the current guild from [guildid].
+
+  GuildControllerProvider call(Snowflake guildId) =>
+      GuildControllerProvider._(argument: guildId, from: this);
 
   @override
-  Snowflake get guildId => (origin as GuildControllerProvider).guildId;
+  String toString() => r'guildControllerProvider';
 }
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
+
+/// Fetches the current guild from [guildid].
+
+abstract class _$GuildController extends $Notifier<Guild?> {
+  late final _$args = ref.$arg as Snowflake;
+  Snowflake get guildId => _$args;
+
+  Guild? build(Snowflake guildId);
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build(_$args);
+    final ref = this.ref as $Ref<Guild?, Guild?>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<Guild?, Guild?>,
+              Guild?,
+              Object?,
+              Object?
+            >;
+    element.handleValue(ref, created);
+  }
+}

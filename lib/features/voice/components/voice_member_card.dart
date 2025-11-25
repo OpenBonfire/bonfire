@@ -25,7 +25,7 @@ class VoiceMemberCard extends ConsumerStatefulWidget {
 class _VoiceMemberCardState extends ConsumerState<VoiceMemberCard> {
   @override
   Widget build(BuildContext context) {
-    User? user = ref.watch(getUserFromIdProvider(widget.userId)).valueOrNull;
+    User? user = ref.watch(getUserFromIdProvider(widget.userId)).value;
     Uint8List? icon = ref.watch(userIconProvider(widget.userId)).value;
 
     final bonfireTheme = BonfireThemeExtension.of(context);
@@ -38,10 +38,7 @@ class _VoiceMemberCardState extends ConsumerState<VoiceMemberCard> {
           style: OutlinedButton.styleFrom(
             minimumSize: Size.zero,
             padding: EdgeInsets.zero,
-            side: const BorderSide(
-              color: Colors.transparent,
-              width: 0.1,
-            ),
+            side: const BorderSide(color: Colors.transparent, width: 0.1),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12),
             ),
@@ -73,23 +70,22 @@ class _VoiceMemberCardState extends ConsumerState<VoiceMemberCard> {
                           ),
                           const SizedBox(width: 8),
                           Expanded(
-                              child: Row(
-                            children: [
-                              Text(
-                                // todo: I need to get the member for nickname
-                                user.globalName ?? user.username,
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 1,
-                                softWrap: false,
-                                textAlign: TextAlign.left,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyMedium!
-                                    .copyWith(color: bonfireTheme.gray),
-                              ),
-                              const Spacer(),
-                            ],
-                          )),
+                            child: Row(
+                              children: [
+                                Text(
+                                  // todo: I need to get the member for nickname
+                                  user.globalName ?? user.username,
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
+                                  softWrap: false,
+                                  textAlign: TextAlign.left,
+                                  style: Theme.of(context).textTheme.bodyMedium!
+                                      .copyWith(color: bonfireTheme.gray),
+                                ),
+                                const Spacer(),
+                              ],
+                            ),
+                          ),
                         ],
                       )
                     : const SizedBox(),

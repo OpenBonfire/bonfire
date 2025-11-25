@@ -152,12 +152,12 @@ void handleEvents(Ref ref, NyxxGateway client) {
   client.onPresenceUpdate.listen((event) {
     if (event.status != null) {
       ref
-          .read(UserStatusStateProvider(event.user!.id).notifier)
+          .read(userStatusStateProvider(event.user!.id).notifier)
           .setUserStatus(event.status!);
     }
     if (event.activities != null) {
       ref
-          .read(UserActivityStateProvider(event.user!.id).notifier)
+          .read(userActivityStateProvider(event.user!.id).notifier)
           .setUserActivity(event.activities!);
     }
   });

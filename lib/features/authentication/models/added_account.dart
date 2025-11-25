@@ -1,17 +1,17 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:dart_mappable/dart_mappable.dart';
 
-part 'added_account.freezed.dart';
-part 'added_account.g.dart';
+part 'added_account.mapper.dart';
 
-@freezed
-class AddedAccount with _$AddedAccount {
-  factory AddedAccount({
-    required String token,
-    required String username,
-    required String userId,
-    required String avatar,
-  }) = _AddedAccount;
-
-  factory AddedAccount.fromJson(Map<String, dynamic> json) =>
-      _$AddedAccountFromJson(json);
+@MappableClass()
+class AddedAccount with AddedAccountMappable {
+  final String token;
+  final String username;
+  final String userId;
+  final String avatar;
+  const AddedAccount({
+    required this.token,
+    required this.username,
+    required this.userId,
+    required this.avatar,
+  });
 }

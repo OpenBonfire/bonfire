@@ -67,7 +67,7 @@ class _BarWidgetState extends ConsumerState<NavigationBarWidget> {
 
     if (shouldUseDesktopLayout(context)) return Container();
 
-    final user = ref.watch(selfUserProvider).valueOrNull;
+    final user = ref.watch(selfUserProvider).value;
 
     return Column(
       children: [
@@ -109,7 +109,9 @@ class _BarWidgetState extends ConsumerState<NavigationBarWidget> {
                       onTap: () async {
                         HapticFeedback.lightImpact();
                         showAccountSwitcherDialog(
-                            context, GoRouter.of(context));
+                          context,
+                          GoRouter.of(context),
+                        );
                       },
                     ),
                   ),
@@ -122,7 +124,7 @@ class _BarWidgetState extends ConsumerState<NavigationBarWidget> {
             color: BonfireThemeExtension.of(context).darkGray,
           ),
           height: MediaQuery.paddingOf(context).bottom,
-        )
+        ),
       ],
     );
   }
@@ -139,13 +141,13 @@ class _BarWidgetState extends ConsumerState<NavigationBarWidget> {
       right: 0,
       curve: Curves.ease,
       child: SlideTransition(
-        position: Tween<Offset>(
-          begin: const Offset(0.0, 1.0),
-          end: Offset.zero,
-        ).animate(CurvedAnimation(
-          parent: ModalRoute.of(context)!.animation!,
-          curve: Curves.linear,
-        )),
+        position: Tween<Offset>(begin: const Offset(0.0, 1.0), end: Offset.zero)
+            .animate(
+              CurvedAnimation(
+                parent: ModalRoute.of(context)!.animation!,
+                curve: Curves.linear,
+              ),
+            ),
         child: barComponent(),
       ),
     );
@@ -193,19 +195,17 @@ class NavigatorIcon extends StatelessWidget {
               height: 25,
             ),
             DefaultTextStyle(
-              style: Theme.of(context).textTheme.labelMedium!.copyWith(
-                    fontSize: 9,
-                    color: color,
-                  ),
+              style: Theme.of(
+                context,
+              ).textTheme.labelMedium!.copyWith(fontSize: 9, color: color),
               child: Text(
                 label,
                 textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.labelMedium!.copyWith(
-                      fontSize: 9,
-                      color: color,
-                    ),
+                style: Theme.of(
+                  context,
+                ).textTheme.labelMedium!.copyWith(fontSize: 9, color: color),
               ),
-            )
+            ),
           ],
         ),
       ),

@@ -22,11 +22,10 @@ class _ChannelVoiceMembersState extends ConsumerState<ChannelVoiceMembers> {
   @override
   Widget build(BuildContext context) {
     List<MapEntry<Snowflake, VoiceState>>? voiceMembers = ref
-        .watch(voiceMembersProvider(
-          widget.guildId,
-          channelId: widget.channelId,
-        ))
-        .valueOrNull;
+        .watch(
+          voiceMembersProvider(widget.guildId, channelId: widget.channelId),
+        )
+        .value;
 
     return (voiceMembers != null)
         ? Column(

@@ -6,169 +6,103 @@ part of 'message.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$messageControllerHash() => r'b2e02f7c2ea0369d4e95ac40065ea811d0259b6b';
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
 
-/// Copied from Dart SDK
-class _SystemHash {
-  _SystemHash._();
-
-  static int combine(int hash, int value) {
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + value);
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + ((0x0007ffff & hash) << 10));
-    return hash ^ (hash >> 6);
-  }
-
-  static int finish(int hash) {
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + ((0x03ffffff & hash) << 3));
-    // ignore: parameter_assignments
-    hash = hash ^ (hash >> 11);
-    return 0x1fffffff & (hash + ((0x00003fff & hash) << 15));
-  }
-}
-
-abstract class _$MessageController extends BuildlessNotifier<Message?> {
-  late final Snowflake messageId;
-
-  Message? build(
-    Snowflake messageId,
-  );
-}
-
-/// See also [MessageController].
 @ProviderFor(MessageController)
-const messageControllerProvider = MessageControllerFamily();
+const messageControllerProvider = MessageControllerFamily._();
 
-/// See also [MessageController].
-class MessageControllerFamily extends Family<Message?> {
-  /// See also [MessageController].
-  const MessageControllerFamily();
+final class MessageControllerProvider
+    extends $NotifierProvider<MessageController, Message?> {
+  const MessageControllerProvider._({
+    required MessageControllerFamily super.from,
+    required Snowflake super.argument,
+  }) : super(
+         retry: null,
+         name: r'messageControllerProvider',
+         isAutoDispose: false,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
 
-  /// See also [MessageController].
-  MessageControllerProvider call(
-    Snowflake messageId,
-  ) {
-    return MessageControllerProvider(
-      messageId,
-    );
+  @override
+  String debugGetCreateSourceHash() => _$messageControllerHash();
+
+  @override
+  String toString() {
+    return r'messageControllerProvider'
+        ''
+        '($argument)';
   }
 
+  @$internal
   @override
-  MessageControllerProvider getProviderOverride(
-    covariant MessageControllerProvider provider,
-  ) {
-    return call(
-      provider.messageId,
-    );
-  }
+  MessageController create() => MessageController();
 
-  static const Iterable<ProviderOrFamily>? _dependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
-
-  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
-      _allTransitiveDependencies;
-
-  @override
-  String? get name => r'messageControllerProvider';
-}
-
-/// See also [MessageController].
-class MessageControllerProvider
-    extends NotifierProviderImpl<MessageController, Message?> {
-  /// See also [MessageController].
-  MessageControllerProvider(
-    Snowflake messageId,
-  ) : this._internal(
-          () => MessageController()..messageId = messageId,
-          from: messageControllerProvider,
-          name: r'messageControllerProvider',
-          debugGetCreateSourceHash:
-              const bool.fromEnvironment('dart.vm.product')
-                  ? null
-                  : _$messageControllerHash,
-          dependencies: MessageControllerFamily._dependencies,
-          allTransitiveDependencies:
-              MessageControllerFamily._allTransitiveDependencies,
-          messageId: messageId,
-        );
-
-  MessageControllerProvider._internal(
-    super._createNotifier, {
-    required super.name,
-    required super.dependencies,
-    required super.allTransitiveDependencies,
-    required super.debugGetCreateSourceHash,
-    required super.from,
-    required this.messageId,
-  }) : super.internal();
-
-  final Snowflake messageId;
-
-  @override
-  Message? runNotifierBuild(
-    covariant MessageController notifier,
-  ) {
-    return notifier.build(
-      messageId,
-    );
-  }
-
-  @override
-  Override overrideWith(MessageController Function() create) {
-    return ProviderOverride(
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(Message? value) {
+    return $ProviderOverride(
       origin: this,
-      override: MessageControllerProvider._internal(
-        () => create()..messageId = messageId,
-        from: from,
-        name: null,
-        dependencies: null,
-        allTransitiveDependencies: null,
-        debugGetCreateSourceHash: null,
-        messageId: messageId,
-      ),
+      providerOverride: $SyncValueProvider<Message?>(value),
     );
-  }
-
-  @override
-  NotifierProviderElement<MessageController, Message?> createElement() {
-    return _MessageControllerProviderElement(this);
   }
 
   @override
   bool operator ==(Object other) {
-    return other is MessageControllerProvider && other.messageId == messageId;
+    return other is MessageControllerProvider && other.argument == argument;
   }
 
   @override
   int get hashCode {
-    var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, messageId.hashCode);
-
-    return _SystemHash.finish(hash);
+    return argument.hashCode;
   }
 }
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-mixin MessageControllerRef on NotifierProviderRef<Message?> {
-  /// The parameter `messageId` of this provider.
-  Snowflake get messageId;
-}
+String _$messageControllerHash() => r'b2e02f7c2ea0369d4e95ac40065ea811d0259b6b';
 
-class _MessageControllerProviderElement
-    extends NotifierProviderElement<MessageController, Message?>
-    with MessageControllerRef {
-  _MessageControllerProviderElement(super.provider);
+final class MessageControllerFamily extends $Family
+    with
+        $ClassFamilyOverride<
+          MessageController,
+          Message?,
+          Message?,
+          Message?,
+          Snowflake
+        > {
+  const MessageControllerFamily._()
+    : super(
+        retry: null,
+        name: r'messageControllerProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: false,
+      );
+
+  MessageControllerProvider call(Snowflake messageId) =>
+      MessageControllerProvider._(argument: messageId, from: this);
 
   @override
-  Snowflake get messageId => (origin as MessageControllerProvider).messageId;
+  String toString() => r'messageControllerProvider';
 }
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
+
+abstract class _$MessageController extends $Notifier<Message?> {
+  late final _$args = ref.$arg as Snowflake;
+  Snowflake get messageId => _$args;
+
+  Message? build(Snowflake messageId);
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build(_$args);
+    final ref = this.ref as $Ref<Message?, Message?>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<Message?, Message?>,
+              Message?,
+              Object?,
+              Object?
+            >;
+    element.handleValue(ref, created);
+  }
+}

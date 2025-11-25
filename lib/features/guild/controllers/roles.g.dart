@@ -6,181 +6,112 @@ part of 'roles.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$rolesControllerHash() => r'0785eb2bff764f0cba882b5a0c8303ae39ea6e07';
-
-/// Copied from Dart SDK
-class _SystemHash {
-  _SystemHash._();
-
-  static int combine(int hash, int value) {
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + value);
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + ((0x0007ffff & hash) << 10));
-    return hash ^ (hash >> 6);
-  }
-
-  static int finish(int hash) {
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + ((0x03ffffff & hash) << 3));
-    // ignore: parameter_assignments
-    hash = hash ^ (hash >> 11);
-    return 0x1fffffff & (hash + ((0x00003fff & hash) << 15));
-  }
-}
-
-abstract class _$RolesController extends BuildlessNotifier<List<Snowflake>?> {
-  late final Snowflake guildId;
-
-  List<Snowflake>? build(
-    Snowflake guildId,
-  );
-}
-
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
 /// Fetches the current roles from [guildId].
-///
-/// Copied from [RolesController].
+
 @ProviderFor(RolesController)
-const rolesControllerProvider = RolesControllerFamily();
+const rolesControllerProvider = RolesControllerFamily._();
 
 /// Fetches the current roles from [guildId].
-///
-/// Copied from [RolesController].
-class RolesControllerFamily extends Family<List<Snowflake>?> {
+final class RolesControllerProvider
+    extends $NotifierProvider<RolesController, List<Snowflake>?> {
   /// Fetches the current roles from [guildId].
-  ///
-  /// Copied from [RolesController].
-  const RolesControllerFamily();
+  const RolesControllerProvider._({
+    required RolesControllerFamily super.from,
+    required Snowflake super.argument,
+  }) : super(
+         retry: null,
+         name: r'rolesControllerProvider',
+         isAutoDispose: false,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
 
-  /// Fetches the current roles from [guildId].
-  ///
-  /// Copied from [RolesController].
-  RolesControllerProvider call(
-    Snowflake guildId,
-  ) {
-    return RolesControllerProvider(
-      guildId,
-    );
+  @override
+  String debugGetCreateSourceHash() => _$rolesControllerHash();
+
+  @override
+  String toString() {
+    return r'rolesControllerProvider'
+        ''
+        '($argument)';
   }
 
+  @$internal
   @override
-  RolesControllerProvider getProviderOverride(
-    covariant RolesControllerProvider provider,
-  ) {
-    return call(
-      provider.guildId,
-    );
-  }
+  RolesController create() => RolesController();
 
-  static const Iterable<ProviderOrFamily>? _dependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
-
-  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
-      _allTransitiveDependencies;
-
-  @override
-  String? get name => r'rolesControllerProvider';
-}
-
-/// Fetches the current roles from [guildId].
-///
-/// Copied from [RolesController].
-class RolesControllerProvider
-    extends NotifierProviderImpl<RolesController, List<Snowflake>?> {
-  /// Fetches the current roles from [guildId].
-  ///
-  /// Copied from [RolesController].
-  RolesControllerProvider(
-    Snowflake guildId,
-  ) : this._internal(
-          () => RolesController()..guildId = guildId,
-          from: rolesControllerProvider,
-          name: r'rolesControllerProvider',
-          debugGetCreateSourceHash:
-              const bool.fromEnvironment('dart.vm.product')
-                  ? null
-                  : _$rolesControllerHash,
-          dependencies: RolesControllerFamily._dependencies,
-          allTransitiveDependencies:
-              RolesControllerFamily._allTransitiveDependencies,
-          guildId: guildId,
-        );
-
-  RolesControllerProvider._internal(
-    super._createNotifier, {
-    required super.name,
-    required super.dependencies,
-    required super.allTransitiveDependencies,
-    required super.debugGetCreateSourceHash,
-    required super.from,
-    required this.guildId,
-  }) : super.internal();
-
-  final Snowflake guildId;
-
-  @override
-  List<Snowflake>? runNotifierBuild(
-    covariant RolesController notifier,
-  ) {
-    return notifier.build(
-      guildId,
-    );
-  }
-
-  @override
-  Override overrideWith(RolesController Function() create) {
-    return ProviderOverride(
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(List<Snowflake>? value) {
+    return $ProviderOverride(
       origin: this,
-      override: RolesControllerProvider._internal(
-        () => create()..guildId = guildId,
-        from: from,
-        name: null,
-        dependencies: null,
-        allTransitiveDependencies: null,
-        debugGetCreateSourceHash: null,
-        guildId: guildId,
-      ),
+      providerOverride: $SyncValueProvider<List<Snowflake>?>(value),
     );
-  }
-
-  @override
-  NotifierProviderElement<RolesController, List<Snowflake>?> createElement() {
-    return _RolesControllerProviderElement(this);
   }
 
   @override
   bool operator ==(Object other) {
-    return other is RolesControllerProvider && other.guildId == guildId;
+    return other is RolesControllerProvider && other.argument == argument;
   }
 
   @override
   int get hashCode {
-    var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, guildId.hashCode);
-
-    return _SystemHash.finish(hash);
+    return argument.hashCode;
   }
 }
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-mixin RolesControllerRef on NotifierProviderRef<List<Snowflake>?> {
-  /// The parameter `guildId` of this provider.
-  Snowflake get guildId;
-}
+String _$rolesControllerHash() => r'0785eb2bff764f0cba882b5a0c8303ae39ea6e07';
 
-class _RolesControllerProviderElement
-    extends NotifierProviderElement<RolesController, List<Snowflake>?>
-    with RolesControllerRef {
-  _RolesControllerProviderElement(super.provider);
+/// Fetches the current roles from [guildId].
+
+final class RolesControllerFamily extends $Family
+    with
+        $ClassFamilyOverride<
+          RolesController,
+          List<Snowflake>?,
+          List<Snowflake>?,
+          List<Snowflake>?,
+          Snowflake
+        > {
+  const RolesControllerFamily._()
+    : super(
+        retry: null,
+        name: r'rolesControllerProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: false,
+      );
+
+  /// Fetches the current roles from [guildId].
+
+  RolesControllerProvider call(Snowflake guildId) =>
+      RolesControllerProvider._(argument: guildId, from: this);
 
   @override
-  Snowflake get guildId => (origin as RolesControllerProvider).guildId;
+  String toString() => r'rolesControllerProvider';
 }
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
+
+/// Fetches the current roles from [guildId].
+
+abstract class _$RolesController extends $Notifier<List<Snowflake>?> {
+  late final _$args = ref.$arg as Snowflake;
+  Snowflake get guildId => _$args;
+
+  List<Snowflake>? build(Snowflake guildId);
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build(_$args);
+    final ref = this.ref as $Ref<List<Snowflake>?, List<Snowflake>?>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<List<Snowflake>?, List<Snowflake>?>,
+              List<Snowflake>?,
+              Object?,
+              Object?
+            >;
+    element.handleValue(ref, created);
+  }
+}

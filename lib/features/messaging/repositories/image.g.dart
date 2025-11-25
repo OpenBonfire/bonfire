@@ -6,285 +6,153 @@ part of 'image.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$attachedImageHash() => r'b60e7477de6e6dd4c2c4454462db11192edcada1';
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
 
-/// Copied from Dart SDK
-class _SystemHash {
-  _SystemHash._();
-
-  static int combine(int hash, int value) {
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + value);
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + ((0x0007ffff & hash) << 10));
-    return hash ^ (hash >> 6);
-  }
-
-  static int finish(int hash) {
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + ((0x03ffffff & hash) << 3));
-    // ignore: parameter_assignments
-    hash = hash ^ (hash >> 11);
-    return 0x1fffffff & (hash + ((0x00003fff & hash) << 15));
-  }
-}
-
-/// See also [attachedImage].
 @ProviderFor(attachedImage)
-const attachedImageProvider = AttachedImageFamily();
+const attachedImageProvider = AttachedImageFamily._();
 
-/// See also [attachedImage].
-class AttachedImageFamily extends Family<AsyncValue<Uint8List?>> {
-  /// See also [attachedImage].
-  const AttachedImageFamily();
+final class AttachedImageProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<Uint8List?>,
+          Uint8List?,
+          FutureOr<Uint8List?>
+        >
+    with $FutureModifier<Uint8List?>, $FutureProvider<Uint8List?> {
+  const AttachedImageProvider._({
+    required AttachedImageFamily super.from,
+    required Attachment super.argument,
+  }) : super(
+         retry: null,
+         name: r'attachedImageProvider',
+         isAutoDispose: false,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
 
-  /// See also [attachedImage].
-  AttachedImageProvider call(
-    Attachment attachment,
-  ) {
-    return AttachedImageProvider(
-      attachment,
-    );
+  @override
+  String debugGetCreateSourceHash() => _$attachedImageHash();
+
+  @override
+  String toString() {
+    return r'attachedImageProvider'
+        ''
+        '($argument)';
   }
 
+  @$internal
   @override
-  AttachedImageProvider getProviderOverride(
-    covariant AttachedImageProvider provider,
-  ) {
-    return call(
-      provider.attachment,
-    );
-  }
-
-  static const Iterable<ProviderOrFamily>? _dependencies = null;
+  $FutureProviderElement<Uint8List?> $createElement($ProviderPointer pointer) =>
+      $FutureProviderElement(pointer);
 
   @override
-  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
-
-  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
-      _allTransitiveDependencies;
-
-  @override
-  String? get name => r'attachedImageProvider';
-}
-
-/// See also [attachedImage].
-class AttachedImageProvider extends FutureProvider<Uint8List?> {
-  /// See also [attachedImage].
-  AttachedImageProvider(
-    Attachment attachment,
-  ) : this._internal(
-          (ref) => attachedImage(
-            ref as AttachedImageRef,
-            attachment,
-          ),
-          from: attachedImageProvider,
-          name: r'attachedImageProvider',
-          debugGetCreateSourceHash:
-              const bool.fromEnvironment('dart.vm.product')
-                  ? null
-                  : _$attachedImageHash,
-          dependencies: AttachedImageFamily._dependencies,
-          allTransitiveDependencies:
-              AttachedImageFamily._allTransitiveDependencies,
-          attachment: attachment,
-        );
-
-  AttachedImageProvider._internal(
-    super._createNotifier, {
-    required super.name,
-    required super.dependencies,
-    required super.allTransitiveDependencies,
-    required super.debugGetCreateSourceHash,
-    required super.from,
-    required this.attachment,
-  }) : super.internal();
-
-  final Attachment attachment;
-
-  @override
-  Override overrideWith(
-    FutureOr<Uint8List?> Function(AttachedImageRef provider) create,
-  ) {
-    return ProviderOverride(
-      origin: this,
-      override: AttachedImageProvider._internal(
-        (ref) => create(ref as AttachedImageRef),
-        from: from,
-        name: null,
-        dependencies: null,
-        allTransitiveDependencies: null,
-        debugGetCreateSourceHash: null,
-        attachment: attachment,
-      ),
-    );
-  }
-
-  @override
-  FutureProviderElement<Uint8List?> createElement() {
-    return _AttachedImageProviderElement(this);
+  FutureOr<Uint8List?> create(Ref ref) {
+    final argument = this.argument as Attachment;
+    return attachedImage(ref, argument);
   }
 
   @override
   bool operator ==(Object other) {
-    return other is AttachedImageProvider && other.attachment == attachment;
+    return other is AttachedImageProvider && other.argument == argument;
   }
 
   @override
   int get hashCode {
-    var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, attachment.hashCode);
-
-    return _SystemHash.finish(hash);
+    return argument.hashCode;
   }
 }
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-mixin AttachedImageRef on FutureProviderRef<Uint8List?> {
-  /// The parameter `attachment` of this provider.
-  Attachment get attachment;
-}
+String _$attachedImageHash() => r'9d63fb6b1e3fee17c786dde2d44ad83678938161';
 
-class _AttachedImageProviderElement extends FutureProviderElement<Uint8List?>
-    with AttachedImageRef {
-  _AttachedImageProviderElement(super.provider);
+final class AttachedImageFamily extends $Family
+    with $FunctionalFamilyOverride<FutureOr<Uint8List?>, Attachment> {
+  const AttachedImageFamily._()
+    : super(
+        retry: null,
+        name: r'attachedImageProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: false,
+      );
+
+  AttachedImageProvider call(Attachment attachment) =>
+      AttachedImageProvider._(argument: attachment, from: this);
 
   @override
-  Attachment get attachment => (origin as AttachedImageProvider).attachment;
+  String toString() => r'attachedImageProvider';
 }
 
-String _$embeddedImageHash() => r'4c09866299b75f220247de855d7a62a5575e31aa';
-
-/// See also [embeddedImage].
 @ProviderFor(embeddedImage)
-const embeddedImageProvider = EmbeddedImageFamily();
+const embeddedImageProvider = EmbeddedImageFamily._();
 
-/// See also [embeddedImage].
-class EmbeddedImageFamily extends Family<AsyncValue<Uint8List?>> {
-  /// See also [embeddedImage].
-  const EmbeddedImageFamily();
+final class EmbeddedImageProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<Uint8List?>,
+          Uint8List?,
+          FutureOr<Uint8List?>
+        >
+    with $FutureModifier<Uint8List?>, $FutureProvider<Uint8List?> {
+  const EmbeddedImageProvider._({
+    required EmbeddedImageFamily super.from,
+    required Embed super.argument,
+  }) : super(
+         retry: null,
+         name: r'embeddedImageProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
 
-  /// See also [embeddedImage].
-  EmbeddedImageProvider call(
-    Embed embed,
-  ) {
-    return EmbeddedImageProvider(
-      embed,
-    );
+  @override
+  String debugGetCreateSourceHash() => _$embeddedImageHash();
+
+  @override
+  String toString() {
+    return r'embeddedImageProvider'
+        ''
+        '($argument)';
   }
 
+  @$internal
   @override
-  EmbeddedImageProvider getProviderOverride(
-    covariant EmbeddedImageProvider provider,
-  ) {
-    return call(
-      provider.embed,
-    );
-  }
-
-  static const Iterable<ProviderOrFamily>? _dependencies = null;
+  $FutureProviderElement<Uint8List?> $createElement($ProviderPointer pointer) =>
+      $FutureProviderElement(pointer);
 
   @override
-  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
-
-  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
-      _allTransitiveDependencies;
-
-  @override
-  String? get name => r'embeddedImageProvider';
-}
-
-/// See also [embeddedImage].
-class EmbeddedImageProvider extends AutoDisposeFutureProvider<Uint8List?> {
-  /// See also [embeddedImage].
-  EmbeddedImageProvider(
-    Embed embed,
-  ) : this._internal(
-          (ref) => embeddedImage(
-            ref as EmbeddedImageRef,
-            embed,
-          ),
-          from: embeddedImageProvider,
-          name: r'embeddedImageProvider',
-          debugGetCreateSourceHash:
-              const bool.fromEnvironment('dart.vm.product')
-                  ? null
-                  : _$embeddedImageHash,
-          dependencies: EmbeddedImageFamily._dependencies,
-          allTransitiveDependencies:
-              EmbeddedImageFamily._allTransitiveDependencies,
-          embed: embed,
-        );
-
-  EmbeddedImageProvider._internal(
-    super._createNotifier, {
-    required super.name,
-    required super.dependencies,
-    required super.allTransitiveDependencies,
-    required super.debugGetCreateSourceHash,
-    required super.from,
-    required this.embed,
-  }) : super.internal();
-
-  final Embed embed;
-
-  @override
-  Override overrideWith(
-    FutureOr<Uint8List?> Function(EmbeddedImageRef provider) create,
-  ) {
-    return ProviderOverride(
-      origin: this,
-      override: EmbeddedImageProvider._internal(
-        (ref) => create(ref as EmbeddedImageRef),
-        from: from,
-        name: null,
-        dependencies: null,
-        allTransitiveDependencies: null,
-        debugGetCreateSourceHash: null,
-        embed: embed,
-      ),
-    );
-  }
-
-  @override
-  AutoDisposeFutureProviderElement<Uint8List?> createElement() {
-    return _EmbeddedImageProviderElement(this);
+  FutureOr<Uint8List?> create(Ref ref) {
+    final argument = this.argument as Embed;
+    return embeddedImage(ref, argument);
   }
 
   @override
   bool operator ==(Object other) {
-    return other is EmbeddedImageProvider && other.embed == embed;
+    return other is EmbeddedImageProvider && other.argument == argument;
   }
 
   @override
   int get hashCode {
-    var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, embed.hashCode);
-
-    return _SystemHash.finish(hash);
+    return argument.hashCode;
   }
 }
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-mixin EmbeddedImageRef on AutoDisposeFutureProviderRef<Uint8List?> {
-  /// The parameter `embed` of this provider.
-  Embed get embed;
-}
+String _$embeddedImageHash() => r'e7d9c894f522c096cfe24370ddb90a55b5e509f3';
 
-class _EmbeddedImageProviderElement
-    extends AutoDisposeFutureProviderElement<Uint8List?> with EmbeddedImageRef {
-  _EmbeddedImageProviderElement(super.provider);
+final class EmbeddedImageFamily extends $Family
+    with $FunctionalFamilyOverride<FutureOr<Uint8List?>, Embed> {
+  const EmbeddedImageFamily._()
+    : super(
+        retry: null,
+        name: r'embeddedImageProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: true,
+      );
+
+  EmbeddedImageProvider call(Embed embed) =>
+      EmbeddedImageProvider._(argument: embed, from: this);
 
   @override
-  Embed get embed => (origin as EmbeddedImageProvider).embed;
+  String toString() => r'embeddedImageProvider';
 }
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

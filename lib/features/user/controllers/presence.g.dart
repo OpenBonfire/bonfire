@@ -6,172 +6,104 @@ part of 'presence.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$presenceControllerHash() =>
-    r'c61e47940b2eafc16eb039bac4425f7f24544379';
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
 
-/// Copied from Dart SDK
-class _SystemHash {
-  _SystemHash._();
-
-  static int combine(int hash, int value) {
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + value);
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + ((0x0007ffff & hash) << 10));
-    return hash ^ (hash >> 6);
-  }
-
-  static int finish(int hash) {
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + ((0x03ffffff & hash) << 3));
-    // ignore: parameter_assignments
-    hash = hash ^ (hash >> 11);
-    return 0x1fffffff & (hash + ((0x00003fff & hash) << 15));
-  }
-}
-
-abstract class _$PresenceController
-    extends BuildlessNotifier<PresenceUpdateEvent?> {
-  late final Snowflake userId;
-
-  PresenceUpdateEvent? build(
-    Snowflake userId,
-  );
-}
-
-/// See also [PresenceController].
 @ProviderFor(PresenceController)
-const presenceControllerProvider = PresenceControllerFamily();
+const presenceControllerProvider = PresenceControllerFamily._();
 
-/// See also [PresenceController].
-class PresenceControllerFamily extends Family<PresenceUpdateEvent?> {
-  /// See also [PresenceController].
-  const PresenceControllerFamily();
+final class PresenceControllerProvider
+    extends $NotifierProvider<PresenceController, PresenceUpdateEvent?> {
+  const PresenceControllerProvider._({
+    required PresenceControllerFamily super.from,
+    required Snowflake super.argument,
+  }) : super(
+         retry: null,
+         name: r'presenceControllerProvider',
+         isAutoDispose: false,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
 
-  /// See also [PresenceController].
-  PresenceControllerProvider call(
-    Snowflake userId,
-  ) {
-    return PresenceControllerProvider(
-      userId,
-    );
+  @override
+  String debugGetCreateSourceHash() => _$presenceControllerHash();
+
+  @override
+  String toString() {
+    return r'presenceControllerProvider'
+        ''
+        '($argument)';
   }
 
+  @$internal
   @override
-  PresenceControllerProvider getProviderOverride(
-    covariant PresenceControllerProvider provider,
-  ) {
-    return call(
-      provider.userId,
-    );
-  }
+  PresenceController create() => PresenceController();
 
-  static const Iterable<ProviderOrFamily>? _dependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
-
-  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
-      _allTransitiveDependencies;
-
-  @override
-  String? get name => r'presenceControllerProvider';
-}
-
-/// See also [PresenceController].
-class PresenceControllerProvider
-    extends NotifierProviderImpl<PresenceController, PresenceUpdateEvent?> {
-  /// See also [PresenceController].
-  PresenceControllerProvider(
-    Snowflake userId,
-  ) : this._internal(
-          () => PresenceController()..userId = userId,
-          from: presenceControllerProvider,
-          name: r'presenceControllerProvider',
-          debugGetCreateSourceHash:
-              const bool.fromEnvironment('dart.vm.product')
-                  ? null
-                  : _$presenceControllerHash,
-          dependencies: PresenceControllerFamily._dependencies,
-          allTransitiveDependencies:
-              PresenceControllerFamily._allTransitiveDependencies,
-          userId: userId,
-        );
-
-  PresenceControllerProvider._internal(
-    super._createNotifier, {
-    required super.name,
-    required super.dependencies,
-    required super.allTransitiveDependencies,
-    required super.debugGetCreateSourceHash,
-    required super.from,
-    required this.userId,
-  }) : super.internal();
-
-  final Snowflake userId;
-
-  @override
-  PresenceUpdateEvent? runNotifierBuild(
-    covariant PresenceController notifier,
-  ) {
-    return notifier.build(
-      userId,
-    );
-  }
-
-  @override
-  Override overrideWith(PresenceController Function() create) {
-    return ProviderOverride(
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(PresenceUpdateEvent? value) {
+    return $ProviderOverride(
       origin: this,
-      override: PresenceControllerProvider._internal(
-        () => create()..userId = userId,
-        from: from,
-        name: null,
-        dependencies: null,
-        allTransitiveDependencies: null,
-        debugGetCreateSourceHash: null,
-        userId: userId,
-      ),
+      providerOverride: $SyncValueProvider<PresenceUpdateEvent?>(value),
     );
-  }
-
-  @override
-  NotifierProviderElement<PresenceController, PresenceUpdateEvent?>
-      createElement() {
-    return _PresenceControllerProviderElement(this);
   }
 
   @override
   bool operator ==(Object other) {
-    return other is PresenceControllerProvider && other.userId == userId;
+    return other is PresenceControllerProvider && other.argument == argument;
   }
 
   @override
   int get hashCode {
-    var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, userId.hashCode);
-
-    return _SystemHash.finish(hash);
+    return argument.hashCode;
   }
 }
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-mixin PresenceControllerRef on NotifierProviderRef<PresenceUpdateEvent?> {
-  /// The parameter `userId` of this provider.
-  Snowflake get userId;
-}
+String _$presenceControllerHash() =>
+    r'c61e47940b2eafc16eb039bac4425f7f24544379';
 
-class _PresenceControllerProviderElement
-    extends NotifierProviderElement<PresenceController, PresenceUpdateEvent?>
-    with PresenceControllerRef {
-  _PresenceControllerProviderElement(super.provider);
+final class PresenceControllerFamily extends $Family
+    with
+        $ClassFamilyOverride<
+          PresenceController,
+          PresenceUpdateEvent?,
+          PresenceUpdateEvent?,
+          PresenceUpdateEvent?,
+          Snowflake
+        > {
+  const PresenceControllerFamily._()
+    : super(
+        retry: null,
+        name: r'presenceControllerProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: false,
+      );
+
+  PresenceControllerProvider call(Snowflake userId) =>
+      PresenceControllerProvider._(argument: userId, from: this);
 
   @override
-  Snowflake get userId => (origin as PresenceControllerProvider).userId;
+  String toString() => r'presenceControllerProvider';
 }
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
+
+abstract class _$PresenceController extends $Notifier<PresenceUpdateEvent?> {
+  late final _$args = ref.$arg as Snowflake;
+  Snowflake get userId => _$args;
+
+  PresenceUpdateEvent? build(Snowflake userId);
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build(_$args);
+    final ref = this.ref as $Ref<PresenceUpdateEvent?, PresenceUpdateEvent?>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<PresenceUpdateEvent?, PresenceUpdateEvent?>,
+              PresenceUpdateEvent?,
+              Object?,
+              Object?
+            >;
+    element.handleValue(ref, created);
+  }
+}

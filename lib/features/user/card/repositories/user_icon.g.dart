@@ -6,179 +6,104 @@ part of 'user_icon.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$userIconHash() => r'368134c5f229119e326b6c2743379510e05cb4ba';
-
-/// Copied from Dart SDK
-class _SystemHash {
-  _SystemHash._();
-
-  static int combine(int hash, int value) {
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + value);
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + ((0x0007ffff & hash) << 10));
-    return hash ^ (hash >> 6);
-  }
-
-  static int finish(int hash) {
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + ((0x03ffffff & hash) << 3));
-    // ignore: parameter_assignments
-    hash = hash ^ (hash >> 11);
-    return 0x1fffffff & (hash + ((0x00003fff & hash) << 15));
-  }
-}
-
-abstract class _$UserIcon extends BuildlessAsyncNotifier<Uint8List?> {
-  late final Snowflake userId;
-
-  FutureOr<Uint8List?> build(
-    Snowflake userId,
-  );
-}
-
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
 /// Get the icon of a given user by id
-///
-/// Copied from [UserIcon].
+
 @ProviderFor(UserIcon)
-const userIconProvider = UserIconFamily();
+const userIconProvider = UserIconFamily._();
 
 /// Get the icon of a given user by id
-///
-/// Copied from [UserIcon].
-class UserIconFamily extends Family<AsyncValue<Uint8List?>> {
+final class UserIconProvider
+    extends $AsyncNotifierProvider<UserIcon, Uint8List?> {
   /// Get the icon of a given user by id
-  ///
-  /// Copied from [UserIcon].
-  const UserIconFamily();
+  const UserIconProvider._({
+    required UserIconFamily super.from,
+    required Snowflake super.argument,
+  }) : super(
+         retry: null,
+         name: r'userIconProvider',
+         isAutoDispose: false,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
 
-  /// Get the icon of a given user by id
-  ///
-  /// Copied from [UserIcon].
-  UserIconProvider call(
-    Snowflake userId,
-  ) {
-    return UserIconProvider(
-      userId,
-    );
+  @override
+  String debugGetCreateSourceHash() => _$userIconHash();
+
+  @override
+  String toString() {
+    return r'userIconProvider'
+        ''
+        '($argument)';
   }
 
+  @$internal
   @override
-  UserIconProvider getProviderOverride(
-    covariant UserIconProvider provider,
-  ) {
-    return call(
-      provider.userId,
-    );
-  }
-
-  static const Iterable<ProviderOrFamily>? _dependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
-
-  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
-      _allTransitiveDependencies;
-
-  @override
-  String? get name => r'userIconProvider';
-}
-
-/// Get the icon of a given user by id
-///
-/// Copied from [UserIcon].
-class UserIconProvider extends AsyncNotifierProviderImpl<UserIcon, Uint8List?> {
-  /// Get the icon of a given user by id
-  ///
-  /// Copied from [UserIcon].
-  UserIconProvider(
-    Snowflake userId,
-  ) : this._internal(
-          () => UserIcon()..userId = userId,
-          from: userIconProvider,
-          name: r'userIconProvider',
-          debugGetCreateSourceHash:
-              const bool.fromEnvironment('dart.vm.product')
-                  ? null
-                  : _$userIconHash,
-          dependencies: UserIconFamily._dependencies,
-          allTransitiveDependencies: UserIconFamily._allTransitiveDependencies,
-          userId: userId,
-        );
-
-  UserIconProvider._internal(
-    super._createNotifier, {
-    required super.name,
-    required super.dependencies,
-    required super.allTransitiveDependencies,
-    required super.debugGetCreateSourceHash,
-    required super.from,
-    required this.userId,
-  }) : super.internal();
-
-  final Snowflake userId;
-
-  @override
-  FutureOr<Uint8List?> runNotifierBuild(
-    covariant UserIcon notifier,
-  ) {
-    return notifier.build(
-      userId,
-    );
-  }
-
-  @override
-  Override overrideWith(UserIcon Function() create) {
-    return ProviderOverride(
-      origin: this,
-      override: UserIconProvider._internal(
-        () => create()..userId = userId,
-        from: from,
-        name: null,
-        dependencies: null,
-        allTransitiveDependencies: null,
-        debugGetCreateSourceHash: null,
-        userId: userId,
-      ),
-    );
-  }
-
-  @override
-  AsyncNotifierProviderElement<UserIcon, Uint8List?> createElement() {
-    return _UserIconProviderElement(this);
-  }
+  UserIcon create() => UserIcon();
 
   @override
   bool operator ==(Object other) {
-    return other is UserIconProvider && other.userId == userId;
+    return other is UserIconProvider && other.argument == argument;
   }
 
   @override
   int get hashCode {
-    var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, userId.hashCode);
-
-    return _SystemHash.finish(hash);
+    return argument.hashCode;
   }
 }
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-mixin UserIconRef on AsyncNotifierProviderRef<Uint8List?> {
-  /// The parameter `userId` of this provider.
-  Snowflake get userId;
-}
+String _$userIconHash() => r'368134c5f229119e326b6c2743379510e05cb4ba';
 
-class _UserIconProviderElement
-    extends AsyncNotifierProviderElement<UserIcon, Uint8List?>
-    with UserIconRef {
-  _UserIconProviderElement(super.provider);
+/// Get the icon of a given user by id
+
+final class UserIconFamily extends $Family
+    with
+        $ClassFamilyOverride<
+          UserIcon,
+          AsyncValue<Uint8List?>,
+          Uint8List?,
+          FutureOr<Uint8List?>,
+          Snowflake
+        > {
+  const UserIconFamily._()
+    : super(
+        retry: null,
+        name: r'userIconProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: false,
+      );
+
+  /// Get the icon of a given user by id
+
+  UserIconProvider call(Snowflake userId) =>
+      UserIconProvider._(argument: userId, from: this);
 
   @override
-  Snowflake get userId => (origin as UserIconProvider).userId;
+  String toString() => r'userIconProvider';
 }
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
+
+/// Get the icon of a given user by id
+
+abstract class _$UserIcon extends $AsyncNotifier<Uint8List?> {
+  late final _$args = ref.$arg as Snowflake;
+  Snowflake get userId => _$args;
+
+  FutureOr<Uint8List?> build(Snowflake userId);
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build(_$args);
+    final ref = this.ref as $Ref<AsyncValue<Uint8List?>, Uint8List?>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<AsyncValue<Uint8List?>, Uint8List?>,
+              AsyncValue<Uint8List?>,
+              Object?,
+              Object?
+            >;
+    element.handleValue(ref, created);
+  }
+}

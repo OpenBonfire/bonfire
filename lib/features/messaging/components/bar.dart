@@ -24,14 +24,13 @@ class EnterKeyFormatter extends TextInputFormatter {
   final bool isShiftPressed;
   final bool isDesktop;
 
-  EnterKeyFormatter({
-    required this.isShiftPressed,
-    required this.isDesktop,
-  });
+  EnterKeyFormatter({required this.isShiftPressed, required this.isDesktop});
 
   @override
   TextEditingValue formatEditUpdate(
-      TextEditingValue oldValue, TextEditingValue newValue) {
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
     if (newValue.text.endsWith('\n') && !isShiftPressed && isDesktop) {
       return oldValue;
     }
@@ -93,19 +92,19 @@ class _MessageBarState extends ConsumerState<MessageBar> {
     overlappingPanelsState?.setIgnoreGestures(false);
   }
 
-  Widget _messageBarIcon(SvgPicture icon, void Function() onPressed,
-      {Color? backgroundColor,
-      BorderRadius? borderRadius,
-      bool enabled = true}) {
+  Widget _messageBarIcon(
+    SvgPicture icon,
+    void Function() onPressed, {
+    Color? backgroundColor,
+    BorderRadius? borderRadius,
+    bool enabled = true,
+  }) {
     Color color =
         backgroundColor ?? BonfireThemeExtension.of(context).foreground;
     return Container(
       width: 48,
       height: 48,
-      decoration: BoxDecoration(
-        color: color,
-        borderRadius: borderRadius,
-      ),
+      decoration: BoxDecoration(color: color, borderRadius: borderRadius),
       child: Material(
         color: Colors.transparent,
         child: enabled
@@ -114,9 +113,7 @@ class _MessageBarState extends ConsumerState<MessageBar> {
                 borderRadius: borderRadius,
                 child: Center(child: icon),
               )
-            : Center(
-                child: Opacity(opacity: 0.5, child: icon),
-              ),
+            : Center(child: Opacity(opacity: 0.5, child: icon)),
       ),
     );
   }
@@ -166,11 +163,9 @@ class _MessageBarState extends ConsumerState<MessageBar> {
   void _sendMessage() {
     final message = messageBarController.text.trim();
     if (message.isNotEmpty || _attachments.isNotEmpty) {
-      ref.read(messagesProvider(widget.channel.id).notifier).sendMessage(
-            widget.channel,
-            message,
-            attachments: _attachments,
-          );
+      ref
+          .read(messagesProvider(widget.channel.id).notifier)
+          .sendMessage(widget.channel, message, attachments: _attachments);
       ref.read(replyControllerProvider.notifier).setMessageReply(null);
       setState(() {
         messageBarController.clear();
@@ -185,11 +180,10 @@ class _MessageBarState extends ConsumerState<MessageBar> {
       height: 100,
       child: RawGestureDetector(
         gestures: {
-          HorizontalDragGestureRecognizer: GestureRecognizerFactoryWithHandlers<
-              HorizontalDragGestureRecognizer>(
-            () => _attachmentDragRecognizer,
-            (_) {},
-          ),
+          HorizontalDragGestureRecognizer:
+              GestureRecognizerFactoryWithHandlers<
+                HorizontalDragGestureRecognizer
+              >(() => _attachmentDragRecognizer, (_) {}),
         },
         child: Padding(
           padding: const EdgeInsets.all(8.0),
@@ -216,8 +210,9 @@ class _MessageBarState extends ConsumerState<MessageBar> {
   Widget build(BuildContext context) {
     bool isWatch = isSmartwatch(context);
     ReplyState? replyState = ref.watch(replyControllerProvider);
-    Permissions? channelPermissions =
-        ref.watch(channelPermissionsProvider(widget.channel.id)).valueOrNull;
+    Permissions? channelPermissions = ref
+        .watch(channelPermissionsProvider(widget.channel.id))
+        .value;
     Channel? channel = ref.watch(channelControllerProvider(widget.channel.id));
     if (channel == null) return const SizedBox.shrink();
 
@@ -243,13 +238,14 @@ class _MessageBarState extends ConsumerState<MessageBar> {
                 ),
               Container(
                 decoration: BoxDecoration(
-                    color: BonfireThemeExtension.of(context).foreground,
-                    borderRadius: (replyState == null)
-                        ? BorderRadius.circular(8)
-                        : const BorderRadius.only(
-                            bottomLeft: Radius.circular(8),
-                            bottomRight: Radius.circular(8),
-                          )),
+                  color: BonfireThemeExtension.of(context).foreground,
+                  borderRadius: (replyState == null)
+                      ? BorderRadius.circular(8)
+                      : const BorderRadius.only(
+                          bottomLeft: Radius.circular(8),
+                          bottomRight: Radius.circular(8),
+                        ),
+                ),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
@@ -265,28 +261,32 @@ class _MessageBarState extends ConsumerState<MessageBar> {
                           topLeft: Radius.circular(8),
                           bottomLeft: Radius.circular(8),
                         ),
-                        enabled: channel is! GuildChannel ||
+                        enabled:
+                            channel is! GuildChannel ||
                             (channelPermissions?.canSendMessages == true &&
                                 channelPermissions?.canAttachFiles == true),
                       ),
                     Expanded(
                       child: ConstrainedBox(
-                        constraints: const BoxConstraints(
-                          maxHeight: 4 * 24,
-                        ),
+                        constraints: const BoxConstraints(maxHeight: 4 * 24),
                         child: TextSelectionTheme(
                           data: TextSelectionThemeData(
-                            cursorColor:
-                                BonfireThemeExtension.of(context).primary,
-                            selectionColor:
-                                BonfireThemeExtension.of(context).primary,
-                            selectionHandleColor:
-                                BonfireThemeExtension.of(context).primary,
+                            cursorColor: BonfireThemeExtension.of(
+                              context,
+                            ).primary,
+                            selectionColor: BonfireThemeExtension.of(
+                              context,
+                            ).primary,
+                            selectionHandleColor: BonfireThemeExtension.of(
+                              context,
+                            ).primary,
                           ),
                           child: KeyboardListener(
                             focusNode: FocusNode(),
                             onKeyEvent: (event) => _handleKeyEvent(
-                                event, shouldUseDesktopLayout(context)),
+                              event,
+                              shouldUseDesktopLayout(context),
+                            ),
                             child: TextField(
                               focusNode: messageBarFocusNode,
                               controller: messageBarController,
@@ -317,9 +317,10 @@ class _MessageBarState extends ConsumerState<MessageBar> {
                                 isCollapsed: false,
                               ),
                               style: GoogleFonts.publicSans(
-                                  color: const Color(0xFFBDBDBD),
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 14.5),
+                                color: const Color(0xFFBDBDBD),
+                                fontWeight: FontWeight.w500,
+                                fontSize: 14.5,
+                              ),
                               cursorColor: Colors.white,
                             ),
                           ),
@@ -336,8 +337,9 @@ class _MessageBarState extends ConsumerState<MessageBar> {
                           height: 24,
                         ),
                         _sendMessage,
-                        backgroundColor:
-                            BonfireThemeExtension.of(context).primary,
+                        backgroundColor: BonfireThemeExtension.of(
+                          context,
+                        ).primary,
                         borderRadius: const BorderRadius.only(
                           topRight: Radius.circular(8),
                           bottomRight: Radius.circular(8),
@@ -367,8 +369,14 @@ class AttachmentPreview extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final extension = path_lib.extension(attachment.fileName);
-    final isImage = ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp']
-        .contains(extension.toLowerCase());
+    final isImage = [
+      '.jpg',
+      '.jpeg',
+      '.png',
+      '.gif',
+      '.bmp',
+      '.webp',
+    ].contains(extension.toLowerCase());
 
     return Stack(
       children: [
@@ -387,12 +395,7 @@ class AttachmentPreview extends StatelessWidget {
                     fit: BoxFit.cover,
                   ),
                 )
-              : Center(
-                  child: FileIcon(
-                    attachment.fileName,
-                    size: 48,
-                  ),
-                ),
+              : Center(child: FileIcon(attachment.fileName, size: 48)),
         ),
         if (onDeleted != null)
           Positioned(
@@ -406,11 +409,7 @@ class AttachmentPreview extends StatelessWidget {
                   shape: BoxShape.circle,
                 ),
                 padding: const EdgeInsets.all(4),
-                child: const Icon(
-                  Icons.close,
-                  size: 16,
-                  color: Colors.white,
-                ),
+                child: const Icon(Icons.close, size: 16, color: Colors.white),
               ),
             ),
           ),

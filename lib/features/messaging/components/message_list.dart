@@ -56,8 +56,10 @@ class _MessageViewState extends ConsumerState<MessageList>
       duration: const Duration(milliseconds: 300),
       vsync: this,
     );
-    _fadeAnimation =
-        Tween<double>(begin: 0.0, end: 1.0).animate(_fadeController);
+    _fadeAnimation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(_fadeController);
 
     Stream<ReadyEvent>? listener;
 
@@ -101,7 +103,7 @@ class _MessageViewState extends ConsumerState<MessageList>
 
   void _scrollListener() {
     if (_scrollController.position.pixels == 0) {
-      final messages = ref.read(messagesProvider(widget.channelId)).valueOrNull;
+      final messages = ref.read(messagesProvider(widget.channelId)).value;
       if (messages != null && messages.isNotEmpty) {
         // TODO: This spams. We should check the read state or something to only do this once.
         // messages.first.manager.acknowledge(messages.first.id);
@@ -187,7 +189,7 @@ class _MessageViewState extends ConsumerState<MessageList>
   }
 
   void _updateOldestAndNewestMessages() {
-    final messages = ref.read(messagesProvider(widget.channelId)).valueOrNull;
+    final messages = ref.read(messagesProvider(widget.channelId)).value;
     if (messages == null || messages.isEmpty) return;
 
     // Since messages are sorted newest first, first is newest and last is oldest
@@ -201,7 +203,8 @@ class _MessageViewState extends ConsumerState<MessageList>
             _scrollController.position.maxScrollExtent) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (_scrollController.hasClients) {
-          final delta = _scrollController.position.maxScrollExtent -
+          final delta =
+              _scrollController.position.maxScrollExtent -
               _previousMaxScrollExtent!;
           if (delta > 0) {
             // _scrollController.jumpTo(_scrollController.offset + delta);
@@ -212,8 +215,7 @@ class _MessageViewState extends ConsumerState<MessageList>
   }
 
   Widget _buildMessageList() {
-    final messages =
-        ref.watch(messagesProvider(widget.channelId)).valueOrNull ?? [];
+    final messages = ref.watch(messagesProvider(widget.channelId)).value ?? [];
 
     if (messages.isNotEmpty) {
       _newestLoadedMessage = messages.first;
@@ -229,8 +231,9 @@ class _MessageViewState extends ConsumerState<MessageList>
         top: isSmartwatch(context)
             ? 0
             : 50 +
-                MediaQuery.viewPaddingOf(context)
-                    .top, // add the height of the channel header
+                  MediaQuery.viewPaddingOf(
+                    context,
+                  ).top, // add the height of the channel header
         left: 0,
         right: 0,
       ),
@@ -238,22 +241,25 @@ class _MessageViewState extends ConsumerState<MessageList>
         childCount: messages.length + (isSmartwatch(context) ? 1 : 0),
         findChildIndexCallback: (Key key) {
           final ValueKey<BigInt> valueKey = key as ValueKey<BigInt>;
-          var idx = messages
-              .indexWhere((message) => message.id.value == valueKey.value);
+          var idx = messages.indexWhere(
+            (message) => message.id.value == valueKey.value,
+          );
           if (idx == -1) return null;
           return idx;
         },
         (context, index) {
-          final channel =
-              ref.watch(channelControllerProvider(widget.channelId));
+          final channel = ref.watch(
+            channelControllerProvider(widget.channelId),
+          );
 
           if (channel == null) return const SizedBox.shrink();
           if (isSmartwatch(context) && index == 0) {
             return MessageBar(
-                guildId:
-                    ref.read(guildControllerProvider(widget.guildId))?.id ??
-                        Snowflake.zero,
-                channel: channel);
+              guildId:
+                  ref.read(guildControllerProvider(widget.guildId))?.id ??
+                  Snowflake.zero,
+              channel: channel,
+            );
           }
 
           final messageIndex = isSmartwatch(context) ? index - 1 : index;
@@ -280,7 +286,8 @@ class _MessageViewState extends ConsumerState<MessageList>
 
           return MessageBox(
             key: ValueKey(messages[messageIndex].id.value),
-            guildId: ref.read(guildControllerProvider(widget.guildId))?.id ??
+            guildId:
+                ref.read(guildControllerProvider(widget.guildId))?.id ??
                 Snowflake.zero,
             channel: channel,
             messageId: messages[messageIndex].id,
@@ -338,9 +345,7 @@ class _MessageViewState extends ConsumerState<MessageList>
           _fadeController.forward();
           content = _buildMessageList();
         } else {
-          content = const Center(
-            child: Text('No messages in this channel'),
-          );
+          content = const Center(child: Text('No messages in this channel'));
         }
       },
       loading: () {
@@ -358,41 +363,31 @@ class _MessageViewState extends ConsumerState<MessageList>
     final guild = ref.watch(guildControllerProvider(widget.guildId));
 
     if (channel == null) {
-      return const Center(
-        child: CircularProgressIndicator(),
-      );
+      return const Center(child: CircularProgressIndicator());
     }
 
     return Container(
-      decoration:
-          BoxDecoration(color: BonfireThemeExtension.of(context).background),
+      decoration: BoxDecoration(
+        color: BonfireThemeExtension.of(context).background,
+      ),
       child: Column(
         children: [
           Expanded(
             child: Stack(
               children: [
                 FadeTransition(
-                    opacity: _fadeAnimation,
-                    child: Align(
-                      alignment: Alignment.bottomLeft,
-                      child: content,
-                    )),
+                  opacity: _fadeAnimation,
+                  child: Align(alignment: Alignment.bottomLeft, child: content),
+                ),
                 if (!isSmartwatch(context))
-                  ChannelHeader(
-                    channelId: channel.id,
-                  ),
+                  ChannelHeader(channelId: channel.id),
               ],
             ),
           ),
-          MessageBar(
-            guildId: guild?.id ?? Snowflake.zero,
-            channel: channel,
-          ),
+          MessageBar(guildId: guild?.id ?? Snowflake.zero, channel: channel),
           if (!isSmartwatch(context))
-            SizedBox(
-              height: MediaQuery.paddingOf(context).bottom,
-            ),
-          if (!isSmartwatch(context)) const KeyboardBuffer()
+            SizedBox(height: MediaQuery.paddingOf(context).bottom),
+          if (!isSmartwatch(context)) const KeyboardBuffer(),
         ],
       ),
     );
@@ -405,7 +400,9 @@ class NoMessageSendPermissionPlaceholder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        decoration:
-            BoxDecoration(color: BonfireThemeExtension.of(context).background));
+      decoration: BoxDecoration(
+        color: BonfireThemeExtension.of(context).background,
+      ),
+    );
   }
 }

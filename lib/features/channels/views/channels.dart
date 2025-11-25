@@ -15,8 +15,11 @@ import 'package:universal_platform/universal_platform.dart';
 class ChannelsList extends ConsumerStatefulWidget {
   final Snowflake guildId;
   final Snowflake channelId;
-  const ChannelsList(
-      {super.key, required this.guildId, required this.channelId});
+  const ChannelsList({
+    super.key,
+    required this.guildId,
+    required this.channelId,
+  });
 
   @override
   ConsumerState<ChannelsList> createState() => _ChannelsListState();
@@ -27,11 +30,12 @@ class _ChannelsListState extends ConsumerState<ChannelsList> {
 
   @override
   Widget build(BuildContext context) {
-    var topPadding = (MediaQuery.paddingOf(context).top) +
+    var topPadding =
+        (MediaQuery.paddingOf(context).top) +
         (UniversalPlatform.isDesktopOrWeb ? 8 : 0);
 
     var channelWatch = ref.watch(channelsProvider(widget.guildId));
-    var channels = channelWatch.valueOrNull ?? [];
+    var channels = channelWatch.value ?? [];
 
     List<Channel> channelsWithoutParent = [];
     Map<GuildChannel, List<GuildChannel>> categoryMap = {};
@@ -55,14 +59,12 @@ class _ChannelsListState extends ConsumerState<ChannelsList> {
       }
     }
 
-    var guildBannerUrl =
-        ref.watch(guildBannerUrlProvider(widget.guildId)).valueOrNull;
+    var guildBannerUrl = ref
+        .watch(guildBannerUrlProvider(widget.guildId))
+        .value;
 
     return Padding(
-      padding: EdgeInsets.only(
-        top: topPadding,
-        right: 8,
-      ),
+      padding: EdgeInsets.only(top: topPadding, right: 8),
       child: Container(
         height: double.infinity,
         decoration: BoxDecoration(
@@ -81,79 +83,85 @@ class _ChannelsListState extends ConsumerState<ChannelsList> {
         child: Column(
           children: [
             Expanded(
-              child: Builder(builder: (context) {
-                List<Widget> listItems = [];
+              child: Builder(
+                builder: (context) {
+                  List<Widget> listItems = [];
 
-                if (guildBannerUrl != null) {
+                  if (guildBannerUrl != null) {
+                    listItems.add(
+                      SizedBox(
+                        height: 150,
+                        child: Image.network(
+                          "$guildBannerUrl?size=512",
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    );
+                  }
+
                   listItems.add(
-                    SizedBox(
-                      height: 150,
-                      child: Image.network(
-                        "$guildBannerUrl?size=512",
-                        fit: BoxFit.cover,
+                    StickyHeader(
+                      header: GuildOverview(guildId: widget.guildId),
+                      content: const SizedBox(height: 8),
+                    ),
+                  );
+
+                  for (var channel in channelsWithoutParent) {
+                    listItems.add(
+                      ChannelButton(
+                        currentChannelId: widget.channelId,
+                        currentGuildId: widget.guildId,
+                        channel: channel as GuildChannel,
+                      ),
+                    );
+                  }
+
+                  categoryMap.forEach((category, children) {
+                    listItems.add(
+                      Category(
+                        guildId: widget.guildId,
+                        channelId: widget.channelId,
+                        category: category,
+                        children: children,
+                      ),
+                    );
+                  });
+
+                  if (shouldUseMobileLayout(context)) {
+                    listItems.add(
+                      SizedBox(
+                        height: MediaQuery.paddingOf(context).bottom + 50,
+                      ),
+                    );
+                  }
+
+                  return ClipRRect(
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(24),
+                      topRight: Radius.circular(8),
+                    ),
+                    child: ScrollConfiguration(
+                      behavior: ScrollConfiguration.of(
+                        context,
+                      ).copyWith(scrollbars: false),
+                      child: ListView(
+                        key: ValueKey(widget.guildId.toString()),
+                        controller: scrollController,
+                        padding: EdgeInsets.zero,
+                        children: listItems,
                       ),
                     ),
                   );
-                }
-
-                listItems.add(
-                  StickyHeader(
-                    header: GuildOverview(guildId: widget.guildId),
-                    content: const SizedBox(height: 8),
-                  ),
-                );
-
-                for (var channel in channelsWithoutParent) {
-                  listItems.add(
-                    ChannelButton(
-                      currentChannelId: widget.channelId,
-                      currentGuildId: widget.guildId,
-                      channel: channel as GuildChannel,
-                    ),
-                  );
-                }
-
-                categoryMap.forEach((category, children) {
-                  listItems.add(
-                    Category(
-                      guildId: widget.guildId,
-                      channelId: widget.channelId,
-                      category: category,
-                      children: children,
-                    ),
-                  );
-                });
-
-                if (shouldUseMobileLayout(context)) {
-                  listItems.add(
-                    SizedBox(
-                      height: MediaQuery.paddingOf(context).bottom + 50,
-                    ),
-                  );
-                }
-
-                return ClipRRect(
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(24),
-                    topRight: Radius.circular(8),
-                  ),
-                  child: ScrollConfiguration(
-                    behavior: ScrollConfiguration.of(context)
-                        .copyWith(scrollbars: false),
-                    child: ListView(
-                      key: ValueKey(widget.guildId.toString()),
-                      controller: scrollController,
-                      padding: EdgeInsets.zero,
-                      children: listItems,
-                    ),
-                  ),
-                );
-              }),
+                },
+              ),
             ),
             shouldUseDesktopLayout(context)
                 ? const Padding(
-                    padding:
-                        EdgeInsets.only(left: 8.0, right: 8.0, bottom: 8.0),
+                    padding: EdgeInsets.only(
+                      left: 8.0,
+                      right: 8.0,
+                      bottom: 8.0,
+                    ),
                     child: UserCard(),
                   )
                 : const SizedBox(),

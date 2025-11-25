@@ -9,11 +9,12 @@ class GroupHeader extends ConsumerStatefulWidget {
   final GuildMemberListGroup group;
   final Guild guild;
   final List<GuildMemberListGroup> groups;
-  const GroupHeader(
-      {super.key,
-      required this.guild,
-      required this.group,
-      required this.groups});
+  const GroupHeader({
+    super.key,
+    required this.guild,
+    required this.group,
+    required this.groups,
+  });
 
   @override
   ConsumerState<GroupHeader> createState() => _HeaderCardState();
@@ -27,7 +28,7 @@ class _HeaderCardState extends ConsumerState<GroupHeader> {
     if (widget.group.id != null) {
       role = ref
           .watch(getRoleProvider(widget.guild.id, widget.group.id!))
-          .valueOrNull;
+          .value;
     }
     int groupCount = 0;
     for (var _ in widget.groups) {
@@ -38,10 +39,13 @@ class _HeaderCardState extends ConsumerState<GroupHeader> {
       }
     }
 
-    return Text("${role?.name ?? widget.group.name} - $groupCount",
-        style: GoogleFonts.publicSans(
-            fontSize: 14,
-            fontWeight: FontWeight.w600,
-            color: BonfireThemeExtension.of(context).dirtyWhite));
+    return Text(
+      "${role?.name ?? widget.group.name} - $groupCount",
+      style: GoogleFonts.publicSans(
+        fontSize: 14,
+        fontWeight: FontWeight.w600,
+        color: BonfireThemeExtension.of(context).dirtyWhite,
+      ),
+    );
   }
 }

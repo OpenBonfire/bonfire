@@ -61,20 +61,21 @@ class _MessageBoxState extends ConsumerState<MessageBox>
     twelveHour = twelveHour == 0 ? 12 : twelveHour;
     String section3 = time.hour >= 12 ? 'PM' : 'AM';
 
-    String formattedMinute =
-        time.minute < 10 ? '0${time.minute}' : '${time.minute}';
+    String formattedMinute = time.minute < 10
+        ? '0${time.minute}'
+        : '${time.minute}';
     section2 = ' at $twelveHour:$formattedMinute $section3';
 
     return section1 + section2;
   }
 
   bool mentionsSelf(Message message) {
-    var selfMember =
-        ref.watch(getSelfMemberProvider(widget.guildId)).valueOrNull;
+    var selfMember = ref.watch(getSelfMemberProvider(widget.guildId)).value;
     if (selfMember == null) return false;
 
-    bool directlyMentions =
-        message.mentions.any((mention) => mention.id == selfMember.id);
+    bool directlyMentions = message.mentions.any(
+      (mention) => mention.id == selfMember.id,
+    );
 
     if (directlyMentions) return true;
 
@@ -95,34 +96,31 @@ class _MessageBoxState extends ConsumerState<MessageBox>
     Message? message = ref.watch(messageControllerProvider(widget.messageId));
     if (message == null) return const SizedBox.shrink();
 
-    String? name = ref
-            .watch(messageAuthorNameProvider(
-                widget.guildId, widget.channel, message.author))
-            .valueOrNull ??
+    String? name =
+        ref
+            .watch(
+              messageAuthorNameProvider(
+                widget.guildId,
+                widget.channel,
+                message.author,
+              ),
+            )
+            .value ??
         message.author.username;
 
     var member = ref
         .watch(getMemberProvider(widget.guildId, message.author.id))
-        .valueOrNull;
+        .value;
 
     var roleIconRef = ref.watch(
-      roleIconProvider(
-        widget.guildId,
-        message.author.id,
-      ),
+      roleIconProvider(widget.guildId, message.author.id),
     );
 
-    Color textColor = ref
-            .watch(
-              roleColorProvider(
-                widget.guildId,
-                message.author.id,
-              ),
-            )
-            .valueOrNull ??
+    Color textColor =
+        ref.watch(roleColorProvider(widget.guildId, message.author.id)).value ??
         Colors.white;
 
-    Uint8List? roleIcon = roleIconRef.valueOrNull;
+    Uint8List? roleIcon = roleIconRef.value;
 
     name = member?.nick ?? member?.user?.globalName ?? name;
 
@@ -138,16 +136,18 @@ class _MessageBoxState extends ConsumerState<MessageBox>
                 child: Container(
                   width: 2,
                   decoration: const BoxDecoration(
-                      color: Color.fromARGB(255, 252, 218, 155)),
+                    color: Color.fromARGB(255, 252, 218, 155),
+                  ),
                 ),
               ),
             ),
           Padding(
             padding: EdgeInsets.only(
-                left: mentioned ? 2 : 0,
-                right: 16,
-                top: mentioned ? 8 : 0,
-                bottom: mentioned ? 4 : 0),
+              left: mentioned ? 2 : 0,
+              right: 16,
+              top: mentioned ? 8 : 0,
+              bottom: mentioned ? 4 : 0,
+            ),
             child: Column(
               children: [
                 if (message.referencedMessage != null && !isSmartwatch(context))
@@ -178,9 +178,7 @@ class _MessageBoxState extends ConsumerState<MessageBox>
               right: 0,
               child: OverlayEntry(
                 maintainState: true,
-                builder: (context) => ContextPopout(
-                  messageId: message.id,
-                ),
+                builder: (context) => ContextPopout(messageId: message.id),
               ).builder(context),
             ),
         ],
@@ -208,10 +206,12 @@ class _MessageBoxState extends ConsumerState<MessageBox>
                     HapticFeedback.mediumImpact();
                     ref
                         .read(replyControllerProvider.notifier)
-                        .setMessageReply(ReplyState(
-                          messageId: widget.messageId,
-                          shouldMention: true,
-                        ));
+                        .setMessageReply(
+                          ReplyState(
+                            messageId: widget.messageId,
+                            shouldMention: true,
+                          ),
+                        );
                   },
                   child: OutlinedButton(
                     style: OutlinedButton.styleFrom(
@@ -224,17 +224,19 @@ class _MessageBoxState extends ConsumerState<MessageBox>
                         borderRadius: BorderRadius.circular(0),
                       ),
                       // change hover / select color to white
-                      foregroundColor:
-                          BonfireThemeExtension.of(context).foreground,
+                      foregroundColor: BonfireThemeExtension.of(
+                        context,
+                      ).foreground,
                     ),
                     onPressed: () {},
-                    // on double tap
 
+                    // on double tap
                     onLongPress: () {
                       if (shouldUseMobileLayout(context)) {
                         GlobalDrawer.of(context)!.toggleDrawer();
-                        GlobalDrawer.of(context)!.setChild(
-                            ContextDrawer(messageId: widget.messageId));
+                        GlobalDrawer.of(
+                          context,
+                        )!.setChild(ContextDrawer(messageId: widget.messageId));
                       }
                     },
                     child: buildBoxContent(),
@@ -246,7 +248,7 @@ class _MessageBoxState extends ConsumerState<MessageBox>
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: buildBoxContent(),
-                )
+                ),
         ],
       ),
     );
@@ -266,8 +268,9 @@ class _MessageBoxState extends ConsumerState<MessageBox>
       child: Column(
         children: [
           Row(
-            crossAxisAlignment:
-                isWatch ? CrossAxisAlignment.center : CrossAxisAlignment.start,
+            crossAxisAlignment: isWatch
+                ? CrossAxisAlignment.center
+                : CrossAxisAlignment.start,
             children: [
               if (widget.showSenderInfo)
                 Padding(
@@ -341,19 +344,16 @@ class _MessageBoxState extends ConsumerState<MessageBox>
               ),
               if (message.editedTimestamp != null)
                 TextSpan(
-                    text: " (edited)",
-                    style: Theme.of(context).textTheme.labelMedium),
+                  text: " (edited)",
+                  style: Theme.of(context).textTheme.labelMedium,
+                ),
             ],
           ),
         ),
         if (roleIcon != null)
           Padding(
             padding: const EdgeInsets.only(left: 6),
-            child: Image.memory(
-              roleIcon,
-              width: 18,
-              height: 18,
-            ),
+            child: Image.memory(roleIcon, width: 18, height: 18),
           ),
       ],
     );
@@ -364,24 +364,23 @@ class _MessageBoxState extends ConsumerState<MessageBox>
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         MessageMarkdownBox(message: message),
-        ...message.embeds.map((embed) => Padding(
-              padding: const EdgeInsets.only(top: 8),
-              child: EmbedWidget(
-                scrollController: widget.scrollController,
-                embed: embed,
-              ),
-            )),
-        ...message.attachments.map((attachment) => Padding(
-              padding: const EdgeInsets.only(top: 8),
-              child: AttachmentWidget(
-                attachment: attachment,
-              ),
-            )),
-        // const SizedBox(height: 4),
-        MessageReactions(
-          guildId: widget.guildId,
-          messageId: widget.messageId,
+        ...message.embeds.map(
+          (embed) => Padding(
+            padding: const EdgeInsets.only(top: 8),
+            child: EmbedWidget(
+              scrollController: widget.scrollController,
+              embed: embed,
+            ),
+          ),
         ),
+        ...message.attachments.map(
+          (attachment) => Padding(
+            padding: const EdgeInsets.only(top: 8),
+            child: AttachmentWidget(attachment: attachment),
+          ),
+        ),
+        // const SizedBox(height: 4),
+        MessageReactions(guildId: widget.guildId, messageId: widget.messageId),
       ],
     );
   }

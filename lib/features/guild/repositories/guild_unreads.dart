@@ -21,7 +21,7 @@ class GuildUnreads extends _$GuildUnreads {
       // debugPrint("Guild is null");
       return false;
     }
-    var channels = ref.watch(channelsProvider(guildId)).valueOrNull ?? [];
+    var channels = ref.watch(channelsProvider(guildId)).value ?? [];
     // debugPrint("GOT CHANNELS: ${channels.length}");
 
     for (var channel in channels) {
@@ -29,7 +29,7 @@ class GuildUnreads extends _$GuildUnreads {
         var unread = await ref.watch(hasUnreadsProvider(channel.id).future);
         if (unread) return true;
         // var unread = ref.watch(hasUnreadsProvider(channel.id));
-        // return unread.valueOrNull ?? false;
+        // return unread.value ?? false;
       }
     }
 

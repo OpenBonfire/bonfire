@@ -6,22 +6,59 @@ part of 'added_accounts.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$addedAccountsControllerHash() =>
-    r'51b5b9b894cbb61c6ac686b819251d219b4b50d6';
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
 
-/// See also [AddedAccountsController].
 @ProviderFor(AddedAccountsController)
-final addedAccountsControllerProvider = AutoDisposeNotifierProvider<
-    AddedAccountsController, List<AddedAccount>>.internal(
-  AddedAccountsController.new,
-  name: r'addedAccountsControllerProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$addedAccountsControllerHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+const addedAccountsControllerProvider = AddedAccountsControllerProvider._();
 
-typedef _$AddedAccountsController = AutoDisposeNotifier<List<AddedAccount>>;
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
+final class AddedAccountsControllerProvider
+    extends $NotifierProvider<AddedAccountsController, List<AddedAccount>> {
+  const AddedAccountsControllerProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'addedAccountsControllerProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$addedAccountsControllerHash();
+
+  @$internal
+  @override
+  AddedAccountsController create() => AddedAccountsController();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(List<AddedAccount> value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<List<AddedAccount>>(value),
+    );
+  }
+}
+
+String _$addedAccountsControllerHash() =>
+    r'849d6877765ebd9786344bd551e8ae451ef6cf49';
+
+abstract class _$AddedAccountsController extends $Notifier<List<AddedAccount>> {
+  List<AddedAccount> build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build();
+    final ref = this.ref as $Ref<List<AddedAccount>, List<AddedAccount>>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<List<AddedAccount>, List<AddedAccount>>,
+              List<AddedAccount>,
+              Object?,
+              Object?
+            >;
+    element.handleValue(ref, created);
+  }
+}

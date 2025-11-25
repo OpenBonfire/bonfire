@@ -36,7 +36,7 @@ class GuildFolderWidgetState extends ConsumerState<GuildFolderWidget>
 
   bool _hasUnreadsInFolder(List<UserGuild> folderGuilds, WidgetRef ref) {
     for (var guild in folderGuilds) {
-      if (ref.watch(guildUnreadsProvider(guild.id)).valueOrNull ?? false) {
+      if (ref.watch(guildUnreadsProvider(guild.id)).value ?? false) {
         return true;
       }
     }
@@ -46,8 +46,7 @@ class GuildFolderWidgetState extends ConsumerState<GuildFolderWidget>
   int _getTotalMentionsInFolder(List<UserGuild> folderGuilds, WidgetRef ref) {
     int totalMentions = 0;
     for (var guild in folderGuilds) {
-      totalMentions +=
-          ref.read(guildMentionsProvider(guild.id)).valueOrNull ?? 0;
+      totalMentions += ref.read(guildMentionsProvider(guild.id)).value ?? 0;
     }
     return totalMentions;
   }
@@ -110,14 +109,14 @@ class GuildFolderWidgetState extends ConsumerState<GuildFolderWidget>
               child: Text(
                 count.toString(),
                 style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                      fontSize: 11,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.white,
-                    ),
+                  fontSize: 11,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.white,
+                ),
                 textAlign: TextAlign.center,
               ),
             ),
-          )
+          ),
         ],
       ),
     );
@@ -199,11 +198,12 @@ class GuildFolderWidgetState extends ConsumerState<GuildFolderWidget>
                               child: Container(
                                 decoration: BoxDecoration(
                                   color: (widget.guildFolder.color != null)
-                                      ? Color(int.parse(
-                                              widget.guildFolder.color
-                                                  .toString(),
-                                              radix: 10))
-                                          .withOpacity(0.5)
+                                      ? Color(
+                                          int.parse(
+                                            widget.guildFolder.color.toString(),
+                                            radix: 10,
+                                          ),
+                                        ).withOpacity(0.5)
                                       : bonfireTheme.primary.withOpacity(0.5),
                                   borderRadius: BorderRadius.circular(16),
                                 ),
@@ -218,7 +218,8 @@ class GuildFolderWidgetState extends ConsumerState<GuildFolderWidget>
                                     children: folderGuilds.take(4).map((guild) {
                                       return Center(
                                         child: SidebarIcon(
-                                          selected: widget.selectedGuildId ==
+                                          selected:
+                                              widget.selectedGuildId ==
                                               guild.id,
                                           guild: guild,
                                           mini: true,
@@ -235,13 +236,15 @@ class GuildFolderWidgetState extends ConsumerState<GuildFolderWidget>
                             opacity: _expandAnimation.value,
                             child: Center(
                               child: FolderIcon(
-                                  color: (widget.guildFolder.color != null)
-                                      ? Color(int.parse(
-                                              widget.guildFolder.color
-                                                  .toString(),
-                                              radix: 10))
-                                          .withOpacity(1)
-                                      : bonfireTheme.primary),
+                                color: (widget.guildFolder.color != null)
+                                    ? Color(
+                                        int.parse(
+                                          widget.guildFolder.color.toString(),
+                                          radix: 10,
+                                        ),
+                                      ).withOpacity(1)
+                                    : bonfireTheme.primary,
+                              ),
                             ),
                           ),
                           if (totalMentions > 0 && !_isExpanded)
@@ -256,27 +259,29 @@ class GuildFolderWidgetState extends ConsumerState<GuildFolderWidget>
                         key: _sizeTransitionKey,
                         sizeFactor: _expandAnimation,
                         child: Column(
-                          children: (folderGuilds
-                              .map(
-                                (guild) => SizedBox(
-                                  child: Center(
-                                    child: Padding(
-                                      padding:
-                                          EdgeInsets.only(top: iconSpacing),
-                                      child: SidebarIcon(
-                                        selected:
-                                            widget.selectedGuildId == guild.id,
-                                        guild: guild,
-                                        isClickable: true,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              )
-                              .toList() as List<Widget>)
-                            ..add(
-                              const SizedBox(height: 4),
-                            ),
+                          children:
+                              (folderGuilds
+                                        .map(
+                                          (guild) => SizedBox(
+                                            child: Center(
+                                              child: Padding(
+                                                padding: EdgeInsets.only(
+                                                  top: iconSpacing,
+                                                ),
+                                                child: SidebarIcon(
+                                                  selected:
+                                                      widget.selectedGuildId ==
+                                                      guild.id,
+                                                  guild: guild,
+                                                  isClickable: true,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        )
+                                        .toList()
+                                    as List<Widget>)
+                                ..add(const SizedBox(height: 4)),
                         ),
                       ),
                     ],

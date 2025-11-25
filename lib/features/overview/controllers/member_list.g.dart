@@ -6,22 +6,59 @@ part of 'member_list.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
+
+@ProviderFor(MemberListVisibility)
+const memberListVisibilityProvider = MemberListVisibilityProvider._();
+
+final class MemberListVisibilityProvider
+    extends $NotifierProvider<MemberListVisibility, bool> {
+  const MemberListVisibilityProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'memberListVisibilityProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$memberListVisibilityHash();
+
+  @$internal
+  @override
+  MemberListVisibility create() => MemberListVisibility();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(bool value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<bool>(value),
+    );
+  }
+}
+
 String _$memberListVisibilityHash() =>
     r'd0c3c92fd359b44b5aac32a8a596f70862921465';
 
-/// See also [MemberListVisibility].
-@ProviderFor(MemberListVisibility)
-final memberListVisibilityProvider =
-    NotifierProvider<MemberListVisibility, bool>.internal(
-  MemberListVisibility.new,
-  name: r'memberListVisibilityProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$memberListVisibilityHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
-
-typedef _$MemberListVisibility = Notifier<bool>;
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
+abstract class _$MemberListVisibility extends $Notifier<bool> {
+  bool build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build();
+    final ref = this.ref as $Ref<bool, bool>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<bool, bool>,
+              bool,
+              Object?,
+              Object?
+            >;
+    element.handleValue(ref, created);
+  }
+}

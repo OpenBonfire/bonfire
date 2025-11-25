@@ -10,8 +10,13 @@ class AddedAccountsController extends _$AddedAccountsController {
   List<AddedAccount> build() {
     final box = Hive.box("added-accounts");
     final List<AddedAccount> accounts = box.values
-        .map((e) => AddedAccount.fromJson((e as Map<dynamic, dynamic>)
-            .map((key, value) => MapEntry(key.toString(), value.toString()))))
+        .map(
+          (e) => AddedAccountMapper.fromMap(
+            (e as Map<dynamic, dynamic>).map(
+              (key, value) => MapEntry(key.toString(), value.toString()),
+            ),
+          ),
+        )
         .toList()
         .cast<AddedAccount>();
 

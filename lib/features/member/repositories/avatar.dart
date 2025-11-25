@@ -8,8 +8,7 @@ import 'package:http/http.dart' as http;
 part 'avatar.g.dart';
 
 @riverpod
-Future<Uint8List?> messageAuthorAvatar(
-    MessageAuthorAvatarRef ref, MessageAuthor member) async {
+Future<Uint8List?> messageAuthorAvatar(Ref ref, MessageAuthor member) async {
   // String? hash = member.avatarHash;
   // if (hash != null) {
   //   var cached = await fetchMemberAvatarFromCache(member.avatarHash!);

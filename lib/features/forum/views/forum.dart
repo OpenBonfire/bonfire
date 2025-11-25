@@ -10,11 +10,7 @@ class ForumView extends ConsumerStatefulWidget {
   final Snowflake guildId;
   final Snowflake channelId;
 
-  const ForumView({
-    super.key,
-    required this.guildId,
-    required this.channelId,
-  });
+  const ForumView({super.key, required this.guildId, required this.channelId});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _ForumViewState();
@@ -33,7 +29,7 @@ class _ForumViewState extends ConsumerState<ForumView> {
   void _onScroll() {
     if (_scrollController.position.pixels >=
         _scrollController.position.maxScrollExtent - 100) {
-      final channel = ref.read(forumsProvider(widget.channelId)).valueOrNull;
+      final channel = ref.read(forumsProvider(widget.channelId)).value;
       if (channel != null) {
         final forumPosts = ref.read(forumPostsProvider(channel.id).notifier);
         if (forumPosts.hasMore) {
@@ -45,12 +41,10 @@ class _ForumViewState extends ConsumerState<ForumView> {
 
   @override
   Widget build(BuildContext context) {
-    final channel = ref.watch(forumsProvider(widget.channelId)).valueOrNull;
+    final channel = ref.watch(forumsProvider(widget.channelId)).value;
 
     if (channel == null) {
-      return const Center(
-        child: CircularProgressIndicator(),
-      );
+      return const Center(child: CircularProgressIndicator());
     }
 
     final postsAsync = ref.watch(forumPostsProvider(channel.id));
@@ -83,9 +77,7 @@ class _ForumViewState extends ConsumerState<ForumView> {
                   bottom: MediaQuery.paddingOf(context).bottom,
                 ),
               ),
-              ChannelHeader(
-                channelId: channel.id,
-              ),
+              ChannelHeader(channelId: channel.id),
             ],
           );
         },
@@ -103,13 +95,9 @@ class _ForumViewState extends ConsumerState<ForumView> {
                     ),
                   );
                 },
-                padding: const EdgeInsets.only(
-                  top: 8,
-                ),
+                padding: const EdgeInsets.only(top: 8),
               ),
-        error: (error, stack) => Center(
-          child: Text('Error: $error'),
-        ),
+        error: (error, stack) => Center(child: Text('Error: $error')),
       ),
     );
   }

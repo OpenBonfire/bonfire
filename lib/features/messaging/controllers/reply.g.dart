@@ -6,21 +6,58 @@ part of 'reply.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
+
+@ProviderFor(ReplyController)
+const replyControllerProvider = ReplyControllerProvider._();
+
+final class ReplyControllerProvider
+    extends $NotifierProvider<ReplyController, ReplyState?> {
+  const ReplyControllerProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'replyControllerProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$replyControllerHash();
+
+  @$internal
+  @override
+  ReplyController create() => ReplyController();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(ReplyState? value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<ReplyState?>(value),
+    );
+  }
+}
+
 String _$replyControllerHash() => r'9bc3d0ec5dfe8af5bbdd41de4fa5177605cdfaf2';
 
-/// See also [ReplyController].
-@ProviderFor(ReplyController)
-final replyControllerProvider =
-    NotifierProvider<ReplyController, ReplyState?>.internal(
-  ReplyController.new,
-  name: r'replyControllerProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$replyControllerHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
-
-typedef _$ReplyController = Notifier<ReplyState?>;
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
+abstract class _$ReplyController extends $Notifier<ReplyState?> {
+  ReplyState? build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build();
+    final ref = this.ref as $Ref<ReplyState?, ReplyState?>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<ReplyState?, ReplyState?>,
+              ReplyState?,
+              Object?,
+              Object?
+            >;
+    element.handleValue(ref, created);
+  }
+}

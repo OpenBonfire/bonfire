@@ -22,7 +22,7 @@ class MessageReply extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     var author = parentMessage.referencedMessage!.author;
     var member = ref.watch(getMemberProvider(guildId, author.id));
-    var roles = ref.watch(getGuildRolesProvider(guildId)).valueOrNull ?? [];
+    var roles = ref.watch(getGuildRolesProvider(guildId)).value ?? [];
 
     String name = author.username;
     Color textColor = Colors.white;

@@ -6,313 +6,201 @@ part of 'forum.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$threadChannelHash() => r'978541d1e6c62409681e1ba9c38976ee410d7465';
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
 
-/// Copied from Dart SDK
-class _SystemHash {
-  _SystemHash._();
-
-  static int combine(int hash, int value) {
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + value);
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + ((0x0007ffff & hash) << 10));
-    return hash ^ (hash >> 6);
-  }
-
-  static int finish(int hash) {
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + ((0x03ffffff & hash) << 3));
-    // ignore: parameter_assignments
-    hash = hash ^ (hash >> 11);
-    return 0x1fffffff & (hash + ((0x00003fff & hash) << 15));
-  }
-}
-
-abstract class _$ThreadChannel extends BuildlessNotifier<Channel?> {
-  late final Snowflake channelId;
-
-  Channel? build(
-    Snowflake channelId,
-  );
-}
-
-/// See also [ThreadChannel].
 @ProviderFor(ThreadChannel)
-const threadChannelProvider = ThreadChannelFamily();
+const threadChannelProvider = ThreadChannelFamily._();
 
-/// See also [ThreadChannel].
-class ThreadChannelFamily extends Family<Channel?> {
-  /// See also [ThreadChannel].
-  const ThreadChannelFamily();
+final class ThreadChannelProvider
+    extends $NotifierProvider<ThreadChannel, Channel?> {
+  const ThreadChannelProvider._({
+    required ThreadChannelFamily super.from,
+    required Snowflake super.argument,
+  }) : super(
+         retry: null,
+         name: r'threadChannelProvider',
+         isAutoDispose: false,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
 
-  /// See also [ThreadChannel].
-  ThreadChannelProvider call(
-    Snowflake channelId,
-  ) {
-    return ThreadChannelProvider(
-      channelId,
-    );
+  @override
+  String debugGetCreateSourceHash() => _$threadChannelHash();
+
+  @override
+  String toString() {
+    return r'threadChannelProvider'
+        ''
+        '($argument)';
   }
 
+  @$internal
   @override
-  ThreadChannelProvider getProviderOverride(
-    covariant ThreadChannelProvider provider,
-  ) {
-    return call(
-      provider.channelId,
-    );
-  }
+  ThreadChannel create() => ThreadChannel();
 
-  static const Iterable<ProviderOrFamily>? _dependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
-
-  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
-      _allTransitiveDependencies;
-
-  @override
-  String? get name => r'threadChannelProvider';
-}
-
-/// See also [ThreadChannel].
-class ThreadChannelProvider
-    extends NotifierProviderImpl<ThreadChannel, Channel?> {
-  /// See also [ThreadChannel].
-  ThreadChannelProvider(
-    Snowflake channelId,
-  ) : this._internal(
-          () => ThreadChannel()..channelId = channelId,
-          from: threadChannelProvider,
-          name: r'threadChannelProvider',
-          debugGetCreateSourceHash:
-              const bool.fromEnvironment('dart.vm.product')
-                  ? null
-                  : _$threadChannelHash,
-          dependencies: ThreadChannelFamily._dependencies,
-          allTransitiveDependencies:
-              ThreadChannelFamily._allTransitiveDependencies,
-          channelId: channelId,
-        );
-
-  ThreadChannelProvider._internal(
-    super._createNotifier, {
-    required super.name,
-    required super.dependencies,
-    required super.allTransitiveDependencies,
-    required super.debugGetCreateSourceHash,
-    required super.from,
-    required this.channelId,
-  }) : super.internal();
-
-  final Snowflake channelId;
-
-  @override
-  Channel? runNotifierBuild(
-    covariant ThreadChannel notifier,
-  ) {
-    return notifier.build(
-      channelId,
-    );
-  }
-
-  @override
-  Override overrideWith(ThreadChannel Function() create) {
-    return ProviderOverride(
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(Channel? value) {
+    return $ProviderOverride(
       origin: this,
-      override: ThreadChannelProvider._internal(
-        () => create()..channelId = channelId,
-        from: from,
-        name: null,
-        dependencies: null,
-        allTransitiveDependencies: null,
-        debugGetCreateSourceHash: null,
-        channelId: channelId,
-      ),
+      providerOverride: $SyncValueProvider<Channel?>(value),
     );
-  }
-
-  @override
-  NotifierProviderElement<ThreadChannel, Channel?> createElement() {
-    return _ThreadChannelProviderElement(this);
   }
 
   @override
   bool operator ==(Object other) {
-    return other is ThreadChannelProvider && other.channelId == channelId;
+    return other is ThreadChannelProvider && other.argument == argument;
   }
 
   @override
   int get hashCode {
-    var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, channelId.hashCode);
-
-    return _SystemHash.finish(hash);
+    return argument.hashCode;
   }
 }
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-mixin ThreadChannelRef on NotifierProviderRef<Channel?> {
-  /// The parameter `channelId` of this provider.
-  Snowflake get channelId;
-}
+String _$threadChannelHash() => r'978541d1e6c62409681e1ba9c38976ee410d7465';
 
-class _ThreadChannelProviderElement
-    extends NotifierProviderElement<ThreadChannel, Channel?>
-    with ThreadChannelRef {
-  _ThreadChannelProviderElement(super.provider);
+final class ThreadChannelFamily extends $Family
+    with
+        $ClassFamilyOverride<
+          ThreadChannel,
+          Channel?,
+          Channel?,
+          Channel?,
+          Snowflake
+        > {
+  const ThreadChannelFamily._()
+    : super(
+        retry: null,
+        name: r'threadChannelProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: false,
+      );
+
+  ThreadChannelProvider call(Snowflake channelId) =>
+      ThreadChannelProvider._(argument: channelId, from: this);
 
   @override
-  Snowflake get channelId => (origin as ThreadChannelProvider).channelId;
+  String toString() => r'threadChannelProvider';
+}
+
+abstract class _$ThreadChannel extends $Notifier<Channel?> {
+  late final _$args = ref.$arg as Snowflake;
+  Snowflake get channelId => _$args;
+
+  Channel? build(Snowflake channelId);
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build(_$args);
+    final ref = this.ref as $Ref<Channel?, Channel?>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<Channel?, Channel?>,
+              Channel?,
+              Object?,
+              Object?
+            >;
+    element.handleValue(ref, created);
+  }
+}
+
+@ProviderFor(FirstMessage)
+const firstMessageProvider = FirstMessageFamily._();
+
+final class FirstMessageProvider
+    extends $NotifierProvider<FirstMessage, Message?> {
+  const FirstMessageProvider._({
+    required FirstMessageFamily super.from,
+    required Snowflake super.argument,
+  }) : super(
+         retry: null,
+         name: r'firstMessageProvider',
+         isAutoDispose: false,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
+
+  @override
+  String debugGetCreateSourceHash() => _$firstMessageHash();
+
+  @override
+  String toString() {
+    return r'firstMessageProvider'
+        ''
+        '($argument)';
+  }
+
+  @$internal
+  @override
+  FirstMessage create() => FirstMessage();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(Message? value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<Message?>(value),
+    );
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is FirstMessageProvider && other.argument == argument;
+  }
+
+  @override
+  int get hashCode {
+    return argument.hashCode;
+  }
 }
 
 String _$firstMessageHash() => r'df3012cc799a51760acb497c92f30cb47cdac767';
 
-abstract class _$FirstMessage extends BuildlessNotifier<Message?> {
-  late final Snowflake channelId;
-
-  Message? build(
-    Snowflake channelId,
-  );
-}
-
-/// See also [FirstMessage].
-@ProviderFor(FirstMessage)
-const firstMessageProvider = FirstMessageFamily();
-
-/// See also [FirstMessage].
-class FirstMessageFamily extends Family<Message?> {
-  /// See also [FirstMessage].
-  const FirstMessageFamily();
-
-  /// See also [FirstMessage].
-  FirstMessageProvider call(
-    Snowflake channelId,
-  ) {
-    return FirstMessageProvider(
-      channelId,
-    );
-  }
-
-  @override
-  FirstMessageProvider getProviderOverride(
-    covariant FirstMessageProvider provider,
-  ) {
-    return call(
-      provider.channelId,
-    );
-  }
-
-  static const Iterable<ProviderOrFamily>? _dependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
-
-  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
-      _allTransitiveDependencies;
-
-  @override
-  String? get name => r'firstMessageProvider';
-}
-
-/// See also [FirstMessage].
-class FirstMessageProvider
-    extends NotifierProviderImpl<FirstMessage, Message?> {
-  /// See also [FirstMessage].
-  FirstMessageProvider(
-    Snowflake channelId,
-  ) : this._internal(
-          () => FirstMessage()..channelId = channelId,
-          from: firstMessageProvider,
-          name: r'firstMessageProvider',
-          debugGetCreateSourceHash:
-              const bool.fromEnvironment('dart.vm.product')
-                  ? null
-                  : _$firstMessageHash,
-          dependencies: FirstMessageFamily._dependencies,
-          allTransitiveDependencies:
-              FirstMessageFamily._allTransitiveDependencies,
-          channelId: channelId,
-        );
-
-  FirstMessageProvider._internal(
-    super._createNotifier, {
-    required super.name,
-    required super.dependencies,
-    required super.allTransitiveDependencies,
-    required super.debugGetCreateSourceHash,
-    required super.from,
-    required this.channelId,
-  }) : super.internal();
-
-  final Snowflake channelId;
-
-  @override
-  Message? runNotifierBuild(
-    covariant FirstMessage notifier,
-  ) {
-    return notifier.build(
-      channelId,
-    );
-  }
-
-  @override
-  Override overrideWith(FirstMessage Function() create) {
-    return ProviderOverride(
-      origin: this,
-      override: FirstMessageProvider._internal(
-        () => create()..channelId = channelId,
-        from: from,
-        name: null,
+final class FirstMessageFamily extends $Family
+    with
+        $ClassFamilyOverride<
+          FirstMessage,
+          Message?,
+          Message?,
+          Message?,
+          Snowflake
+        > {
+  const FirstMessageFamily._()
+    : super(
+        retry: null,
+        name: r'firstMessageProvider',
         dependencies: null,
-        allTransitiveDependencies: null,
-        debugGetCreateSourceHash: null,
-        channelId: channelId,
-      ),
-    );
-  }
+        $allTransitiveDependencies: null,
+        isAutoDispose: false,
+      );
+
+  FirstMessageProvider call(Snowflake channelId) =>
+      FirstMessageProvider._(argument: channelId, from: this);
 
   @override
-  NotifierProviderElement<FirstMessage, Message?> createElement() {
-    return _FirstMessageProviderElement(this);
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return other is FirstMessageProvider && other.channelId == channelId;
-  }
-
-  @override
-  int get hashCode {
-    var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, channelId.hashCode);
-
-    return _SystemHash.finish(hash);
-  }
+  String toString() => r'firstMessageProvider';
 }
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-mixin FirstMessageRef on NotifierProviderRef<Message?> {
-  /// The parameter `channelId` of this provider.
-  Snowflake get channelId;
-}
+abstract class _$FirstMessage extends $Notifier<Message?> {
+  late final _$args = ref.$arg as Snowflake;
+  Snowflake get channelId => _$args;
 
-class _FirstMessageProviderElement
-    extends NotifierProviderElement<FirstMessage, Message?>
-    with FirstMessageRef {
-  _FirstMessageProviderElement(super.provider);
-
+  Message? build(Snowflake channelId);
+  @$mustCallSuper
   @override
-  Snowflake get channelId => (origin as FirstMessageProvider).channelId;
+  void runBuild() {
+    final created = build(_$args);
+    final ref = this.ref as $Ref<Message?, Message?>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<Message?, Message?>,
+              Message?,
+              Object?,
+              Object?
+            >;
+    element.handleValue(ref, created);
+  }
 }
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

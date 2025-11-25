@@ -8,16 +8,20 @@ part 'name.g.dart';
 
 @riverpod
 Future<String?> messageAuthorName(
-    Ref ref, Snowflake guildId, Channel channel, MessageAuthor author) async {
+  Ref ref,
+  Snowflake guildId,
+  Channel channel,
+  MessageAuthor author,
+) async {
   String name = author.username;
   if (guildId == Snowflake.zero) {
     User? user = (channel as DmChannel).recipients.firstWhereOrNull(
-          (element) => element.id == author.id,
-        );
+      (element) => element.id == author.id,
+    );
 
     if (user == null) {
       // assume it's ourselves
-      User me = ref.read(selfUserProvider).valueOrNull!;
+      User me = ref.read(selfUserProvider).value!;
       name = me.globalName ?? name;
     } else {
       name = user.globalName ?? name;

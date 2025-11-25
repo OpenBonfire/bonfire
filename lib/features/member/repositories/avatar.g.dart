@@ -6,158 +6,80 @@ part of 'avatar.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$messageAuthorAvatarHash() =>
-    r'f7137171fba75b801285cc42ceb220f1dc053363';
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
 
-/// Copied from Dart SDK
-class _SystemHash {
-  _SystemHash._();
-
-  static int combine(int hash, int value) {
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + value);
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + ((0x0007ffff & hash) << 10));
-    return hash ^ (hash >> 6);
-  }
-
-  static int finish(int hash) {
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + ((0x03ffffff & hash) << 3));
-    // ignore: parameter_assignments
-    hash = hash ^ (hash >> 11);
-    return 0x1fffffff & (hash + ((0x00003fff & hash) << 15));
-  }
-}
-
-/// See also [messageAuthorAvatar].
 @ProviderFor(messageAuthorAvatar)
-const messageAuthorAvatarProvider = MessageAuthorAvatarFamily();
+const messageAuthorAvatarProvider = MessageAuthorAvatarFamily._();
 
-/// See also [messageAuthorAvatar].
-class MessageAuthorAvatarFamily extends Family<AsyncValue<Uint8List?>> {
-  /// See also [messageAuthorAvatar].
-  const MessageAuthorAvatarFamily();
+final class MessageAuthorAvatarProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<Uint8List?>,
+          Uint8List?,
+          FutureOr<Uint8List?>
+        >
+    with $FutureModifier<Uint8List?>, $FutureProvider<Uint8List?> {
+  const MessageAuthorAvatarProvider._({
+    required MessageAuthorAvatarFamily super.from,
+    required MessageAuthor super.argument,
+  }) : super(
+         retry: null,
+         name: r'messageAuthorAvatarProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
 
-  /// See also [messageAuthorAvatar].
-  MessageAuthorAvatarProvider call(
-    MessageAuthor member,
-  ) {
-    return MessageAuthorAvatarProvider(
-      member,
-    );
+  @override
+  String debugGetCreateSourceHash() => _$messageAuthorAvatarHash();
+
+  @override
+  String toString() {
+    return r'messageAuthorAvatarProvider'
+        ''
+        '($argument)';
   }
 
+  @$internal
   @override
-  MessageAuthorAvatarProvider getProviderOverride(
-    covariant MessageAuthorAvatarProvider provider,
-  ) {
-    return call(
-      provider.member,
-    );
-  }
-
-  static const Iterable<ProviderOrFamily>? _dependencies = null;
+  $FutureProviderElement<Uint8List?> $createElement($ProviderPointer pointer) =>
+      $FutureProviderElement(pointer);
 
   @override
-  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
-
-  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
-      _allTransitiveDependencies;
-
-  @override
-  String? get name => r'messageAuthorAvatarProvider';
-}
-
-/// See also [messageAuthorAvatar].
-class MessageAuthorAvatarProvider
-    extends AutoDisposeFutureProvider<Uint8List?> {
-  /// See also [messageAuthorAvatar].
-  MessageAuthorAvatarProvider(
-    MessageAuthor member,
-  ) : this._internal(
-          (ref) => messageAuthorAvatar(
-            ref as MessageAuthorAvatarRef,
-            member,
-          ),
-          from: messageAuthorAvatarProvider,
-          name: r'messageAuthorAvatarProvider',
-          debugGetCreateSourceHash:
-              const bool.fromEnvironment('dart.vm.product')
-                  ? null
-                  : _$messageAuthorAvatarHash,
-          dependencies: MessageAuthorAvatarFamily._dependencies,
-          allTransitiveDependencies:
-              MessageAuthorAvatarFamily._allTransitiveDependencies,
-          member: member,
-        );
-
-  MessageAuthorAvatarProvider._internal(
-    super._createNotifier, {
-    required super.name,
-    required super.dependencies,
-    required super.allTransitiveDependencies,
-    required super.debugGetCreateSourceHash,
-    required super.from,
-    required this.member,
-  }) : super.internal();
-
-  final MessageAuthor member;
-
-  @override
-  Override overrideWith(
-    FutureOr<Uint8List?> Function(MessageAuthorAvatarRef provider) create,
-  ) {
-    return ProviderOverride(
-      origin: this,
-      override: MessageAuthorAvatarProvider._internal(
-        (ref) => create(ref as MessageAuthorAvatarRef),
-        from: from,
-        name: null,
-        dependencies: null,
-        allTransitiveDependencies: null,
-        debugGetCreateSourceHash: null,
-        member: member,
-      ),
-    );
-  }
-
-  @override
-  AutoDisposeFutureProviderElement<Uint8List?> createElement() {
-    return _MessageAuthorAvatarProviderElement(this);
+  FutureOr<Uint8List?> create(Ref ref) {
+    final argument = this.argument as MessageAuthor;
+    return messageAuthorAvatar(ref, argument);
   }
 
   @override
   bool operator ==(Object other) {
-    return other is MessageAuthorAvatarProvider && other.member == member;
+    return other is MessageAuthorAvatarProvider && other.argument == argument;
   }
 
   @override
   int get hashCode {
-    var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, member.hashCode);
-
-    return _SystemHash.finish(hash);
+    return argument.hashCode;
   }
 }
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-mixin MessageAuthorAvatarRef on AutoDisposeFutureProviderRef<Uint8List?> {
-  /// The parameter `member` of this provider.
-  MessageAuthor get member;
-}
+String _$messageAuthorAvatarHash() =>
+    r'f28aacf08d50928e35167e7f6dc0492a4b15a4be';
 
-class _MessageAuthorAvatarProviderElement
-    extends AutoDisposeFutureProviderElement<Uint8List?>
-    with MessageAuthorAvatarRef {
-  _MessageAuthorAvatarProviderElement(super.provider);
+final class MessageAuthorAvatarFamily extends $Family
+    with $FunctionalFamilyOverride<FutureOr<Uint8List?>, MessageAuthor> {
+  const MessageAuthorAvatarFamily._()
+    : super(
+        retry: null,
+        name: r'messageAuthorAvatarProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: true,
+      );
+
+  MessageAuthorAvatarProvider call(MessageAuthor member) =>
+      MessageAuthorAvatarProvider._(argument: member, from: this);
 
   @override
-  MessageAuthor get member => (origin as MessageAuthorAvatarProvider).member;
+  String toString() => r'messageAuthorAvatarProvider';
 }
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

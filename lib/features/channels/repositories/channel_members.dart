@@ -13,7 +13,8 @@ class GuildMemberList extends _$GuildMemberList {
 
   @override
   Future<Pair<List<GuildMemberListGroup>, List<dynamic>>> build(
-      Snowflake guildId) async {
+    Snowflake guildId,
+  ) async {
     return _data ?? Pair([], []);
   }
 
@@ -54,17 +55,15 @@ class GuildMemberList extends _$GuildMemberList {
 
                 // If the replacement list is smaller than the range, pad it with null or empty values
                 if (data.length < rangeLength) {
-                  final padding =
-                      List<dynamic>.filled(rangeLength - data.length, null);
+                  final padding = List<dynamic>.filled(
+                    rangeLength - data.length,
+                    null,
+                  );
                   data = [...data, ...padding];
                 }
 
                 // Replace the range
-                newMemberList.replaceRange(
-                  start,
-                  endIndex,
-                  data,
-                );
+                newMemberList.replaceRange(start, endIndex, data);
               } else {
                 // If the replacement list is empty, remove the range
                 newMemberList.removeRange(start, endIndex);
@@ -129,37 +128,32 @@ class ChannelMembers extends _$ChannelMembers {
       GuildSubscriptionChannel(
         channelId: channelId,
         memberRange: [
-          GuildMemberRange(
-            lowerMemberBound: 0,
-            upperMemberBound: 99,
-          )
+          GuildMemberRange(lowerMemberBound: 0, upperMemberBound: 99),
         ],
-      )
+      ),
     ];
     _updateSubscriptions();
   }
 
   void loadMemberRange(int lowerBound, int upperBound) {
-    final exists = currentSubscriptions.any((sub) => sub.memberRange.any(
+    final exists = currentSubscriptions.any(
+      (sub) => sub.memberRange.any(
         (range) =>
             range.lowerMemberBound == lowerBound &&
-            range.upperMemberBound == upperBound));
+            range.upperMemberBound == upperBound,
+      ),
+    );
 
     if (!exists) {
       final subscription = currentSubscriptions.firstWhere(
         (sub) => sub.channelId == channelId,
-        orElse: () => GuildSubscriptionChannel(
-          channelId: channelId,
-          memberRange: [],
-        ),
+        orElse: () =>
+            GuildSubscriptionChannel(channelId: channelId, memberRange: []),
       );
 
       subscription.memberRange.clear();
       subscription.memberRange.add(
-        GuildMemberRange(
-          lowerMemberBound: 0,
-          upperMemberBound: 99,
-        ),
+        GuildMemberRange(lowerMemberBound: 0, upperMemberBound: 99),
       );
       subscription.memberRange.add(
         GuildMemberRange(
@@ -177,21 +171,26 @@ class ChannelMembers extends _$ChannelMembers {
       if (guildId == Snowflake.zero) {
         return; // when in dms I don't think sending op 37 is required
       }
-      user!.client.updateGuildSubscriptionsBulk(GuildSubscriptionsBulkBuilder()
-        ..subscriptions = [
-          GuildSubscription(
-            typing: true,
-            memberUpdates: true,
-            channels: currentSubscriptions,
-            guildId: guildId,
-          )
-        ]);
+      user!.client.updateGuildSubscriptionsBulk(
+        GuildSubscriptionsBulkBuilder()
+          ..subscriptions = [
+            GuildSubscription(
+              typing: true,
+              memberUpdates: true,
+              channels: currentSubscriptions,
+              guildId: guildId,
+            ),
+          ],
+      );
     }
   }
 
-  void updateMemberList(List<MemberListUpdateOperation> operations,
-      Snowflake guildId, List<dynamic> groups) {
-    final currentState = ref.read(guildMemberListProvider(guildId)).valueOrNull;
+  void updateMemberList(
+    List<MemberListUpdateOperation> operations,
+    Snowflake guildId,
+    List<dynamic> groups,
+  ) {
+    final currentState = ref.read(guildMemberListProvider(guildId)).value;
     if (currentState != null) {
       final newGroups = groups.cast<GuildMemberListGroup>();
 
@@ -200,7 +199,7 @@ class ChannelMembers extends _$ChannelMembers {
           .applyOperations(operations);
 
       final updatedMemberList =
-          ref.read(guildMemberListProvider(guildId)).valueOrNull?.second ?? [];
+          ref.read(guildMemberListProvider(guildId)).value?.second ?? [];
 
       for (final itemList in updatedMemberList) {
         for (final item in itemList) {
@@ -220,10 +219,9 @@ class ChannelMembers extends _$ChannelMembers {
 
       final newPair = Pair(newGroups, updatedMemberList);
 
-      ref.read(guildMemberListProvider(guildId).notifier).setData(
-            guildId,
-            newPair,
-          );
+      ref
+          .read(guildMemberListProvider(guildId).notifier)
+          .setData(guildId, newPair);
     }
   }
 }

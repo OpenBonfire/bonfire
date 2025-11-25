@@ -6,170 +6,95 @@ part of 'typing.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$typingHash() => r'681356187f4fa9eb83807183ce89f5c740d2974a';
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
 
-/// Copied from Dart SDK
-class _SystemHash {
-  _SystemHash._();
-
-  static int combine(int hash, int value) {
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + value);
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + ((0x0007ffff & hash) << 10));
-    return hash ^ (hash >> 6);
-  }
-
-  static int finish(int hash) {
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + ((0x03ffffff & hash) << 3));
-    // ignore: parameter_assignments
-    hash = hash ^ (hash >> 11);
-    return 0x1fffffff & (hash + ((0x00003fff & hash) << 15));
-  }
-}
-
-abstract class _$Typing
-    extends BuildlessAutoDisposeAsyncNotifier<List<dynamic>> {
-  late final Snowflake channelId;
-
-  FutureOr<List<dynamic>> build(
-    Snowflake channelId,
-  );
-}
-
-/// See also [Typing].
 @ProviderFor(Typing)
-const typingProvider = TypingFamily();
+const typingProvider = TypingFamily._();
 
-/// See also [Typing].
-class TypingFamily extends Family<AsyncValue<List<dynamic>>> {
-  /// See also [Typing].
-  const TypingFamily();
+final class TypingProvider
+    extends $AsyncNotifierProvider<Typing, List<dynamic>> {
+  const TypingProvider._({
+    required TypingFamily super.from,
+    required Snowflake super.argument,
+  }) : super(
+         retry: null,
+         name: r'typingProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
 
-  /// See also [Typing].
-  TypingProvider call(
-    Snowflake channelId,
-  ) {
-    return TypingProvider(
-      channelId,
-    );
+  @override
+  String debugGetCreateSourceHash() => _$typingHash();
+
+  @override
+  String toString() {
+    return r'typingProvider'
+        ''
+        '($argument)';
   }
 
+  @$internal
   @override
-  TypingProvider getProviderOverride(
-    covariant TypingProvider provider,
-  ) {
-    return call(
-      provider.channelId,
-    );
-  }
-
-  static const Iterable<ProviderOrFamily>? _dependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
-
-  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
-      _allTransitiveDependencies;
-
-  @override
-  String? get name => r'typingProvider';
-}
-
-/// See also [Typing].
-class TypingProvider
-    extends AutoDisposeAsyncNotifierProviderImpl<Typing, List<dynamic>> {
-  /// See also [Typing].
-  TypingProvider(
-    Snowflake channelId,
-  ) : this._internal(
-          () => Typing()..channelId = channelId,
-          from: typingProvider,
-          name: r'typingProvider',
-          debugGetCreateSourceHash:
-              const bool.fromEnvironment('dart.vm.product')
-                  ? null
-                  : _$typingHash,
-          dependencies: TypingFamily._dependencies,
-          allTransitiveDependencies: TypingFamily._allTransitiveDependencies,
-          channelId: channelId,
-        );
-
-  TypingProvider._internal(
-    super._createNotifier, {
-    required super.name,
-    required super.dependencies,
-    required super.allTransitiveDependencies,
-    required super.debugGetCreateSourceHash,
-    required super.from,
-    required this.channelId,
-  }) : super.internal();
-
-  final Snowflake channelId;
-
-  @override
-  FutureOr<List<dynamic>> runNotifierBuild(
-    covariant Typing notifier,
-  ) {
-    return notifier.build(
-      channelId,
-    );
-  }
-
-  @override
-  Override overrideWith(Typing Function() create) {
-    return ProviderOverride(
-      origin: this,
-      override: TypingProvider._internal(
-        () => create()..channelId = channelId,
-        from: from,
-        name: null,
-        dependencies: null,
-        allTransitiveDependencies: null,
-        debugGetCreateSourceHash: null,
-        channelId: channelId,
-      ),
-    );
-  }
-
-  @override
-  AutoDisposeAsyncNotifierProviderElement<Typing, List<dynamic>>
-      createElement() {
-    return _TypingProviderElement(this);
-  }
+  Typing create() => Typing();
 
   @override
   bool operator ==(Object other) {
-    return other is TypingProvider && other.channelId == channelId;
+    return other is TypingProvider && other.argument == argument;
   }
 
   @override
   int get hashCode {
-    var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, channelId.hashCode);
-
-    return _SystemHash.finish(hash);
+    return argument.hashCode;
   }
 }
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-mixin TypingRef on AutoDisposeAsyncNotifierProviderRef<List<dynamic>> {
-  /// The parameter `channelId` of this provider.
-  Snowflake get channelId;
-}
+String _$typingHash() => r'681356187f4fa9eb83807183ce89f5c740d2974a';
 
-class _TypingProviderElement
-    extends AutoDisposeAsyncNotifierProviderElement<Typing, List<dynamic>>
-    with TypingRef {
-  _TypingProviderElement(super.provider);
+final class TypingFamily extends $Family
+    with
+        $ClassFamilyOverride<
+          Typing,
+          AsyncValue<List<dynamic>>,
+          List<dynamic>,
+          FutureOr<List<dynamic>>,
+          Snowflake
+        > {
+  const TypingFamily._()
+    : super(
+        retry: null,
+        name: r'typingProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: true,
+      );
+
+  TypingProvider call(Snowflake channelId) =>
+      TypingProvider._(argument: channelId, from: this);
 
   @override
-  Snowflake get channelId => (origin as TypingProvider).channelId;
+  String toString() => r'typingProvider';
 }
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
+
+abstract class _$Typing extends $AsyncNotifier<List<dynamic>> {
+  late final _$args = ref.$arg as Snowflake;
+  Snowflake get channelId => _$args;
+
+  FutureOr<List<dynamic>> build(Snowflake channelId);
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build(_$args);
+    final ref = this.ref as $Ref<AsyncValue<List<dynamic>>, List<dynamic>>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<AsyncValue<List<dynamic>>, List<dynamic>>,
+              AsyncValue<List<dynamic>>,
+              Object?,
+              Object?
+            >;
+    element.handleValue(ref, created);
+  }
+}

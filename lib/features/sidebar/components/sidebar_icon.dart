@@ -31,7 +31,7 @@ class _SidebarIconState extends ConsumerState<SidebarIcon> {
   @override
   Widget build(BuildContext context) {
     var hasUnreads =
-        ref.watch(guildUnreadsProvider(widget.guild.id)).valueOrNull ?? false;
+        ref.watch(guildUnreadsProvider(widget.guild.id)).value ?? false;
     var mentions = ref.watch(guildMentionsProvider(widget.guild.id)).value ?? 0;
 
     return SidebarItem(
@@ -41,11 +41,13 @@ class _SidebarIconState extends ConsumerState<SidebarIcon> {
       mini: widget.mini,
       onTap: () {
         if (widget.isClickable) {
-          GoRouter.of(context)
-              .go('/channels/${widget.guild.id}/${Snowflake.zero}');
+          GoRouter.of(
+            context,
+          ).go('/channels/${widget.guild.id}/${Snowflake.zero}');
           widget.guild.manager.get(widget.guild.id).then((Guild guild) async {
             var lastGuildChannels = Hive.box("last-guild-channels");
-            var channelId = lastGuildChannels.get(guild.id.value.toString()) ??
+            var channelId =
+                lastGuildChannels.get(guild.id.value.toString()) ??
                 guild.rulesChannelId ??
                 (await guild.fetchChannels()).first.id.value;
 
@@ -82,10 +84,9 @@ class _SidebarIconState extends ConsumerState<SidebarIcon> {
               child: Text(
                 iconText,
                 overflow: TextOverflow.ellipsis,
-                style: Theme.of(context)
-                    .textTheme
-                    .titleSmall!
-                    .copyWith(fontSize: widget.mini ? 3 : 12),
+                style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                  fontSize: widget.mini ? 3 : 12,
+                ),
               ),
             ),
           );

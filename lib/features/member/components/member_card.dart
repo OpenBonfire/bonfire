@@ -30,8 +30,7 @@ class MemberCard extends ConsumerStatefulWidget {
 class _MemberCardState extends ConsumerState<MemberCard> {
   @override
   Widget build(BuildContext context) {
-    var roles =
-        ref.watch(getGuildRolesProvider(widget.guild.id)).valueOrNull ?? [];
+    var roles = ref.watch(getGuildRolesProvider(widget.guild.id)).value ?? [];
     PresenceUpdateEvent? initialPresence = widget.member.initialPresence;
 
     double borderRadiusTop = widget.roundTop ? 20 : 0;
@@ -46,10 +45,7 @@ class _MemberCardState extends ConsumerState<MemberCard> {
           style: OutlinedButton.styleFrom(
             minimumSize: Size.zero,
             padding: const EdgeInsets.all(4),
-            side: const BorderSide(
-              color: Colors.transparent,
-              width: 0,
-            ),
+            side: const BorderSide(color: Colors.transparent, width: 0),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(borderRadiusTop),
@@ -65,10 +61,7 @@ class _MemberCardState extends ConsumerState<MemberCard> {
             padding: const EdgeInsets.symmetric(horizontal: 4),
             child: Row(
               children: [
-                const SizedBox(
-                  width: 6,
-                  height: 58,
-                ),
+                const SizedBox(width: 6, height: 58),
                 PresenceAvatar(
                   user: widget.member.user!,
                   initialPresence: initialPresence,
@@ -86,7 +79,8 @@ class _MemberCardState extends ConsumerState<MemberCard> {
                             "Unknown",
                         softWrap: false,
                         style: Theme.of(context).textTheme.labelLarge!.copyWith(
-                            color: getRoleColor(widget.member, roles)),
+                          color: getRoleColor(widget.member, roles),
+                        ),
                       ),
                       PresenceText(
                         userid: widget.member.user!.id,
@@ -117,7 +111,7 @@ class _MemberCardState extends ConsumerState<MemberCard> {
                 ),
               ),
             ),
-          )
+          ),
       ],
     );
   }

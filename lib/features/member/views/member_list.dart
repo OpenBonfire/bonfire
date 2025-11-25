@@ -27,26 +27,25 @@ class _MemberListState extends ConsumerState<MemberList> {
       width: double.infinity,
       decoration: BoxDecoration(
         color: BonfireThemeExtension.of(context).background,
-        borderRadius: const BorderRadius.only(
-          bottomLeft: Radius.circular(0),
-        ),
+        borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(0)),
       ),
       child: Padding(
         padding: EdgeInsets.only(top: MediaQuery.paddingOf(context).top + 20),
         child: Align(
-            alignment: Alignment.topCenter,
-            child: Column(
-              children: [
-                Text(
-                  "# $channelName",
-                  style: Theme.of(context).textTheme.titleSmall,
-                ),
-                Text(
-                  channelDescription,
-                  style: Theme.of(context).textTheme.labelMedium,
-                ),
-              ],
-            )),
+          alignment: Alignment.topCenter,
+          child: Column(
+            children: [
+              Text(
+                "# $channelName",
+                style: Theme.of(context).textTheme.titleSmall,
+              ),
+              Text(
+                channelDescription,
+                style: Theme.of(context).textTheme.labelMedium,
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -57,9 +56,7 @@ class _MemberListState extends ConsumerState<MemberList> {
     Guild? guild = ref.watch(guildControllerProvider(widget.guildId));
 
     if (channel == null || guild == null) {
-      return const Center(
-        child: CircularProgressIndicator(),
-      );
+      return const Center(child: CircularProgressIndicator());
     }
 
     String channelName = getChannelName(channel);
@@ -82,8 +79,9 @@ class _MemberListState extends ConsumerState<MemberList> {
         children: [
           if (!isSmartwatch(context))
             Padding(
-              padding:
-                  EdgeInsets.only(left: UniversalPlatform.isDesktop ? 8.0 : 0),
+              padding: EdgeInsets.only(
+                left: UniversalPlatform.isDesktop ? 8.0 : 0,
+              ),
               child: topBox(channelName, ""),
             ),
           Expanded(
@@ -93,12 +91,9 @@ class _MemberListState extends ConsumerState<MemberList> {
                     ? 32
                     : 8,
               ),
-              child: MemberScrollView(
-                guild: guild,
-                channel: channel,
-              ),
+              child: MemberScrollView(guild: guild, channel: channel),
             ),
-          )
+          ),
         ],
       ),
     );
@@ -108,8 +103,11 @@ class _MemberListState extends ConsumerState<MemberList> {
 class MemberScrollView extends ConsumerStatefulWidget {
   final Guild guild;
   final Channel channel;
-  const MemberScrollView(
-      {super.key, required this.guild, required this.channel});
+  const MemberScrollView({
+    super.key,
+    required this.guild,
+    required this.channel,
+  });
 
   @override
   ConsumerState<MemberScrollView> createState() => MemberScrollViewState();
@@ -190,8 +188,9 @@ class MemberScrollViewState extends ConsumerState<MemberScrollView> {
 
   @override
   Widget build(BuildContext context) {
-    var memberListPair =
-        ref.watch(guildMemberListProvider(widget.guild.id)).valueOrNull;
+    var memberListPair = ref
+        .watch(guildMemberListProvider(widget.guild.id))
+        .value;
     var groupList = memberListPair?.first ?? [];
     var memberList = memberListPair?.second ?? [];
 
@@ -224,17 +223,21 @@ class MemberScrollViewState extends ConsumerState<MemberScrollView> {
             }
 
             if (item is Member) {
-              bool shouldRoundBottom = index == memberList.length - 1 ||
+              bool shouldRoundBottom =
+                  index == memberList.length - 1 ||
                   memberList[index + 1].first is GuildMemberListGroup;
 
               return Padding(
                 padding: EdgeInsets.only(
-                    right: 8, bottom: shouldRoundBottom ? 8 : 0),
+                  right: 8,
+                  bottom: shouldRoundBottom ? 8 : 0,
+                ),
                 child: MemberCard(
                   member: item,
                   guild: widget.guild,
                   channel: widget.channel,
-                  roundTop: index == 0 ||
+                  roundTop:
+                      index == 0 ||
                       memberList[index - 1].first is GuildMemberListGroup,
                   roundBottom: shouldRoundBottom,
                 ),
@@ -245,7 +248,8 @@ class MemberScrollViewState extends ConsumerState<MemberScrollView> {
             if (item is List<Member>) {
               return Column(
                 children: item.map<Widget>((member) {
-                  bool shouldRoundBottom = member == item.last &&
+                  bool shouldRoundBottom =
+                      member == item.last &&
                       (index == memberList.length - 1 ||
                           memberList[index + 1] is GuildMemberListGroup);
 
@@ -258,7 +262,8 @@ class MemberScrollViewState extends ConsumerState<MemberScrollView> {
                       member: member,
                       guild: widget.guild,
                       channel: widget.channel,
-                      roundTop: member == item.first &&
+                      roundTop:
+                          member == item.first &&
                           (index == 0 ||
                               memberList[index - 1] is GuildMemberListGroup),
                       roundBottom: shouldRoundBottom,

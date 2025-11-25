@@ -31,13 +31,14 @@ class UserPopoutCard extends ConsumerStatefulWidget {
 class _UserPopoutCardState extends ConsumerState<UserPopoutCard> {
   @override
   Widget build(BuildContext context) {
-    final profileEffects = ref.watch(profileEffectsProvider).valueOrNull;
+    final profileEffects = ref.watch(profileEffectsProvider).value;
 
     final theme = Theme.of(context);
     final bonfireTheme = BonfireThemeExtension.of(context);
 
-    final profile =
-        ref.watch(userProfileControllerProvider(widget.userId)).valueOrNull;
+    final profile = ref
+        .watch(userProfileControllerProvider(widget.userId))
+        .value;
 
     final effect = profile?.userProfile.profileEffect;
     ProfileEffectConfig? selectedProfileConfig;
@@ -50,16 +51,15 @@ class _UserPopoutCardState extends ConsumerState<UserPopoutCard> {
 
     final banner = profile?.user.banner;
 
-    PresenceUpdateEvent? presence =
-        ref.watch(presenceControllerProvider(widget.userId));
+    PresenceUpdateEvent? presence = ref.watch(
+      presenceControllerProvider(widget.userId),
+    );
 
     // debugPrint(selectedProfileConfig?.effects.first.src);
     return ClipRRect(
       borderRadius: BorderRadius.circular(20),
       child: Container(
-        decoration: BoxDecoration(
-          color: bonfireTheme.foreground,
-        ),
+        decoration: BoxDecoration(color: bonfireTheme.foreground),
         child: Stack(
           children: [
             SizedBox(
@@ -82,10 +82,11 @@ class _UserPopoutCardState extends ConsumerState<UserPopoutCard> {
                               Container(
                                 height: 150,
                                 decoration: BoxDecoration(
-                                  color: (profile.userProfile.accentColor !=
-                                          null)
-                                      ? Color(profile.userProfile.accentColor!)
-                                          .withAlpha(255)
+                                  color:
+                                      (profile.userProfile.accentColor != null)
+                                      ? Color(
+                                          profile.userProfile.accentColor!,
+                                        ).withAlpha(255)
                                       : bonfireTheme.background,
                                 ),
                               ),
@@ -99,22 +100,25 @@ class _UserPopoutCardState extends ConsumerState<UserPopoutCard> {
                                     profile.guildMember?.nick ??
                                         profile.user.globalName ??
                                         profile.user.username,
-                                    style:
-                                        Theme.of(context).textTheme.titleMedium,
+                                    style: Theme.of(
+                                      context,
+                                    ).textTheme.titleMedium,
                                   ),
                                   Text(
                                     profile.user.username,
-                                    style:
-                                        Theme.of(context).textTheme.labelMedium,
+                                    style: Theme.of(
+                                      context,
+                                    ).textTheme.labelMedium,
                                   ),
                                 ],
                               ),
                             ),
                             Expanded(
-                                child: UserInfoTabView(
-                              profile,
-                              guildId: widget.guildId,
-                            )),
+                              child: UserInfoTabView(
+                                profile,
+                                guildId: widget.guildId,
+                              ),
+                            ),
                           ],
                         ),
                         Positioned(
@@ -131,7 +135,7 @@ class _UserPopoutCardState extends ConsumerState<UserPopoutCard> {
                   : Container(),
             ),
             if (selectedProfileConfig != null)
-              PopoutEffectAnimation(selectedProfileConfig)
+              PopoutEffectAnimation(selectedProfileConfig),
           ],
         ),
       ),
@@ -216,15 +220,13 @@ class _PopoutEffectAnimationState extends State<PopoutEffectAnimation>
             } else if (value < (startTime + duration) / totalDuration) {
               opacity = 1.0;
             } else {
-              opacity = 1.0 -
+              opacity =
+                  1.0 -
                   (value * totalDuration - startTime - duration) /
                       fadeOutDuration;
             }
 
-            return Opacity(
-              opacity: opacity,
-              child: child,
-            );
+            return Opacity(opacity: opacity, child: child);
           },
           child: Container(
             decoration: BoxDecoration(
@@ -266,8 +268,10 @@ class _UserInfoTabViewState extends ConsumerState<UserInfoTabView>
 
     friendsCount = widget.userProfile.mutualFriendsCount?.toInt() ?? 0;
 
-    _tabController =
-        TabController(length: (friendsCount > 0) ? 3 : 2, vsync: this);
+    _tabController = TabController(
+      length: (friendsCount > 0) ? 3 : 2,
+      vsync: this,
+    );
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (shouldUseMobileLayout(context)) {
@@ -320,28 +324,27 @@ class _UserInfoTabViewState extends ConsumerState<UserInfoTabView>
               ),
             ),
           ),
+
           // I really hate this method of laying out, but it's all I can come up with
           // it won't lay out when using any other method, like expanded, flex, etc.
 
           // TODO: I gotta make the child of the TabBar not scrollable, and instead just have the entire thing scrollable
-
           Expanded(
             child: SizedBox(
               child: TabBarView(
                 controller: _tabController,
                 children: [
-                  AboutUserTab(
-                    widget.userProfile,
-                    guildId: widget.guildId,
-                  ),
+                  AboutUserTab(widget.userProfile, guildId: widget.guildId),
                   if (friendsCount > 0) MutualFriends(widget.userProfile),
                   const Center(
-                      child: Text(
-                          "I'll add the guild card soon I just gotta make the buttons and stuff")),
+                    child: Text(
+                      "I'll add the guild card soon I just gotta make the buttons and stuff",
+                    ),
+                  ),
                 ],
               ),
             ),
-          )
+          ),
         ],
       ),
     );
@@ -377,7 +380,9 @@ class _AboutUserTabState extends ConsumerState<AboutUserTab> {
               child: _BioCard(bio ?? ""),
             ),
           _RolesCard(
-              guildId: widget.guildId, userId: widget.userProfile.user.id),
+            guildId: widget.guildId,
+            userId: widget.userProfile.user.id,
+          ),
         ],
       ),
     );
@@ -400,10 +405,7 @@ class _BioCard extends ConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            "About Me",
-            style: Theme.of(context).textTheme.titleSmall,
-          ),
+          Text("About Me", style: Theme.of(context).textTheme.titleSmall),
           const SizedBox(height: 8),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -434,8 +436,10 @@ class _BioCard extends ConsumerWidget {
                 },
                 onTapLink: (href, title) {
                   if (href != null) {
-                    launchUrl(Uri.parse(href),
-                        mode: LaunchMode.externalApplication);
+                    launchUrl(
+                      Uri.parse(href),
+                      mode: LaunchMode.externalApplication,
+                    );
                   }
                 },
                 styleSheet: getMarkdownStyleSheet(context),
@@ -455,11 +459,13 @@ class _RolesCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final member = ref.watch(getMemberProvider(guildId, userId)).valueOrNull;
+    final member = ref.watch(getMemberProvider(guildId, userId)).value;
 
     if (member == null) {
       return LoadingAnimationWidget.fallingDot(
-          color: BonfireThemeExtension.of(context).gray, size: 24);
+        color: BonfireThemeExtension.of(context).gray,
+        size: 24,
+      );
     }
 
     return Container(
@@ -473,10 +479,7 @@ class _RolesCard extends ConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              "Roles",
-              style: Theme.of(context).textTheme.titleSmall,
-            ),
+            Text("Roles", style: Theme.of(context).textTheme.titleSmall),
             Wrap(
               spacing: 6,
               runSpacing: 6,
@@ -484,10 +487,11 @@ class _RolesCard extends ConsumerWidget {
                 for (var roleId in member.roleIds)
                   Padding(
                     padding: const EdgeInsets.all(0),
-                    child: Builder(builder: (context) {
-                      // debugPrint("looking for role ${roleId}");
-                      var role = ref.watch(roleControllerProvider(roleId))!;
-                      return OutlinedButton(
+                    child: Builder(
+                      builder: (context) {
+                        // debugPrint("looking for role ${roleId}");
+                        var role = ref.watch(roleControllerProvider(roleId))!;
+                        return OutlinedButton(
                           style: OutlinedButton.styleFrom(
                             minimumSize: Size.zero,
                             padding: const EdgeInsets.all(4),
@@ -498,15 +502,19 @@ class _RolesCard extends ConsumerWidget {
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(4),
                             ),
-                            foregroundColor:
-                                BonfireThemeExtension.of(context).dirtyWhite,
-                            backgroundColor:
-                                BonfireThemeExtension.of(context).foreground,
+                            foregroundColor: BonfireThemeExtension.of(
+                              context,
+                            ).dirtyWhite,
+                            backgroundColor: BonfireThemeExtension.of(
+                              context,
+                            ).foreground,
                           ),
                           onPressed: () {},
                           child: Padding(
                             padding: const EdgeInsets.symmetric(
-                                horizontal: 4, vertical: 2),
+                              horizontal: 4,
+                              vertical: 2,
+                            ),
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
@@ -514,26 +522,32 @@ class _RolesCard extends ConsumerWidget {
                                   width: 12,
                                   height: 12,
                                   decoration: BoxDecoration(
-                                    color: Color.fromARGB(255, role.color.r,
-                                        role.color.g, role.color.b),
+                                    color: Color.fromARGB(
+                                      255,
+                                      role.color.r,
+                                      role.color.g,
+                                      role.color.b,
+                                    ),
                                     shape: BoxShape.circle,
                                   ),
                                 ),
                                 const SizedBox(width: 6),
-                                Text(role.name,
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .labelMedium!
-                                        .copyWith(
-                                          fontWeight: FontWeight.w600,
-                                        )),
+                                Text(
+                                  role.name,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .labelMedium!
+                                      .copyWith(fontWeight: FontWeight.w600),
+                                ),
                               ],
                             ),
-                          ));
-                    }),
+                          ),
+                        );
+                      },
+                    ),
                   ),
               ],
-            )
+            ),
           ],
         ),
       ),
@@ -554,11 +568,13 @@ class _MutualFriendsState extends ConsumerState<MutualFriends> {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       padding: EdgeInsets.only(
-          top: 8.0, bottom: MediaQuery.paddingOf(context).bottom),
+        top: 8.0,
+        bottom: MediaQuery.paddingOf(context).bottom,
+      ),
       child: Column(
         children: [
           for (var mutualFriend in widget.userProfile.mutualFriends!)
-            FriendCard(user: mutualFriend)
+            FriendCard(user: mutualFriend),
         ],
       ),
     );
@@ -588,13 +604,8 @@ class _MutualFriendsInlineState extends ConsumerState<MutualFriendsInline> {
       style: OutlinedButton.styleFrom(
         minimumSize: Size.zero,
         padding: const EdgeInsets.all(4),
-        side: const BorderSide(
-          color: Colors.transparent,
-          width: 0,
-        ),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(4),
-        ),
+        side: const BorderSide(color: Colors.transparent, width: 0),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
         foregroundColor: BonfireThemeExtension.of(context).dirtyWhite,
         backgroundColor: BonfireThemeExtension.of(context).foreground,
       ),
@@ -603,27 +614,28 @@ class _MutualFriendsInlineState extends ConsumerState<MutualFriendsInline> {
         children: [
           if (mutuals != null)
             Stack(
-                children: mutuals
-                    .map((e) => Padding(
-                          padding: EdgeInsets.only(left: 16.0 * idx++),
-                          child: Container(
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20),
-                                border: Border.all(
-                                  color: bonfireTheme.background,
-                                  width: 2,
-                                )),
-                            child: Padding(
-                              padding: const EdgeInsets.all(1),
-                              child: PresenceAvatar(
-                                user: e,
-                                size: 20,
-                              ),
-                            ),
+              children: mutuals
+                  .map(
+                    (e) => Padding(
+                      padding: EdgeInsets.only(left: 16.0 * idx++),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(
+                            color: bonfireTheme.background,
+                            width: 2,
                           ),
-                        ))
-                    .toList()
-                    .slice(0, 3)),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(1),
+                          child: PresenceAvatar(user: e, size: 20),
+                        ),
+                      ),
+                    ),
+                  )
+                  .toList()
+                  .slice(0, 3),
+            ),
           if (mutualCount != null)
             Padding(
               padding: const EdgeInsets.only(left: 4.0),
@@ -631,7 +643,7 @@ class _MutualFriendsInlineState extends ConsumerState<MutualFriendsInline> {
                 "$mutualCount Mutual Friends",
                 style: Theme.of(context).textTheme.labelMedium,
               ),
-            )
+            ),
         ],
       ),
     );

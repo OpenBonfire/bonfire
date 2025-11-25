@@ -30,7 +30,9 @@ class Auth extends _$Auth {
 
   /// Authenticate client with Discord [username] and [password]
   Future<AuthResponse> loginWithCredentials(
-      String username, String password) async {
+    String username,
+    String password,
+  ) async {
     Map<String, Object?> body = {
       'gift_code_sku_id': null,
       'login': username,
@@ -40,8 +42,9 @@ class Auth extends _$Auth {
     };
 
     Uri loginUrl = UniversalPlatform.isWeb
-        ? Uri.https("cors-proxy.mylo-fawcett.workers.dev", "/",
-            {'url': Uri.https("discord.com", '/api/v9/auth/login').toString()})
+        ? Uri.https("cors-proxy.mylo-fawcett.workers.dev", "/", {
+            'url': Uri.https("discord.com", '/api/v9/auth/login').toString(),
+          })
         : Uri.https("discord.com", '/api/v9/auth/login');
 
     final response = await http.post(
@@ -55,21 +58,22 @@ class Auth extends _$Auth {
 
     if (json.containsKey('user_id')) {
       if (json.containsKey("ticket")) {
-        authResponse = MFARequired.fromJson(json);
+        authResponse = MFARequiredMapper.fromMap(json);
         state = authResponse;
       } else {
-        final authObj = AuthSuccess.fromJson(json);
+        final authObj = AuthSuccessMapper.fromMap(json);
         return await loginWithToken(authObj.token);
       }
     } else if (json.containsKey('captcha_key') &&
         json.containsKey('captcha_sitekey') &&
         json.containsKey('captcha_service')) {
-      authResponse = CaptchaResponse.fromJson(json);
+      authResponse = CaptchaResponseMapper.fromMap(json);
       state = authResponse;
     } else if (json['errors']['login']['_errors'][0]['code'] ==
         'INVALID_LOGIN') {
-      authResponse =
-          FailedAuth(error: json['errors']['login']['_errors'][0]['message']);
+      authResponse = FailedAuth(
+        error: json['errors']['login']['_errors'][0]['message'],
+      );
       state = authResponse;
     } else {
       throw Exception('Unknown response');
@@ -89,19 +93,16 @@ class Auth extends _$Auth {
     }
 
     var client = await Nyxx.connectGatewayWithOptions(
-        GatewayApiOptions(
-          token: token,
-          // totalShards: 1,
-          intents: GatewayIntents.all,
-          compression: UniversalPlatform.isWeb
-              ? GatewayCompression.none
-              : GatewayCompression.transport,
-        ),
-        GatewayClientOptions(
-          plugins: [
-            Logging(logLevel: Level.SEVERE),
-          ],
-        ));
+      GatewayApiOptions(
+        token: token,
+        // totalShards: 1,
+        intents: GatewayIntents.all,
+        compression: UniversalPlatform.isWeb
+            ? GatewayCompression.none
+            : GatewayCompression.transport,
+      ),
+      GatewayClientOptions(plugins: [Logging(logLevel: Level.SEVERE)]),
+    );
 
     // This is how we save login information
     var box = await Hive.openBox('auth');
@@ -154,7 +155,7 @@ class Auth extends _$Auth {
     );
 
     if (response.statusCode == 200) {
-      var resp = AuthSuccess.fromJson(jsonDecode(response.body));
+      var resp = AuthSuccessMapper.fromMap(jsonDecode(response.body));
       return loginWithToken(resp.token);
     } else if (response.statusCode == 400) {
       return MFAInvalidError(error: "Invalid two-factor code");

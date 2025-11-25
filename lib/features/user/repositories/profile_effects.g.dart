@@ -6,24 +6,46 @@ part of 'profile_effects.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$profileEffectsHash() => r'ccff97b6cfa6372552cb058ab105fe541159040d';
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
 
-/// See also [profileEffects].
 @ProviderFor(profileEffects)
-final profileEffectsProvider =
-    AutoDisposeFutureProvider<List<ProfileEffectConfig>?>.internal(
-  profileEffects,
-  name: r'profileEffectsProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$profileEffectsHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+const profileEffectsProvider = ProfileEffectsProvider._();
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef ProfileEffectsRef
-    = AutoDisposeFutureProviderRef<List<ProfileEffectConfig>?>;
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
+final class ProfileEffectsProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<List<ProfileEffectConfig>?>,
+          List<ProfileEffectConfig>?,
+          FutureOr<List<ProfileEffectConfig>?>
+        >
+    with
+        $FutureModifier<List<ProfileEffectConfig>?>,
+        $FutureProvider<List<ProfileEffectConfig>?> {
+  const ProfileEffectsProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'profileEffectsProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$profileEffectsHash();
+
+  @$internal
+  @override
+  $FutureProviderElement<List<ProfileEffectConfig>?> $createElement(
+    $ProviderPointer pointer,
+  ) => $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<List<ProfileEffectConfig>?> create(Ref ref) {
+    return profileEffects(ref);
+  }
+}
+
+String _$profileEffectsHash() => r'ccff97b6cfa6372552cb058ab105fe541159040d';

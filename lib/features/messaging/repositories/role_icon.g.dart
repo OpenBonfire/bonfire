@@ -6,317 +6,152 @@ part of 'role_icon.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$roleIconHash() => r'dcaae7382243eb2d985902afd78df265fa040c39';
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
 
-/// Copied from Dart SDK
-class _SystemHash {
-  _SystemHash._();
-
-  static int combine(int hash, int value) {
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + value);
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + ((0x0007ffff & hash) << 10));
-    return hash ^ (hash >> 6);
-  }
-
-  static int finish(int hash) {
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + ((0x03ffffff & hash) << 3));
-    // ignore: parameter_assignments
-    hash = hash ^ (hash >> 11);
-    return 0x1fffffff & (hash + ((0x00003fff & hash) << 15));
-  }
-}
-
-/// See also [roleIcon].
 @ProviderFor(roleIcon)
-const roleIconProvider = RoleIconFamily();
+const roleIconProvider = RoleIconFamily._();
 
-/// See also [roleIcon].
-class RoleIconFamily extends Family<AsyncValue<Uint8List?>> {
-  /// See also [roleIcon].
-  const RoleIconFamily();
+final class RoleIconProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<Uint8List?>,
+          Uint8List?,
+          FutureOr<Uint8List?>
+        >
+    with $FutureModifier<Uint8List?>, $FutureProvider<Uint8List?> {
+  const RoleIconProvider._({
+    required RoleIconFamily super.from,
+    required (Snowflake, Snowflake) super.argument,
+  }) : super(
+         retry: null,
+         name: r'roleIconProvider',
+         isAutoDispose: false,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
 
-  /// See also [roleIcon].
-  RoleIconProvider call(
-    Snowflake guildId,
-    Snowflake authorId,
-  ) {
-    return RoleIconProvider(
-      guildId,
-      authorId,
-    );
+  @override
+  String debugGetCreateSourceHash() => _$roleIconHash();
+
+  @override
+  String toString() {
+    return r'roleIconProvider'
+        ''
+        '$argument';
   }
 
+  @$internal
   @override
-  RoleIconProvider getProviderOverride(
-    covariant RoleIconProvider provider,
-  ) {
-    return call(
-      provider.guildId,
-      provider.authorId,
-    );
-  }
-
-  static const Iterable<ProviderOrFamily>? _dependencies = null;
+  $FutureProviderElement<Uint8List?> $createElement($ProviderPointer pointer) =>
+      $FutureProviderElement(pointer);
 
   @override
-  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
-
-  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
-      _allTransitiveDependencies;
-
-  @override
-  String? get name => r'roleIconProvider';
-}
-
-/// See also [roleIcon].
-class RoleIconProvider extends FutureProvider<Uint8List?> {
-  /// See also [roleIcon].
-  RoleIconProvider(
-    Snowflake guildId,
-    Snowflake authorId,
-  ) : this._internal(
-          (ref) => roleIcon(
-            ref as RoleIconRef,
-            guildId,
-            authorId,
-          ),
-          from: roleIconProvider,
-          name: r'roleIconProvider',
-          debugGetCreateSourceHash:
-              const bool.fromEnvironment('dart.vm.product')
-                  ? null
-                  : _$roleIconHash,
-          dependencies: RoleIconFamily._dependencies,
-          allTransitiveDependencies: RoleIconFamily._allTransitiveDependencies,
-          guildId: guildId,
-          authorId: authorId,
-        );
-
-  RoleIconProvider._internal(
-    super._createNotifier, {
-    required super.name,
-    required super.dependencies,
-    required super.allTransitiveDependencies,
-    required super.debugGetCreateSourceHash,
-    required super.from,
-    required this.guildId,
-    required this.authorId,
-  }) : super.internal();
-
-  final Snowflake guildId;
-  final Snowflake authorId;
-
-  @override
-  Override overrideWith(
-    FutureOr<Uint8List?> Function(RoleIconRef provider) create,
-  ) {
-    return ProviderOverride(
-      origin: this,
-      override: RoleIconProvider._internal(
-        (ref) => create(ref as RoleIconRef),
-        from: from,
-        name: null,
-        dependencies: null,
-        allTransitiveDependencies: null,
-        debugGetCreateSourceHash: null,
-        guildId: guildId,
-        authorId: authorId,
-      ),
-    );
-  }
-
-  @override
-  FutureProviderElement<Uint8List?> createElement() {
-    return _RoleIconProviderElement(this);
+  FutureOr<Uint8List?> create(Ref ref) {
+    final argument = this.argument as (Snowflake, Snowflake);
+    return roleIcon(ref, argument.$1, argument.$2);
   }
 
   @override
   bool operator ==(Object other) {
-    return other is RoleIconProvider &&
-        other.guildId == guildId &&
-        other.authorId == authorId;
+    return other is RoleIconProvider && other.argument == argument;
   }
 
   @override
   int get hashCode {
-    var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, guildId.hashCode);
-    hash = _SystemHash.combine(hash, authorId.hashCode);
-
-    return _SystemHash.finish(hash);
+    return argument.hashCode;
   }
 }
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-mixin RoleIconRef on FutureProviderRef<Uint8List?> {
-  /// The parameter `guildId` of this provider.
-  Snowflake get guildId;
+String _$roleIconHash() => r'a79e59f58fce4b58e786b94e4dd3610e09fd443b';
 
-  /// The parameter `authorId` of this provider.
-  Snowflake get authorId;
-}
+final class RoleIconFamily extends $Family
+    with
+        $FunctionalFamilyOverride<
+          FutureOr<Uint8List?>,
+          (Snowflake, Snowflake)
+        > {
+  const RoleIconFamily._()
+    : super(
+        retry: null,
+        name: r'roleIconProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: false,
+      );
 
-class _RoleIconProviderElement extends FutureProviderElement<Uint8List?>
-    with RoleIconRef {
-  _RoleIconProviderElement(super.provider);
+  RoleIconProvider call(Snowflake guildId, Snowflake authorId) =>
+      RoleIconProvider._(argument: (guildId, authorId), from: this);
 
   @override
-  Snowflake get guildId => (origin as RoleIconProvider).guildId;
-  @override
-  Snowflake get authorId => (origin as RoleIconProvider).authorId;
+  String toString() => r'roleIconProvider';
 }
 
-String _$roleColorHash() => r'9c243f343882907e031b2b9fb0be310a71268d5e';
-
-/// See also [roleColor].
 @ProviderFor(roleColor)
-const roleColorProvider = RoleColorFamily();
+const roleColorProvider = RoleColorFamily._();
 
-/// See also [roleColor].
-class RoleColorFamily extends Family<AsyncValue<Color>> {
-  /// See also [roleColor].
-  const RoleColorFamily();
+final class RoleColorProvider
+    extends $FunctionalProvider<AsyncValue<Color>, Color, FutureOr<Color>>
+    with $FutureModifier<Color>, $FutureProvider<Color> {
+  const RoleColorProvider._({
+    required RoleColorFamily super.from,
+    required (Snowflake, Snowflake) super.argument,
+  }) : super(
+         retry: null,
+         name: r'roleColorProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
 
-  /// See also [roleColor].
-  RoleColorProvider call(
-    Snowflake guildId,
-    Snowflake authorId,
-  ) {
-    return RoleColorProvider(
-      guildId,
-      authorId,
-    );
+  @override
+  String debugGetCreateSourceHash() => _$roleColorHash();
+
+  @override
+  String toString() {
+    return r'roleColorProvider'
+        ''
+        '$argument';
   }
 
+  @$internal
   @override
-  RoleColorProvider getProviderOverride(
-    covariant RoleColorProvider provider,
-  ) {
-    return call(
-      provider.guildId,
-      provider.authorId,
-    );
-  }
-
-  static const Iterable<ProviderOrFamily>? _dependencies = null;
+  $FutureProviderElement<Color> $createElement($ProviderPointer pointer) =>
+      $FutureProviderElement(pointer);
 
   @override
-  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
-
-  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
-      _allTransitiveDependencies;
-
-  @override
-  String? get name => r'roleColorProvider';
-}
-
-/// See also [roleColor].
-class RoleColorProvider extends AutoDisposeFutureProvider<Color> {
-  /// See also [roleColor].
-  RoleColorProvider(
-    Snowflake guildId,
-    Snowflake authorId,
-  ) : this._internal(
-          (ref) => roleColor(
-            ref as RoleColorRef,
-            guildId,
-            authorId,
-          ),
-          from: roleColorProvider,
-          name: r'roleColorProvider',
-          debugGetCreateSourceHash:
-              const bool.fromEnvironment('dart.vm.product')
-                  ? null
-                  : _$roleColorHash,
-          dependencies: RoleColorFamily._dependencies,
-          allTransitiveDependencies: RoleColorFamily._allTransitiveDependencies,
-          guildId: guildId,
-          authorId: authorId,
-        );
-
-  RoleColorProvider._internal(
-    super._createNotifier, {
-    required super.name,
-    required super.dependencies,
-    required super.allTransitiveDependencies,
-    required super.debugGetCreateSourceHash,
-    required super.from,
-    required this.guildId,
-    required this.authorId,
-  }) : super.internal();
-
-  final Snowflake guildId;
-  final Snowflake authorId;
-
-  @override
-  Override overrideWith(
-    FutureOr<Color> Function(RoleColorRef provider) create,
-  ) {
-    return ProviderOverride(
-      origin: this,
-      override: RoleColorProvider._internal(
-        (ref) => create(ref as RoleColorRef),
-        from: from,
-        name: null,
-        dependencies: null,
-        allTransitiveDependencies: null,
-        debugGetCreateSourceHash: null,
-        guildId: guildId,
-        authorId: authorId,
-      ),
-    );
-  }
-
-  @override
-  AutoDisposeFutureProviderElement<Color> createElement() {
-    return _RoleColorProviderElement(this);
+  FutureOr<Color> create(Ref ref) {
+    final argument = this.argument as (Snowflake, Snowflake);
+    return roleColor(ref, argument.$1, argument.$2);
   }
 
   @override
   bool operator ==(Object other) {
-    return other is RoleColorProvider &&
-        other.guildId == guildId &&
-        other.authorId == authorId;
+    return other is RoleColorProvider && other.argument == argument;
   }
 
   @override
   int get hashCode {
-    var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, guildId.hashCode);
-    hash = _SystemHash.combine(hash, authorId.hashCode);
-
-    return _SystemHash.finish(hash);
+    return argument.hashCode;
   }
 }
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-mixin RoleColorRef on AutoDisposeFutureProviderRef<Color> {
-  /// The parameter `guildId` of this provider.
-  Snowflake get guildId;
+String _$roleColorHash() => r'80e5f2e0a1324b363d53a829f6bb440676cf70ff';
 
-  /// The parameter `authorId` of this provider.
-  Snowflake get authorId;
-}
+final class RoleColorFamily extends $Family
+    with $FunctionalFamilyOverride<FutureOr<Color>, (Snowflake, Snowflake)> {
+  const RoleColorFamily._()
+    : super(
+        retry: null,
+        name: r'roleColorProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: true,
+      );
 
-class _RoleColorProviderElement extends AutoDisposeFutureProviderElement<Color>
-    with RoleColorRef {
-  _RoleColorProviderElement(super.provider);
+  RoleColorProvider call(Snowflake guildId, Snowflake authorId) =>
+      RoleColorProvider._(argument: (guildId, authorId), from: this);
 
   @override
-  Snowflake get guildId => (origin as RoleColorProvider).guildId;
-  @override
-  Snowflake get authorId => (origin as RoleColorProvider).authorId;
+  String toString() => r'roleColorProvider';
 }
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

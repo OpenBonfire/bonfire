@@ -15,7 +15,7 @@ var _cacheManager = CacheManager(
 );
 
 @riverpod
-Future<Uint8List?> userAvatar(UserAvatarRef ref, User user) async {
+Future<Uint8List?> userAvatar(Ref ref, User user) async {
   String? hash = user.avatarHash;
   if (hash != null) {
     var cached = await fetchMemberAvatarFromCache(hash);
@@ -25,10 +25,7 @@ Future<Uint8List?> userAvatar(UserAvatarRef ref, User user) async {
   var iconUrl = user.avatar.url;
   var fetched = (await http.get(iconUrl)).bodyBytes;
 
-  await _cacheManager.putFile(
-    user.avatar.hash,
-    fetched,
-  );
+  await _cacheManager.putFile(user.avatar.hash, fetched);
   return fetched;
 }
 
