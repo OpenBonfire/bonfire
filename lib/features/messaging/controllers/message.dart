@@ -10,13 +10,9 @@ part 'message.g.dart';
 
 @Riverpod(keepAlive: true)
 class MessageController extends _$MessageController {
-  FirebridgeGateway? client;
   @override
   Message? build(Snowflake messageId) {
-    AuthResponse? user = ref.watch(clientControllerProvider);
-    if (user is! AuthUser) return null;
-
-    client = user.client;
+    final client = ref.watch(clientControllerProvider);
 
     return null;
   }
@@ -29,8 +25,10 @@ class MessageController extends _$MessageController {
   }
 
   Future<void> editMessage(Snowflake partialMessage) async {
-    if (client == null) return;
-
+    final client = ref.watch(clientControllerProvider);
+    if (client == null) {
+      return;
+    }
     // final message = await partialMessage.get();
     // setMessage(message);
   }

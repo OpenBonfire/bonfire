@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:bonfire/features/authentication/controllers/ready.dart';
 import 'package:bonfire/features/authentication/models/added_account.dart';
 import 'package:bonfire/features/authentication/utils/headers.dart';
-import 'package:bonfire/features/authentication/repositories/discord_auth.dart';
 import 'package:bonfire/features/authentication/models/auth.dart';
 import 'package:bonfire/features/events/utils/event_handler.dart';
 import 'package:flutter/foundation.dart';
@@ -19,17 +18,16 @@ part 'auth.g.dart';
 @Riverpod(keepAlive: true)
 class ClientController extends _$ClientController {
   FirebridgeGateway? client;
-  AuthResponse? authResponse;
   bool hasSentInit = false;
   bool isHandlingEvents = false;
 
   @override
-  AuthResponse? build() {
-    return authResponse;
+  FirebridgeGateway? build() {
+    return null;
   }
 
   /// Authenticate client with Discord [username] and [password]
-  Future<AuthResponse> loginWithCredentials(
+  Future<FirebridgeGateway> loginWithCredentials(
     String username,
     String password,
   ) async {
@@ -50,12 +48,10 @@ class ClientController extends _$ClientController {
     );
 
     final json = jsonDecode(response.body) as Map<String, dynamic>;
-    AuthResponse authResponse;
 
     if (json.containsKey('user_id')) {
       if (json.containsKey("ticket")) {
-        authResponse = MFARequiredMapper.fromMap(json);
-        state = authResponse;
+        throw Exception("Requires MFA");
       } else {
         final authObj = AuthSuccessMapper.fromMap(json);
         return await loginWithToken(authObj.token);
@@ -63,31 +59,20 @@ class ClientController extends _$ClientController {
     } else if (json.containsKey('captcha_key') &&
         json.containsKey('captcha_sitekey') &&
         json.containsKey('captcha_service')) {
-      authResponse = CaptchaResponseMapper.fromMap(json);
-      state = authResponse;
+      throw Exception("Requires Captcha");
     } else if (json['errors']['login']['_errors'][0]['code'] ==
         'INVALID_LOGIN') {
-      authResponse = FailedAuth(
-        error: json['errors']['login']['_errors'][0]['message'],
-      );
-      state = authResponse;
+      throw Exception("Invalid Login");
     } else {
       throw Exception('Unknown response');
     }
-
-    return authResponse;
   }
 
   /// Authenticate client with Discord [token]
-  Future<AuthResponse> loginWithToken(String token) async {
+  Future<FirebridgeGateway> loginWithToken(String token) async {
     debugPrint("LOGGING IN WITH TOKEN!");
-    AuthResponse response = AuthNotStarted();
 
-    if (authResponse is AuthUser) {
-      await (authResponse as AuthUser).client.close();
-    }
-
-    var client = await Firebridge.connectGatewayWithOptions(
+    final client = await Firebridge.connectGatewayWithOptions(
       GatewayApiOptions(
         token: token,
         // totalShards: 1,
@@ -103,9 +88,7 @@ class ClientController extends _$ClientController {
     box.put('token', token);
 
     // Save and notify state
-    authResponse = AuthUser(token: token, client: client);
-
-    state = authResponse!;
+    state = client;
 
     // if (!isHandlingEvents) {
     handleEvents(ref, client);
@@ -114,19 +97,7 @@ class ClientController extends _$ClientController {
 
     ref.read(readyControllerProvider.notifier).setReady(true);
 
-    final user = (await client.users.fetch(client.user.id));
-    final addedAccountsBox = Hive.box('added-accounts');
-
-    final addedAccount = AddedAccount(
-      userId: client.user.id.toString(),
-      token: token,
-      username: user.globalName ?? user.username,
-      // avatar: user.avatar.url.toString(),
-      avatar: "thebomb.com",
-    );
-    addedAccountsBox.put(client.user.id.toString(), addedAccount.toJson());
-
-    return response;
+    return client;
   }
 
   /// Submit captcha with [captchaKey] and [captchaToken]
@@ -135,7 +106,7 @@ class ClientController extends _$ClientController {
   }
 
   /// Submit multi-factor authentication with [mfaToken]
-  Future<AuthResponse> submitMfa(String mfaToken) async {
+  Future<FirebridgeGateway> submitMfa(String mfaToken) async {
     var body = {
       'code': int.parse(mfaToken),
       'gift_code_sku_id': null,
@@ -153,9 +124,9 @@ class ClientController extends _$ClientController {
       var resp = AuthSuccessMapper.fromMap(jsonDecode(response.body));
       return loginWithToken(resp.token);
     } else if (response.statusCode == 400) {
-      return MFAInvalidError(error: "Invalid two-factor code");
+      throw Exception("Invalid two-factor code");
     } else {
-      return FailedAuth(error: response.body);
+      throw Exception(response.body);
     }
   }
 

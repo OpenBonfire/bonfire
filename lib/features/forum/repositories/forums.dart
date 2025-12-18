@@ -1,7 +1,5 @@
 import 'package:bonfire/features/authentication/repositories/auth.dart';
-import 'package:bonfire/features/authentication/repositories/discord_auth.dart';
 import 'package:firebridge/firebridge.dart';
-import 'package:flutter/foundation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'forums.g.dart';
@@ -10,19 +8,11 @@ part 'forums.g.dart';
 @Riverpod(keepAlive: true)
 class Forums extends _$Forums {
   @override
-  Future<ForumChannel?> build(Snowflake channelId) async {
-    var auth = ref.watch(clientControllerProvider);
+  Future<ForumChannel> build(Snowflake channelId) async {
+    final client = ref.watch(clientControllerProvider)!;
 
-    if (auth is AuthUser) {
-      Channel channel = await auth.client.channels.get(channelId);
+    Channel channel = await client.channels.fetch(channelId);
 
-      if (channel is ForumChannel) {
-        return channel;
-      } else {
-        debugPrint('Channel is not a forum channel');
-      }
-    }
-
-    return null;
+    return channel as ForumChannel;
   }
 }

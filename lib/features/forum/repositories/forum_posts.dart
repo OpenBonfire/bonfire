@@ -12,12 +12,9 @@ part 'forum_posts.g.dart';
 class ForumPosts extends _$ForumPosts {
   int _currentOffset = 0;
   bool _hasMore = true;
-  AuthUser? authUser;
-
   @override
   Future<List<ThreadList?>> build(Snowflake channelId) async {
-    var auth = ref.watch(clientControllerProvider);
-    if (auth is AuthUser) authUser = auth;
+    final client = ref.watch(clientControllerProvider);
 
     _currentOffset = 0;
     _hasMore = true;

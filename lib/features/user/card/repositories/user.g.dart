@@ -16,8 +16,8 @@ const getUserFromIdProvider = GetUserFromIdFamily._();
 /// Get user by id
 
 final class GetUserFromIdProvider
-    extends $FunctionalProvider<AsyncValue<User?>, User?, FutureOr<User?>>
-    with $FutureModifier<User?>, $FutureProvider<User?> {
+    extends $FunctionalProvider<AsyncValue<User>, User, FutureOr<User>>
+    with $FutureModifier<User>, $FutureProvider<User> {
   /// Get user by id
   const GetUserFromIdProvider._({
     required GetUserFromIdFamily super.from,
@@ -42,11 +42,11 @@ final class GetUserFromIdProvider
 
   @$internal
   @override
-  $FutureProviderElement<User?> $createElement($ProviderPointer pointer) =>
+  $FutureProviderElement<User> $createElement($ProviderPointer pointer) =>
       $FutureProviderElement(pointer);
 
   @override
-  FutureOr<User?> create(Ref ref) {
+  FutureOr<User> create(Ref ref) {
     final argument = this.argument as Snowflake;
     return getUserFromId(ref, argument);
   }
@@ -62,12 +62,12 @@ final class GetUserFromIdProvider
   }
 }
 
-String _$getUserFromIdHash() => r'2a01e9341409de9c57f517271cdf90b33367eb33';
+String _$getUserFromIdHash() => r'75ec3cbae1c68b98c7cee5ec7daa22651f83c4cb';
 
 /// Get user by id
 
 final class GetUserFromIdFamily extends $Family
-    with $FunctionalFamilyOverride<FutureOr<User?>, Snowflake> {
+    with $FunctionalFamilyOverride<FutureOr<User>, Snowflake> {
   const GetUserFromIdFamily._()
     : super(
         retry: null,

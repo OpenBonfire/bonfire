@@ -15,7 +15,7 @@ const clientControllerProvider = ClientControllerProvider._();
 
 /// A riverpod provider that handles authentication with Discord.
 final class ClientControllerProvider
-    extends $NotifierProvider<ClientController, AuthResponse?> {
+    extends $NotifierProvider<ClientController, FirebridgeGateway?> {
   /// A riverpod provider that handles authentication with Discord.
   const ClientControllerProvider._()
     : super(
@@ -36,30 +36,30 @@ final class ClientControllerProvider
   ClientController create() => ClientController();
 
   /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(AuthResponse? value) {
+  Override overrideWithValue(FirebridgeGateway? value) {
     return $ProviderOverride(
       origin: this,
-      providerOverride: $SyncValueProvider<AuthResponse?>(value),
+      providerOverride: $SyncValueProvider<FirebridgeGateway?>(value),
     );
   }
 }
 
-String _$clientControllerHash() => r'37b4d4b9c0e5c939b03530d611506e748bf06a2f';
+String _$clientControllerHash() => r'bc11d7be89c0adfc58d23b5112a8477866d00f54';
 
 /// A riverpod provider that handles authentication with Discord.
 
-abstract class _$ClientController extends $Notifier<AuthResponse?> {
-  AuthResponse? build();
+abstract class _$ClientController extends $Notifier<FirebridgeGateway?> {
+  FirebridgeGateway? build();
   @$mustCallSuper
   @override
   void runBuild() {
     final created = build();
-    final ref = this.ref as $Ref<AuthResponse?, AuthResponse?>;
+    final ref = this.ref as $Ref<FirebridgeGateway?, FirebridgeGateway?>;
     final element =
         ref.element
             as $ClassProviderElement<
-              AnyNotifier<AuthResponse?, AuthResponse?>,
-              AuthResponse?,
+              AnyNotifier<FirebridgeGateway?, FirebridgeGateway?>,
+              FirebridgeGateway?,
               Object?,
               Object?
             >;

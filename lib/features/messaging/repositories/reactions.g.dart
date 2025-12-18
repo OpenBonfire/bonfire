@@ -58,7 +58,7 @@ final class MessageReactionsProvider
   }
 }
 
-String _$messageReactionsHash() => r'4586ce342ef10a0237342b45618041f71d58efc8';
+String _$messageReactionsHash() => r'eafaa7e5653f630accd9b2b54f313305102a899c';
 
 final class MessageReactionsFamily extends $Family
     with

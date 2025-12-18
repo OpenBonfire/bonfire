@@ -21,7 +21,6 @@ enum MessageFetchDirection { before, after, around }
 /// Message provider for fetching messages from the Discord API
 @riverpod
 class Messages extends _$Messages {
-  AuthUser? _user;
   final Map<String, Message> _messageCache = {};
   Timer? _authDebounceTimer;
   bool _isInitialLoad = true;
@@ -29,29 +28,21 @@ class Messages extends _$Messages {
 
   @override
   Future<List<Message>?> build(Snowflake channelId) async {
-    final auth = ref.watch(clientControllerProvider);
+    final client = ref.watch(clientControllerProvider);
 
     ref.onDispose(() {
       _authDebounceTimer?.cancel();
     });
 
-    if (auth is AuthUser) {
-      _user = auth;
-
-      // I think this is kinda useless but we'll see I guess
-      if (!_isInitialLoad && _messageCache.isNotEmpty) {
-        _authDebounceTimer?.cancel();
-        _authDebounceTimer = Timer(const Duration(milliseconds: 0), () {
-          _messageCache.clear();
-          _fetchInitialMessages();
-        });
-      } else {
-        return _fetchInitialMessages();
-      }
+    // I think this is kinda useless but we'll see I guess
+    if (!_isInitialLoad && _messageCache.isNotEmpty) {
+      _authDebounceTimer?.cancel();
+      _authDebounceTimer = Timer(const Duration(milliseconds: 0), () {
+        _messageCache.clear();
+        _fetchInitialMessages();
+      });
     } else {
-      _user = null;
-      _messageCache.clear();
-      return null;
+      return _fetchInitialMessages();
     }
 
     if (_messageCache.isNotEmpty) {

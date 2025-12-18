@@ -36,7 +36,7 @@ final class UserMessagesProvider
   UserMessages create() => UserMessages();
 }
 
-String _$userMessagesHash() => r'db72544d904d26f6ddca0c44b7487230c1013864';
+String _$userMessagesHash() => r'25da1550a768b62e067934dc430d270a16a7f938';
 
 /// Message provider for fetching user messages from the Discord API
 

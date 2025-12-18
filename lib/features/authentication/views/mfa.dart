@@ -69,20 +69,9 @@ class _MFAPageState extends ConsumerState<MFAPage> {
   }
 
   Future<void> submitMFA() async {
-    try {
-      final resp = await ref
-          .read(clientControllerProvider.notifier)
-          .submitMfa(controller.text);
-      if (resp is MFAInvalidError) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text(resp.error)));
-      } else {}
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("An unexpected error occurred")),
-      );
-    }
+    await ref
+        .read(clientControllerProvider.notifier)
+        .submitMfa(controller.text);
   }
 
   @override

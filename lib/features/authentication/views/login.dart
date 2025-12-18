@@ -23,15 +23,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   @override
   void initState() {
     super.initState();
-    ref.listenManual(clientControllerProvider, (a, b) {
-      if (b is AuthUser) {
-        client = b.client;
-        b.client.onReady.listen((_) {
-          print("User is Ready!");
-          _navigateToLastLocation();
-        });
-      }
-    });
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _checkAuthToken();
@@ -47,7 +38,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       if (client is AuthUser) {
         return;
       }
-      ref.read(clientControllerProvider.notifier).loginWithToken(token);
+      final newClient = await ref
+          .read(clientControllerProvider.notifier)
+          .loginWithToken(token);
+      _navigateToLastLocation();
     } else {
       setState(() {
         authMissing = true;

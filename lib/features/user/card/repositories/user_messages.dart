@@ -7,13 +7,10 @@ part 'user_messages.g.dart';
 /// Message provider for fetching user messages from the Discord API
 @Riverpod(keepAlive: true)
 class UserMessages extends _$UserMessages {
-  AuthUser? user;
-
   @override
   Future<void> build() async {
     var authOutput = ref.watch(clientControllerProvider);
     if (authOutput is AuthUser) {
-      user = authOutput;
       // debugPrint("LISTING CHANNELS!");
 
       // try {

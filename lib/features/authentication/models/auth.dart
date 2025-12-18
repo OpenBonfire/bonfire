@@ -7,7 +7,7 @@ part 'auth.mapper.dart';
 abstract class AuthResponse {}
 
 @MappableClass()
-class AuthNotStarted extends AuthResponse with AuthSuccessMappable {}
+class AuthNotStarted extends AuthResponse with AuthNotStartedMappable {}
 
 @MappableClass()
 class AuthSuccess extends AuthResponse with AuthSuccessMappable {

@@ -15,7 +15,7 @@ const forumsProvider = ForumsFamily._();
 
 /// Fetches a forum channel from the [channelId].
 final class ForumsProvider
-    extends $AsyncNotifierProvider<Forums, ForumChannel?> {
+    extends $AsyncNotifierProvider<Forums, ForumChannel> {
   /// Fetches a forum channel from the [channelId].
   const ForumsProvider._({
     required ForumsFamily super.from,
@@ -53,7 +53,7 @@ final class ForumsProvider
   }
 }
 
-String _$forumsHash() => r'6be8589d7ebce3c851ea9561bf4d84ed7f779836';
+String _$forumsHash() => r'3ee7905eb504cc81066858b70ef21dac28c514b1';
 
 /// Fetches a forum channel from the [channelId].
 
@@ -61,9 +61,9 @@ final class ForumsFamily extends $Family
     with
         $ClassFamilyOverride<
           Forums,
-          AsyncValue<ForumChannel?>,
-          ForumChannel?,
-          FutureOr<ForumChannel?>,
+          AsyncValue<ForumChannel>,
+          ForumChannel,
+          FutureOr<ForumChannel>,
           Snowflake
         > {
   const ForumsFamily._()
@@ -86,21 +86,21 @@ final class ForumsFamily extends $Family
 
 /// Fetches a forum channel from the [channelId].
 
-abstract class _$Forums extends $AsyncNotifier<ForumChannel?> {
+abstract class _$Forums extends $AsyncNotifier<ForumChannel> {
   late final _$args = ref.$arg as Snowflake;
   Snowflake get channelId => _$args;
 
-  FutureOr<ForumChannel?> build(Snowflake channelId);
+  FutureOr<ForumChannel> build(Snowflake channelId);
   @$mustCallSuper
   @override
   void runBuild() {
     final created = build(_$args);
-    final ref = this.ref as $Ref<AsyncValue<ForumChannel?>, ForumChannel?>;
+    final ref = this.ref as $Ref<AsyncValue<ForumChannel>, ForumChannel>;
     final element =
         ref.element
             as $ClassProviderElement<
-              AnyNotifier<AsyncValue<ForumChannel?>, ForumChannel?>,
-              AsyncValue<ForumChannel?>,
+              AnyNotifier<AsyncValue<ForumChannel>, ForumChannel>,
+              AsyncValue<ForumChannel>,
               Object?,
               Object?
             >;
