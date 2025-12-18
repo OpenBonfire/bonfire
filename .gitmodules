@@ -1,3 +1,0 @@
-[submodule "packages/firebridge"]
-	path = packages/firebridge
-	url = https://github.com/OpenBonfire/firebridge
