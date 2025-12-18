@@ -34,96 +34,98 @@ class _SidebarState extends ConsumerState<Sidebar> {
     super.dispose();
   }
 
-  // List<Widget> _buildGuildList(
-  //     List<UserGuild> allGuilds, List<GuildFolder>? folders) {
-  //   List<Widget> items = [];
+  List<Widget> _buildGuildList(
+    List<UserGuild> allGuilds,
+    List<GuildFolder>? folders,
+  ) {
+    List<Widget> items = [];
 
-  //   // set of guild IDs that are in foldersp
-  //   Set<Snowflake> folderedGuildIds = {};
-  //   if (folders != null) {
-  //     for (var folder in folders) {
-  //       folderedGuildIds.addAll(folder.guildIds);
-  //     }
-  //   }
+    // set of guild IDs that are in foldersp
+    Set<Snowflake> folderedGuildIds = {};
+    if (folders != null) {
+      for (var folder in folders) {
+        folderedGuildIds.addAll(folder.guildIds);
+      }
+    }
 
-  //   // guilds that are not in folders
-  //   for (var guild in allGuilds) {
-  //     if (!folderedGuildIds.contains(guild.id)) {
-  //       items.add(
-  //         Padding(
-  //           padding: EdgeInsets.only(bottom: iconSpacing),
-  //           child: SidebarIcon(
-  //             selected: widget.guildId == guild.id,
-  //             guild: guild,
-  //             isClickable: true,
-  //           ),
-  //         ),
-  //       );
-  //     }
-  //   }
+    // guilds that are not in folders
+    for (var guild in allGuilds) {
+      if (!folderedGuildIds.contains(guild.id)) {
+        items.add(
+          Padding(
+            padding: EdgeInsets.only(bottom: iconSpacing),
+            child: SidebarIcon(
+              selected: widget.guildId == guild.id,
+              guild: guild,
+              isClickable: true,
+            ),
+          ),
+        );
+      }
+    }
 
-  //   // folders
-  //   if (folders != null) {
-  //     for (var folder in folders) {
-  //       items.add(
-  //         Padding(
-  //           padding: EdgeInsets.only(bottom: iconSpacing),
-  //           child: GuildFolderWidget(
-  //             guildFolder: folder,
-  //             guildList: allGuilds,
-  //             selectedGuildId: widget.guildId,
-  //           ),
-  //         ),
-  //       );
-  //     }
-  //   }
+    // folders
+    if (folders != null) {
+      for (var folder in folders) {
+        items.add(
+          Padding(
+            padding: EdgeInsets.only(bottom: iconSpacing),
+            child: GuildFolderWidget(
+              guildFolder: folder,
+              guildList: allGuilds,
+              selectedGuildId: widget.guildId,
+            ),
+          ),
+        );
+      }
+    }
 
-  //   return items;
-  // }
+    return items;
+  }
 
-  // List<Widget> _buildUnreadDmList() {
-  //   List<ReadState>? unreadDms = ref.watch(unreadDmsProvider);
-  //   String? _channelId = GoRouter.of(context)
-  //       .routerDelegate
-  //       .currentConfiguration
-  //       .pathParameters['channelId'];
+  List<Widget> _buildUnreadDmList() {
+    List<ReadState>? unreadDms = ref.watch(unreadDmsProvider);
+    String? _channelId = GoRouter.of(
+      context,
+    ).routerDelegate.currentConfiguration.pathParameters['channelId'];
 
-  //   Snowflake? channelId;
-  //   if (_channelId != null) {
-  //     channelId = Snowflake.parse(_channelId);
-  //   }
+    Snowflake? channelId;
+    if (_channelId != null) {
+      channelId = Snowflake.parse(_channelId);
+    }
 
-  //   if (unreadDms == null || unreadDms.isEmpty) {
-  //     return [];
-  //   }
+    if (unreadDms == null || unreadDms.isEmpty) {
+      return [];
+    }
 
-  //   return unreadDms.map((readState) {
-  //     // TODO: The selected guildId should really be extracted from the route
-  //     return Padding(
-  //         padding: EdgeInsets.only(bottom: iconSpacing),
-  //         child: SidebarItem(
-  //           selected: channelId == readState.channel.id,
-  //           mentions: readState.mentionCount ?? 0,
-  //           onTap: () {
-  //             debugPrint("tapped dm!");
-  //             GoRouter.of(context).go('/channels/@me/${readState.channel.id}');
-  //           },
-  //           child: DmIcon(privateChannelId: readState.channel.id),
-  //         ));
-  //   }).toList();
-  // }
+    return unreadDms.map((readState) {
+      // TODO: The selected guildId should really be extracted from the route
+      return Padding(
+        padding: EdgeInsets.only(bottom: iconSpacing),
+        child: SidebarItem(
+          selected: channelId == readState.channelId,
+          mentions: readState.mentionCount ?? 0,
+          onTap: () {
+            debugPrint("tapped dm!");
+            GoRouter.of(context).go('/channels/@me/${readState.channelId}');
+          },
+          child: DmIcon(privateChannelId: readState.channelId),
+        ),
+      );
+    }).toList();
+  }
 
   @override
   Widget build(BuildContext context) {
     var guildWatch = ref.watch(guildsControllerProvider);
-    // var guildFoldersWatch = ref.watch(guildFoldersProvider);
+    var guildFoldersWatch = ref.watch(guildFoldersProvider);
 
     double bottomPadding = MediaQuery.paddingOf(context).bottom;
     double navbarHeight = shouldUseMobileLayout(context) ? 40 : 0;
 
     List<UserGuild> guildList = guildWatch ?? [];
 
-    // List<GuildFolder>? guildFolders = guildFoldersWatch;
+    List<GuildFolder>? guildFolders = guildFoldersWatch;
 
     return Container(
       decoration: BoxDecoration(
@@ -167,7 +169,7 @@ class _SidebarState extends ConsumerState<Sidebar> {
                           ),
                         ),
                         const SizedBox(height: 8),
-                        // ..._buildUnreadDmList(),
+                        ..._buildUnreadDmList(),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 12),
                           child: Container(
@@ -176,7 +178,7 @@ class _SidebarState extends ConsumerState<Sidebar> {
                           ),
                         ),
                         const SizedBox(height: 8),
-                        // ..._buildGuildList(guildList, guildFolders),
+                        ..._buildGuildList(guildList, guildFolders),
                         SizedBox(height: bottomPadding + navbarHeight),
                       ],
                     ),

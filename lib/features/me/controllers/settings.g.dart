@@ -63,6 +63,157 @@ abstract class _$PrivateMessageHistory extends $Notifier<List<Channel>> {
   }
 }
 
+@ProviderFor(GuildFolders)
+const guildFoldersProvider = GuildFoldersProvider._();
+
+final class GuildFoldersProvider
+    extends $NotifierProvider<GuildFolders, List<GuildFolder>?> {
+  const GuildFoldersProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'guildFoldersProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$guildFoldersHash();
+
+  @$internal
+  @override
+  GuildFolders create() => GuildFolders();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(List<GuildFolder>? value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<List<GuildFolder>?>(value),
+    );
+  }
+}
+
+String _$guildFoldersHash() => r'7e8b9a3c50d1bbd5abf6f23f04c46b6a2ff674b3';
+
+abstract class _$GuildFolders extends $Notifier<List<GuildFolder>?> {
+  List<GuildFolder>? build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build();
+    final ref = this.ref as $Ref<List<GuildFolder>?, List<GuildFolder>?>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<List<GuildFolder>?, List<GuildFolder>?>,
+              List<GuildFolder>?,
+              Object?,
+              Object?
+            >;
+    element.handleValue(ref, created);
+  }
+}
+
+@ProviderFor(ChannelReadState)
+const channelReadStateProvider = ChannelReadStateFamily._();
+
+final class ChannelReadStateProvider
+    extends $NotifierProvider<ChannelReadState, ReadState?> {
+  const ChannelReadStateProvider._({
+    required ChannelReadStateFamily super.from,
+    required Snowflake super.argument,
+  }) : super(
+         retry: null,
+         name: r'channelReadStateProvider',
+         isAutoDispose: false,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
+
+  @override
+  String debugGetCreateSourceHash() => _$channelReadStateHash();
+
+  @override
+  String toString() {
+    return r'channelReadStateProvider'
+        ''
+        '($argument)';
+  }
+
+  @$internal
+  @override
+  ChannelReadState create() => ChannelReadState();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(ReadState? value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<ReadState?>(value),
+    );
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is ChannelReadStateProvider && other.argument == argument;
+  }
+
+  @override
+  int get hashCode {
+    return argument.hashCode;
+  }
+}
+
+String _$channelReadStateHash() => r'9b8a22ce3ab8d8a3f0eb9e6cf82936402624ff3e';
+
+final class ChannelReadStateFamily extends $Family
+    with
+        $ClassFamilyOverride<
+          ChannelReadState,
+          ReadState?,
+          ReadState?,
+          ReadState?,
+          Snowflake
+        > {
+  const ChannelReadStateFamily._()
+    : super(
+        retry: null,
+        name: r'channelReadStateProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: false,
+      );
+
+  ChannelReadStateProvider call(Snowflake channelId) =>
+      ChannelReadStateProvider._(argument: channelId, from: this);
+
+  @override
+  String toString() => r'channelReadStateProvider';
+}
+
+abstract class _$ChannelReadState extends $Notifier<ReadState?> {
+  late final _$args = ref.$arg as Snowflake;
+  Snowflake get channelId => _$args;
+
+  ReadState? build(Snowflake channelId);
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build(_$args);
+    final ref = this.ref as $Ref<ReadState?, ReadState?>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<ReadState?, ReadState?>,
+              ReadState?,
+              Object?,
+              Object?
+            >;
+    element.handleValue(ref, created);
+  }
+}
+
 @ProviderFor(SelfStatusState)
 const selfStatusStateProvider = SelfStatusStateProvider._();
 
@@ -305,6 +456,213 @@ abstract class _$UserActivityState extends $Notifier<List<Activity>?> {
             as $ClassProviderElement<
               AnyNotifier<List<Activity>?, List<Activity>?>,
               List<Activity>?,
+              Object?,
+              Object?
+            >;
+    element.handleValue(ref, created);
+  }
+}
+
+@ProviderFor(CustomStatusState)
+const customStatusStateProvider = CustomStatusStateProvider._();
+
+final class CustomStatusStateProvider
+    extends $NotifierProvider<CustomStatusState, CustomStatus?> {
+  const CustomStatusStateProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'customStatusStateProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$customStatusStateHash();
+
+  @$internal
+  @override
+  CustomStatusState create() => CustomStatusState();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(CustomStatus? value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<CustomStatus?>(value),
+    );
+  }
+}
+
+String _$customStatusStateHash() => r'0714d50f94a66471c2715255ae77ebef99bc1641';
+
+abstract class _$CustomStatusState extends $Notifier<CustomStatus?> {
+  CustomStatus? build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build();
+    final ref = this.ref as $Ref<CustomStatus?, CustomStatus?>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<CustomStatus?, CustomStatus?>,
+              CustomStatus?,
+              Object?,
+              Object?
+            >;
+    element.handleValue(ref, created);
+  }
+}
+
+@ProviderFor(GuildsState)
+const guildsStateProvider = GuildsStateProvider._();
+
+final class GuildsStateProvider
+    extends $AsyncNotifierProvider<GuildsState, List<Guild>?> {
+  const GuildsStateProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'guildsStateProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$guildsStateHash();
+
+  @$internal
+  @override
+  GuildsState create() => GuildsState();
+}
+
+String _$guildsStateHash() => r'd6350d6f38c81f9e3635a497ebe6a5f22511186c';
+
+abstract class _$GuildsState extends $AsyncNotifier<List<Guild>?> {
+  FutureOr<List<Guild>?> build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build();
+    final ref = this.ref as $Ref<AsyncValue<List<Guild>?>, List<Guild>?>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<AsyncValue<List<Guild>?>, List<Guild>?>,
+              AsyncValue<List<Guild>?>,
+              Object?,
+              Object?
+            >;
+    element.handleValue(ref, created);
+  }
+}
+
+@ProviderFor(VoiceStates)
+const voiceStatesProvider = VoiceStatesFamily._();
+
+final class VoiceStatesProvider
+    extends
+        $NotifierProvider<VoiceStates, List<MapEntry<Snowflake, VoiceState>>?> {
+  const VoiceStatesProvider._({
+    required VoiceStatesFamily super.from,
+    required Snowflake super.argument,
+  }) : super(
+         retry: null,
+         name: r'voiceStatesProvider',
+         isAutoDispose: false,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
+
+  @override
+  String debugGetCreateSourceHash() => _$voiceStatesHash();
+
+  @override
+  String toString() {
+    return r'voiceStatesProvider'
+        ''
+        '($argument)';
+  }
+
+  @$internal
+  @override
+  VoiceStates create() => VoiceStates();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(List<MapEntry<Snowflake, VoiceState>>? value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride:
+          $SyncValueProvider<List<MapEntry<Snowflake, VoiceState>>?>(value),
+    );
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is VoiceStatesProvider && other.argument == argument;
+  }
+
+  @override
+  int get hashCode {
+    return argument.hashCode;
+  }
+}
+
+String _$voiceStatesHash() => r'a5bcbb9b250877d53f1e29f22415c7cb7cd7cd2e';
+
+final class VoiceStatesFamily extends $Family
+    with
+        $ClassFamilyOverride<
+          VoiceStates,
+          List<MapEntry<Snowflake, VoiceState>>?,
+          List<MapEntry<Snowflake, VoiceState>>?,
+          List<MapEntry<Snowflake, VoiceState>>?,
+          Snowflake
+        > {
+  const VoiceStatesFamily._()
+    : super(
+        retry: null,
+        name: r'voiceStatesProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: false,
+      );
+
+  VoiceStatesProvider call(Snowflake guildId) =>
+      VoiceStatesProvider._(argument: guildId, from: this);
+
+  @override
+  String toString() => r'voiceStatesProvider';
+}
+
+abstract class _$VoiceStates
+    extends $Notifier<List<MapEntry<Snowflake, VoiceState>>?> {
+  late final _$args = ref.$arg as Snowflake;
+  Snowflake get guildId => _$args;
+
+  List<MapEntry<Snowflake, VoiceState>>? build(Snowflake guildId);
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build(_$args);
+    final ref =
+        this.ref
+            as $Ref<
+              List<MapEntry<Snowflake, VoiceState>>?,
+              List<MapEntry<Snowflake, VoiceState>>?
+            >;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<
+                List<MapEntry<Snowflake, VoiceState>>?,
+                List<MapEntry<Snowflake, VoiceState>>?
+              >,
+              List<MapEntry<Snowflake, VoiceState>>?,
               Object?,
               Object?
             >;
