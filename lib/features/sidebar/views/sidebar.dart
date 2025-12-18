@@ -117,8 +117,8 @@ class _SidebarState extends ConsumerState<Sidebar> {
 
   @override
   Widget build(BuildContext context) {
-    var guildWatch = ref.watch(guildsControllerProvider);
-    var guildFoldersWatch = ref.watch(guildFoldersProvider);
+    final guildWatch = ref.watch(guildsControllerProvider);
+    final guildFoldersWatch = ref.watch(guildFoldersProvider);
 
     double bottomPadding = MediaQuery.paddingOf(context).bottom;
     double navbarHeight = shouldUseMobileLayout(context) ? 40 : 0;

@@ -1,3 +1,5 @@
+// turns out we don't actually use this
+
 // import 'package:bonfire/features/friends/views/friends.dart';
 // import 'package:bonfire/features/me/components/private_messages.dart';
 // import 'package:bonfire/features/member/views/member_list.dart';
@@ -43,11 +45,7 @@
 //                           channelId: widget.channelId!,
 //                         ),
 //                       )
-//                     : Expanded(
-//                         child: FriendsList(
-//                           channelId: Snowflake.zero,
-//                         ),
-//                       ),
+//                     : Expanded(child: FriendsList(channelId: Snowflake.zero)),
 //               ],
 //             );
 //           } else {
@@ -61,9 +59,7 @@
 //                 width: MediaQuery.sizeOf(context).width,
 //                 child: Row(
 //                   children: [
-//                     Sidebar(
-//                       guildId: Snowflake.zero,
-//                     ),
+//                     Sidebar(guildId: Snowflake.zero),
 //                     Expanded(
 //                       child: Padding(
 //                         padding: const EdgeInsets.only(right: 32),
@@ -71,7 +67,7 @@
 //                           channelId: widget.channelId ?? Snowflake.zero,
 //                         ),
 //                       ),
-//                     )
+//                     ),
 //                   ],
 //                 ),
 //               ),
@@ -80,9 +76,7 @@
 //                       guildId: Snowflake.zero,
 //                       channelId: widget.channelId!,
 //                     )
-//                   : FriendsList(
-//                       channelId: Snowflake.zero,
-//                     ),
+//                   : FriendsList(channelId: Snowflake.zero),
 //               right: (widget.channelId != null)
 //                   ? MemberList(
 //                       guildId: Snowflake.zero,
