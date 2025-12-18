@@ -11,10 +11,7 @@ import 'package:universal_platform/universal_platform.dart';
 class TopButtons extends ConsumerStatefulWidget {
   final Snowflake channelId;
 
-  const TopButtons({
-    super.key,
-    required this.channelId,
-  });
+  const TopButtons({super.key, required this.channelId});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _TopButtonsState();
@@ -23,23 +20,14 @@ class TopButtons extends ConsumerStatefulWidget {
 class _TopButtonsState extends ConsumerState<TopButtons> {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        TopButton(
-          channelId: widget.channelId,
-        ),
-      ],
-    );
+    return Column(children: [TopButton(channelId: widget.channelId)]);
   }
 }
 
 class TopButton extends ConsumerStatefulWidget {
   final Snowflake channelId;
 
-  const TopButton({
-    super.key,
-    required this.channelId,
-  });
+  const TopButton({super.key, required this.channelId});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _TopButtonState();
@@ -53,21 +41,17 @@ class _TopButtonState extends ConsumerState<TopButton> {
       padding: const EdgeInsets.fromLTRB(4, 0, 4, 4),
       child: OutlinedButton(
         style: OutlinedButton.styleFrom(
-            minimumSize: Size.zero,
-            padding: const EdgeInsets.all(4),
-            side: const BorderSide(
-              color: Colors.transparent,
-              width: 0,
-            ),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(4),
-            ),
-            foregroundColor: selected
-                ? BonfireThemeExtension.of(context).dirtyWhite
-                : BonfireThemeExtension.of(context).gray,
-            backgroundColor: selected
-                ? BonfireThemeExtension.of(context).foreground
-                : Colors.transparent),
+          minimumSize: Size.zero,
+          padding: const EdgeInsets.all(4),
+          side: const BorderSide(color: Colors.transparent, width: 0),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+          foregroundColor: selected
+              ? BonfireThemeExtension.of(context).dirtyWhite
+              : BonfireThemeExtension.of(context).gray,
+          backgroundColor: selected
+              ? BonfireThemeExtension.of(context).foreground
+              : Colors.transparent,
+        ),
         onPressed: () {
           HapticFeedback.selectionClick();
           GoRouter.of(context).go("/channels/@me");
@@ -111,10 +95,7 @@ class _TopButtonState extends ConsumerState<TopButton> {
 
 class PrivateMessages extends ConsumerStatefulWidget {
   final Snowflake channelId;
-  const PrivateMessages({
-    super.key,
-    required this.channelId,
-  });
+  const PrivateMessages({super.key, required this.channelId});
 
   @override
   ConsumerState<PrivateMessages> createState() => _PrivateMessagesState();
@@ -123,7 +104,8 @@ class PrivateMessages extends ConsumerStatefulWidget {
 class _PrivateMessagesState extends ConsumerState<PrivateMessages> {
   @override
   Widget build(BuildContext context) {
-    var topPadding = MediaQuery.paddingOf(context).top +
+    var topPadding =
+        MediaQuery.paddingOf(context).top +
         (UniversalPlatform.isDesktopOrWeb ? 8 : 0);
     double bottomPadding = UniversalPlatform.isMobile
         ? MediaQuery.paddingOf(context).bottom + 68
@@ -131,50 +113,52 @@ class _PrivateMessagesState extends ConsumerState<PrivateMessages> {
     var dms = ref.watch(privateMessageHistoryProvider).toList();
 
     // sort by numerical ids
-    dms.sort((a, b) {
-      BigInt aLastMessageId =
-          (a as TextChannel).lastMessageId?.value ?? BigInt.zero;
-      var bLastMessageId =
-          (b as TextChannel).lastMessageId?.value ?? BigInt.zero;
-      return bLastMessageId.compareTo(aLastMessageId);
-    });
+    // dms.sort((a, b) {
+    //   BigInt aLastMessageId =
+    //       (a as TextChannel).lastMessageId?.value ?? BigInt.zero;
+    //   var bLastMessageId =
+    //       (b as TextChannel).lastMessageId?.value ?? BigInt.zero;
+    //   return bLastMessageId.compareTo(aLastMessageId);
+    // });
 
     final bonfireTheme = BonfireThemeExtension.of(context);
 
     return Padding(
-        padding: EdgeInsets.only(left: 8, top: topPadding, bottom: 0),
-        child: SizedBox(
-            width: double.infinity,
-            child: Container(
-                decoration: BoxDecoration(
-                    color: BonfireThemeExtension.of(context).background,
-                    borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(24),
-                      bottomLeft: Radius.circular(24),
-                    ),
-                    border: Border(
-                        bottom: BorderSide(
-                            color: bonfireTheme.foreground, width: 1.0))),
-                child: Column(
-                  children: [
-                    Expanded(
-                      child: ListView.builder(
-                        padding: EdgeInsets.only(bottom: bottomPadding),
-                        itemCount: dms.length,
-                        itemBuilder: (context, index) {
-                          if (index == 0) {
-                            return TopButtons(
-                              channelId: widget.channelId,
-                            );
-                          }
-                          return DirectMessageMember(
-                            privateChannel: dms[index - 1],
-                            currentChannelId: widget.channelId,
-                          );
-                        },
-                      ),
-                    ),
-                  ],
-                ))));
+      padding: EdgeInsets.only(left: 8, top: topPadding, bottom: 0),
+      child: SizedBox(
+        width: double.infinity,
+        child: Container(
+          decoration: BoxDecoration(
+            color: BonfireThemeExtension.of(context).background,
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(24),
+              bottomLeft: Radius.circular(24),
+            ),
+            border: Border(
+              bottom: BorderSide(color: bonfireTheme.foreground, width: 1.0),
+            ),
+          ),
+          child: Column(
+            children: [
+              Expanded(
+                child: ListView.builder(
+                  padding: EdgeInsets.only(bottom: bottomPadding),
+                  itemCount: dms.length,
+                  itemBuilder: (context, index) {
+                    if (index == 0) {
+                      return TopButtons(channelId: widget.channelId);
+                    }
+                    return DirectMessageMember(
+                      privateChannel: dms[index - 1],
+                      currentChannelId: widget.channelId,
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }

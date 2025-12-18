@@ -11,9 +11,7 @@ class MessageReactions extends _$MessageReactions {
   List<Reaction> reactions = [];
 
   @override
-  List<Reaction>? build(
-    Snowflake messageId,
-  ) {
+  List<Reaction>? build(Snowflake messageId) {
     var auth = ref.watch(authProvider);
 
     if (auth is AuthUser) {
@@ -41,7 +39,7 @@ class MessageReactions extends _$MessageReactions {
     for (var r in reactions) {
       String name = "";
       if (r.emoji is TextEmoji) {
-        name = (r.emoji as TextEmoji).name;
+        // name = (r.emoji as TextEmoji).name;
       } else if (r.emoji is GuildEmoji) {
         name = (r.emoji as GuildEmoji).name!;
       }
@@ -63,24 +61,21 @@ class MessageReactions extends _$MessageReactions {
       }
     }
 
-    newReactions.add(
-      Reaction(
-        count: 1,
-        countDetails: ReactionCountDetails(burst: 0, normal: 0),
-        me: user.id == this.user!.client.user.id,
-        meBurst: false,
-        emoji: emoji,
-        burstColors: [],
-      ),
-    );
+    // newReactions.add(
+    //   Reaction(
+    //     count: 1,
+    //     countDetails: ReactionCountDetails(burst: 0, normal: 0),
+    //     me: user.id == this.user!.client.user.id,
+    //     meBurst: false,
+    //     emoji: emoji,
+    //     burstColors: [],
+    //   ),
+    // );
     reactions = newReactions;
     state = reactions;
   }
 
-  void removeReaction(
-    Emoji emoji,
-    PartialUser user,
-  ) {
+  void removeReaction(Emoji emoji, PartialUser user) {
     List<Reaction> newReactions = [];
     // copy reactions
     newReactions = List.from(reactions);
@@ -88,7 +83,7 @@ class MessageReactions extends _$MessageReactions {
     for (var r in reactions) {
       String name = "";
       if (r.emoji is TextEmoji) {
-        name = (r.emoji as TextEmoji).name;
+        // name = (r.emoji as TextEmoji).name;
       } else if (r.emoji is GuildEmoji) {
         name = (r.emoji as GuildEmoji).name!;
       }
@@ -120,7 +115,7 @@ class MessageReactions extends _$MessageReactions {
     for (var r in reactions) {
       String name = "";
       if (r.emoji is TextEmoji) {
-        name = (r.emoji as TextEmoji).name;
+        // name = (r.emoji as TextEmoji).name;
       } else if (r.emoji is GuildEmoji) {
         name = (r.emoji as GuildEmoji).name!;
       }

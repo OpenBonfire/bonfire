@@ -40,6 +40,8 @@ class _PresenceAvatarState extends ConsumerState<PresenceAvatar> {
         break;
       case UserStatus.offline:
         statusColor = BonfireThemeExtension.of(context).foreground;
+      case UserStatus.custom:
+        statusColor = BonfireThemeExtension.of(context).foreground;
     }
 
     if (clientStatus?.mobile == overallStatus) {
@@ -68,11 +70,7 @@ class _PresenceAvatarState extends ConsumerState<PresenceAvatar> {
       ),
       child: Padding(
         padding: padding,
-        child: Icon(
-          statusIcon,
-          size: iconSize,
-          color: statusColor,
-        ),
+        child: Icon(statusIcon, size: iconSize, color: statusColor),
       ),
     );
   }
@@ -85,10 +83,7 @@ class _PresenceAvatarState extends ConsumerState<PresenceAvatar> {
       children: [
         // const SizedBox(width: 38, height: 38),
         Center(
-          child: UserAvatar(
-            user: widget.user,
-            size: widget.size ?? 35,
-          ),
+          child: UserAvatar(user: widget.user, size: widget.size ?? 35),
         ),
         Positioned(
           right: widget.size != null ? (widget.size! / 20) : 0,
@@ -97,7 +92,7 @@ class _PresenceAvatarState extends ConsumerState<PresenceAvatar> {
             initialPresence?.clientStatus,
             initialPresence?.status ?? UserStatus.offline,
           ),
-        )
+        ),
       ],
     );
   }

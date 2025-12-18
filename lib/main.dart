@@ -5,6 +5,7 @@ import 'package:bonfire/router/controller.dart';
 import 'package:bonfire/theme/color_theme.dart';
 import 'package:bonfire/theme/theme.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:firebridge/firebridge.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -33,6 +34,7 @@ void main() async {
   );
 
   WidgetsFlutterBinding.ensureInitialized();
+  Firebridge.ensureInitialized();
 
   SystemChrome.setEnabledSystemUIMode(
     SystemUiMode.edgeToEdge,
@@ -47,10 +49,7 @@ void main() async {
   // Because desktop is way less locked down, it probably has
   // some other notifer endpoint that doesn't rely on the system
   if (UniversalPlatform.isAndroid) {
-    await Firebase.initializeApp(
-      name: 'bonfire',
-      options: firebaseOptions,
-    );
+    await Firebase.initializeApp(name: 'bonfire', options: firebaseOptions);
     await initializeNotifications();
     await setupFirebaseMessaging();
 
@@ -69,11 +68,7 @@ void main() async {
     debugPrint('Notification permissions: ${settings.authorizationStatus}');
   }
 
-  runApp(const ProviderScope(
-    child: MaterialApp(
-      home: MainWindow(),
-    ),
-  ));
+  runApp(const ProviderScope(child: MaterialApp(home: MainWindow())));
 }
 
 class MainWindow extends ConsumerStatefulWidget {
@@ -86,13 +81,15 @@ class MainWindow extends ConsumerStatefulWidget {
 class _MainWindowState extends ConsumerState<MainWindow> {
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-      systemNavigationBarColor: Colors.transparent,
-      systemNavigationBarIconBrightness: Brightness.light,
-      statusBarColor: Colors.transparent,
-      systemStatusBarContrastEnforced: false,
-      systemNavigationBarContrastEnforced: false,
-    ));
+    SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(
+        systemNavigationBarColor: Colors.transparent,
+        systemNavigationBarIconBrightness: Brightness.light,
+        statusBarColor: Colors.transparent,
+        systemStatusBarContrastEnforced: false,
+        systemNavigationBarContrastEnforced: false,
+      ),
+    );
 
     // final theme = ref.watch(themeDataProvider).copyWith(
     //       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
@@ -140,10 +137,11 @@ class _MainWindowState extends ConsumerState<MainWindow> {
         fontFamily: family,
       ),
       labelLarge: TextStyle(
-          fontSize: 15,
-          fontWeight: FontWeight.w500,
-          fontFamily: family,
-          color: const Color(0xFFBDBDBD)),
+        fontSize: 15,
+        fontWeight: FontWeight.w500,
+        fontFamily: family,
+        color: const Color(0xFFBDBDBD),
+      ),
       labelMedium: TextStyle(
         fontSize: 12,
         fontFamily: family,
@@ -164,31 +162,34 @@ class _MainWindowState extends ConsumerState<MainWindow> {
       ),
     );
 
-    final theme = ThemeData.dark().copyWith(textTheme: textTheme, extensions: [
-      UniversalPlatform.isMobile
-          ? const BonfireThemeExtension(
-              foreground: AppColorsAmoled.foreground,
-              background: AppColorsAmoled.background,
-              dirtyWhite: AppColorsAmoled.dirtyWhite,
-              gray: AppColorsAmoled.gray,
-              darkGray: AppColorsAmoled.darkGray,
-              primary: AppColorsAmoled.primary,
-              red: AppColorsAmoled.red,
-              green: AppColorsAmoled.green,
-              yellow: AppColorsAmoled.yellow,
-            )
-          : const BonfireThemeExtension(
-              foreground: AppColorsDark.foreground,
-              background: AppColorsDark.background,
-              dirtyWhite: AppColorsDark.dirtyWhite,
-              gray: AppColorsDark.gray,
-              darkGray: AppColorsDark.darkGray,
-              primary: AppColorsDark.primary,
-              red: AppColorsDark.red,
-              green: AppColorsDark.green,
-              yellow: AppColorsDark.yellow,
-            )
-    ]);
+    final theme = ThemeData.dark().copyWith(
+      textTheme: textTheme,
+      extensions: [
+        UniversalPlatform.isMobile
+            ? const BonfireThemeExtension(
+                foreground: AppColorsAmoled.foreground,
+                background: AppColorsAmoled.background,
+                dirtyWhite: AppColorsAmoled.dirtyWhite,
+                gray: AppColorsAmoled.gray,
+                darkGray: AppColorsAmoled.darkGray,
+                primary: AppColorsAmoled.primary,
+                red: AppColorsAmoled.red,
+                green: AppColorsAmoled.green,
+                yellow: AppColorsAmoled.yellow,
+              )
+            : const BonfireThemeExtension(
+                foreground: AppColorsDark.foreground,
+                background: AppColorsDark.background,
+                dirtyWhite: AppColorsDark.dirtyWhite,
+                gray: AppColorsDark.gray,
+                darkGray: AppColorsDark.darkGray,
+                primary: AppColorsDark.primary,
+                red: AppColorsDark.red,
+                green: AppColorsDark.green,
+                yellow: AppColorsDark.yellow,
+              ),
+      ],
+    );
 
     return Scaffold(
       backgroundColor: Colors.transparent,

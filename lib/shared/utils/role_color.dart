@@ -11,8 +11,8 @@ class MemberRoleHelper {
   Role? getTopRole() {
     Role? topRole;
 
-    for (PartialRole partialRole in member.roles) {
-      Role? role = roles.firstWhereOrNull((role) => partialRole.id == role.id);
+    for (Snowflake partialRole in member.roles) {
+      Role? role = roles.firstWhereOrNull((role) => partialRole == role.id);
       if (role == null) {
         continue;
       }
@@ -30,33 +30,37 @@ class MemberRoleHelper {
   }
 
   Role? getTopEmojiRole() {
-    Role? topEmojiRole;
+    // Role? topEmojiRole;
 
-    for (PartialRole partialRole in member.roles) {
-      Role? role = roles.firstWhereOrNull((role) => partialRole.id == role.id);
-      if (role == null || role.icon == null) {
-        continue;
-      }
+    // for (Snowflake partialRole in member.roles) {
+    //   Role? role = roles.firstWhereOrNull((role) => partialRole.id == role.id);
+    //   if (role == null || role.icon == null) {
+    //     continue;
+    //   }
 
-      if (topEmojiRole == null || role.position > topEmojiRole.position) {
-        topEmojiRole = role;
-      }
-    }
-    return topEmojiRole;
+    //   if (topEmojiRole == null || role.position > topEmojiRole.position) {
+    //     topEmojiRole = role;
+    //   }
+    // }
+    // return topEmojiRole;
   }
 
   Color getRoleColor() {
     Role? topRole = getTopRole();
     if (topRole != null) {
       return Color.fromRGBO(
-          topRole.color.r, topRole.color.g, topRole.color.b, 1);
+        topRole.color.r,
+        topRole.color.g,
+        topRole.color.b,
+        1,
+      );
     }
     return Colors.white;
   }
 
   String? getRoleIconUrl() {
-    Role? topEmojiRole = getTopEmojiRole();
-    return topEmojiRole?.icon?.url.toString();
+    // Role? topEmojiRole = getTopEmojiRole();
+    // return topEmojiRole?.icon?.url.toString();
   }
 }
 

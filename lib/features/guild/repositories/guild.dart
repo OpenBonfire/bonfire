@@ -12,7 +12,7 @@ Future<Uri?> guildBannerUrl(Ref ref, Snowflake guildId) async {
 
   if (authOutput is AuthUser) {
     // (await authOutput.client.guilds.get(guildId)).rulesChannel
-    return (await authOutput.client.guilds.get(guildId)).banner?.url;
+    // return (await authOutput.client.guilds.get(guildId)).banner?.url;
   }
 
   return null;

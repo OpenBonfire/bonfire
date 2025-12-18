@@ -2,7 +2,7 @@ import 'dart:typed_data';
 
 import 'package:bonfire/features/guild/repositories/member.dart';
 import 'package:bonfire/shared/utils/role_color.dart';
-import 'package:firebridge/firebridge.dart';
+import 'package:firebridge/firebridge.dart' hide CacheManager;
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

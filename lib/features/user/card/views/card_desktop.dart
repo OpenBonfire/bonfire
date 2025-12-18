@@ -21,106 +21,107 @@ class UserCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    User? user = ref.watch(selfUserProvider).value;
-    UserStatus? status = ref.watch(selfStatusStateProvider);
-    CustomStatus? customStatus = ref.watch(customStatusStateProvider);
-    VoiceReadyEvent? voiceReady = ref.watch(voiceChannelControllerProvider);
+    return Container();
+    // User? user = ref.watch(selfUserProvider).value;
+    // UserStatus? status = ref.watch(selfStatusStateProvider);
+    // CustomStatus? customStatus = ref.watch(customStatusStateProvider);
+    // VoiceReadyEvent? voiceReady = ref.watch(voiceChannelControllerProvider);
 
-    Uint8List? avatar;
-    String name = "";
+    // Uint8List? avatar;
+    // String name = "";
 
-    if (user != null) {
-      avatar = ref.watch(userAvatarProvider(user)).value;
-      name = user.globalName ?? user.username;
-    }
+    // if (user != null) {
+    //   avatar = ref.watch(userAvatarProvider(user)).value;
+    //   name = user.globalName ?? user.username;
+    // }
 
-    return TextButton(
-      style: ButtonStyle(padding: WidgetStateProperty.all(EdgeInsets.zero)),
-      onPressed: () {
-        showAccountSwitcherDialog(context, GoRouter.of(context));
-      },
-      child: Container(
-        decoration: BoxDecoration(
-          color: BonfireThemeExtension.of(context).foreground,
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            children: [
-              if (voiceReady != null)
-                Column(
-                  children: [
-                    const VoiceControlBar(),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 4),
-                      child: Container(
-                        height: 0.1,
-                        decoration: const BoxDecoration(color: Colors.white),
-                      ),
-                    ),
-                  ],
-                ),
-              Row(
-                children: [
-                  Stack(
-                    children: [
-                      SizedBox(
-                        height: 40,
-                        width: 40,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                          child: (avatar != null)
-                              ? Image.memory(avatar, fit: BoxFit.cover)
-                              : const SizedBox.shrink(),
-                        ),
-                      ),
-                      Positioned(
-                        bottom: 2,
-                        right: 2,
-                        child: Container(
-                          height: 12,
-                          width: 12,
-                          decoration: BoxDecoration(
-                            color: getStatusColor(
-                              context,
-                              status ?? UserStatus.offline,
-                            ),
-                            borderRadius: BorderRadius.circular(6),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(width: 6),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        name,
-                        style: GoogleFonts.publicSans(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 14,
-                        ),
-                      ),
-                      Text(
-                        customStatus?.text ?? status?.value ?? "Offline",
-                        style: GoogleFonts.publicSans(
-                          color: BonfireThemeExtension.of(context).gray,
-                          fontWeight: FontWeight.w400,
-                          fontSize: 12,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
+    // return TextButton(
+    //   style: ButtonStyle(padding: WidgetStateProperty.all(EdgeInsets.zero)),
+    //   onPressed: () {
+    //     showAccountSwitcherDialog(context, GoRouter.of(context));
+    //   },
+    //   child: Container(
+    //     decoration: BoxDecoration(
+    //       color: BonfireThemeExtension.of(context).foreground,
+    //       borderRadius: BorderRadius.circular(10),
+    //     ),
+    //     child: Padding(
+    //       padding: const EdgeInsets.all(8.0),
+    //       child: Column(
+    //         children: [
+    //           if (voiceReady != null)
+    //             Column(
+    //               children: [
+    //                 const VoiceControlBar(),
+    //                 Padding(
+    //                   padding: const EdgeInsets.only(bottom: 4),
+    //                   child: Container(
+    //                     height: 0.1,
+    //                     decoration: const BoxDecoration(color: Colors.white),
+    //                   ),
+    //                 ),
+    //               ],
+    //             ),
+    //           Row(
+    //             children: [
+    //               Stack(
+    //                 children: [
+    //                   SizedBox(
+    //                     height: 40,
+    //                     width: 40,
+    //                     child: ClipRRect(
+    //                       borderRadius: BorderRadius.circular(10),
+    //                       child: (avatar != null)
+    //                           ? Image.memory(avatar, fit: BoxFit.cover)
+    //                           : const SizedBox.shrink(),
+    //                     ),
+    //                   ),
+    //                   Positioned(
+    //                     bottom: 2,
+    //                     right: 2,
+    //                     child: Container(
+    //                       height: 12,
+    //                       width: 12,
+    //                       decoration: BoxDecoration(
+    //                         color: getStatusColor(
+    //                           context,
+    //                           status ?? UserStatus.offline,
+    //                         ),
+    //                         borderRadius: BorderRadius.circular(6),
+    //                       ),
+    //                     ),
+    //                   ),
+    //                 ],
+    //               ),
+    //               const SizedBox(width: 6),
+    //               Column(
+    //                 mainAxisAlignment: MainAxisAlignment.center,
+    //                 crossAxisAlignment: CrossAxisAlignment.start,
+    //                 children: [
+    //                   Text(
+    //                     name,
+    //                     style: GoogleFonts.publicSans(
+    //                       color: Colors.white,
+    //                       fontWeight: FontWeight.w600,
+    //                       fontSize: 14,
+    //                     ),
+    //                   ),
+    //                   Text(
+    //                     customStatus?.text ?? status?.value ?? "Offline",
+    //                     style: GoogleFonts.publicSans(
+    //                       color: BonfireThemeExtension.of(context).gray,
+    //                       fontWeight: FontWeight.w400,
+    //                       fontSize: 12,
+    //                     ),
+    //                   ),
+    //                 ],
+    //               ),
+    //             ],
+    //           ),
+    //         ],
+    //       ),
+    //     ),
+    //   ),
+    // );
   }
 }

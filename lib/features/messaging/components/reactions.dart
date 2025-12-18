@@ -24,10 +24,12 @@ class MessageReactions extends ConsumerStatefulWidget {
 class _MessageReactionsState extends ConsumerState<MessageReactions> {
   @override
   Widget build(BuildContext context) {
-    final reactions = ref.watch(messageReactionsProvider(
-      // widget.guildId,
-      widget.messageId,
-    ));
+    final reactions = ref.watch(
+      messageReactionsProvider(
+        // widget.guildId,
+        widget.messageId,
+      ),
+    );
     if (reactions == null) {
       return Container();
     }
@@ -39,10 +41,7 @@ class _MessageReactionsState extends ConsumerState<MessageReactions> {
         runSpacing: 4,
         children: [
           for (var reaction in reactions)
-            ReactionWidget(
-              reaction: reaction,
-              messageId: widget.messageId,
-            ),
+            ReactionWidget(reaction: reaction, messageId: widget.messageId),
         ],
       ),
     );
@@ -79,12 +78,12 @@ class ReactionWidget extends ConsumerWidget {
           print("Tapped");
           HapticFeedback.lightImpact();
           final message = ref.read(messageControllerProvider(messageId));
-          if (reaction.me) {
-            message!.deleteOwnReaction(
-                ReactionBuilder.fromEmoji(reaction.emoji as Emoji));
-          } else {
-            message!.react(ReactionBuilder.fromEmoji(reaction.emoji as Emoji));
-          }
+          // if (reaction.me) {
+          //   message!.deleteOwnReaction(
+          //       ReactionBuilder.fromEmoji(reaction.emoji as Emoji));
+          // } else {
+          //   message!.react(ReactionBuilder.fromEmoji(reaction.emoji as Emoji));
+          // }
         },
         borderRadius: BorderRadius.circular(8),
         child: Padding(
@@ -99,19 +98,21 @@ class ReactionWidget extends ConsumerWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              (reaction.emoji is TextEmoji)
-                  ? SizedBox(
-                      child: Text((reaction.emoji as TextEmoji).name,
-                          style: Theme.of(context).textTheme.bodyMedium!),
-                    )
-                  : ClipRRect(
-                      borderRadius: BorderRadius.circular(4),
-                      child: Image.network(
-                        (reaction.emoji as GuildEmoji).image.url.toString(),
-                        width: 20,
-                        height: 20,
-                      ),
-                    ),
+              // (reaction.emoji is TextEmoji)
+              //     ? SizedBox(
+              //         child: Text(
+              //           (reaction.emoji as TextEmoji).name ?? "no name",
+              //           style: Theme.of(context).textTheme.bodyMedium!,
+              //         ),
+              //       )
+              //     : ClipRRect(
+              //         borderRadius: BorderRadius.circular(4),
+              //         child: Image.network(
+              //           (reaction.emoji as GuildEmoji)..url.toString(),
+              //           width: 20,
+              //           height: 20,
+              //         ),
+              //       ),
               const SizedBox(width: 4),
               Text(
                 reaction.count.toString(),

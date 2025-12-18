@@ -50,7 +50,7 @@ final class MessageSearchProvider
   }
 }
 
-String _$messageSearchHash() => r'aee504655bf2f7fcc58c6964514a2072d9433098';
+String _$messageSearchHash() => r'a75733bb3a64f68f7d0b6c69288398dd3afb7280';
 
 final class MessageSearchFamily extends $Family
     with

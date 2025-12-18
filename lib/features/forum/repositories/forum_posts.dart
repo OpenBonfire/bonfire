@@ -25,43 +25,43 @@ class ForumPosts extends _$ForumPosts {
   }
 
   Future<ThreadList?> _fetchThreads(Snowflake channelId) async {
-    if (authUser is AuthUser) {
-      Channel channel = await authUser!.client.channels.get(channelId);
-      if (channel is ForumChannel) {
-        ThreadList? threadData = await channel.manager.searchThreads(
-          channel.id,
-          25,
-          offset: _currentOffset,
-        );
+    // if (authUser is AuthUser) {
+    //   Channel channel = await authUser!.client.channels.get(channelId);
+    //   if (channel is ForumChannel) {
+    //     ThreadList? threadData = await channel.manager.searchThreads(
+    //       channel.id,
+    //       25,
+    //       offset: _currentOffset,
+    //     );
 
-        if (threadData != null) {
-          _hasMore = threadData.threads.length == 25;
+    //     if (threadData != null) {
+    //       _hasMore = threadData.threads.length == 25;
 
-          for (var element in threadData.threads) {
-            ref
-                .read(threadChannelProvider(element.id).notifier)
-                .setThreadChannel(element);
-          }
+    //       for (var element in threadData.threads) {
+    //         ref
+    //             .read(threadChannelProvider(element.id).notifier)
+    //             .setThreadChannel(element);
+    //       }
 
-          int idx = 0;
-          for (var message in threadData.firstMessages) {
-            ref
-                .read(messageControllerProvider(message.id).notifier)
-                .setMessage(message);
+    //       int idx = 0;
+    //       for (var message in threadData.firstMessages) {
+    //         ref
+    //             .read(messageControllerProvider(message.id).notifier)
+    //             .setMessage(message);
 
-            var thread = threadData.threads[idx];
+    //         var thread = threadData.threads[idx];
 
-            ref
-                .read(firstMessageProvider(thread.id).notifier)
-                .setFirstMessage(message);
+    //         ref
+    //             .read(firstMessageProvider(thread.id).notifier)
+    //             .setFirstMessage(message);
 
-            idx++;
-          }
+    //         idx++;
+    //       }
 
-          return threadData;
-        }
-      }
-    }
+    //       return threadData;
+    //     }
+    //   }
+    // }
 
     return null;
   }

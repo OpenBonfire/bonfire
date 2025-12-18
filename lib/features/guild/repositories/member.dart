@@ -8,26 +8,27 @@ part 'member.g.dart';
 
 @Riverpod(keepAlive: true)
 Future<Member?> getMember(
-    Ref ref, Snowflake guildId, Snowflake memberId) async {
+  Ref ref,
+  Snowflake guildId,
+  Snowflake memberId,
+) async {
   var authOutput = ref.watch(authProvider);
 
   if (authOutput is AuthUser) {
-    return await authOutput.client.guilds[guildId].members.get(memberId);
+    // return await authOutput.client.guilds[guildId].members.get(memberId);
   }
 
   return null;
 }
 
 @Riverpod(keepAlive: true)
-Future<Member?> getSelfMember(
-  Ref ref,
-  Snowflake guildId,
-) async {
+Future<Member?> getSelfMember(Ref ref, Snowflake guildId) async {
   var authOutput = ref.watch(authProvider);
 
   if (authOutput is AuthUser) {
-    return await authOutput.client.guilds[guildId].members
-        .get(authOutput.client.user.id);
+    // return await authOutput.client.guilds[guildId].members.get(
+    //   authOutput.client.user.id,
+    // );
   }
   return null;
 }
@@ -36,19 +37,20 @@ Future<Member?> getSelfMember(
 Future<List<Role>?> getGuildRoles(Ref ref, Snowflake guildId) async {
   var authOutput = ref.watch(authProvider);
 
-  if (authOutput is AuthUser) {
-    return await authOutput.client.guilds[guildId].roles.list();
-  }
+  // if (authOutput is AuthUser) {
+  //   return await authOutput.client.guilds[guildId].roles.list();
+  // }
   return null;
 }
 
 @riverpod
-Future<Role> getRole(Ref ref, Snowflake guildId, Snowflake roleId) async {
+Future<Role?> getRole(Ref ref, Snowflake guildId, Snowflake roleId) async {
   var authOutput = ref.watch(authProvider);
 
-  if (authOutput is AuthUser) {
-    return await authOutput.client.guilds[guildId].roles.get(roleId);
-  } else {
-    throw Exception('No auth user');
-  }
+  // if (authOutput is AuthUser) {
+  //   return await authOutput.client.gui.roles.get(roleId);
+  // } else {
+  //   throw Exception('No auth user');
+  // }
+  return null;
 }

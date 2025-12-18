@@ -14,12 +14,12 @@ class UserIcon extends _$UserIcon {
 
   @override
   Future<Uint8List?> build(Snowflake userId) async {
-    var authOutput = ref.watch(authProvider);
-    if (authOutput is AuthUser) {
-      user = authOutput;
+    // var authOutput = ref.watch(authProvider);
+    // if (authOutput is AuthUser) {
+    //   user = authOutput;
 
-      return await (await user!.client.users[userId].get()).avatar.fetch();
-    }
+    //   return await (await user!.client.users[userId].get()).avatar.fetch();
+    // }
     return null;
   }
 }

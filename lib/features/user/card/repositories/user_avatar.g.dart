@@ -63,7 +63,7 @@ final class UserAvatarProvider
   }
 }
 
-String _$userAvatarHash() => r'3982dfdca04e32dd6f5ac7d9ff30cf8acee5c319';
+String _$userAvatarHash() => r'e34d2b96d951c20144a0c8b6b9bbd9b4f04964f4';
 
 final class UserAvatarFamily extends $Family
     with $FunctionalFamilyOverride<FutureOr<Uint8List?>, User> {

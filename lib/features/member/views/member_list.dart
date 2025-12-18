@@ -127,9 +127,9 @@ class MemberScrollViewState extends ConsumerState<MemberScrollView> {
         _router.routerDelegate.currentConfiguration.pathParameters["channelId"];
     if (cId == null) return;
     Snowflake newChannelId = Snowflake.parse(cId);
-    ref
-        .read(channelMembersProvider.notifier)
-        .setRoute(newGuildId, newChannelId);
+    // ref
+    //     .read(channelMembersProvider.notifier)
+    //     .setRoute(newGuildId, newChannelId);
   }
 
   @override
@@ -140,9 +140,9 @@ class MemberScrollViewState extends ConsumerState<MemberScrollView> {
 
     _router.routerDelegate.addListener(_onRouteChanged);
     _scrollController.addListener(_onScroll);
-    ref
-        .read(channelMembersProvider.notifier)
-        .setRoute(widget.guild.id, widget.channel.id);
+    // ref
+    //     .read(channelMembersProvider.notifier)
+    //     .setRoute(widget.guild.id, widget.channel.id);
   }
 
   @override
@@ -165,118 +165,119 @@ class MemberScrollViewState extends ConsumerState<MemberScrollView> {
   }
 
   void _loadMoreData() {
-    final channelMembersNotifier = ref.read(channelMembersProvider.notifier);
+    // final channelMembersNotifier = ref.read(channelMembersProvider.notifier);
 
-    int nextLowerBound = 0;
-    if (channelMembersNotifier.currentSubscriptions.isNotEmpty) {
-      final maxUpperBound = channelMembersNotifier.currentSubscriptions
-          .expand((sub) => sub.memberRange)
-          .map((range) => range.upperMemberBound)
-          .reduce((a, b) => a > b ? a : b);
-      nextLowerBound = maxUpperBound + 1;
-    }
+    // int nextLowerBound = 0;
+    // if (channelMembersNotifier.currentSubscriptions.isNotEmpty) {
+    //   final maxUpperBound = channelMembersNotifier.currentSubscriptions
+    //       .expand((sub) => sub.memberRange)
+    //       .map((range) => range.upperMemberBound)
+    //       .reduce((a, b) => a > b ? a : b);
+    //   nextLowerBound = maxUpperBound + 1;
+    // }
 
-    int nextUpperBound = nextLowerBound + 99;
+    // int nextUpperBound = nextLowerBound + 99;
 
-    debugPrint("Loading next range: $nextLowerBound - $nextUpperBound");
-    channelMembersNotifier.loadMemberRange(nextLowerBound, nextUpperBound);
+    // debugPrint("Loading next range: $nextLowerBound - $nextUpperBound");
+    // channelMembersNotifier.loadMemberRange(nextLowerBound, nextUpperBound);
 
-    Future.delayed(const Duration(milliseconds: 500), () {
-      _isLoadingMore = false;
-    });
+    // Future.delayed(const Duration(milliseconds: 500), () {
+    //   _isLoadingMore = false;
+    // });
   }
 
   @override
   Widget build(BuildContext context) {
-    var memberListPair = ref
-        .watch(guildMemberListProvider(widget.guild.id))
-        .value;
-    var groupList = memberListPair?.first ?? [];
-    var memberList = memberListPair?.second ?? [];
+    return Text("Member list wahoo");
+    // var memberListPair = ref
+    //     .watch(guildMemberListProvider(widget.guild.id))
+    //     .value;
+    // var groupList = memberListPair?.first ?? [];
+    // var memberList = memberListPair?.second ?? [];
 
-    return Container(
-      decoration: BoxDecoration(
-        color: BonfireThemeExtension.of(context).background,
-      ),
-      child: ScrollConfiguration(
-        behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
-        child: ListView.builder(
-          controller: _scrollController,
-          itemCount: memberList.length,
-          itemBuilder: (context, index) {
-            // TODO: These should absolutely not be lists of one item
-            final item = memberList[index].first;
+    // return Container(
+    //   decoration: BoxDecoration(
+    //     color: BonfireThemeExtension.of(context).background,
+    //   ),
+    //   child: ScrollConfiguration(
+    //     behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
+    //     child: ListView.builder(
+    //       controller: _scrollController,
+    //       itemCount: memberList.length,
+    //       itemBuilder: (context, index) {
+    //         // TODO: These should absolutely not be lists of one item
+    //         final item = memberList[index].first;
 
-            if (item is GuildMemberListGroup) {
-              return Padding(
-                padding: EdgeInsets.only(
-                  left: isSmartwatch(context) ? 34 : 2,
-                  top: 10,
-                  bottom: 4,
-                ),
-                child: GroupHeader(
-                  guild: widget.guild,
-                  groups: groupList,
-                  group: item,
-                ),
-              );
-            }
+    //         if (item is GuildMemberListGroup) {
+    //           return Padding(
+    //             padding: EdgeInsets.only(
+    //               left: isSmartwatch(context) ? 34 : 2,
+    //               top: 10,
+    //               bottom: 4,
+    //             ),
+    //             child: GroupHeader(
+    //               guild: widget.guild,
+    //               groups: groupList,
+    //               group: item,
+    //             ),
+    //           );
+    //         }
 
-            if (item is Member) {
-              bool shouldRoundBottom =
-                  index == memberList.length - 1 ||
-                  memberList[index + 1].first is GuildMemberListGroup;
+    //         if (item is Member) {
+    //           bool shouldRoundBottom =
+    //               index == memberList.length - 1 ||
+    //               memberList[index + 1].first is GuildMemberListGroup;
 
-              return Padding(
-                padding: EdgeInsets.only(
-                  right: 8,
-                  bottom: shouldRoundBottom ? 8 : 0,
-                ),
-                child: MemberCard(
-                  member: item,
-                  guild: widget.guild,
-                  channel: widget.channel,
-                  roundTop:
-                      index == 0 ||
-                      memberList[index - 1].first is GuildMemberListGroup,
-                  roundBottom: shouldRoundBottom,
-                ),
-              );
-            }
+    //           return Padding(
+    //             padding: EdgeInsets.only(
+    //               right: 8,
+    //               bottom: shouldRoundBottom ? 8 : 0,
+    //             ),
+    //             child: MemberCard(
+    //               member: item,
+    //               guild: widget.guild,
+    //               channel: widget.channel,
+    //               roundTop:
+    //                   index == 0 ||
+    //                   memberList[index - 1].first is GuildMemberListGroup,
+    //               roundBottom: shouldRoundBottom,
+    //             ),
+    //           );
+    //         }
 
-            // Handle lists of members (from SYNC operations)
-            if (item is List<Member>) {
-              return Column(
-                children: item.map<Widget>((member) {
-                  bool shouldRoundBottom =
-                      member == item.last &&
-                      (index == memberList.length - 1 ||
-                          memberList[index + 1] is GuildMemberListGroup);
+    //         // Handle lists of members (from SYNC operations)
+    //         if (item is List<Member>) {
+    //           return Column(
+    //             children: item.map<Widget>((member) {
+    //               bool shouldRoundBottom =
+    //                   member == item.last &&
+    //                   (index == memberList.length - 1 ||
+    //                       memberList[index + 1] is GuildMemberListGroup);
 
-                  return Padding(
-                    padding: EdgeInsets.only(
-                      right: 8,
-                      bottom: shouldRoundBottom ? 8 : 0,
-                    ),
-                    child: MemberCard(
-                      member: member,
-                      guild: widget.guild,
-                      channel: widget.channel,
-                      roundTop:
-                          member == item.first &&
-                          (index == 0 ||
-                              memberList[index - 1] is GuildMemberListGroup),
-                      roundBottom: shouldRoundBottom,
-                    ),
-                  );
-                }).toList(),
-              );
-            }
+    //               return Padding(
+    //                 padding: EdgeInsets.only(
+    //                   right: 8,
+    //                   bottom: shouldRoundBottom ? 8 : 0,
+    //                 ),
+    //                 child: MemberCard(
+    //                   member: member,
+    //                   guild: widget.guild,
+    //                   channel: widget.channel,
+    //                   roundTop:
+    //                       member == item.first &&
+    //                       (index == 0 ||
+    //                           memberList[index - 1] is GuildMemberListGroup),
+    //                   roundBottom: shouldRoundBottom,
+    //                 ),
+    //               );
+    //             }).toList(),
+    //           );
+    //         }
 
-            return Container();
-          },
-        ),
-      ),
-    );
+    //         return Container();
+    //       },
+    //     ),
+    //   ),
+    // );
   }
 }

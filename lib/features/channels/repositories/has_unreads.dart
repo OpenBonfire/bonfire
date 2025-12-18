@@ -26,9 +26,9 @@ class HasUnreads extends _$HasUnreads {
       return false;
     }
 
-    var readState = ref.watch(channelReadStateProvider(channel.id));
+    // var readState = ref.watch(channelReadStateProvider(channel.id));
 
-    var lastReadMessage = readState?.lastMessage;
+    // var lastReadMessage = readState?.lastMessage;
     var lastChannelMessageId = lastMessageId;
 
     // if (channelId == Snowflake.parse(1320481167102967869)) {
@@ -42,10 +42,12 @@ class HasUnreads extends _$HasUnreads {
     //       readState.lastViewed!.millisecondsSinceEpoch);
     // }
 
-    if (lastChannelMessageId == null) return false;
-    if (lastReadMessage == null) return true;
+    // if (lastChannelMessageId == null) return false;
+    // if (lastReadMessage == null) return true;
 
-    return (readState!.lastViewed!.millisecondsSinceEpoch <
-        lastChannelMessageId.timestamp.millisecondsSinceEpoch);
+    // return (readState!.lastViewed!.millisecondsSinceEpoch <
+    //     lastChannelMessageId.timestamp.millisecondsSinceEpoch);
+
+    return false;
   }
 }

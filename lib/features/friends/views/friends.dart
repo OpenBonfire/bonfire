@@ -15,14 +15,15 @@ class FriendsList extends ConsumerStatefulWidget {
 class _FriendsListState extends ConsumerState<FriendsList> {
   @override
   Widget build(BuildContext context) {
-    List<Relationship>? relationships =
-        ref.watch(relationshipControllerProvider);
+    // List<Relationship>? relationships =
+    //     ref.watch(relationshipControllerProvider);
+    final relationships = [];
 
-    if (relationships == null) {
-      // return const Text("relationships loading...");
-      // TODO: Fancy loading animation
-      return const SizedBox();
-    }
+    // if (relationships == null) {
+    //   // return const Text("relationships loading...");
+    //   // TODO: Fancy loading animation
+    //   return const SizedBox();
+    // }
 
     return Container(
       decoration: BoxDecoration(
@@ -33,9 +34,7 @@ class _FriendsListState extends ConsumerState<FriendsList> {
         child: ListView.builder(
           itemCount: relationships.length,
           itemBuilder: (BuildContext context, int index) {
-            return FriendCard(
-              user: relationships[index].user,
-            );
+            return FriendCard(user: relationships[index].user);
           },
         ),
       ),

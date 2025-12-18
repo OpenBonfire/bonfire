@@ -54,7 +54,7 @@ final class VoiceMembersProvider
   }
 }
 
-String _$voiceMembersHash() => r'48dc14b3cbb21f1ff26a94aecba8bc3b7cf0b7aa';
+String _$voiceMembersHash() => r'586b94445c2cb8b060fbc399ec246aca48694531';
 
 final class VoiceMembersFamily extends $Family
     with

@@ -43,7 +43,7 @@ final class AuthProvider extends $NotifierProvider<Auth, AuthResponse?> {
   }
 }
 
-String _$authHash() => r'c277677bcbc43d6692cd359463b38eae928829e9';
+String _$authHash() => r'e649e36edd9eb11ff00dff55cd1a71ded0098b3d';
 
 /// A riverpod provider that handles authentication with Discord.
 

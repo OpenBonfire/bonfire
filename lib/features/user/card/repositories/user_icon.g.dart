@@ -53,7 +53,7 @@ final class UserIconProvider
   }
 }
 
-String _$userIconHash() => r'368134c5f229119e326b6c2743379510e05cb4ba';
+String _$userIconHash() => r'93bfe9b4c7d6d140a29387d0838501ea95ef650c';
 
 /// Get the icon of a given user by id
 

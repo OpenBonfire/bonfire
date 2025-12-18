@@ -49,13 +49,13 @@ class _ChannelsListState extends ConsumerState<ChannelsList> {
     for (var channel in channels) {
       if (channel.type != ChannelType.guildCategory) {
         var guildChannel = channel as GuildChannel;
-        var parentChannel = guildChannel.parent;
+        // var parentChannel = guildChannel.parent;
 
-        if (parentChannel == null) {
-          channelsWithoutParent.add(channel);
-        } else if (categoryMap[parentChannel] != null) {
-          categoryMap[parentChannel]!.add(guildChannel);
-        }
+        // if (parentChannel == null) {
+        //   channelsWithoutParent.add(channel);
+        // } else if (categoryMap[parentChannel] != null) {
+        //   categoryMap[parentChannel]!.add(guildChannel);
+        // }
       }
     }
 

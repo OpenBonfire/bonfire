@@ -28,7 +28,7 @@ void showNotification(RemoteMessage message) async {
     return;
   }
 
-  final client = await Nyxx.connectRest(token);
+  final client = await Firebridge.connectRest(token);
   // final client = await Nyxx.connectGatewayWithOptions(
   //     GatewayApiOptions(
   //       token: token,
@@ -41,24 +41,24 @@ void showNotification(RemoteMessage message) async {
   //       ],
   //     ));
 
-  final notificationData =
-      client.gateway.parseNotificationCreated(message.data);
+  // final notificationData =
+  //     client.gateway.parseNotificationCreated(message.data);
 
-  debugPrint("parsed!");
+  // debugPrint("parsed!");
 
-  flutterLocalNotificationsPlugin.show(
-    notification.hashCode,
-    notificationData.username,
-    notificationData.messageContent,
-    NotificationDetails(
-      android: AndroidNotificationDetails(
-        channel.id,
-        channel.name,
-        channelDescription: channel.description,
-        icon: 'app_icon',
-      ),
-    ),
-  );
+  // flutterLocalNotificationsPlugin.show(
+  //   notification.hashCode,
+  //   notificationData.username,
+  //   notificationData.messageContent,
+  //   NotificationDetails(
+  //     android: AndroidNotificationDetails(
+  //       channel.id,
+  //       channel.name,
+  //       channelDescription: channel.description,
+  //       icon: 'app_icon',
+  //     ),
+  //   ),
+  // );
 }
 
 Future<void> setupFirebaseMessaging() async {

@@ -74,7 +74,7 @@ class _MessageBoxState extends ConsumerState<MessageBox>
     if (selfMember == null) return false;
 
     bool directlyMentions = message.mentions.any(
-      (mention) => mention.id == selfMember.id,
+      (mention) => mention.id == selfMember.user?.id,
     );
 
     if (directlyMentions) return true;
@@ -82,7 +82,7 @@ class _MessageBoxState extends ConsumerState<MessageBox>
     if (message.mentionsEveryone) return true;
 
     for (var role in message.roleMentionIds) {
-      if (selfMember.roleIds.contains(role)) {
+      if (selfMember.roles.contains(role)) {
         return true;
       }
     }

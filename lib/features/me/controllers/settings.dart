@@ -27,37 +27,37 @@ class PrivateMessageHistory extends _$PrivateMessageHistory {
   }
 }
 
-@Riverpod(keepAlive: true)
-class GuildFolders extends _$GuildFolders {
-  AuthUser? user;
+// @Riverpod(keepAlive: true)
+// class GuildFolders extends _$GuildFolders {
+//   AuthUser? user;
 
-  @override
-  List<GuildFolder>? build() {
-    return null;
-  }
+//   @override
+//   List<GuildFolder>? build() {
+//     return null;
+//   }
 
-  void setGuildFolders(List<GuildFolder> folders) {
-    state = folders;
-  }
-}
+//   void setGuildFolders(List<GuildFolder> folders) {
+//     state = folders;
+//   }
+// }
 
-@Riverpod(keepAlive: true)
-class ChannelReadState extends _$ChannelReadState {
-  AuthUser? user;
+// @Riverpod(keepAlive: true)
+// class ChannelReadState extends _$ChannelReadState {
+//   AuthUser? user;
 
-  // TODO: When a message is recieved, we need to create a new read state for that channel
-  // when a message is acked, we need to also modify the read state
-  // read states are never updated, you have to re-"calculate" them
+//   // TODO: When a message is recieved, we need to create a new read state for that channel
+//   // when a message is acked, we need to also modify the read state
+//   // read states are never updated, you have to re-"calculate" them
 
-  @override
-  ReadState? build(Snowflake channelId) {
-    return null;
-  }
+//   @override
+//   ReadState? build(Snowflake channelId) {
+//     return null;
+//   }
 
-  void setReadState(ReadState readState) async {
-    state = readState;
-  }
-}
+//   void setReadState(ReadState readState) async {
+//     state = readState;
+//   }
+// }
 
 @Riverpod(keepAlive: true)
 class SelfStatusState extends _$SelfStatusState {
@@ -101,19 +101,19 @@ class UserActivityState extends _$UserActivityState {
   }
 }
 
-@Riverpod(keepAlive: true)
-class CustomStatusState extends _$CustomStatusState {
-  AuthUser? user;
+// @Riverpod(keepAlive: true)
+// class CustomStatusState extends _$CustomStatusState {
+//   AuthUser? user;
 
-  @override
-  CustomStatus? build() {
-    return null;
-  }
+//   @override
+//   CustomStatus? build() {
+//     return null;
+//   }
 
-  void setCustomStatus(CustomStatus userStatus) {
-    state = userStatus;
-  }
-}
+//   void setCustomStatus(CustomStatus userStatus) {
+//     state = userStatus;
+//   }
+// }
 
 // @Riverpod(keepAlive: true)
 // class GuildsState extends _$GuildsState {

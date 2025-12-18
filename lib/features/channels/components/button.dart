@@ -56,14 +56,14 @@ class _ChannelButtonState extends ConsumerState<ChannelButton> {
               child: Text(
                 count.toString(),
                 style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                      fontSize: 11,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.white,
-                    ),
+                  fontSize: 11,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.white,
+                ),
                 textAlign: TextAlign.center,
               ),
             ),
-          )
+          ),
         ],
       ),
     );
@@ -72,21 +72,27 @@ class _ChannelButtonState extends ConsumerState<ChannelButton> {
   @override
   Widget build(BuildContext context) {
     bool selected = widget.channel.id == widget.currentChannelId;
-    var readState = ref.watch(channelReadStateProvider(widget.channel.id));
-    int mentionCount = readState?.mentionCount ?? 0;
+    // var readState = ref.watch(channelReadStateProvider(widget.channel.id));
+    // int mentionCount = readState?.mentionCount ?? 0;
+    final mentionCount = 0;
 
     final bonfireTheme = BonfireThemeExtension.of(context);
 
-    bool hasUnreads =
-        ref.watch(hasUnreadsProvider(widget.channel.id)).when(data: (data) {
-      return data;
-    }, loading: () {
-      return false;
-    }, error: (error, stack) {
-      debugPrint(stack.toString());
-      debugPrint("Error: $error");
-      return false;
-    });
+    bool hasUnreads = ref
+        .watch(hasUnreadsProvider(widget.channel.id))
+        .when(
+          data: (data) {
+            return data;
+          },
+          loading: () {
+            return false;
+          },
+          error: (error, stack) {
+            debugPrint(stack.toString());
+            debugPrint("Error: $error");
+            return false;
+          },
+        );
 
     return Column(
       children: [
@@ -99,8 +105,9 @@ class _ChannelButtonState extends ConsumerState<ChannelButton> {
                     decoration: const BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.only(
-                          topRight: Radius.circular(20),
-                          bottomRight: Radius.circular(20)),
+                        topRight: Radius.circular(20),
+                        bottomRight: Radius.circular(20),
+                      ),
                     ),
                   )
                 : const SizedBox(width: 3),
@@ -112,34 +119,40 @@ class _ChannelButtonState extends ConsumerState<ChannelButton> {
                   height: 36,
                   child: OutlinedButton(
                     style: OutlinedButton.styleFrom(
-                        minimumSize: Size.zero,
-                        padding: EdgeInsets.zero,
-                        side: const BorderSide(
-                          color: Colors.transparent,
-                          width: 0,
-                        ),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(4),
-                        ),
-                        foregroundColor: selected
-                            ? BonfireThemeExtension.of(context).dirtyWhite
-                            : BonfireThemeExtension.of(context).gray,
-                        backgroundColor: selected
-                            ? BonfireThemeExtension.of(context).foreground
-                            : Colors.transparent),
+                      minimumSize: Size.zero,
+                      padding: EdgeInsets.zero,
+                      side: const BorderSide(
+                        color: Colors.transparent,
+                        width: 0,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      foregroundColor: selected
+                          ? BonfireThemeExtension.of(context).dirtyWhite
+                          : BonfireThemeExtension.of(context).gray,
+                      backgroundColor: selected
+                          ? BonfireThemeExtension.of(context).foreground
+                          : Colors.transparent,
+                    ),
                     onPressed: () {
                       if (widget.channel is GuildVoiceChannel) {
-                        ref
-                            .read(voiceChannelControllerProvider.notifier)
-                            .joinVoiceChannel(
-                                widget.currentGuildId, widget.channel.id);
+                        // ref
+                        //     .read(voiceChannelControllerProvider.notifier)
+                        //     .joinVoiceChannel(
+                        //       widget.currentGuildId,
+                        //       widget.channel.id,
+                        //     );
                       } else {
                         // route to channel
                         HapticFeedback.selectionClick();
-                        lastGuildChannels.put(widget.currentGuildId.toString(),
-                            widget.channel.id.toString());
+                        lastGuildChannels.put(
+                          widget.currentGuildId.toString(),
+                          widget.channel.id.toString(),
+                        );
                         GoRouter.of(context).go(
-                            '/channels/${widget.currentGuildId}/${widget.channel.id}');
+                          '/channels/${widget.currentGuildId}/${widget.channel.id}',
+                        );
 
                         OverlappingPanelsState? overlappingPanelsState =
                             OverlappingPanels.of(context);
@@ -158,7 +171,8 @@ class _ChannelButtonState extends ConsumerState<ChannelButton> {
                             children: [
                               Icon(
                                 BonfireIcons
-                                    .channelIcons[widget.channel.type]!.icon,
+                                    .channelIcons[widget.channel.type]!
+                                    .icon,
                                 color: (selected || hasUnreads)
                                     ? bonfireTheme.dirtyWhite
                                     : BonfireThemeExtension.of(context).gray,
@@ -166,29 +180,31 @@ class _ChannelButtonState extends ConsumerState<ChannelButton> {
                               ),
                               const SizedBox(width: 8),
                               Expanded(
-                                  child: Row(
-                                children: [
-                                  Expanded(
-                                    child: Text(
-                                      (widget.channel as GuildChannel).name,
-                                      overflow: TextOverflow.ellipsis,
-                                      maxLines: 1,
-                                      softWrap: false,
-                                      textAlign: TextAlign.left,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium!
-                                          .copyWith(
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      child: Text(
+                                        (widget.channel as GuildChannel).name,
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 1,
+                                        softWrap: false,
+                                        textAlign: TextAlign.left,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium!
+                                            .copyWith(
                                               color: (selected || hasUnreads)
                                                   ? bonfireTheme.dirtyWhite
-                                                  : bonfireTheme.gray),
+                                                  : bonfireTheme.gray,
+                                            ),
+                                      ),
                                     ),
-                                  ),
-                                  // const Spacer(),
-                                  if (mentionCount > 0)
-                                    _buildMentionBubble(mentionCount),
-                                ],
-                              )),
+                                    // const Spacer(),
+                                    if (mentionCount > 0)
+                                      _buildMentionBubble(mentionCount),
+                                  ],
+                                ),
+                              ),
                             ],
                           ),
                         ),

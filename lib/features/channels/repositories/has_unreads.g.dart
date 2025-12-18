@@ -50,7 +50,7 @@ final class HasUnreadsProvider
   }
 }
 
-String _$hasUnreadsHash() => r'8b5f4c1c68d105aa86af102dc1530107ad5c5a1b';
+String _$hasUnreadsHash() => r'c2f9e70c097d9516a591fff9c8a3733962410e44';
 
 final class HasUnreadsFamily extends $Family
     with

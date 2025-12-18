@@ -35,7 +35,7 @@ final class SelfUserProvider extends $AsyncNotifierProvider<SelfUser, User?> {
   SelfUser create() => SelfUser();
 }
 
-String _$selfUserHash() => r'741a7ae9309b20e8c3b3572590f22a3adf54d960';
+String _$selfUserHash() => r'920097dda991c1f161b5c42b50a758982fc64621';
 
 /// Get the current user
 

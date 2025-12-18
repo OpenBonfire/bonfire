@@ -25,7 +25,7 @@ class LocalAccountSwitcherScreen extends ConsumerStatefulWidget {
 
 class _LocalAccountSwitcherScreenState
     extends ConsumerState<LocalAccountSwitcherScreen> {
-  NyxxGateway? client;
+  FirebridgeGateway? client;
   bool isLoading = false;
 
   @override
@@ -67,16 +67,15 @@ class _LocalAccountSwitcherScreenState
         : EdgeInsets.zero;
     final addedAccounts = ref.watch(addedAccountsControllerProvider);
     if (isLoading) {
-      return const Center(
-        child: CircularProgressIndicator(),
-      );
+      return const Center(child: CircularProgressIndicator());
     }
     return Container(
       padding: EdgeInsets.only(
-          top: padding.top + 24,
-          left: 24,
-          right: 24,
-          bottom: padding.bottom + 24),
+        top: padding.top + 24,
+        left: 24,
+        right: 24,
+        bottom: padding.bottom + 24,
+      ),
       decoration: BoxDecoration(
         color: BonfireThemeExtension.of(context).background,
         borderRadius: BorderRadius.circular(24),
@@ -89,22 +88,26 @@ class _LocalAccountSwitcherScreenState
                 Text(
                   "Switch Account",
                   style: theme.textTheme.titleMedium!.copyWith(
-                      color: bonfireTheme.dirtyWhite,
-                      fontWeight: FontWeight.w600),
+                    color: bonfireTheme.dirtyWhite,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
                 const SizedBox(height: 24),
                 ...addedAccounts.map((account) {
                   return Padding(
                     padding: const EdgeInsets.only(bottom: 4),
-                    child: _LocalAccountCard(account, onPressed: () {
-                      HapticFeedback.mediumImpact();
-                      setState(() {
-                        isLoading = true;
-                      });
-                      ref
-                          .read(authProvider.notifier)
-                          .loginWithToken(account.token);
-                    }),
+                    child: _LocalAccountCard(
+                      account,
+                      onPressed: () {
+                        HapticFeedback.mediumImpact();
+                        setState(() {
+                          isLoading = true;
+                        });
+                        ref
+                            .read(authProvider.notifier)
+                            .loginWithToken(account.token);
+                      },
+                    ),
                   );
                 }),
               ],
@@ -112,27 +115,29 @@ class _LocalAccountSwitcherScreenState
           ),
           const Spacer(),
           ConfirmButton(
-              onPressed: () {
-                if (shouldUseMobileLayout(context)) {
-                  Navigator.of(context).push(
-                    PageRouteBuilder(
-                      opaque: true,
-                      pageBuilder: (_, __, ___) => Material(
-                          color: BonfireThemeExtension.of(context).background,
-                          child: const PlatformLoginWidget()),
+            onPressed: () {
+              if (shouldUseMobileLayout(context)) {
+                Navigator.of(context).push(
+                  PageRouteBuilder(
+                    opaque: true,
+                    pageBuilder: (_, __, ___) => Material(
+                      color: BonfireThemeExtension.of(context).background,
+                      child: const PlatformLoginWidget(),
                     ),
-                  );
-                } else {
-                  Navigator.pop(context);
-                  showDialog(
-                    context: context,
-                    builder: (context) {
-                      return const Dialog(child: PlatformLoginWidget());
-                    },
-                  );
-                }
-              },
-              text: "Add Account"),
+                  ),
+                );
+              } else {
+                Navigator.pop(context);
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    return const Dialog(child: PlatformLoginWidget());
+                  },
+                );
+              }
+            },
+            text: "Add Account",
+          ),
         ],
       ),
     );
@@ -151,13 +156,8 @@ class _LocalAccountCard extends ConsumerWidget {
       style: OutlinedButton.styleFrom(
         minimumSize: Size.zero,
         padding: const EdgeInsets.all(4),
-        side: const BorderSide(
-          color: Colors.transparent,
-          width: 0,
-        ),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
+        side: const BorderSide(color: Colors.transparent, width: 0),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         foregroundColor: BonfireThemeExtension.of(context).dirtyWhite,
         backgroundColor: BonfireThemeExtension.of(context).foreground,
       ),
@@ -168,12 +168,16 @@ class _LocalAccountCard extends ConsumerWidget {
           child: Row(
             children: [
               SizedBox(
-                  width: 35,
-                  child: ClipOval(
-                      child: CachedNetworkImage(imageUrl: account.avatar))),
+                width: 35,
+                child: ClipOval(
+                  child: CachedNetworkImage(imageUrl: account.avatar),
+                ),
+              ),
               const SizedBox(width: 12),
-              Text(account.username,
-                  style: Theme.of(context).textTheme.titleSmall),
+              Text(
+                account.username,
+                style: Theme.of(context).textTheme.titleSmall,
+              ),
             ],
           ),
         ),

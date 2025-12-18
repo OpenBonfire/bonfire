@@ -16,7 +16,7 @@ Future<Uint8List?> guildIcon(Ref ref, Snowflake guildId) async {
 
   Guild guild = ref.watch(guildControllerProvider(guildId))!;
 
-  if (guild.icon == null) return null;
+  // if (guild.icon == null) return null;
   // Uint8List? fromCache =
   //     await (await iconCache.getFileFromCache(guild.iconHash!))
   //         ?.file
@@ -26,10 +26,11 @@ Future<Uint8List?> guildIcon(Ref ref, Snowflake guildId) async {
   //   return fromCache;
   // }
 
-  Uint8List? icon = await guild.icon?.fetch();
+  // Uint8List? icon = await guild.icon?.fetch();
   // if (guild.iconHash != null && icon != null) {
   //   iconCache.putFile(guild.iconHash!, icon);
   // }
 
-  return icon;
+  // return icon;
+  return null;
 }

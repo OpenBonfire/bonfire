@@ -58,7 +58,7 @@ final class GetMemberProvider
   }
 }
 
-String _$getMemberHash() => r'fbdb591dcbb1962b38245ca8f5c30a5255d6b635';
+String _$getMemberHash() => r'13c92cb5c0a2fa0e5d2b9cea6f163eecbc8c0ffe';
 
 final class GetMemberFamily extends $Family
     with $FunctionalFamilyOverride<FutureOr<Member?>, (Snowflake, Snowflake)> {
@@ -127,7 +127,7 @@ final class GetSelfMemberProvider
   }
 }
 
-String _$getSelfMemberHash() => r'1545647f9fb8a99f51cab6cd7f23a9faf031fe64';
+String _$getSelfMemberHash() => r'7d0297319c1184768d92fae212463c4f536c91de';
 
 final class GetSelfMemberFamily extends $Family
     with $FunctionalFamilyOverride<FutureOr<Member?>, Snowflake> {
@@ -202,7 +202,7 @@ final class GetGuildRolesProvider
   }
 }
 
-String _$getGuildRolesHash() => r'45c032a0aa8feec6de2bc46f5fe64bff877fe6eb';
+String _$getGuildRolesHash() => r'63f288fa97a88070e5b3de22afab229c60c87757';
 
 final class GetGuildRolesFamily extends $Family
     with $FunctionalFamilyOverride<FutureOr<List<Role>?>, Snowflake> {
@@ -226,8 +226,8 @@ final class GetGuildRolesFamily extends $Family
 const getRoleProvider = GetRoleFamily._();
 
 final class GetRoleProvider
-    extends $FunctionalProvider<AsyncValue<Role>, Role, FutureOr<Role>>
-    with $FutureModifier<Role>, $FutureProvider<Role> {
+    extends $FunctionalProvider<AsyncValue<Role?>, Role?, FutureOr<Role?>>
+    with $FutureModifier<Role?>, $FutureProvider<Role?> {
   const GetRoleProvider._({
     required GetRoleFamily super.from,
     required (Snowflake, Snowflake) super.argument,
@@ -251,11 +251,11 @@ final class GetRoleProvider
 
   @$internal
   @override
-  $FutureProviderElement<Role> $createElement($ProviderPointer pointer) =>
+  $FutureProviderElement<Role?> $createElement($ProviderPointer pointer) =>
       $FutureProviderElement(pointer);
 
   @override
-  FutureOr<Role> create(Ref ref) {
+  FutureOr<Role?> create(Ref ref) {
     final argument = this.argument as (Snowflake, Snowflake);
     return getRole(ref, argument.$1, argument.$2);
   }
@@ -271,10 +271,10 @@ final class GetRoleProvider
   }
 }
 
-String _$getRoleHash() => r'49e2bffd36c7d0a056d49f51cd1f29bbe7ae1585';
+String _$getRoleHash() => r'd2e1a8a6cdd5822577aefe58d897276120f84b15';
 
 final class GetRoleFamily extends $Family
-    with $FunctionalFamilyOverride<FutureOr<Role>, (Snowflake, Snowflake)> {
+    with $FunctionalFamilyOverride<FutureOr<Role?>, (Snowflake, Snowflake)> {
   const GetRoleFamily._()
     : super(
         retry: null,

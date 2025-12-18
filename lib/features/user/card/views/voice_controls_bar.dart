@@ -28,9 +28,9 @@ class _VoiceControlBarState extends ConsumerState<VoiceControlBar> {
             IconButton(
               icon: const Icon(Icons.call_end_rounded, color: Colors.white),
               onPressed: () {
-                ref
-                    .watch(voiceChannelControllerProvider.notifier)
-                    .leaveVoiceChannel();
+                // ref
+                //     .watch(voiceChannelControllerProvider.notifier)
+                //     .leaveVoiceChannel();
               },
             ),
           ],

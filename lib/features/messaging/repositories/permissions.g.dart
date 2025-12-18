@@ -54,7 +54,7 @@ final class ChannelPermissionsProvider
 }
 
 String _$channelPermissionsHash() =>
-    r'ab65ba280e705f2edce1f71dfbd7dc9d1a9edf29';
+    r'34ff594b7ddd2d789be9ec78f64c1b47e3cf147a';
 
 /// Provider for calculating permissions for a channel
 

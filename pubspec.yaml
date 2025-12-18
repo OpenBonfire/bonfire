@@ -14,13 +14,13 @@ dependencies:
     sdk: flutter
 
   firebridge:
-    path: packages/firebridge
+    path: /Users/eric/Documents/development/languages/dart/nyxx
 
   markdown_viewer:
     path: packages/markdown_viewer
 
-  firebridge_extensions:
-    path: packages/firebridge_extensions
+  # firebridge_extensions:
+  #   path: packages/firebridge_extensions
 
   google_fonts: ^6.2.1
   flutter_riverpod: ^3.0.3
@@ -93,6 +93,9 @@ dependencies:
   dart_mappable: ^4.6.1
 
 dependency_overrides:
+  firebridge:
+    path: /Users/eric/Documents/development/languages/dart/nyxx
+
   http: ^1.2.1
 
   media_kit:

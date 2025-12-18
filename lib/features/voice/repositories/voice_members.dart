@@ -17,26 +17,26 @@ class VoiceMembers extends _$VoiceMembers {
     Snowflake guildId, {
     Snowflake? channelId,
   }) async {
-    var authOutput = ref.watch(authProvider);
-    if (authOutput is AuthUser) {
-      user = authOutput;
-      Guild voiceGuild = ref
-          .watch(guildsControllerProvider)!
-          .firstWhere((element) => element.id == guildId);
+    // var authOutput = ref.watch(authProvider);
+    // if (authOutput is AuthUser) {
+    //   user = authOutput;
+    //   Guild voiceGuild = ref
+    //       .watch(guildsControllerProvider)!
+    //       .firstWhere((element) => element.id == guildId);
 
-      var allStates = voiceGuild.voiceStates.entries.toList();
+    //   // var allStates = voiceGuild.voiceStates.entries.toList();
 
-      if (channelId != null) {
-        var filteredStates = allStates
-            .where((element) => element.value.channelId == channelId)
-            .toList();
-        state = AsyncData(filteredStates);
-        return filteredStates;
-      } else {
-        state = AsyncData(allStates);
-        return allStates;
-      }
-    }
+    //   if (channelId != null) {
+    //     var filteredStates = allStates
+    //         .where((element) => element.value.channelId == channelId)
+    //         .toList();
+    //     state = AsyncData(filteredStates);
+    //     return filteredStates;
+    //   } else {
+    //     state = AsyncData(allStates);
+    //     return allStates;
+    //   }
+    // }
     return null;
   }
 

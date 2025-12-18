@@ -7,8 +7,7 @@ import 'package:bonfire/features/guild/controllers/role.dart';
 import 'package:bonfire/features/guild/controllers/roles.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
-import 'package:firebridge_extensions/firebridge_extensions.dart';
-import 'package:firebridge/firebridge.dart';
+import 'package:firebridge/firebridge.dart' hide CacheManager;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'channels.g.dart';
@@ -48,19 +47,20 @@ class Channels extends _$Channels {
       // debugPrint("Member List: ${guild.memberList?.length}");
       Member? maybeSelf;
       Member? selfMember;
-      guild.memberList?.forEach((element) {
-        if (element.user?.id == auth.client.user.id) {
-          maybeSelf = element;
-        }
-        // debugPrint("Member: ${element.user.username}");
-      });
+      // guild.memberList?.forEach((element) {
+      //   if (element.user?.id == auth.client.user.id) {
+      //     maybeSelf = element;
+      //   }
+      //   // debugPrint("Member: ${element.user.username}");
+      // });
 
       if (maybeSelf != null) {
         selfMember = maybeSelf;
       } else {
         // shouldn't really be called
-        selfMember =
-            await auth.client.guilds[guild.id].members.get(auth.client.user.id);
+        // selfMember = await auth.client.guilds[guild.id].members.get(
+        //   auth.client.user.id,
+        // );
       }
 
       var roleIds = ref.watch(rolesControllerProvider(guildId));
@@ -76,15 +76,16 @@ class Channels extends _$Channels {
 
       // filter out channels that the user can't view
       for (var channel in rawGuildChannels) {
-        var permissions =
-            await channel.computePermissionsForMemberWithGuildAndRoles(
-          selfMember!,
-          guild,
-          roles,
-        );
-        if (permissions.canViewChannel) {
-          guildChannels.add(channel);
-        }
+        // var permissions = await channel
+        //     .computePermissionsForMemberWithGuildAndRoles(
+        //       selfMember!,
+        //       guild,
+        //       roles,
+        //     );
+        // if (permissions.canViewChannel) {
+        //   guildChannels.add(channel);
+        // }
+        guildChannels.add(channel as GuildChannel);
       }
 
       // first load categories, so we can parent channels later
@@ -103,9 +104,9 @@ class Channels extends _$Channels {
 
       // sorts the channels by position (provided by nyxx)
       channels.sort((a, b) {
-        return (a as GuildChannel)
-            .position
-            .compareTo((b as GuildChannel).position);
+        return (a as GuildChannel).position.compareTo(
+          (b as GuildChannel).position,
+        );
       });
 
       // state = AsyncValue.data(channels);
@@ -121,10 +122,11 @@ class Channels extends _$Channels {
     if (cacheData != null) {
       var decoded = json.decode(utf8.decode(cacheData.file.readAsBytesSync()));
 
-      var mapped =
-          (decoded.map((e) => guild.manager.client.channels.parse(e)).toList());
+      // var mapped = (decoded
+      //     .map((e) => guild.manager.client.channels.parse(e))
+      //     .toList());
 
-      return List<Channel>.from(mapped);
+      // return List<Channel>.from(mapped);
     }
 
     return null;

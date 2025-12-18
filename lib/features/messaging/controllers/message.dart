@@ -3,13 +3,14 @@ import 'package:bonfire/features/authentication/repositories/auth.dart';
 import 'package:bonfire/features/authentication/repositories/discord_auth.dart';
 import 'package:bonfire/features/messaging/repositories/reactions.dart';
 import 'package:firebridge/firebridge.dart';
+
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'message.g.dart';
 
 @Riverpod(keepAlive: true)
 class MessageController extends _$MessageController {
-  NyxxGateway? client;
+  FirebridgeGateway? client;
   @override
   Message? build(Snowflake messageId) {
     AuthResponse? user = ref.watch(authProvider);
@@ -21,16 +22,16 @@ class MessageController extends _$MessageController {
   }
 
   void setMessage(Message message) {
-    ref.read(messageReactionsProvider(message.id).notifier).setReactions(
-          message.reactions,
-        );
+    ref
+        .read(messageReactionsProvider(message.id).notifier)
+        .setReactions(message.reactions);
     state = message;
   }
 
-  Future<void> editMessage(PartialMessage partialMessage) async {
+  Future<void> editMessage(Snowflake partialMessage) async {
     if (client == null) return;
 
-    final message = await partialMessage.get();
-    setMessage(message);
+    // final message = await partialMessage.get();
+    // setMessage(message);
   }
 }

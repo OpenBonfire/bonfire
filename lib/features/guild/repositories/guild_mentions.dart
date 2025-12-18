@@ -28,22 +28,22 @@ class GuildMentions extends _$GuildMentions {
     int mentions = 0;
     // var selfMember = await user.client.guilds[currentGuild.id].members
     //     .get(user.client.user.id);
-    for (var channel in channels) {
-      var readStateProvider = ref.watch(channelReadStateProvider(channel.id));
-      // if (channel is! GuildTextChannel) continue;
-      try {
-        // if (channel is GuildTextChannel) {
-        ReadState? readState = readStateProvider;
-        if (readState == null) continue;
+    // for (var channel in channels) {
+    //   var readStateProvider = ref.watch(channelReadStateProvider(channel.id));
+    //   // if (channel is! GuildTextChannel) continue;
+    //   try {
+    //     // if (channel is GuildTextChannel) {
+    //     ReadState? readState = readStateProvider;
+    //     if (readState == null) continue;
 
-        mentions += readState.mentionCount ?? 0;
-        // }
-      } catch (err, stacktrace) {
-        debugPrint(stacktrace.toString());
-        debugPrint("Error fetching channel: $err");
-        continue;
-      }
-    }
+    //     mentions += readState.mentionCount ?? 0;
+    //     // }
+    //   } catch (err, stacktrace) {
+    //     debugPrint(stacktrace.toString());
+    //     debugPrint("Error fetching channel: $err");
+    //     continue;
+    //   }
+    // }
 
     return mentions;
   }

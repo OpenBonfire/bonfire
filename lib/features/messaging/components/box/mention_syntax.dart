@@ -30,14 +30,14 @@ class DiscordMentionSyntax extends MdInlineSyntax {
 
 class DiscordMentionBuilder extends MarkdownElementBuilder {
   DiscordMentionBuilder()
-      : super(
-          textStyle: TextStyle(
-            color: const Color(0xff2448BE),
-            fontWeight: FontWeight.w500,
-            fontSize: 14.5,
-            backgroundColor: const Color(0xff2448BE).withOpacity(0.2),
-          ),
-        );
+    : super(
+        textStyle: TextStyle(
+          color: const Color(0xff2448BE),
+          fontWeight: FontWeight.w500,
+          fontSize: 14.5,
+          backgroundColor: const Color(0xff2448BE).withOpacity(0.2),
+        ),
+      );
 
   @override
   bool isBlock(element) => false;
@@ -58,90 +58,89 @@ class DiscordMentionBuilder extends MarkdownElementBuilder {
     bool isMember = false;
     bool isChannel = false;
 
-    return Consumer(builder: (context, ref, child) {
-      final rawGuildId = GoRouter.of(context)
-          .routerDelegate
-          .currentConfiguration
-          .pathParameters['guildId'];
+    return Consumer(
+      builder: (context, ref, child) {
+        final rawGuildId = GoRouter.of(
+          context,
+        ).routerDelegate.currentConfiguration.pathParameters['guildId'];
 
-      String username = "loading?";
+        String username = "loading?";
 
-      Snowflake guildId = Snowflake.parse(rawGuildId ?? '0');
-      if (rawGuildId == "@me") {
-        guildId = Snowflake.zero;
-      }
-
-      if (type == "@") {
-        isMember = true;
-        final member = ref.watch(getMemberProvider(
-          guildId,
-          id,
-        ));
-
-        member.when(
-          data: (member) => {
-            username = username = member?.nick ??
-                member?.user?.globalName ??
-                member?.user?.username ??
-                "Unknown User",
-            username = "@$username"
-          },
-          loading: () => {},
-          error: (error, stackTrace) =>
-              debugPrint('Error loading member: $error'),
-        );
-      }
-
-      if (type == "@&") {
-        final role = ref.watch(getRoleProvider(guildId, id));
-        role.when(
-            data: (role) {
-              username = "@${role.name}";
-            },
-            loading: () => debugPrint('Loading role...'),
-            error: (error, stackTrace) =>
-                debugPrint('Error loading role: $error'));
-      }
-
-      if (type == "#") {
-        isChannel = true;
-        final channel =
-            ref.watch(channelControllerProvider(id)) as GuildChannel?;
-        if (channel != null) {
-          username = "#${channel.name}";
+        Snowflake guildId = Snowflake.parse(rawGuildId ?? '0');
+        if (rawGuildId == "@me") {
+          guildId = Snowflake.zero;
         }
-      }
 
-      return InkWell(
-        borderRadius: BorderRadius.circular(4),
-        onTap: () {
-          if (isMember) {
-            showMemberDialog(context, id, guildId);
-          } else if (isChannel) {
-            context.go('/channels/$guildId/$id');
+        if (type == "@") {
+          isMember = true;
+          final member = ref.watch(getMemberProvider(guildId, id));
+
+          member.when(
+            data: (member) => {
+              username = username =
+                  member?.nick ??
+                  member?.user?.globalName ??
+                  member?.user?.username ??
+                  "Unknown User",
+              username = "@$username",
+            },
+            loading: () => {},
+            error: (error, stackTrace) =>
+                debugPrint('Error loading member: $error'),
+          );
+        }
+
+        if (type == "@&") {
+          // final role = ref.watch(getRoleProvider(guildId, id));
+          // role.when(
+          //     data: (role) {
+          //       username = "@${role.name}";
+          //     },
+          //     loading: () => debugPrint('Loading role...'),
+          //     error: (error, stackTrace) =>
+          //         debugPrint('Error loading role: $error'));
+        }
+
+        if (type == "#") {
+          isChannel = true;
+          final channel =
+              ref.watch(channelControllerProvider(id)) as GuildChannel?;
+          if (channel != null) {
+            username = "#${channel.name}";
           }
-        },
-        child: Padding(
-          padding: const EdgeInsets.only(top: 2),
-          child: Container(
-            decoration: BoxDecoration(
-              color: BonfireThemeExtension.of(context).primary.withOpacity(0.2),
-              borderRadius: BorderRadius.circular(4),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.only(left: 2, right: 2),
-              child: Text(
-                username,
-                style: Theme.of(context).textTheme.bodyMedium!.merge(
-                      const TextStyle(
-                        color: Color.fromARGB(255, 79, 115, 234),
-                      ),
-                    ),
+        }
+
+        return InkWell(
+          borderRadius: BorderRadius.circular(4),
+          onTap: () {
+            if (isMember) {
+              showMemberDialog(context, id, guildId);
+            } else if (isChannel) {
+              context.go('/channels/$guildId/$id');
+            }
+          },
+          child: Padding(
+            padding: const EdgeInsets.only(top: 2),
+            child: Container(
+              decoration: BoxDecoration(
+                color: BonfireThemeExtension.of(
+                  context,
+                ).primary.withOpacity(0.2),
+                borderRadius: BorderRadius.circular(4),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.only(left: 2, right: 2),
+                child: Text(
+                  username,
+                  style: Theme.of(context).textTheme.bodyMedium!.merge(
+                    const TextStyle(color: Color.fromARGB(255, 79, 115, 234)),
+                  ),
+                ),
               ),
             ),
           ),
-        ),
-      );
-    });
+        );
+      },
+    );
   }
 }

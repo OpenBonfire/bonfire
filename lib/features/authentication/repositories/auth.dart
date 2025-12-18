@@ -18,7 +18,7 @@ part 'auth.g.dart';
 /// A riverpod provider that handles authentication with Discord.
 @Riverpod(keepAlive: true)
 class Auth extends _$Auth {
-  NyxxGateway? client;
+  FirebridgeGateway? client;
   AuthResponse? authResponse;
   bool hasSentInit = false;
   bool isHandlingEvents = false;
@@ -92,11 +92,10 @@ class Auth extends _$Auth {
       await (authResponse as AuthUser).client.close();
     }
 
-    var client = await Nyxx.connectGatewayWithOptions(
+    var client = await Firebridge.connectGatewayWithOptions(
       GatewayApiOptions(
         token: token,
         // totalShards: 1,
-        intents: GatewayIntents.all,
         compression: UniversalPlatform.isWeb
             ? GatewayCompression.none
             : GatewayCompression.transport,
@@ -120,14 +119,15 @@ class Auth extends _$Auth {
 
     ref.read(readyControllerProvider.notifier).setReady(true);
 
-    final user = (await client.user.get());
+    final user = (await client.users.fetch(client.user.id));
     final addedAccountsBox = Hive.box('added-accounts');
 
     final addedAccount = AddedAccount(
       userId: client.user.id.toString(),
       token: token,
       username: user.globalName ?? user.username,
-      avatar: user.avatar.url.toString(),
+      // avatar: user.avatar.url.toString(),
+      avatar: "thebomb.com",
     );
     addedAccountsBox.put(client.user.id.toString(), addedAccount.toJson());
 

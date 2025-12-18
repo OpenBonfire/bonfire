@@ -50,7 +50,7 @@ final class TypingProvider
   }
 }
 
-String _$typingHash() => r'681356187f4fa9eb83807183ce89f5c740d2974a';
+String _$typingHash() => r'40ea65aa147633284a5048ea8c136460ecd1551d';
 
 final class TypingFamily extends $Family
     with

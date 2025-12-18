@@ -15,5 +15,7 @@ Color getStatusColor(BuildContext context, UserStatus status) {
       return BonfireThemeExtension.of(context).red;
     case UserStatus.offline:
       return BonfireThemeExtension.of(context).background;
+    case UserStatus.custom:
+      return BonfireThemeExtension.of(context).background;
   }
 }

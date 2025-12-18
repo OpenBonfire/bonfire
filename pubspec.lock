@@ -281,15 +281,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.19.1"
-  combine:
-    dependency: transitive
-    description:
-      path: "."
-      ref: "4dc44d700ac43d0ce5f7903e07bddbecfc1d168c"
-      resolved-ref: "4dc44d700ac43d0ce5f7903e07bddbecfc1d168c"
-      url: "https://github.com/ericapostal/combine"
-    source: git
-    version: "0.5.8"
   convert:
     dependency: transitive
     description:
@@ -573,17 +564,10 @@ packages:
   firebridge:
     dependency: "direct main"
     description:
-      path: "packages/firebridge"
-      relative: true
+      path: "/Users/eric/Documents/development/languages/dart/nyxx"
+      relative: false
     source: path
-    version: "6.2.14"
-  firebridge_extensions:
-    dependency: "direct main"
-    description:
-      path: "packages/firebridge_extensions"
-      relative: true
-    source: path
-    version: "4.1.2"
+    version: "6.8.0-dev.1"
   fixnum:
     dependency: transitive
     description:
@@ -1319,14 +1303,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.1.0"
-  retry:
-    dependency: transitive
-    description:
-      name: retry
-      sha256: "822e118d5b3aafed083109c72d5f484c6dc66707885e07c0fbcb8b986bba7efc"
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.1.2"
   riverpod:
     dependency: transitive
     description:
@@ -1962,14 +1938,6 @@ packages:
     description:
       name: webrtc_interface
       sha256: "2e604a31703ad26781782fb14fa8a4ee621154ee2c513d2b9938e486fa695233"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.3.0"
-  websocket_universal:
-    dependency: transitive
-    description:
-      name: websocket_universal
-      sha256: "2e30785341c47bb94ca2e2d445e94e151f8e9704c8288d9e820d68db82221330"
       url: "https://pub.dev"
     source: hosted
     version: "1.3.0"

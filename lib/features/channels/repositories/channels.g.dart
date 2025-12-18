@@ -53,7 +53,7 @@ final class ChannelsProvider
   }
 }
 
-String _$channelsHash() => r'3ee8db13955eb2ed7ba4696bfe8ff3c601daba93';
+String _$channelsHash() => r'dae41d5d8bf0ff8c3e6aa1042d8b54c74f4d7c40';
 
 /// A riverpod provider that fetches the channels for the current guild.
 

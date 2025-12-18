@@ -31,7 +31,7 @@ class _MemberCardState extends ConsumerState<MemberCard> {
   @override
   Widget build(BuildContext context) {
     var roles = ref.watch(getGuildRolesProvider(widget.guild.id)).value ?? [];
-    PresenceUpdateEvent? initialPresence = widget.member.initialPresence;
+    // PresenceUpdateEvent? initialPresence = widget.member.initialPresence;
 
     double borderRadiusTop = widget.roundTop ? 20 : 0;
     double borderRadiusBottom = widget.roundBottom ? 20 : 0;
@@ -62,10 +62,10 @@ class _MemberCardState extends ConsumerState<MemberCard> {
             child: Row(
               children: [
                 const SizedBox(width: 6, height: 58),
-                PresenceAvatar(
-                  user: widget.member.user!,
-                  initialPresence: initialPresence,
-                ),
+                // PresenceAvatar(
+                //   user: widget.member.user!,
+                //   initialPresence: initialPresence,
+                // ),
                 const SizedBox(width: 8),
                 Expanded(
                   child: Column(
@@ -82,10 +82,10 @@ class _MemberCardState extends ConsumerState<MemberCard> {
                           color: getRoleColor(widget.member, roles),
                         ),
                       ),
-                      PresenceText(
-                        userid: widget.member.user!.id,
-                        initialPresence: initialPresence,
-                      ),
+                      // PresenceText(
+                      //   userid: widget.member.user!.id,
+                      //   initialPresence: initialPresence,
+                      // ),
                     ],
                   ),
                 ),

@@ -13,8 +13,8 @@ Future<Uint8List?> memberAvatar(Ref ref, Member member) async {
   //   var cached = await fetchMemberAvatarFromCache(hash);
   //   if (cached != null) return cached;
   // }
-  var iconUrl = member.user?.avatar.url;
-  if (iconUrl == null) return null;
-  var fetched = (await http.get(iconUrl)).bodyBytes;
-  return fetched;
+  // var iconUrl = member.user?.avatar;
+  // if (iconUrl == null) return null;
+  // var fetched = (await http.get(iconUrl)).bodyBytes;
+  // return fetched;
 }

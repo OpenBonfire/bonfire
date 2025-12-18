@@ -64,7 +64,7 @@ final class MessageAuthorAvatarProvider
 }
 
 String _$messageAuthorAvatarHash() =>
-    r'f28aacf08d50928e35167e7f6dc0492a4b15a4be';
+    r'd31b1d61a3435285c48ebee6d96ef256c39eaa8a';
 
 final class MessageAuthorAvatarFamily extends $Family
     with $FunctionalFamilyOverride<FutureOr<Uint8List?>, MessageAuthor> {

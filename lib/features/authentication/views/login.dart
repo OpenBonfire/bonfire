@@ -17,7 +17,7 @@ class LoginScreen extends ConsumerStatefulWidget {
 }
 
 class _LoginScreenState extends ConsumerState<LoginScreen> {
-  NyxxGateway? client;
+  FirebridgeGateway? client;
   // final fireviewController = FireviewController();
   bool? authMissing;
   @override
@@ -64,10 +64,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text("Loading Bonfire...",
-                style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                      color: Theme.of(context).textTheme.bodyMedium!.color!,
-                    )),
+            Text(
+              "Loading Bonfire...",
+              style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                color: Theme.of(context).textTheme.bodyMedium!.color!,
+              ),
+            ),
             const SizedBox(height: 30),
             LoadingAnimationWidget.fourRotatingDots(
               color: Theme.of(context).textTheme.bodyMedium!.color!,

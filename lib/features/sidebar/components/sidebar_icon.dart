@@ -44,54 +44,54 @@ class _SidebarIconState extends ConsumerState<SidebarIcon> {
           GoRouter.of(
             context,
           ).go('/channels/${widget.guild.id}/${Snowflake.zero}');
-          widget.guild.manager.get(widget.guild.id).then((Guild guild) async {
-            var lastGuildChannels = Hive.box("last-guild-channels");
-            var channelId =
-                lastGuildChannels.get(guild.id.value.toString()) ??
-                guild.rulesChannelId ??
-                (await guild.fetchChannels()).first.id.value;
+          // widget.guild.manager.get(widget.guild.id).then((Guild guild) async {
+          //   var lastGuildChannels = Hive.box("last-guild-channels");
+          //   var channelId =
+          //       lastGuildChannels.get(guild.id.value.toString()) ??
+          //       guild.rulesChannelId ??
+          //       (await guild.fetchChannels()).first.id.value;
 
-            // if mounted
-            if (mounted) {
-              GoRouter.of(context).go('/channels/${guild.id}/$channelId');
-            }
-          });
+          //   // if mounted
+          //   if (mounted) {
+          //     GoRouter.of(context).go('/channels/${guild.id}/$channelId');
+          //   }
+          // });
         }
       },
       child: ClipRRect(
         //borderRadius: BorderRadius.circular(25),
-        child: _buildGuildIcon(),
+        // child: _buildGuildIcon(),
       ),
     );
   }
 
-  Widget _buildGuildIcon() {
-    return Consumer(
-      builder: (context, ref, _) {
-        if (widget.guild.icon != null) {
-          return CachedNetworkImage(
-            imageUrl: widget.guild.icon!.url.toString(),
-            cacheKey: widget.guild.iconHash!,
-          );
-        } else {
-          String iconText = widget.guild.name
-              .split(" ")
-              .map((word) => word.isNotEmpty ? word[0] : '')
-              .join();
-          return Container(
-            color: BonfireThemeExtension.of(context).foreground,
-            child: Center(
-              child: Text(
-                iconText,
-                overflow: TextOverflow.ellipsis,
-                style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                  fontSize: widget.mini ? 3 : 12,
-                ),
-              ),
-            ),
-          );
-        }
-      },
-    );
-  }
+  // Widget _buildGuildIcon() {
+  //   return Consumer(
+  //     builder: (context, ref, _) {
+  //       if (widget.guild.icon != null) {
+  //         return CachedNetworkImage(
+  //           imageUrl: widget.guild.icon!.url.toString(),
+  //           cacheKey: widget.guild.iconHash!,
+  //         );
+  //       } else {
+  //         String iconText = widget.guild.name
+  //             .split(" ")
+  //             .map((word) => word.isNotEmpty ? word[0] : '')
+  //             .join();
+  //         return Container(
+  //           color: BonfireThemeExtension.of(context).foreground,
+  //           child: Center(
+  //             child: Text(
+  //               iconText,
+  //               overflow: TextOverflow.ellipsis,
+  //               style: Theme.of(context).textTheme.titleSmall!.copyWith(
+  //                 fontSize: widget.mini ? 3 : 12,
+  //               ),
+  //             ),
+  //           ),
+  //         );
+  //       }
+  //     },
+  //   );
+  // }
 }

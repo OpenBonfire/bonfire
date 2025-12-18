@@ -10,17 +10,13 @@ import 'package:bonfire/features/guild/controllers/roles.dart';
 import 'package:bonfire/features/me/controllers/settings.dart';
 import 'package:bonfire/features/messaging/controllers/message.dart';
 import 'package:bonfire/features/messaging/controllers/reply.dart';
-import 'package:firebridge_extensions/firebridge_extensions.dart';
+// import 'package:firebridge_extensions/firebridge_extensions.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'messages.g.dart';
 
-enum MessageFetchDirection {
-  before,
-  after,
-  around,
-}
+enum MessageFetchDirection { before, after, around }
 
 /// Message provider for fetching messages from the Discord API
 @riverpod
@@ -74,71 +70,73 @@ class Messages extends _$Messages {
 
   /// Fetch initial messages for the channel
   Future<List<Message>?> _fetchInitialMessages() async {
-    _isInitialLoad = false;
+    // _isInitialLoad = false;
 
-    if (_user == null || channelId == Snowflake.zero) {
-      return [];
-    }
+    // if (_user == null || channelId == Snowflake.zero) {
+    //   return [];
+    // }
 
-    // Check for channel access permissions
-    if (!await _hasChannelAccess()) {
-      return [];
-    }
+    // // Check for channel access permissions
+    // if (!await _hasChannelAccess()) {
+    //   return [];
+    // }
 
-    try {
-      final messages = await _fetchMessages(limit: 50);
+    // try {
+    //   final messages = await _fetchMessages(limit: 50);
 
-      if (messages.isNotEmpty) {
-        await messages.first.manager.acknowledge(messages.first.id);
-      }
+    //   if (messages.isNotEmpty) {
+    //     await messages.first.manager.acknowledge(messages.first.id);
+    //   }
 
-      return _getSortedMessages();
-    } catch (e, stack) {
-      _logger.severe("Error fetching initial messages", e, stack);
-      return [];
-    }
+    //   return _getSortedMessages();
+    // } catch (e, stack) {
+    //   _logger.severe("Error fetching initial messages", e, stack);
+    //   return [];
+    // }
   }
 
   /// Check if the user has access to read messages in this channel
   Future<bool> _hasChannelAccess() async {
-    final channel = ref.read(channelControllerProvider(channelId));
-    if (channel == null) {
-      _logger.warning("Tried to request messages from a null channel.");
-      return false;
-    }
+    return false;
+    // final channel = ref.read(channelControllerProvider(channelId));
+    // if (channel == null) {
+    //   _logger.warning("Tried to request messages from a null channel.");
+    //   return false;
+    // }
 
-    if (channel is! TextChannel) {
-      _logger.warning("Channel ${channel.id} is not a text channel");
-      return false;
-    }
+    // if (channel is! TextChannel) {
+    //   _logger.warning("Channel ${channel.id} is not a text channel");
+    //   return false;
+    // }
 
-    if (channel is GuildChannel) {
-      final guild =
-          ref.read(guildControllerProvider((channel as GuildChannel).guildId));
-      if (guild == null) return false;
+    // if (channel is GuildChannel) {
+    //   //   final guild =
+    //   //       ref.read(guildControllerProvider((channel as GuildChannel).guildId));
+    //   //   if (guild == null) return false;
 
-      final roleIds =
-          ref.read(rolesControllerProvider((channel as GuildChannel).guildId));
-      if (roleIds == null) return false;
+    //   //   final roleIds =
+    //   //       ref.read(rolesControllerProvider((channel as GuildChannel).guildId));
+    //   //   if (roleIds == null) return false;
 
-      final roles = roleIds
-          .map((roleId) => ref.read(roleControllerProvider(roleId)))
-          .whereType<Role>()
-          .toList();
+    //   //   final roles = roleIds
+    //   //       .map((roleId) => ref.read(roleControllerProvider(roleId)))
+    //   //       .whereType<Role>()
+    //   //       .toList();
 
-      final selfMember = await guild.members.get(_user!.client.user.id);
-      final permissions = await (channel as GuildChannel)
-          .computePermissionsForMemberWithGuildAndRoles(
-              selfMember, guild, roles);
+    //   //   final selfMember = await guild.members.get(_user!.client.user.id);
+    //   //   final permissions = await (channel as GuildChannel)
+    //   //       .computePermissionsForMemberWithGuildAndRoles(
+    //   //           selfMember, guild, roles);
 
-      if (!permissions.canReadMessageHistory) {
-        _logger.warning(
-            "No permission to read message history in channel ${channel.id}");
-        return false;
-      }
-    }
+    //   //   if (!permissions.canReadMessageHistory) {
+    //   //     _logger.warning(
+    //   //         "No permission to read message history in channel ${channel.id}");
+    //   //     return false;
+    //   //   }
+    //   // }
 
-    return true;
+    //   // return true;
+    // }
   }
 
   /// Fetch messages with specified parameters
@@ -149,52 +147,53 @@ class Messages extends _$Messages {
     bool updateState = true,
     bool disableAck = false,
   }) async {
-    if (_user == null) return [];
+    return [];
+    // if (_user == null) return [];
 
-    final channel = ref.read(channelControllerProvider(channelId));
-    if (channel == null || channel is! TextChannel) return [];
+    // final channel = ref.read(channelControllerProvider(channelId));
+    // if (channel == null || channel is! TextChannel) return [];
 
-    Snowflake? before, after, around;
-    switch (direction) {
-      case MessageFetchDirection.before:
-        before = reference;
-        break;
-      case MessageFetchDirection.after:
-        after = reference;
-        break;
-      case MessageFetchDirection.around:
-        around = reference;
-        break;
-    }
+    // Snowflake? before, after, around;
+    // switch (direction) {
+    //   case MessageFetchDirection.before:
+    //     before = reference;
+    //     break;
+    //   case MessageFetchDirection.after:
+    //     after = reference;
+    //     break;
+    //   case MessageFetchDirection.around:
+    //     around = reference;
+    //     break;
+    // }
 
-    try {
-      final messages = await channel.messages.fetchMany(
-        limit: limit,
-        before: before,
-        after: after,
-        around: around,
-      );
-      for (final message in messages) {
-        _cacheMessage(message);
-      }
+    // try {
+    //   final messages = await channel.messages.fetchMany(
+    //     limit: limit,
+    //     before: before,
+    //     after: after,
+    //     around: around,
+    //   );
+    //   for (final message in messages) {
+    //     _cacheMessage(message);
+    //   }
 
-      if (!disableAck &&
-          before == null &&
-          after == null &&
-          around == null &&
-          messages.isNotEmpty) {
-        await messages.first.manager.acknowledge(messages.first.id);
-      }
+    //   if (!disableAck &&
+    //       before == null &&
+    //       after == null &&
+    //       around == null &&
+    //       messages.isNotEmpty) {
+    //     await messages.first.manager.acknowledge(messages.first.id);
+    //   }
 
-      if (updateState) {
-        state = AsyncValue.data(_getSortedMessages());
-      }
+    //   if (updateState) {
+    //     state = AsyncValue.data(_getSortedMessages());
+    //   }
 
-      return messages.toList();
-    } catch (e, stack) {
-      _logger.severe("Error fetching messages", e, stack);
-      return [];
-    }
+    //   return messages.toList();
+    // } catch (e, stack) {
+    //   _logger.severe("Error fetching messages", e, stack);
+    //   return [];
+    // }
   }
 
   void _cacheMessage(Message message) {
@@ -205,8 +204,10 @@ class Messages extends _$Messages {
   }
 
   /// Fetch messages before a specific message
-  Future<List<Message>> fetchMessagesBefore(Message reference,
-      {int limit = 50}) async {
+  Future<List<Message>> fetchMessagesBefore(
+    Message reference, {
+    int limit = 50,
+  }) async {
     return await _fetchMessages(
       direction: MessageFetchDirection.before,
       reference: reference.id,
@@ -215,8 +216,10 @@ class Messages extends _$Messages {
   }
 
   /// Fetch messages after a specific message
-  Future<List<Message>> fetchMessagesAfter(Message reference,
-      {int limit = 50}) async {
+  Future<List<Message>> fetchMessagesAfter(
+    Message reference, {
+    int limit = 50,
+  }) async {
     return await _fetchMessages(
       direction: MessageFetchDirection.after,
       reference: reference.id,
@@ -225,8 +228,10 @@ class Messages extends _$Messages {
   }
 
   /// Fetch messages around a specific message
-  Future<List<Message>> fetchMessagesAround(Snowflake reference,
-      {int limit = 50}) async {
+  Future<List<Message>> fetchMessagesAround(
+    Snowflake reference, {
+    int limit = 50,
+  }) async {
     return await _fetchMessages(
       direction: MessageFetchDirection.around,
       reference: reference,
@@ -236,46 +241,46 @@ class Messages extends _$Messages {
 
   /// Process a new message
   void processMessage(Message message) async {
-    if (message.channel.id != channelId) return;
+    // if (message.channel.id != channelId) return;
 
-    final channel = ref.read(channelControllerProvider(channelId));
-    if (channel == null) return;
+    // final channel = ref.read(channelControllerProvider(channelId));
+    // if (channel == null) return;
 
-    // Update read state
-    final ReadState? currentReadState =
-        ref.read(channelReadStateProvider(message.channelId));
+    // // Update read state
+    // final ReadState? currentReadState =
+    //     ref.read(channelReadStateProvider(message.channelId));
 
-    int mentionCount = currentReadState?.mentionCount ?? 0;
-    bool mentionsSelf = false;
+    // int mentionCount = currentReadState?.mentionCount ?? 0;
+    // bool mentionsSelf = false;
 
-    for (var mention in message.mentions) {
-      if (mention.id == _user!.client.user.id) {
-        mentionsSelf = true;
-        break;
-      }
-    }
+    // for (var mention in message.mentions) {
+    //   if (mention.id == _user!.client.user.id) {
+    //     mentionsSelf = true;
+    //     break;
+    //   }
+    // }
 
-    if ((mentionsSelf || channel is DmChannel || channel is GroupDmChannel) &&
-        message.author.id != _user!.client.user.id) {
-      mentionCount++;
-    }
+    // if ((mentionsSelf || channel is DmChannel || channel is GroupDmChannel) &&
+    //     message.author.id != _user!.client.user.id) {
+    //   mentionCount++;
+    // }
 
-    ref.read(channelReadStateProvider(message.channelId).notifier).setReadState(
-          ReadState(
-            channel: message.channel,
-            lastMessage: message,
-            lastPinTimestamp: currentReadState?.lastPinTimestamp,
-            mentionCount: mentionCount,
-            lastViewed: currentReadState?.lastViewed,
-          ),
-        );
+    // ref.read(channelReadStateProvider(message.channelId).notifier).setReadState(
+    //       ReadState(
+    //         channel: message.channel,
+    //         lastMessage: message,
+    //         lastPinTimestamp: currentReadState?.lastPinTimestamp,
+    //         mentionCount: mentionCount,
+    //         lastViewed: currentReadState?.lastViewed,
+    //       ),
+    //     );
 
-    ref
-        .read(typingProvider(channel.id).notifier)
-        .cancelTyping(channelId, message.author.id);
+    // ref
+    //     .read(typingProvider(channel.id).notifier)
+    //     .cancelTyping(channelId, message.author.id);
 
-    _cacheMessage(message);
-    state = AsyncValue.data(_getSortedMessages());
+    // _cacheMessage(message);
+    // state = AsyncValue.data(_getSortedMessages());
   }
 
   /// Send a message to the channel
@@ -284,24 +289,25 @@ class Messages extends _$Messages {
     String message, {
     List<AttachmentBuilder>? attachments,
   }) async {
-    if (_user == null || channel is! TextChannel) return false;
+    return false;
+    // if (_user == null || channel is! TextChannel) return false;
 
-    try {
-      final Snowflake? replyTo = ref.read(replyControllerProvider)?.messageId;
+    // try {
+    //   final Snowflake? replyTo = ref.read(replyControllerProvider)?.messageId;
 
-      await channel.sendMessage(
-        MessageBuilder(
-          content: message,
-          attachments: attachments,
-          replyId: replyTo,
-        ),
-      );
+    //   await channel.sendMessage(
+    //     MessageBuilder(
+    //       content: message,
+    //       attachments: attachments,
+    //       replyId: replyTo,
+    //     ),
+    //   );
 
-      return true;
-    } catch (e, stack) {
-      _logger.severe("Error sending message", e, stack);
-      return false;
-    }
+    //   return true;
+    // } catch (e, stack) {
+    //   _logger.severe("Error sending message", e, stack);
+    //   return false;
+    // }
   }
 
   /// Refresh the messages in the channel

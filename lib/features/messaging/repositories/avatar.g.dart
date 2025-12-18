@@ -63,7 +63,7 @@ final class MemberAvatarProvider
   }
 }
 
-String _$memberAvatarHash() => r'a4284ceeacda6a715d122da2f161c5c94ccbd377';
+String _$memberAvatarHash() => r'173d4e4052b5b86e69e2841778b79976316d813d';
 
 final class MemberAvatarFamily extends $Family
     with $FunctionalFamilyOverride<FutureOr<Uint8List?>, Member> {
