@@ -99,7 +99,7 @@ class ClientController extends _$ClientController {
     );
 
     // This is how we save login information
-    var box = await Hive.openBox('auth');
+    final box = await Hive.openBox('auth');
     box.put('token', token);
 
     // Save and notify state
