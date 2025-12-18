@@ -53,7 +53,7 @@ final class MessagesProvider
   }
 }
 
-String _$messagesHash() => r'f741dc4c2b2368d48d6d18b00ee034e41cdaba24';
+String _$messagesHash() => r'a7837caaf1bf80eece16a0f6d5603eb1bd217fb2';
 
 /// Message provider for fetching messages from the Discord API
 

@@ -58,7 +58,7 @@ final class GetMemberProvider
   }
 }
 
-String _$getMemberHash() => r'13c92cb5c0a2fa0e5d2b9cea6f163eecbc8c0ffe';
+String _$getMemberHash() => r'ae848a0f124efaa0ae02ef85b3c789e474f95002';
 
 final class GetMemberFamily extends $Family
     with $FunctionalFamilyOverride<FutureOr<Member?>, (Snowflake, Snowflake)> {
@@ -127,7 +127,7 @@ final class GetSelfMemberProvider
   }
 }
 
-String _$getSelfMemberHash() => r'7d0297319c1184768d92fae212463c4f536c91de';
+String _$getSelfMemberHash() => r'cb6ad7c101b2be5bfff4a472ceb85353459a7370';
 
 final class GetSelfMemberFamily extends $Family
     with $FunctionalFamilyOverride<FutureOr<Member?>, Snowflake> {
@@ -202,7 +202,7 @@ final class GetGuildRolesProvider
   }
 }
 
-String _$getGuildRolesHash() => r'63f288fa97a88070e5b3de22afab229c60c87757';
+String _$getGuildRolesHash() => r'98ad64ceae99c76ab0d1cf2cd98934c4f4f39630';
 
 final class GetGuildRolesFamily extends $Family
     with $FunctionalFamilyOverride<FutureOr<List<Role>?>, Snowflake> {
@@ -271,7 +271,7 @@ final class GetRoleProvider
   }
 }
 
-String _$getRoleHash() => r'd2e1a8a6cdd5822577aefe58d897276120f84b15';
+String _$getRoleHash() => r'b82887128fd8e6e78aac774cb33f8a63f5fe6d89';
 
 final class GetRoleFamily extends $Family
     with $FunctionalFamilyOverride<FutureOr<Role?>, (Snowflake, Snowflake)> {

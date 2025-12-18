@@ -12,7 +12,7 @@ class SelfUser extends _$SelfUser {
 
   @override
   Future<User?> build() async {
-    // var authOutput = ref.watch(authProvider);
+    // var authOutput = ref.watch(clientControllerProvider);
     // if (authOutput is AuthUser) {
     //   user = authOutput;
 

@@ -63,7 +63,7 @@ final class GuildIconProvider
   }
 }
 
-String _$guildIconHash() => r'df4d4c4a1e911dd0c023cc8aac0defa23b131d9d';
+String _$guildIconHash() => r'98eb9f593543e9e4ac96b04f6b40f9bef5750bc4';
 
 final class GuildIconFamily extends $Family
     with $FunctionalFamilyOverride<FutureOr<Uint8List?>, Snowflake> {

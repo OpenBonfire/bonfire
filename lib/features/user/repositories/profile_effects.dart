@@ -8,7 +8,7 @@
 
 // @riverpod
 // Future<List<ProfileEffectConfig>?> profileEffects(Ref ref) async {
-//   final auth = ref.watch(authProvider);
+//   final auth = ref.watch(clientControllerProvider);
 //   if (auth is! AuthUser) return null;
 
 //   return await auth.client.users.fetchProfileEffects();

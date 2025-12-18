@@ -22,7 +22,7 @@
 
 //   @override
 //   Future<List<UserGuild>> build() async {
-//     var authOutput = ref.watch(authProvider);
+//     var authOutput = ref.watch(clientControllerProvider);
 
 //     if ((authOutput != null) & (authOutput! is AuthUser)) {
 //       user = authOutput as AuthUser;

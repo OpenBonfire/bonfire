@@ -14,7 +14,7 @@ class ChannelPermissions extends _$ChannelPermissions {
   @override
   Future<Permissions?> build(Snowflake channelId) async {
     return null;
-    // var auth = ref.watch(authProvider);
+    // var auth = ref.watch(clientControllerProvider);
     // if (auth is! AuthUser) return null;
     // user = auth;
 

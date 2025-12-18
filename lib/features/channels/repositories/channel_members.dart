@@ -113,7 +113,7 @@
 
 //   @override
 //   Future<Pair<List<GuildMemberListGroup>, List<dynamic>>?> build() async {
-//     var authOutput = ref.watch(authProvider);
+//     var authOutput = ref.watch(clientControllerProvider);
 //     if (authOutput is AuthUser) {
 //       user = authOutput;
 //     }

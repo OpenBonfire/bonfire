@@ -11,7 +11,7 @@ class MessageSearch extends _$MessageSearch {
 
   @override
   Future<List<Message>?> build(Snowflake guildId, String query) async {
-    // final auth = ref.watch(authProvider);
+    // final auth = ref.watch(clientControllerProvider);
     // if (auth is AuthUser) user = auth;
 
     // return user!.client.guilds[guildId].manager.searchMessages(guildId, query);

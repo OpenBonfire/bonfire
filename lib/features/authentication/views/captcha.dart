@@ -7,9 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class TokenLoginWidget extends ConsumerStatefulWidget {
-  const TokenLoginWidget({
-    super.key,
-  });
+  const TokenLoginWidget({super.key});
 
   @override
   ConsumerState<TokenLoginWidget> createState() => _TokenLoginWidgetState();
@@ -97,7 +95,9 @@ class _TokenLoginWidgetState extends ConsumerState<TokenLoginWidget> {
               onPressed: () {
                 final token = _tokenController.text.trim();
                 if (token.isNotEmpty) {
-                  ref.read(authProvider.notifier).loginWithToken(token);
+                  ref
+                      .read(clientControllerProvider.notifier)
+                      .loginWithToken(token);
                 }
               },
               style: ElevatedButton.styleFrom(

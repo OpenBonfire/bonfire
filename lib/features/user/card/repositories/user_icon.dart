@@ -14,7 +14,7 @@ class UserIcon extends _$UserIcon {
 
   @override
   Future<Uint8List?> build(Snowflake userId) async {
-    // var authOutput = ref.watch(authProvider);
+    // var authOutput = ref.watch(clientControllerProvider);
     // if (authOutput is AuthUser) {
     //   user = authOutput;
 

@@ -17,7 +17,7 @@ part 'auth.g.dart';
 
 /// A riverpod provider that handles authentication with Discord.
 @Riverpod(keepAlive: true)
-class Auth extends _$Auth {
+class ClientController extends _$ClientController {
   FirebridgeGateway? client;
   AuthResponse? authResponse;
   bool hasSentInit = false;
@@ -41,11 +41,7 @@ class Auth extends _$Auth {
       'undelete': false,
     };
 
-    Uri loginUrl = UniversalPlatform.isWeb
-        ? Uri.https("cors-proxy.mylo-fawcett.workers.dev", "/", {
-            'url': Uri.https("discord.com", '/api/v9/auth/login').toString(),
-          })
-        : Uri.https("discord.com", '/api/v9/auth/login');
+    Uri loginUrl = Uri.https("discord.com", '/api/v9/auth/login');
 
     final response = await http.post(
       loginUrl, //Uri.https("discord.com", '/api/v9/auth/login'),
@@ -88,7 +84,6 @@ class Auth extends _$Auth {
     AuthResponse response = AuthNotStarted();
 
     if (authResponse is AuthUser) {
-      print("is auth user so is closing!");
       await (authResponse as AuthUser).client.close();
     }
 

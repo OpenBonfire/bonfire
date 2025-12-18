@@ -12,7 +12,7 @@ Future<Member?> getMember(
   Snowflake guildId,
   Snowflake memberId,
 ) async {
-  var authOutput = ref.watch(authProvider);
+  var authOutput = ref.watch(clientControllerProvider);
 
   if (authOutput is AuthUser) {
     // return await authOutput.client.guilds[guildId].members.get(memberId);
@@ -23,7 +23,7 @@ Future<Member?> getMember(
 
 @Riverpod(keepAlive: true)
 Future<Member?> getSelfMember(Ref ref, Snowflake guildId) async {
-  var authOutput = ref.watch(authProvider);
+  var authOutput = ref.watch(clientControllerProvider);
 
   if (authOutput is AuthUser) {
     // return await authOutput.client.guilds[guildId].members.get(
@@ -35,7 +35,7 @@ Future<Member?> getSelfMember(Ref ref, Snowflake guildId) async {
 
 @Riverpod(keepAlive: true)
 Future<List<Role>?> getGuildRoles(Ref ref, Snowflake guildId) async {
-  var authOutput = ref.watch(authProvider);
+  var authOutput = ref.watch(clientControllerProvider);
 
   // if (authOutput is AuthUser) {
   //   return await authOutput.client.guilds[guildId].roles.list();
@@ -45,7 +45,7 @@ Future<List<Role>?> getGuildRoles(Ref ref, Snowflake guildId) async {
 
 @riverpod
 Future<Role?> getRole(Ref ref, Snowflake guildId, Snowflake roleId) async {
-  var authOutput = ref.watch(authProvider);
+  var authOutput = ref.watch(clientControllerProvider);
 
   // if (authOutput is AuthUser) {
   //   return await authOutput.client.gui.roles.get(roleId);

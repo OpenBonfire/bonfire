@@ -53,7 +53,7 @@ final class ForumPostsProvider
   }
 }
 
-String _$forumPostsHash() => r'e64914b3312500358cdcff81bcc9c7b0df2fed2a';
+String _$forumPostsHash() => r'00058e9af26d855f97c980c1031a05283a28e676';
 
 /// Fetches a forum channel from the [channelId].
 

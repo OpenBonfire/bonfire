@@ -9,7 +9,7 @@
 // class UserProfileController extends _$UserProfileController {
 //   @override
 //   Future<UserProfile?> build(Snowflake userId) async {
-//     var auth = ref.watch(authProvider);
+//     var auth = ref.watch(clientControllerProvider);
 //     if (auth is! AuthUser) return null;
 
 //     return await auth.client.users.fetchUserProfile(

@@ -24,7 +24,7 @@
 
 //   @override
 //   VoiceReadyEvent? build() {
-//     var authUser = ref.watch(authProvider);
+//     var authUser = ref.watch(clientControllerProvider);
 //     if (authUser is AuthUser) {
 //       user = authUser;
 //     }

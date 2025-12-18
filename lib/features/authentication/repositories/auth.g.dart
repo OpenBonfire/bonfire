@@ -10,29 +10,30 @@ part of 'auth.dart';
 // ignore_for_file: type=lint, type=warning
 /// A riverpod provider that handles authentication with Discord.
 
-@ProviderFor(Auth)
-const authProvider = AuthProvider._();
+@ProviderFor(ClientController)
+const clientControllerProvider = ClientControllerProvider._();
 
 /// A riverpod provider that handles authentication with Discord.
-final class AuthProvider extends $NotifierProvider<Auth, AuthResponse?> {
+final class ClientControllerProvider
+    extends $NotifierProvider<ClientController, AuthResponse?> {
   /// A riverpod provider that handles authentication with Discord.
-  const AuthProvider._()
+  const ClientControllerProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
-        name: r'authProvider',
+        name: r'clientControllerProvider',
         isAutoDispose: false,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
 
   @override
-  String debugGetCreateSourceHash() => _$authHash();
+  String debugGetCreateSourceHash() => _$clientControllerHash();
 
   @$internal
   @override
-  Auth create() => Auth();
+  ClientController create() => ClientController();
 
   /// {@macro riverpod.override_with_value}
   Override overrideWithValue(AuthResponse? value) {
@@ -43,11 +44,11 @@ final class AuthProvider extends $NotifierProvider<Auth, AuthResponse?> {
   }
 }
 
-String _$authHash() => r'e649e36edd9eb11ff00dff55cd1a71ded0098b3d';
+String _$clientControllerHash() => r'831aa9f1ae8c6fa06be6debd091f8693c9cdaba3';
 
 /// A riverpod provider that handles authentication with Discord.
 
-abstract class _$Auth extends $Notifier<AuthResponse?> {
+abstract class _$ClientController extends $Notifier<AuthResponse?> {
   AuthResponse? build();
   @$mustCallSuper
   @override

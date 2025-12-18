@@ -50,7 +50,7 @@ final class GuildMentionsProvider
   }
 }
 
-String _$guildMentionsHash() => r'4b80b418c8afc416a3f6b40aa6693a5b2c354426';
+String _$guildMentionsHash() => r'9cc4e2e82931893b32a7e9518c939281577e2b55';
 
 final class GuildMentionsFamily extends $Family
     with

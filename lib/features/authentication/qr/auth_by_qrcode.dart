@@ -97,26 +97,29 @@ class _AuthByQRcodeState extends ConsumerState<AuthByQRcode> {
     }
   }
 
-  _acceptTicket(KeyPair<RsaOaepPrivateKey, RsaOaepPublicKey> keyPair,
-      String ticket) async {
+  _acceptTicket(
+    KeyPair<RsaOaepPrivateKey, RsaOaepPublicKey> keyPair,
+    String ticket,
+  ) async {
     try {
       final response = await http.post(
-          Uri.parse("https://discord.com/api/v9/users/@me/remote-auth/login"),
-          headers: {HttpHeaders.contentTypeHeader: "application/json"},
-          body: jsonEncode({
-            "ticket": ticket.trim(),
-          }));
+        Uri.parse("https://discord.com/api/v9/users/@me/remote-auth/login"),
+        headers: {HttpHeaders.contentTypeHeader: "application/json"},
+        body: jsonEncode({"ticket": ticket.trim()}),
+      );
 
       final data = jsonDecode(response.body);
 
       final encrypted_token = data["encrypted_token"];
 
       final token = await DiscordKeyPair.decryptEncodedCiphertext(
-          keyPair, encrypted_token);
+        keyPair,
+        encrypted_token,
+      );
 
       debugPrint("Got token: $token");
 
-      ref.read(authProvider.notifier).loginWithToken(token);
+      ref.read(clientControllerProvider.notifier).loginWithToken(token);
 
       // GetIt.I<SettingsStore>().setApiToken(token).then((value) {
       //   endOfLogin = true;
@@ -180,117 +183,128 @@ class _AuthByQRcodeState extends ConsumerState<AuthByQRcode> {
 
       debugPrint("Elapsed.3=${getTimeNow() - start0}");
 
-      final fingerprint =
-          await DiscordKeyPair.publicKeyFingerdebugPrint(keyPair);
+      final fingerprint = await DiscordKeyPair.publicKeyFingerdebugPrint(
+        keyPair,
+      );
 
       debugPrint("Elapsed.4=${getTimeNow() - start0}");
 
-      channel!.stream.listen((data) async {
-        final map = jsonDecode(data) as Map<String, dynamic>;
+      channel!.stream.listen(
+        (data) async {
+          final map = jsonDecode(data) as Map<String, dynamic>;
 
-        if (map["op"] == "hello") {
-          final int hb_interval = map["heartbeat_interval"];
+          if (map["op"] == "hello") {
+            final int hb_interval = map["heartbeat_interval"];
 
-          _sendMessage(
-              channel!, {"op": "init", "encoded_public_key": publicKey});
-
-          final int hb_interval0 = (hb_interval * Random().nextDouble()).ceil();
-
-          debugPrint("hb_interval0=$hb_interval0");
-
-          timoutId = Timer(Duration(milliseconds: hb_interval0), () {
-            timoutId = null;
-            int lastHeartbeat = getTimeNow();
-            intervalId =
-                Timer.periodic(const Duration(microseconds: 500), (timer) {
-              if (getTimeNow() - lastHeartbeat > hb_interval) {
-                lastHeartbeat = getTimeNow();
-                _sendHeardbeat();
-              }
+            _sendMessage(channel!, {
+              "op": "init",
+              "encoded_public_key": publicKey,
             });
-          });
-        } else if (map["op"] == "nonce_proof") {
-          final encrypted_nonce = map["encrypted_nonce"];
 
-          DiscordKeyPair.decryptNonce(keyPair, encrypted_nonce).then((nonce) {
-            _sendMessage(channel!, {"op": "nonce_proof", "nonce": nonce});
-          });
-        } else if (map["op"] == "pending_remote_init") {
-          final localFingerprint = map["fingerprint"];
+            final int hb_interval0 = (hb_interval * Random().nextDouble())
+                .ceil();
 
-          if (fingerprint == localFingerprint) {
+            debugPrint("hb_interval0=$hb_interval0");
+
+            timoutId = Timer(Duration(milliseconds: hb_interval0), () {
+              timoutId = null;
+              int lastHeartbeat = getTimeNow();
+              intervalId = Timer.periodic(const Duration(microseconds: 500), (
+                timer,
+              ) {
+                if (getTimeNow() - lastHeartbeat > hb_interval) {
+                  lastHeartbeat = getTimeNow();
+                  _sendHeardbeat();
+                }
+              });
+            });
+          } else if (map["op"] == "nonce_proof") {
+            final encrypted_nonce = map["encrypted_nonce"];
+
+            DiscordKeyPair.decryptNonce(keyPair, encrypted_nonce).then((nonce) {
+              _sendMessage(channel!, {"op": "nonce_proof", "nonce": nonce});
+            });
+          } else if (map["op"] == "pending_remote_init") {
+            final localFingerprint = map["fingerprint"];
+
+            if (fingerprint == localFingerprint) {
+              setState(() {
+                step = AuthByQRcode.LOGIN_STATE_QR_CODE;
+                nfingerprint = "https://discord.com/ra/${fingerprint}";
+              });
+            }
+          } else if (map["op"] == "pending_ticket") {
+            final encrypted_user_payload = map["encrypted_user_payload"];
+
+            DiscordKeyPair.decodeEncodedUserRecord(
+              keyPair,
+              encrypted_user_payload,
+            ).then((userData0) {
+              setState(() {
+                step = AuthByQRcode.LOGIN_STATE_USER_PROFILE;
+                userData = userData0;
+              });
+            });
+          } else if (map["op"] == "pending_login") {
+            final ticket = map["ticket"];
+
+            debugPrint("pending_login.ticket=${ticket}");
+            if (ticket != null) {
+              //https://discord.com/api/v9/users/@me/remote-auth/login
+              _acceptTicket(keyPair, ticket);
+            }
+          } else if (map["op"] == "pending_finish") {
+            // final encrypted_user_payload = map["encrypted_user_payload"];
+
+            // final userData0 = await DiscordKeyPair.decodeEncodedUserRecord(
+            //     keyPair, encrypted_user_payload);
+
+            // debugPrint("userData=${userData0}");
+
+            // setState(() {
+            //   step = LoginPage.LOGIN_STATE_USER_PROFILE;
+            //   userData = userData0;
+            // });
+          } else if (map["op"] == "finish") {
+            // final encrypted_token = map["encrypted_token"];
+
+            // final n = await DiscordKeyPair.decryptEncodedCiphertext(
+            //     keyPair, encrypted_token);
+
+            //
+          } else if (map["op"] == "cancel") {
             setState(() {
-              step = AuthByQRcode.LOGIN_STATE_QR_CODE;
-              nfingerprint = "https://discord.com/ra/${fingerprint}";
+              step = AuthByQRcode.LOGIN_STATE_DEFAULT;
+              channel?.sink.close();
+              connect();
             });
+          } else if (map["op"] == "heartbeat_ack") {
+            acked = true;
           }
-        } else if (map["op"] == "pending_ticket") {
-          final encrypted_user_payload = map["encrypted_user_payload"];
 
-          DiscordKeyPair.decodeEncodedUserRecord(
-                  keyPair, encrypted_user_payload)
-              .then((userData0) {
-            setState(() {
-              step = AuthByQRcode.LOGIN_STATE_USER_PROFILE;
-              userData = userData0;
-            });
-          });
-        } else if (map["op"] == "pending_login") {
-          final ticket = map["ticket"];
+          // debugPrint("Message = ${map}");
+        },
+        onError: (error) {
+          debugPrint(error);
+        },
+        onDone: () {
+          debugPrint(
+            "Login connection closed ${channel?.closeCode}, ${channel?.closeReason}",
+          );
 
-          debugPrint("pending_login.ticket=${ticket}");
-          if (ticket != null) {
-            //https://discord.com/api/v9/users/@me/remote-auth/login
-            _acceptTicket(keyPair, ticket);
-          }
-        } else if (map["op"] == "pending_finish") {
-          // final encrypted_user_payload = map["encrypted_user_payload"];
+          if (ended) return;
 
-          // final userData0 = await DiscordKeyPair.decodeEncodedUserRecord(
-          //     keyPair, encrypted_user_payload);
+          timoutId?.cancel();
+          timoutId = null;
 
-          // debugPrint("userData=${userData0}");
+          intervalId?.cancel();
+          intervalId = null;
 
-          // setState(() {
-          //   step = LoginPage.LOGIN_STATE_USER_PROFILE;
-          //   userData = userData0;
-          // });
-        } else if (map["op"] == "finish") {
-          // final encrypted_token = map["encrypted_token"];
+          if (endOfLogin) return;
 
-          // final n = await DiscordKeyPair.decryptEncodedCiphertext(
-          //     keyPair, encrypted_token);
-
-          //
-        } else if (map["op"] == "cancel") {
-          setState(() {
-            step = AuthByQRcode.LOGIN_STATE_DEFAULT;
-            channel?.sink.close();
-            connect();
-          });
-        } else if (map["op"] == "heartbeat_ack") {
-          acked = true;
-        }
-
-        // debugPrint("Message = ${map}");
-      }, onError: (error) {
-        debugPrint(error);
-      }, onDone: () {
-        debugPrint(
-            "Login connection closed ${channel?.closeCode}, ${channel?.closeReason}");
-
-        if (ended) return;
-
-        timoutId?.cancel();
-        timoutId = null;
-
-        intervalId?.cancel();
-        intervalId = null;
-
-        if (endOfLogin) return;
-
-        _reconnect();
-      });
+          _reconnect();
+        },
+      );
     } catch (e, st) {
       debugPrint("some error: $st");
       debugPrint(e.toString());
@@ -300,25 +314,27 @@ class _AuthByQRcodeState extends ConsumerState<AuthByQRcode> {
   @override
   Widget build(BuildContext context) {
     return AuthRemote(
-        step: step,
-        requestForHCapcha: requestForHCapcha,
-        nfingerprint: nfingerprint,
-        userData: userData,
-        onClick: () {
-          channel?.sink.close();
-          _reconnect();
-        });
+      step: step,
+      requestForHCapcha: requestForHCapcha,
+      nfingerprint: nfingerprint,
+      userData: userData,
+      onClick: () {
+        channel?.sink.close();
+        _reconnect();
+      },
+    );
   }
 }
 
 class AuthRemote extends StatefulWidget {
-  const AuthRemote(
-      {super.key,
-      required this.step,
-      required this.requestForHCapcha,
-      this.nfingerprint,
-      this.userData,
-      this.onClick});
+  const AuthRemote({
+    super.key,
+    required this.step,
+    required this.requestForHCapcha,
+    this.nfingerprint,
+    this.userData,
+    this.onClick,
+  });
 
   final int step;
   final String? nfingerprint;
@@ -342,80 +358,97 @@ class _AuthRemoteState extends State<AuthRemote> {
 
     if (widget.step == AuthByQRcode.LOGIN_STATE_QR_CODE) {
       w = Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Center(
-              child: ClipRRect(
-                borderRadius: const BorderRadius.all(Radius.circular(24)),
-                child: QrImageView(
-                  padding: const EdgeInsets.all(16.0),
-                  dataModuleStyle: QrDataModuleStyle(
-                      dataModuleShape: QrDataModuleShape.circle,
-                      color: bonfireTheme.dirtyWhite),
-                  eyeStyle: QrEyeStyle(
-                    eyeShape: QrEyeShape.circle,
-                    color: bonfireTheme.dirtyWhite,
-                  ),
-                  backgroundColor: bonfireTheme.foreground,
-                  data: widget.nfingerprint!,
-                  version: QrVersions.auto,
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Center(
+            child: ClipRRect(
+              borderRadius: const BorderRadius.all(Radius.circular(24)),
+              child: QrImageView(
+                padding: const EdgeInsets.all(16.0),
+                dataModuleStyle: QrDataModuleStyle(
+                  dataModuleShape: QrDataModuleShape.circle,
+                  color: bonfireTheme.dirtyWhite,
                 ),
+                eyeStyle: QrEyeStyle(
+                  eyeShape: QrEyeShape.circle,
+                  color: bonfireTheme.dirtyWhite,
+                ),
+                backgroundColor: bonfireTheme.foreground,
+                data: widget.nfingerprint!,
+                version: QrVersions.auto,
               ),
             ),
-          ]);
+          ),
+        ],
+      );
     } else if (widget.step == AuthByQRcode.LOGIN_STATE_DEFAULT) {
       w = const SizedBox(child: Center(child: CircularProgressIndicator()));
     } else if (widget.step == AuthByQRcode.LOGIN_STATE_USER_PROFILE) {
-      w = Column(children: [
-        Container(
-          width: 80.0,
-          height: 80.0,
-          decoration: BoxDecoration(
-            color: Colors.transparent,
-            image: DecorationImage(
-              image: CachedNetworkImageProvider(
-                  "https://cdn.discordapp.com/avatars/${widget.userData!["id"]}/${widget.userData!["avatar"]}.webp?size=128"),
-              fit: BoxFit.cover,
-            ),
-            borderRadius: const BorderRadius.all(Radius.circular(50.0)),
-            border: Border.all(
-              color: BonfireThemeExtension.of(context).background,
-              width: 6.0,
+      w = Column(
+        children: [
+          Container(
+            width: 80.0,
+            height: 80.0,
+            decoration: BoxDecoration(
+              color: Colors.transparent,
+              image: DecorationImage(
+                image: CachedNetworkImageProvider(
+                  "https://cdn.discordapp.com/avatars/${widget.userData!["id"]}/${widget.userData!["avatar"]}.webp?size=128",
+                ),
+                fit: BoxFit.cover,
+              ),
+              borderRadius: const BorderRadius.all(Radius.circular(50.0)),
+              border: Border.all(
+                color: BonfireThemeExtension.of(context).background,
+                width: 6.0,
+              ),
             ),
           ),
-        ),
-        Text("Check your phone!",
+          Text(
+            "Check your phone!",
             style: theme.textTheme.bodyMedium!.copyWith(
-                fontWeight: FontWeight.bold,
-                fontSize: 24,
-                color: Colors.white)),
-        const SizedBox(height: 20),
-        Text("Вход: ${widget.userData!["username"]}",
-            style: theme.textTheme.bodyMedium!.copyWith(
-                fontWeight: FontWeight.bold, fontSize: 12, color: Colors.grey)),
-        const SizedBox(height: 20),
-        TextButton(
-          child: Text(
-            "It's not me, try again",
-            style: theme.textTheme.bodyMedium!
-                .copyWith(fontSize: 14, color: Colors.lightBlue),
+              fontWeight: FontWeight.bold,
+              fontSize: 24,
+              color: Colors.white,
+            ),
           ),
-          onPressed: () {
-            if (widget.onClick != null) {
-              widget.onClick!();
-            }
-          },
-        ),
-        const SizedBox(height: 10),
-        widget.requestForHCapcha
-            ? Text(
-                "Hcapcha request required...",
-                style: theme.textTheme.bodyMedium!
-                    .copyWith(fontSize: 14, color: Colors.red),
-              )
-            : Container()
-      ]);
+          const SizedBox(height: 20),
+          Text(
+            "Вход: ${widget.userData!["username"]}",
+            style: theme.textTheme.bodyMedium!.copyWith(
+              fontWeight: FontWeight.bold,
+              fontSize: 12,
+              color: Colors.grey,
+            ),
+          ),
+          const SizedBox(height: 20),
+          TextButton(
+            child: Text(
+              "It's not me, try again",
+              style: theme.textTheme.bodyMedium!.copyWith(
+                fontSize: 14,
+                color: Colors.lightBlue,
+              ),
+            ),
+            onPressed: () {
+              if (widget.onClick != null) {
+                widget.onClick!();
+              }
+            },
+          ),
+          const SizedBox(height: 10),
+          widget.requestForHCapcha
+              ? Text(
+                  "Hcapcha request required...",
+                  style: theme.textTheme.bodyMedium!.copyWith(
+                    fontSize: 14,
+                    color: Colors.red,
+                  ),
+                )
+              : Container(),
+        ],
+      );
     } else {
       w = Container();
     }

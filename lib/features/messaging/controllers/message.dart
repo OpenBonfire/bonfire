@@ -13,7 +13,7 @@ class MessageController extends _$MessageController {
   FirebridgeGateway? client;
   @override
   Message? build(Snowflake messageId) {
-    AuthResponse? user = ref.watch(authProvider);
+    AuthResponse? user = ref.watch(clientControllerProvider);
     if (user is! AuthUser) return null;
 
     client = user.client;

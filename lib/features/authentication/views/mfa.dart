@@ -54,8 +54,9 @@ class _MFAPageState extends ConsumerState<MFAPage> {
                 keyboardType: TextInputType.number,
                 decoration: const InputDecoration(
                   hintText: '',
-                  hintStyle:
-                      TextStyle(color: Color.fromARGB(255, 255, 255, 255)),
+                  hintStyle: TextStyle(
+                    color: Color.fromARGB(255, 255, 255, 255),
+                  ),
                   border: InputBorder.none,
                   contentPadding: EdgeInsets.symmetric(horizontal: 20),
                 ),
@@ -69,12 +70,13 @@ class _MFAPageState extends ConsumerState<MFAPage> {
 
   Future<void> submitMFA() async {
     try {
-      final resp =
-          await ref.read(authProvider.notifier).submitMfa(controller.text);
+      final resp = await ref
+          .read(clientControllerProvider.notifier)
+          .submitMfa(controller.text);
       if (resp is MFAInvalidError) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(resp.error)),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(resp.error)));
       } else {}
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -91,8 +93,10 @@ class _MFAPageState extends ConsumerState<MFAPage> {
           Expanded(
             child: SingleChildScrollView(
               child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 24,
+                ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -122,10 +126,7 @@ class _MFAPageState extends ConsumerState<MFAPage> {
           ),
           Padding(
             padding: const EdgeInsets.all(16),
-            child: ConfirmButton(
-              text: "Sign In",
-              onPressed: submitMFA,
-            ),
+            child: ConfirmButton(text: "Sign In", onPressed: submitMFA),
           ),
         ],
       ),

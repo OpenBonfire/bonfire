@@ -9,7 +9,7 @@ part 'user.g.dart';
 /// Get user by id
 @riverpod
 Future<User?> getUserFromId(Ref ref, Snowflake userId) async {
-  var user = ref.watch(authProvider);
+  var user = ref.watch(clientControllerProvider);
   if (user is AuthUser) {
     return await user.client.users.get(userId);
   }

@@ -63,7 +63,7 @@ class _MessageViewState extends ConsumerState<MessageList>
 
     Stream<ReadyEvent>? listener;
 
-    ref.listenManual(authProvider, (_, state) {
+    ref.listenManual(clientControllerProvider, (_, state) {
       if (state is AuthUser) {
         listener = state.client.onReady;
         listener!.listen((event) {

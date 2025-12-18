@@ -6,9 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class WebviewLoginScreen extends ConsumerStatefulWidget {
-  const WebviewLoginScreen({
-    super.key,
-  });
+  const WebviewLoginScreen({super.key});
 
   @override
   ConsumerState<WebviewLoginScreen> createState() => _WebviewLoginScreenState();
@@ -29,9 +27,9 @@ class _WebviewLoginScreenState extends ConsumerState<WebviewLoginScreen> {
 
   @override
   void initState() {
-    webviewController
-        .loadRequest(Uri.parse("https://discord.com/login"))
-        .then((_) async {
+    webviewController.loadRequest(Uri.parse("https://discord.com/login")).then((
+      _,
+    ) async {
       await webviewController.clearCache();
       await webviewController.clearLocalStorage();
 
@@ -39,27 +37,34 @@ class _WebviewLoginScreenState extends ConsumerState<WebviewLoginScreen> {
         webviewInitialized = true;
       });
 
-      webviewController
-          .runJavaScript("document.body.style.backgroundColor = '#14161A';");
+      webviewController.runJavaScript(
+        "document.body.style.backgroundColor = '#14161A';",
+      );
 
-      webviewController
-          .setNavigationDelegate(NavigationDelegate(onUrlChange: (change) {
-        print("URL: ${change.url}");
-        if (change.url?.contains("@me") ?? false) {
-          webviewController
-              .runJavaScriptReturningResult(
-                  "(webpackChunkdiscord_app.push([[''],{},e=>{m=[];for(let c in e.c)m.push(e.c[c])}]),m).find(m=>m?.exports?.default?.getToken!==void 0).exports.default.getToken();")
-              .then((value) async {
-            // this sucks
+      webviewController.setNavigationDelegate(
+        NavigationDelegate(
+          onUrlChange: (change) {
+            print("URL: ${change.url}");
+            if (change.url?.contains("@me") ?? false) {
+              webviewController
+                  .runJavaScriptReturningResult(
+                    "(webpackChunkdiscord_app.push([[''],{},e=>{m=[];for(let c in e.c)m.push(e.c[c])}]),m).find(m=>m?.exports?.default?.getToken!==void 0).exports.default.getToken();",
+                  )
+                  .then((value) async {
+                    // this sucks
 
-            await ref
-                .read(authProvider.notifier)
-                .loginWithToken((value as String).replaceAll('"', ""));
+                    await ref
+                        .read(clientControllerProvider.notifier)
+                        .loginWithToken((value as String).replaceAll('"', ""));
 
-            await webviewController.loadRequest(Uri.parse("about:blank"));
-          });
-        }
-      }));
+                    await webviewController.loadRequest(
+                      Uri.parse("about:blank"),
+                    );
+                  });
+            }
+          },
+        ),
+      );
     });
 
     super.initState();
@@ -94,19 +99,13 @@ class _WebviewLoginScreenState extends ConsumerState<WebviewLoginScreen> {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(24),
                     child: webviewInitialized
-                        ? WebViewWidget(
-                            controller: webviewController,
-                          )
+                        ? WebViewWidget(controller: webviewController)
                         : const SizedBox(),
                   ),
                 ),
               ),
             ),
-            Padding(
-              padding: EdgeInsets.only(
-                bottom: bottomPadding + 12,
-              ),
-            ),
+            Padding(padding: EdgeInsets.only(bottom: bottomPadding + 12)),
           ],
         ),
       ],

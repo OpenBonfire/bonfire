@@ -23,7 +23,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   @override
   void initState() {
     super.initState();
-    ref.listenManual(authProvider, (a, b) {
+    ref.listenManual(clientControllerProvider, (a, b) {
       if (b is AuthUser) {
         client = b.client;
         b.client.onReady.listen((_) {
@@ -43,11 +43,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     var token = auth.get('token');
 
     if (token != null) {
-      // var client = ref.watch(authProvider);
+      // var client = ref.watch(clientControllerProvider);
       if (client is AuthUser) {
         return;
       }
-      ref.read(authProvider.notifier).loginWithToken(token);
+      ref.read(clientControllerProvider.notifier).loginWithToken(token);
     } else {
       setState(() {
         authMissing = true;

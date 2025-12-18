@@ -12,7 +12,7 @@ class MessageReactions extends _$MessageReactions {
 
   @override
   List<Reaction>? build(Snowflake messageId) {
-    var auth = ref.watch(authProvider);
+    var auth = ref.watch(clientControllerProvider);
 
     if (auth is AuthUser) {
       user = auth;

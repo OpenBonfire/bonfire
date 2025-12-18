@@ -29,7 +29,7 @@ class Messages extends _$Messages {
 
   @override
   Future<List<Message>?> build(Snowflake channelId) async {
-    final auth = ref.watch(authProvider);
+    final auth = ref.watch(clientControllerProvider);
 
     ref.onDispose(() {
       _authDebounceTimer?.cancel();

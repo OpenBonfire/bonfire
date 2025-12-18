@@ -16,7 +16,7 @@ class ForumPosts extends _$ForumPosts {
 
   @override
   Future<List<ThreadList?>> build(Snowflake channelId) async {
-    var auth = ref.watch(authProvider);
+    var auth = ref.watch(clientControllerProvider);
     if (auth is AuthUser) authUser = auth;
 
     _currentOffset = 0;

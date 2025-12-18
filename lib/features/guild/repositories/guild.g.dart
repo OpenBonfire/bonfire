@@ -58,7 +58,7 @@ final class GuildBannerUrlProvider
   }
 }
 
-String _$guildBannerUrlHash() => r'93c9fc05339bca213cca8de2c877648cb4f20747';
+String _$guildBannerUrlHash() => r'aeb8cb8cb63663b183191bc71f3b69fb915ca7c2';
 
 final class GuildBannerUrlFamily extends $Family
     with $FunctionalFamilyOverride<FutureOr<Uri?>, Snowflake> {

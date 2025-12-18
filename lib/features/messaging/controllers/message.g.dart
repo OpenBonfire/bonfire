@@ -58,7 +58,7 @@ final class MessageControllerProvider
   }
 }
 
-String _$messageControllerHash() => r'668bd4c605c4462eb81117a78c8f0ecaf52df707';
+String _$messageControllerHash() => r'ea014ac1df31dac50bd76add6bb7769662b7b860';
 
 final class MessageControllerFamily extends $Family
     with

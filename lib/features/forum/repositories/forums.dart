@@ -11,7 +11,7 @@ part 'forums.g.dart';
 class Forums extends _$Forums {
   @override
   Future<ForumChannel?> build(Snowflake channelId) async {
-    var auth = ref.watch(authProvider);
+    var auth = ref.watch(clientControllerProvider);
 
     if (auth is AuthUser) {
       Channel channel = await auth.client.channels.get(channelId);
