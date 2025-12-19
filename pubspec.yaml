@@ -5,7 +5,7 @@ publish_to: "none"
 version: 1.0.0+1
 
 environment:
-  sdk: ^3.10.0
+  sdk: ^3.10.4
 
 dependencies:
   flutter:
@@ -22,15 +22,14 @@ dependencies:
   # firebridge_extensions:
   #   path: packages/firebridge_extensions
 
-  google_fonts: ^6.2.1
+  google_fonts: ^6.3.3
   flutter_riverpod: ^3.0.3
   riverpod_annotation: ^3.0.3
 
   flutter_keyboard_size: ^1.0.1
   freezed_annotation: ^3.1.0
-  json_serializable: ^6.7.1
 
-  go_router: ^17.0.0
+  go_router: ^17.0.1
   flutter_prism: ^0.2.2
 
   media_kit:
@@ -93,7 +92,11 @@ dependencies:
   dart_mappable: ^4.6.1
   go_transitions: ^0.8.3
 
+
 dependency_overrides:
+  analyzer: ^8.0.0
+  meta: ^1.16.0
+  
   firebridge:
     path: ./packages/firebridge
 
@@ -138,6 +141,7 @@ dev_dependencies:
   freezed: ^3.2.3
   flutter_launcher_icons: ^0.14.4
   dart_mappable_builder: ^4.6.3
+
 
 flutter_launcher_icons:
   ios: true
