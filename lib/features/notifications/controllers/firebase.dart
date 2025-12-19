@@ -4,7 +4,7 @@ import 'package:bonfire/features/authentication/utils/hive.dart';
 import 'package:bonfire/features/notifications/controllers/notification.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:firebridge/firebridge.dart';
+
 import 'package:flutter/foundation.dart';
 import 'package:hive_ce/hive.dart';
 
@@ -17,7 +17,7 @@ const firebaseOptions = FirebaseOptions(
 );
 
 void showNotification(RemoteMessage message) async {
-  final notification = message.notification;
+  // final notification = message.notification;
 
   var auth = await Hive.openBox('auth');
   var token = auth.get('token');
@@ -27,7 +27,7 @@ void showNotification(RemoteMessage message) async {
     return;
   }
 
-  final client = await Firebridge.connectRest(token);
+  // final client = await Firebridge.connectRest(token);
   // final client = await Nyxx.connectGatewayWithOptions(
   //     GatewayApiOptions(
   //       token: token,s

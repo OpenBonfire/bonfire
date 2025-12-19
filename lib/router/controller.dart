@@ -1,3 +1,4 @@
+import 'package:bonfire/features/channels/views/channel_router_wrapper.dart';
 import 'package:bonfire/features/channels/views/guild_channel.dart';
 import 'package:bonfire/features/friends/views/friends.dart';
 import 'package:firebridge/firebridge.dart';
@@ -10,31 +11,58 @@ final routerController = GoRouter(
     GoRoute(path: '/app', redirect: (context, state) => "/login"),
     GoRoute(path: '/login', builder: (context, state) => const LoginScreen()),
     GoRoute(path: '/channels', redirect: (context, state) => "/channels/@me"),
-    GoRoute(
-      path: '/channels/:guildId',
-      builder: (context, state) {
-        final guildId = state.pathParameters["guildId"]!;
+    ShellRoute(
+      builder: (context, state, child) {
+        final rawGuildId = state.pathParameters["guildId"];
+        final rawChannelId = state.pathParameters["rawChannelId"];
 
-        if (guildId == "@me") {
-          return FriendsScreen();
+        Snowflake? guildId;
+        Snowflake? channelId;
+        if (rawGuildId != null && rawGuildId != "@me") {
+          guildId = Snowflake.parse(rawGuildId);
         }
 
-        return GuildChannelScreen(guildId: Snowflake.parse(guildId));
+        if (rawChannelId != null) {
+          channelId = Snowflake.parse(rawChannelId);
+        }
+
+        return ChannelRouterWrapper(
+          guildId: guildId,
+          channelId: channelId,
+          child: child,
+        );
       },
       routes: [
         GoRoute(
-          path: ":channelId",
+          path: '/channels/:guildId',
           builder: (context, state) {
             final guildId = state.pathParameters["guildId"]!;
-            final channelId = Snowflake.parse(
-              state.pathParameters["channelId"]!,
-            );
+
             if (guildId == "@me") {
-              return FriendsScreen(channelId: channelId);
+              return FriendsScreen();
             }
-            final snowflake = Snowflake.parse(guildId);
-            return GuildChannelScreen(guildId: snowflake, channelId: channelId);
+
+            return GuildChannelScreen(guildId: Snowflake.parse(guildId));
           },
+          routes: [
+            GoRoute(
+              path: ":channelId",
+              builder: (context, state) {
+                final guildId = state.pathParameters["guildId"]!;
+                final channelId = Snowflake.parse(
+                  state.pathParameters["channelId"]!,
+                );
+                if (guildId == "@me") {
+                  return FriendsScreen(channelId: channelId);
+                }
+                final snowflake = Snowflake.parse(guildId);
+                return GuildChannelScreen(
+                  guildId: snowflake,
+                  channelId: channelId,
+                );
+              },
+            ),
+          ],
         ),
       ],
     ),

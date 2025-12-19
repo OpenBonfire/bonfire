@@ -15,14 +15,12 @@ class AdaptivePanelLayout extends StatelessWidget {
       return OverlappingPanels(left: main, right: right, main: main);
     }
 
-    return Scaffold(
-      body: Row(
-        children: [
-          if (left != null) Flexible(child: left!),
-          if (main != null) Flexible(child: main!),
-          if (right != null) Flexible(child: right!),
-        ],
-      ),
+    return Row(
+      children: [
+        if (left != null) Flexible(child: left!),
+        if (main != null) Flexible(child: main!),
+        if (right != null) Flexible(child: right!),
+      ],
     );
   }
 }

@@ -4,6 +4,7 @@ import 'package:bonfire/features/authentication/components/platform_login.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hive_ce/hive.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
@@ -48,6 +49,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
         return;
       }
       await ref.read(clientControllerProvider.notifier).loginWithToken(token);
+      context.go("/channels/@me");
     } else {
       setState(() {
         authMissing = true;
