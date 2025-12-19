@@ -11,6 +11,7 @@ TextTheme getBaseTextTheme() {
     labelLarge: GoogleFonts.inter(fontWeight: .w700, fontSize: 14.5),
     labelMedium: GoogleFonts.inter(fontWeight: .w500, fontSize: 13),
     labelSmall: GoogleFonts.inter(fontWeight: .w400, fontSize: 12),
+    headlineLarge: GoogleFonts.inter(fontWeight: .w600, fontSize: 48),
     headlineMedium: GoogleFonts.inter(fontWeight: .w600, fontSize: 24),
     headlineSmall: GoogleFonts.inter(fontWeight: .w500, fontSize: 16),
     bodyLarge: GoogleFonts.inter(fontWeight: .w600, fontSize: 14.5),
