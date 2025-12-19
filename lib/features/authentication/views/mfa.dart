@@ -1,5 +1,4 @@
 import 'package:bonfire/features/authentication/repositories/auth.dart';
-import 'package:bonfire/features/authentication/models/auth.dart';
 import 'package:bonfire/shared/components/confirm_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -114,7 +113,7 @@ class _MFAPageState extends ConsumerState<MFAPage> {
           ),
           Padding(
             padding: const EdgeInsets.all(16),
-            child: ConfirmButton(text: "Sign In", onPressed: submitMFA),
+            child: BonfireButton(onPressed: submitMFA, child: Text("Sign In")),
           ),
         ],
       ),

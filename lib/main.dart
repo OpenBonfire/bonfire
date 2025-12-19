@@ -103,7 +103,7 @@ class _MainWindowState extends ConsumerState<MainWindow> {
     );
 
     return MaterialApp.router(
-      themeMode: ThemeMode.system,
+      themeMode: ThemeMode.dark,
       title: 'EpicHire',
       theme: ThemeData(
         colorScheme: lightColorScheme,

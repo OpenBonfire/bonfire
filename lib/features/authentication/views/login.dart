@@ -5,7 +5,6 @@ import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_ce/hive.dart';
-import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
@@ -28,17 +27,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   }
 
   void _checkAuthToken() async {
-    var auth = await Hive.openBox('auth');
-    var token = auth.get('token');
+    final auth = await Hive.openBox('auth');
+    final token = auth.get('token');
 
     if (token != null) {
-      // var client = ref.watch(clientControllerProvider);
       if (client is AuthUser) {
         return;
       }
-      final newClient = await ref
-          .read(clientControllerProvider.notifier)
-          .loginWithToken(token);
+      await ref.read(clientControllerProvider.notifier).loginWithToken(token);
     } else {
       setState(() {
         authMissing = true;
@@ -48,24 +44,16 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     if (authMissing == null) {
       return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text(
-              "Loading Bonfire...",
-              style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                color: Theme.of(context).textTheme.bodyMedium!.color!,
-              ),
-            ),
-            const SizedBox(height: 30),
-            LoadingAnimationWidget.fourRotatingDots(
-              color: Theme.of(context).textTheme.bodyMedium!.color!,
-              size: 50,
-            ),
-          ],
+        child: Container(
+          decoration: BoxDecoration(
+            color: theme.colorScheme.surfaceContainerLow,
+            borderRadius: .circular(36),
+          ),
+          width: 500,
+          height: 400,
         ),
       );
     }
