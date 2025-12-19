@@ -91,6 +91,7 @@ dependencies:
   cached_network_image: ^3.4.1
   webview_flutter: ^4.10.0
   dart_mappable: ^4.6.1
+  go_transitions: ^0.8.3
 
 dependency_overrides:
   firebridge:

@@ -7,7 +7,6 @@ import 'dart:math';
 import 'package:bonfire/features/authentication/repositories/auth.dart';
 import 'package:bonfire/features/authentication/qr/key_pair.dart';
 import 'package:bonfire/features/authentication/qr/ws_impl.dart';
-import 'package:bonfire/theme/theme.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -349,7 +348,6 @@ class AuthRemote extends StatefulWidget {
 class _AuthRemoteState extends State<AuthRemote> {
   @override
   Widget build(BuildContext context) {
-    final bonfireTheme = BonfireThemeExtension.of(context);
     final theme = Theme.of(context);
 
     Widget w;
@@ -368,13 +366,13 @@ class _AuthRemoteState extends State<AuthRemote> {
                 padding: const EdgeInsets.all(16.0),
                 dataModuleStyle: QrDataModuleStyle(
                   dataModuleShape: QrDataModuleShape.circle,
-                  color: bonfireTheme.dirtyWhite,
+                  color: theme.colorScheme.onSurface,
                 ),
                 eyeStyle: QrEyeStyle(
                   eyeShape: QrEyeShape.circle,
-                  color: bonfireTheme.dirtyWhite,
+                  color: theme.colorScheme.onSurface,
                 ),
-                backgroundColor: bonfireTheme.foreground,
+                backgroundColor: theme.colorScheme.surfaceContainer,
                 data: widget.nfingerprint!,
                 version: QrVersions.auto,
               ),
@@ -399,10 +397,7 @@ class _AuthRemoteState extends State<AuthRemote> {
                 fit: BoxFit.cover,
               ),
               borderRadius: const BorderRadius.all(Radius.circular(50.0)),
-              border: Border.all(
-                color: BonfireThemeExtension.of(context).background,
-                width: 6.0,
-              ),
+              border: Border.all(color: theme.colorScheme.surface, width: 6.0),
             ),
           ),
           Text(

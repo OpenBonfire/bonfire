@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:bonfire/features/authentication/repositories/auth.dart';
-import 'package:bonfire/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -18,6 +17,7 @@ class _TokenLoginWidgetState extends ConsumerState<TokenLoginWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return ConstrainedBox(
       constraints: BoxConstraints(
         maxWidth: min(MediaQuery.sizeOf(context).width - 20, 400),
@@ -25,7 +25,7 @@ class _TokenLoginWidgetState extends ConsumerState<TokenLoginWidget> {
       child: Container(
         padding: const EdgeInsets.all(32),
         decoration: BoxDecoration(
-          color: BonfireThemeExtension.of(context).foreground,
+          color: theme.colorScheme.surfaceContainer,
           borderRadius: BorderRadius.circular(24),
           boxShadow: [
             BoxShadow(
@@ -44,24 +44,20 @@ class _TokenLoginWidgetState extends ConsumerState<TokenLoginWidget> {
               style: GoogleFonts.publicSans(
                 fontSize: 28,
                 fontWeight: FontWeight.bold,
-                color: BonfireThemeExtension.of(context).dirtyWhite,
+                color: theme.colorScheme.surfaceContainerHighest,
               ),
             ),
             const SizedBox(height: 16),
             Text(
               "Due to recent restrictions put in place by Discord, I currently have disabled credential-based login. You must log in via QR code, or input your token.",
-              style: GoogleFonts.publicSans(
-                fontSize: 16,
-                color: BonfireThemeExtension.of(context).gray,
-              ),
               softWrap: true,
             ),
             const SizedBox(height: 24),
             TextSelectionTheme(
               data: TextSelectionThemeData(
-                cursorColor: BonfireThemeExtension.of(context).primary,
-                selectionColor: BonfireThemeExtension.of(context).primary,
-                selectionHandleColor: BonfireThemeExtension.of(context).primary,
+                cursorColor: theme.colorScheme.primary,
+                selectionColor: theme.colorScheme.primary,
+                selectionHandleColor: theme.colorScheme.primary,
               ),
               child: TextField(
                 controller: _tokenController,
@@ -71,22 +67,22 @@ class _TokenLoginWidgetState extends ConsumerState<TokenLoginWidget> {
                   hintText: 'Enter your token here',
                   hintStyle: GoogleFonts.publicSans(
                     fontSize: 16,
-                    color: BonfireThemeExtension.of(context).gray,
+                    color: theme.colorScheme.surfaceContainerHighest,
                   ),
                   filled: true,
-                  fillColor: BonfireThemeExtension.of(context).background,
+                  fillColor: theme.colorScheme.surface,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                     borderSide: BorderSide.none,
                   ),
                   prefixIcon: Icon(
                     Icons.vpn_key,
-                    color: BonfireThemeExtension.of(context).gray,
+                    color: theme.colorScheme.surfaceContainerHighest,
                   ),
                 ),
                 style: GoogleFonts.publicSans(
                   fontSize: 16,
-                  color: BonfireThemeExtension.of(context).dirtyWhite,
+                  color: theme.colorScheme.surfaceContainerHighest,
                 ),
               ),
             ),
@@ -101,7 +97,7 @@ class _TokenLoginWidgetState extends ConsumerState<TokenLoginWidget> {
                 }
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: BonfireThemeExtension.of(context).primary,
+                backgroundColor: theme.colorScheme.primary,
                 foregroundColor: Colors.white,
                 padding: const EdgeInsets.symmetric(vertical: 16),
                 shape: RoundedRectangleBorder(

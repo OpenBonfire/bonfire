@@ -1,11 +1,9 @@
 import 'package:bonfire/features/authentication/repositories/auth.dart';
 import 'package:bonfire/features/authentication/repositories/discord_auth.dart';
 import 'package:bonfire/features/authentication/components/platform_login.dart';
-import 'package:bonfire/theme/theme.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:hive_ce/hive.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
@@ -51,7 +49,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     if (authMissing == null) {
-      // TODO: Make sick bonfire loading screen
       return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

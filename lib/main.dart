@@ -2,17 +2,17 @@ import 'package:bonfire/features/authentication/utils/hive.dart';
 import 'package:bonfire/features/notifications/controllers/firebase.dart';
 import 'package:bonfire/features/notifications/controllers/notification.dart';
 import 'package:bonfire/router/controller.dart';
-import 'package:bonfire/theme/color_theme.dart';
-import 'package:bonfire/theme/theme.dart';
+import 'package:bonfire/theme/themes/base.dart';
+import 'package:bonfire/theme/themes/dark.dart';
+import 'package:bonfire/theme/themes/light.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebridge/firebridge.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_keyboard_size/flutter_keyboard_size.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:go_transitions/go_transitions.dart';
 import 'package:universal_platform/universal_platform.dart';
 import 'package:video_player_media_kit/video_player_media_kit.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -91,126 +91,34 @@ class _MainWindowState extends ConsumerState<MainWindow> {
       ),
     );
 
-    // final theme = ref.watch(themeDataProvider).copyWith(
-    //       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-    //     );
-
-    String family = GoogleFonts.publicSans().fontFamily!;
-
-    final textTheme = TextTheme(
-      displayLarge: TextStyle(
-        fontSize: 36,
-        fontFamily: family,
-        fontWeight: FontWeight.w500,
-      ),
-      displayMedium: TextStyle(
-        fontSize: 20,
-        fontFamily: family,
-        fontWeight: FontWeight.w500,
-      ),
-      displaySmall: TextStyle(
-        fontSize: 15,
-        fontFamily: family,
-        fontWeight: FontWeight.w500,
-      ),
-      titleLarge: TextStyle(
-        fontSize: 36,
-        fontFamily: family,
-        fontWeight: FontWeight.w500,
-        color: Colors.white,
-      ),
-      titleMedium: TextStyle(
-        fontSize: 20,
-        fontFamily: family,
-        fontWeight: FontWeight.w500,
-        color: Colors.white,
-      ),
-      titleSmall: TextStyle(
-        fontSize: 15,
-        fontFamily: family,
-        fontWeight: FontWeight.w500,
-        color: Colors.white,
-      ),
-      headlineLarge: TextStyle(
-        fontSize: 18,
-        fontWeight: FontWeight.w500,
-        fontFamily: family,
-      ),
-      labelLarge: TextStyle(
-        fontSize: 15,
-        fontWeight: FontWeight.w500,
-        fontFamily: family,
-        color: const Color(0xFFBDBDBD),
-      ),
-      labelMedium: TextStyle(
-        fontSize: 12,
-        fontFamily: family,
-        fontWeight: FontWeight.w500,
-        color: const Color(0xFFBDBDBD),
-      ),
-      bodyLarge: TextStyle(
-        fontSize: 15,
-        fontFamily: family,
-        color: const Color.fromARGB(255, 255, 255, 255),
-        fontWeight: FontWeight.w500,
-      ),
-      bodyMedium: TextStyle(
-        fontSize: 14,
-        fontFamily: family,
-        color: const Color(0xFFBDBDBD),
-        fontWeight: FontWeight.w500,
-      ),
+    final pageTransition = const PageTransitionsTheme(
+      builders: {
+        // TargetPlatform.android: GoTransitions.material,
+        TargetPlatform.fuchsia: GoTransitions.none,
+        TargetPlatform.iOS: GoTransitions.none,
+        TargetPlatform.linux: GoTransitions.none,
+        TargetPlatform.macOS: GoTransitions.none,
+        TargetPlatform.windows: GoTransitions.none,
+      },
     );
 
-    final theme = ThemeData.dark().copyWith(
-      textTheme: textTheme,
-      extensions: [
-        UniversalPlatform.isMobile
-            ? const BonfireThemeExtension(
-                foreground: AppColorsAmoled.foreground,
-                background: AppColorsAmoled.background,
-                dirtyWhite: AppColorsAmoled.dirtyWhite,
-                gray: AppColorsAmoled.gray,
-                darkGray: AppColorsAmoled.darkGray,
-                primary: AppColorsAmoled.primary,
-                red: AppColorsAmoled.red,
-                green: AppColorsAmoled.green,
-                yellow: AppColorsAmoled.yellow,
-              )
-            : const BonfireThemeExtension(
-                foreground: AppColorsDark.foreground,
-                background: AppColorsDark.background,
-                dirtyWhite: AppColorsDark.dirtyWhite,
-                gray: AppColorsDark.gray,
-                darkGray: AppColorsDark.darkGray,
-                primary: AppColorsDark.primary,
-                red: AppColorsDark.red,
-                green: AppColorsDark.green,
-                yellow: AppColorsDark.yellow,
-              ),
-      ],
-    );
-
-    return Scaffold(
-      backgroundColor: Colors.transparent,
-      body: Stack(
-        children: [
-          Column(
-            children: [
-              Flexible(
-                child: KeyboardSizeProvider(
-                  child: MaterialApp.router(
-                    title: 'Bonfire',
-                    theme: theme,
-                    darkTheme: theme,
-                    routerConfig: routerController,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ],
+    return MaterialApp.router(
+      themeMode: ThemeMode.system,
+      title: 'EpicHire',
+      theme: ThemeData(
+        colorScheme: lightColorScheme,
+        textTheme: getBaseTextTheme(),
+        pageTransitionsTheme: pageTransition,
       ),
+      darkTheme: ThemeData(
+        colorScheme: darkColorScheme,
+        textTheme: getBaseTextTheme(),
+        pageTransitionsTheme: pageTransition,
+      ),
+      routerConfig: routerController,
+      builder: (context, child) {
+        return Container(child: child);
+      },
     );
   }
 }

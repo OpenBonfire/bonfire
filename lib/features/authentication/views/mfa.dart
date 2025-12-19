@@ -1,8 +1,6 @@
 import 'package:bonfire/features/authentication/repositories/auth.dart';
 import 'package:bonfire/features/authentication/models/auth.dart';
 import 'package:bonfire/shared/components/confirm_button.dart';
-import 'package:bonfire/theme/text_theme.dart';
-import 'package:bonfire/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -24,6 +22,7 @@ class _MFAPageState extends ConsumerState<MFAPage> {
   }
 
   Widget mfaBox() {
+    final theme = Theme.of(context);
     return SizedBox(
       width: 400,
       child: Column(
@@ -40,7 +39,7 @@ class _MFAPageState extends ConsumerState<MFAPage> {
           Container(
             height: 60,
             decoration: BoxDecoration(
-              color: BonfireThemeExtension.of(context).foreground,
+              color: theme.colorScheme.surfaceContainerHighest,
               borderRadius: BorderRadius.circular(12),
             ),
             child: Center(

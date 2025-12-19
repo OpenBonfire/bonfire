@@ -1,5 +1,4 @@
 import 'package:bonfire/features/authentication/repositories/auth.dart';
-import 'package:bonfire/theme/text_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';

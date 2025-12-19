@@ -1,24 +1,23 @@
-import 'package:bonfire/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:markdown_viewer/markdown_viewer.dart';
 
 MarkdownStyle getMarkdownStyleSheet(BuildContext context) {
-  const textColor = Color.fromARGB(255, 235, 235, 235);
+  final theme = Theme.of(context);
+  final textColor = theme.colorScheme.onSurface;
   return MarkdownStyle(
     paragraph: GoogleFonts.publicSans(
       fontSize: 14.5,
       fontWeight: FontWeight.w400,
       color: textColor,
     ),
-    codeBlock: GoogleFonts.jetBrainsMono(
-      fontSize: 14,
-    ),
+    codeBlock: GoogleFonts.jetBrainsMono(fontSize: 14),
     codeblockDecoration: BoxDecoration(
-        color: BonfireThemeExtension.of(context).foreground,
-        borderRadius: BorderRadius.circular(8)),
+      color: theme.colorScheme.surfaceContainer,
+      borderRadius: BorderRadius.circular(8),
+    ),
     codeSpan: GoogleFonts.jetBrainsMono(
-      backgroundColor: BonfireThemeExtension.of(context).foreground,
+      color: theme.colorScheme.surfaceContainer,
       fontSize: 14,
     ),
     list: GoogleFonts.publicSans(
