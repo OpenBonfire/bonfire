@@ -13,7 +13,7 @@ Future<void> setupHive() async {
     Hive.init(dataDir.path);
   }
   await Hive.openBox("auth");
-  await Hive.openBox("last-location");
-  await Hive.openBox("last-guild-channels");
-  await Hive.openBox("added-accounts");
+  // await Hive.openBox("last-location");
+  // await Hive.openBox("last-guild-channels");
+  // await Hive.openBox("added-accounts");
 }

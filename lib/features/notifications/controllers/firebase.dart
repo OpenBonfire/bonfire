@@ -6,7 +6,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:hive_ce/hive.dart';
 
 const firebaseOptions = FirebaseOptions(
@@ -31,7 +30,7 @@ void showNotification(RemoteMessage message) async {
   final client = await Firebridge.connectRest(token);
   // final client = await Nyxx.connectGatewayWithOptions(
   //     GatewayApiOptions(
-  //       token: token,
+  //       token: token,s
   //       intents: GatewayIntents.all,
   //       compression: GatewayCompression.none,
   //     ),
@@ -41,8 +40,9 @@ void showNotification(RemoteMessage message) async {
   //       ],
   //     ));
 
-  // final notificationData =
-  //     client.gateway.parseNotificationCreated(message.data);
+  // final notificationData = client.gateway.parseNotificationCreated(
+  //   message.data,
+  // );
 
   // debugPrint("parsed!");
 

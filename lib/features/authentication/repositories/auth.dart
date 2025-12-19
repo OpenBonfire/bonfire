@@ -1,10 +1,8 @@
 import 'dart:convert';
 
 import 'package:bonfire/features/authentication/controllers/ready.dart';
-import 'package:bonfire/features/authentication/models/added_account.dart';
 import 'package:bonfire/features/authentication/utils/headers.dart';
 import 'package:bonfire/features/authentication/models/auth.dart';
-import 'package:bonfire/features/events/utils/event_handler.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:firebridge/firebridge.dart';
@@ -91,7 +89,7 @@ class ClientController extends _$ClientController {
     state = client;
 
     // if (!isHandlingEvents) {
-    handleEvents(ref, client);
+    // handleEvents(ref, client);
     //   isHandlingEvents = true;
     // }
 

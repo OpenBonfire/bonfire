@@ -41,7 +41,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       final newClient = await ref
           .read(clientControllerProvider.notifier)
           .loginWithToken(token);
-      _navigateToLastLocation();
     } else {
       setState(() {
         authMissing = true;
@@ -75,12 +74,5 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     }
 
     return const Center(child: PlatformLoginWidget());
-  }
-
-  void _navigateToLastLocation() {
-    var lastLocation = Hive.box("last-location");
-    String? guildId = lastLocation.get("guildId");
-    String? channelId = lastLocation.get("channelId");
-    context.go('/channels/${guildId ?? '0'}/${channelId ?? '0'}');
   }
 }

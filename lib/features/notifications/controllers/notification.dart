@@ -16,13 +16,12 @@ Future<void> initializeNotifications() async {
       AndroidInitializationSettings('app_icon');
 
   await flutterLocalNotificationsPlugin.initialize(
-    const InitializationSettings(
-      android: initializationSettingsAndroid,
-    ),
+    const InitializationSettings(android: initializationSettingsAndroid),
   );
 
-  final androidPlugin =
-      flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<
-          AndroidFlutterLocalNotificationsPlugin>();
+  final androidPlugin = flutterLocalNotificationsPlugin
+      .resolvePlatformSpecificImplementation<
+        AndroidFlutterLocalNotificationsPlugin
+      >();
   await androidPlugin?.createNotificationChannel(channel);
 }
