@@ -41,7 +41,7 @@ final class EntityStoreProvider
   }
 }
 
-String _$entityStoreHash() => r'6ad2c8c3c1749b23db3ab5903144601192b24819';
+String _$entityStoreHash() => r'8226536adb555c56f1b7515e60b010d56d65255f';
 
 abstract class _$EntityStore extends $Notifier<EntityState> {
   EntityState build();
@@ -61,6 +61,48 @@ abstract class _$EntityStore extends $Notifier<EntityState> {
     element.handleValue(ref, created);
   }
 }
+
+@ProviderFor(guildIds)
+const guildIdsProvider = GuildIdsProvider._();
+
+final class GuildIdsProvider
+    extends
+        $FunctionalProvider<List<Snowflake>, List<Snowflake>, List<Snowflake>>
+    with $Provider<List<Snowflake>> {
+  const GuildIdsProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'guildIdsProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$guildIdsHash();
+
+  @$internal
+  @override
+  $ProviderElement<List<Snowflake>> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  List<Snowflake> create(Ref ref) {
+    return guildIds(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(List<Snowflake> value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<List<Snowflake>>(value),
+    );
+  }
+}
+
+String _$guildIdsHash() => r'428dd578af2952ea095886586418f4cd8ff9a644';
 
 @ProviderFor(guild)
 const guildProvider = GuildFamily._();

@@ -30,12 +30,25 @@ class EntityStateMapper extends ClassMapperBase<EntityState> {
     opt: true,
     def: const {},
   );
+  static List<Snowflake> _$guildIds(EntityState v) => v.guildIds;
+  static const Field<EntityState, List<Snowflake>> _f$guildIds = Field(
+    'guildIds',
+    _$guildIds,
+    opt: true,
+    def: const [],
+  );
 
   @override
-  final MappableFields<EntityState> fields = const {#guilds: _f$guilds};
+  final MappableFields<EntityState> fields = const {
+    #guilds: _f$guilds,
+    #guildIds: _f$guildIds,
+  };
 
   static EntityState _instantiate(DecodingData data) {
-    return EntityState(guilds: data.dec(_f$guilds));
+    return EntityState(
+      guilds: data.dec(_f$guilds),
+      guildIds: data.dec(_f$guildIds),
+    );
   }
 
   @override
@@ -99,7 +112,9 @@ extension EntityStateValueCopy<$R, $Out>
 abstract class EntityStateCopyWith<$R, $In extends EntityState, $Out>
     implements ClassCopyWith<$R, $In, $Out> {
   MapCopyWith<$R, Snowflake, Guild, GuildCopyWith<$R, Guild, Guild>> get guilds;
-  $R call({Map<Snowflake, Guild>? guilds});
+  ListCopyWith<$R, Snowflake, SnowflakeCopyWith<$R, Snowflake, Snowflake>>
+  get guildIds;
+  $R call({Map<Snowflake, Guild>? guilds, List<Snowflake>? guildIds});
   EntityStateCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(Then<$Out2, $R2> t);
 }
 
@@ -119,11 +134,24 @@ class _EntityStateCopyWithImpl<$R, $Out>
     (v) => call(guilds: v),
   );
   @override
-  $R call({Map<Snowflake, Guild>? guilds}) =>
-      $apply(FieldCopyWithData({if (guilds != null) #guilds: guilds}));
+  ListCopyWith<$R, Snowflake, SnowflakeCopyWith<$R, Snowflake, Snowflake>>
+  get guildIds => ListCopyWith(
+    $value.guildIds,
+    (v, t) => v.copyWith.$chain(t),
+    (v) => call(guildIds: v),
+  );
   @override
-  EntityState $make(CopyWithData data) =>
-      EntityState(guilds: data.get(#guilds, or: $value.guilds));
+  $R call({Map<Snowflake, Guild>? guilds, List<Snowflake>? guildIds}) => $apply(
+    FieldCopyWithData({
+      if (guilds != null) #guilds: guilds,
+      if (guildIds != null) #guildIds: guildIds,
+    }),
+  );
+  @override
+  EntityState $make(CopyWithData data) => EntityState(
+    guilds: data.get(#guilds, or: $value.guilds),
+    guildIds: data.get(#guildIds, or: $value.guildIds),
+  );
 
   @override
   EntityStateCopyWith<$R2, EntityState, $Out2> $chain<$R2, $Out2>(

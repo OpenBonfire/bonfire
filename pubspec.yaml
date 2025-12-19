@@ -94,7 +94,7 @@ dependencies:
 
 
 dependency_overrides:
-  analyzer: ^8.0.0
+  analyzer: ^9.0.0
   meta: ^1.16.0
   
   firebridge:
