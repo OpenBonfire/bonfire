@@ -46,40 +46,35 @@ There's a few projects that OpenBonfire uses and maintains, which can be found i
 
 ## Progress
 
-| Feature Category       | Sub-feature                | Status      | Notes                                                                 |
-|------------------------|----------------------------|-------------|-----------------------------------------------------------------------|
-| **Login**              | WebView-based login        | 🟩 Complete |                                                                       |
-|                        | Web Login                  | 🟨 Partial  | Requires manual token input                                          |
-|                        | WearOS login support       | 🟥 Missing  | Requires compiling with hard-coded token                              |
-| **Messaging**          | Sending Messages           | 🟩 Complete |                                                                       |
-|                        | Cache Messages             | 🟩 Complete |                                                                       |
-|                        | Message View               | 🟨 Partial  | Missing bidirectional requests                                       |
-|                        | Context Actions            | 🟨 Partial  | Edit, delete, etc. partially implemented                             |
-|                        | Event Actions              | 🟨 Partial  | Edit, delete, etc. partially implemented                             |
-|                        | Embeds                     | 🟩 Complete |                                                                       |
-|                        | → YouTube embeds           | 🟩 Complete |                                                                       |
-|                        | → Tenor videos             | 🟩 Complete |                                                                       |
-|                        | → Attachments              | 🟩 Complete |                                                                       |
-|                        | →→ Image Attachments       | 🟩 Complete |                                                                       |
-|                        | →→ Video Attachments       | 🟩 Complete |                                                                       |
-|                        | →→ Audio Attachments       | 🟩 Complete | With mobile playback support                                         |
-|                        | Notifications              | 🟩 Complete |                                                                       |
-|                        | Unreads                    | 🟨 Partial  | Somewhat buggy                                                       |
-|                        | Threads                    | 🟥 Missing  |                                                                       |
-|                        | Member List                | 🟨 Partial  |                                                                       |
-|                        | → Base View                | 🟩 Complete |                                                                       |
-|                        | → Networking               | 🟩 Complete | Handled in firebridge                                                |
-|                        | → Member Search            | 🟥 Missing  |                                                                       |
-| **Friends**            |                            | 🟨 Partial  |                                                                       |
-| **Guilds**             | Guild List                 | 🟩 Complete |                                                                       |
-|                        | Guild Networking           | 🟩 Complete |                                                                       |
-|                        | Guild Organization         | 🟩 Complete |                                                                       |
-|                        | → Guild Order              | 🟩 Complete |                                                                       |
-|                        | → Guild Names              | 🟩 Complete |                                                                       |
-|                        | → Guild Folders            | 🟩 Complete |                                                                       |
-| **Voice/Video**        | Voice Chat                 | 🟥 Missing  | Planned but difficult to implement                                   |
-|                        | Camera Chat                | 🟥 Missing  | Planned but difficult to implement                                   |
-|                        | Screen Sharing             | 🟥 Missing  | Planned but difficult to implement                                   |
+**Login**
+- 🟩 WebView-based login
+- 🟨 Web Login (requires manual token input)
+- 🟥 WearOS login support (requires compiling with hard-coded token)
+
+**Messaging**
+- 🟩 Sending Messages
+- 🟩 Cache Messages
+- 🟨 Message View (missing bidirectional requests)
+- 🟨 Context Actions (edit, delete, etc. partially implemented)
+- 🟨 Event Actions (edit, delete, etc. partially implemented)
+- 🟩 Embeds (YouTube, Tenor videos, attachments all supported)
+  - 🟩 Image/Video/Audio Attachments (with mobile playback support)
+- 🟩 Notifications
+- 🟨 Unreads (somewhat buggy)
+- 🟥 Threads
+- 🟨 Member List (base view & networking complete, search missing)
+
+**Friends**
+- 🟨 Partial implementation
+
+**Guilds**
+- 🟩 Guild List, Networking, Organization
+- 🟩 Guild Order, Names, Folders
+
+**Voice/Video**
+- 🟥 Voice Chat (planned but difficult to implement)
+- 🟥 Camera Chat (planned but difficult to implement)
+- 🟥 Screen Sharing (planned but difficult to implement)
 
 *Not exhaustive - there's a lot of stuff to do*
 ## Building
