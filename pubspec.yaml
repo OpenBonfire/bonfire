@@ -85,7 +85,9 @@ dependencies:
   flutter_local_notifications: ^19.5.0
   flutter_webrtc: ^1.2.0
   sdp_transform: ^0.3.2
-  webcrypto: ^0.5.8
+  webcrypto:
+    git:
+      url: https://github.com/OpenBonfire/webcrypto.dart
   web_socket_channel: ^3.0.2
   qr_flutter: ^4.1.0
   cached_network_image: ^3.4.1
