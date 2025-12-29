@@ -9,7 +9,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:162066849712:android:db38e83be74de1b6",
         "android_client_info": {
-          "package_name": "com.example.bonfire"
+          "package_name": "org.openbonfire.bonfire"
         }
       },
       "oauth_client": [],
