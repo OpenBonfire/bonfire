@@ -1,6 +1,9 @@
 name: Flutter Build with Artifacts
 
-on: [push, pull_request]
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
 
 jobs:
   build-web:
@@ -54,7 +57,9 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: bonfire-android
-          path: bonfire/build/app/outputs/flutter-apk/app-release.apk
+          path: build/app/outputs/flutter-apk/*.apk
+
+
 
 #      - name: Build Android App Bundle
 #        run: flutter build appbundle --no-tree-shake-icons -v
@@ -101,7 +106,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: bonfire-windows
-          path: bonfire/build/windows/x64/runner/Release/
+          path: build/windows/x64/runner/Release/
 
   build-linux:
     runs-on: ubuntu-latest
@@ -166,7 +171,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: bonfire-linux
-          path: bonfire/build/linux/x64/release/bundle/
+          path: build/linux/x64/release/bundle/
 #  build-ios:
 #      runs-on: macos-latest
 #      steps:
