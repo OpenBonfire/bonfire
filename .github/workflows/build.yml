@@ -54,7 +54,9 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: bonfire-android
-          path: bonfire/build/app/outputs/flutter-apk/app-release.apk
+          path: build/app/outputs/flutter-apk/*.apk
+
+
 
 #      - name: Build Android App Bundle
 #        run: flutter build appbundle --no-tree-shake-icons -v
