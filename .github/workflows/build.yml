@@ -106,7 +106,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: bonfire-windows
-          path: bonfire/build/windows/x64/runner/Release/
+          path: build/windows/x64/runner/Release/
 
   build-linux:
     runs-on: ubuntu-latest
@@ -171,7 +171,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: bonfire-linux
-          path: bonfire/build/linux/x64/release/bundle/
+          path: build/linux/x64/release/bundle/
 #  build-ios:
 #      runs-on: macos-latest
 #      steps:
