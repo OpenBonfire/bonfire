@@ -1,4 +1,4 @@
-package com.example.bonfire
+package org.openbonfire.bonfire
 
 import io.flutter.embedding.android.FlutterActivity
 
