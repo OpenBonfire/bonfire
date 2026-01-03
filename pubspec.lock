@@ -1532,6 +1532,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  sliver_expandable:
+    dependency: "direct main"
+    description:
+      name: sliver_expandable
+      sha256: "046d8912ebd072bf9d8e8161e50a4669c520f691fce8bfcbae4ada6982b18ba3"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.2"
   source_gen:
     dependency: transitive
     description:

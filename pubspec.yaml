@@ -92,6 +92,7 @@ dependencies:
   dart_mappable: ^4.6.1
   go_transitions: ^0.8.3
   extended_image: ^10.0.1
+  sliver_expandable: ^1.1.2
 
 
 dependency_overrides:

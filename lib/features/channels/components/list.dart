@@ -12,26 +12,37 @@ class GuildChannelList extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final guild = ref.watch(guildProvider(guildId))!;
-    final channels = ref.watch(guildChannelsProvider(guildId)) ?? [];
+
+    // TODO: Just handle this in the provider that also calculates permissions
+    final channels =
+        (ref.watch(guildChannelsProvider(guildId))?.cast<GuildChannel>() ?? [])
+            .toList();
+
+    channels.sort((a, b) {
+      return a.position - b.position;
+    });
+
+    final categories = channels.whereType<GuildCategory>();
+    final Map<Snowflake, Snowflake> categoryMap = {};
+    for (GuildChannel channel in channels) {
+      if (channel.parentId != null) {
+        categoryMap[channel.id] = channel.parentId!;
+      }
+    }
 
     // print("channels = $channels");
     return CustomScrollView(
       slivers: [
-        SliverList.separated(
-          itemCount: channels.length,
-          itemBuilder: (context, index) {
-            final channel = channels[index] as GuildChannel;
-            return ChannelButton(
-              name: channel.name,
-              icon: Icon(Icons.numbers_rounded),
-              selected: false,
-              onPressed: () {
-                HapticFeedback.lightImpact();
-              },
-            );
-          },
-          separatorBuilder: (context, index) => SizedBox(height: 4),
-        ),
+        // SliverList.separated(
+        //   itemCount: channels.length,
+        //   itemBuilder: (context, index) {
+        //     final channel = channels[index];
+        //     if (channel is GuildCategory) {
+        //       return
+        //     }
+        //   },
+        //   separatorBuilder: (context, index) => SizedBox(height: 4),
+        // ),
       ],
     );
   }
