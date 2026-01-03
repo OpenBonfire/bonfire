@@ -36,7 +36,7 @@ class _SidebarItemState extends State<SidebarItem> {
             builder: (context, constraints) {
               final size = constraints.maxWidth;
               final selectedRadius = size * 0.22;
-              final unselectedRadius = size * 0.5;
+              final unselectedRadius = size * 0.38;
 
               return TweenAnimationBuilder<double>(
                 duration: const Duration(milliseconds: 150),
@@ -50,6 +50,7 @@ class _SidebarItemState extends State<SidebarItem> {
                     child: NoSplashButton(
                       borderRadius: BorderRadius.circular(radius),
                       onPressed: widget.onPressed,
+                      backgroundColor: Colors.transparent,
                       child: SizedBox.expand(child: widget.child),
                     ),
                   );

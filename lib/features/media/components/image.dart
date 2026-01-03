@@ -5,22 +5,19 @@ import 'package:flutter/material.dart';
 class DiscordNetworkImage extends StatelessWidget {
   final String src;
   final BoxFit? fit;
-  const DiscordNetworkImage(this.src, {super.key, this.fit});
+  final BorderRadius? borderRadius;
+  const DiscordNetworkImage(this.src, {super.key, this.fit, this.borderRadius});
 
   @override
   Widget build(BuildContext context) {
-    return Image.network(
-      src,
-      fit: fit,
-      frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
-        if (wasSynchronouslyLoaded) return child;
-        return AnimatedOpacity(
-          opacity: frame == null ? 0 : 1,
-          duration: const Duration(milliseconds: 300),
-          curve: Curves.easeOut,
-          child: child,
-        );
-      },
+    return ClipRRect(
+      borderRadius: borderRadius ?? BorderRadius.zero,
+      child: ExtendedImage.network(
+        src,
+        fit: fit,
+        borderRadius: borderRadius,
+        loadStateChanged: loadStateChange,
+      ),
     );
   }
 

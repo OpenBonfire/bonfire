@@ -1,5 +1,8 @@
+import 'package:bonfire/features/authentication/repositories/auth.dart';
+import 'package:bonfire/features/gateway/store/entity_store.dart';
 import 'package:bonfire/features/guilds/components/sidebar/guild_item.dart';
 import 'package:bonfire/features/guilds/components/sidebar/item.dart';
+import 'package:bonfire/features/media/components/image.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -48,13 +51,18 @@ class _GuildFolderItemState extends ConsumerState<GuildFolderItem>
       return GuildSidebarItem(guildId: widget.folder.guildIds.first);
     }
 
-    final items = widget.folder.guildIds
-        .map((e) => GuildSidebarItem(guildId: e))
-        .toList();
+    final items = _expanded
+        ? widget.folder.guildIds
+              .map((e) => GuildSidebarItem(guildId: e))
+              .toList()
+        : widget.folder.guildIds
+              .take(4)
+              .map((e) => _GuildIcon(guildId: e))
+              .toList();
     final color = widget.folder.color != null
         ? Color(
             int.parse(widget.folder.color.toString(), radix: 10),
-          ).withValues(alpha: 0.4)
+          ).withValues(alpha: 0.3)
         : theme.colorScheme.primary.withValues(alpha: 0.4);
 
     return Stack(
@@ -64,7 +72,12 @@ class _GuildFolderItemState extends ConsumerState<GuildFolderItem>
           bottom: 0,
           left: 10,
           right: 0,
-          child: Container(decoration: BoxDecoration(color: color)),
+          child: Container(
+            decoration: BoxDecoration(
+              color: color,
+              borderRadius: .circular(16),
+            ),
+          ),
         ),
         AnimatedBuilder(
           animation: _animation,
@@ -94,7 +107,10 @@ class _GuildFolderItemState extends ConsumerState<GuildFolderItem>
                           child: AbsorbPointer(
                             child: GridView.count(
                               shrinkWrap: true,
+                              padding: .all(5),
                               physics: const NeverScrollableScrollPhysics(),
+                              mainAxisSpacing: 2,
+                              crossAxisSpacing: 2,
                               crossAxisCount: 2,
                               children: items.take(4).toList(),
                             ),
@@ -113,7 +129,7 @@ class _GuildFolderItemState extends ConsumerState<GuildFolderItem>
                 SizeTransition(
                   sizeFactor: _animation,
                   axisAlignment: -1.0,
-                  child: Column(children: items),
+                  child: Column(spacing: 4, children: items),
                 ),
               ],
             );
@@ -121,5 +137,22 @@ class _GuildFolderItemState extends ConsumerState<GuildFolderItem>
         ),
       ],
     );
+  }
+}
+
+class _GuildIcon extends ConsumerWidget {
+  final Snowflake guildId;
+  const _GuildIcon({super.key, required this.guildId});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final guild = ref.watch(guildProvider(guildId))!;
+    final client = ref.watch(clientControllerProvider)!;
+    return guild.icon != null
+        ? DiscordNetworkImage(
+            guild.icon!.getUrl(client).toString(),
+            borderRadius: .circular(8),
+          )
+        : Text("rah");
   }
 }
