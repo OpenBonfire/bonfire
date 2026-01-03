@@ -1,6 +1,5 @@
 import 'package:bonfire/features/guilds/components/sidebar/guild_item.dart';
 import 'package:bonfire/features/guilds/components/sidebar/item.dart';
-import 'package:bonfire/shared/components/buttons/no_splash.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -19,6 +18,7 @@ class _GuildFolderItemState extends ConsumerState<GuildFolderItem>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _animation;
+  bool _expanded = false;
 
   @override
   void initState() {
@@ -41,22 +41,13 @@ class _GuildFolderItemState extends ConsumerState<GuildFolderItem>
     });
   }
 
-  bool _expanded = false;
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    // return SidebarItem(
-    //   selected: false,
-    //   title: "Folder",
-    //   child: Text(widget.folder.guildIds.toString()),
-    // );
     if (widget.folder.id == null) {
       return GuildSidebarItem(guildId: widget.folder.guildIds.first);
     }
-    // final items = widget.folder.guildIds
-    //     .take(_expanded ? widget.folder.guildIds.length : 4)
-    //     .map((e) => GuildSidebarItem(guildId: e))
-    //     .toList();
+
     final items = widget.folder.guildIds
         .map((e) => GuildSidebarItem(guildId: e))
         .toList();
@@ -66,55 +57,69 @@ class _GuildFolderItemState extends ConsumerState<GuildFolderItem>
           ).withValues(alpha: 0.4)
         : theme.colorScheme.primary.withValues(alpha: 0.4);
 
-    return AnimatedBuilder(
-      animation: _animation,
-      builder: (context, child) {
-        return Column(
-          children: [
-            if (_expanded) ...[
-              NoSplashButton(
-                child: Padding(
-                  padding: const EdgeInsets.only(
-                    left: 12.0,
-                    top: 12,
-                    bottom: 12,
-                  ),
-                  child: AspectRatio(
-                    aspectRatio: 1,
-                    child: SizedBox.expand(
-                      child: Center(child: Icon(Icons.folder_rounded)),
+    return Stack(
+      children: [
+        Positioned(
+          top: 0,
+          bottom: 0,
+          left: 10,
+          right: 0,
+          child: Container(decoration: BoxDecoration(color: color)),
+        ),
+        AnimatedBuilder(
+          animation: _animation,
+          builder: (context, child) {
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SidebarItem(
+                  title: "Folder",
+                  selected: false,
+                  onPressed: () {
+                    HapticFeedback.lightImpact();
+                    _toggleExpand();
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Color.lerp(
+                        color,
+                        Colors.transparent,
+                        _animation.value,
+                      ),
+                    ),
+                    child: Stack(
+                      children: [
+                        Opacity(
+                          opacity: (1 - _animation.value).clamp(0.0, 1.0),
+                          child: AbsorbPointer(
+                            child: GridView.count(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              crossAxisCount: 2,
+                              children: items.take(4).toList(),
+                            ),
+                          ),
+                        ),
+                        Opacity(
+                          opacity: _animation.value.clamp(0.0, 1.0),
+                          child: const Center(
+                            child: Icon(Icons.folder_rounded),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
-                onPressed: () {
-                  HapticFeedback.lightImpact();
-                  _toggleExpand();
-                },
-              ),
-              ...items,
-            ] else
-              SidebarItem(
-                title: "Folder",
-                selected: false,
-                onPressed: () {
-                  HapticFeedback.lightImpact();
-                  _toggleExpand();
-                },
-                child: Container(
-                  decoration: BoxDecoration(color: color),
-                  child: AbsorbPointer(
-                    child: GridView.count(
-                      shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
-                      crossAxisCount: 2,
-                      children: items.toList(),
-                    ),
-                  ),
+                SizeTransition(
+                  sizeFactor: _animation,
+                  axisAlignment: -1.0,
+                  child: Column(children: items),
                 ),
-              ),
-          ],
-        );
-      },
+              ],
+            );
+          },
+        ),
+      ],
     );
   }
 }
