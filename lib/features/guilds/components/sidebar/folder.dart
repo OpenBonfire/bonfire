@@ -15,13 +15,30 @@ class GuildFolderItem extends ConsumerStatefulWidget {
       _GuildFolderItemState();
 }
 
-class _GuildFolderItemState extends ConsumerState<GuildFolderItem> {
-  //   late AnimationController _controller;
-  // late Animation<double> _expandAnimation;
+class _GuildFolderItemState extends ConsumerState<GuildFolderItem>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _animation;
 
   @override
   void initState() {
     super.initState();
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 200),
+      vsync: this,
+    );
+    _animation = CurvedAnimation(parent: _controller, curve: Curves.easeInOut);
+  }
+
+  void _toggleExpand() {
+    setState(() {
+      _expanded = !_expanded;
+      if (_expanded) {
+        _controller.forward();
+      } else {
+        _controller.reverse();
+      }
+    });
   }
 
   bool _expanded = false;
@@ -49,14 +66,10 @@ class _GuildFolderItemState extends ConsumerState<GuildFolderItem> {
           ).withValues(alpha: 0.4)
         : theme.colorScheme.primary.withValues(alpha: 0.4);
 
-    return AnimatedContainer(
-      duration: Duration(milliseconds: 300),
-      decoration: BoxDecoration(color: color),
-      child: AnimatedSize(
-        duration: Duration(milliseconds: 300),
-        alignment: Alignment.topCenter,
-        curve: Curves.easeInOut,
-        child: Column(
+    return AnimatedBuilder(
+      animation: _animation,
+      builder: (context, child) {
+        return Column(
           children: [
             if (_expanded) ...[
               NoSplashButton(
@@ -75,9 +88,7 @@ class _GuildFolderItemState extends ConsumerState<GuildFolderItem> {
                 ),
                 onPressed: () {
                   HapticFeedback.lightImpact();
-                  setState(() {
-                    _expanded = !_expanded;
-                  });
+                  _toggleExpand();
                 },
               ),
               ...items,
@@ -87,9 +98,7 @@ class _GuildFolderItemState extends ConsumerState<GuildFolderItem> {
                 selected: false,
                 onPressed: () {
                   HapticFeedback.lightImpact();
-                  setState(() {
-                    _expanded = !_expanded;
-                  });
+                  _toggleExpand();
                 },
                 child: Container(
                   decoration: BoxDecoration(color: color),
@@ -104,8 +113,8 @@ class _GuildFolderItemState extends ConsumerState<GuildFolderItem> {
                 ),
               ),
           ],
-        ),
-      ),
+        );
+      },
     );
   }
 }
