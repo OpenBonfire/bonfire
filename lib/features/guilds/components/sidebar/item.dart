@@ -7,12 +7,14 @@ class SidebarItem extends StatefulWidget {
   final bool hasUnreads;
   final String title;
   final VoidCallback? onPressed;
+  final EdgeInsets? padding;
   final Widget? child;
   const SidebarItem({
     super.key,
     required this.selected,
     required this.title,
     this.onPressed,
+    this.padding,
     this.hasUnreads = false,
     this.child,
   });
@@ -30,7 +32,7 @@ class _SidebarItemState extends State<SidebarItem> {
           selected: widget.selected,
           hasUnreads: widget.hasUnreads,
         ),
-        SizedBox(width: 4),
+        SizedBox(width: 6),
         Flexible(
           child: LayoutBuilder(
             builder: (context, constraints) {
@@ -45,13 +47,16 @@ class _SidebarItemState extends State<SidebarItem> {
                 ),
                 curve: Curves.linear,
                 builder: (context, radius, child) {
-                  return AspectRatio(
-                    aspectRatio: 1,
-                    child: NoSplashButton(
-                      borderRadius: BorderRadius.circular(radius),
-                      onPressed: widget.onPressed,
-                      backgroundColor: Colors.transparent,
-                      child: SizedBox.expand(child: widget.child),
+                  return Padding(
+                    padding: widget.padding ?? EdgeInsets.zero,
+                    child: AspectRatio(
+                      aspectRatio: 1,
+                      child: NoSplashButton(
+                        borderRadius: BorderRadius.circular(radius),
+                        onPressed: widget.onPressed,
+                        backgroundColor: Colors.transparent,
+                        child: SizedBox.expand(child: widget.child),
+                      ),
                     ),
                   );
                 },

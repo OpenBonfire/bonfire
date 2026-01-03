@@ -10,7 +10,8 @@ import 'package:go_router/go_router.dart';
 
 class GuildSidebarItem extends ConsumerWidget {
   final Snowflake guildId;
-  const GuildSidebarItem({super.key, required this.guildId});
+  final EdgeInsets? padding;
+  const GuildSidebarItem({super.key, required this.guildId, this.padding});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -24,6 +25,7 @@ class GuildSidebarItem extends ConsumerWidget {
     ).routerDelegate.currentConfiguration.pathParameters["guildId"];
 
     return SidebarItem(
+      padding: padding,
       selected: rawGuildId == guildId.toString(),
       title: guild.name,
       onPressed: () {
@@ -31,7 +33,10 @@ class GuildSidebarItem extends ConsumerWidget {
         context.go("/channels/$guildId");
       },
       child: guild.icon != null
-          ? DiscordNetworkImage(guild.icon!.getUrl(client).toString())
+          ? DiscordNetworkImage(
+              guild.icon!.getUrl(client).toString(),
+              fit: .cover,
+            )
           : null,
     );
   }

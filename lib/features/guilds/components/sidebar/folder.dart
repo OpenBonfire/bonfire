@@ -53,7 +53,12 @@ class _GuildFolderItemState extends ConsumerState<GuildFolderItem>
 
     final items = _expanded
         ? widget.folder.guildIds
-              .map((e) => GuildSidebarItem(guildId: e))
+              .map(
+                (e) => GuildSidebarItem(
+                  guildId: e,
+                  padding: .only(left: 4, right: 4),
+                ),
+              )
               .toList()
         : widget.folder.guildIds
               .take(4)
@@ -130,7 +135,7 @@ class _GuildFolderItemState extends ConsumerState<GuildFolderItem>
                   sizeFactor: _animation,
                   axisAlignment: -1.0,
                   child: Padding(
-                    padding: const EdgeInsets.all(0.0),
+                    padding: const EdgeInsets.only(bottom: 4.0),
                     child: Column(spacing: 4, children: items),
                   ),
                 ),
