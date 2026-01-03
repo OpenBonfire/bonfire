@@ -16,6 +16,14 @@ class GuildFolderItem extends ConsumerStatefulWidget {
 }
 
 class _GuildFolderItemState extends ConsumerState<GuildFolderItem> {
+  //   late AnimationController _controller;
+  // late Animation<double> _expandAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   bool _expanded = false;
   @override
   Widget build(BuildContext context) {
@@ -44,50 +52,59 @@ class _GuildFolderItemState extends ConsumerState<GuildFolderItem> {
     return AnimatedContainer(
       duration: Duration(milliseconds: 300),
       decoration: BoxDecoration(color: color),
-      child: Column(
-        children: [
-          if (_expanded) ...[
-            NoSplashButton(
-              child: Padding(
-                padding: const EdgeInsets.only(left: 12.0, top: 12, bottom: 12),
-                child: AspectRatio(
-                  aspectRatio: 1,
-                  child: SizedBox.expand(
-                    child: Center(child: Icon(Icons.folder_rounded)),
+      child: AnimatedSize(
+        duration: Duration(milliseconds: 300),
+        alignment: Alignment.topCenter,
+        curve: Curves.easeInOut,
+        child: Column(
+          children: [
+            if (_expanded) ...[
+              NoSplashButton(
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                    left: 12.0,
+                    top: 12,
+                    bottom: 12,
+                  ),
+                  child: AspectRatio(
+                    aspectRatio: 1,
+                    child: SizedBox.expand(
+                      child: Center(child: Icon(Icons.folder_rounded)),
+                    ),
+                  ),
+                ),
+                onPressed: () {
+                  HapticFeedback.lightImpact();
+                  setState(() {
+                    _expanded = !_expanded;
+                  });
+                },
+              ),
+              ...items,
+            ] else
+              SidebarItem(
+                title: "Folder",
+                selected: false,
+                onPressed: () {
+                  HapticFeedback.lightImpact();
+                  setState(() {
+                    _expanded = !_expanded;
+                  });
+                },
+                child: Container(
+                  decoration: BoxDecoration(color: color),
+                  child: AbsorbPointer(
+                    child: GridView.count(
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      crossAxisCount: 2,
+                      children: items.toList(),
+                    ),
                   ),
                 ),
               ),
-              onPressed: () {
-                HapticFeedback.lightImpact();
-                setState(() {
-                  _expanded = !_expanded;
-                });
-              },
-            ),
-            ...items,
-          ] else
-            SidebarItem(
-              title: "Folder",
-              selected: false,
-              onPressed: () {
-                HapticFeedback.lightImpact();
-                setState(() {
-                  _expanded = !_expanded;
-                });
-              },
-              child: Container(
-                decoration: BoxDecoration(color: color),
-                child: AbsorbPointer(
-                  child: GridView.count(
-                    shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
-                    crossAxisCount: 2,
-                    children: items.toList(),
-                  ),
-                ),
-              ),
-            ),
-        ],
+          ],
+        ),
       ),
     );
   }
