@@ -1,6 +1,5 @@
 import 'package:bonfire/features/gateway/store/entity_store.dart';
-import 'package:bonfire/features/guilds/components/sidebar/guild_item.dart';
-import 'package:bonfire/features/guilds/components/sidebar/item.dart';
+import 'package:bonfire/features/guilds/components/sidebar/folder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -14,16 +13,15 @@ class GuildSidebar extends ConsumerStatefulWidget {
 class _GuildSidebarState extends ConsumerState<GuildSidebar> {
   @override
   Widget build(BuildContext context) {
-    final guildIds = ref.watch(guildIdsProvider);
     final folders = ref.watch(guildFoldersProvider);
-    print("folders = $folders");
+    // print("folders = $folders");
     return CustomScrollView(
       slivers: [
         SliverList.separated(
-          itemCount: guildIds.length,
-          separatorBuilder: (context, index) => SizedBox(height: 4),
+          itemCount: folders.length,
+          separatorBuilder: (context, index) => SizedBox(height: 8),
           itemBuilder: (context, index) {
-            return GuildSidebarItem(guildId: guildIds[index]);
+            return GuildFolderItem(folder: folders[index]);
           },
         ),
       ],
