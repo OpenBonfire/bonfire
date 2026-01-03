@@ -1,5 +1,7 @@
+import 'package:bonfire/features/channels/components/category.dart';
 import 'package:bonfire/features/channels/components/channel_button.dart';
 import 'package:bonfire/features/gateway/store/entity_store.dart';
+import 'package:collection/collection.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -14,6 +16,7 @@ class GuildChannelList extends ConsumerWidget {
     final guild = ref.watch(guildProvider(guildId))!;
 
     // TODO: Just handle this in the provider that also calculates permissions
+    // TODO: We need a ChannelButton that can take ids
     final channels =
         (ref.watch(guildChannelsProvider(guildId))?.cast<GuildChannel>() ?? [])
             .toList();
@@ -23,27 +26,73 @@ class GuildChannelList extends ConsumerWidget {
     });
 
     final categories = channels.whereType<GuildCategory>();
-    final Map<Snowflake, Snowflake> categoryMap = {};
+    final nonCategory = channels.whereNot(
+      (channel) => channel is GuildCategory,
+    );
+
+    final channelWidgets = nonCategory.map(
+      (e) => ChannelButton(
+        name: e.name,
+        icon: Icon(Icons.numbers_rounded),
+        selected: false,
+        onPressed: () {
+          HapticFeedback.lightImpact();
+        },
+      ),
+    );
+
+    final Map<Snowflake, List<GuildChannel>> categoryMap = {};
     for (GuildChannel channel in channels) {
       if (channel.parentId != null) {
-        categoryMap[channel.id] = channel.parentId!;
+        if (!categoryMap.containsKey(channel.parentId!)) {
+          categoryMap[channel.parentId!] = [];
+        }
+        categoryMap[channel.parentId!]!.add(channel);
+      }
+    }
+
+    List<Widget> slivers = [];
+    for (GuildChannel channel in channels) {
+      if (channel is GuildCategory) {
+        final categoryChannels = categoryMap[channel.id];
+        slivers.add(
+          ChannelCategorySliver(
+            name: channel.name,
+            channels:
+                categoryChannels
+                    ?.map(
+                      (e) => ChannelButton(
+                        name: e.name,
+                        icon: Icon(Icons.numbers_rounded),
+                        selected: false,
+                        onPressed: () {
+                          HapticFeedback.lightImpact();
+                        },
+                      ),
+                    )
+                    .toList() ??
+                [Text("was null")],
+          ),
+        );
+      } else {
+        slivers.add(
+          SliverList.list(
+            children: [
+              ChannelButton(
+                name: channel.name,
+                icon: Icon(Icons.numbers_rounded),
+                selected: false,
+                onPressed: () {
+                  HapticFeedback.lightImpact();
+                },
+              ),
+            ],
+          ),
+        );
       }
     }
 
     // print("channels = $channels");
-    return CustomScrollView(
-      slivers: [
-        // SliverList.separated(
-        //   itemCount: channels.length,
-        //   itemBuilder: (context, index) {
-        //     final channel = channels[index];
-        //     if (channel is GuildCategory) {
-        //       return
-        //     }
-        //   },
-        //   separatorBuilder: (context, index) => SizedBox(height: 4),
-        // ),
-      ],
-    );
+    return CustomScrollView(slivers: slivers);
   }
 }
