@@ -1,4 +1,6 @@
 import 'package:bonfire/features/gateway/store/entity_store.dart';
+import 'package:bonfire/features/guilds/components/sidebar/guild_item.dart';
+import 'package:bonfire/features/guilds/components/sidebar/item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -18,7 +20,7 @@ class _GuildSidebarState extends ConsumerState<GuildSidebar> {
         SliverList.builder(
           itemCount: guildIds.length,
           itemBuilder: (context, index) {
-            return Text(guildIds[index].toString());
+            return GuildSidebarItem(guildId: guildIds[index]);
           },
         ),
       ],

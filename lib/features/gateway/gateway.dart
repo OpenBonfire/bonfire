@@ -33,12 +33,6 @@ class GatewayController extends _$GatewayController {
   }
 
   void _subscribeToClient(FirebridgeGateway client) {
-    // client.onReady.listen((asd) {
-    //   print("on ready!");
-    // });
-    // client.onMessageCreate.listen((message) {
-    //   print("got message!");
-    // });
     client.onCacheUpdate.listen((entity) {
       switch (entity) {
         case ReadyEvent():
