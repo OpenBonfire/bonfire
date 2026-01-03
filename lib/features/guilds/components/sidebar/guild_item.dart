@@ -1,6 +1,7 @@
 import 'package:bonfire/features/authentication/repositories/auth.dart';
 import 'package:bonfire/features/gateway/store/entity_store.dart';
 import 'package:bonfire/features/guilds/components/sidebar/item.dart';
+import 'package:bonfire/features/media/components/image.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -19,7 +20,7 @@ class GuildSidebarItem extends ConsumerWidget {
     return SidebarItem(
       selected: false,
       child: guild.icon != null
-          ? Image.network(guild.icon!.getUrl(client).toString())
+          ? DiscordNetworkImage(guild.icon!.getUrl(client).toString())
           : Text("null"),
     );
   }
