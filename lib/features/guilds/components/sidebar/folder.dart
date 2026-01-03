@@ -56,7 +56,7 @@ class _GuildFolderItemState extends ConsumerState<GuildFolderItem>
               .map(
                 (e) => GuildSidebarItem(
                   guildId: e,
-                  padding: .only(left: 4, right: 4),
+                  padding: .only(left: 2, right: 4),
                 ),
               )
               .toList()
@@ -68,7 +68,7 @@ class _GuildFolderItemState extends ConsumerState<GuildFolderItem>
         ? Color(
             int.parse(widget.folder.color.toString(), radix: 10),
           ).withValues(alpha: 0.3)
-        : theme.colorScheme.primary.withValues(alpha: 0.4);
+        : theme.colorScheme.primary.withValues(alpha: 0.3);
 
     return Stack(
       children: [
@@ -80,7 +80,7 @@ class _GuildFolderItemState extends ConsumerState<GuildFolderItem>
           child: Container(
             decoration: BoxDecoration(
               color: color,
-              borderRadius: .circular(16),
+              borderRadius: .circular(18),
             ),
           ),
         ),

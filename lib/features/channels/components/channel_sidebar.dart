@@ -1,3 +1,4 @@
+import 'package:bonfire/features/channels/components/list.dart';
 import 'package:bonfire/features/guilds/components/sidebar/sidebar.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +12,12 @@ class ChannelSidebar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Row(children: [SizedBox(width: 60, child: GuildSidebar())]);
+    return Row(
+      children: [
+        SizedBox(width: 60, child: GuildSidebar()),
+        if (guildId != null)
+          SizedBox(width: 275, child: GuildChannelList(guildId: guildId!)),
+      ],
+    );
   }
 }

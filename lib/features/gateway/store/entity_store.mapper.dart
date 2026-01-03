@@ -16,6 +16,7 @@ class EntityStateMapper extends ClassMapperBase<EntityState> {
       MapperContainer.globals.use(_instance = EntityStateMapper._());
       SnowflakeMapper.ensureInitialized();
       GuildMapper.ensureInitialized();
+      ChannelMapper.ensureInitialized();
       GuildFolderMapper.ensureInitialized();
     }
     return _instance!;
@@ -28,6 +29,15 @@ class EntityStateMapper extends ClassMapperBase<EntityState> {
   static const Field<EntityState, Map<Snowflake, Guild>> _f$guilds = Field(
     'guilds',
     _$guilds,
+    opt: true,
+    def: const {},
+  );
+  static Map<Snowflake, List<Channel>> _$guildChannels(EntityState v) =>
+      v.guildChannels;
+  static const Field<EntityState, Map<Snowflake, List<Channel>>>
+  _f$guildChannels = Field(
+    'guildChannels',
+    _$guildChannels,
     opt: true,
     def: const {},
   );
@@ -49,6 +59,7 @@ class EntityStateMapper extends ClassMapperBase<EntityState> {
   @override
   final MappableFields<EntityState> fields = const {
     #guilds: _f$guilds,
+    #guildChannels: _f$guildChannels,
     #guildIds: _f$guildIds,
     #guildFolders: _f$guildFolders,
   };
@@ -56,6 +67,7 @@ class EntityStateMapper extends ClassMapperBase<EntityState> {
   static EntityState _instantiate(DecodingData data) {
     return EntityState(
       guilds: data.dec(_f$guilds),
+      guildChannels: data.dec(_f$guildChannels),
       guildIds: data.dec(_f$guildIds),
       guildFolders: data.dec(_f$guildFolders),
     );
@@ -122,6 +134,13 @@ extension EntityStateValueCopy<$R, $Out>
 abstract class EntityStateCopyWith<$R, $In extends EntityState, $Out>
     implements ClassCopyWith<$R, $In, $Out> {
   MapCopyWith<$R, Snowflake, Guild, GuildCopyWith<$R, Guild, Guild>> get guilds;
+  MapCopyWith<
+    $R,
+    Snowflake,
+    List<Channel>,
+    ObjectCopyWith<$R, List<Channel>, List<Channel>>
+  >
+  get guildChannels;
   ListCopyWith<$R, Snowflake, SnowflakeCopyWith<$R, Snowflake, Snowflake>>
   get guildIds;
   ListCopyWith<
@@ -132,6 +151,7 @@ abstract class EntityStateCopyWith<$R, $In extends EntityState, $Out>
   get guildFolders;
   $R call({
     Map<Snowflake, Guild>? guilds,
+    Map<Snowflake, List<Channel>>? guildChannels,
     List<Snowflake>? guildIds,
     List<GuildFolder>? guildFolders,
   });
@@ -154,6 +174,18 @@ class _EntityStateCopyWithImpl<$R, $Out>
     (v) => call(guilds: v),
   );
   @override
+  MapCopyWith<
+    $R,
+    Snowflake,
+    List<Channel>,
+    ObjectCopyWith<$R, List<Channel>, List<Channel>>
+  >
+  get guildChannels => MapCopyWith(
+    $value.guildChannels,
+    (v, t) => ObjectCopyWith(v, $identity, t),
+    (v) => call(guildChannels: v),
+  );
+  @override
   ListCopyWith<$R, Snowflake, SnowflakeCopyWith<$R, Snowflake, Snowflake>>
   get guildIds => ListCopyWith(
     $value.guildIds,
@@ -174,11 +206,13 @@ class _EntityStateCopyWithImpl<$R, $Out>
   @override
   $R call({
     Map<Snowflake, Guild>? guilds,
+    Map<Snowflake, List<Channel>>? guildChannels,
     List<Snowflake>? guildIds,
     List<GuildFolder>? guildFolders,
   }) => $apply(
     FieldCopyWithData({
       if (guilds != null) #guilds: guilds,
+      if (guildChannels != null) #guildChannels: guildChannels,
       if (guildIds != null) #guildIds: guildIds,
       if (guildFolders != null) #guildFolders: guildFolders,
     }),
@@ -186,6 +220,7 @@ class _EntityStateCopyWithImpl<$R, $Out>
   @override
   EntityState $make(CopyWithData data) => EntityState(
     guilds: data.get(#guilds, or: $value.guilds),
+    guildChannels: data.get(#guildChannels, or: $value.guildChannels),
     guildIds: data.get(#guildIds, or: $value.guildIds),
     guildFolders: data.get(#guildFolders, or: $value.guildFolders),
   );

@@ -9,11 +9,14 @@ part 'entity_store.g.dart';
 @MappableClass()
 class EntityState with EntityStateMappable {
   final Map<Snowflake, Guild> guilds;
+  final Map<Snowflake, List<Channel>> guildChannels;
+
   final List<Snowflake> guildIds;
   final List<GuildFolder> guildFolders;
 
   const EntityState({
     this.guilds = const {},
+    this.guildChannels = const {},
     this.guildIds = const [],
     this.guildFolders = const [],
   });
@@ -44,6 +47,12 @@ class EntityStore extends _$EntityStore {
   void upsertGuildFolders(List<GuildFolder> guildFolders) {
     state = state.copyWith(guildFolders: guildFolders);
   }
+
+  void upsertGuildChannels(Ref ref, Snowflake guildId, List<Channel> channels) {
+    state = state.copyWith(
+      guildChannels: {...state.guildChannels, guildId: channels},
+    );
+  }
 }
 
 @riverpod
@@ -57,3 +66,7 @@ Guild? guild(Ref ref, Snowflake id) =>
 @riverpod
 List<GuildFolder> guildFolders(Ref ref) =>
     ref.watch(entityStoreProvider.select((s) => s.guildFolders));
+
+@riverpod
+List<Channel>? guildChannels(Ref ref, Snowflake id) =>
+    ref.watch(entityStoreProvider.select((s) => s.guildChannels[id]));

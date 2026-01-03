@@ -41,7 +41,7 @@ final class EntityStoreProvider
   }
 }
 
-String _$entityStoreHash() => r'f35a8b10c62c1749792e417da35eb9747f2f3ab6';
+String _$entityStoreHash() => r'e400551417db909e4465295b473b3f2b981d4c35';
 
 abstract class _$EntityStore extends $Notifier<EntityState> {
   EntityState build();
@@ -225,3 +225,80 @@ final class GuildFoldersProvider
 }
 
 String _$guildFoldersHash() => r'1546c1753eaade8c787a407b32d479c0cfd7ee55';
+
+@ProviderFor(guildChannels)
+const guildChannelsProvider = GuildChannelsFamily._();
+
+final class GuildChannelsProvider
+    extends $FunctionalProvider<List<Channel>?, List<Channel>?, List<Channel>?>
+    with $Provider<List<Channel>?> {
+  const GuildChannelsProvider._({
+    required GuildChannelsFamily super.from,
+    required Snowflake super.argument,
+  }) : super(
+         retry: null,
+         name: r'guildChannelsProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
+
+  @override
+  String debugGetCreateSourceHash() => _$guildChannelsHash();
+
+  @override
+  String toString() {
+    return r'guildChannelsProvider'
+        ''
+        '($argument)';
+  }
+
+  @$internal
+  @override
+  $ProviderElement<List<Channel>?> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  List<Channel>? create(Ref ref) {
+    final argument = this.argument as Snowflake;
+    return guildChannels(ref, argument);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(List<Channel>? value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<List<Channel>?>(value),
+    );
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is GuildChannelsProvider && other.argument == argument;
+  }
+
+  @override
+  int get hashCode {
+    return argument.hashCode;
+  }
+}
+
+String _$guildChannelsHash() => r'1c9232a054637b6ca1a52381580d3e5f4598af04';
+
+final class GuildChannelsFamily extends $Family
+    with $FunctionalFamilyOverride<List<Channel>?, Snowflake> {
+  const GuildChannelsFamily._()
+    : super(
+        retry: null,
+        name: r'guildChannelsProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: true,
+      );
+
+  GuildChannelsProvider call(Snowflake id) =>
+      GuildChannelsProvider._(argument: id, from: this);
+
+  @override
+  String toString() => r'guildChannelsProvider';
+}
