@@ -44,7 +44,7 @@ final class ClientControllerProvider
   }
 }
 
-String _$clientControllerHash() => r'9dcf3e5a6eaafe3f49bdcc081d62790ad482aedc';
+String _$clientControllerHash() => r'e8db90313c199c9919fdb4e000d3703d8186ad98';
 
 /// A riverpod provider that handles authentication with Discord.
 

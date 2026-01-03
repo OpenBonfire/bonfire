@@ -27,19 +27,26 @@ class GatewayController extends _$GatewayController {
       if (client == null) return;
 
       _currentClient = client;
-      print("subscribed");
       _subscribeToClient(client);
     }
   }
 
   void _subscribeToClient(FirebridgeGateway client) {
     client.onCacheUpdate.listen((entity) {
-      switch (entity) {
-        case ReadyEvent():
-          for (Guild guild in entity.guilds) {
-            ref.read(entityStoreProvider.notifier).upsertGuild(guild);
-          }
-      }
+      _handleCacheUpdate(ref, entity);
     });
+  }
+}
+
+void _handleCacheUpdate(Ref ref, Object? entity) {
+  switch (entity) {
+    case ReadyEvent():
+      for (Guild guild in entity.guilds) {
+        ref.read(entityStoreProvider.notifier).upsertGuild(guild);
+      }
+    case UserSettings():
+      ref
+          .read(entityStoreProvider.notifier)
+          .upsertGuildFolders(entity.guildFolders);
   }
 }

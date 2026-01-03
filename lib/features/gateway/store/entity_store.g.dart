@@ -41,7 +41,7 @@ final class EntityStoreProvider
   }
 }
 
-String _$entityStoreHash() => r'8226536adb555c56f1b7515e60b010d56d65255f';
+String _$entityStoreHash() => r'f35a8b10c62c1749792e417da35eb9747f2f3ab6';
 
 abstract class _$EntityStore extends $Notifier<EntityState> {
   EntityState build();
@@ -178,3 +178,50 @@ final class GuildFamily extends $Family
   @override
   String toString() => r'guildProvider';
 }
+
+@ProviderFor(guildFolders)
+const guildFoldersProvider = GuildFoldersProvider._();
+
+final class GuildFoldersProvider
+    extends
+        $FunctionalProvider<
+          List<GuildFolder>,
+          List<GuildFolder>,
+          List<GuildFolder>
+        >
+    with $Provider<List<GuildFolder>> {
+  const GuildFoldersProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'guildFoldersProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$guildFoldersHash();
+
+  @$internal
+  @override
+  $ProviderElement<List<GuildFolder>> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
+
+  @override
+  List<GuildFolder> create(Ref ref) {
+    return guildFolders(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(List<GuildFolder> value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<List<GuildFolder>>(value),
+    );
+  }
+}
+
+String _$guildFoldersHash() => r'1546c1753eaade8c787a407b32d479c0cfd7ee55';

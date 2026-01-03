@@ -15,6 +15,8 @@ class _GuildSidebarState extends ConsumerState<GuildSidebar> {
   @override
   Widget build(BuildContext context) {
     final guildIds = ref.watch(guildIdsProvider);
+    final folders = ref.watch(guildFoldersProvider);
+    print("folders = $folders");
     return CustomScrollView(
       slivers: [
         SliverList.separated(

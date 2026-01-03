@@ -16,6 +16,7 @@ class EntityStateMapper extends ClassMapperBase<EntityState> {
       MapperContainer.globals.use(_instance = EntityStateMapper._());
       SnowflakeMapper.ensureInitialized();
       GuildMapper.ensureInitialized();
+      GuildFolderMapper.ensureInitialized();
     }
     return _instance!;
   }
@@ -37,17 +38,26 @@ class EntityStateMapper extends ClassMapperBase<EntityState> {
     opt: true,
     def: const [],
   );
+  static List<GuildFolder> _$guildFolders(EntityState v) => v.guildFolders;
+  static const Field<EntityState, List<GuildFolder>> _f$guildFolders = Field(
+    'guildFolders',
+    _$guildFolders,
+    opt: true,
+    def: const [],
+  );
 
   @override
   final MappableFields<EntityState> fields = const {
     #guilds: _f$guilds,
     #guildIds: _f$guildIds,
+    #guildFolders: _f$guildFolders,
   };
 
   static EntityState _instantiate(DecodingData data) {
     return EntityState(
       guilds: data.dec(_f$guilds),
       guildIds: data.dec(_f$guildIds),
+      guildFolders: data.dec(_f$guildFolders),
     );
   }
 
@@ -114,7 +124,17 @@ abstract class EntityStateCopyWith<$R, $In extends EntityState, $Out>
   MapCopyWith<$R, Snowflake, Guild, GuildCopyWith<$R, Guild, Guild>> get guilds;
   ListCopyWith<$R, Snowflake, SnowflakeCopyWith<$R, Snowflake, Snowflake>>
   get guildIds;
-  $R call({Map<Snowflake, Guild>? guilds, List<Snowflake>? guildIds});
+  ListCopyWith<
+    $R,
+    GuildFolder,
+    GuildFolderCopyWith<$R, GuildFolder, GuildFolder>
+  >
+  get guildFolders;
+  $R call({
+    Map<Snowflake, Guild>? guilds,
+    List<Snowflake>? guildIds,
+    List<GuildFolder>? guildFolders,
+  });
   EntityStateCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(Then<$Out2, $R2> t);
 }
 
@@ -141,16 +161,33 @@ class _EntityStateCopyWithImpl<$R, $Out>
     (v) => call(guildIds: v),
   );
   @override
-  $R call({Map<Snowflake, Guild>? guilds, List<Snowflake>? guildIds}) => $apply(
+  ListCopyWith<
+    $R,
+    GuildFolder,
+    GuildFolderCopyWith<$R, GuildFolder, GuildFolder>
+  >
+  get guildFolders => ListCopyWith(
+    $value.guildFolders,
+    (v, t) => v.copyWith.$chain(t),
+    (v) => call(guildFolders: v),
+  );
+  @override
+  $R call({
+    Map<Snowflake, Guild>? guilds,
+    List<Snowflake>? guildIds,
+    List<GuildFolder>? guildFolders,
+  }) => $apply(
     FieldCopyWithData({
       if (guilds != null) #guilds: guilds,
       if (guildIds != null) #guildIds: guildIds,
+      if (guildFolders != null) #guildFolders: guildFolders,
     }),
   );
   @override
   EntityState $make(CopyWithData data) => EntityState(
     guilds: data.get(#guilds, or: $value.guilds),
     guildIds: data.get(#guildIds, or: $value.guildIds),
+    guildFolders: data.get(#guildFolders, or: $value.guildFolders),
   );
 
   @override
