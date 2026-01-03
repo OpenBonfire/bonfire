@@ -1,4 +1,5 @@
 import 'package:bonfire/features/authentication/utils/hive.dart';
+import 'package:bonfire/features/gateway/gateway.dart';
 import 'package:bonfire/features/notifications/controllers/firebase.dart';
 import 'package:bonfire/features/notifications/controllers/notification.dart';
 import 'package:bonfire/router/controller.dart';
@@ -81,6 +82,7 @@ class MainWindow extends ConsumerStatefulWidget {
 class _MainWindowState extends ConsumerState<MainWindow> {
   @override
   Widget build(BuildContext context) {
+    ref.watch(gatewayControllerProvider);
     SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(
         systemNavigationBarColor: Colors.transparent,
@@ -104,7 +106,7 @@ class _MainWindowState extends ConsumerState<MainWindow> {
 
     return MaterialApp.router(
       themeMode: ThemeMode.dark,
-      title: 'EpicHire',
+      title: 'Bonfire',
       theme: ThemeData(
         colorScheme: lightColorScheme,
         textTheme: getBaseTextTheme(),

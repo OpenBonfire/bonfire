@@ -78,8 +78,12 @@ class ClientController extends _$ClientController {
             ? GatewayCompression.none
             : GatewayCompression.transport,
       ),
-      GatewayClientOptions(plugins: [Logging(logLevel: Level.SEVERE)]),
+      GatewayClientOptions(plugins: [Logging(logLevel: Level.INFO)]),
     );
+
+    // await for (final MessageCreateEvent(:message) in client.onMessageCreate) {
+    //   print('${message.id} sent by ${message.author.id} in ${message.id}!');
+    // }
 
     // This is how we save login information
     final box = await Hive.openBox('auth');
