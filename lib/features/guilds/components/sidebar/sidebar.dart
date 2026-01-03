@@ -17,8 +17,9 @@ class _GuildSidebarState extends ConsumerState<GuildSidebar> {
     final guildIds = ref.watch(guildIdsProvider);
     return CustomScrollView(
       slivers: [
-        SliverList.builder(
+        SliverList.separated(
           itemCount: guildIds.length,
+          separatorBuilder: (context, index) => SizedBox(height: 4),
           itemBuilder: (context, index) {
             return GuildSidebarItem(guildId: guildIds[index]);
           },

@@ -2,8 +2,14 @@ import 'package:flutter/material.dart';
 
 class SidebarItem extends StatefulWidget {
   final bool selected;
-  final Widget child;
-  const SidebarItem({super.key, required this.selected, required this.child});
+  final String title;
+  final Widget? child;
+  const SidebarItem({
+    super.key,
+    required this.selected,
+    required this.title,
+    this.child,
+  });
 
   @override
   State<SidebarItem> createState() => _SidebarItemState();

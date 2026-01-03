@@ -5,6 +5,7 @@ import 'package:bonfire/features/media/components/image.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 class GuildSidebarItem extends ConsumerWidget {
   final Snowflake guildId;
@@ -17,11 +18,16 @@ class GuildSidebarItem extends ConsumerWidget {
     if (guild == null || client == null) {
       return Center(child: CircularProgressIndicator.adaptive());
     }
+    final rawGuildId = GoRouter.of(
+      context,
+    ).routerDelegate.currentConfiguration.pathParameters["guildId"];
+
     return SidebarItem(
-      selected: false,
+      selected: rawGuildId == guild.toString(),
+      title: guild.name,
       child: guild.icon != null
           ? DiscordNetworkImage(guild.icon!.getUrl(client).toString())
-          : Text("null"),
+          : null,
     );
   }
 }
