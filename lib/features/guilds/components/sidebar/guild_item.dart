@@ -4,6 +4,7 @@ import 'package:bonfire/features/guilds/components/sidebar/item.dart';
 import 'package:bonfire/features/media/components/image.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -23,8 +24,12 @@ class GuildSidebarItem extends ConsumerWidget {
     ).routerDelegate.currentConfiguration.pathParameters["guildId"];
 
     return SidebarItem(
-      selected: rawGuildId == guild.toString(),
+      selected: rawGuildId == guildId.toString(),
       title: guild.name,
+      onPressed: () {
+        HapticFeedback.lightImpact();
+        context.go("/channels/$guildId");
+      },
       child: guild.icon != null
           ? DiscordNetworkImage(guild.icon!.getUrl(client).toString())
           : null,
