@@ -1,7 +1,6 @@
 import 'package:bonfire/features/channels/components/category.dart';
 import 'package:bonfire/features/channels/components/channel_button.dart';
 import 'package:bonfire/features/gateway/store/entity_store.dart';
-import 'package:collection/collection.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -25,22 +24,6 @@ class GuildChannelList extends ConsumerWidget {
       return a.position - b.position;
     });
 
-    final categories = channels.whereType<GuildCategory>();
-    final nonCategory = channels.whereNot(
-      (channel) => channel is GuildCategory,
-    );
-
-    final channelWidgets = nonCategory.map(
-      (e) => ChannelButton(
-        name: e.name,
-        icon: Icon(Icons.numbers_rounded),
-        selected: false,
-        onPressed: () {
-          HapticFeedback.lightImpact();
-        },
-      ),
-    );
-
     final Map<Snowflake, List<GuildChannel>> categoryMap = {};
     for (GuildChannel channel in channels) {
       if (channel.parentId != null) {
@@ -52,47 +35,52 @@ class GuildChannelList extends ConsumerWidget {
     }
 
     List<Widget> slivers = [];
+
     for (GuildChannel channel in channels) {
-      if (channel is GuildCategory) {
-        final categoryChannels = categoryMap[channel.id];
+      if (channel.parentId == null && channel is! GuildCategory) {
         slivers.add(
-          ChannelCategorySliver(
-            name: channel.name,
-            channels:
-                categoryChannels
-                    ?.map(
-                      (e) => ChannelButton(
-                        name: e.name,
-                        icon: Icon(Icons.numbers_rounded),
-                        selected: false,
-                        onPressed: () {
-                          HapticFeedback.lightImpact();
-                        },
-                      ),
-                    )
-                    .toList() ??
-                [Text("was null")],
-          ),
-        );
-      } else {
-        slivers.add(
-          SliverList.list(
-            children: [
-              ChannelButton(
-                name: channel.name,
-                icon: Icon(Icons.numbers_rounded),
-                selected: false,
-                onPressed: () {
-                  HapticFeedback.lightImpact();
-                },
-              ),
-            ],
+          SliverToBoxAdapter(
+            child: ChannelButton(
+              name: channel.name,
+              icon: Icon(Icons.numbers_rounded),
+              selected: false,
+              onPressed: () {
+                HapticFeedback.lightImpact();
+              },
+            ),
           ),
         );
       }
     }
 
-    // print("channels = $channels");
+    for (GuildChannel channel in channels) {
+      if (channel is GuildCategory) {
+        final categoryChannels = categoryMap[channel.id];
+        slivers.add(
+          SliverPadding(
+            padding: const EdgeInsets.only(top: 8.0),
+            sliver: ChannelCategorySliver(
+              name: channel.name,
+              channels:
+                  categoryChannels
+                      ?.map(
+                        (e) => ChannelButton(
+                          name: e.name,
+                          icon: Icon(Icons.numbers_rounded),
+                          selected: false,
+                          onPressed: () {
+                            HapticFeedback.lightImpact();
+                          },
+                        ),
+                      )
+                      .toList() ??
+                  [],
+            ),
+          ),
+        );
+      }
+    }
+
     return CustomScrollView(slivers: slivers);
   }
 }
