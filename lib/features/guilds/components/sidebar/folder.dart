@@ -129,7 +129,10 @@ class _GuildFolderItemState extends ConsumerState<GuildFolderItem>
                 SizeTransition(
                   sizeFactor: _animation,
                   axisAlignment: -1.0,
-                  child: Column(spacing: 4, children: items),
+                  child: Padding(
+                    padding: const EdgeInsets.all(0.0),
+                    child: Column(spacing: 4, children: items),
+                  ),
                 ),
               ],
             );

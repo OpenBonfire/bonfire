@@ -15,16 +15,19 @@ class _GuildSidebarState extends ConsumerState<GuildSidebar> {
   Widget build(BuildContext context) {
     final folders = ref.watch(guildFoldersProvider);
 
-    return CustomScrollView(
-      slivers: [
-        SliverList.separated(
-          itemCount: folders.length,
-          separatorBuilder: (context, index) => SizedBox(height: 8),
-          itemBuilder: (context, index) {
-            return GuildFolderItem(folder: folders[index]);
-          },
-        ),
-      ],
+    return ScrollConfiguration(
+      behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
+      child: CustomScrollView(
+        slivers: [
+          SliverList.separated(
+            itemCount: folders.length,
+            separatorBuilder: (context, index) => SizedBox(height: 8),
+            itemBuilder: (context, index) {
+              return GuildFolderItem(folder: folders[index]);
+            },
+          ),
+        ],
+      ),
     );
   }
 }

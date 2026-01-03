@@ -16,7 +16,7 @@ class SidebarIndicator extends ConsumerWidget {
 
     return AnimatedContainer(
       duration: Duration(milliseconds: 150),
-      width: 6,
+      width: 5,
       height: selected ? 36 : 12,
       decoration: BoxDecoration(
         color: (hasUnreads || selected)
