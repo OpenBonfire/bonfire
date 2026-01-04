@@ -21,14 +21,15 @@ class MessageScreen extends StatelessWidget {
           width: double.infinity,
           decoration: BoxDecoration(
             color: theme.colorScheme.surfaceContainerLow,
-            borderRadius: .circular(8),
+            borderRadius: .circular(0),
           ),
           child: Padding(
             padding: const EdgeInsets.all(12.0),
             child: Column(
+              crossAxisAlignment: .start,
               children: [
                 DefaultTextStyle(
-                  style: theme.textTheme.titleMedium!,
+                  style: theme.textTheme.titleSmall!,
                   child: title,
                 ),
                 if (description != null)
@@ -43,7 +44,20 @@ class MessageScreen extends StatelessWidget {
           ),
         ),
 
-        Expanded(child: child),
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.only(left: 0),
+            child: Container(
+              decoration: BoxDecoration(
+                color: theme.colorScheme.surfaceContainerLowest,
+              ),
+              child: Padding(
+                padding: const EdgeInsets.only(left: 8.0),
+                child: child,
+              ),
+            ),
+          ),
+        ),
       ],
     );
   }

@@ -17,7 +17,13 @@ class ChannelSidebar extends ConsumerWidget {
       children: [
         SizedBox(width: 60, child: GuildSidebar()),
         if (guildId != null)
-          SizedBox(width: 275, child: GuildChannelList(guildId: guildId!)),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 4.0),
+            child: SizedBox(
+              width: 275,
+              child: GuildChannelList(guildId: guildId!),
+            ),
+          ),
       ],
     );
   }

@@ -17,9 +17,6 @@ class MessageBox extends ConsumerWidget {
     final author = message.author;
     final avatar = author.avatar;
 
-    // print(avatar.getUrl(client!).toString());
-    print("hash = ${author.avatarHash}");
-
     return Row(
       crossAxisAlignment: .start,
       children: [
