@@ -39,17 +39,18 @@ class GatewayController extends _$GatewayController {
 }
 
 void _handleCacheUpdate(Ref ref, Object? entity) {
+  final store = ref.read(entityStoreProvider.notifier);
   switch (entity) {
     // case ReadyEvent():
 
     case UserSettings():
-      ref
-          .read(entityStoreProvider.notifier)
-          .upsertGuildFolders(entity.guildFolders);
+      store.upsertGuildFolders(entity.guildFolders);
     case Guild():
-      ref.read(entityStoreProvider.notifier).upsertGuild(entity);
-      ref
-          .read(entityStoreProvider.notifier)
-          .upsertGuildChannels(ref, entity.id, entity.channels);
+      store.upsertGuild(entity);
+      store.upsertGuildChannels(entity.id, entity.channels);
+
+    case Channel():
+      print("upserting channel...");
+      store.upsertChannel(entity);
   }
 }

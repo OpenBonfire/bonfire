@@ -21,17 +21,18 @@ class MessageBox extends ConsumerWidget {
     print("hash = ${author.avatarHash}");
 
     return Row(
+      crossAxisAlignment: .start,
       children: [
         SizedBox(
-          width: 45,
-          height: 45,
+          width: 42,
+          height: 42,
           child: DiscordNetworkImage(
             avatar.getUrl(client!).toString(),
             fit: .cover,
             borderRadius: .circular(100),
           ),
         ),
-        SizedBox(width: 4),
+        SizedBox(width: 8),
         Flexible(
           child: Column(
             mainAxisSize: .min,

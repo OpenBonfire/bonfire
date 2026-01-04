@@ -1,5 +1,5 @@
+import 'package:bonfire/features/gateway/store/entity_store.dart';
 import 'package:bonfire/features/messages/components/message_list.dart';
-import 'package:bonfire/features/messages/components/bidirectional_scroll_view.dart';
 import 'package:bonfire/features/messages/components/message_screen.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
@@ -17,8 +17,10 @@ class ChannelMessageScreen extends ConsumerStatefulWidget {
 class _ChannelMessageScreenState extends ConsumerState<ChannelMessageScreen> {
   @override
   Widget build(BuildContext context) {
+    final channel =
+        ref.watch(channelProvider(widget.channelId)) as GuildChannel?;
     return MessageScreen(
-      title: Text("id = ${widget.channelId}"),
+      title: Text(channel?.name ?? "No name idk"),
       child: ChannelMessageList(channelId: widget.channelId),
     );
   }

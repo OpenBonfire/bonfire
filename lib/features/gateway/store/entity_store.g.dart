@@ -41,7 +41,7 @@ final class EntityStoreProvider
   }
 }
 
-String _$entityStoreHash() => r'e400551417db909e4465295b473b3f2b981d4c35';
+String _$entityStoreHash() => r'1f5ae46b9fa1666a39695ff8e02e0cacee788520';
 
 abstract class _$EntityStore extends $Notifier<EntityState> {
   EntityState build();
@@ -301,4 +301,81 @@ final class GuildChannelsFamily extends $Family
 
   @override
   String toString() => r'guildChannelsProvider';
+}
+
+@ProviderFor(channel)
+const channelProvider = ChannelFamily._();
+
+final class ChannelProvider
+    extends $FunctionalProvider<Channel?, Channel?, Channel?>
+    with $Provider<Channel?> {
+  const ChannelProvider._({
+    required ChannelFamily super.from,
+    required Snowflake super.argument,
+  }) : super(
+         retry: null,
+         name: r'channelProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
+
+  @override
+  String debugGetCreateSourceHash() => _$channelHash();
+
+  @override
+  String toString() {
+    return r'channelProvider'
+        ''
+        '($argument)';
+  }
+
+  @$internal
+  @override
+  $ProviderElement<Channel?> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  Channel? create(Ref ref) {
+    final argument = this.argument as Snowflake;
+    return channel(ref, argument);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(Channel? value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<Channel?>(value),
+    );
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is ChannelProvider && other.argument == argument;
+  }
+
+  @override
+  int get hashCode {
+    return argument.hashCode;
+  }
+}
+
+String _$channelHash() => r'3159697bb4cfcc1f8b9156f90b13910c96fdcec4';
+
+final class ChannelFamily extends $Family
+    with $FunctionalFamilyOverride<Channel?, Snowflake> {
+  const ChannelFamily._()
+    : super(
+        retry: null,
+        name: r'channelProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: true,
+      );
+
+  ChannelProvider call(Snowflake id) =>
+      ChannelProvider._(argument: id, from: this);
+
+  @override
+  String toString() => r'channelProvider';
 }

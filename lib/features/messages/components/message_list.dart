@@ -26,7 +26,7 @@ class _ChannelMessageListState extends ConsumerState<ChannelMessageList> {
       slivers: [
         SliverList.separated(
           itemCount: messages.length,
-          separatorBuilder: (context, index) => SizedBox(height: 10),
+          separatorBuilder: (context, index) => SizedBox(height: 12),
           itemBuilder: (context, index) {
             final message = messages[index];
             return MessageBox(message: message);
