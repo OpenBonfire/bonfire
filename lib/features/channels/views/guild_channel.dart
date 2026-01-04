@@ -1,3 +1,4 @@
+import 'package:bonfire/features/channels/views/message.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -9,6 +10,9 @@ class GuildChannelScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Container();
+    if (channelId == null) {
+      return Center(child: Text("No channel selected"));
+    }
+    return ChannelMessageScreen(channelId: channelId!);
   }
 }

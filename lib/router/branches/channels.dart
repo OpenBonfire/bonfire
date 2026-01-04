@@ -14,7 +14,7 @@ final channelsNavigationBranch = StatefulShellBranch(
     ShellRoute(
       builder: (context, state, child) {
         final rawGuildId = state.pathParameters["guildId"];
-        final rawChannelId = state.pathParameters["rawChannelId"];
+        final rawChannelId = state.pathParameters["channelId"];
 
         Snowflake? guildId;
         Snowflake? channelId;

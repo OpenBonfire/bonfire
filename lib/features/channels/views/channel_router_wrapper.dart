@@ -19,7 +19,7 @@ class ChannelRouterWrapper extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       body: AdaptivePanelLayout(
-        left: ChannelSidebar(guildId: guildId),
+        left: ChannelSidebar(guildId: guildId, channelId: channelId),
         main: child,
       ),
     );

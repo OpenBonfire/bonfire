@@ -1,6 +1,6 @@
 import 'package:bonfire/features/channels/components/list.dart';
+import 'package:bonfire/features/channels/components/message_list.dart';
 import 'package:bonfire/features/guilds/components/sidebar/sidebar.dart';
-import 'package:bonfire/features/messages/components/message_screen.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

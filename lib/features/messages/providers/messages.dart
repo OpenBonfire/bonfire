@@ -20,7 +20,7 @@ class ChannelMessages extends _$ChannelMessages {
         final client = ref.read(clientControllerProvider);
         return await client!
             .messages(channelId: channelId)
-            .fetchMany(after: cursor!.id);
+            .fetchMany(after: cursor?.id);
       },
       getId: (conversation) => conversation.id,
       debugName: 'ChannelMessages($channelId)',

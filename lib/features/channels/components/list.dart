@@ -5,6 +5,7 @@ import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 class GuildChannelList extends ConsumerWidget {
   final Snowflake guildId;
@@ -46,6 +47,7 @@ class GuildChannelList extends ConsumerWidget {
               selected: false,
               onPressed: () {
                 HapticFeedback.lightImpact();
+                context.go("/channels/$guildId/${channel.id}");
               },
             ),
           ),
@@ -70,6 +72,7 @@ class GuildChannelList extends ConsumerWidget {
                           selected: false,
                           onPressed: () {
                             HapticFeedback.lightImpact();
+                            context.go("/channels/$guildId/${e.id}");
                           },
                         ),
                       )
