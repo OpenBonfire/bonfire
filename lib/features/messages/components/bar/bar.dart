@@ -24,7 +24,7 @@ class _ChannelMessageBarState extends ConsumerState<ChannelMessageBar> {
       name = channel.name;
     }
     return Padding(
-      padding: const EdgeInsets.only(top: 2, bottom: 8, right: 8),
+      padding: const EdgeInsets.only(top: 0, bottom: 8, right: 8),
       child: TextField(
         controller: _controller,
         style: theme.textTheme.bodyMedium,
