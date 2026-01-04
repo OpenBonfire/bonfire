@@ -1,9 +1,11 @@
 import 'package:bonfire/features/authentication/repositories/auth.dart';
 import 'package:bonfire/features/media/components/image.dart';
 import 'package:bonfire/features/messages/components/box/render/markdown.dart';
+import 'package:bonfire/shared/utils/time.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class MessageBox extends ConsumerWidget {
   final Message message;
@@ -21,6 +23,9 @@ class MessageBox extends ConsumerWidget {
     final client = ref.watch(clientControllerProvider);
     final author = message.author;
     final avatar = author.avatar;
+
+    // TODO: Role color
+    final textColor = theme.colorScheme.onSurface;
 
     return Row(
       crossAxisAlignment: .start,
@@ -45,10 +50,33 @@ class MessageBox extends ConsumerWidget {
             crossAxisAlignment: .start,
             children: [
               if (showAuthor)
-                Text(
-                  author.displayName,
-                  style: theme.textTheme.bodyMedium!.copyWith(
-                    fontWeight: .bold,
+                RichText(
+                  text: TextSpan(
+                    children: [
+                      TextSpan(
+                        text: author.displayName,
+                        style: GoogleFonts.publicSans(
+                          letterSpacing: 0.3,
+                          color: textColor,
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      const TextSpan(text: '  '),
+                      TextSpan(
+                        text: dateTimeFormat(message.timestamp.toLocal()),
+                        style: GoogleFonts.publicSans(
+                          letterSpacing: 0.3,
+                          color: const Color.fromARGB(189, 255, 255, 255),
+                          fontSize: 11,
+                        ),
+                      ),
+                      if (message.editedTimestamp != null)
+                        TextSpan(
+                          text: " (edited)",
+                          style: Theme.of(context).textTheme.labelMedium,
+                        ),
+                    ],
                   ),
                 ),
               MessageMarkdownBox(message: message),

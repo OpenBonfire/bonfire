@@ -48,9 +48,9 @@ class MessageScreen extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.only(left: 0),
             child: Container(
-              decoration: BoxDecoration(
-                color: theme.colorScheme.surfaceContainerLowest,
-              ),
+              // decoration: BoxDecoration(
+              //   color: theme.colorScheme.surfaceContainerLowest,
+              // ),
               child: Padding(
                 padding: const EdgeInsets.only(left: 8.0),
                 child: child,
