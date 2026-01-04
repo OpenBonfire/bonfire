@@ -7,7 +7,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class MessageBox extends ConsumerWidget {
   final Message message;
-  const MessageBox({super.key, required this.message});
+  final bool showAuthor;
+  const MessageBox({
+    super.key,
+    required this.message,
+    required this.showAuthor,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -20,15 +25,18 @@ class MessageBox extends ConsumerWidget {
     return Row(
       crossAxisAlignment: .start,
       children: [
-        SizedBox(
-          width: 42,
-          height: 42,
-          child: DiscordNetworkImage(
-            avatar.getUrl(client!).toString(),
-            fit: .cover,
-            borderRadius: .circular(100),
-          ),
-        ),
+        if (showAuthor)
+          SizedBox(
+            width: 42,
+            height: 42,
+            child: DiscordNetworkImage(
+              avatar.getUrl(client!).toString(),
+              fit: .cover,
+              borderRadius: .circular(100),
+            ),
+          )
+        else
+          SizedBox(width: 42),
         SizedBox(width: 8),
         Flexible(
           child: Column(
@@ -36,10 +44,13 @@ class MessageBox extends ConsumerWidget {
             mainAxisAlignment: .start,
             crossAxisAlignment: .start,
             children: [
-              Text(
-                author.displayName,
-                style: theme.textTheme.bodyMedium!.copyWith(fontWeight: .bold),
-              ),
+              if (showAuthor)
+                Text(
+                  author.displayName,
+                  style: theme.textTheme.bodyMedium!.copyWith(
+                    fontWeight: .bold,
+                  ),
+                ),
               MessageMarkdownBox(message: message),
             ],
           ),

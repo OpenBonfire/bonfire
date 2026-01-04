@@ -28,8 +28,29 @@ class _ChannelMessageListState extends ConsumerState<ChannelMessageList> {
           itemCount: messages.length,
           separatorBuilder: (context, index) => SizedBox(height: 12),
           itemBuilder: (context, index) {
+            bool showAuthor = true;
+            if (index + 1 < messages.length) {
+              Message currentMessage = messages[index];
+              Message lastMessage = messages[index + 1];
+
+              showAuthor = lastMessage.author.id != currentMessage.author.id;
+
+              if (currentMessage.timestamp
+                      .difference(lastMessage.timestamp)
+                      .inMinutes >
+                  5) {
+                showAuthor = true;
+              }
+              if (currentMessage.referencedMessage != null) {
+                showAuthor = true;
+              }
+            } else {
+              showAuthor = true;
+            }
+
             final message = messages[index];
-            return MessageBox(message: message);
+
+            return MessageBox(message: message, showAuthor: showAuthor);
           },
         ),
       ],

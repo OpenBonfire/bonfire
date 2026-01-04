@@ -1,4 +1,5 @@
 import 'package:bonfire/features/gateway/store/entity_store.dart';
+import 'package:bonfire/features/messages/components/bar/bar.dart';
 import 'package:bonfire/features/messages/components/message_list.dart';
 import 'package:bonfire/features/messages/components/message_screen.dart';
 import 'package:firebridge/firebridge.dart';
@@ -21,7 +22,12 @@ class _ChannelMessageScreenState extends ConsumerState<ChannelMessageScreen> {
         ref.watch(channelProvider(widget.channelId)) as GuildChannel?;
     return MessageScreen(
       title: Text(channel?.name ?? "No name idk"),
-      child: ChannelMessageList(channelId: widget.channelId),
+      child: Column(
+        children: [
+          Expanded(child: ChannelMessageList(channelId: widget.channelId)),
+          ChannelMessageBar(channelId: widget.channelId),
+        ],
+      ),
     );
   }
 }
