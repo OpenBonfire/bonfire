@@ -1,3 +1,4 @@
+import 'package:bonfire/features/authentication/repositories/auth.dart';
 import 'package:bonfire/features/gateway/store/entity_store.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +15,15 @@ class ChannelMessageBar extends ConsumerStatefulWidget {
 
 class _ChannelMessageBarState extends ConsumerState<ChannelMessageBar> {
   final TextEditingController _controller = TextEditingController();
+  Future<void> _sendMessage() async {
+    final content = _controller.text;
+    _controller.clear();
+    final client = ref.watch(clientControllerProvider)!;
+    await client
+        .messages(channelId: widget.channelId)
+        .create(MessageBuilder(content: content));
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -29,7 +39,9 @@ class _ChannelMessageBarState extends ConsumerState<ChannelMessageBar> {
         controller: _controller,
         style: theme.textTheme.bodyMedium,
         minLines: 1,
-        maxLines: 4,
+        maxLines: 8,
+        textInputAction: TextInputAction.send,
+        onSubmitted: (_) => _sendMessage(),
         decoration: InputDecoration(
           hintText: "Message #$name",
           filled: true,
