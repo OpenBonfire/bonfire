@@ -7,6 +7,7 @@ import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 class GuildFolderItem extends ConsumerStatefulWidget {
   final GuildFolder folder;
@@ -51,6 +52,14 @@ class _GuildFolderItemState extends ConsumerState<GuildFolderItem>
       return GuildSidebarItem(guildId: widget.folder.guildIds.first);
     }
 
+    final rawGuildId = GoRouter.of(
+      context,
+    ).routerDelegate.currentConfiguration.pathParameters["guildId"];
+    Snowflake? selectedGuildId;
+    try {
+      selectedGuildId = Snowflake.parse(rawGuildId!);
+    } catch (e) {}
+
     final items = _expanded
         ? widget.folder.guildIds
               .map(
@@ -70,6 +79,11 @@ class _GuildFolderItemState extends ConsumerState<GuildFolderItem>
           ).withValues(alpha: 0.3)
         : theme.colorScheme.primary.withValues(alpha: 0.3);
 
+    final selected =
+        selectedGuildId != null &&
+        widget.folder.guildIds.contains(selectedGuildId) &&
+        !_expanded;
+
     return Stack(
       children: [
         Positioned(
@@ -80,7 +94,7 @@ class _GuildFolderItemState extends ConsumerState<GuildFolderItem>
           child: Container(
             decoration: BoxDecoration(
               color: color,
-              borderRadius: .circular(18),
+              borderRadius: .circular(20),
             ),
           ),
         ),
@@ -92,7 +106,9 @@ class _GuildFolderItemState extends ConsumerState<GuildFolderItem>
               children: [
                 SidebarItem(
                   title: "Folder",
-                  selected: false,
+                  selectedRadiusFactor: 0.38,
+                  deselectedRadiusFactor: 0.38,
+                  selected: selected,
                   onPressed: () {
                     HapticFeedback.lightImpact();
                     _toggleExpand();
@@ -123,8 +139,11 @@ class _GuildFolderItemState extends ConsumerState<GuildFolderItem>
                         ),
                         Opacity(
                           opacity: _animation.value.clamp(0.0, 1.0),
-                          child: const Center(
-                            child: Icon(Icons.folder_rounded),
+                          child: Center(
+                            child: Icon(
+                              Icons.folder_rounded,
+                              color: color.withAlpha(255),
+                            ),
                           ),
                         ),
                       ],

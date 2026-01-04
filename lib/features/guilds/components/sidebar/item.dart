@@ -9,6 +9,8 @@ class SidebarItem extends StatefulWidget {
   final VoidCallback? onPressed;
   final EdgeInsets? padding;
   final Widget? child;
+  final double selectedRadiusFactor;
+  final double deselectedRadiusFactor;
   const SidebarItem({
     super.key,
     required this.selected,
@@ -16,6 +18,8 @@ class SidebarItem extends StatefulWidget {
     this.onPressed,
     this.padding,
     this.hasUnreads = false,
+    this.selectedRadiusFactor = 0.22,
+    this.deselectedRadiusFactor = 0.38,
     this.child,
   });
 
@@ -37,8 +41,8 @@ class _SidebarItemState extends State<SidebarItem> {
           child: LayoutBuilder(
             builder: (context, constraints) {
               final size = constraints.maxWidth;
-              final selectedRadius = size * 0.22;
-              final unselectedRadius = size * 0.38;
+              final selectedRadius = size * widget.selectedRadiusFactor;
+              final unselectedRadius = size * widget.deselectedRadiusFactor;
 
               return TweenAnimationBuilder<double>(
                 duration: const Duration(milliseconds: 150),
