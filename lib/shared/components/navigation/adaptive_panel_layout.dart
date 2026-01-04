@@ -17,9 +17,9 @@ class AdaptivePanelLayout extends StatelessWidget {
 
     return Row(
       children: [
-        if (left != null) Flexible(child: left!),
-        if (main != null) Flexible(child: main!),
-        if (right != null) Flexible(child: right!),
+        if (left != null) left!,
+        if (main != null) Expanded(child: main!),
+        if (right != null) right!,
       ],
     );
   }

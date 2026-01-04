@@ -14,6 +14,7 @@ class ChannelSidebar extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Row(
+      mainAxisSize: MainAxisSize.min,
       children: [
         SizedBox(width: 60, child: GuildSidebar()),
         if (guildId != null)
