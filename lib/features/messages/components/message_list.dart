@@ -1,3 +1,4 @@
+import 'package:bonfire/features/messages/components/box/box.dart';
 import 'package:bonfire/features/messages/providers/messages.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
@@ -23,11 +24,12 @@ class _ChannelMessageListState extends ConsumerState<ChannelMessageList> {
     return CustomScrollView(
       reverse: true,
       slivers: [
-        SliverList.builder(
+        SliverList.separated(
           itemCount: messages.length,
+          separatorBuilder: (context, index) => SizedBox(height: 10),
           itemBuilder: (context, index) {
             final message = messages[index];
-            return Text(message.content);
+            return MessageBox(message: message);
           },
         ),
       ],

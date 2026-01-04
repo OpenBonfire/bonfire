@@ -1,4 +1,4 @@
-import 'package:bonfire/features/channels/components/message_list.dart';
+import 'package:bonfire/features/messages/components/message_list.dart';
 import 'package:bonfire/features/messages/components/bidirectional_scroll_view.dart';
 import 'package:bonfire/features/messages/components/message_screen.dart';
 import 'package:firebridge/firebridge.dart';

@@ -1,5 +1,4 @@
 import 'package:bonfire/features/channels/components/list.dart';
-import 'package:bonfire/features/channels/components/message_list.dart';
 import 'package:bonfire/features/guilds/components/sidebar/sidebar.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';

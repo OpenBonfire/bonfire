@@ -13,6 +13,10 @@ class GuildChannelList extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final selectedChannel = GoRouter.of(
+      context,
+    ).routerDelegate.currentConfiguration.pathParameters["channelId"];
+
     final guild = ref.watch(guildProvider(guildId))!;
 
     // TODO: Just handle this in the provider that also calculates permissions
@@ -44,7 +48,7 @@ class GuildChannelList extends ConsumerWidget {
             child: ChannelButton(
               name: channel.name,
               icon: Icon(Icons.numbers_rounded),
-              selected: false,
+              selected: channel.id.toString() == selectedChannel,
               onPressed: () {
                 HapticFeedback.lightImpact();
                 context.go("/channels/$guildId/${channel.id}");
@@ -69,7 +73,7 @@ class GuildChannelList extends ConsumerWidget {
                         (e) => ChannelButton(
                           name: e.name,
                           icon: Icon(Icons.numbers_rounded),
-                          selected: false,
+                          selected: e.id.toString() == selectedChannel,
                           onPressed: () {
                             HapticFeedback.lightImpact();
                             context.go("/channels/$guildId/${e.id}");
