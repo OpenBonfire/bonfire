@@ -138,5 +138,6 @@ class SectionHeaderDelegate extends SliverPersistentHeaderDelegate {
   double get minExtent => 52;
 
   @override
-  bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) => false;
+  bool shouldRebuild(covariant SectionHeaderDelegate oldDelegate) =>
+      guildId != oldDelegate.guildId;
 }
