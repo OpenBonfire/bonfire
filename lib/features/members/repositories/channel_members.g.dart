@@ -142,7 +142,7 @@ final class ChannelMembersProvider
   ChannelMembers create() => ChannelMembers();
 }
 
-String _$channelMembersHash() => r'ad2806951028399c4b6d7da6107f9e0d7dc207de';
+String _$channelMembersHash() => r'd36e8d8dae2e4bf3362a523b98b5bf0abb172213';
 
 abstract class _$ChannelMembers
     extends $AsyncNotifier<Pair<List<GuildMemberListGroup>, List<dynamic>>?> {

@@ -196,21 +196,21 @@ class ChannelMembers extends _$ChannelMembers {
       final updatedMemberList =
           ref.read(guildMemberListProvider(guildId)).value?.second ?? [];
 
-      for (final itemList in updatedMemberList) {
-        for (final item in itemList) {
-          if (item is Member) {
-            // I think this is a sign that firebridge itself should user notifiers (probably riverpod)
-            // If we used riverpod to cache this data and such, we could make it reactive, and probably disable
-            // event requirements all together.
-            // Maybe keeping the api wrapper simple is key? It just seems like there's always 2 layers of logic.
-            // if (item.initialPresence != null) {
-            //   ref
-            //       .read(presenceControllerProvider(item.user!.id).notifier)
-            //       .setPresence(item.initialPresence!);
-            // }
-          }
-        }
-      }
+      // for (final itemList in updatedMemberList) {
+      //   for (final item in itemList) {
+      //     if (item is Member) {
+      //       // I think this is a sign that firebridge itself should user notifiers (probably riverpod)
+      //       // If we used riverpod to cache this data and such, we could make it reactive, and probably disable
+      //       // event requirements all together.
+      //       // Maybe keeping the api wrapper simple is key? It just seems like there's always 2 layers of logic.
+      //       // if (item.initialPresence != null) {
+      //       //   ref
+      //       //       .read(presenceControllerProvider(item.user!.id).notifier)
+      //       //       .setPresence(item.initialPresence!);
+      //       // }
+      //     }
+      //   }
+      // }
 
       final newPair = Pair(newGroups, updatedMemberList);
 
