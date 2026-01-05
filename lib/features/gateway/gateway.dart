@@ -57,7 +57,6 @@ void _handleCacheUpdate(Ref ref, Object? entity) {
       store.upsertGuildChannels(entity.id, entity.channels);
 
     case Channel():
-      print("upserting channel...");
       store.upsertChannel(entity);
   }
 }
