@@ -24,7 +24,7 @@ class _ChannelMessageListState extends ConsumerState<ChannelMessageList> {
     return NotificationListener<ScrollNotification>(
       onNotification: (ScrollNotification scrollInfo) {
         if (scrollInfo.metrics.pixels >=
-            scrollInfo.metrics.maxScrollExtent - 500) {
+            scrollInfo.metrics.maxScrollExtent - 1500) {
           ref
               .read(channelMessagesProvider(widget.channelId).notifier)
               .loadMore();
