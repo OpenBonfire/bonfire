@@ -1,4 +1,5 @@
 import 'package:bonfire/features/channels/components/channel_sidebar.dart';
+import 'package:bonfire/features/members/components/member_list.dart';
 import 'package:bonfire/shared/components/navigation/adaptive_panel_layout.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
@@ -21,6 +22,12 @@ class ChannelRouterWrapper extends ConsumerWidget {
       body: AdaptivePanelLayout(
         left: ChannelSidebar(guildId: guildId, channelId: channelId),
         main: child,
+        right: (guildId != null && channelId != null)
+            ? SizedBox(
+                width: 275,
+                child: MemberList(guildId: guildId!, channelId: channelId!),
+              )
+            : null,
       ),
     );
   }

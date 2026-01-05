@@ -167,9 +167,9 @@ class MemberScrollViewState extends ConsumerState<MemberScrollView> {
 
     int nextLowerBound = 0;
     if (channelMembersNotifier.currentSubscriptions.isNotEmpty) {
-      final maxUpperBound = channelMembersNotifier.currentSubscriptions
-          .expand((sub) => sub.memberRange)
-          .map((range) => range.upperMemberBound)
+      final maxUpperBound = channelMembersNotifier.currentSubscriptions.values
+          .expand((ranges) => ranges)
+          .map((range) => range[1])
           .reduce((a, b) => a > b ? a : b);
       nextLowerBound = maxUpperBound + 1;
     }
@@ -187,7 +187,7 @@ class MemberScrollViewState extends ConsumerState<MemberScrollView> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    var memberListPair = ref
+    final memberListPair = ref
         .watch(guildMemberListProvider(widget.guild.id))
         .value;
     final groupList = memberListPair?.first ?? [];
@@ -201,73 +201,53 @@ class MemberScrollViewState extends ConsumerState<MemberScrollView> {
           controller: _scrollController,
           itemCount: memberList.length,
           itemBuilder: (context, index) {
-            // TODO: These should absolutely not be lists of one item
-            final item = memberList[index].first;
+            final itemWrapper = memberList[index];
 
-            if (item is GuildMemberListGroup) {
-              return Padding(
-                padding: EdgeInsets.only(
-                  left: isSmartwatch(context) ? 34 : 2,
-                  top: 10,
-                  bottom: 4,
-                ),
-                child: GroupHeader(
-                  guild: widget.guild,
-                  groups: groupList,
-                  group: item,
-                ),
-              );
-            }
+            if (itemWrapper is GuildMemberListUpdateItem) {
+              if (itemWrapper.group != null) {
+                return Padding(
+                  padding: EdgeInsets.only(
+                    left: isSmartwatch(context) ? 34 : 2,
+                    top: 10,
+                    bottom: 4,
+                  ),
+                  child: GroupHeader(
+                    guild: widget.guild,
+                    groups: groupList,
+                    group: itemWrapper.group!,
+                  ),
+                );
+              }
 
-            if (item is Member) {
-              bool shouldRoundBottom =
-                  index == memberList.length - 1 ||
-                  memberList[index + 1].first is GuildMemberListGroup;
+              if (itemWrapper.member != null) {
+                bool shouldRoundBottom =
+                    index == memberList.length - 1 ||
+                    (memberList[index + 1] is GuildMemberListUpdateItem &&
+                        (memberList[index + 1] as GuildMemberListUpdateItem)
+                                .group !=
+                            null);
 
-              return Padding(
-                padding: EdgeInsets.only(
-                  right: 8,
-                  bottom: shouldRoundBottom ? 8 : 0,
-                ),
-                child: MemberCard(
-                  member: item,
-                  guild: widget.guild,
-                  channel: widget.channel,
-                  roundTop:
-                      index == 0 ||
-                      memberList[index - 1].first is GuildMemberListGroup,
-                  roundBottom: shouldRoundBottom,
-                ),
-              );
-            }
+                bool shouldRoundTop =
+                    index == 0 ||
+                    (memberList[index - 1] is GuildMemberListUpdateItem &&
+                        (memberList[index - 1] as GuildMemberListUpdateItem)
+                                .group !=
+                            null);
 
-            // Handle lists of members (from SYNC operations)
-            if (item is List<Member>) {
-              return Column(
-                children: item.map<Widget>((member) {
-                  bool shouldRoundBottom =
-                      member == item.last &&
-                      (index == memberList.length - 1 ||
-                          memberList[index + 1] is GuildMemberListGroup);
-
-                  return Padding(
-                    padding: EdgeInsets.only(
-                      right: 8,
-                      bottom: shouldRoundBottom ? 8 : 0,
-                    ),
-                    child: MemberCard(
-                      member: member,
-                      guild: widget.guild,
-                      channel: widget.channel,
-                      roundTop:
-                          member == item.first &&
-                          (index == 0 ||
-                              memberList[index - 1] is GuildMemberListGroup),
-                      roundBottom: shouldRoundBottom,
-                    ),
-                  );
-                }).toList(),
-              );
+                return Padding(
+                  padding: EdgeInsets.only(
+                    right: 8,
+                    bottom: shouldRoundBottom ? 8 : 0,
+                  ),
+                  child: MemberCard(
+                    member: itemWrapper.member!,
+                    guild: widget.guild,
+                    channel: widget.channel,
+                    roundTop: shouldRoundTop,
+                    roundBottom: shouldRoundBottom,
+                  ),
+                );
+              }
             }
 
             return Container();
