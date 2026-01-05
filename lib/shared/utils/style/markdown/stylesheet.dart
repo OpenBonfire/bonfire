@@ -17,7 +17,7 @@ MarkdownStyle getMarkdownStyleSheet(BuildContext context) {
       borderRadius: BorderRadius.circular(8),
     ),
     codeSpan: GoogleFonts.jetBrainsMono(
-      color: theme.colorScheme.surfaceContainer,
+      color: theme.colorScheme.onSurface,
       fontSize: 14,
     ),
     list: GoogleFonts.publicSans(

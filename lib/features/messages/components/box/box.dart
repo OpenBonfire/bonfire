@@ -67,14 +67,18 @@ class MessageBox extends ConsumerWidget {
                         text: dateTimeFormat(message.timestamp.toLocal()),
                         style: GoogleFonts.publicSans(
                           letterSpacing: 0.3,
-                          color: const Color.fromARGB(189, 255, 255, 255),
+                          color: theme.colorScheme.surfaceContainerHighest,
                           fontSize: 11,
                         ),
                       ),
                       if (message.editedTimestamp != null)
                         TextSpan(
                           text: " (edited)",
-                          style: Theme.of(context).textTheme.labelMedium,
+                          style: GoogleFonts.publicSans(
+                            letterSpacing: 0.3,
+                            color: theme.colorScheme.surfaceContainerHighest,
+                            fontSize: 11,
+                          ),
                         ),
                     ],
                   ),

@@ -49,7 +49,7 @@ class _MessageMarkdownBoxState extends State<MessageMarkdownBox> {
                     : const PrismStyle(),
               );
               try {
-                var rendered = prism.render(text, language ?? 'plain');
+                final rendered = prism.render(text, language ?? 'plain');
                 return rendered;
               } catch (e) {
                 debugPrint('MessageMarkdownBox: Error in highlightBuilder: $e');
