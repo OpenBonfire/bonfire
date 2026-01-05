@@ -1,5 +1,6 @@
 import 'package:bonfire/features/authentication/repositories/auth.dart';
 import 'package:bonfire/features/gateway/store/entity_store.dart';
+import 'package:bonfire/features/members/repositories/channel_members.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -34,6 +35,12 @@ class GatewayController extends _$GatewayController {
   void _subscribeToClient(FirebridgeGateway client) {
     client.onCacheUpdate.listen((entity) {
       _handleCacheUpdate(ref, entity);
+    });
+
+    client.on<GuildMemberListUpdateEvent>((event) {
+      ref
+          .read(channelMembersProvider.notifier)
+          .updateMemberList(event.operations, event.guildId, event.groups);
     });
   }
 }

@@ -110,6 +110,9 @@ class ChannelMembers extends _$ChannelMembers {
   @override
   Future<Pair<List<GuildMemberListGroup>, List<dynamic>>?> build() async {
     client = ref.watch(clientControllerProvider);
+    if (client != null) {
+      _updateSubscriptions();
+    }
     return null;
   }
 

@@ -64,11 +64,6 @@ class _MemberListState extends ConsumerState<MemberList> {
 
     return Container(
       decoration: BoxDecoration(
-        color: theme.colorScheme.onSurface,
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(8),
-          topRight: Radius.circular(8),
-        ),
         border: Border(
           left: BorderSide(color: theme.colorScheme.surfaceContainer, width: 1),
         ),

@@ -20,8 +20,7 @@ class MessageScreen extends StatelessWidget {
         Container(
           width: double.infinity,
           decoration: BoxDecoration(
-            color: theme.colorScheme.surfaceContainerLow,
-            borderRadius: .circular(0),
+            // border: Border.fromBorderSide(BorderSide())
           ),
           child: Padding(
             padding: const EdgeInsets.all(12.0),

@@ -41,7 +41,7 @@ final class GatewayControllerProvider
   }
 }
 
-String _$gatewayControllerHash() => r'70fd2ecb77b7411049f97a16a49511604c2bb4cd';
+String _$gatewayControllerHash() => r'ddabb1a1349eec6ad519e05bdc5a4c60f2b214fe';
 
 abstract class _$GatewayController extends $Notifier<void> {
   void build();
