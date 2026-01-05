@@ -41,7 +41,7 @@ final class EntityStoreProvider
   }
 }
 
-String _$entityStoreHash() => r'1f5ae46b9fa1666a39695ff8e02e0cacee788520';
+String _$entityStoreHash() => r'1ab0c316c105bfff79718aa16a7e724fc36df7c6';
 
 abstract class _$EntityStore extends $Notifier<EntityState> {
   EntityState build();
