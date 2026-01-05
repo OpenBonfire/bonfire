@@ -50,7 +50,7 @@ final class ChannelMessagesProvider
   }
 }
 
-String _$channelMessagesHash() => r'648579d2a4206b56db7e9da61d6ead2c6c054d5a';
+String _$channelMessagesHash() => r'a1c79a28230537a8c55ce05acba208fc89767690';
 
 final class ChannelMessagesFamily extends $Family
     with

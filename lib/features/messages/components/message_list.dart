@@ -21,42 +21,54 @@ class _ChannelMessageListState extends ConsumerState<ChannelMessageList> {
     if (messages == null) {
       return Center(child: CircularProgressIndicator.adaptive());
     }
-    return CustomScrollView(
-      reverse: true,
-      slivers: [
-        SliverPadding(
-          padding: const EdgeInsets.only(bottom: 12.0),
-          sliver: SliverList.separated(
-            itemCount: messages.length,
-            separatorBuilder: (context, index) => SizedBox(height: 12),
-            itemBuilder: (context, index) {
-              bool showAuthor = true;
-              if (index + 1 < messages.length) {
-                Message currentMessage = messages[index];
-                Message lastMessage = messages[index + 1];
+    return NotificationListener<ScrollNotification>(
+      onNotification: (ScrollNotification scrollInfo) {
+        if (scrollInfo.metrics.pixels >=
+            scrollInfo.metrics.maxScrollExtent - 500) {
+          ref
+              .read(channelMessagesProvider(widget.channelId).notifier)
+              .loadMore();
+        }
+        return false;
+      },
+      child: CustomScrollView(
+        reverse: true,
+        slivers: [
+          SliverPadding(
+            padding: const EdgeInsets.only(bottom: 20.0),
+            sliver: SliverList.separated(
+              itemCount: messages.length,
+              separatorBuilder: (context, index) => SizedBox(height: 12),
+              itemBuilder: (context, index) {
+                bool showAuthor = true;
+                if (index + 1 < messages.length) {
+                  Message currentMessage = messages[index];
+                  Message lastMessage = messages[index + 1];
 
-                showAuthor = lastMessage.author.id != currentMessage.author.id;
+                  showAuthor =
+                      lastMessage.author.id != currentMessage.author.id;
 
-                if (currentMessage.timestamp
-                        .difference(lastMessage.timestamp)
-                        .inMinutes >
-                    5) {
+                  if (currentMessage.timestamp
+                          .difference(lastMessage.timestamp)
+                          .inMinutes >
+                      5) {
+                    showAuthor = true;
+                  }
+                  if (currentMessage.referencedMessage != null) {
+                    showAuthor = true;
+                  }
+                } else {
                   showAuthor = true;
                 }
-                if (currentMessage.referencedMessage != null) {
-                  showAuthor = true;
-                }
-              } else {
-                showAuthor = true;
-              }
 
-              final message = messages[index];
+                final message = messages[index];
 
-              return MessageBox(message: message, showAuthor: showAuthor);
-            },
+                return MessageBox(message: message, showAuthor: showAuthor);
+              },
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

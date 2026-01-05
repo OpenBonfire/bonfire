@@ -8,7 +8,7 @@ part 'messages.g.dart';
 @Riverpod()
 class ChannelMessages extends _$ChannelMessages {
   late final PaginationHelper<Message> _paginationHelper;
-  final int _limit = 20;
+  final int _limit = 40;
 
   @override
   Future<List<Message>> build(Snowflake channelId) async {
@@ -20,7 +20,7 @@ class ChannelMessages extends _$ChannelMessages {
         final client = ref.read(clientControllerProvider);
         return await client!
             .messages(channelId: channelId)
-            .fetchMany(after: cursor?.id);
+            .fetchMany(before: cursor?.id, limit: limit);
       },
       getId: (conversation) => conversation.id,
       debugName: 'ChannelMessages($channelId)',
