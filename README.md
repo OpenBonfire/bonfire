@@ -36,8 +36,6 @@ To start, lets outline a few things.
 
 - Bonfire is for all platforms. The goal motivation for the project is mobile, as that's where current modding is far worse, however it works great on Web, Windows and Linux as well!
 
-- **Extensions are planned**. We plan on using (wasm_run)[https://github.com/juancastillo0/wasm_run] to allow for users to extend the functionality of Bonfire to their liking, and we also plan on hosting a marketplace where users can publish their plugins / download the plugins other people make.
-
 # Developing
 ## General Info
 There's a few projects that OpenBonfire uses and maintains, which can be found in our org. Let's just talk about the big ones.
