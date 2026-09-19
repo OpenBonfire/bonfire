@@ -45,3 +45,35 @@ Stream<Channel?> _channelStream(Ref ref, Snowflake id) =>
 @riverpod
 Channel? channel(Ref ref, Snowflake id) =>
     ref.watch(_channelStreamProvider(id)).value;
+
+@riverpod
+Stream<int?> _lastReadMessageIdStream(Ref ref, Snowflake channelId) =>
+    ref.watch(appDatabaseProvider).watchLastReadMessageId(channelId);
+
+/// Whether [channelId] has messages the user hasn't read yet. `false` for
+/// non-text channels (categories, voice, ...) since they have no read state.
+@riverpod
+bool channelHasUnreads(Ref ref, Snowflake channelId) {
+  final channel = ref.watch(channelProvider(channelId));
+  if (channel is! TextChannel) return false;
+
+  final lastMessageId = channel.lastMessageId;
+  if (lastMessageId == null) return false;
+
+  final lastReadMessageId =
+      ref.watch(_lastReadMessageIdStreamProvider(channelId)).value;
+  return lastReadMessageId != lastMessageId.value;
+}
+
+/// Whether any channel in [guildId] has unread messages.
+@riverpod
+bool guildHasUnreads(Ref ref, Snowflake guildId) {
+  final channels = ref.watch(guildChannelsProvider(guildId)) ?? const [];
+  return channels.any((channel) => ref.watch(channelHasUnreadsProvider(channel.id)));
+}
+
+/// Whether any guild in [folder] has unread messages.
+@riverpod
+bool folderHasUnreads(Ref ref, GuildFolder folder) {
+  return folder.guildIds.any((guildId) => ref.watch(guildHasUnreadsProvider(guildId)));
+}

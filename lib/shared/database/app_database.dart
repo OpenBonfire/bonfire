@@ -41,9 +41,19 @@ class KeyValues extends Table {
   Set<Column> get primaryKey => {key};
 }
 
+@DataClassName('ReadStateRow')
+class ReadStates extends Table {
+  IntColumn get channelId => integer()();
+  IntColumn get lastMessageId => integer().nullable()();
+  IntColumn get mentionCount => integer().nullable()();
+
+  @override
+  Set<Column> get primaryKey => {channelId};
+}
+
 const _guildFoldersKey = 'guildFolders';
 
-@DriftDatabase(tables: [Guilds, Channels, KeyValues])
+@DriftDatabase(tables: [Guilds, Channels, KeyValues, ReadStates])
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(driftDatabase(name: 'bonfire'));
 
@@ -62,9 +72,11 @@ class AppDatabase extends _$AppDatabase {
   }
 
   Stream<Guild?> watchGuild(Snowflake id) {
-    return (select(guilds)..where((t) => t.id.equals(id.value)))
-        .watchSingleOrNull()
-        .map((row) => row == null ? null : GuildMapper.fromMap(jsonDecode(row.data)));
+    return (select(
+      guilds,
+    )..where((t) => t.id.equals(id.value))).watchSingleOrNull().map(
+      (row) => row == null ? null : GuildMapper.fromMap(jsonDecode(row.data)),
+    );
   }
 
   Stream<List<Snowflake>> watchGuildIds() {
@@ -79,12 +91,12 @@ class AppDatabase extends _$AppDatabase {
     return into(channels).insertOnConflictUpdate(_channelCompanion(channel));
   }
 
-  Future<void> upsertGuildChannels(Snowflake guildId, List<Channel> channelList) {
+  Future<void> upsertGuildChannels(
+    Snowflake guildId,
+    List<Channel> channelList,
+  ) {
     return batch((b) {
-      b.insertAllOnConflictUpdate(
-        channels,
-        channelList.map(_channelCompanion),
-      );
+      b.insertAllOnConflictUpdate(channels, channelList.map(_channelCompanion));
     });
   }
 
@@ -97,15 +109,20 @@ class AppDatabase extends _$AppDatabase {
   }
 
   Stream<Channel?> watchChannel(Snowflake id) {
-    return (select(channels)..where((t) => t.id.equals(id.value)))
-        .watchSingleOrNull()
-        .map((row) => row == null ? null : ChannelMapper.fromMap(jsonDecode(row.data)));
+    return (select(
+      channels,
+    )..where((t) => t.id.equals(id.value))).watchSingleOrNull().map(
+      (row) => row == null ? null : ChannelMapper.fromMap(jsonDecode(row.data)),
+    );
   }
 
   Stream<List<Channel>> watchGuildChannels(Snowflake guildId) {
-    return (select(channels)..where((t) => t.guildId.equals(guildId.value)))
-        .watch()
-        .map((rows) => rows.map((r) => ChannelMapper.fromMap(jsonDecode(r.data))).toList());
+    return (select(
+      channels,
+    )..where((t) => t.guildId.equals(guildId.value))).watch().map(
+      (rows) =>
+          rows.map((r) => ChannelMapper.fromMap(jsonDecode(r.data))).toList(),
+    );
   }
 
   // --- Guild folders ---
@@ -123,11 +140,30 @@ class AppDatabase extends _$AppDatabase {
     return (select(keyValues)..where((t) => t.key.equals(_guildFoldersKey)))
         .watchSingleOrNull()
         .map((row) {
-      if (row == null) return const <GuildFolder>[];
-      final raw = jsonDecode(row.value) as List;
-      return raw
-          .map((m) => GuildFolderMapper.fromMap(m as Map<String, dynamic>))
-          .toList();
-    });
+          if (row == null) return const <GuildFolder>[];
+          final raw = jsonDecode(row.value) as List;
+          return raw
+              .map((m) => GuildFolderMapper.fromMap(m as Map<String, dynamic>))
+              .toList();
+        });
+  }
+
+  // --- Read states ---
+
+  Future<void> upsertReadState(ReadState readState) {
+    return into(readStates).insertOnConflictUpdate(
+      ReadStatesCompanion.insert(
+        channelId: Value(readState.channelId.value),
+        lastMessageId: Value(readState.lastMessageId?.value),
+        mentionCount: Value(readState.mentionCount),
+      ),
+    );
+  }
+
+  Stream<int?> watchLastReadMessageId(Snowflake channelId) {
+    return (select(readStates)
+          ..where((t) => t.channelId.equals(channelId.value)))
+        .watchSingleOrNull()
+        .map((row) => row?.lastMessageId);
   }
 }

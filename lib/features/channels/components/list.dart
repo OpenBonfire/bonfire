@@ -53,6 +53,7 @@ class GuildChannelList extends ConsumerWidget {
               name: channel.name,
               icon: Icon(Icons.numbers_rounded),
               selected: channel.id.toString() == selectedChannel,
+              hasUnreads: ref.watch(channelHasUnreadsProvider(channel.id)),
               onPressed: () {
                 HapticFeedback.lightImpact();
                 context.go("/channels/$guildId/${channel.id}");
@@ -78,6 +79,7 @@ class GuildChannelList extends ConsumerWidget {
                           name: e.name,
                           icon: Icon(Icons.numbers_rounded),
                           selected: e.id.toString() == selectedChannel,
+                          hasUnreads: ref.watch(channelHasUnreadsProvider(e.id)),
                           onPressed: () {
                             HapticFeedback.lightImpact();
                             context.go("/channels/$guildId/${e.id}");

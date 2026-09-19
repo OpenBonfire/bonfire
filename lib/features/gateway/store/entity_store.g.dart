@@ -622,3 +622,337 @@ final class ChannelFamily extends $Family
   @override
   String toString() => r'channelProvider';
 }
+
+@ProviderFor(_lastReadMessageIdStream)
+const _lastReadMessageIdStreamProvider = _LastReadMessageIdStreamFamily._();
+
+final class _LastReadMessageIdStreamProvider
+    extends $FunctionalProvider<AsyncValue<int?>, int?, Stream<int?>>
+    with $FutureModifier<int?>, $StreamProvider<int?> {
+  const _LastReadMessageIdStreamProvider._({
+    required _LastReadMessageIdStreamFamily super.from,
+    required Snowflake super.argument,
+  }) : super(
+         retry: null,
+         name: r'_lastReadMessageIdStreamProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
+
+  @override
+  String debugGetCreateSourceHash() => _$_lastReadMessageIdStreamHash();
+
+  @override
+  String toString() {
+    return r'_lastReadMessageIdStreamProvider'
+        ''
+        '($argument)';
+  }
+
+  @$internal
+  @override
+  $StreamProviderElement<int?> $createElement($ProviderPointer pointer) =>
+      $StreamProviderElement(pointer);
+
+  @override
+  Stream<int?> create(Ref ref) {
+    final argument = this.argument as Snowflake;
+    return _lastReadMessageIdStream(ref, argument);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is _LastReadMessageIdStreamProvider &&
+        other.argument == argument;
+  }
+
+  @override
+  int get hashCode {
+    return argument.hashCode;
+  }
+}
+
+String _$_lastReadMessageIdStreamHash() =>
+    r'f1805e38867d7ad7fbc182cf227420b00522e49c';
+
+final class _LastReadMessageIdStreamFamily extends $Family
+    with $FunctionalFamilyOverride<Stream<int?>, Snowflake> {
+  const _LastReadMessageIdStreamFamily._()
+    : super(
+        retry: null,
+        name: r'_lastReadMessageIdStreamProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: true,
+      );
+
+  _LastReadMessageIdStreamProvider call(Snowflake channelId) =>
+      _LastReadMessageIdStreamProvider._(argument: channelId, from: this);
+
+  @override
+  String toString() => r'_lastReadMessageIdStreamProvider';
+}
+
+/// Whether [channelId] has messages the user hasn't read yet. `false` for
+/// non-text channels (categories, voice, ...) since they have no read state.
+
+@ProviderFor(channelHasUnreads)
+const channelHasUnreadsProvider = ChannelHasUnreadsFamily._();
+
+/// Whether [channelId] has messages the user hasn't read yet. `false` for
+/// non-text channels (categories, voice, ...) since they have no read state.
+
+final class ChannelHasUnreadsProvider
+    extends $FunctionalProvider<bool, bool, bool>
+    with $Provider<bool> {
+  /// Whether [channelId] has messages the user hasn't read yet. `false` for
+  /// non-text channels (categories, voice, ...) since they have no read state.
+  const ChannelHasUnreadsProvider._({
+    required ChannelHasUnreadsFamily super.from,
+    required Snowflake super.argument,
+  }) : super(
+         retry: null,
+         name: r'channelHasUnreadsProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
+
+  @override
+  String debugGetCreateSourceHash() => _$channelHasUnreadsHash();
+
+  @override
+  String toString() {
+    return r'channelHasUnreadsProvider'
+        ''
+        '($argument)';
+  }
+
+  @$internal
+  @override
+  $ProviderElement<bool> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  bool create(Ref ref) {
+    final argument = this.argument as Snowflake;
+    return channelHasUnreads(ref, argument);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(bool value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<bool>(value),
+    );
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is ChannelHasUnreadsProvider && other.argument == argument;
+  }
+
+  @override
+  int get hashCode {
+    return argument.hashCode;
+  }
+}
+
+String _$channelHasUnreadsHash() => r'12ed943607399f6d44a17fc6ba449ff876f2c85d';
+
+/// Whether [channelId] has messages the user hasn't read yet. `false` for
+/// non-text channels (categories, voice, ...) since they have no read state.
+
+final class ChannelHasUnreadsFamily extends $Family
+    with $FunctionalFamilyOverride<bool, Snowflake> {
+  const ChannelHasUnreadsFamily._()
+    : super(
+        retry: null,
+        name: r'channelHasUnreadsProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: true,
+      );
+
+  /// Whether [channelId] has messages the user hasn't read yet. `false` for
+  /// non-text channels (categories, voice, ...) since they have no read state.
+
+  ChannelHasUnreadsProvider call(Snowflake channelId) =>
+      ChannelHasUnreadsProvider._(argument: channelId, from: this);
+
+  @override
+  String toString() => r'channelHasUnreadsProvider';
+}
+
+/// Whether any channel in [guildId] has unread messages.
+
+@ProviderFor(guildHasUnreads)
+const guildHasUnreadsProvider = GuildHasUnreadsFamily._();
+
+/// Whether any channel in [guildId] has unread messages.
+
+final class GuildHasUnreadsProvider
+    extends $FunctionalProvider<bool, bool, bool>
+    with $Provider<bool> {
+  /// Whether any channel in [guildId] has unread messages.
+  const GuildHasUnreadsProvider._({
+    required GuildHasUnreadsFamily super.from,
+    required Snowflake super.argument,
+  }) : super(
+         retry: null,
+         name: r'guildHasUnreadsProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
+
+  @override
+  String debugGetCreateSourceHash() => _$guildHasUnreadsHash();
+
+  @override
+  String toString() {
+    return r'guildHasUnreadsProvider'
+        ''
+        '($argument)';
+  }
+
+  @$internal
+  @override
+  $ProviderElement<bool> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  bool create(Ref ref) {
+    final argument = this.argument as Snowflake;
+    return guildHasUnreads(ref, argument);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(bool value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<bool>(value),
+    );
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is GuildHasUnreadsProvider && other.argument == argument;
+  }
+
+  @override
+  int get hashCode {
+    return argument.hashCode;
+  }
+}
+
+String _$guildHasUnreadsHash() => r'd23d957369b6c9ec1057779954cdaf98dd85b2fe';
+
+/// Whether any channel in [guildId] has unread messages.
+
+final class GuildHasUnreadsFamily extends $Family
+    with $FunctionalFamilyOverride<bool, Snowflake> {
+  const GuildHasUnreadsFamily._()
+    : super(
+        retry: null,
+        name: r'guildHasUnreadsProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: true,
+      );
+
+  /// Whether any channel in [guildId] has unread messages.
+
+  GuildHasUnreadsProvider call(Snowflake guildId) =>
+      GuildHasUnreadsProvider._(argument: guildId, from: this);
+
+  @override
+  String toString() => r'guildHasUnreadsProvider';
+}
+
+/// Whether any guild in [folder] has unread messages.
+
+@ProviderFor(folderHasUnreads)
+const folderHasUnreadsProvider = FolderHasUnreadsFamily._();
+
+/// Whether any guild in [folder] has unread messages.
+
+final class FolderHasUnreadsProvider
+    extends $FunctionalProvider<bool, bool, bool>
+    with $Provider<bool> {
+  /// Whether any guild in [folder] has unread messages.
+  const FolderHasUnreadsProvider._({
+    required FolderHasUnreadsFamily super.from,
+    required GuildFolder super.argument,
+  }) : super(
+         retry: null,
+         name: r'folderHasUnreadsProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
+
+  @override
+  String debugGetCreateSourceHash() => _$folderHasUnreadsHash();
+
+  @override
+  String toString() {
+    return r'folderHasUnreadsProvider'
+        ''
+        '($argument)';
+  }
+
+  @$internal
+  @override
+  $ProviderElement<bool> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  bool create(Ref ref) {
+    final argument = this.argument as GuildFolder;
+    return folderHasUnreads(ref, argument);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(bool value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<bool>(value),
+    );
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is FolderHasUnreadsProvider && other.argument == argument;
+  }
+
+  @override
+  int get hashCode {
+    return argument.hashCode;
+  }
+}
+
+String _$folderHasUnreadsHash() => r'8a32ac83f903e6ca50b3d00e85d1aca533f3cc11';
+
+/// Whether any guild in [folder] has unread messages.
+
+final class FolderHasUnreadsFamily extends $Family
+    with $FunctionalFamilyOverride<bool, GuildFolder> {
+  const FolderHasUnreadsFamily._()
+    : super(
+        retry: null,
+        name: r'folderHasUnreadsProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: true,
+      );
+
+  /// Whether any guild in [folder] has unread messages.
+
+  FolderHasUnreadsProvider call(GuildFolder folder) =>
+      FolderHasUnreadsProvider._(argument: folder, from: this);
+
+  @override
+  String toString() => r'folderHasUnreadsProvider';
+}

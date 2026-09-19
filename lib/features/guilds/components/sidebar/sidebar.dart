@@ -24,10 +24,12 @@ class _GuildSidebarState extends ConsumerState<GuildSidebar> {
             itemCount: entries.length,
             separatorBuilder: (context, index) => SizedBox(height: 8),
             itemBuilder: (context, index) => switch (entries[index]) {
-              GuildSidebarGuildEntry(:final guildId) =>
-                GuildSidebarItem(guildId: guildId),
-              GuildSidebarFolderEntry(:final folder) =>
-                GuildFolderItem(folder: folder),
+              GuildSidebarGuildEntry(:final guildId) => GuildSidebarItem(
+                guildId: guildId,
+              ),
+              GuildSidebarFolderEntry(:final folder) => GuildFolderItem(
+                folder: folder,
+              ),
             },
           ),
         ],

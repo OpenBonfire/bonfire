@@ -1,8 +1,8 @@
 import 'package:bonfire/features/authentication/repositories/auth.dart';
 import 'package:bonfire/features/gateway/store/entity_store.dart';
+import 'package:bonfire/features/guilds/components/guild_avatar.dart';
 import 'package:bonfire/features/guilds/components/sidebar/guild_item.dart';
 import 'package:bonfire/features/guilds/components/sidebar/item.dart';
-import 'package:bonfire/features/media/components/image.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -106,6 +106,7 @@ class _GuildFolderItemState extends ConsumerState<GuildFolderItem>
                   selectedRadiusFactor: 0.38,
                   deselectedRadiusFactor: 0.38,
                   selected: selected,
+                  hasUnreads: ref.watch(folderHasUnreadsProvider(widget.folder)),
                   onPressed: () {
                     HapticFeedback.lightImpact();
                     _toggleExpand();
@@ -173,11 +174,10 @@ class _GuildIcon extends ConsumerWidget {
     final guild = ref.watch(guildProvider(guildId))!;
     final client = ref.watch(clientControllerProvider)!;
 
-    return guild.icon != null
-        ? DiscordNetworkImage(
-            guild.icon!.getUrl(client).toString(),
-            borderRadius: .circular(8),
-          )
-        : Text("rah");
+    return GuildAvatar(
+      guild: guild,
+      client: client,
+      borderRadius: BorderRadius.circular(8),
+    );
   }
 }

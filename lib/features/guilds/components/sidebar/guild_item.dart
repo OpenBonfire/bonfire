@@ -1,7 +1,7 @@
 import 'package:bonfire/features/authentication/repositories/auth.dart';
 import 'package:bonfire/features/gateway/store/entity_store.dart';
+import 'package:bonfire/features/guilds/components/guild_avatar.dart';
 import 'package:bonfire/features/guilds/components/sidebar/item.dart';
-import 'package:bonfire/features/media/components/image.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -27,17 +27,13 @@ class GuildSidebarItem extends ConsumerWidget {
     return SidebarItem(
       padding: padding,
       selected: rawGuildId == guildId.toString(),
+      hasUnreads: ref.watch(guildHasUnreadsProvider(guildId)),
       title: guild.name,
       onPressed: () {
         HapticFeedback.lightImpact();
         context.go("/channels/$guildId");
       },
-      child: guild.icon != null
-          ? DiscordNetworkImage(
-              guild.icon!.getUrl(client).toString(),
-              fit: .cover,
-            )
-          : null,
+      child: GuildAvatar(guild: guild, client: client),
     );
   }
 }

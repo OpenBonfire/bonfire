@@ -634,12 +634,287 @@ class KeyValuesCompanion extends UpdateCompanion<KeyValue> {
   }
 }
 
+class $ReadStatesTable extends ReadStates
+    with TableInfo<$ReadStatesTable, ReadStateRow> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $ReadStatesTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _channelIdMeta = const VerificationMeta(
+    'channelId',
+  );
+  @override
+  late final GeneratedColumn<int> channelId = GeneratedColumn<int>(
+    'channel_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _lastMessageIdMeta = const VerificationMeta(
+    'lastMessageId',
+  );
+  @override
+  late final GeneratedColumn<int> lastMessageId = GeneratedColumn<int>(
+    'last_message_id',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _mentionCountMeta = const VerificationMeta(
+    'mentionCount',
+  );
+  @override
+  late final GeneratedColumn<int> mentionCount = GeneratedColumn<int>(
+    'mention_count',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    channelId,
+    lastMessageId,
+    mentionCount,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'read_states';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<ReadStateRow> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('channel_id')) {
+      context.handle(
+        _channelIdMeta,
+        channelId.isAcceptableOrUnknown(data['channel_id']!, _channelIdMeta),
+      );
+    }
+    if (data.containsKey('last_message_id')) {
+      context.handle(
+        _lastMessageIdMeta,
+        lastMessageId.isAcceptableOrUnknown(
+          data['last_message_id']!,
+          _lastMessageIdMeta,
+        ),
+      );
+    }
+    if (data.containsKey('mention_count')) {
+      context.handle(
+        _mentionCountMeta,
+        mentionCount.isAcceptableOrUnknown(
+          data['mention_count']!,
+          _mentionCountMeta,
+        ),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {channelId};
+  @override
+  ReadStateRow map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return ReadStateRow(
+      channelId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}channel_id'],
+      )!,
+      lastMessageId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}last_message_id'],
+      ),
+      mentionCount: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}mention_count'],
+      ),
+    );
+  }
+
+  @override
+  $ReadStatesTable createAlias(String alias) {
+    return $ReadStatesTable(attachedDatabase, alias);
+  }
+}
+
+class ReadStateRow extends DataClass implements Insertable<ReadStateRow> {
+  final int channelId;
+  final int? lastMessageId;
+  final int? mentionCount;
+  const ReadStateRow({
+    required this.channelId,
+    this.lastMessageId,
+    this.mentionCount,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['channel_id'] = Variable<int>(channelId);
+    if (!nullToAbsent || lastMessageId != null) {
+      map['last_message_id'] = Variable<int>(lastMessageId);
+    }
+    if (!nullToAbsent || mentionCount != null) {
+      map['mention_count'] = Variable<int>(mentionCount);
+    }
+    return map;
+  }
+
+  ReadStatesCompanion toCompanion(bool nullToAbsent) {
+    return ReadStatesCompanion(
+      channelId: Value(channelId),
+      lastMessageId: lastMessageId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(lastMessageId),
+      mentionCount: mentionCount == null && nullToAbsent
+          ? const Value.absent()
+          : Value(mentionCount),
+    );
+  }
+
+  factory ReadStateRow.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return ReadStateRow(
+      channelId: serializer.fromJson<int>(json['channelId']),
+      lastMessageId: serializer.fromJson<int?>(json['lastMessageId']),
+      mentionCount: serializer.fromJson<int?>(json['mentionCount']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'channelId': serializer.toJson<int>(channelId),
+      'lastMessageId': serializer.toJson<int?>(lastMessageId),
+      'mentionCount': serializer.toJson<int?>(mentionCount),
+    };
+  }
+
+  ReadStateRow copyWith({
+    int? channelId,
+    Value<int?> lastMessageId = const Value.absent(),
+    Value<int?> mentionCount = const Value.absent(),
+  }) => ReadStateRow(
+    channelId: channelId ?? this.channelId,
+    lastMessageId: lastMessageId.present
+        ? lastMessageId.value
+        : this.lastMessageId,
+    mentionCount: mentionCount.present ? mentionCount.value : this.mentionCount,
+  );
+  ReadStateRow copyWithCompanion(ReadStatesCompanion data) {
+    return ReadStateRow(
+      channelId: data.channelId.present ? data.channelId.value : this.channelId,
+      lastMessageId: data.lastMessageId.present
+          ? data.lastMessageId.value
+          : this.lastMessageId,
+      mentionCount: data.mentionCount.present
+          ? data.mentionCount.value
+          : this.mentionCount,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ReadStateRow(')
+          ..write('channelId: $channelId, ')
+          ..write('lastMessageId: $lastMessageId, ')
+          ..write('mentionCount: $mentionCount')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(channelId, lastMessageId, mentionCount);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is ReadStateRow &&
+          other.channelId == this.channelId &&
+          other.lastMessageId == this.lastMessageId &&
+          other.mentionCount == this.mentionCount);
+}
+
+class ReadStatesCompanion extends UpdateCompanion<ReadStateRow> {
+  final Value<int> channelId;
+  final Value<int?> lastMessageId;
+  final Value<int?> mentionCount;
+  const ReadStatesCompanion({
+    this.channelId = const Value.absent(),
+    this.lastMessageId = const Value.absent(),
+    this.mentionCount = const Value.absent(),
+  });
+  ReadStatesCompanion.insert({
+    this.channelId = const Value.absent(),
+    this.lastMessageId = const Value.absent(),
+    this.mentionCount = const Value.absent(),
+  });
+  static Insertable<ReadStateRow> custom({
+    Expression<int>? channelId,
+    Expression<int>? lastMessageId,
+    Expression<int>? mentionCount,
+  }) {
+    return RawValuesInsertable({
+      if (channelId != null) 'channel_id': channelId,
+      if (lastMessageId != null) 'last_message_id': lastMessageId,
+      if (mentionCount != null) 'mention_count': mentionCount,
+    });
+  }
+
+  ReadStatesCompanion copyWith({
+    Value<int>? channelId,
+    Value<int?>? lastMessageId,
+    Value<int?>? mentionCount,
+  }) {
+    return ReadStatesCompanion(
+      channelId: channelId ?? this.channelId,
+      lastMessageId: lastMessageId ?? this.lastMessageId,
+      mentionCount: mentionCount ?? this.mentionCount,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (channelId.present) {
+      map['channel_id'] = Variable<int>(channelId.value);
+    }
+    if (lastMessageId.present) {
+      map['last_message_id'] = Variable<int>(lastMessageId.value);
+    }
+    if (mentionCount.present) {
+      map['mention_count'] = Variable<int>(mentionCount.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ReadStatesCompanion(')
+          ..write('channelId: $channelId, ')
+          ..write('lastMessageId: $lastMessageId, ')
+          ..write('mentionCount: $mentionCount')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
   late final $GuildsTable guilds = $GuildsTable(this);
   late final $ChannelsTable channels = $ChannelsTable(this);
   late final $KeyValuesTable keyValues = $KeyValuesTable(this);
+  late final $ReadStatesTable readStates = $ReadStatesTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -648,6 +923,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     guilds,
     channels,
     keyValues,
+    readStates,
   ];
 }
 
@@ -1050,6 +1326,166 @@ typedef $$KeyValuesTableProcessedTableManager =
       KeyValue,
       PrefetchHooks Function()
     >;
+typedef $$ReadStatesTableCreateCompanionBuilder =
+    ReadStatesCompanion Function({
+      Value<int> channelId,
+      Value<int?> lastMessageId,
+      Value<int?> mentionCount,
+    });
+typedef $$ReadStatesTableUpdateCompanionBuilder =
+    ReadStatesCompanion Function({
+      Value<int> channelId,
+      Value<int?> lastMessageId,
+      Value<int?> mentionCount,
+    });
+
+class $$ReadStatesTableFilterComposer
+    extends Composer<_$AppDatabase, $ReadStatesTable> {
+  $$ReadStatesTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get channelId => $composableBuilder(
+    column: $table.channelId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get lastMessageId => $composableBuilder(
+    column: $table.lastMessageId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get mentionCount => $composableBuilder(
+    column: $table.mentionCount,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$ReadStatesTableOrderingComposer
+    extends Composer<_$AppDatabase, $ReadStatesTable> {
+  $$ReadStatesTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get channelId => $composableBuilder(
+    column: $table.channelId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get lastMessageId => $composableBuilder(
+    column: $table.lastMessageId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get mentionCount => $composableBuilder(
+    column: $table.mentionCount,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$ReadStatesTableAnnotationComposer
+    extends Composer<_$AppDatabase, $ReadStatesTable> {
+  $$ReadStatesTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get channelId =>
+      $composableBuilder(column: $table.channelId, builder: (column) => column);
+
+  GeneratedColumn<int> get lastMessageId => $composableBuilder(
+    column: $table.lastMessageId,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get mentionCount => $composableBuilder(
+    column: $table.mentionCount,
+    builder: (column) => column,
+  );
+}
+
+class $$ReadStatesTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $ReadStatesTable,
+          ReadStateRow,
+          $$ReadStatesTableFilterComposer,
+          $$ReadStatesTableOrderingComposer,
+          $$ReadStatesTableAnnotationComposer,
+          $$ReadStatesTableCreateCompanionBuilder,
+          $$ReadStatesTableUpdateCompanionBuilder,
+          (
+            ReadStateRow,
+            BaseReferences<_$AppDatabase, $ReadStatesTable, ReadStateRow>,
+          ),
+          ReadStateRow,
+          PrefetchHooks Function()
+        > {
+  $$ReadStatesTableTableManager(_$AppDatabase db, $ReadStatesTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$ReadStatesTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$ReadStatesTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$ReadStatesTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<int> channelId = const Value.absent(),
+                Value<int?> lastMessageId = const Value.absent(),
+                Value<int?> mentionCount = const Value.absent(),
+              }) => ReadStatesCompanion(
+                channelId: channelId,
+                lastMessageId: lastMessageId,
+                mentionCount: mentionCount,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> channelId = const Value.absent(),
+                Value<int?> lastMessageId = const Value.absent(),
+                Value<int?> mentionCount = const Value.absent(),
+              }) => ReadStatesCompanion.insert(
+                channelId: channelId,
+                lastMessageId: lastMessageId,
+                mentionCount: mentionCount,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$ReadStatesTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $ReadStatesTable,
+      ReadStateRow,
+      $$ReadStatesTableFilterComposer,
+      $$ReadStatesTableOrderingComposer,
+      $$ReadStatesTableAnnotationComposer,
+      $$ReadStatesTableCreateCompanionBuilder,
+      $$ReadStatesTableUpdateCompanionBuilder,
+      (
+        ReadStateRow,
+        BaseReferences<_$AppDatabase, $ReadStatesTable, ReadStateRow>,
+      ),
+      ReadStateRow,
+      PrefetchHooks Function()
+    >;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -1060,4 +1496,6 @@ class $AppDatabaseManager {
       $$ChannelsTableTableManager(_db, _db.channels);
   $$KeyValuesTableTableManager get keyValues =>
       $$KeyValuesTableTableManager(_db, _db.keyValues);
+  $$ReadStatesTableTableManager get readStates =>
+      $$ReadStatesTableTableManager(_db, _db.readStates);
 }

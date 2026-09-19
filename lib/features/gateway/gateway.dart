@@ -58,5 +58,8 @@ void _handleCacheUpdate(Ref ref, Object? entity) {
 
     case Channel():
       db.upsertChannel(entity);
+
+    case ReadState():
+      db.upsertReadState(entity);
   }
 }
