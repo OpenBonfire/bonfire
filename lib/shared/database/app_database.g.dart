@@ -1023,7 +1023,16 @@ class $$GuildsTableTableManager
               ({Value<int> id = const Value.absent(), required String data}) =>
                   GuildsCompanion.insert(id: id, data: data),
           withReferenceMapper: (p0) => p0
-              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .map(
+                (e) => (
+                  e.readTable<$GuildsTable, GuildRow>(table),
+                  BaseReferences<_$AppDatabase, $GuildsTable, GuildRow>(
+                    db,
+                    table,
+                    e,
+                  ),
+                ),
+              )
               .toList(),
           prefetchHooksCallback: null,
         ),
@@ -1172,7 +1181,16 @@ class $$ChannelsTableTableManager
                 data: data,
               ),
           withReferenceMapper: (p0) => p0
-              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .map(
+                (e) => (
+                  e.readTable<$ChannelsTable, ChannelRow>(table),
+                  BaseReferences<_$AppDatabase, $ChannelsTable, ChannelRow>(
+                    db,
+                    table,
+                    e,
+                  ),
+                ),
+              )
               .toList(),
           prefetchHooksCallback: null,
         ),
@@ -1305,7 +1323,16 @@ class $$KeyValuesTableTableManager
                 rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0
-              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .map(
+                (e) => (
+                  e.readTable<$KeyValuesTable, KeyValue>(table),
+                  BaseReferences<_$AppDatabase, $KeyValuesTable, KeyValue>(
+                    db,
+                    table,
+                    e,
+                  ),
+                ),
+              )
               .toList(),
           prefetchHooksCallback: null,
         ),
@@ -1462,7 +1489,16 @@ class $$ReadStatesTableTableManager
                 mentionCount: mentionCount,
               ),
           withReferenceMapper: (p0) => p0
-              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .map(
+                (e) => (
+                  e.readTable<$ReadStatesTable, ReadStateRow>(table),
+                  BaseReferences<_$AppDatabase, $ReadStatesTable, ReadStateRow>(
+                    db,
+                    table,
+                    e,
+                  ),
+                ),
+              )
               .toList(),
           prefetchHooksCallback: null,
         ),

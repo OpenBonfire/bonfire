@@ -13,7 +13,7 @@ part of 'database_provider.dart';
 /// queries can be shared across every screen without reopening the db.
 
 @ProviderFor(appDatabase)
-const appDatabaseProvider = AppDatabaseProvider._();
+final appDatabaseProvider = AppDatabaseProvider._();
 
 /// The single, app-wide Drift database instance. This is the source of truth
 /// for cached entities - kept alive for the lifetime of the app so watch
@@ -25,7 +25,7 @@ final class AppDatabaseProvider
   /// The single, app-wide Drift database instance. This is the source of truth
   /// for cached entities - kept alive for the lifetime of the app so watch
   /// queries can be shared across every screen without reopening the db.
-  const AppDatabaseProvider._()
+  AppDatabaseProvider._()
     : super(
         from: null,
         argument: null,

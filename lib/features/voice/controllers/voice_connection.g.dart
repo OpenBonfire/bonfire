@@ -10,11 +10,11 @@ part of 'voice_connection.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(VoiceConnectionController)
-const voiceConnectionControllerProvider = VoiceConnectionControllerProvider._();
+final voiceConnectionControllerProvider = VoiceConnectionControllerProvider._();
 
 final class VoiceConnectionControllerProvider
     extends $NotifierProvider<VoiceConnectionController, VoiceConnectionState> {
-  const VoiceConnectionControllerProvider._()
+  VoiceConnectionControllerProvider._()
     : super(
         from: null,
         argument: null,
@@ -49,8 +49,7 @@ abstract class _$VoiceConnectionController
   VoiceConnectionState build();
   @$mustCallSuper
   @override
-  void runBuild() {
-    final created = build();
+  WhenComplete runBuild() {
     final ref = this.ref as $Ref<VoiceConnectionState, VoiceConnectionState>;
     final element =
         ref.element
@@ -60,6 +59,6 @@ abstract class _$VoiceConnectionController
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    return element.handleCreate(ref, build);
   }
 }

@@ -10,11 +10,11 @@ part of 'gateway.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(GatewayController)
-const gatewayControllerProvider = GatewayControllerProvider._();
+final gatewayControllerProvider = GatewayControllerProvider._();
 
 final class GatewayControllerProvider
     extends $NotifierProvider<GatewayController, void> {
-  const GatewayControllerProvider._()
+  GatewayControllerProvider._()
     : super(
         from: null,
         argument: null,
@@ -47,8 +47,7 @@ abstract class _$GatewayController extends $Notifier<void> {
   void build();
   @$mustCallSuper
   @override
-  void runBuild() {
-    build();
+  WhenComplete runBuild() {
     final ref = this.ref as $Ref<void, void>;
     final element =
         ref.element
@@ -58,6 +57,6 @@ abstract class _$GatewayController extends $Notifier<void> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, null);
+    return element.handleCreate(ref, build);
   }
 }

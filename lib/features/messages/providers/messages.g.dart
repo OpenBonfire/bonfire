@@ -10,11 +10,11 @@ part of 'messages.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(ChannelMessages)
-const channelMessagesProvider = ChannelMessagesFamily._();
+final channelMessagesProvider = ChannelMessagesFamily._();
 
 final class ChannelMessagesProvider
     extends $AsyncNotifierProvider<ChannelMessages, List<Message>> {
-  const ChannelMessagesProvider._({
+  ChannelMessagesProvider._({
     required ChannelMessagesFamily super.from,
     required Snowflake super.argument,
   }) : super(
@@ -61,7 +61,7 @@ final class ChannelMessagesFamily extends $Family
           FutureOr<List<Message>>,
           Snowflake
         > {
-  const ChannelMessagesFamily._()
+  ChannelMessagesFamily._()
     : super(
         retry: null,
         name: r'channelMessagesProvider',
@@ -84,8 +84,7 @@ abstract class _$ChannelMessages extends $AsyncNotifier<List<Message>> {
   FutureOr<List<Message>> build(Snowflake channelId);
   @$mustCallSuper
   @override
-  void runBuild() {
-    final created = build(_$args);
+  WhenComplete runBuild() {
     final ref = this.ref as $Ref<AsyncValue<List<Message>>, List<Message>>;
     final element =
         ref.element
@@ -95,6 +94,6 @@ abstract class _$ChannelMessages extends $AsyncNotifier<List<Message>> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    return element.handleCreate(ref, () => build(_$args));
   }
 }

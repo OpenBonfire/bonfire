@@ -10,7 +10,7 @@ part of 'entity_store.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(_guildIdsStream)
-const _guildIdsStreamProvider = _GuildIdsStreamProvider._();
+final _guildIdsStreamProvider = _GuildIdsStreamProvider._();
 
 final class _GuildIdsStreamProvider
     extends
@@ -20,7 +20,7 @@ final class _GuildIdsStreamProvider
           Stream<List<Snowflake>>
         >
     with $FutureModifier<List<Snowflake>>, $StreamProvider<List<Snowflake>> {
-  const _GuildIdsStreamProvider._()
+  _GuildIdsStreamProvider._()
     : super(
         from: null,
         argument: null,
@@ -49,13 +49,13 @@ final class _GuildIdsStreamProvider
 String _$_guildIdsStreamHash() => r'b1f21cbebecf3453c95e541ffb7bb5ce9f0112b0';
 
 @ProviderFor(guildIds)
-const guildIdsProvider = GuildIdsProvider._();
+final guildIdsProvider = GuildIdsProvider._();
 
 final class GuildIdsProvider
     extends
         $FunctionalProvider<List<Snowflake>, List<Snowflake>, List<Snowflake>>
     with $Provider<List<Snowflake>> {
-  const GuildIdsProvider._()
+  GuildIdsProvider._()
     : super(
         from: null,
         argument: null,
@@ -91,12 +91,12 @@ final class GuildIdsProvider
 String _$guildIdsHash() => r'740e8be0196b027aa311944dd2d29d01de00786e';
 
 @ProviderFor(_guildStream)
-const _guildStreamProvider = _GuildStreamFamily._();
+final _guildStreamProvider = _GuildStreamFamily._();
 
 final class _GuildStreamProvider
     extends $FunctionalProvider<AsyncValue<Guild?>, Guild?, Stream<Guild?>>
     with $FutureModifier<Guild?>, $StreamProvider<Guild?> {
-  const _GuildStreamProvider._({
+  _GuildStreamProvider._({
     required _GuildStreamFamily super.from,
     required Snowflake super.argument,
   }) : super(
@@ -143,7 +143,7 @@ String _$_guildStreamHash() => r'a03873b053315c67afcd7239e0e71acb534849f8';
 
 final class _GuildStreamFamily extends $Family
     with $FunctionalFamilyOverride<Stream<Guild?>, Snowflake> {
-  const _GuildStreamFamily._()
+  _GuildStreamFamily._()
     : super(
         retry: null,
         name: r'_guildStreamProvider',
@@ -160,11 +160,11 @@ final class _GuildStreamFamily extends $Family
 }
 
 @ProviderFor(guild)
-const guildProvider = GuildFamily._();
+final guildProvider = GuildFamily._();
 
 final class GuildProvider extends $FunctionalProvider<Guild?, Guild?, Guild?>
     with $Provider<Guild?> {
-  const GuildProvider._({
+  GuildProvider._({
     required GuildFamily super.from,
     required Snowflake super.argument,
   }) : super(
@@ -219,7 +219,7 @@ String _$guildHash() => r'd75bc7f43e8dcb5a2510ef706a51eb4251ed3a72';
 
 final class GuildFamily extends $Family
     with $FunctionalFamilyOverride<Guild?, Snowflake> {
-  const GuildFamily._()
+  GuildFamily._()
     : super(
         retry: null,
         name: r'guildProvider',
@@ -235,7 +235,7 @@ final class GuildFamily extends $Family
 }
 
 @ProviderFor(_guildFoldersStream)
-const _guildFoldersStreamProvider = _GuildFoldersStreamProvider._();
+final _guildFoldersStreamProvider = _GuildFoldersStreamProvider._();
 
 final class _GuildFoldersStreamProvider
     extends
@@ -247,7 +247,7 @@ final class _GuildFoldersStreamProvider
     with
         $FutureModifier<List<GuildFolder>>,
         $StreamProvider<List<GuildFolder>> {
-  const _GuildFoldersStreamProvider._()
+  _GuildFoldersStreamProvider._()
     : super(
         from: null,
         argument: null,
@@ -277,7 +277,7 @@ String _$_guildFoldersStreamHash() =>
     r'2e53bb55b87ce519af44410376a32afacb2bc482';
 
 @ProviderFor(guildFolders)
-const guildFoldersProvider = GuildFoldersProvider._();
+final guildFoldersProvider = GuildFoldersProvider._();
 
 final class GuildFoldersProvider
     extends
@@ -287,7 +287,7 @@ final class GuildFoldersProvider
           List<GuildFolder>
         >
     with $Provider<List<GuildFolder>> {
-  const GuildFoldersProvider._()
+  GuildFoldersProvider._()
     : super(
         from: null,
         argument: null,
@@ -324,7 +324,7 @@ final class GuildFoldersProvider
 String _$guildFoldersHash() => r'55d302dbed6d6a5b3aac320fdf2b03906405b15e';
 
 @ProviderFor(_guildChannelsStream)
-const _guildChannelsStreamProvider = _GuildChannelsStreamFamily._();
+final _guildChannelsStreamProvider = _GuildChannelsStreamFamily._();
 
 final class _GuildChannelsStreamProvider
     extends
@@ -334,7 +334,7 @@ final class _GuildChannelsStreamProvider
           Stream<List<Channel>>
         >
     with $FutureModifier<List<Channel>>, $StreamProvider<List<Channel>> {
-  const _GuildChannelsStreamProvider._({
+  _GuildChannelsStreamProvider._({
     required _GuildChannelsStreamFamily super.from,
     required Snowflake super.argument,
   }) : super(
@@ -383,7 +383,7 @@ String _$_guildChannelsStreamHash() =>
 
 final class _GuildChannelsStreamFamily extends $Family
     with $FunctionalFamilyOverride<Stream<List<Channel>>, Snowflake> {
-  const _GuildChannelsStreamFamily._()
+  _GuildChannelsStreamFamily._()
     : super(
         retry: null,
         name: r'_guildChannelsStreamProvider',
@@ -400,12 +400,12 @@ final class _GuildChannelsStreamFamily extends $Family
 }
 
 @ProviderFor(guildChannels)
-const guildChannelsProvider = GuildChannelsFamily._();
+final guildChannelsProvider = GuildChannelsFamily._();
 
 final class GuildChannelsProvider
     extends $FunctionalProvider<List<Channel>?, List<Channel>?, List<Channel>?>
     with $Provider<List<Channel>?> {
-  const GuildChannelsProvider._({
+  GuildChannelsProvider._({
     required GuildChannelsFamily super.from,
     required Snowflake super.argument,
   }) : super(
@@ -460,7 +460,7 @@ String _$guildChannelsHash() => r'fbd6c50241a709a767cf31d9f218b23a6a28344e';
 
 final class GuildChannelsFamily extends $Family
     with $FunctionalFamilyOverride<List<Channel>?, Snowflake> {
-  const GuildChannelsFamily._()
+  GuildChannelsFamily._()
     : super(
         retry: null,
         name: r'guildChannelsProvider',
@@ -477,13 +477,13 @@ final class GuildChannelsFamily extends $Family
 }
 
 @ProviderFor(_channelStream)
-const _channelStreamProvider = _ChannelStreamFamily._();
+final _channelStreamProvider = _ChannelStreamFamily._();
 
 final class _ChannelStreamProvider
     extends
         $FunctionalProvider<AsyncValue<Channel?>, Channel?, Stream<Channel?>>
     with $FutureModifier<Channel?>, $StreamProvider<Channel?> {
-  const _ChannelStreamProvider._({
+  _ChannelStreamProvider._({
     required _ChannelStreamFamily super.from,
     required Snowflake super.argument,
   }) : super(
@@ -530,7 +530,7 @@ String _$_channelStreamHash() => r'a81622d8ed0de57fffc939b707b3d753ec39a76b';
 
 final class _ChannelStreamFamily extends $Family
     with $FunctionalFamilyOverride<Stream<Channel?>, Snowflake> {
-  const _ChannelStreamFamily._()
+  _ChannelStreamFamily._()
     : super(
         retry: null,
         name: r'_channelStreamProvider',
@@ -547,12 +547,12 @@ final class _ChannelStreamFamily extends $Family
 }
 
 @ProviderFor(channel)
-const channelProvider = ChannelFamily._();
+final channelProvider = ChannelFamily._();
 
 final class ChannelProvider
     extends $FunctionalProvider<Channel?, Channel?, Channel?>
     with $Provider<Channel?> {
-  const ChannelProvider._({
+  ChannelProvider._({
     required ChannelFamily super.from,
     required Snowflake super.argument,
   }) : super(
@@ -607,7 +607,7 @@ String _$channelHash() => r'a6d521772671d6ac0e8d48d7250297bbd6cfcc9c';
 
 final class ChannelFamily extends $Family
     with $FunctionalFamilyOverride<Channel?, Snowflake> {
-  const ChannelFamily._()
+  ChannelFamily._()
     : super(
         retry: null,
         name: r'channelProvider',
@@ -624,12 +624,12 @@ final class ChannelFamily extends $Family
 }
 
 @ProviderFor(_lastReadMessageIdStream)
-const _lastReadMessageIdStreamProvider = _LastReadMessageIdStreamFamily._();
+final _lastReadMessageIdStreamProvider = _LastReadMessageIdStreamFamily._();
 
 final class _LastReadMessageIdStreamProvider
     extends $FunctionalProvider<AsyncValue<int?>, int?, Stream<int?>>
     with $FutureModifier<int?>, $StreamProvider<int?> {
-  const _LastReadMessageIdStreamProvider._({
+  _LastReadMessageIdStreamProvider._({
     required _LastReadMessageIdStreamFamily super.from,
     required Snowflake super.argument,
   }) : super(
@@ -678,7 +678,7 @@ String _$_lastReadMessageIdStreamHash() =>
 
 final class _LastReadMessageIdStreamFamily extends $Family
     with $FunctionalFamilyOverride<Stream<int?>, Snowflake> {
-  const _LastReadMessageIdStreamFamily._()
+  _LastReadMessageIdStreamFamily._()
     : super(
         retry: null,
         name: r'_lastReadMessageIdStreamProvider',
@@ -698,7 +698,7 @@ final class _LastReadMessageIdStreamFamily extends $Family
 /// non-text channels (categories, voice, ...) since they have no read state.
 
 @ProviderFor(channelHasUnreads)
-const channelHasUnreadsProvider = ChannelHasUnreadsFamily._();
+final channelHasUnreadsProvider = ChannelHasUnreadsFamily._();
 
 /// Whether [channelId] has messages the user hasn't read yet. `false` for
 /// non-text channels (categories, voice, ...) since they have no read state.
@@ -708,7 +708,7 @@ final class ChannelHasUnreadsProvider
     with $Provider<bool> {
   /// Whether [channelId] has messages the user hasn't read yet. `false` for
   /// non-text channels (categories, voice, ...) since they have no read state.
-  const ChannelHasUnreadsProvider._({
+  ChannelHasUnreadsProvider._({
     required ChannelHasUnreadsFamily super.from,
     required Snowflake super.argument,
   }) : super(
@@ -766,7 +766,7 @@ String _$channelHasUnreadsHash() => r'12ed943607399f6d44a17fc6ba449ff876f2c85d';
 
 final class ChannelHasUnreadsFamily extends $Family
     with $FunctionalFamilyOverride<bool, Snowflake> {
-  const ChannelHasUnreadsFamily._()
+  ChannelHasUnreadsFamily._()
     : super(
         retry: null,
         name: r'channelHasUnreadsProvider',
@@ -788,7 +788,7 @@ final class ChannelHasUnreadsFamily extends $Family
 /// Whether any channel in [guildId] has unread messages.
 
 @ProviderFor(guildHasUnreads)
-const guildHasUnreadsProvider = GuildHasUnreadsFamily._();
+final guildHasUnreadsProvider = GuildHasUnreadsFamily._();
 
 /// Whether any channel in [guildId] has unread messages.
 
@@ -796,7 +796,7 @@ final class GuildHasUnreadsProvider
     extends $FunctionalProvider<bool, bool, bool>
     with $Provider<bool> {
   /// Whether any channel in [guildId] has unread messages.
-  const GuildHasUnreadsProvider._({
+  GuildHasUnreadsProvider._({
     required GuildHasUnreadsFamily super.from,
     required Snowflake super.argument,
   }) : super(
@@ -853,7 +853,7 @@ String _$guildHasUnreadsHash() => r'd23d957369b6c9ec1057779954cdaf98dd85b2fe';
 
 final class GuildHasUnreadsFamily extends $Family
     with $FunctionalFamilyOverride<bool, Snowflake> {
-  const GuildHasUnreadsFamily._()
+  GuildHasUnreadsFamily._()
     : super(
         retry: null,
         name: r'guildHasUnreadsProvider',
@@ -874,7 +874,7 @@ final class GuildHasUnreadsFamily extends $Family
 /// Whether any guild in [folder] has unread messages.
 
 @ProviderFor(folderHasUnreads)
-const folderHasUnreadsProvider = FolderHasUnreadsFamily._();
+final folderHasUnreadsProvider = FolderHasUnreadsFamily._();
 
 /// Whether any guild in [folder] has unread messages.
 
@@ -882,7 +882,7 @@ final class FolderHasUnreadsProvider
     extends $FunctionalProvider<bool, bool, bool>
     with $Provider<bool> {
   /// Whether any guild in [folder] has unread messages.
-  const FolderHasUnreadsProvider._({
+  FolderHasUnreadsProvider._({
     required FolderHasUnreadsFamily super.from,
     required GuildFolder super.argument,
   }) : super(
@@ -939,7 +939,7 @@ String _$folderHasUnreadsHash() => r'8a32ac83f903e6ca50b3d00e85d1aca533f3cc11';
 
 final class FolderHasUnreadsFamily extends $Family
     with $FunctionalFamilyOverride<bool, GuildFolder> {
-  const FolderHasUnreadsFamily._()
+  FolderHasUnreadsFamily._()
     : super(
         retry: null,
         name: r'folderHasUnreadsProvider',

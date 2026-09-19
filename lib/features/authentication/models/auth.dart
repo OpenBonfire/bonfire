@@ -1,6 +1,5 @@
 import 'package:bonfire/features/authentication/repositories/discord_auth.dart';
 import 'package:dart_mappable/dart_mappable.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'auth.mapper.dart';
 
@@ -40,14 +39,16 @@ class MFARequired extends AuthResponse with MFARequiredMappable {
 /// Captcha required response with [captcha_key], [captcha_sitekey], and [captcha_service]
 @MappableClass()
 class CaptchaResponse extends AuthResponse with CaptchaResponseMappable {
+  final List<dynamic> captcha_key;
+  final String captcha_sitekey;
+  final String captcha_service;
   CaptchaResponse({
-    required List<dynamic> captcha_key,
-    required String captcha_sitekey,
-    required String captcha_service,
+    required this.captcha_key,
+    required this.captcha_sitekey,
+    required this.captcha_service,
   });
 }
 
-@sealed
 abstract class LoginAuthenticator {}
 
 class CredentialsUserAuth extends LoginAuthenticator {

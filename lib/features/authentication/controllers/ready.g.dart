@@ -10,11 +10,11 @@ part of 'ready.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(ReadyController)
-const readyControllerProvider = ReadyControllerProvider._();
+final readyControllerProvider = ReadyControllerProvider._();
 
 final class ReadyControllerProvider
     extends $NotifierProvider<ReadyController, bool> {
-  const ReadyControllerProvider._()
+  ReadyControllerProvider._()
     : super(
         from: null,
         argument: null,
@@ -47,8 +47,7 @@ abstract class _$ReadyController extends $Notifier<bool> {
   bool build();
   @$mustCallSuper
   @override
-  void runBuild() {
-    final created = build();
+  WhenComplete runBuild() {
     final ref = this.ref as $Ref<bool, bool>;
     final element =
         ref.element
@@ -58,6 +57,6 @@ abstract class _$ReadyController extends $Notifier<bool> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    return element.handleCreate(ref, build);
   }
 }

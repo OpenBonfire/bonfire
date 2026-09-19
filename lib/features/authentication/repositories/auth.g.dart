@@ -11,13 +11,13 @@ part of 'auth.dart';
 /// A riverpod provider that handles authentication with Discord.
 
 @ProviderFor(ClientController)
-const clientControllerProvider = ClientControllerProvider._();
+final clientControllerProvider = ClientControllerProvider._();
 
 /// A riverpod provider that handles authentication with Discord.
 final class ClientControllerProvider
     extends $NotifierProvider<ClientController, FirebridgeGateway?> {
   /// A riverpod provider that handles authentication with Discord.
-  const ClientControllerProvider._()
+  ClientControllerProvider._()
     : super(
         from: null,
         argument: null,
@@ -52,8 +52,7 @@ abstract class _$ClientController extends $Notifier<FirebridgeGateway?> {
   FirebridgeGateway? build();
   @$mustCallSuper
   @override
-  void runBuild() {
-    final created = build();
+  WhenComplete runBuild() {
     final ref = this.ref as $Ref<FirebridgeGateway?, FirebridgeGateway?>;
     final element =
         ref.element
@@ -63,6 +62,6 @@ abstract class _$ClientController extends $Notifier<FirebridgeGateway?> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    return element.handleCreate(ref, build);
   }
 }

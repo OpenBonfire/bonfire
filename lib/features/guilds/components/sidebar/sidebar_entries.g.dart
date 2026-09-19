@@ -14,7 +14,7 @@ part of 'sidebar_entries.dart';
 /// [GuildSidebarGuildEntry], all in [guildIdsProvider] order.
 
 @ProviderFor(guildSidebarEntries)
-const guildSidebarEntriesProvider = GuildSidebarEntriesProvider._();
+final guildSidebarEntriesProvider = GuildSidebarEntriesProvider._();
 
 /// The ordered, deduplicated list of sidebar rows: guilds in a folder are
 /// collapsed into a single [GuildSidebarFolderEntry] (at the position of the
@@ -33,7 +33,7 @@ final class GuildSidebarEntriesProvider
   /// collapsed into a single [GuildSidebarFolderEntry] (at the position of the
   /// first of their guilds), every other guild becomes its own
   /// [GuildSidebarGuildEntry], all in [guildIdsProvider] order.
-  const GuildSidebarEntriesProvider._()
+  GuildSidebarEntriesProvider._()
     : super(
         from: null,
         argument: null,

@@ -10,7 +10,7 @@ part of 'channel_members.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(GuildMemberList)
-const guildMemberListProvider = GuildMemberListFamily._();
+final guildMemberListProvider = GuildMemberListFamily._();
 
 final class GuildMemberListProvider
     extends
@@ -18,7 +18,7 @@ final class GuildMemberListProvider
           GuildMemberList,
           Pair<List<GuildMemberListGroup>, List<dynamic>>
         > {
-  const GuildMemberListProvider._({
+  GuildMemberListProvider._({
     required GuildMemberListFamily super.from,
     required Snowflake super.argument,
   }) : super(
@@ -65,7 +65,7 @@ final class GuildMemberListFamily extends $Family
           FutureOr<Pair<List<GuildMemberListGroup>, List<dynamic>>>,
           Snowflake
         > {
-  const GuildMemberListFamily._()
+  GuildMemberListFamily._()
     : super(
         retry: null,
         name: r'guildMemberListProvider',
@@ -91,8 +91,7 @@ abstract class _$GuildMemberList
   );
   @$mustCallSuper
   @override
-  void runBuild() {
-    final created = build(_$args);
+  WhenComplete runBuild() {
     final ref =
         this.ref
             as $Ref<
@@ -110,12 +109,12 @@ abstract class _$GuildMemberList
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    return element.handleCreate(ref, () => build(_$args));
   }
 }
 
 @ProviderFor(ChannelMembers)
-const channelMembersProvider = ChannelMembersProvider._();
+final channelMembersProvider = ChannelMembersProvider._();
 
 final class ChannelMembersProvider
     extends
@@ -123,7 +122,7 @@ final class ChannelMembersProvider
           ChannelMembers,
           Pair<List<GuildMemberListGroup>, List<dynamic>>?
         > {
-  const ChannelMembersProvider._()
+  ChannelMembersProvider._()
     : super(
         from: null,
         argument: null,
@@ -149,8 +148,7 @@ abstract class _$ChannelMembers
   FutureOr<Pair<List<GuildMemberListGroup>, List<dynamic>>?> build();
   @$mustCallSuper
   @override
-  void runBuild() {
-    final created = build();
+  WhenComplete runBuild() {
     final ref =
         this.ref
             as $Ref<
@@ -168,6 +166,6 @@ abstract class _$ChannelMembers
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    return element.handleCreate(ref, build);
   }
 }

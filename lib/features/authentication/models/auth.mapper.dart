@@ -2,6 +2,7 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // dart format off
 // ignore_for_file: type=lint
+// ignore_for_file: invalid_use_of_protected_member
 // ignore_for_file: unused_element, unnecessary_cast, override_on_non_overriding_member
 // ignore_for_file: strict_raw_type, inference_failure_on_untyped_parameter
 
@@ -208,7 +209,7 @@ extension AuthSuccessValueCopy<$R, $Out>
 
 abstract class AuthSuccessCopyWith<$R, $In extends AuthSuccess, $Out>
     implements ClassCopyWith<$R, $In, $Out> {
-  MapCopyWith<$R, String, dynamic, ObjectCopyWith<$R, dynamic, dynamic>>
+  MapCopyWith<$R, String, dynamic, ObjectCopyWith<$R, dynamic, dynamic>?>
   get user_settings;
   $R call({String? token, Map<String, dynamic>? user_settings});
   AuthSuccessCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(Then<$Out2, $R2> t);
@@ -223,7 +224,7 @@ class _AuthSuccessCopyWithImpl<$R, $Out>
   late final ClassMapperBase<AuthSuccess> $mapper =
       AuthSuccessMapper.ensureInitialized();
   @override
-  MapCopyWith<$R, String, dynamic, ObjectCopyWith<$R, dynamic, dynamic>>
+  MapCopyWith<$R, String, dynamic, ObjectCopyWith<$R, dynamic, dynamic>?>
   get user_settings => MapCopyWith(
     $value.user_settings,
     (v, t) => ObjectCopyWith(v, $identity, t),
@@ -446,20 +447,20 @@ class CaptchaResponseMapper extends ClassMapperBase<CaptchaResponse> {
   @override
   final String id = 'CaptchaResponse';
 
+  static List<dynamic> _$captcha_key(CaptchaResponse v) => v.captcha_key;
   static const Field<CaptchaResponse, List<dynamic>> _f$captcha_key = Field(
     'captcha_key',
-    null,
-    mode: FieldMode.param,
+    _$captcha_key,
   );
+  static String _$captcha_sitekey(CaptchaResponse v) => v.captcha_sitekey;
   static const Field<CaptchaResponse, String> _f$captcha_sitekey = Field(
     'captcha_sitekey',
-    null,
-    mode: FieldMode.param,
+    _$captcha_sitekey,
   );
+  static String _$captcha_service(CaptchaResponse v) => v.captcha_service;
   static const Field<CaptchaResponse, String> _f$captcha_service = Field(
     'captcha_service',
-    null,
-    mode: FieldMode.param,
+    _$captcha_service,
   );
 
   @override
@@ -539,10 +540,12 @@ extension CaptchaResponseValueCopy<$R, $Out>
 
 abstract class CaptchaResponseCopyWith<$R, $In extends CaptchaResponse, $Out>
     implements ClassCopyWith<$R, $In, $Out> {
+  ListCopyWith<$R, dynamic, ObjectCopyWith<$R, dynamic, dynamic>?>
+  get captcha_key;
   $R call({
-    required List<dynamic> captcha_key,
-    required String captcha_sitekey,
-    required String captcha_service,
+    List<dynamic>? captcha_key,
+    String? captcha_sitekey,
+    String? captcha_service,
   });
   CaptchaResponseCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
     Then<$Out2, $R2> t,
@@ -558,22 +561,29 @@ class _CaptchaResponseCopyWithImpl<$R, $Out>
   late final ClassMapperBase<CaptchaResponse> $mapper =
       CaptchaResponseMapper.ensureInitialized();
   @override
+  ListCopyWith<$R, dynamic, ObjectCopyWith<$R, dynamic, dynamic>?>
+  get captcha_key => ListCopyWith(
+    $value.captcha_key,
+    (v, t) => ObjectCopyWith(v, $identity, t),
+    (v) => call(captcha_key: v),
+  );
+  @override
   $R call({
-    required List<dynamic> captcha_key,
-    required String captcha_sitekey,
-    required String captcha_service,
+    List<dynamic>? captcha_key,
+    String? captcha_sitekey,
+    String? captcha_service,
   }) => $apply(
     FieldCopyWithData({
-      #captcha_key: captcha_key,
-      #captcha_sitekey: captcha_sitekey,
-      #captcha_service: captcha_service,
+      if (captcha_key != null) #captcha_key: captcha_key,
+      if (captcha_sitekey != null) #captcha_sitekey: captcha_sitekey,
+      if (captcha_service != null) #captcha_service: captcha_service,
     }),
   );
   @override
   CaptchaResponse $make(CopyWithData data) => CaptchaResponse(
-    captcha_key: data.get(#captcha_key),
-    captcha_sitekey: data.get(#captcha_sitekey),
-    captcha_service: data.get(#captcha_service),
+    captcha_key: data.get(#captcha_key, or: $value.captcha_key),
+    captcha_sitekey: data.get(#captcha_sitekey, or: $value.captcha_sitekey),
+    captcha_service: data.get(#captcha_service, or: $value.captcha_service),
   );
 
   @override
