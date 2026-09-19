@@ -19,6 +19,11 @@ dependencies:
   markdown_viewer:
     path: packages/markdown_viewer
 
+  dave:
+    path: ./packages/dave
+  opus:
+    path: ./packages/opus
+
   # firebridge_extensions:
   #   path: packages/firebridge_extensions
 
@@ -96,11 +101,19 @@ dependencies:
   talker: ^5.1.9
   drift_flutter: ^0.3.1
   drift: ^2.35.0
+  cryptography: ^2.9.0
+  record: ^7.1.1
+  flutter_soloud: ^4.1.7
 
 
 dependency_overrides:
   firebridge:
     path: ./packages/firebridge
+
+  # Patches a real macOS-13-availability bug in upstream 2.1.1 - see the
+  # comment in packages/record_macos/macos/record_macos/Package.swift.
+  record_macos:
+    path: ./packages/record_macos
 
   http: ^1.2.1
 

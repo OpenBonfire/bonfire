@@ -1,2 +1,8 @@
+// Note: this file backs both the Release and Profile build configurations
+// (see project.pbxproj), so Profile builds get the Release pod config too -
+// harmless in practice (pod build settings barely differ between the two),
+// but not strictly correct. A full fix would give Profile its own xcconfig
+// file, matching Debug/Release, rather than sharing this one.
+#include? "../../Pods/Target Support Files/Pods-Runner/Pods-Runner.release.xcconfig"
 #include "../../Flutter/Flutter-Release.xcconfig"
 #include "Warnings.xcconfig"

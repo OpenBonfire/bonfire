@@ -13,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_soloud/flutter_soloud.dart';
 import 'package:go_transitions/go_transitions.dart';
 import 'package:universal_platform/universal_platform.dart';
 import 'package:video_player_media_kit/video_player_media_kit.dart';
@@ -43,6 +44,7 @@ void main() async {
   );
 
   await setupHive();
+  await SoLoud.instance.init();
 
   // TODO: Add iOS support
   // Notifications for other platforms like Windows will be added,

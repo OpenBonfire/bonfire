@@ -1,15 +1,18 @@
 import 'dart:async';
 
 import 'package:bonfire/features/authentication/repositories/auth.dart';
+import 'package:bonfire/features/voice/services/dave_voice_session.dart';
 import 'package:bonfire/features/voice/services/voice_gateway.dart';
-import 'package:bonfire/features/voice/services/voice_webrtc_session.dart';
+import 'package:bonfire/features/voice/services/voice_media_session.dart';
+import 'package:bonfire/features/voice/services/voice_transport_crypto.dart';
+import 'package:dave/dave.dart' as dave;
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter/foundation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'voice_connection.g.dart';
 
-/// How far along the actual media (voice gateway + WebRTC) connection is,
+/// How far along the actual media (voice gateway + UDP) connection is,
 /// layered on top of the plain "have we told Discord we want to be in this
 /// channel" state.
 enum VoiceMediaStatus {
@@ -21,13 +24,12 @@ enum VoiceMediaStatus {
   /// identify and become ready.
   connectingGateway,
 
-  /// Voice gateway is ready; negotiating SDP with the SFU over WebRTC.
+  /// Voice gateway is ready; running IP discovery, selecting the UDP
+  /// protocol, and (if the server supports it) the DAVE handshake.
   negotiating,
 
-  /// The SFU's answer was applied. Note this does not yet mean audio is
-  /// actually flowing to production Discord: DAVE (E2EE) isn't implemented,
-  /// and Discord's voice servers currently close the connection with code
-  /// 4017 once they notice DAVE was never negotiated.
+  /// Session Description was applied and the UDP media session has
+  /// started capturing/sending and is ready to receive.
   connected,
 
   /// Something failed - see [VoiceConnectionState.mediaError].
@@ -35,7 +37,7 @@ enum VoiceMediaStatus {
 }
 
 /// The current voice connection: both which channel we've told Discord we
-/// want to be in, and how the underlying voice-gateway/WebRTC connection is
+/// want to be in, and how the underlying voice-gateway/UDP connection is
 /// progressing.
 class VoiceConnectionState {
   final Snowflake? guildId;
@@ -66,7 +68,8 @@ class VoiceConnectionController extends _$VoiceConnectionController {
   /// whenever [VoiceConnectionState.mediaStatus] is
   /// [VoiceMediaStatus.idle].
   VoiceGateway? _gateway;
-  VoiceWebRtcSession? _webrtc;
+  DaveVoiceSession? _daveSession;
+  VoiceMediaSession? _mediaSession;
 
   /// Identifies the (guildId, sessionId, endpoint) combination media is
   /// currently connected/connecting for, so repeated `VOICE_SERVER_UPDATE`s
@@ -197,7 +200,7 @@ class VoiceConnectionController extends _$VoiceConnectionController {
     unawaited(_maybeStartMediaConnection());
   }
 
-  /// Kicks off the voice-gateway + WebRTC connection once we have
+  /// Kicks off the voice-gateway + UDP media connection once we have
   /// everything Discord requires to identify on the voice gateway: which
   /// channel, our session id (from `VOICE_STATE_UPDATE`), and the voice
   /// server's token/endpoint (from `VOICE_SERVER_UPDATE`). These two events
@@ -231,12 +234,9 @@ class VoiceConnectionController extends _$VoiceConnectionController {
 
     final sessionKey = '$guildId:$sessionId:$endpoint';
     if (_connectedSessionKey == sessionKey) {
-      debugPrint(
-        '[Voice] _maybeStartMediaConnection: already connecting/connected for $sessionKey',
-      );
+      debugPrint('[Voice] _maybeStartMediaConnection: already connecting/connected for $sessionKey');
       return;
     }
-    debugPrint('[Voice] _maybeStartMediaConnection: starting for $sessionKey');
     // Set synchronously (before the await below yields control) so a
     // second handler firing right after this one - VOICE_STATE_UPDATE and
     // VOICE_SERVER_UPDATE typically arrive back to back - sees the guard
@@ -244,7 +244,7 @@ class VoiceConnectionController extends _$VoiceConnectionController {
     _connectedSessionKey = sessionKey;
     _ssrc = null;
 
-    await _closeGatewayAndWebrtc();
+    await _closeGatewayAndMedia();
 
     state = VoiceConnectionState(
       guildId: guildId,
@@ -261,41 +261,57 @@ class VoiceConnectionController extends _$VoiceConnectionController {
       userId: client.user.id,
       sessionId: sessionId,
       token: token,
+      maxDaveProtocolVersion: dave.daveMaxSupportedProtocolVersion(),
     );
     _gateway = gateway;
 
-    final webrtc = VoiceWebRtcSession();
-    _webrtc = webrtc;
+    // Created immediately (rather than lazily once DAVE is confirmed
+    // active) and subscribes right away - the external sender package
+    // (opcode 25) "may be sent immediately on Gateway connect", so we can't
+    // risk missing early DAVE opcodes by wiring this up later.
+    final daveSession = DaveVoiceSession(
+      gateway: gateway,
+      selfUserId: client.user.id,
+      groupId: channelId,
+    );
+    _daveSession = daveSession;
+
+    final mediaSession = VoiceMediaSession(
+      gateway: gateway,
+      selfUserId: client.user.id,
+      daveSession: daveSession,
+    );
+    _mediaSession = mediaSession;
 
     gateway.onClose.listen((close) {
-      final message =
-          close.description ??
+      final message = close.description ??
           close.reason ??
           'Voice gateway closed unexpectedly (code ${close.code})';
       debugPrint('VoiceConnectionController: $message');
       _setMediaFailed(message);
     });
 
+    gateway.onSpeaking.listen((event) {
+      mediaSession.handleSpeaking(userId: Snowflake.parse(event.userId), ssrc: event.ssrc);
+    });
+
     gateway.onReady.listen((ready) async {
-      debugPrint(
-        '[Voice] gateway ready: ssrc=${ready.ssrc} modes=${ready.modes}',
-      );
+      debugPrint('[Voice] gateway ready: ssrc=${ready.ssrc} modes=${ready.modes}');
       _ssrc = ready.ssrc;
       try {
         state = _withMediaStatus(VoiceMediaStatus.negotiating);
-        await webrtc.connect();
-        debugPrint(
-          '[Voice] webrtc session connected (mic captured), building offer',
-        );
-        final fragment = await webrtc.createOfferAndBuildFragment();
-        debugPrint(
-          '[Voice] sending select protocol, fragment length=${fragment.length}',
-        );
-        gateway.selectWebRtcProtocol(fragment);
+
+        final mode = pickTransportEncryptionMode(ready.modes);
+        if (mode == null) {
+          _setMediaFailed('Voice server offered no transport encryption mode we support');
+          return;
+        }
+
+        final discovered = await mediaSession.connectAndDiscoverIp(ready);
+        debugPrint('[Voice] IP discovery: ${discovered.address}:${discovered.port}');
+        gateway.selectUdpProtocol(address: discovered.address, port: discovered.port, mode: mode);
       } catch (error, stackTrace) {
-        debugPrint(
-          'VoiceConnectionController: negotiation failed: $error\n$stackTrace',
-        );
+        debugPrint('VoiceConnectionController: negotiation failed: $error\n$stackTrace');
         _setMediaFailed(error.toString());
       }
     });
@@ -303,24 +319,23 @@ class VoiceConnectionController extends _$VoiceConnectionController {
     gateway.onSessionDescription.listen((description) async {
       debugPrint(
         '[Voice] session description received: audioCodec=${description.audioCodec} '
-        'sdpLength=${description.sdp?.length}',
+        'mode=${description.mode} daveVersion=${description.daveProtocolVersion}',
       );
-      final sdp = description.sdp;
-      if (sdp == null) {
-        _setMediaFailed('Session Description had no sdp (are we in UDP mode?)');
+      final mode = description.mode;
+      final secretKey = description.secretKey;
+      if (mode == null || secretKey == null) {
+        _setMediaFailed('Session Description had no transport mode/secret key (are we in WebRTC mode?)');
         return;
       }
       try {
-        await webrtc.applyAnswer(sdp);
+        await mediaSession.start(mode: mode, secretKey: secretKey);
         state = _withMediaStatus(VoiceMediaStatus.connected);
         final ssrc = _ssrc;
         if (ssrc != null) {
           gateway.setSpeaking(ssrc: ssrc, speaking: true);
         }
       } catch (error, stackTrace) {
-        debugPrint(
-          'VoiceConnectionController: failed to apply SFU answer: $error\n$stackTrace',
-        );
+        debugPrint('VoiceConnectionController: failed to start media session: $error\n$stackTrace');
         _setMediaFailed(error.toString());
       }
     });
@@ -330,15 +345,12 @@ class VoiceConnectionController extends _$VoiceConnectionController {
       await gateway.connect();
       debugPrint('[Voice] voice gateway socket open');
     } catch (error, stackTrace) {
-      debugPrint(
-        'VoiceConnectionController: voice gateway connection failed: $error\n$stackTrace',
-      );
+      debugPrint('VoiceConnectionController: voice gateway connection failed: $error\n$stackTrace');
       _setMediaFailed(error.toString());
     }
   }
 
-  VoiceConnectionState _withMediaStatus(VoiceMediaStatus status) =>
-      VoiceConnectionState(
+  VoiceConnectionState _withMediaStatus(VoiceMediaStatus status) => VoiceConnectionState(
         guildId: state.guildId,
         channelId: state.channelId,
         sessionId: state.sessionId,
@@ -360,21 +372,26 @@ class VoiceConnectionController extends _$VoiceConnectionController {
   }
 
   /// Full teardown: also clears [_connectedSessionKey], so a subsequent
-  /// join/session is free to reconnect. Use [_closeGatewayAndWebrtc]
+  /// join/session is free to reconnect. Use [_closeGatewayAndMedia]
   /// instead when reconnecting for the *same* session key (see
   /// [_maybeStartMediaConnection]), so that guard isn't clobbered mid-check.
   Future<void> _teardownMedia() async {
     _connectedSessionKey = null;
     _ssrc = null;
-    await _closeGatewayAndWebrtc();
+    await _closeGatewayAndMedia();
   }
 
-  Future<void> _closeGatewayAndWebrtc() async {
+  Future<void> _closeGatewayAndMedia() async {
     final gateway = _gateway;
-    final webrtc = _webrtc;
+    final daveSession = _daveSession;
+    final mediaSession = _mediaSession;
     _gateway = null;
-    _webrtc = null;
+    _daveSession = null;
+    _mediaSession = null;
+    // Order matters: stop using ratchets before freeing them, and free the
+    // MLS session before tearing down the socket they were negotiated over.
+    await mediaSession?.dispose();
+    await daveSession?.dispose();
     await gateway?.close();
-    await webrtc?.dispose();
   }
 }

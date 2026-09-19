@@ -6,9 +6,13 @@ import 'package:firebridge/firebridge.dart';
 import 'package:flutter/foundation.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
-/// Opcodes used on Discord's voice Gateway.
+/// Opcodes used on Discord's voice Gateway, including the DAVE (E2EE)
+/// protocol opcodes (21-31).
 ///
-/// Reference: https://docs.discord.food/topics/voice-connections
+/// Reference: https://docs.discord.food/topics/voice-connections and the
+/// DAVE protocol whitepaper (https://daveprotocol.com/), whose "opcodes"
+/// section has the exact wire format for 21-31 - several of which are
+/// raw binary frames, not JSON (see [VoiceGateway]'s framing handling).
 enum VoiceOpcode {
   identify(0),
   selectProtocol(1),
@@ -21,7 +25,18 @@ enum VoiceOpcode {
   hello(8),
   resumed(9),
   clientsConnect(11),
-  clientDisconnect(13);
+  clientDisconnect(13),
+  davePrepareTransition(21),
+  daveExecuteTransition(22),
+  daveTransitionReady(23),
+  davePrepareEpoch(24),
+  daveMlsExternalSenderPackage(25),
+  daveMlsKeyPackage(26),
+  daveMlsProposals(27),
+  daveMlsCommitWelcome(28),
+  daveMlsAnnounceCommitTransition(29),
+  daveMlsWelcome(30),
+  daveMlsInvalidCommitWelcome(31);
 
   final int value;
   const VoiceOpcode(this.value);
@@ -57,37 +72,129 @@ class VoiceReady {
 }
 
 /// The payload of a [VoiceOpcode.sessionDescription] event.
-///
-/// In WebRTC mode (the only mode this client speaks so far) this carries the
-/// SFU's SDP answer. `mode`/`secret_key` only apply to UDP-mode connections
-/// and are intentionally not parsed here.
 class VoiceSessionDescription {
   final String? audioCodec;
   final String? videoCodec;
   final String? mediaSessionId;
-  final String? sdp;
+
+  /// The transport encryption mode in use - see `VoiceTransportCrypto`.
+  final String? mode;
+
+  /// The 32-byte transport encryption key - see `VoiceTransportCrypto`.
+  final Uint8List? secretKey;
+
+  /// The DAVE protocol version in use for this call, or 0/null if DAVE
+  /// isn't active.
+  final int? daveProtocolVersion;
 
   const VoiceSessionDescription({
     this.audioCodec,
     this.videoCodec,
     this.mediaSessionId,
-    this.sdp,
+    this.mode,
+    this.secretKey,
+    this.daveProtocolVersion,
   });
 
-  factory VoiceSessionDescription.fromJson(Map<String, dynamic> json) =>
-      VoiceSessionDescription(
-        audioCodec: json['audio_codec'] as String?,
-        videoCodec: json['video_codec'] as String?,
-        mediaSessionId: json['media_session_id'] as String?,
-        sdp: json['sdp'] as String?,
-      );
+  factory VoiceSessionDescription.fromJson(Map<String, dynamic> json) {
+    final secretKeyList = json['secret_key'] as List?;
+    return VoiceSessionDescription(
+      audioCodec: json['audio_codec'] as String?,
+      videoCodec: json['video_codec'] as String?,
+      mediaSessionId: json['media_session_id'] as String?,
+      mode: json['mode'] as String?,
+      secretKey: secretKeyList == null ? null : Uint8List.fromList(secretKeyList.cast<int>()),
+      daveProtocolVersion: json['dave_protocol_version'] as int?,
+    );
+  }
+}
+
+/// `dave_protocol_prepare_transition` (opcode 21, JSON, server->client).
+/// Announces an upcoming transition - most commonly a downgrade to no DAVE
+/// (`transitionId == 0` means it can execute immediately).
+class DavePrepareTransition {
+  const DavePrepareTransition({required this.protocolVersion, required this.transitionId});
+  final int protocolVersion;
+  final int transitionId;
+}
+
+/// `dave_protocol_execute_transition` (opcode 22, JSON, server->client).
+/// Confirms execution of a previously-announced transition.
+class DaveExecuteTransition {
+  const DaveExecuteTransition({required this.transitionId});
+  final int transitionId;
+}
+
+/// `dave_protocol_prepare_epoch` (opcode 24, JSON, server->client).
+/// Announces a new MLS epoch; `epoch == 1` means a brand new group is being
+/// created and a key package must be generated and sent (opcode 26).
+class DavePrepareEpoch {
+  const DavePrepareEpoch({required this.protocolVersion, required this.epoch});
+  final int protocolVersion;
+  final int epoch;
+}
+
+/// `dave_mls_external_sender_package` (opcode 25, binary, server->client).
+/// [data] is the raw `ExternalSender` bytes - pass directly to
+/// `DaveSession.setExternalSender`.
+class DaveExternalSenderPackage {
+  const DaveExternalSenderPackage(this.data);
+  final Uint8List data;
+}
+
+/// `dave_mls_proposals` (opcode 27, binary, server->client). [data] is the
+/// operation-type byte plus the proposal/proposal-ref message bytes exactly
+/// as received - pass directly to `DaveSession.processProposals`.
+class DaveProposals {
+  const DaveProposals(this.data);
+  final Uint8List data;
+}
+
+/// `dave_mls_announce_commit_transition` (opcode 29, binary,
+/// server->client). The "winning" commit for this epoch; existing group
+/// members apply it via `DaveSession.processCommit`.
+class DaveAnnounceCommitTransition {
+  const DaveAnnounceCommitTransition({required this.transitionId, required this.commitData});
+  final int transitionId;
+  final Uint8List commitData;
+}
+
+/// `dave_mls_welcome` (opcode 30, binary, server->client). Adds a pending
+/// member to the group; process via `DaveSession.processWelcome`.
+class DaveWelcome {
+  const DaveWelcome({required this.transitionId, required this.welcomeData});
+  final int transitionId;
+  final Uint8List welcomeData;
+}
+
+/// Opcode 11 (Clients Connect, JSON, server->client). Announces user IDs
+/// newly present in the channel - DAVE needs these as "recognized user IDs"
+/// when processing proposals/commits/welcomes.
+class VoiceClientsConnect {
+  const VoiceClientsConnect(this.userIds);
+  final List<String> userIds;
+}
+
+/// Opcode 13 (Client Disconnect, JSON, server->client).
+class VoiceClientDisconnect {
+  const VoiceClientDisconnect(this.userId);
+  final String userId;
+}
+
+/// Opcode 5 (Speaking, JSON, server->client), announcing which user a given
+/// SSRC belongs to (and their speaking state). `VoiceMediaSession` uses
+/// this to route incoming RTP packets to the right participant.
+class VoiceSpeakingUpdate {
+  const VoiceSpeakingUpdate({required this.userId, required this.ssrc, required this.speaking});
+  final String userId;
+  final int ssrc;
+  final int speaking;
 }
 
 /// Known voice gateway close codes.
 ///
 /// 4017 is what real Discord voice servers currently send when a client
-/// completes signalling but never negotiates DAVE (E2EE) - which is every
-/// connection this client makes today, since DAVE isn't implemented yet.
+/// completes signalling but never negotiates DAVE (E2EE).
 const voiceCloseCodeDescriptions = <int, String>{
   4001: 'Unknown opcode',
   4002: 'Failed to decode payload',
@@ -102,7 +209,7 @@ const voiceCloseCodeDescriptions = <int, String>{
   4015: 'Voice server crashed',
   4016: 'Unknown encryption mode',
   4017: 'Disconnected: DAVE end-to-end encryption is required by this '
-      'server and was not negotiated (not implemented by this client yet)',
+      'server and was not negotiated in time',
 };
 
 /// A close event from the voice gateway.
@@ -117,22 +224,16 @@ class VoiceGatewayClose {
   String? get description => voiceCloseCodeDescriptions[code];
 }
 
-/// A connection to Discord's per-guild voice Gateway.
+/// A connection to Discord's per-guild voice Gateway, over UDP transport.
 ///
-/// This only speaks the WebRTC transport mode: it exchanges SDP with the
-/// voice SFU over this websocket, but does no UDP socket work and no manual
-/// RTP encryption itself - all of that is handled by libwebrtc via
-/// flutter_webrtc's `RTCPeerConnection` once a
-/// [VoiceSessionDescription.sdp] answer is applied (see
-/// [VoiceWebRtcSession] in `voice_webrtc_session.dart`).
-///
-/// Does NOT implement DAVE (Discord's MLS-based E2EE layer) - see the
-/// voice feature's other notes. Real Discord voice servers reject
-/// non-DAVE clients once negotiation reaches this point (close code 4017),
-/// so this class alone cannot yet complete a connection to production
-/// Discord. It's still useful groundwork: DAVE sits on top of this exact
-/// signalling flow, encrypting the media frames this negotiates rather
-/// than replacing any of it.
+/// Handles the base voice protocol (identify/heartbeat/select-protocol/
+/// session-description/speaking) as well as the DAVE protocol opcodes
+/// (21-31) needed for end-to-end encryption. Several DAVE opcodes are raw
+/// binary WebSocket frames rather than JSON text - see
+/// https://docs.discord.food/topics/voice-connections#binary-websocket-messages.
+/// This class only handles the signalling; actual UDP media transport (RTP,
+/// transport encryption, DAVE frame encryption, Opus) lives in
+/// `VoiceMediaSession`.
 class VoiceGateway {
   VoiceGateway({
     required this.endpoint,
@@ -140,6 +241,7 @@ class VoiceGateway {
     required this.userId,
     required this.sessionId,
     required this.token,
+    required this.maxDaveProtocolVersion,
   });
 
   /// The voice server host, as given by `VOICE_SERVER_UPDATE` (no scheme or
@@ -150,7 +252,13 @@ class VoiceGateway {
   final String sessionId;
   final String token;
 
-  /// Voice gateway version. v8 is the minimum with resuming support; see
+  /// The highest DAVE protocol version this client supports - from
+  /// `daveMaxSupportedProtocolVersion()` in the `dave` package. 0 means no
+  /// DAVE support.
+  final int maxDaveProtocolVersion;
+
+  /// Voice gateway version. v8 is the minimum with resuming support and
+  /// binary DAVE opcode sequence numbers; see
   /// https://docs.discord.food/topics/voice-connections.
   static const _gatewayVersion = 8;
 
@@ -160,18 +268,43 @@ class VoiceGateway {
   bool _lastHeartbeatAcked = true;
   bool _closing = false;
 
+  /// The last sequence number seen on a binary (DAVE) server->client
+  /// message, sent back as `seq_ack` on heartbeats per gateway v8+.
+  int? _lastBinarySequence;
+
   final _readyController = StreamController<VoiceReady>.broadcast();
-  final _sessionDescriptionController =
-      StreamController<VoiceSessionDescription>.broadcast();
+  final _sessionDescriptionController = StreamController<VoiceSessionDescription>.broadcast();
   final _closeController = StreamController<VoiceGatewayClose>.broadcast();
+  final _davePrepareTransitionController = StreamController<DavePrepareTransition>.broadcast();
+  final _daveExecuteTransitionController = StreamController<DaveExecuteTransition>.broadcast();
+  final _davePrepareEpochController = StreamController<DavePrepareEpoch>.broadcast();
+  final _daveExternalSenderPackageController = StreamController<DaveExternalSenderPackage>.broadcast();
+  final _daveProposalsController = StreamController<DaveProposals>.broadcast();
+  final _daveAnnounceCommitTransitionController = StreamController<DaveAnnounceCommitTransition>.broadcast();
+  final _daveWelcomeController = StreamController<DaveWelcome>.broadcast();
+  final _clientsConnectController = StreamController<VoiceClientsConnect>.broadcast();
+  final _clientDisconnectController = StreamController<VoiceClientDisconnect>.broadcast();
+  final _speakingController = StreamController<VoiceSpeakingUpdate>.broadcast();
 
   Stream<VoiceReady> get onReady => _readyController.stream;
-  Stream<VoiceSessionDescription> get onSessionDescription =>
-      _sessionDescriptionController.stream;
+  Stream<VoiceSessionDescription> get onSessionDescription => _sessionDescriptionController.stream;
 
   /// Fires when the underlying websocket closes unexpectedly (i.e. not as a
   /// result of calling [close] on this side - see the ordering note there).
   Stream<VoiceGatewayClose> get onClose => _closeController.stream;
+
+  Stream<DavePrepareTransition> get onDavePrepareTransition => _davePrepareTransitionController.stream;
+  Stream<DaveExecuteTransition> get onDaveExecuteTransition => _daveExecuteTransitionController.stream;
+  Stream<DavePrepareEpoch> get onDavePrepareEpoch => _davePrepareEpochController.stream;
+  Stream<DaveExternalSenderPackage> get onDaveExternalSenderPackage =>
+      _daveExternalSenderPackageController.stream;
+  Stream<DaveProposals> get onDaveProposals => _daveProposalsController.stream;
+  Stream<DaveAnnounceCommitTransition> get onDaveAnnounceCommitTransition =>
+      _daveAnnounceCommitTransitionController.stream;
+  Stream<DaveWelcome> get onDaveWelcome => _daveWelcomeController.stream;
+  Stream<VoiceClientsConnect> get onClientsConnect => _clientsConnectController.stream;
+  Stream<VoiceClientDisconnect> get onClientDisconnect => _clientDisconnectController.stream;
+  Stream<VoiceSpeakingUpdate> get onSpeaking => _speakingController.stream;
 
   Future<void> connect() async {
     final uri = Uri.parse('wss://$endpoint').replace(
@@ -205,17 +338,38 @@ class VoiceGateway {
     );
   }
 
-  void _send(VoiceOpcode opcode, Object? data) {
+  void _sendJson(VoiceOpcode opcode, Object? data) {
     debugPrint('VoiceGateway: -> ${opcode.name} (${opcode.value})');
     _channel?.sink.add(jsonEncode({'op': opcode.value, 'd': data}));
   }
 
+  /// Sends a binary DAVE opcode. Client-to-server binary messages are just
+  /// `[1-byte opcode][payload]` - no sequence number (that's server->client
+  /// only, on v8+).
+  void _sendBinary(VoiceOpcode opcode, Uint8List payload) {
+    debugPrint('VoiceGateway: -> ${opcode.name} (${opcode.value}) [binary, ${payload.length}B]');
+    final frame = Uint8List(1 + payload.length);
+    frame[0] = opcode.value;
+    frame.setAll(1, payload);
+    _channel?.sink.add(frame);
+  }
+
   void _handleMessage(dynamic raw) {
+    if (raw is String) {
+      _handleJsonMessage(raw);
+    } else if (raw is List<int>) {
+      _handleBinaryMessage(Uint8List.fromList(raw));
+    } else {
+      debugPrint('VoiceGateway: received message of unexpected type ${raw.runtimeType}');
+    }
+  }
+
+  void _handleJsonMessage(String raw) {
     final Map<String, dynamic> payload;
     try {
-      payload = jsonDecode(raw as String) as Map<String, dynamic>;
+      payload = jsonDecode(raw) as Map<String, dynamic>;
     } catch (error) {
-      debugPrint('VoiceGateway: failed to decode payload: $error\nraw: $raw');
+      debugPrint('VoiceGateway: failed to decode JSON payload: $error\nraw: $raw');
       return;
     }
 
@@ -236,29 +390,105 @@ class VoiceGateway {
               .add(VoiceSessionDescription.fromJson(data as Map<String, dynamic>));
         case VoiceOpcode.heartbeatAck:
           _lastHeartbeatAcked = true;
+        case VoiceOpcode.speaking:
+          final map = data as Map<String, dynamic>;
+          final speakingUserId = map['user_id'] as String?;
+          if (speakingUserId != null) {
+            _speakingController.add(VoiceSpeakingUpdate(
+              userId: speakingUserId,
+              ssrc: map['ssrc'] as int,
+              speaking: map['speaking'] as int,
+            ));
+          }
         case VoiceOpcode.resumed:
           debugPrint('VoiceGateway: resumed session');
+        case VoiceOpcode.davePrepareTransition:
+          final map = data as Map<String, dynamic>;
+          _davePrepareTransitionController.add(DavePrepareTransition(
+            protocolVersion: map['protocol_version'] as int,
+            transitionId: map['transition_id'] as int,
+          ));
+        case VoiceOpcode.daveExecuteTransition:
+          final map = data as Map<String, dynamic>;
+          _daveExecuteTransitionController.add(DaveExecuteTransition(
+            transitionId: map['transition_id'] as int,
+          ));
+        case VoiceOpcode.davePrepareEpoch:
+          final map = data as Map<String, dynamic>;
+          _davePrepareEpochController.add(DavePrepareEpoch(
+            protocolVersion: map['protocol_version'] as int,
+            epoch: map['epoch'] as int,
+          ));
         case VoiceOpcode.clientsConnect:
+          final map = data as Map<String, dynamic>;
+          _clientsConnectController.add(
+            VoiceClientsConnect((map['user_ids'] as List).cast<String>()),
+          );
         case VoiceOpcode.clientDisconnect:
-          // Not needed for basic join/leave; ignored for now.
-          break;
+          final map = data as Map<String, dynamic>;
+          _clientDisconnectController.add(
+            VoiceClientDisconnect(map['user_id'] as String),
+          );
         default:
-          debugPrint('VoiceGateway: unhandled opcode ${payload['op']}: $data');
+          debugPrint('VoiceGateway: unhandled JSON opcode ${payload['op']}: $data');
       }
     } catch (error, stackTrace) {
-      // A bad cast/shape here shouldn't take down the whole socket listener
-      // silently - log it so a wire-format mismatch is visible instead of
-      // just... nothing happening.
-      debugPrint('VoiceGateway: error handling opcode ${payload['op']}: $error\n$stackTrace');
+      debugPrint('VoiceGateway: error handling JSON opcode ${payload['op']}: $error\n$stackTrace');
+    }
+  }
+
+  void _handleBinaryMessage(Uint8List data) {
+    // Server-to-client binary messages on gateway v8+ are prefixed with a
+    // 2-byte big-endian sequence number, then the 1-byte opcode.
+    if (data.length < 3) {
+      debugPrint('VoiceGateway: binary message too short (${data.length}B)');
+      return;
+    }
+    final view = ByteData.sublistView(data);
+    final sequence = view.getUint16(0, Endian.big);
+    _lastBinarySequence = sequence;
+    final opcode = VoiceOpcode.fromValue(data[2]);
+    final payload = Uint8List.sublistView(data, 3);
+
+    debugPrint('VoiceGateway: <- ${opcode?.name ?? data[2]} (binary, seq=$sequence, ${payload.length}B)');
+
+    try {
+      switch (opcode) {
+        case VoiceOpcode.daveMlsExternalSenderPackage:
+          _daveExternalSenderPackageController.add(DaveExternalSenderPackage(payload));
+        case VoiceOpcode.daveMlsProposals:
+          _daveProposalsController.add(DaveProposals(payload));
+        case VoiceOpcode.daveMlsAnnounceCommitTransition:
+          if (payload.length < 2) {
+            throw const FormatException('MLS Announce Commit Transition payload too short');
+          }
+          _daveAnnounceCommitTransitionController.add(DaveAnnounceCommitTransition(
+            transitionId: ByteData.sublistView(payload).getUint16(0, Endian.big),
+            commitData: Uint8List.sublistView(payload, 2),
+          ));
+        case VoiceOpcode.daveMlsWelcome:
+          if (payload.length < 2) {
+            throw const FormatException('MLS Welcome payload too short');
+          }
+          _daveWelcomeController.add(DaveWelcome(
+            transitionId: ByteData.sublistView(payload).getUint16(0, Endian.big),
+            welcomeData: Uint8List.sublistView(payload, 2),
+          ));
+        default:
+          debugPrint('VoiceGateway: unhandled binary opcode ${data[2]}');
+      }
+    } catch (error, stackTrace) {
+      debugPrint('VoiceGateway: error handling binary opcode ${data[2]}: $error\n$stackTrace');
     }
   }
 
   void _identify() {
-    _send(VoiceOpcode.identify, {
+    _sendJson(VoiceOpcode.identify, {
       'server_id': guildId.toString(),
       'user_id': userId.toString(),
       'session_id': sessionId,
       'token': token,
+      if (maxDaveProtocolVersion > 0) 'max_dave_protocol_version': maxDaveProtocolVersion,
     });
   }
 
@@ -269,31 +499,32 @@ class VoiceGateway {
         debugPrint('VoiceGateway: heartbeat was not acked; connection may be dead');
       }
       _lastHeartbeatAcked = false;
-      _send(VoiceOpcode.heartbeat, {'t': DateTime.now().millisecondsSinceEpoch});
+      _sendJson(VoiceOpcode.heartbeat, {
+        't': DateTime.now().millisecondsSinceEpoch,
+        if (_lastBinarySequence != null) 'seq_ack': _lastBinarySequence,
+      });
     });
   }
 
-  /// Sends Select Protocol (opcode 1) for the WebRTC transport, with
-  /// [sdpFragment] built from the local offer (see
-  /// `VoiceWebRtcSession.createOfferAndBuildFragment`).
-  ///
-  /// NOTE: the exact wire shape of `data` for WebRTC-mode Select Protocol
-  /// isn't fully nailed down from public documentation - this follows the
-  /// most consistent reading available (mirroring UDP mode's `data` object,
-  /// with an `sdp` key holding the fragment). This needs verification
-  /// against a live connection; if the SFU never responds with a Session
-  /// Description, this shape is the first thing to double check.
-  void selectWebRtcProtocol(String sdpFragment) {
-    _send(VoiceOpcode.selectProtocol, {
-      'protocol': 'webrtc',
-      'data': {'sdp': sdpFragment},
+  /// Sends Select Protocol (opcode 1) for the UDP transport, with the
+  /// externally-discovered [address]/[port] (see `buildIpDiscoveryRequest`)
+  /// and the chosen transport encryption [mode] (see
+  /// `pickTransportEncryptionMode`).
+  void selectUdpProtocol({required String address, required int port, required String mode}) {
+    _sendJson(VoiceOpcode.selectProtocol, {
+      'protocol': 'udp',
+      'data': {
+        'address': address,
+        'port': port,
+        'mode': mode,
+      },
       'rtc_connection_id': _generateUuidV4(),
       'codecs': [
         {
           'name': 'opus',
           'type': 'audio',
           'priority': 1000,
-          'payload_type': 111,
+          'payload_type': 120,
         },
       ],
     });
@@ -302,11 +533,38 @@ class VoiceGateway {
   /// Sends a Speaking (opcode 5) update. [ssrc] should be the value from
   /// [VoiceReady.ssrc].
   void setSpeaking({required int ssrc, required bool speaking}) {
-    _send(VoiceOpcode.speaking, {
+    _sendJson(VoiceOpcode.speaking, {
       'speaking': speaking ? 1 : 0,
       'delay': 0,
       'ssrc': ssrc,
     });
+  }
+
+  /// `dave_protocol_ready_for_transition` (opcode 23, JSON). Sent once local
+  /// state for [transitionId] (an MLS commit/welcome having been applied,
+  /// or a protocol downgrade being ready) has been prepared.
+  void sendDaveTransitionReady(int transitionId) {
+    _sendJson(VoiceOpcode.daveTransitionReady, {'transition_id': transitionId});
+  }
+
+  /// `dave_mls_key_package` (opcode 26, binary). [keyPackage] is
+  /// `DaveSession.marshalledKeyPackage`.
+  void sendDaveKeyPackage(Uint8List keyPackage) {
+    _sendBinary(VoiceOpcode.daveMlsKeyPackage, keyPackage);
+  }
+
+  /// `dave_mls_commit_welcome` (opcode 28, binary). [commitWelcome] is the
+  /// output of `DaveSession.processProposals`.
+  void sendDaveCommitWelcome(Uint8List commitWelcome) {
+    _sendBinary(VoiceOpcode.daveMlsCommitWelcome, commitWelcome);
+  }
+
+  /// `dave_mls_invalid_commit_welcome` (opcode 31, JSON). Sent when a
+  /// received commit/welcome for [transitionId] couldn't be processed -
+  /// asks the voice server to remove and re-add this member so it can
+  /// recover with a fresh key package.
+  void sendDaveInvalidCommitWelcome(int transitionId) {
+    _sendJson(VoiceOpcode.daveMlsInvalidCommitWelcome, {'transition_id': transitionId});
   }
 
   /// Closes the connection. Cancels the socket subscription before closing
@@ -321,6 +579,16 @@ class VoiceGateway {
     await _readyController.close();
     await _sessionDescriptionController.close();
     await _closeController.close();
+    await _davePrepareTransitionController.close();
+    await _daveExecuteTransitionController.close();
+    await _davePrepareEpochController.close();
+    await _daveExternalSenderPackageController.close();
+    await _daveProposalsController.close();
+    await _daveAnnounceCommitTransitionController.close();
+    await _daveWelcomeController.close();
+    await _clientsConnectController.close();
+    await _clientDisconnectController.close();
+    await _speakingController.close();
   }
 }
 

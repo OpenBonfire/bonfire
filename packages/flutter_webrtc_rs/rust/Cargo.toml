@@ -1,0 +1,29 @@
+[package]
+name = "flutter_webrtc_rs_core"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib", "staticlib"]
+
+[dependencies]
+flutter_rust_bridge = "=2.13.0"
+
+# webrtc-rs: sans-I/O core (`rtc`) + async wrapper (`webrtc`). Pinned to the exact
+# release tag we validated the API against (examples/ under git tag v0.21.0) - see
+# rust/README.md. `webrtc`'s default features (runtime-tokio, crypto-ring) are what
+# we want: a real Tokio runtime for ICE/DTLS UDP I/O and timers, ring for DTLS/SRTP
+# crypto. Nothing here is platform-specific C/C++; this is why a single Rust build
+# covers every Flutter target without per-platform native toolchains.
+webrtc = "0.21.0"
+rtc = "0.21.0"
+
+tokio = { version = "1", features = ["rt-multi-thread", "sync", "time", "macros", "net"] }
+async-trait = "0.1"
+bytes = "1"
+log = "0.4"
+serde_json = "1"
+rand = "0.10"
+
+[lints.rust]
+unexpected_cfgs = { level = "warn", check-cfg = ['cfg(frb_expand)'] }

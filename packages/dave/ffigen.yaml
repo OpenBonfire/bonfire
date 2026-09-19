@@ -1,0 +1,32 @@
+# Run with `dart run ffigen --config ffigen.yaml`.
+#
+# Bindings for Discord's libdave C API
+# (third_party/libdave/cpp/includes/dave/dave.h). libdave is vendored as a
+# git submodule - see README.md for how it's built (hook/build.dart drives
+# vcpkg + CMake and registers the resulting shared library as a CodeAsset
+# named to match `asset-id` below).
+name: DaveBindings
+description: |
+  Bindings for Discord's libdave C API (DAVE end-to-end encryption for
+  audio/video).
+
+  Regenerate bindings with `dart run ffigen --config ffigen.yaml`.
+output: 'lib/src/dave_bindings_generated.dart'
+headers:
+  entry-points:
+    - 'third_party/libdave/cpp/includes/dave/dave.h'
+  include-directives:
+    - 'third_party/libdave/cpp/includes/dave/dave.h'
+ffi-native:
+  asset-id: 'package:dave/dave'
+# dave.h's enums are plain sequential ints (0-6) with explicit values, well
+# within range for every platform ffigen targets, so the implementation-
+# defined-size warning doesn't apply here.
+silence-enum-warning: true
+comments:
+  style: any
+  length: full
+preamble: |
+  // ignore_for_file: always_specify_types
+  // ignore_for_file: camel_case_types
+  // ignore_for_file: non_constant_identifier_names
