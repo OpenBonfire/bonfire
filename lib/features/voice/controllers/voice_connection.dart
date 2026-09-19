@@ -5,12 +5,23 @@ import 'package:bonfire/features/voice/services/dave_voice_session.dart';
 import 'package:bonfire/features/voice/services/voice_gateway.dart';
 import 'package:bonfire/features/voice/services/voice_media_session.dart';
 import 'package:bonfire/features/voice/services/voice_transport_crypto.dart';
+import 'package:bonfire/features/voice/services/voice_webrtc_rs_session.dart';
 import 'package:dave/dave.dart' as dave;
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter/foundation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'voice_connection.g.dart';
+
+/// Selects the media transport: the proven raw-UDP path
+/// ([VoiceMediaSession], Discord's own transport encryption over hand-rolled
+/// RTP - this is what's actually been confirmed working end to end), or the
+/// real-ICE/DTLS-SRTP path ([VoiceWebRtcRsSession], built on
+/// `flutter_webrtc_rs`/webrtc-rs). The WebRTC path's Select Protocol wire
+/// format is unverified against a live Discord voice server - see
+/// [VoiceWebRtcRsSession]'s class doc before flipping this on for anything
+/// beyond testing. Defaults to `false` so existing behavior is unchanged.
+const bool voiceUseWebRtcTransport = false;
 
 /// How far along the actual media (voice gateway + UDP) connection is,
 /// layered on top of the plain "have we told Discord we want to be in this
@@ -70,6 +81,7 @@ class VoiceConnectionController extends _$VoiceConnectionController {
   VoiceGateway? _gateway;
   DaveVoiceSession? _daveSession;
   VoiceMediaSession? _mediaSession;
+  VoiceWebRtcRsSession? _webrtcSession;
 
   /// Identifies the (guildId, sessionId, endpoint) combination media is
   /// currently connected/connecting for, so repeated `VOICE_SERVER_UPDATE`s
@@ -276,12 +288,23 @@ class VoiceConnectionController extends _$VoiceConnectionController {
     );
     _daveSession = daveSession;
 
-    final mediaSession = VoiceMediaSession(
-      gateway: gateway,
-      selfUserId: client.user.id,
-      daveSession: daveSession,
-    );
-    _mediaSession = mediaSession;
+    VoiceMediaSession? mediaSession;
+    VoiceWebRtcRsSession? webrtcSession;
+    if (voiceUseWebRtcTransport) {
+      webrtcSession = VoiceWebRtcRsSession(
+        gateway: gateway,
+        selfUserId: client.user.id,
+        daveSession: daveSession,
+      );
+      _webrtcSession = webrtcSession;
+    } else {
+      mediaSession = VoiceMediaSession(
+        gateway: gateway,
+        selfUserId: client.user.id,
+        daveSession: daveSession,
+      );
+      _mediaSession = mediaSession;
+    }
 
     gateway.onClose.listen((close) {
       final message = close.description ??
@@ -292,7 +315,9 @@ class VoiceConnectionController extends _$VoiceConnectionController {
     });
 
     gateway.onSpeaking.listen((event) {
-      mediaSession.handleSpeaking(userId: Snowflake.parse(event.userId), ssrc: event.ssrc);
+      final userId = Snowflake.parse(event.userId);
+      mediaSession?.handleSpeaking(userId: userId, ssrc: event.ssrc);
+      webrtcSession?.handleSpeaking(userId: userId, ssrc: event.ssrc);
     });
 
     gateway.onReady.listen((ready) async {
@@ -301,13 +326,20 @@ class VoiceConnectionController extends _$VoiceConnectionController {
       try {
         state = _withMediaStatus(VoiceMediaStatus.negotiating);
 
+        if (webrtcSession != null) {
+          webrtcSession.localSsrc = ready.ssrc;
+          final fragment = await webrtcSession.createOfferAndBuildFragment();
+          gateway.selectWebRtcProtocol(fragment);
+          return;
+        }
+
         final mode = pickTransportEncryptionMode(ready.modes);
         if (mode == null) {
           _setMediaFailed('Voice server offered no transport encryption mode we support');
           return;
         }
 
-        final discovered = await mediaSession.connectAndDiscoverIp(ready);
+        final discovered = await mediaSession!.connectAndDiscoverIp(ready);
         debugPrint('[Voice] IP discovery: ${discovered.address}:${discovered.port}');
         gateway.selectUdpProtocol(address: discovered.address, port: discovered.port, mode: mode);
       } catch (error, stackTrace) {
@@ -319,16 +351,26 @@ class VoiceConnectionController extends _$VoiceConnectionController {
     gateway.onSessionDescription.listen((description) async {
       debugPrint(
         '[Voice] session description received: audioCodec=${description.audioCodec} '
-        'mode=${description.mode} daveVersion=${description.daveProtocolVersion}',
+        'mode=${description.mode} daveVersion=${description.daveProtocolVersion} '
+        'sdp=${description.sdp != null}',
       );
-      final mode = description.mode;
-      final secretKey = description.secretKey;
-      if (mode == null || secretKey == null) {
-        _setMediaFailed('Session Description had no transport mode/secret key (are we in WebRTC mode?)');
-        return;
-      }
       try {
-        await mediaSession.start(mode: mode, secretKey: secretKey);
+        if (webrtcSession != null) {
+          final sdp = description.sdp;
+          if (sdp == null) {
+            _setMediaFailed('Session Description had no sdp (are we in UDP mode?)');
+            return;
+          }
+          await webrtcSession.applyAnswer(sdp);
+        } else {
+          final mode = description.mode;
+          final secretKey = description.secretKey;
+          if (mode == null || secretKey == null) {
+            _setMediaFailed('Session Description had no transport mode/secret key (are we in WebRTC mode?)');
+            return;
+          }
+          await mediaSession!.start(mode: mode, secretKey: secretKey);
+        }
         state = _withMediaStatus(VoiceMediaStatus.connected);
         final ssrc = _ssrc;
         if (ssrc != null) {
@@ -385,12 +427,16 @@ class VoiceConnectionController extends _$VoiceConnectionController {
     final gateway = _gateway;
     final daveSession = _daveSession;
     final mediaSession = _mediaSession;
+    final webrtcSession = _webrtcSession;
     _gateway = null;
     _daveSession = null;
     _mediaSession = null;
+    _webrtcSession = null;
     // Order matters: stop using ratchets before freeing them, and free the
-    // MLS session before tearing down the socket they were negotiated over.
+    // MLS session before tearing down the socket/peer connection they were
+    // negotiated over.
     await mediaSession?.dispose();
+    await webrtcSession?.dispose();
     await daveSession?.dispose();
     await gateway?.close();
   }

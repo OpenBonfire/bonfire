@@ -87,6 +87,10 @@ class VoiceSessionDescription {
   /// isn't active.
   final int? daveProtocolVersion;
 
+  /// The SFU's SDP answer, present only when [selectWebRtcProtocol] (rather
+  /// than [selectUdpProtocol]) was used - see `VoiceWebRtcRsSession`.
+  final String? sdp;
+
   const VoiceSessionDescription({
     this.audioCodec,
     this.videoCodec,
@@ -94,6 +98,7 @@ class VoiceSessionDescription {
     this.mode,
     this.secretKey,
     this.daveProtocolVersion,
+    this.sdp,
   });
 
   factory VoiceSessionDescription.fromJson(Map<String, dynamic> json) {
@@ -105,6 +110,7 @@ class VoiceSessionDescription {
       mode: json['mode'] as String?,
       secretKey: secretKeyList == null ? null : Uint8List.fromList(secretKeyList.cast<int>()),
       daveProtocolVersion: json['dave_protocol_version'] as int?,
+      sdp: json['sdp'] as String?,
     );
   }
 }
@@ -525,6 +531,35 @@ class VoiceGateway {
           'type': 'audio',
           'priority': 1000,
           'payload_type': 120,
+        },
+      ],
+    });
+  }
+
+  /// Sends Select Protocol (opcode 1) for the WebRTC transport (real
+  /// ICE/DTLS/SRTP via `flutter_webrtc_rs`, as opposed to [selectUdpProtocol]'s
+  /// raw-UDP-plus-Discord's-own-transport-encryption scheme), with
+  /// [sdpFragment] built from the local offer - see
+  /// `VoiceWebRtcRsSession.createOfferAndBuildFragment`.
+  ///
+  /// NOTE: the exact wire shape of `data` here is carried over from an
+  /// earlier, never-connected attempt (see git history of this file) and is
+  /// **unverified against a live Discord voice server** - it mirrors
+  /// [selectUdpProtocol]'s `data` object with an `sdp` key, which is the
+  /// most consistent reading of the sparse public documentation. If the SFU
+  /// never responds with a [VoiceSessionDescription] carrying `sdp`, this
+  /// shape is the first thing to double check.
+  void selectWebRtcProtocol(String sdpFragment) {
+    _sendJson(VoiceOpcode.selectProtocol, {
+      'protocol': 'webrtc',
+      'data': {'sdp': sdpFragment},
+      'rtc_connection_id': _generateUuidV4(),
+      'codecs': [
+        {
+          'name': 'opus',
+          'type': 'audio',
+          'priority': 1000,
+          'payload_type': 111,
         },
       ],
     });

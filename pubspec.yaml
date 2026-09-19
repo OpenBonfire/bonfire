@@ -23,6 +23,8 @@ dependencies:
     path: ./packages/dave
   opus:
     path: ./packages/opus
+  flutter_webrtc_rs:
+    path: ./packages/flutter_webrtc_rs
 
   # firebridge_extensions:
   #   path: packages/firebridge_extensions
