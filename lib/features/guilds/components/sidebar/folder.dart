@@ -106,7 +106,9 @@ class _GuildFolderItemState extends ConsumerState<GuildFolderItem>
                   selectedRadiusFactor: 0.38,
                   deselectedRadiusFactor: 0.38,
                   selected: selected,
-                  hasUnreads: ref.watch(folderHasUnreadsProvider(widget.folder)),
+                  hasUnreads: ref.watch(
+                    folderHasUnreadsProvider(widget.folder),
+                  ),
                   onPressed: () {
                     HapticFeedback.lightImpact();
                     _toggleExpand();
@@ -171,7 +173,8 @@ class _GuildIcon extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final guild = ref.watch(guildProvider(guildId))!;
+    final guild = ref.watch(guildProvider(guildId));
+    if (guild == null) return CircularProgressIndicator.adaptive();
     final client = ref.watch(clientControllerProvider)!;
 
     return GuildAvatar(

@@ -12,9 +12,8 @@ class VoiceConnectionBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final connectedChannelId = ref
-        .watch(voiceConnectionControllerProvider)
-        .channelId;
+    final connectionState = ref.watch(voiceConnectionControllerProvider);
+    final connectedChannelId = connectionState.channelId;
     if (connectedChannelId == null) return const SizedBox.shrink();
 
     final theme = Theme.of(context);
@@ -22,9 +21,10 @@ class VoiceConnectionBar extends ConsumerWidget {
     final channelName = channel is GuildChannel
         ? channel.name
         : connectedChannelId.toString();
+    final statusText = _statusText(connectionState);
 
     return Container(
-      width: 200,
+      width: 350,
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(color: theme.colorScheme.surfaceContainer),
       child: Row(
@@ -36,14 +36,33 @@ class VoiceConnectionBar extends ConsumerWidget {
           ),
           const SizedBox(width: 8),
           Expanded(
-            child: Text(
-              channelName,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: theme.textTheme.bodySmall?.copyWith(
-                color: theme.colorScheme.onSurface,
-                fontWeight: FontWeight.w600,
-              ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  channelName,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: theme.colorScheme.onSurface,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                if (statusText != null)
+                  Text(
+                    statusText,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color:
+                          connectionState.mediaStatus == VoiceMediaStatus.failed
+                          ? theme.colorScheme.error
+                          : theme.colorScheme.onSurfaceVariant,
+                      fontSize: 11,
+                    ),
+                  ),
+              ],
             ),
           ),
           TextButton(
@@ -55,5 +74,20 @@ class VoiceConnectionBar extends ConsumerWidget {
         ],
       ),
     );
+  }
+
+  String? _statusText(VoiceConnectionState state) {
+    switch (state.mediaStatus) {
+      case VoiceMediaStatus.idle:
+        return null;
+      case VoiceMediaStatus.connectingGateway:
+        return "Connecting…";
+      case VoiceMediaStatus.negotiating:
+        return "Negotiating…";
+      case VoiceMediaStatus.connected:
+        return "Voice connected";
+      case VoiceMediaStatus.failed:
+        return state.mediaError ?? "Voice connection failed";
+    }
   }
 }
