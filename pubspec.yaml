@@ -94,6 +94,7 @@ dependencies:
   extended_image: ^10.0.1
   sliver_expandable: ^1.1.2
   talker: ^5.1.9
+  drift_flutter: ^0.3.1
 
 
 dependency_overrides:
