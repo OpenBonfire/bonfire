@@ -4,6 +4,7 @@ import 'package:bonfire/features/channels/components/channel_button.dart';
 import 'package:bonfire/features/gateway/store/entity_store.dart';
 import 'package:bonfire/features/guilds/components/header.dart';
 import 'package:bonfire/features/media/components/image.dart';
+import 'package:bonfire/features/voice/controllers/voice_connection.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -49,15 +50,12 @@ class GuildChannelList extends ConsumerWidget {
       if (channel.parentId == null && channel is! GuildCategory) {
         channelSlivers.add(
           SliverToBoxAdapter(
-            child: ChannelButton(
-              name: channel.name,
-              icon: Icon(Icons.numbers_rounded),
-              selected: channel.id.toString() == selectedChannel,
-              hasUnreads: ref.watch(channelHasUnreadsProvider(channel.id)),
-              onPressed: () {
-                HapticFeedback.lightImpact();
-                context.go("/channels/$guildId/${channel.id}");
-              },
+            child: _buildChannelButton(
+              ref,
+              context,
+              guildId,
+              channel,
+              selectedChannel,
             ),
           ),
         );
@@ -75,15 +73,12 @@ class GuildChannelList extends ConsumerWidget {
               channels:
                   categoryChannels
                       ?.map(
-                        (e) => ChannelButton(
-                          name: e.name,
-                          icon: Icon(Icons.numbers_rounded),
-                          selected: e.id.toString() == selectedChannel,
-                          hasUnreads: ref.watch(channelHasUnreadsProvider(e.id)),
-                          onPressed: () {
-                            HapticFeedback.lightImpact();
-                            context.go("/channels/$guildId/${e.id}");
-                          },
+                        (e) => _buildChannelButton(
+                          ref,
+                          context,
+                          guildId,
+                          e,
+                          selectedChannel,
                         ),
                       )
                       .toList() ??
@@ -142,4 +137,45 @@ class SectionHeaderDelegate extends SliverPersistentHeaderDelegate {
   @override
   bool shouldRebuild(covariant SectionHeaderDelegate oldDelegate) =>
       guildId != oldDelegate.guildId;
+}
+
+/// Voice channels join/leave the current voice connection instead of
+/// navigating; everything else behaves like a text channel.
+Widget _buildChannelButton(
+  WidgetRef ref,
+  BuildContext context,
+  Snowflake guildId,
+  GuildChannel channel,
+  String? selectedChannel,
+) {
+  if (channel is GuildVoiceChannel) {
+    final connectedChannelId = ref.watch(voiceConnectionControllerProvider).channelId;
+    final connected = connectedChannelId == channel.id;
+
+    return ChannelButton(
+      name: channel.name,
+      icon: const Icon(Icons.volume_up_rounded),
+      selected: connected,
+      onPressed: () {
+        HapticFeedback.lightImpact();
+        final controller = ref.read(voiceConnectionControllerProvider.notifier);
+        if (connected) {
+          controller.leave();
+        } else {
+          controller.join(guildId, channel.id);
+        }
+      },
+    );
+  }
+
+  return ChannelButton(
+    name: channel.name,
+    icon: const Icon(Icons.numbers_rounded),
+    selected: channel.id.toString() == selectedChannel,
+    hasUnreads: ref.watch(channelHasUnreadsProvider(channel.id)),
+    onPressed: () {
+      HapticFeedback.lightImpact();
+      context.go("/channels/$guildId/${channel.id}");
+    },
+  );
 }
