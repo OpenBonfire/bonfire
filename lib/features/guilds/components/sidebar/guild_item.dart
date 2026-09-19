@@ -18,7 +18,6 @@ class GuildSidebarItem extends ConsumerWidget {
     final guild = ref.watch(guildProvider(guildId));
     final client = ref.watch(clientControllerProvider);
     if (guild == null || client == null) {
-      print("yo");
       return Center(child: CircularProgressIndicator.adaptive());
     }
     final rawGuildId = GoRouter.of(

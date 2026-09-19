@@ -94,7 +94,8 @@ dependencies:
   extended_image: ^10.0.1
   sliver_expandable: ^1.1.2
   talker: ^5.1.9
-  drift_flutter: ^0.3.1
+  drift_flutter: ^0.2.8
+  drift: ">=2.30.0 <2.32.0"
 
 
 dependency_overrides:
@@ -144,6 +145,7 @@ dev_dependencies:
   freezed: ^3.2.3
   flutter_launcher_icons: ^0.14.4
   dart_mappable_builder: ^4.6.3
+  drift_dev: ">=2.30.0 <2.32.0"
 
 
 flutter_launcher_icons:

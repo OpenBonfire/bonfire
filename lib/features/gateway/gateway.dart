@@ -1,6 +1,6 @@
 import 'package:bonfire/features/authentication/repositories/auth.dart';
-import 'package:bonfire/features/gateway/store/entity_store.dart';
 import 'package:bonfire/features/members/repositories/channel_members.dart';
+import 'package:bonfire/shared/database/database_provider.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -46,17 +46,17 @@ class GatewayController extends _$GatewayController {
 }
 
 void _handleCacheUpdate(Ref ref, Object? entity) {
-  final store = ref.read(entityStoreProvider.notifier);
+  final db = ref.read(appDatabaseProvider);
   switch (entity) {
     // case ReadyEvent():
 
     case UserSettings():
-      store.upsertGuildFolders(entity.guildFolders);
+      db.upsertGuildFolders(entity.guildFolders);
     case Guild():
-      store.upsertGuild(entity);
-      store.upsertGuildChannels(entity.id, entity.channels);
+      db.upsertGuild(entity);
+      db.upsertGuildChannels(entity.id, entity.channels);
 
     case Channel():
-      store.upsertChannel(entity);
+      db.upsertChannel(entity);
   }
 }

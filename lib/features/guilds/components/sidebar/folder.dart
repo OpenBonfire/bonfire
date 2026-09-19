@@ -48,9 +48,6 @@ class _GuildFolderItemState extends ConsumerState<GuildFolderItem>
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    if (widget.folder.id == null) {
-      return GuildSidebarItem(guildId: widget.folder.guildIds.first);
-    }
 
     final rawGuildId = GoRouter.of(
       context,
@@ -175,6 +172,7 @@ class _GuildIcon extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final guild = ref.watch(guildProvider(guildId))!;
     final client = ref.watch(clientControllerProvider)!;
+
     return guild.icon != null
         ? DiscordNetworkImage(
             guild.icon!.getUrl(client).toString(),
