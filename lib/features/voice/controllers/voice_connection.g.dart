@@ -42,7 +42,7 @@ final class VoiceConnectionControllerProvider
 }
 
 String _$voiceConnectionControllerHash() =>
-    r'f2c78161c2be2c9f7a5cf198758899ee7d591e6c';
+    r'3dc33e87503a2d8b7534ba1de424b20ed688b17d';
 
 abstract class _$VoiceConnectionController
     extends $Notifier<VoiceConnectionState> {

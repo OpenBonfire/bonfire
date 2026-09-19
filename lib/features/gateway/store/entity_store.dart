@@ -77,3 +77,22 @@ bool guildHasUnreads(Ref ref, Snowflake guildId) {
 bool folderHasUnreads(Ref ref, GuildFolder folder) {
   return folder.guildIds.any((guildId) => ref.watch(guildHasUnreadsProvider(guildId)));
 }
+
+@riverpod
+Stream<User?> _userStream(Ref ref, Snowflake id) =>
+    ref.watch(appDatabaseProvider).watchUser(id);
+
+@riverpod
+User? user(Ref ref, Snowflake id) => ref.watch(_userStreamProvider(id)).value;
+
+@riverpod
+Stream<List<Snowflake>> _channelVoiceStateUserIdsStream(
+  Ref ref,
+  Snowflake channelId,
+) => ref.watch(appDatabaseProvider).watchChannelVoiceStateUserIds(channelId);
+
+/// The ids of the users currently connected to voice channel [channelId].
+@riverpod
+List<Snowflake> channelVoiceStateUserIds(Ref ref, Snowflake channelId) =>
+    ref.watch(_channelVoiceStateUserIdsStreamProvider(channelId)).value ??
+    const [];

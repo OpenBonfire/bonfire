@@ -61,5 +61,11 @@ void _handleCacheUpdate(Ref ref, Object? entity) {
 
     case ReadState():
       db.upsertReadState(entity);
+
+    case User():
+      db.upsertUser(entity);
+
+    case VoiceState():
+      db.upsertVoiceState(entity);
   }
 }

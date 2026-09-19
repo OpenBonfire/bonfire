@@ -51,14 +51,51 @@ class ReadStates extends Table {
   Set<Column> get primaryKey => {channelId};
 }
 
+/// Persisted users, keyed by id. Same JSON-blob shape as [Guilds]/[Channels].
+@DataClassName('UserRow')
+class Users extends Table {
+  IntColumn get id => integer()();
+  TextColumn get data => text()();
+
+  @override
+  Set<Column> get primaryKey => {id};
+}
+
+/// Who is currently in which voice channel. A user can only be connected to
+/// one voice channel at a time, so [userId] alone is the primary key - a row
+/// existing at all means that user is in a voice channel somewhere.
+@DataClassName('VoiceStateRow')
+class VoiceStates extends Table {
+  IntColumn get userId => integer()();
+  IntColumn get guildId => integer()();
+  IntColumn get channelId => integer()();
+
+  @override
+  Set<Column> get primaryKey => {userId};
+}
+
 const _guildFoldersKey = 'guildFolders';
 
-@DriftDatabase(tables: [Guilds, Channels, KeyValues, ReadStates])
+@DriftDatabase(tables: [Guilds, Channels, KeyValues, ReadStates, Users, VoiceStates])
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(driftDatabase(name: 'bonfire'));
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 3;
+
+  @override
+  MigrationStrategy get migration => MigrationStrategy(
+    onCreate: (m) => m.createAll(),
+    onUpgrade: (m, from, to) async {
+      if (from < 2) {
+        await m.createTable(readStates);
+      }
+      if (from < 3) {
+        await m.createTable(users);
+        await m.createTable(voiceStates);
+      }
+    },
+  );
 
   // --- Guilds ---
 
@@ -165,5 +202,57 @@ class AppDatabase extends _$AppDatabase {
           ..where((t) => t.channelId.equals(channelId.value)))
         .watchSingleOrNull()
         .map((row) => row?.lastMessageId);
+  }
+
+  // --- Users ---
+
+  Future<void> upsertUser(User user) {
+    return into(users).insertOnConflictUpdate(
+      UsersCompanion.insert(
+        id: Value(user.id.value),
+        data: jsonEncode(user.toMap()),
+      ),
+    );
+  }
+
+  Stream<User?> watchUser(Snowflake id) {
+    return (select(
+      users,
+    )..where((t) => t.id.equals(id.value))).watchSingleOrNull().map(
+      (row) => row == null ? null : UserMapper.fromMap(jsonDecode(row.data)),
+    );
+  }
+
+  // --- Voice states ---
+
+  /// A `channelId`/`guildId` of `null` means the user left voice entirely -
+  /// there's nothing useful to store, so the row is removed instead.
+  Future<void> upsertVoiceState(VoiceState voiceState) {
+    final guildId = voiceState.guildId;
+    final channelId = voiceState.channelId;
+    if (guildId == null || channelId == null) {
+      return deleteVoiceState(voiceState.userId);
+    }
+
+    return into(voiceStates).insertOnConflictUpdate(
+      VoiceStatesCompanion.insert(
+        userId: Value(voiceState.userId.value),
+        guildId: guildId.value,
+        channelId: channelId.value,
+      ),
+    );
+  }
+
+  Future<void> deleteVoiceState(Snowflake userId) {
+    return (delete(
+      voiceStates,
+    )..where((t) => t.userId.equals(userId.value))).go();
+  }
+
+  Stream<List<Snowflake>> watchChannelVoiceStateUserIds(Snowflake channelId) {
+    return (select(voiceStates)
+          ..where((t) => t.channelId.equals(channelId.value)))
+        .watch()
+        .map((rows) => rows.map((r) => Snowflake(r.userId)).toList());
   }
 }

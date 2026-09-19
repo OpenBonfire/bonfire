@@ -1,5 +1,6 @@
 import 'package:bonfire/features/channels/components/channel_sidebar.dart';
 import 'package:bonfire/features/members/components/member_list.dart';
+import 'package:bonfire/features/voice/components/voice_connection_bar.dart';
 import 'package:bonfire/shared/components/divider.dart';
 import 'package:bonfire/shared/components/navigation/adaptive_panel_layout.dart';
 import 'package:firebridge/firebridge.dart';
@@ -21,13 +22,20 @@ class ChannelRouterWrapper extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       body: AdaptivePanelLayout(
-        left: Row(
+        left: Column(
           children: [
-            ChannelSidebar(guildId: guildId, channelId: channelId),
-            Padding(
-              padding: const EdgeInsets.only(left: 4),
-              child: BonfireVerticalDivider(),
+            Expanded(
+              child: Row(
+                children: [
+                  ChannelSidebar(guildId: guildId, channelId: channelId),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 4),
+                    child: BonfireVerticalDivider(),
+                  ),
+                ],
+              ),
             ),
+            const VoiceConnectionBar(),
           ],
         ),
         main: child,

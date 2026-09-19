@@ -956,3 +956,317 @@ final class FolderHasUnreadsFamily extends $Family
   @override
   String toString() => r'folderHasUnreadsProvider';
 }
+
+@ProviderFor(_userStream)
+final _userStreamProvider = _UserStreamFamily._();
+
+final class _UserStreamProvider
+    extends $FunctionalProvider<AsyncValue<User?>, User?, Stream<User?>>
+    with $FutureModifier<User?>, $StreamProvider<User?> {
+  _UserStreamProvider._({
+    required _UserStreamFamily super.from,
+    required Snowflake super.argument,
+  }) : super(
+         retry: null,
+         name: r'_userStreamProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
+
+  @override
+  String debugGetCreateSourceHash() => _$_userStreamHash();
+
+  @override
+  String toString() {
+    return r'_userStreamProvider'
+        ''
+        '($argument)';
+  }
+
+  @$internal
+  @override
+  $StreamProviderElement<User?> $createElement($ProviderPointer pointer) =>
+      $StreamProviderElement(pointer);
+
+  @override
+  Stream<User?> create(Ref ref) {
+    final argument = this.argument as Snowflake;
+    return _userStream(ref, argument);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is _UserStreamProvider && other.argument == argument;
+  }
+
+  @override
+  int get hashCode {
+    return argument.hashCode;
+  }
+}
+
+String _$_userStreamHash() => r'c3dffb7f71ebac8e28f0196646344849d4f10ec3';
+
+final class _UserStreamFamily extends $Family
+    with $FunctionalFamilyOverride<Stream<User?>, Snowflake> {
+  _UserStreamFamily._()
+    : super(
+        retry: null,
+        name: r'_userStreamProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: true,
+      );
+
+  _UserStreamProvider call(Snowflake id) =>
+      _UserStreamProvider._(argument: id, from: this);
+
+  @override
+  String toString() => r'_userStreamProvider';
+}
+
+@ProviderFor(user)
+final userProvider = UserFamily._();
+
+final class UserProvider extends $FunctionalProvider<User?, User?, User?>
+    with $Provider<User?> {
+  UserProvider._({
+    required UserFamily super.from,
+    required Snowflake super.argument,
+  }) : super(
+         retry: null,
+         name: r'userProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
+
+  @override
+  String debugGetCreateSourceHash() => _$userHash();
+
+  @override
+  String toString() {
+    return r'userProvider'
+        ''
+        '($argument)';
+  }
+
+  @$internal
+  @override
+  $ProviderElement<User?> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  User? create(Ref ref) {
+    final argument = this.argument as Snowflake;
+    return user(ref, argument);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(User? value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<User?>(value),
+    );
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is UserProvider && other.argument == argument;
+  }
+
+  @override
+  int get hashCode {
+    return argument.hashCode;
+  }
+}
+
+String _$userHash() => r'477c4489c7fef334994c81dde5e22bf31b56265b';
+
+final class UserFamily extends $Family
+    with $FunctionalFamilyOverride<User?, Snowflake> {
+  UserFamily._()
+    : super(
+        retry: null,
+        name: r'userProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: true,
+      );
+
+  UserProvider call(Snowflake id) => UserProvider._(argument: id, from: this);
+
+  @override
+  String toString() => r'userProvider';
+}
+
+@ProviderFor(_channelVoiceStateUserIdsStream)
+final _channelVoiceStateUserIdsStreamProvider =
+    _ChannelVoiceStateUserIdsStreamFamily._();
+
+final class _ChannelVoiceStateUserIdsStreamProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<List<Snowflake>>,
+          List<Snowflake>,
+          Stream<List<Snowflake>>
+        >
+    with $FutureModifier<List<Snowflake>>, $StreamProvider<List<Snowflake>> {
+  _ChannelVoiceStateUserIdsStreamProvider._({
+    required _ChannelVoiceStateUserIdsStreamFamily super.from,
+    required Snowflake super.argument,
+  }) : super(
+         retry: null,
+         name: r'_channelVoiceStateUserIdsStreamProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
+
+  @override
+  String debugGetCreateSourceHash() => _$_channelVoiceStateUserIdsStreamHash();
+
+  @override
+  String toString() {
+    return r'_channelVoiceStateUserIdsStreamProvider'
+        ''
+        '($argument)';
+  }
+
+  @$internal
+  @override
+  $StreamProviderElement<List<Snowflake>> $createElement(
+    $ProviderPointer pointer,
+  ) => $StreamProviderElement(pointer);
+
+  @override
+  Stream<List<Snowflake>> create(Ref ref) {
+    final argument = this.argument as Snowflake;
+    return _channelVoiceStateUserIdsStream(ref, argument);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is _ChannelVoiceStateUserIdsStreamProvider &&
+        other.argument == argument;
+  }
+
+  @override
+  int get hashCode {
+    return argument.hashCode;
+  }
+}
+
+String _$_channelVoiceStateUserIdsStreamHash() =>
+    r'404ef8a59d4d588982f1651b6ff42775e01a1ea7';
+
+final class _ChannelVoiceStateUserIdsStreamFamily extends $Family
+    with $FunctionalFamilyOverride<Stream<List<Snowflake>>, Snowflake> {
+  _ChannelVoiceStateUserIdsStreamFamily._()
+    : super(
+        retry: null,
+        name: r'_channelVoiceStateUserIdsStreamProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: true,
+      );
+
+  _ChannelVoiceStateUserIdsStreamProvider call(Snowflake channelId) =>
+      _ChannelVoiceStateUserIdsStreamProvider._(
+        argument: channelId,
+        from: this,
+      );
+
+  @override
+  String toString() => r'_channelVoiceStateUserIdsStreamProvider';
+}
+
+/// The ids of the users currently connected to voice channel [channelId].
+
+@ProviderFor(channelVoiceStateUserIds)
+final channelVoiceStateUserIdsProvider = ChannelVoiceStateUserIdsFamily._();
+
+/// The ids of the users currently connected to voice channel [channelId].
+
+final class ChannelVoiceStateUserIdsProvider
+    extends
+        $FunctionalProvider<List<Snowflake>, List<Snowflake>, List<Snowflake>>
+    with $Provider<List<Snowflake>> {
+  /// The ids of the users currently connected to voice channel [channelId].
+  ChannelVoiceStateUserIdsProvider._({
+    required ChannelVoiceStateUserIdsFamily super.from,
+    required Snowflake super.argument,
+  }) : super(
+         retry: null,
+         name: r'channelVoiceStateUserIdsProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
+
+  @override
+  String debugGetCreateSourceHash() => _$channelVoiceStateUserIdsHash();
+
+  @override
+  String toString() {
+    return r'channelVoiceStateUserIdsProvider'
+        ''
+        '($argument)';
+  }
+
+  @$internal
+  @override
+  $ProviderElement<List<Snowflake>> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  List<Snowflake> create(Ref ref) {
+    final argument = this.argument as Snowflake;
+    return channelVoiceStateUserIds(ref, argument);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(List<Snowflake> value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<List<Snowflake>>(value),
+    );
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is ChannelVoiceStateUserIdsProvider &&
+        other.argument == argument;
+  }
+
+  @override
+  int get hashCode {
+    return argument.hashCode;
+  }
+}
+
+String _$channelVoiceStateUserIdsHash() =>
+    r'3e9784f95c2c72b84417acde03ea925d8c862e26';
+
+/// The ids of the users currently connected to voice channel [channelId].
+
+final class ChannelVoiceStateUserIdsFamily extends $Family
+    with $FunctionalFamilyOverride<List<Snowflake>, Snowflake> {
+  ChannelVoiceStateUserIdsFamily._()
+    : super(
+        retry: null,
+        name: r'channelVoiceStateUserIdsProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: true,
+      );
+
+  /// The ids of the users currently connected to voice channel [channelId].
+
+  ChannelVoiceStateUserIdsProvider call(Snowflake channelId) =>
+      ChannelVoiceStateUserIdsProvider._(argument: channelId, from: this);
+
+  @override
+  String toString() => r'channelVoiceStateUserIdsProvider';
+}

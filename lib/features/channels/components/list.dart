@@ -152,19 +152,27 @@ Widget _buildChannelButton(
     final connectedChannelId = ref.watch(voiceConnectionControllerProvider).channelId;
     final connected = connectedChannelId == channel.id;
 
-    return ChannelButton(
-      name: channel.name,
-      icon: const Icon(Icons.volume_up_rounded),
-      selected: connected,
-      onPressed: () {
-        HapticFeedback.lightImpact();
-        final controller = ref.read(voiceConnectionControllerProvider.notifier);
-        if (connected) {
-          controller.leave();
-        } else {
-          controller.join(guildId, channel.id);
-        }
-      },
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        ChannelButton(
+          name: channel.name,
+          icon: const Icon(Icons.volume_up_rounded),
+          selected: connected,
+          onPressed: () {
+            HapticFeedback.lightImpact();
+            final controller = ref.read(
+              voiceConnectionControllerProvider.notifier,
+            );
+            if (connected) {
+              controller.leave();
+            } else {
+              controller.join(guildId, channel.id);
+            }
+          },
+        ),
+        _VoiceChannelMembers(channelId: channel.id),
+      ],
     );
   }
 
@@ -178,4 +186,48 @@ Widget _buildChannelButton(
       context.go("/channels/$guildId/${channel.id}");
     },
   );
+}
+
+/// The users currently connected to a voice channel. Just names for now -
+/// enough to see who's in there.
+class _VoiceChannelMembers extends ConsumerWidget {
+  final Snowflake channelId;
+  const _VoiceChannelMembers({required this.channelId});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final userIds = ref.watch(channelVoiceStateUserIdsProvider(channelId));
+    if (userIds.isEmpty) return const SizedBox.shrink();
+
+    final theme = Theme.of(context);
+    return Padding(
+      padding: const EdgeInsets.only(left: 40, right: 8, bottom: 4),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          for (final userId in userIds)
+            _VoiceChannelMember(userId: userId, theme: theme),
+        ],
+      ),
+    );
+  }
+}
+
+class _VoiceChannelMember extends ConsumerWidget {
+  final Snowflake userId;
+  final ThemeData theme;
+  const _VoiceChannelMember({required this.userId, required this.theme});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final user = ref.watch(userProvider(userId));
+    return Text(
+      user?.globalName ?? user?.username ?? userId.toString(),
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis,
+      style: theme.textTheme.bodySmall?.copyWith(
+        color: theme.colorScheme.surfaceContainerHighest,
+      ),
+    );
+  }
 }

@@ -908,6 +908,436 @@ class ReadStatesCompanion extends UpdateCompanion<ReadStateRow> {
   }
 }
 
+class $UsersTable extends Users with TableInfo<$UsersTable, UserRow> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $UsersTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _dataMeta = const VerificationMeta('data');
+  @override
+  late final GeneratedColumn<String> data = GeneratedColumn<String>(
+    'data',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [id, data];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'users';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<UserRow> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('data')) {
+      context.handle(
+        _dataMeta,
+        this.data.isAcceptableOrUnknown(data['data']!, _dataMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_dataMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  UserRow map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return UserRow(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      data: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}data'],
+      )!,
+    );
+  }
+
+  @override
+  $UsersTable createAlias(String alias) {
+    return $UsersTable(attachedDatabase, alias);
+  }
+}
+
+class UserRow extends DataClass implements Insertable<UserRow> {
+  final int id;
+  final String data;
+  const UserRow({required this.id, required this.data});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['data'] = Variable<String>(data);
+    return map;
+  }
+
+  UsersCompanion toCompanion(bool nullToAbsent) {
+    return UsersCompanion(id: Value(id), data: Value(data));
+  }
+
+  factory UserRow.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return UserRow(
+      id: serializer.fromJson<int>(json['id']),
+      data: serializer.fromJson<String>(json['data']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'data': serializer.toJson<String>(data),
+    };
+  }
+
+  UserRow copyWith({int? id, String? data}) =>
+      UserRow(id: id ?? this.id, data: data ?? this.data);
+  UserRow copyWithCompanion(UsersCompanion data) {
+    return UserRow(
+      id: data.id.present ? data.id.value : this.id,
+      data: data.data.present ? data.data.value : this.data,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('UserRow(')
+          ..write('id: $id, ')
+          ..write('data: $data')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, data);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is UserRow && other.id == this.id && other.data == this.data);
+}
+
+class UsersCompanion extends UpdateCompanion<UserRow> {
+  final Value<int> id;
+  final Value<String> data;
+  const UsersCompanion({
+    this.id = const Value.absent(),
+    this.data = const Value.absent(),
+  });
+  UsersCompanion.insert({this.id = const Value.absent(), required String data})
+    : data = Value(data);
+  static Insertable<UserRow> custom({
+    Expression<int>? id,
+    Expression<String>? data,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (data != null) 'data': data,
+    });
+  }
+
+  UsersCompanion copyWith({Value<int>? id, Value<String>? data}) {
+    return UsersCompanion(id: id ?? this.id, data: data ?? this.data);
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (data.present) {
+      map['data'] = Variable<String>(data.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('UsersCompanion(')
+          ..write('id: $id, ')
+          ..write('data: $data')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $VoiceStatesTable extends VoiceStates
+    with TableInfo<$VoiceStatesTable, VoiceStateRow> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $VoiceStatesTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _userIdMeta = const VerificationMeta('userId');
+  @override
+  late final GeneratedColumn<int> userId = GeneratedColumn<int>(
+    'user_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _guildIdMeta = const VerificationMeta(
+    'guildId',
+  );
+  @override
+  late final GeneratedColumn<int> guildId = GeneratedColumn<int>(
+    'guild_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _channelIdMeta = const VerificationMeta(
+    'channelId',
+  );
+  @override
+  late final GeneratedColumn<int> channelId = GeneratedColumn<int>(
+    'channel_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [userId, guildId, channelId];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'voice_states';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<VoiceStateRow> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('user_id')) {
+      context.handle(
+        _userIdMeta,
+        userId.isAcceptableOrUnknown(data['user_id']!, _userIdMeta),
+      );
+    }
+    if (data.containsKey('guild_id')) {
+      context.handle(
+        _guildIdMeta,
+        guildId.isAcceptableOrUnknown(data['guild_id']!, _guildIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_guildIdMeta);
+    }
+    if (data.containsKey('channel_id')) {
+      context.handle(
+        _channelIdMeta,
+        channelId.isAcceptableOrUnknown(data['channel_id']!, _channelIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_channelIdMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {userId};
+  @override
+  VoiceStateRow map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return VoiceStateRow(
+      userId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}user_id'],
+      )!,
+      guildId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}guild_id'],
+      )!,
+      channelId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}channel_id'],
+      )!,
+    );
+  }
+
+  @override
+  $VoiceStatesTable createAlias(String alias) {
+    return $VoiceStatesTable(attachedDatabase, alias);
+  }
+}
+
+class VoiceStateRow extends DataClass implements Insertable<VoiceStateRow> {
+  final int userId;
+  final int guildId;
+  final int channelId;
+  const VoiceStateRow({
+    required this.userId,
+    required this.guildId,
+    required this.channelId,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['user_id'] = Variable<int>(userId);
+    map['guild_id'] = Variable<int>(guildId);
+    map['channel_id'] = Variable<int>(channelId);
+    return map;
+  }
+
+  VoiceStatesCompanion toCompanion(bool nullToAbsent) {
+    return VoiceStatesCompanion(
+      userId: Value(userId),
+      guildId: Value(guildId),
+      channelId: Value(channelId),
+    );
+  }
+
+  factory VoiceStateRow.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return VoiceStateRow(
+      userId: serializer.fromJson<int>(json['userId']),
+      guildId: serializer.fromJson<int>(json['guildId']),
+      channelId: serializer.fromJson<int>(json['channelId']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'userId': serializer.toJson<int>(userId),
+      'guildId': serializer.toJson<int>(guildId),
+      'channelId': serializer.toJson<int>(channelId),
+    };
+  }
+
+  VoiceStateRow copyWith({int? userId, int? guildId, int? channelId}) =>
+      VoiceStateRow(
+        userId: userId ?? this.userId,
+        guildId: guildId ?? this.guildId,
+        channelId: channelId ?? this.channelId,
+      );
+  VoiceStateRow copyWithCompanion(VoiceStatesCompanion data) {
+    return VoiceStateRow(
+      userId: data.userId.present ? data.userId.value : this.userId,
+      guildId: data.guildId.present ? data.guildId.value : this.guildId,
+      channelId: data.channelId.present ? data.channelId.value : this.channelId,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('VoiceStateRow(')
+          ..write('userId: $userId, ')
+          ..write('guildId: $guildId, ')
+          ..write('channelId: $channelId')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(userId, guildId, channelId);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is VoiceStateRow &&
+          other.userId == this.userId &&
+          other.guildId == this.guildId &&
+          other.channelId == this.channelId);
+}
+
+class VoiceStatesCompanion extends UpdateCompanion<VoiceStateRow> {
+  final Value<int> userId;
+  final Value<int> guildId;
+  final Value<int> channelId;
+  const VoiceStatesCompanion({
+    this.userId = const Value.absent(),
+    this.guildId = const Value.absent(),
+    this.channelId = const Value.absent(),
+  });
+  VoiceStatesCompanion.insert({
+    this.userId = const Value.absent(),
+    required int guildId,
+    required int channelId,
+  }) : guildId = Value(guildId),
+       channelId = Value(channelId);
+  static Insertable<VoiceStateRow> custom({
+    Expression<int>? userId,
+    Expression<int>? guildId,
+    Expression<int>? channelId,
+  }) {
+    return RawValuesInsertable({
+      if (userId != null) 'user_id': userId,
+      if (guildId != null) 'guild_id': guildId,
+      if (channelId != null) 'channel_id': channelId,
+    });
+  }
+
+  VoiceStatesCompanion copyWith({
+    Value<int>? userId,
+    Value<int>? guildId,
+    Value<int>? channelId,
+  }) {
+    return VoiceStatesCompanion(
+      userId: userId ?? this.userId,
+      guildId: guildId ?? this.guildId,
+      channelId: channelId ?? this.channelId,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (userId.present) {
+      map['user_id'] = Variable<int>(userId.value);
+    }
+    if (guildId.present) {
+      map['guild_id'] = Variable<int>(guildId.value);
+    }
+    if (channelId.present) {
+      map['channel_id'] = Variable<int>(channelId.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('VoiceStatesCompanion(')
+          ..write('userId: $userId, ')
+          ..write('guildId: $guildId, ')
+          ..write('channelId: $channelId')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -915,6 +1345,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $ChannelsTable channels = $ChannelsTable(this);
   late final $KeyValuesTable keyValues = $KeyValuesTable(this);
   late final $ReadStatesTable readStates = $ReadStatesTable(this);
+  late final $UsersTable users = $UsersTable(this);
+  late final $VoiceStatesTable voiceStates = $VoiceStatesTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -924,6 +1356,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     channels,
     keyValues,
     readStates,
+    users,
+    voiceStates,
   ];
 }
 
@@ -1522,6 +1956,296 @@ typedef $$ReadStatesTableProcessedTableManager =
       ReadStateRow,
       PrefetchHooks Function()
     >;
+typedef $$UsersTableCreateCompanionBuilder =
+    UsersCompanion Function({Value<int> id, required String data});
+typedef $$UsersTableUpdateCompanionBuilder =
+    UsersCompanion Function({Value<int> id, Value<String> data});
+
+class $$UsersTableFilterComposer extends Composer<_$AppDatabase, $UsersTable> {
+  $$UsersTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get data => $composableBuilder(
+    column: $table.data,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$UsersTableOrderingComposer
+    extends Composer<_$AppDatabase, $UsersTable> {
+  $$UsersTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get data => $composableBuilder(
+    column: $table.data,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$UsersTableAnnotationComposer
+    extends Composer<_$AppDatabase, $UsersTable> {
+  $$UsersTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get data =>
+      $composableBuilder(column: $table.data, builder: (column) => column);
+}
+
+class $$UsersTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $UsersTable,
+          UserRow,
+          $$UsersTableFilterComposer,
+          $$UsersTableOrderingComposer,
+          $$UsersTableAnnotationComposer,
+          $$UsersTableCreateCompanionBuilder,
+          $$UsersTableUpdateCompanionBuilder,
+          (UserRow, BaseReferences<_$AppDatabase, $UsersTable, UserRow>),
+          UserRow,
+          PrefetchHooks Function()
+        > {
+  $$UsersTableTableManager(_$AppDatabase db, $UsersTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$UsersTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$UsersTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$UsersTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<String> data = const Value.absent(),
+              }) => UsersCompanion(id: id, data: data),
+          createCompanionCallback:
+              ({Value<int> id = const Value.absent(), required String data}) =>
+                  UsersCompanion.insert(id: id, data: data),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable<$UsersTable, UserRow>(table),
+                  BaseReferences<_$AppDatabase, $UsersTable, UserRow>(
+                    db,
+                    table,
+                    e,
+                  ),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$UsersTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $UsersTable,
+      UserRow,
+      $$UsersTableFilterComposer,
+      $$UsersTableOrderingComposer,
+      $$UsersTableAnnotationComposer,
+      $$UsersTableCreateCompanionBuilder,
+      $$UsersTableUpdateCompanionBuilder,
+      (UserRow, BaseReferences<_$AppDatabase, $UsersTable, UserRow>),
+      UserRow,
+      PrefetchHooks Function()
+    >;
+typedef $$VoiceStatesTableCreateCompanionBuilder =
+    VoiceStatesCompanion Function({
+      Value<int> userId,
+      required int guildId,
+      required int channelId,
+    });
+typedef $$VoiceStatesTableUpdateCompanionBuilder =
+    VoiceStatesCompanion Function({
+      Value<int> userId,
+      Value<int> guildId,
+      Value<int> channelId,
+    });
+
+class $$VoiceStatesTableFilterComposer
+    extends Composer<_$AppDatabase, $VoiceStatesTable> {
+  $$VoiceStatesTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get userId => $composableBuilder(
+    column: $table.userId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get guildId => $composableBuilder(
+    column: $table.guildId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get channelId => $composableBuilder(
+    column: $table.channelId,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$VoiceStatesTableOrderingComposer
+    extends Composer<_$AppDatabase, $VoiceStatesTable> {
+  $$VoiceStatesTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get userId => $composableBuilder(
+    column: $table.userId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get guildId => $composableBuilder(
+    column: $table.guildId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get channelId => $composableBuilder(
+    column: $table.channelId,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$VoiceStatesTableAnnotationComposer
+    extends Composer<_$AppDatabase, $VoiceStatesTable> {
+  $$VoiceStatesTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get userId =>
+      $composableBuilder(column: $table.userId, builder: (column) => column);
+
+  GeneratedColumn<int> get guildId =>
+      $composableBuilder(column: $table.guildId, builder: (column) => column);
+
+  GeneratedColumn<int> get channelId =>
+      $composableBuilder(column: $table.channelId, builder: (column) => column);
+}
+
+class $$VoiceStatesTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $VoiceStatesTable,
+          VoiceStateRow,
+          $$VoiceStatesTableFilterComposer,
+          $$VoiceStatesTableOrderingComposer,
+          $$VoiceStatesTableAnnotationComposer,
+          $$VoiceStatesTableCreateCompanionBuilder,
+          $$VoiceStatesTableUpdateCompanionBuilder,
+          (
+            VoiceStateRow,
+            BaseReferences<_$AppDatabase, $VoiceStatesTable, VoiceStateRow>,
+          ),
+          VoiceStateRow,
+          PrefetchHooks Function()
+        > {
+  $$VoiceStatesTableTableManager(_$AppDatabase db, $VoiceStatesTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$VoiceStatesTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$VoiceStatesTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$VoiceStatesTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<int> userId = const Value.absent(),
+                Value<int> guildId = const Value.absent(),
+                Value<int> channelId = const Value.absent(),
+              }) => VoiceStatesCompanion(
+                userId: userId,
+                guildId: guildId,
+                channelId: channelId,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> userId = const Value.absent(),
+                required int guildId,
+                required int channelId,
+              }) => VoiceStatesCompanion.insert(
+                userId: userId,
+                guildId: guildId,
+                channelId: channelId,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable<$VoiceStatesTable, VoiceStateRow>(table),
+                  BaseReferences<
+                    _$AppDatabase,
+                    $VoiceStatesTable,
+                    VoiceStateRow
+                  >(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$VoiceStatesTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $VoiceStatesTable,
+      VoiceStateRow,
+      $$VoiceStatesTableFilterComposer,
+      $$VoiceStatesTableOrderingComposer,
+      $$VoiceStatesTableAnnotationComposer,
+      $$VoiceStatesTableCreateCompanionBuilder,
+      $$VoiceStatesTableUpdateCompanionBuilder,
+      (
+        VoiceStateRow,
+        BaseReferences<_$AppDatabase, $VoiceStatesTable, VoiceStateRow>,
+      ),
+      VoiceStateRow,
+      PrefetchHooks Function()
+    >;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -1534,4 +2258,8 @@ class $AppDatabaseManager {
       $$KeyValuesTableTableManager(_db, _db.keyValues);
   $$ReadStatesTableTableManager get readStates =>
       $$ReadStatesTableTableManager(_db, _db.readStates);
+  $$UsersTableTableManager get users =>
+      $$UsersTableTableManager(_db, _db.users);
+  $$VoiceStatesTableTableManager get voiceStates =>
+      $$VoiceStatesTableTableManager(_db, _db.voiceStates);
 }

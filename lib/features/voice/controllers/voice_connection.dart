@@ -40,12 +40,17 @@ class VoiceConnectionController extends _$VoiceConnectionController {
     return const VoiceConnectionState();
   }
 
-  /// Tell Discord we want to join [channelId] in [guildId]. Confirmation
-  /// (and the voice server info needed to actually connect) arrives
-  /// asynchronously via [_handleVoiceStateUpdate]/[_handleVoiceServerUpdate].
+  /// Tell Discord we want to join [channelId] in [guildId]. Sets [state]
+  /// immediately rather than waiting on [_handleVoiceStateUpdate] to confirm
+  /// it - that confirmation still arrives and reconciles [state] (it's how
+  /// [sessionId] gets filled in), but the UI shouldn't be stuck showing
+  /// "not connected" for however long that round-trip takes, and [leave]
+  /// needs `state.guildId` to be set right away or it has nothing to send.
   void join(Snowflake guildId, Snowflake channelId) {
     final client = ref.read(clientControllerProvider);
     if (client == null) return;
+
+    state = VoiceConnectionState(guildId: guildId, channelId: channelId);
 
     client.gateway.updateVoiceState(
       guildId,
@@ -60,12 +65,21 @@ class VoiceConnectionController extends _$VoiceConnectionController {
   void leave() {
     final client = ref.read(clientControllerProvider);
     final guildId = state.guildId;
-    if (client == null || guildId == null) return;
 
-    client.gateway.updateVoiceState(
-      guildId,
-      GatewayVoiceStateBuilder(channelId: null, muted: false, deafened: false),
-    );
+    if (client != null && guildId != null) {
+      client.gateway.updateVoiceState(
+        guildId,
+        GatewayVoiceStateBuilder(
+          channelId: null,
+          muted: false,
+          deafened: false,
+        ),
+      );
+    }
+
+    // Clear unconditionally so leaving always works locally, even if the
+    // guild id was somehow missing or the send above didn't go through.
+    state = const VoiceConnectionState();
   }
 
   void _handleVoiceStateUpdate(VoiceStateUpdateEvent event) {
