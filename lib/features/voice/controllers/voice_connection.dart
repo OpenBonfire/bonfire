@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bonfire/features/authentication/repositories/auth.dart';
+import 'package:bonfire/features/gateway/store/entity_store.dart';
 import 'package:bonfire/features/voice/services/dave_voice_session.dart';
 import 'package:bonfire/features/voice/services/voice_gateway.dart';
 import 'package:bonfire/features/voice/services/voice_media_session.dart';
@@ -343,6 +344,10 @@ class VoiceConnectionController extends _$VoiceConnectionController {
       gateway: gateway,
       selfUserId: client.user.id,
       groupId: channelId,
+      // Seed with everyone the *main* gateway already knows is in the
+      // channel - see DaveVoiceSession._recognizedUserIds's doc for why
+      // this can't wait for the voice gateway's own onClientsConnect.
+      initialRecognizedUserIds: ref.read(channelVoiceStateUserIdsProvider(channelId)),
     );
     _daveSession = daveSession;
 

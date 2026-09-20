@@ -380,6 +380,11 @@ class VoiceWebRtcRsSession {
   }
 
   void _handleEncodedCameraFrame(capture_kit.EncodedVideoFrame frame) {
+    // Defensive: guards against a frame already in flight through the
+    // capture_kit stream landing after dispose()/stopLocalVideo() started
+    // tearing things down (see dispose()'s camera-before-encryptor ordering
+    // comment for the main fix - this is the belt-and-suspenders backstop).
+    if (_disposed) return;
     unawaited(_encryptAndSendLocalVideoFrame(frame));
   }
 
@@ -1128,11 +1133,17 @@ class VoiceWebRtcRsSession {
     await _micSubscription?.cancel();
     await _recorder?.dispose();
     _opusEncoder?.dispose();
-    _encryptor?.dispose();
     await _ratchetSub?.cancel();
     await _eventsSub?.cancel();
+    // Camera teardown must finish *before* disposing the encryptor: frames
+    // already in flight through the capture_kit stream (or ones the Rust
+    // encode thread queues in the brief window before `stop()` joins it)
+    // still reach _handleEncodedCameraFrame otherwise, which then calls
+    // .encrypt() on a disposed DaveEncryptor ("Bad state: DaveEncryptor
+    // used after dispose()").
     await _cameraFramesSub?.cancel();
     await _cameraSession?.stop();
+    _encryptor?.dispose();
 
     for (final participant in _participantsByUserId.values) {
       participant.dispose();

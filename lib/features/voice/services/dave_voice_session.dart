@@ -37,13 +37,21 @@ class DaveRatchetUpdate {
 /// TODOs below. The core join/establish-group/rotate-on-membership-change
 /// path is complete.
 class DaveVoiceSession {
+  /// [initialRecognizedUserIds] should be every user already known (from the
+  /// *main* gateway's voice-state tracking, before this voice-gateway
+  /// connection was even opened) to be in the channel - see this class's
+  /// `_recognizedUserIds` doc for why this matters. Our own [selfUserId] is
+  /// always recognized too.
   DaveVoiceSession({
     required VoiceGateway gateway,
     required Snowflake selfUserId,
     required Snowflake groupId,
+    Iterable<Snowflake> initialRecognizedUserIds = const [],
   }) : _gateway = gateway,
        _selfUserId = selfUserId,
        _groupId = groupId {
+    _recognizedUserIds.add(selfUserId.toString());
+    _recognizedUserIds.addAll(initialRecognizedUserIds.map((id) => id.toString()));
     _subscriptions = [
       gateway.onDavePrepareEpoch.listen(_handlePrepareEpoch),
       gateway.onDaveExternalSenderPackage.listen(_handleExternalSenderPackage),
@@ -67,6 +75,20 @@ class DaveVoiceSession {
   // that a lazily-created session (see _ensureSession) is actually usable
   // even if Prepare Epoch never arrives to give us an authoritative value.
   int _protocolVersion = daveMaxSupportedProtocolVersion();
+  /// User IDs `libdave`'s MLS session is allowed to trust in a roster.
+  /// `Session::VerifyWelcomeState`/`ValidateProposalMessage` (see
+  /// `third_party/libdave/cpp/src/mls/session.cpp`) reject a welcome or
+  /// proposal outright the moment *any* leaf's credential names a user ID
+  /// not in this set - including every member **already** in the group, not
+  /// just the one being added. Seeded at construction (see
+  /// [initialRecognizedUserIds]'s doc) with everyone the *main* gateway
+  /// already knows is in the channel, since a just-opened voice-gateway
+  /// connection's own [onClientsConnect] stream isn't guaranteed to
+  /// enumerate already-present members before the first Welcome/Proposals
+  /// arrives - relying on it alone caused a permanent "MLS welcome lists
+  /// unrecognized user ID" loop (each retry resets the session and sends a
+  /// fresh key package/welcome to the whole group, so it doesn't self-heal
+  /// and ends up disconnecting other members too).
   final Set<String> _recognizedUserIds = {};
   final Map<Snowflake, DaveKeyRatchet> _ratchets = {};
 
