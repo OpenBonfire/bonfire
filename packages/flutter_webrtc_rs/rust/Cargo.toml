@@ -35,3 +35,12 @@ openh264 = "0.9"
 
 [lints.rust]
 unexpected_cfgs = { level = "warn", check-cfg = ['cfg(frb_expand)'] }
+
+[patch.crates-io]
+# See vendor/rtc/src/peer_connection/handler/interceptor.rs's patched
+# `bind_undeclared_ssrc` doc comment: upstream's "undeclared SSRC" binding
+# shortcut only ever worked for a peer connection with exactly one
+# transceiver, TOTAL - broken the instant a second transceiver of any kind
+# (e.g. video, alongside audio) is also negotiated, which silently and
+# permanently drops all incoming media with no error anywhere.
+rtc = { path = "vendor/rtc" }

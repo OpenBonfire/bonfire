@@ -233,9 +233,20 @@ class VoiceWebRtcRsSession {
     // Both added before creating the offer, so the *one* offer this call
     // ever makes already negotiates both m=audio and (if requested) m=video
     // sections - see the class doc for why there's no "add video later".
+    //
+    // `ssrc: _ssrc` is required, not optional: Discord's voice gateway hands
+    // out our audio SSRC in Ready (`localSsrc`, set before this method ever
+    // runs - see its setter's doc) and expects RTP to actually arrive
+    // stamped with exactly that value, same as video's pre-assigned SSRC
+    // just below. Leaving this out (as it was before) makes webrtc-rs pick
+    // a random SSRC per `addMediaSender`'s own doc - every outgoing audio
+    // packet then carries an SSRC Discord's SFU was never told about and
+    // silently drops, with no error anywhere: DAVE encryption, the RTP send
+    // call, everything downstream of the actual wire all report success.
     _audioSender = await pc.addMediaSender(
       kind: MediaKind.audio,
       mimeType: 'audio/opus',
+      ssrc: _ssrc,
     );
     if (videoStream != null) {
       _videoSsrc = videoStream.ssrc;
@@ -610,6 +621,7 @@ class VoiceWebRtcRsSession {
       case PeerConnectionEvent_IceConnectionStateChanged(:final field0):
         debugPrint('VoiceWebRtcRsSession: ICE connection state -> $field0');
       case PeerConnectionEvent_RemoteTrack(:final trackId, :final kind):
+        debugPrint('[VoiceRecv/rtc] remote track discovered: trackId=$trackId kind=$kind');
         unawaited(_handleRemoteTrack(trackId, kind));
       default:
         break;
@@ -622,10 +634,25 @@ class VoiceWebRtcRsSession {
     final track = await pc.takeRemoteTrack(trackId: trackId);
 
     // The SSRC isn't exposed on the RtcRemoteTrack handle itself (only on
-    // each packet as it arrives) - peek the first packet to learn it, then
-    // hand off to the real per-packet handler below. If a Speaking event
-    // already told us this SSRC's user, route immediately; otherwise queue
-    // the track (see field doc) until handleSpeaking catches up.
+    // each packet as it arrives), and a Speaking event telling us this
+    // SSRC's user may not have arrived yet - so every packet is checked
+    // against _userIdBySsrc individually, with unresolved ones simply
+    // dropped, all on ONE persistent subscription set up here.
+    //
+    // This used to peek the first packet on a throwaway subscription, then
+    // (once the user id was known, immediately or after polling for it)
+    // call `packets.listen(...)` a SECOND time to actually consume the
+    // stream. `packets`/`rawPackets` are backed by flutter_rust_bridge's
+    // `RustStreamSink`, which wraps a plain (non-broadcast) StreamController
+    // - Dart streams like that allow exactly one listener for their entire
+    // lifetime, even after that listener cancels. The second `.listen()`
+    // call therefore always threw `Bad state: Stream has already been
+    // listened to`, silently (an uncaught async error in a fire-and-forget
+    // callback/Future) killing every single remote track before any packet
+    // ever reached `_routeRemotePacket` - despite DAVE ratchets,
+    // decrypt, and decode all being wired up correctly downstream. This is
+    // the actual reason no remote audio or video was ever heard/seen.
+    //
     // Video uses rawPackets() (undepacketized, one event per RTP packet) so
     // depacketization can run on the still-encrypted wire bytes, with DAVE
     // decryption happening only after a complete NAL comes out the other
@@ -633,48 +660,48 @@ class VoiceWebRtcRsSession {
     // Audio keeps using packets() since Opus never needs this distinction
     // (one Opus frame is always exactly one RTP packet, so depacketizing
     // and decrypting are the same granularity either way).
+    debugPrint('[VoiceRecv/rtc] took remote track trackId=$trackId kind=$kind, listening for packets');
     final packets = kind == MediaKind.video
         ? track.rawPackets()
         : track.packets();
-    StreamSubscription<RemoteRtpPacket>? peekSub;
-    peekSub = packets.listen((packet) {
-      peekSub?.cancel();
-      final userId = _userIdBySsrc[packet.ssrc];
-      if (userId != null) {
-        _startReceiving(userId, kind, packet, packets);
-      } else {
-        _pendingTracksBySsrc[packet.ssrc] = track;
-        // Re-deliver this first packet once handleSpeaking resolves it -
-        // simplest is to just resubscribe from scratch once known, so
-        // nothing needs to buffer packets by hand here.
-        unawaited(_waitForSsrcThenReceive(packet.ssrc, kind, packets));
-      }
-    });
-  }
-
-  Future<void> _waitForSsrcThenReceive(
-    int ssrc,
-    MediaKind kind,
-    Stream<RemoteRtpPacket> packets,
-  ) async {
-    while (!_disposed && !_userIdBySsrc.containsKey(ssrc)) {
-      await Future<void>.delayed(const Duration(milliseconds: 50));
-    }
-    if (_disposed) return;
-    final userId = _userIdBySsrc[ssrc];
-    if (userId == null) return;
-    _pendingTracksBySsrc.remove(ssrc);
-    packets.listen((packet) => _routeRemotePacket(userId, kind, packet));
-  }
-
-  void _startReceiving(
-    Snowflake userId,
-    MediaKind kind,
-    RemoteRtpPacket firstPacket,
-    Stream<RemoteRtpPacket> packets,
-  ) {
-    _routeRemotePacket(userId, kind, firstPacket);
-    packets.listen((packet) => _routeRemotePacket(userId, kind, packet));
+    var packetCount = 0;
+    var loggedUnresolvedSsrcs = const <int>{};
+    packets.listen(
+      (packet) {
+        packetCount++;
+        final userId = _userIdBySsrc[packet.ssrc];
+        if (userId == null) {
+          // Not yet resolved (handleSpeaking hasn't caught up) - drop this
+          // packet; once resolved, later packets on this same subscription
+          // route normally. Losing a few packets during the resolution
+          // window is a fine trade-off for not needing a second listen.
+          _pendingTracksBySsrc[packet.ssrc] = track;
+          if (!loggedUnresolvedSsrcs.contains(packet.ssrc)) {
+            loggedUnresolvedSsrcs = {...loggedUnresolvedSsrcs, packet.ssrc};
+            debugPrint(
+              '[VoiceRecv/rtc] packet #$packetCount for trackId=$trackId kind=$kind '
+              'has unresolved ssrc=${packet.ssrc} (no handleSpeaking yet) - dropping until resolved',
+            );
+          }
+          return;
+        }
+        _pendingTracksBySsrc.remove(packet.ssrc);
+        if (packetCount <= 3 || packetCount % 250 == 0) {
+          debugPrint(
+            '[VoiceRecv/rtc] packet #$packetCount for trackId=$trackId kind=$kind '
+            'ssrc=${packet.ssrc} resolved to userId=$userId, routing '
+            '(${packet.payload.length}B)',
+          );
+        }
+        _routeRemotePacket(userId, kind, packet);
+      },
+      onError: (Object error, StackTrace stackTrace) {
+        debugPrint('[VoiceRecv/rtc] packets stream for trackId=$trackId kind=$kind errored: $error\n$stackTrace');
+      },
+      onDone: () {
+        debugPrint('[VoiceRecv/rtc] packets stream for trackId=$trackId kind=$kind closed after $packetCount packet(s)');
+      },
+    );
   }
 
   void _routeRemotePacket(
@@ -877,6 +904,7 @@ class VoiceWebRtcRsSession {
   /// arrives, to learn which user a given SSRC belongs to - same role as
   /// [VoiceMediaSession.handleSpeaking].
   void handleSpeaking({required Snowflake userId, required int ssrc}) {
+    debugPrint('[VoiceRecv/rtc] handleSpeaking: ssrc=$ssrc -> userId=$userId');
     _userIdBySsrc[ssrc] = userId;
     _participant(userId);
   }

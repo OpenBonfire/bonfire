@@ -1,0 +1,184 @@
+# rtcp-processing
+
+rtcp-processing demonstrates the Public API for processing RTCP packets in sansio RTC.
+
+## What is RTCP?
+
+RTCP (RTP Control Protocol) is a companion protocol to RTP (Real-time Transport Protocol). While RTP carries the actual
+media data, RTCP provides out-of-band statistics and control information for an RTP session:
+
+- **Sender Reports (SR)**: Statistics from media senders (packets sent, bytes sent, timestamps)
+- **Receiver Reports (RR)**: Reception quality feedback (packet loss, jitter, round-trip time)
+- **Source Description (SDES)**: Identifies the source (CNAME, email, phone, etc.)
+- **Goodbye (BYE)**: Indicates a source is leaving the session
+- **Application-specific (APP)**: Custom application data
+- **Feedback messages**: PLI, FIR, NACK, REMB, etc. for congestion control and quality
+
+## How It Works
+
+1. Paste a base64-encoded SDP offer from a browser
+2. The example creates an answer and outputs it as base64
+3. Paste the answer in the browser to establish the connection
+4. As media flows, RTCP packets are received and printed in human-readable format
+
+## Reading inbound RTCP
+
+**Important:** by default, inbound RTCP is consumed by the interceptor chain (for generating statistics, NACK
+responses, congestion control, etc.) and does **not** reach the application via `poll_read()`. It is control traffic
+the interceptors act on, not media the application asked for.
+
+To see it, put an interceptor in the chain that attaches `Attribute::DeliverToApplication` to the packets you want.
+The terminus that ends the inbound RTCP path passes those through, and they arrive from `poll_read()` alongside the
+media. The choice is per-packet: an SFU relaying keyframe requests marks those and leaves alone the receiver reports
+its own chain is already acting on.
+
+```rust
+// `DeliverRtcp` is this example's own interceptor: it marks inbound RTCP so the terminus lets it past.
+// Application-ward of everything the default chain registers, so those have acted on the packet first.
+let builder = Registry::new().with(Slot::from(14_000), DeliverRtcp::default());
+
+// Register default interceptors (NACK, reports, TWCC, etc.)
+let registry = register_default_interceptors(builder, & mut media_engine) ?;
+
+let config = RTCConfigurationBuilder::new()
+.with_interceptor_registry(registry)
+.build();
+```
+
+It has to be asked for when the chain is built rather than arranged by an interceptor of your own. A chain is a flat
+list walked from the wire towards the application, and what an interceptor emits from `poll_read` rejoins that list
+*behind* itself — where the stage that ends the inbound RTCP path is still ahead of it, and drops the original and the
+copy both.
+
+## Instructions
+
+### Open rtcp-processing example page
+
+[jsfiddle.net](https://jsfiddle.net/zurq6j7x/) you should see two text-areas, 'Start Session' button and 'Copy browser
+SessionDescription to clipboard'
+
+### Run
+
+```bash
+cargo run --example rtcp-processing
+```
+
+### With Debug Logging
+
+```bash
+cargo run --example rtcp-processing -- --debug
+```
+
+### Read SDP from File
+
+```bash
+cargo run --example rtcp-processing -- --input-sdp-file offer.txt
+```
+
+## Example Output
+
+```
+Paste your offer here:
+<paste base64 encoded offer>
+
+Offer received: ...
+RTCP Processing listening on 127.0.0.1:54321...
+
+Paste this answer in your browser:
+eyJ0eXBlIjoiYW5zd2VyIiwic2RwIjoi...
+
+Connection State has changed: checking
+Connection State has changed: connected
+Connection established\! Waiting for RTCP packets...
+
+Track has started - track_id: video-track, receiver_id: 0
+  Stream ID: my-stream, Track ID: video-track, Kind: video, Codec: video/VP8
+
+=== RTCP Packet #1 (Track: video-track) ===
+  [1] Type: SenderReport, Length: 12 words
+      SenderReport from 1234567890
+        NTPTime: 2024-01-15 10:30:45
+        RTPTime: 987654321
+        PacketCount: 1000
+        OctetCount: 150000
+
+=== RTCP Packet #2 (Track: audio-track) ===
+  [1] Type: ReceiverReport, Length: 8 words
+      ReceiverReport from 987654321
+        SSRC: 1234567890
+        FractionLost: 0
+        TotalLost: 0
+        LastSequence: 5000
+        Jitter: 10
+        LastSR: 12345
+        Delay: 100
+
+^C
+Ctrl-C received, shutting down...
+Total RTCP packets received: 42
+Event loop exited
+```
+
+## RTCP Packet Types
+
+| Type | Name                      | Description                  |
+|------|---------------------------|------------------------------|
+| 200  | Sender Report (SR)        | Statistics from media sender |
+| 201  | Receiver Report (RR)      | Reception quality feedback   |
+| 202  | Source Description (SDES) | Source identification        |
+| 203  | Goodbye (BYE)             | Source leaving notification  |
+| 204  | Application (APP)         | Custom application data      |
+| 205  | Transport Feedback        | TWCC, NACK                   |
+| 206  | Payload Feedback          | PLI, FIR, SLI, RPSI          |
+
+## Using with Browser
+
+1. Open a WebRTC demo page that can send video (e.g., the broadcast example's HTML page)
+2. Run this example
+3. Paste the offer from the browser
+4. Paste the answer back into the browser
+5. Watch RTCP packets being logged as media flows
+
+## API Usage
+
+With a marking interceptor on the chain, RTCP packets become available via `poll_read()`:
+
+```rust
+while let Some(message) = peer_connection.poll_read() {
+match message {
+RTCMessage::RtcpPacket(track_id, rtcp_packets) => {
+for packet in rtcp_packets {
+// Get header info
+let header = packet.header();
+println! ("Type: {:?}", header.packet_type);
+
+// Display full packet (implements Display trait)
+println! ("{}", packet);
+}
+}
+_ => {}
+}
+}
+```
+
+**Note:** Without an interceptor marking packets with `Attribute::DeliverToApplication`, you will **not** receive
+`RTCMessage::RtcpPacket` messages — inbound RTCP is consumed internally by the interceptor chain.
+
+Marking is the mechanism because a copy cannot outrun the terminus: a chain is a flat list, and what an interceptor
+emits from `poll_read` rejoins that list *behind* itself, where the terminus is still ahead of it. A marked packet
+finishes the walk normally and the terminus reads the mark.
+
+## Sending RTCP Packets
+
+To send RTCP packets (e.g., PLI for keyframe requests):
+
+```rust
+use rtc::rtcp::payload_feedbacks::picture_loss_indication::PictureLossIndication;
+
+if let Some( mut receiver) = peer_connection.rtp_receiver(receiver_id) {
+receiver.write_rtcp(vec ! [Box::new(PictureLossIndication {
+sender_ssrc: 0,
+media_ssrc: track_ssrc,
+})]) ?;
+}
+```

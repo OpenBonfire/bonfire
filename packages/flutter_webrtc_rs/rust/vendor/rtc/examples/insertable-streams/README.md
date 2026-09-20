@@ -1,0 +1,48 @@
+# insertable-streams
+
+insertable-streams demonstrates how to use insertable streams with WebRTC.rs.
+This example modifies the video with a single-byte XOR cipher before sending, and then
+decrypts in Javascript.
+
+insertable-streams allows the browser to process encoded video. You could implement
+E2E encryption, add metadata or insert a completely different video feed!
+
+## Instructions
+
+### Create IVF that contains a VP8 track
+
+```shell
+ffmpeg -i $INPUT_FILE -g 30 output.ivf
+```
+
+### Open insertable-streams example page
+
+[jsfiddle.net](https://jsfiddle.net/t5xoaryc/) you should see two text-areas and a 'Start Session' button. You will also have a 'Decrypt' checkbox.
+When unchecked the browser will not decrypt the incoming video stream, so it will stop playing or display certificates.
+
+### Run insertable-streams with your browsers SessionDescription as stdin
+
+Copy the string in the first input labelled `Browser base64 Session Description`
+
+#### Linux/macOS
+
+Run `echo $BROWSER_SDP | cargo run --example insertable-streams -- --video <path/to/ivf/file>`
+
+`$BROWSER_OFFER` is the value you copied in the last step.
+
+#### Windows
+
+1. Paste the copied string in the last step into a file.
+1. Run `cargo run --example insertable-streams < my_file -- --video <path/to/ivf/file>`
+
+### Input insertable-streams's SessionDescription into your browser
+
+Copy the text that `insertable-streams` just emitted and copy into second text area
+
+### Hit 'Start Session' in jsfiddle, enjoy your video!
+
+A video should start playing in your browser above the input boxes. `insertable-streams` will exit when the file reaches the end.
+
+To stop decrypting the stream uncheck the box and the video will not be viewable.
+
+Congrats, you have used WebRTC.rs!

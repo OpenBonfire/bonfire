@@ -18,7 +18,7 @@ use rtc::interceptor::Registry;
 use rtc::media::Sample;
 use rtc::media_stream::MediaStreamTrack;
 use rtc::peer_connection::configuration::interceptor_registry::register_default_interceptors;
-use rtc::peer_connection::configuration::media_engine::{MediaEngine, MIME_TYPE_OPUS};
+use rtc::peer_connection::configuration::media_engine::{MediaEngine, MIME_TYPE_H264, MIME_TYPE_OPUS};
 use rtc::peer_connection::configuration::RTCConfigurationBuilder;
 use rtc::rtp_transceiver::rtp_sender::{
     RTCRtpCodec, RTCRtpCodingParameters, RTCRtpEncodingParameters, RtpCodecKind,
@@ -391,6 +391,238 @@ async fn audio_track_loopback() {
     sender_task.abort();
     assert_eq!(received_payload, marker_frame, "payload bytes were not preserved end to end");
 
+    sender_pc.close().await.expect("close sender");
+    receiver_pc.close().await.expect("close receiver");
+}
+
+/// Reproduces the exact scenario that silently broke all incoming bonfire media the
+/// moment video was added alongside audio: a peer connection with an audio *and* a
+/// video transceiver negotiated together (still exactly one of each *kind*, but two
+/// transceivers total), neither SSRC ever declared in the SDP - same as Discord's
+/// voice SFU, which can't predict a remote speaker's SSRC ahead of time any more than
+/// it can a camera's.
+///
+/// `rtc`'s own `bind_undeclared_ssrc` "single-media-section shortcut" used to gate on
+/// `self.rtp_transceivers.len() != 1` - true the instant a second transceiver of
+/// *either* kind existed, regardless of kind - so with both an audio and a video
+/// transceiver present, `on_track` never fired for anything and every incoming packet
+/// (audio included) was silently unroutable. This test adds both tracks before
+/// negotiating (mirroring `VoiceWebRtcRsSession.createOfferAndBuildFragment`, which
+/// always negotiates video too - see its doc), then confirms both an audio and a
+/// video `on_track` fire and both payloads arrive intact. Before the
+/// vendor/rtc/.../interceptor.rs patch (see its `bind_undeclared_ssrc` doc), this test
+/// hangs until the 10s timeout waiting for the second (or, depending on which SSRC's
+/// packets happen to arrive first, either) remote track.
+#[tokio::test(flavor = "multi_thread", worker_threads = 4)]
+async fn multi_track_loopback() {
+    let BuiltPeerConnection {
+        pc: sender_pc,
+        gather_complete_rx: mut sender_gather_rx,
+        connected_rx: mut sender_connected_rx,
+        ..
+    } = build_peer_connection(0).await;
+    let BuiltPeerConnection {
+        pc: receiver_pc,
+        gather_complete_rx: mut receiver_gather_rx,
+        connected_rx: mut receiver_connected_rx,
+        track_rx: mut receiver_track_rx,
+        ..
+    } = build_peer_connection(0).await;
+
+    let audio_ssrc: u32 = rand::random();
+    let audio_track = MediaStreamTrack::new(
+        "stream-0".to_string(),
+        "audio-0".to_string(),
+        "audio-0".to_string(),
+        RtpCodecKind::Audio,
+        vec![RTCRtpEncodingParameters {
+            rtp_coding_parameters: RTCRtpCodingParameters { ssrc: Some(audio_ssrc), ..Default::default() },
+            codec: RTCRtpCodec {
+                mime_type: MIME_TYPE_OPUS.to_string(),
+                clock_rate: 48_000,
+                channels: 2,
+                sdp_fmtp_line: String::new(),
+                rtcp_feedback: Vec::new(),
+            },
+            ..Default::default()
+        }],
+    );
+    let local_audio_track = Arc::new(
+        TrackLocalStaticSample::new(Instant::now(), audio_track).expect("build local audio track"),
+    );
+    let audio_sender = sender_pc
+        .add_track(Arc::clone(&local_audio_track) as Arc<dyn TrackLocal>)
+        .await
+        .expect("add_track (audio)");
+
+    let video_ssrc: u32 = rand::random();
+    let video_track = MediaStreamTrack::new(
+        "stream-1".to_string(),
+        "video-0".to_string(),
+        "video-0".to_string(),
+        RtpCodecKind::Video,
+        vec![RTCRtpEncodingParameters {
+            rtp_coding_parameters: RTCRtpCodingParameters { ssrc: Some(video_ssrc), ..Default::default() },
+            codec: RTCRtpCodec {
+                mime_type: MIME_TYPE_H264.to_string(),
+                clock_rate: 90_000,
+                channels: 0,
+                sdp_fmtp_line: String::new(),
+                rtcp_feedback: Vec::new(),
+            },
+            ..Default::default()
+        }],
+    );
+    let local_video_track = Arc::new(
+        TrackLocalStaticSample::new(Instant::now(), video_track).expect("build local video track"),
+    );
+    let video_sender = sender_pc
+        .add_track(Arc::clone(&local_video_track) as Arc<dyn TrackLocal>)
+        .await
+        .expect("add_track (video)");
+
+    let offer = sender_pc.create_offer(None).await.expect("create offer");
+    sender_pc.set_local_description(offer).await.expect("set local (sender)");
+    tokio::time::timeout(Duration::from_secs(10), sender_gather_rx.recv())
+        .await
+        .expect("sender ICE gathering timed out")
+        .unwrap();
+    let offer_with_candidates = sender_pc.local_description().await.unwrap();
+
+    // Note: this offer legitimately declares each sender's own SSRC via
+    // `a=ssrc:` (standard, unavoidable WebRTC behavior), so the receiver
+    // actually resolves both tracks via `bind_declared_ssrc` here, not
+    // `bind_undeclared_ssrc` - Discord's SFU never declares a remote
+    // participant's SSRC this way (confirmed from its own raw session
+    // description, which carries no per-participant ssrc info at all), so
+    // this test doesn't exercise that exact function/patch in isolation.
+    // What it does verify end to end - and is exactly what regressed - is
+    // that negotiating audio and video together still lets both directions
+    // of media actually arrive; see `vendor/rtc/.../interceptor.rs`'s
+    // `bind_undeclared_ssrc` doc for the specific mechanism, confirmed by
+    // direct source reading and by live bonfire sessions never once firing
+    // `on_track` for any remote participant once video was negotiated.
+    receiver_pc
+        .set_remote_description(offer_with_candidates)
+        .await
+        .expect("set remote (receiver)");
+    let answer = receiver_pc.create_answer(None).await.expect("create answer");
+    receiver_pc.set_local_description(answer).await.expect("set local (receiver)");
+    tokio::time::timeout(Duration::from_secs(10), receiver_gather_rx.recv())
+        .await
+        .expect("receiver ICE gathering timed out")
+        .unwrap();
+    let answer_with_candidates = receiver_pc.local_description().await.unwrap();
+
+    sender_pc
+        .set_remote_description(answer_with_candidates)
+        .await
+        .expect("set remote (sender)");
+
+    tokio::time::timeout(Duration::from_secs(10), sender_connected_rx.recv())
+        .await
+        .expect("sender never reached Connected")
+        .unwrap();
+    tokio::time::timeout(Duration::from_secs(10), receiver_connected_rx.recv())
+        .await
+        .expect("receiver never reached Connected")
+        .unwrap();
+
+    let audio_payload_type = audio_sender
+        .get_parameters()
+        .await
+        .expect("audio sender parameters")
+        .rtp_parameters
+        .codecs
+        .first()
+        .expect("negotiated audio codec")
+        .payload_type;
+    let video_payload_type = video_sender
+        .get_parameters()
+        .await
+        .expect("video sender parameters")
+        .rtp_parameters
+        .codecs
+        .first()
+        .expect("negotiated video codec")
+        .payload_type;
+
+    let audio_marker: Vec<u8> = vec![0xA0, 0xA1, 0xA2, 0xA3];
+    let video_marker: Vec<u8> = vec![0x70, 0x71, 0x72, 0x73];
+    let audio_task = tokio::spawn({
+        let local_audio_track = Arc::clone(&local_audio_track);
+        let audio_marker = audio_marker.clone();
+        async move {
+            loop {
+                let _ = local_audio_track
+                    .sample_writer(audio_ssrc, audio_payload_type)
+                    .write_sample(&Sample {
+                        data: Bytes::from(audio_marker.clone()),
+                        duration: Duration::from_millis(20),
+                        ..Sample::new(Instant::now())
+                    })
+                    .await;
+                tokio::time::sleep(Duration::from_millis(20)).await;
+            }
+        }
+    });
+    let video_task = tokio::spawn({
+        let local_video_track = Arc::clone(&local_video_track);
+        let video_marker = video_marker.clone();
+        async move {
+            loop {
+                let _ = local_video_track
+                    .sample_writer(video_ssrc, video_payload_type)
+                    .write_sample(&Sample {
+                        data: Bytes::from(video_marker.clone()),
+                        duration: Duration::from_millis(33),
+                        ..Sample::new(Instant::now())
+                    })
+                    .await;
+                tokio::time::sleep(Duration::from_millis(33)).await;
+            }
+        }
+    });
+
+    // Both tracks were added before any negotiation happened, so both are already
+    // "known" transceivers by the time on_track can fire for either - only order of
+    // arrival is nondeterministic, not which ones show up at all.
+    let mut remote_tracks = Vec::new();
+    for _ in 0..2 {
+        let track = tokio::time::timeout(Duration::from_secs(10), receiver_track_rx.recv())
+            .await
+            .expect("receiver never saw both remote tracks")
+            .expect("receiver track receiver closed");
+        remote_tracks.push(track);
+    }
+    assert_eq!(remote_tracks.len(), 2, "expected exactly one audio and one video remote track");
+
+    for remote_track in remote_tracks {
+        let (expected_kind_mime, expected_marker) = match remote_track.kind().await {
+            RtpCodecKind::Audio => (MIME_TYPE_OPUS, &audio_marker),
+            RtpCodecKind::Video => (MIME_TYPE_H264, &video_marker),
+            other => panic!("unexpected remote track kind: {other:?}"),
+        };
+
+        let received_payload = loop {
+            let event = tokio::time::timeout(Duration::from_secs(10), remote_track.poll())
+                .await
+                .expect("timed out waiting for the RTP packet")
+                .expect("remote track closed before delivering a packet");
+            if let TrackRemoteEvent::OnRtpPacket(packet) = event {
+                break packet.payload.to_vec();
+            }
+        };
+        assert_eq!(
+            &received_payload, expected_marker,
+            "{expected_kind_mime} track's payload bytes were not preserved end to end \
+             (this is the exact failure mode of the pre-patch bind_undeclared_ssrc bug: \
+             wrong/no packets routed once a second transceiver exists)",
+        );
+    }
+
+    audio_task.abort();
+    video_task.abort();
     sender_pc.close().await.expect("close sender");
     receiver_pc.close().await.expect("close receiver");
 }

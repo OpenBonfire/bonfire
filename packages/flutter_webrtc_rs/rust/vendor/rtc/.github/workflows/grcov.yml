@@ -1,0 +1,83 @@
+name: coverage
+
+on:
+  push:
+    branches: [ master, v0.20.x, v0.21.x ]
+  pull_request:
+    branches: [ master, v0.20.x, v0.21.x ]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  grcov:
+    name: Coverage (${{ matrix.crypto.name }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-latest
+        toolchain:
+          - nightly
+        crypto:
+          - name: ring
+            features: crypto-ring
+          - name: aws-lc-rs
+            features: crypto-aws-lc-rs
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: ${{ matrix.toolchain }}
+          components: llvm-tools-preview
+
+      - name: Install grcov
+        uses: taiki-e/install-action@v2
+        with:
+          tool: grcov
+
+      - name: Test
+        run: cargo test --workspace --no-fail-fast --no-default-features --features ${{ matrix.crypto.features }}
+        env:
+          CARGO_INCREMENTAL: "0"
+          RUSTFLAGS: "-Cinstrument-coverage"
+          LLVM_PROFILE_FILE: "cargo-test-%p-%m.profraw"
+
+      - name: Generate coverage data
+        id: grcov
+        run: |
+          grcov . \
+              --binary-path ./target/debug/ \
+              --source-dir . \
+              --output-type lcov \
+              --output-path lcov.info \
+              --branch \
+              --ignore='/**' \
+              --ignore='C:/**' \
+              --ignore='../**' \
+              --ignore-not-existing \
+              --excl-line "#\\[derive\\(" \
+              --excl-br-line "#\\[derive\\(" \
+              --excl-start "#\\[cfg\\(test\\)\\]" \
+              --excl-br-start "#\\[cfg\\(test\\)\\]"
+      - name: Upload coverage as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: lcov-${{ matrix.crypto.name }}.info
+          # path: ${{ steps.grcov.outputs.report }}
+          path: lcov.info
+
+      - name: Upload coverage to codecov.io
+        uses: codecov/codecov-action@v5
+        with:
+          files: lcov.info
+          flags: ${{ matrix.crypto.name }}
+          fail_ci_if_error: true
