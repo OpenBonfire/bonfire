@@ -14,6 +14,7 @@ list(APPEND FLUTTER_PLUGIN_LIST
 )
 
 list(APPEND FLUTTER_FFI_PLUGIN_LIST
+  capture_kit
   flutter_soloud
   flutter_webrtc_rs
 )

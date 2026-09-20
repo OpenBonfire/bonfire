@@ -25,6 +25,8 @@ dependencies:
     path: ./packages/opus
   flutter_webrtc_rs:
     path: ./packages/flutter_webrtc_rs
+  capture_kit:
+    path: ./packages/capture_kit
 
   # firebridge_extensions:
   #   path: packages/firebridge_extensions
@@ -104,7 +106,6 @@ dependencies:
   cryptography: ^2.9.0
   record: ^7.1.1
   flutter_soloud: ^4.1.7
-  camera_macos: ^0.1.1
 
 
 dependency_overrides:

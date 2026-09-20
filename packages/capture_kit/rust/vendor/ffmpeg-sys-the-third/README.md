@@ -1,0 +1,34 @@
+[![ffmpeg-sys-the-third on crates.io](https://img.shields.io/crates/v/ffmpeg-sys-the-third?cacheSeconds=3600)](https://crates.io/crates/ffmpeg-sys-the-third)
+[![build](https://github.com/shssoichiro/ffmpeg-the-third-sys/workflows/build/badge.svg)](https://github.com/shssoichiro/ffmpeg-the-third-sys/actions)
+
+This is a fork of the abandoned [ffmpeg-sys](https://github.com/meh/rust-ffmpeg-sys) crate. You can find this crate as [ffmpeg-sys-the-third](https://crates.io/crates/ffmpeg-sys-the-third) on crates.io.
+
+This crate contains low level bindings to FFmpeg. You're probably interested in the high level bindings instead: [ffmpeg-next](https://github.com/shssoichiro/ffmpeg-the-third).
+
+A word on versioning: The crate version includes the **maximum supported** FFmpeg version for each release. E.g. `ffmpeg-sys-the-third@2.0.0+ffmpeg-7.0` supports *up to* FFmpeg 7.0. The minimum supported FFmpeg version at the moment is 5.1.
+
+## Supported environment variables
+
+This crate supports the following environment variables to configure the build process:
+
+- `FFMPEG_DIR` can be used to manually set the FFmpeg directory (root directory, not `/lib`, `/include` etc.) to be used for building the crate. If `FFMPEG_DIR` is set, it will take precedence over auto-detection.
+- `FFMPEG_GIT_URL` (only relevant when using the `build` feature) can be used to set a URL to a git repository containing the FFmpeg source code to build. By default, https://github.com/FFmpeg/FFmpeg.git will be used.
+
+## Feature flags
+
+In addition to feature flags declared in `Cargo.toml`, this crate performs various compile-time version and feature detections and exposes the results in additional flags. These flags are briefly documented below; run `cargo build -vv` to view more details.
+
+- `ffmpeg_<x>_<y>` flags, e.g. `ffmpeg_7_1`, indicating the FFmpeg installation being compiled against is at least version `<x>.<y>`. Currently available:
+
+  - "ffmpeg_6_0"
+  - "ffmpeg_6_1"
+  - "ffmpeg_7_0"
+  - "ffmpeg_7_1"
+  - "ffmpeg_8_0"
+  - "ffmpeg_8_1"
+
+- `avcodec_version_greater_than_<x>_<y>`, e.g., `avcodec_version_greater_than_61_11`. The name should be self-explanatory.
+
+- `ff_api_<feature>`, e.g. `ff_api_vaapi`, corresponding to whether their respective uppercase deprecation guards evaluate to true.
+
+- `ff_api_<feature>_is_defined`, e.g. `ff_api_vappi_is_defined`, similar to above except these are enabled as long as the corresponding deprecation guards are defined.

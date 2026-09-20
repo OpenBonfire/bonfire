@@ -1,0 +1,77 @@
+[package]
+name = "capture_kit_core"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib", "staticlib"]
+
+[dependencies]
+flutter_rust_bridge = "=2.13.0"
+
+tokio = { version = "1", features = ["rt-multi-thread", "sync", "time", "macros"] }
+log = "0.4"
+libc = "0.2.189"
+
+[lints.rust]
+unexpected_cfgs = { level = "warn", check-cfg = ['cfg(frb_expand)'] }
+
+[target.'cfg(target_vendor = "apple")'.dependencies]
+dispatch2 = "0.3.1"
+# `build`: compile FFmpeg from source (mirrors how `openh264` is vendored in
+# flutter_webrtc_rs - no system FFmpeg install required on the build or end-
+# user machine). `static`: link it statically into this crate's staticlib,
+# same reasoning as `build`. Deliberately NOT `build-license-gpl` or any
+# `build-lib-x264`/`build-lib-x265` - those are GPL-licensed software
+# encoders we don't want or need: we're here specifically for VideoToolbox
+# hardware encoding, which is LGPL (just calling a macOS system framework).
+#
+# `ffmpeg-sys-the-third`'s build unconditionally passes `--disable-autodetect`
+# to FFmpeg's configure and never re-enables VideoToolbox (unlike
+# libdrm/nvenc, it has no `build-*` Cargo feature of its own) - so the
+# upstream crate, as published, silently produces an FFmpeg build that can
+# never actually use VideoToolbox, despite `h264_videotoolbox` still
+# resolving as a symbol. See `[patch.crates-io]` below and
+# `vendor/ffmpeg-sys-the-third/build/compile.rs`'s patch comment for the fix
+# (`--enable-videotoolbox` on Apple targets).
+#
+# Feature selection: this crate only calls raw avcodec/avutil FFI (encode a
+# frame, get a packet back) via `ffmpeg_the_third::ffi` directly - the safe
+# wrapper has no hwframe-context support anyway (see encode.rs's module
+# doc). `codec` (avcodec) is the only one actually needed; `format`
+# (avformat) and `software-resampling` (swresample) are pulled in only to
+# satisfy avcodec's own *internal* dependencies, not because this crate uses
+# them directly:
+#   - `codec` alone fails to compile: ffmpeg-the-third's `codec::packet`
+#     module unconditionally references `crate::format::Pixel` without
+#     declaring `format` as a feature dependency (an upstream bug).
+#   - avcodec's built-in Opus decoder needs `swr_*` (swresample) symbols at
+#     link time regardless of whether we ever decode Opus.
+# Deliberately NOT `filter`/`software-scaling` (avfilter/swscale) or
+# `device` (avdevice) - genuinely unused, and avfilter+swscale each embed
+# their own private copy of an internal-linkage helper
+# (`libavutil/framepool.c`'s object, not part of avutil's own public
+# archive - confirmed by inspecting the built `.a` files). Linking both into
+# one combined Rust staticlib duplicates that symbol, which `cargo build`/
+# `cargo test` never catches (selective linking) but Xcode's `-force_load`
+# does (whole-archive linking), failing with "duplicate symbol
+# '_ff_frame_pool_get'" et al. `format`/`swresample` don't have this
+# problem (confirmed: neither `.a` contains a `framepool.o` member).
+ffmpeg-the-third = { version = "6", default-features = false, features = ["build", "static", "codec", "format", "software-resampling"] }
+objc2 = "0.6.4"
+objc2-av-foundation = "0.3.2"
+objc2-core-foundation = "0.3.2"
+objc2-core-media = "0.3.2"
+objc2-core-video = "0.3.2"
+objc2-foundation = "0.3.2"
+
+[target.'cfg(target_vendor = "apple")'.dev-dependencies]
+openh264 = "0.9.8"
+
+[patch.crates-io]
+# See the `ffmpeg-the-third` dependency comment above and
+# `vendor/ffmpeg-sys-the-third/build/compile.rs` - upstream never enables
+# VideoToolbox, so `av_hwdevice_ctx_create(AV_HWDEVICE_TYPE_VIDEOTOOLBOX)`
+# fails at runtime with a misleading ENOMEM ("Cannot allocate memory") on an
+# unpatched build.
+ffmpeg-sys-the-third = { path = "vendor/ffmpeg-sys-the-third" }

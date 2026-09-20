@@ -233,14 +233,13 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.3.1"
-  camera_macos:
+  capture_kit:
     dependency: "direct main"
     description:
-      name: camera_macos
-      sha256: "64e199368efb0dc12c5298819df98aada4fe2cc50a5d84997f7bf7d94edaa3f8"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.1.1"
+      path: "packages/capture_kit"
+      relative: true
+    source: path
+    version: "0.0.1"
   characters:
     dependency: transitive
     description:

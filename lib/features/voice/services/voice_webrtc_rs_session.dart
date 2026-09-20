@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:collection';
 import 'dart:typed_data';
 
-import 'package:camera_macos/camera_macos.dart';
+import 'package:capture_kit/capture_kit.dart' as capture_kit;
 import 'package:dave/dave.dart' as dave;
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter/foundation.dart';
@@ -20,28 +20,17 @@ const _samplesPerFrame = 960; // 20ms at 48kHz
 const _bytesPerFrame = _samplesPerFrame * _channels * 2; // 16-bit PCM
 const _frameDurationMicros = 20000; // 20ms, matching _samplesPerFrame
 const _videoBitrateBps = 1_000_000;
-// Fallback frame duration for the very first video frame sent, before
-// there's a previous frame's timestamp to measure the real interval from -
-// see _encodeAndSendLocalVideoFrame. 15fps is a reasonable nominal default;
-// actual cadence is whatever the camera delivers, not fixed.
-const _videoFrameDurationMicros = 1000000 ~/ 15;
 // Leaves headroom below the real network MTU for DAVE's per-frame overhead
 // (nonce, auth tag, small bookkeeping) plus SRTP's own overhead, both added
 // after this - see RtcMediaSender.writePacketizedFrame's doc.
 const _videoRtpMtu = 1000;
-// Must match voice_video_overlay.dart's CameraMacOSView `resolution:`
-// setting (PictureResolution.medium = 960x540) - reported to Discord via
-// VoiceGateway.sendVideo's max_resolution field, which a real client always
-// sends and which the server appears to need to treat a video stream as
-// valid (see sendVideo's doc).
-//
-// Deliberately 16:9, not the also-available 4:3 PictureResolution.low
-// (640x480): camera_macos's own capture session negotiates the camera's
-// native format independently of this setting (via `.high` session
-// preset), which for essentially every modern webcam is 16:9 - camera_macos
-// then stretches that into whatever aspect ratio this constant asks for
-// with independent (non-aspect-preserving) x/y scale factors, so a 4:3
-// target visibly squishes the picture. 16:9 avoids the mismatch entirely.
+// Reported to Discord via VoiceGateway.sendVideo's max_resolution field,
+// which a real client always sends and which the server appears to need to
+// treat a video stream as valid (see sendVideo's doc), and passed to
+// capture_kit's CameraCaptureSession.create as the requested capture size.
+// 16:9, matching essentially every modern webcam's native aspect ratio -
+// see git history for why a 4:3 request (via the camera_macos plugin this
+// class used to depend on) visibly squished the picture.
 const _videoCaptureWidth = 960;
 const _videoCaptureHeight = 540;
 
@@ -168,12 +157,10 @@ class VoiceWebRtcRsSession {
   StreamSubscription<Uint8List>? _micSubscription;
   final BytesBuilder _micBuffer = BytesBuilder(copy: false);
 
-  H264Encoder? _videoEncoder;
-  DateTime? _lastVideoFrameSentAt;
-  bool _loggedFirstCameraFrame = false;
+  capture_kit.CameraCaptureSession? _cameraSession;
+  StreamSubscription<capture_kit.EncodedVideoFrame>? _cameraFramesSub;
   int _sentVideoFrameCount = 0;
   final Map<Snowflake, int> _receivedVideoFrameCounts = {};
-  CameraMacOSController? _cameraController;
   final Map<Snowflake, H264Decoder> _videoDecodersByUserId = {};
   final Map<Snowflake, RtcH264Depacketizer> _videoDepacketizersByUserId = {};
   final Map<Snowflake, Future<void>> _videoProcessingChains = {};
@@ -304,7 +291,7 @@ class VoiceWebRtcRsSession {
   /// `rtc` crate's `RTCRtpSender::write_rtp` checks `sender.track().ssrcs()`
   /// and errors before any network I/O) - so every "active" video frame
   /// this method ever sent under the old SSRC never left the process.
-  Future<void> startLocalVideo(CameraMacOSController controller) async {
+  Future<void> startLocalVideo() async {
     final ssrc = _ssrc;
     final sender = _videoSender;
     final videoSsrc = _videoSsrc;
@@ -320,9 +307,21 @@ class VoiceWebRtcRsSession {
       );
     }
 
-    _cameraController = controller;
-    _videoEncoder = await H264Encoder.create(bitrateBps: _videoBitrateBps);
-    await controller.startImageStream(_handleCameraFrame);
+    // capture_kit owns capture *and* hardware H264 encode (VideoToolbox on
+    // macOS) entirely in Rust - frames never cross into Dart as raw pixels,
+    // unlike the old camera_macos+openh264 pipeline this replaced (which
+    // hit both a severe performance cliff and two separate correctness bugs
+    // - see git history). It knows nothing about Discord/DAVE/RTP; this
+    // class still owns all of that, unchanged, starting from its encoded
+    // output.
+    final session = capture_kit.CameraCaptureSession.create(
+      width: _videoCaptureWidth,
+      height: _videoCaptureHeight,
+      fps: 15,
+      bitrateBps: _videoBitrateBps,
+    );
+    _cameraSession = session;
+    _cameraFramesSub = session.start().listen(_handleEncodedCameraFrame);
 
     // Cross-check: the payload type our RTP packets actually carry (resolved
     // from webrtc-rs's own negotiated SDP state) must match what we told
@@ -358,12 +357,10 @@ class VoiceWebRtcRsSession {
   /// (`active: false`) - the inverse of [startLocalVideo]. Safe to call even
   /// if video was never started.
   Future<void> stopLocalVideo() async {
-    await _cameraController?.stopImageStream();
-    _cameraController = null;
-    _videoEncoder?.dispose();
-    _videoEncoder = null;
-    _lastVideoFrameSentAt = null;
-    _loggedFirstCameraFrame = false;
+    await _cameraFramesSub?.cancel();
+    _cameraFramesSub = null;
+    await _cameraSession?.stop();
+    _cameraSession = null;
     _sentVideoFrameCount = 0;
 
     final videoSsrc = _videoSsrc;
@@ -382,52 +379,16 @@ class VoiceWebRtcRsSession {
     debugPrint('VoiceWebRtcRsSession: local video stopped');
   }
 
-  void _handleCameraFrame(CameraImageData? image) {
-    if (image == null) return;
-    final encoder = _videoEncoder;
-    final sender = _videoSender;
-    if (encoder == null || sender == null) return;
-
-    if (!_loggedFirstCameraFrame) {
-      _loggedFirstCameraFrame = true;
-      debugPrint(
-        'VoiceWebRtcRsSession: first camera frame received '
-        '(${image.width}x${image.height}, ${image.bytes.length}B, bytesPerRow=${image.bytesPerRow})',
-      );
-    }
-
-    // camera_macos may pad each row to a stride wider than `width * 4` -
-    // H264Encoder.encodeRgba8 expects tightly packed pixel data (no per-row
-    // padding), so strip it here if present rather than pushing stride
-    // handling into the Rust encoder for what's normally a no-op copy.
-    //
-    // Despite the field's name/doc, `image.bytes` is actually R,G,B,A, not
-    // BGRA - see _encodeAndSendLocalVideoFrame's doc.
-    final expectedRowBytes = image.width * 4;
-    final Uint8List rgba;
-    if (image.bytesPerRow == expectedRowBytes) {
-      rgba = image.bytes;
-    } else {
-      rgba = Uint8List(expectedRowBytes * image.height);
-      for (var row = 0; row < image.height; row++) {
-        final srcOffset = row * image.bytesPerRow;
-        rgba.setRange(
-          row * expectedRowBytes,
-          (row + 1) * expectedRowBytes,
-          image.bytes.sublist(srcOffset, srcOffset + expectedRowBytes),
-        );
-      }
-    }
-
-    unawaited(
-      _encodeAndSendLocalVideoFrame(encoder, rgba, image.width, image.height),
-    );
+  void _handleEncodedCameraFrame(capture_kit.EncodedVideoFrame frame) {
+    unawaited(_encryptAndSendLocalVideoFrame(frame));
   }
 
-  /// Encodes one camera frame, then encrypts+packetizes+sends it - DAVE
-  /// encrypts the **whole encoded access unit** in one call (SPS+PPS+IDR-
-  /// slice together for a keyframe), not per-NAL and not per-RTP-payload
-  /// fragment. Confirmed from Discord's own vendored `libdave` source
+  /// Encrypts+packetizes+sends one already-encoded camera frame from
+  /// `capture_kit` (capture and hardware H264 encode both already happened
+  /// entirely in Rust - see [startLocalVideo]'s doc) - DAVE encrypts the
+  /// **whole encoded access unit** in one call (SPS+PPS+IDR-slice together
+  /// for a keyframe), not per-NAL and not per-RTP-payload fragment.
+  /// Confirmed from Discord's own vendored `libdave` source
   /// (`ProcessFrameH264` in `codec_utils.cpp` loops over every NAL in the
   /// buffer it's given in one call, and `Encryptor::Encrypt` appends exactly
   /// one trailer per call) - encrypting at any finer granularity produces
@@ -435,82 +396,49 @@ class VoiceWebRtcRsSession {
   /// never parse, even though it looks fine against this app's own loopback
   /// tests. See `RtcMediaSender.writePacketizedFrame`'s doc in `media.rs`
   /// for the full pipeline this now follows.
-  Future<void> _encodeAndSendLocalVideoFrame(
-    H264Encoder encoder,
-    Uint8List rgba,
-    int width,
-    int height,
-  ) async {
+  Future<void> _encryptAndSendLocalVideoFrame(capture_kit.EncodedVideoFrame frame) async {
     final sender = _videoSender;
     final encryptor = _encryptor;
     final videoSsrc = _videoSsrc;
     if (sender == null) return;
     try {
-      // Despite camera_macos's own naming (`CameraImageData`, doc comments
-      // claiming BGRA8) and its capture session genuinely requesting
-      // `kCVPixelFormatType_32BGRA`, the bytes it actually delivers over the
-      // image-stream channel are R,G,B,A: internally it re-wraps the
-      // captured frame in an `NSBitmapImageRep`, whose default in-memory
-      // layout is alpha-last R,G,B,A, not the alpha-first BGRA the
-      // `CGImage` was built with - a plugin-internal conversion, not
-      // anything this app's own capture/stride code does. Encoding this as
-      // BGRA swapped red and blue in every transmitted frame (very visible
-      // on skin tones, which read close to solid blue when swapped).
-      final encoded = await encoder.encodeRgba8(
-        data: rgba,
-        width: width,
-        height: height,
-      );
-      if (encoded.isEmpty) return;
-
       // Same DAVE encrypt-or-passthrough pattern as _sendFrame's audio path
       // - required once DAVE activates (see applyAnswer's video codec
       // assignment doc) - applied once to the whole frame (see this
       // method's doc), not per NAL and not per RTP packet.
-      Uint8List toSend = encoded;
+      Uint8List toSend = frame.data;
       if (encryptor != null && videoSsrc != null) {
         final encryptResult = encryptor.encrypt(
           mediaType: dave.DAVEMediaType.DAVE_MEDIA_TYPE_VIDEO,
           ssrc: videoSsrc,
-          frame: encoded,
+          frame: frame.data,
         );
         if (!encryptResult.isSuccess) {
           debugPrint(
             'VoiceWebRtcRsSession: DAVE failed to encrypt a video frame '
-            '(${encoded.length}B, code=${encryptResult.code}) - dropping it',
+            '(${frame.data.length}B, code=${encryptResult.code}) - dropping it',
           );
           return;
         }
         toSend = encryptResult.frame;
       }
 
-      // Duration is measured from the actual gap since the last frame
-      // (whatever cadence the camera delivers at), falling back to a
-      // nominal default only for the very first frame, when there's no
-      // previous timestamp yet.
-      final now = DateTime.now();
-      final lastSent = _lastVideoFrameSentAt;
-      final durationMicros = lastSent == null
-          ? _videoFrameDurationMicros
-          : now.difference(lastSent).inMicroseconds.clamp(1, 1000000);
-      _lastVideoFrameSentAt = now;
-
       await sender.writePacketizedFrame(
         data: toSend,
         mtu: BigInt.from(_videoRtpMtu),
-        durationMicros: BigInt.from(durationMicros),
+        durationMicros: frame.durationMicros,
       );
 
       _sentVideoFrameCount++;
       if (_sentVideoFrameCount <= 3 || _sentVideoFrameCount % 150 == 0) {
         debugPrint(
           'VoiceWebRtcRsSession: sent local video frame #$_sentVideoFrameCount '
-          '(${encoded.length}B encoded, durationMicros=$durationMicros)',
+          '(${frame.data.length}B encoded, durationMicros=${frame.durationMicros})',
         );
       }
     } catch (error, stackTrace) {
       debugPrint(
-        'VoiceWebRtcRsSession: failed to encode/send local video frame: $error\n$stackTrace',
+        'VoiceWebRtcRsSession: failed to encrypt/send local video frame: $error\n$stackTrace',
       );
     }
   }
@@ -1136,8 +1064,9 @@ class VoiceWebRtcRsSession {
       final mid = mids.length.toString();
       mids.add(mid);
       final rtxPt = _videoRtxPayloadType;
-      // x-google-max-bitrate is in kbps; _videoBitrateBps is the same target
-      // passed to H264Encoder.create, so this just re-expresses it here.
+      // x-google-max-bitrate is in kbps; _videoBitrateBps is also what's
+      // declared to Discord via sendVideo's max_bitrate, so this just
+      // re-expresses the same target here.
       final maxBitrateKbps = _videoBitrateBps ~/ 1000;
       sections.write(
         mediaSection(
@@ -1202,7 +1131,8 @@ class VoiceWebRtcRsSession {
     _encryptor?.dispose();
     await _ratchetSub?.cancel();
     await _eventsSub?.cancel();
-    await _cameraController?.stopImageStream();
+    await _cameraFramesSub?.cancel();
+    await _cameraSession?.stop();
 
     for (final participant in _participantsByUserId.values) {
       participant.dispose();

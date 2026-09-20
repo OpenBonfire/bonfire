@@ -1,4 +1,6 @@
 PODS:
+  - capture_kit (0.0.1):
+    - FlutterMacOS
   - flutter_webrtc_rs (0.0.1):
     - FlutterMacOS
   - FlutterMacOS (1.0.0)
@@ -11,6 +13,7 @@ PODS:
     - FlutterMacOS
 
 DEPENDENCIES:
+  - capture_kit (from `Flutter/ephemeral/.symlinks/plugins/capture_kit/macos`)
   - flutter_webrtc_rs (from `Flutter/ephemeral/.symlinks/plugins/flutter_webrtc_rs/macos`)
   - FlutterMacOS (from `Flutter/ephemeral`)
   - media_kit_libs_macos_video (from `Flutter/ephemeral/.symlinks/plugins/media_kit_libs_macos_video/macos`)
@@ -18,6 +21,8 @@ DEPENDENCIES:
   - webcrypto (from `Flutter/ephemeral/.symlinks/plugins/webcrypto/darwin`)
 
 EXTERNAL SOURCES:
+  capture_kit:
+    :path: Flutter/ephemeral/.symlinks/plugins/capture_kit/macos
   flutter_webrtc_rs:
     :path: Flutter/ephemeral/.symlinks/plugins/flutter_webrtc_rs/macos
   FlutterMacOS:
@@ -30,7 +35,8 @@ EXTERNAL SOURCES:
     :path: Flutter/ephemeral/.symlinks/plugins/webcrypto/darwin
 
 SPEC CHECKSUMS:
-  flutter_webrtc_rs: 706a482df856931018754da40c2851166e07834c
+  capture_kit: 12fb472604f7bbfd285a817d6d0ef0894e9616df
+  flutter_webrtc_rs: 6c755409ff1cfe3d4388e8ed1641fbd4e6d881f6
   FlutterMacOS: c232990155153907050900a2e175c7773903ba4e
   media_kit_libs_macos_video: 85a23e549b5f480e72cae3e5634b5514bc692f65
   media_kit_video: fa6564e3799a0a28bff39442334817088b7ca758

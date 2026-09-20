@@ -6,7 +6,6 @@ import 'package:bonfire/features/voice/services/voice_gateway.dart';
 import 'package:bonfire/features/voice/services/voice_media_session.dart';
 import 'package:bonfire/features/voice/services/voice_transport_crypto.dart';
 import 'package:bonfire/features/voice/services/voice_webrtc_rs_session.dart';
-import 'package:camera_macos/camera_macos.dart';
 import 'package:collection/collection.dart';
 import 'package:dave/dave.dart' as dave;
 import 'package:firebridge/firebridge.dart';
@@ -141,8 +140,10 @@ class VoiceConnectionController extends _$VoiceConnectionController {
 
   /// Starts local camera capture and adds a video sender to the current
   /// call - only meaningful once [VoiceConnectionState.mediaStatus] is
-  /// [VoiceMediaStatus.connected] and [voiceUseWebRtcTransport] is on. `controller`
-  /// comes from a `CameraMacOSView`'s `onCameraInizialized` callback.
+  /// [VoiceMediaStatus.connected] and [voiceUseWebRtcTransport] is on.
+  /// Capture and hardware H264 encode happen entirely in Rust (see
+  /// `capture_kit`, via [VoiceWebRtcRsSession.startLocalVideo]) - no camera
+  /// handle to pass in from the UI layer.
   ///
   /// Also announces `self_video: true` over the *main* gateway (see
   /// [GatewayVoiceStateBuilder.selfVideo]) - this, not the voice gateway's
@@ -150,13 +151,13 @@ class VoiceConnectionController extends _$VoiceConnectionController {
   /// what drives the "live" camera indicator other clients render. Skipping
   /// this call is why the indicator never showed up at all, independent of
   /// whether the WebRTC video stream itself was flowing correctly.
-  Future<void> startLocalVideo(CameraMacOSController controller) async {
+  Future<void> startLocalVideo() async {
     final webrtcSession = _webrtcSession;
     if (webrtcSession == null) {
       debugPrint('[Voice] startLocalVideo() called with no active WebRTC session; ignoring');
       return;
     }
-    await webrtcSession.startLocalVideo(controller);
+    await webrtcSession.startLocalVideo();
     _updateSelfVideo(true);
   }
 

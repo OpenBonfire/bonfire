@@ -6,6 +6,7 @@ import 'package:bonfire/router/controller.dart';
 import 'package:bonfire/theme/themes/base.dart';
 import 'package:bonfire/theme/themes/dark.dart';
 import 'package:bonfire/theme/themes/light.dart';
+import 'package:capture_kit/capture_kit.dart' as capture_kit;
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebridge/firebridge.dart';
 
@@ -47,6 +48,7 @@ void main() async {
   await setupHive();
   await SoLoud.instance.init();
   await RustLib.init();
+  await capture_kit.RustLib.init();
 
   // TODO: Add iOS support
   // Notifications for other platforms like Windows will be added,
