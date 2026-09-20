@@ -30,12 +30,20 @@ const _videoFrameDurationMicros = 1000000 ~/ 15;
 // after this - see RtcMediaSender.writePacketizedFrame's doc.
 const _videoRtpMtu = 1000;
 // Must match voice_video_overlay.dart's CameraMacOSView `resolution:`
-// setting (PictureResolution.low = 640x480) - reported to Discord via
+// setting (PictureResolution.medium = 960x540) - reported to Discord via
 // VoiceGateway.sendVideo's max_resolution field, which a real client always
 // sends and which the server appears to need to treat a video stream as
 // valid (see sendVideo's doc).
-const _videoCaptureWidth = 640;
-const _videoCaptureHeight = 480;
+//
+// Deliberately 16:9, not the also-available 4:3 PictureResolution.low
+// (640x480): camera_macos's own capture session negotiates the camera's
+// native format independently of this setting (via `.high` session
+// preset), which for essentially every modern webcam is 16:9 - camera_macos
+// then stretches that into whatever aspect ratio this constant asks for
+// with independent (non-aspect-preserving) x/y scale factors, so a 4:3
+// target visibly squishes the picture. 16:9 avoids the mismatch entirely.
+const _videoCaptureWidth = 960;
+const _videoCaptureHeight = 540;
 
 /// Attribute lines kept when building the Select Protocol SDP fragment from
 /// the local offer - per https://docs.discord.food/topics/voice-connections
@@ -389,18 +397,21 @@ class VoiceWebRtcRsSession {
     }
 
     // camera_macos may pad each row to a stride wider than `width * 4` -
-    // H264Encoder.encodeBgra8 expects tightly packed BGRA8 (no per-row
+    // H264Encoder.encodeRgba8 expects tightly packed pixel data (no per-row
     // padding), so strip it here if present rather than pushing stride
     // handling into the Rust encoder for what's normally a no-op copy.
+    //
+    // Despite the field's name/doc, `image.bytes` is actually R,G,B,A, not
+    // BGRA - see _encodeAndSendLocalVideoFrame's doc.
     final expectedRowBytes = image.width * 4;
-    final Uint8List bgra;
+    final Uint8List rgba;
     if (image.bytesPerRow == expectedRowBytes) {
-      bgra = image.bytes;
+      rgba = image.bytes;
     } else {
-      bgra = Uint8List(expectedRowBytes * image.height);
+      rgba = Uint8List(expectedRowBytes * image.height);
       for (var row = 0; row < image.height; row++) {
         final srcOffset = row * image.bytesPerRow;
-        bgra.setRange(
+        rgba.setRange(
           row * expectedRowBytes,
           (row + 1) * expectedRowBytes,
           image.bytes.sublist(srcOffset, srcOffset + expectedRowBytes),
@@ -409,7 +420,7 @@ class VoiceWebRtcRsSession {
     }
 
     unawaited(
-      _encodeAndSendLocalVideoFrame(encoder, bgra, image.width, image.height),
+      _encodeAndSendLocalVideoFrame(encoder, rgba, image.width, image.height),
     );
   }
 
@@ -426,7 +437,7 @@ class VoiceWebRtcRsSession {
   /// for the full pipeline this now follows.
   Future<void> _encodeAndSendLocalVideoFrame(
     H264Encoder encoder,
-    Uint8List bgra,
+    Uint8List rgba,
     int width,
     int height,
   ) async {
@@ -435,8 +446,18 @@ class VoiceWebRtcRsSession {
     final videoSsrc = _videoSsrc;
     if (sender == null) return;
     try {
-      final encoded = await encoder.encodeBgra8(
-        data: bgra,
+      // Despite camera_macos's own naming (`CameraImageData`, doc comments
+      // claiming BGRA8) and its capture session genuinely requesting
+      // `kCVPixelFormatType_32BGRA`, the bytes it actually delivers over the
+      // image-stream channel are R,G,B,A: internally it re-wraps the
+      // captured frame in an `NSBitmapImageRep`, whose default in-memory
+      // layout is alpha-last R,G,B,A, not the alpha-first BGRA the
+      // `CGImage` was built with - a plugin-internal conversion, not
+      // anything this app's own capture/stride code does. Encoding this as
+      // BGRA swapped red and blue in every transmitted frame (very visible
+      // on skin tones, which read close to solid blue when swapped).
+      final encoded = await encoder.encodeRgba8(
+        data: rgba,
         width: width,
         height: height,
       );

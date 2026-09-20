@@ -154,15 +154,28 @@ class _VoiceVideoOverlayState extends ConsumerState<VoiceVideoOverlay> {
                                 cameraMode: CameraMacOSMode.video,
                                 // Capturing at the default (max - often the
                                 // camera's native 1080p) makes every frame a
-                                // ~8MB BGRA buffer and a genuinely expensive
+                                // ~8MB RGBA buffer and a genuinely expensive
                                 // 1080p H264 encode (confirmed live: camera
                                 // frames only arrived every ~500ms, capping
                                 // the whole app at ~2fps while it ran) - a
                                 // voice-channel camera doesn't need anywhere
-                                // near that; 480p cuts pixel count (and so
-                                // encode cost, RTP packet count, and DAVE
-                                // encrypt-call count) by ~85%.
-                                resolution: PictureResolution.low,
+                                // near that. `.medium` (960x540, 16:9) cuts
+                                // pixel count (and so encode cost, RTP packet
+                                // count, and DAVE encrypt-call count) by
+                                // ~70% versus 1080p.
+                                //
+                                // Deliberately not `.low` (640x480, 4:3):
+                                // camera_macos negotiates the camera's native
+                                // *capture* format independently of this
+                                // value (always 16:9 on essentially every
+                                // modern webcam) and stretches it into
+                                // whatever aspect ratio this setting asks
+                                // for with non-uniform x/y scaling - a 4:3
+                                // target visibly squishes the picture, so
+                                // this must stay 16:9 (matches
+                                // _videoCaptureWidth/Height in
+                                // voice_webrtc_rs_session.dart).
+                                resolution: PictureResolution.medium,
                                 onCameraInizialized: (controller) {
                                   unawaited(_onLocalCameraReady(controller));
                                 },

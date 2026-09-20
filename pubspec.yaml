@@ -111,11 +111,6 @@ dependency_overrides:
   firebridge:
     path: ./packages/firebridge
 
-  # # Patches a real macOS-13-availability bug in upstream 2.1.1 - see the
-  # # comment in packages/record_macos/macos/record_macos/Package.swift.
-  # record_macos:
-  #   path: ./packages/record_macos
-
   http: ^1.2.1
 
   media_kit:
