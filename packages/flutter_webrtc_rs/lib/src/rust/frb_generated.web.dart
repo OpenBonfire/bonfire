@@ -10,6 +10,7 @@ import 'api/data_channel.dart';
 import 'api/media.dart';
 import 'api/peer_connection.dart';
 import 'api/types.dart';
+import 'api/video_codec.dart';
 
 import 'dart:async';
 import 'dart:convert';
@@ -25,6 +26,14 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
     required super.generalizedFrbRustBinding,
     required super.portManager,
   });
+
+  CrossPlatformFinalizerArg
+  get rust_arc_decrement_strong_count_H264DecoderPtr => wire
+      .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerH264Decoder;
+
+  CrossPlatformFinalizerArg
+  get rust_arc_decrement_strong_count_H264EncoderPtr => wire
+      .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerH264Encoder;
 
   CrossPlatformFinalizerArg
   get rust_arc_decrement_strong_count_RtcDataChannelPtr => wire
@@ -44,6 +53,18 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   AnyhowException dco_decode_AnyhowException(dynamic raw);
+
+  @protected
+  H264Decoder
+  dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerH264Decoder(
+    dynamic raw,
+  );
+
+  @protected
+  H264Encoder
+  dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerH264Encoder(
+    dynamic raw,
+  );
 
   @protected
   RtcDataChannel
@@ -70,6 +91,18 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   );
 
   @protected
+  H264Decoder
+  dco_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerH264Decoder(
+    dynamic raw,
+  );
+
+  @protected
+  H264Encoder
+  dco_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerH264Encoder(
+    dynamic raw,
+  );
+
+  @protected
   RtcDataChannel
   dco_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRtcDataChannel(
     dynamic raw,
@@ -90,6 +123,18 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   RtcRemoteTrack
   dco_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRtcRemoteTrack(
+    dynamic raw,
+  );
+
+  @protected
+  H264Decoder
+  dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerH264Decoder(
+    dynamic raw,
+  );
+
+  @protected
+  H264Encoder
+  dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerH264Encoder(
     dynamic raw,
   );
 
@@ -138,10 +183,16 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   bool dco_decode_bool(dynamic raw);
 
   @protected
+  DecodedVideoFrame dco_decode_box_autoadd_decoded_video_frame(dynamic raw);
+
+  @protected
   RtcConfig dco_decode_box_autoadd_rtc_config(dynamic raw);
 
   @protected
   DataChannelEvent dco_decode_data_channel_event(dynamic raw);
+
+  @protected
+  DecodedVideoFrame dco_decode_decoded_video_frame(dynamic raw);
 
   @protected
   int dco_decode_i_32(dynamic raw);
@@ -172,6 +223,11 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   String? dco_decode_opt_String(dynamic raw);
+
+  @protected
+  DecodedVideoFrame? dco_decode_opt_box_autoadd_decoded_video_frame(
+    dynamic raw,
+  );
 
   @protected
   PeerConnectionEvent dco_decode_peer_connection_event(dynamic raw);
@@ -210,6 +266,18 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   AnyhowException sse_decode_AnyhowException(SseDeserializer deserializer);
 
   @protected
+  H264Decoder
+  sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerH264Decoder(
+    SseDeserializer deserializer,
+  );
+
+  @protected
+  H264Encoder
+  sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerH264Encoder(
+    SseDeserializer deserializer,
+  );
+
+  @protected
   RtcDataChannel
   sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRtcDataChannel(
     SseDeserializer deserializer,
@@ -234,6 +302,18 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   );
 
   @protected
+  H264Decoder
+  sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerH264Decoder(
+    SseDeserializer deserializer,
+  );
+
+  @protected
+  H264Encoder
+  sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerH264Encoder(
+    SseDeserializer deserializer,
+  );
+
+  @protected
   RtcDataChannel
   sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRtcDataChannel(
     SseDeserializer deserializer,
@@ -254,6 +334,18 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   RtcRemoteTrack
   sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRtcRemoteTrack(
+    SseDeserializer deserializer,
+  );
+
+  @protected
+  H264Decoder
+  sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerH264Decoder(
+    SseDeserializer deserializer,
+  );
+
+  @protected
+  H264Encoder
+  sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerH264Encoder(
     SseDeserializer deserializer,
   );
 
@@ -302,10 +394,20 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   bool sse_decode_bool(SseDeserializer deserializer);
 
   @protected
+  DecodedVideoFrame sse_decode_box_autoadd_decoded_video_frame(
+    SseDeserializer deserializer,
+  );
+
+  @protected
   RtcConfig sse_decode_box_autoadd_rtc_config(SseDeserializer deserializer);
 
   @protected
   DataChannelEvent sse_decode_data_channel_event(SseDeserializer deserializer);
+
+  @protected
+  DecodedVideoFrame sse_decode_decoded_video_frame(
+    SseDeserializer deserializer,
+  );
 
   @protected
   int sse_decode_i_32(SseDeserializer deserializer);
@@ -340,6 +442,11 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   String? sse_decode_opt_String(SseDeserializer deserializer);
+
+  @protected
+  DecodedVideoFrame? sse_decode_opt_box_autoadd_decoded_video_frame(
+    SseDeserializer deserializer,
+  );
 
   @protected
   PeerConnectionEvent sse_decode_peer_connection_event(
@@ -386,6 +493,20 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   void
+  sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerH264Decoder(
+    H264Decoder self,
+    SseSerializer serializer,
+  );
+
+  @protected
+  void
+  sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerH264Encoder(
+    H264Encoder self,
+    SseSerializer serializer,
+  );
+
+  @protected
+  void
   sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRtcDataChannel(
     RtcDataChannel self,
     SseSerializer serializer,
@@ -414,6 +535,20 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   void
+  sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerH264Decoder(
+    H264Decoder self,
+    SseSerializer serializer,
+  );
+
+  @protected
+  void
+  sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerH264Encoder(
+    H264Encoder self,
+    SseSerializer serializer,
+  );
+
+  @protected
+  void
   sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRtcDataChannel(
     RtcDataChannel self,
     SseSerializer serializer,
@@ -437,6 +572,20 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   void
   sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRtcRemoteTrack(
     RtcRemoteTrack self,
+    SseSerializer serializer,
+  );
+
+  @protected
+  void
+  sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerH264Decoder(
+    H264Decoder self,
+    SseSerializer serializer,
+  );
+
+  @protected
+  void
+  sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerH264Encoder(
+    H264Encoder self,
     SseSerializer serializer,
   );
 
@@ -493,6 +642,12 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   void sse_encode_bool(bool self, SseSerializer serializer);
 
   @protected
+  void sse_encode_box_autoadd_decoded_video_frame(
+    DecodedVideoFrame self,
+    SseSerializer serializer,
+  );
+
+  @protected
   void sse_encode_box_autoadd_rtc_config(
     RtcConfig self,
     SseSerializer serializer,
@@ -501,6 +656,12 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   void sse_encode_data_channel_event(
     DataChannelEvent self,
+    SseSerializer serializer,
+  );
+
+  @protected
+  void sse_encode_decoded_video_frame(
+    DecodedVideoFrame self,
     SseSerializer serializer,
   );
 
@@ -545,6 +706,12 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   void sse_encode_opt_String(String? self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_opt_box_autoadd_decoded_video_frame(
+    DecodedVideoFrame? self,
+    SseSerializer serializer,
+  );
 
   @protected
   void sse_encode_peer_connection_event(
@@ -596,6 +763,38 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
 class RustLibWire implements BaseWire {
   RustLibWire.fromExternalLibrary(ExternalLibrary lib);
+
+  void
+  rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerH264Decoder(
+    int ptr,
+  ) => wasmModule
+      .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerH264Decoder(
+        ptr,
+      );
+
+  void
+  rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerH264Decoder(
+    int ptr,
+  ) => wasmModule
+      .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerH264Decoder(
+        ptr,
+      );
+
+  void
+  rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerH264Encoder(
+    int ptr,
+  ) => wasmModule
+      .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerH264Encoder(
+        ptr,
+      );
+
+  void
+  rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerH264Encoder(
+    int ptr,
+  ) => wasmModule
+      .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerH264Encoder(
+        ptr,
+      );
 
   void
   rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRtcDataChannel(
@@ -668,6 +867,26 @@ external RustLibWasmModule get wasmModule;
 @JS()
 @anonymous
 extension type RustLibWasmModule._(JSObject _) implements JSObject {
+  external void
+  rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerH264Decoder(
+    int ptr,
+  );
+
+  external void
+  rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerH264Decoder(
+    int ptr,
+  );
+
+  external void
+  rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerH264Encoder(
+    int ptr,
+  );
+
+  external void
+  rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerH264Encoder(
+    int ptr,
+  );
+
   external void
   rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRtcDataChannel(
     int ptr,

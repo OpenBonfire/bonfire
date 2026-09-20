@@ -108,6 +108,26 @@ Future<Uri> _buildForMacOS({
     _ => throw UnsupportedError('dave: unsupported macOS architecture $architecture'),
   };
 
+  // vcpkg ports built via a hand-rolled Makefile/Configure (openssl's, most
+  // notably - CMake-based ports like gtest are unaffected) invoke Xcode's
+  // *toolchain-internal* `cc` by its absolute path
+  // (.../XcodeDefault.xctoolchain/usr/bin/cc), not the `/usr/bin/cc` shim
+  // that macOS itself resolves via `xcrun` and silently passes `-isysroot`
+  // for. Called directly like that, clang adds no sysroot on its own and
+  // can't find *any* system header (`inttypes.h`, `string.h`, ...) - so
+  // `SDKROOT` has to be set explicitly for every child process this hook
+  // spawns, rather than relying on it already being present in whatever
+  // environment `flutter build macos`'s native-assets step happens to run
+  // this hook under.
+  final sdkRoot = (await Process.run('xcrun', ['--sdk', 'macosx', '--show-sdk-path'])).stdout
+      .toString()
+      .trim();
+  if (sdkRoot.isEmpty) {
+    throw StateError('dave: `xcrun --sdk macosx --show-sdk-path` returned nothing - is a full Xcode '
+        '(not just Command Line Tools) selected via `xcode-select -p`?');
+  }
+  final macosEnv = {'SDKROOT': sdkRoot};
+
   // Mirrors third_party/libdave/cpp/Makefile's `shared` target (BUILD_TYPE
   // Release, BUILD_SHARED_LIBS=ON), plus the macOS-specific triplet/arch/
   // deployment-target flags CMake needs since we invoke cmake ourselves
@@ -125,7 +145,7 @@ Future<Uri> _buildForMacOS({
     '-DCMAKE_INSTALL_PREFIX=${installDir.path}',
     '-DCMAKE_OSX_ARCHITECTURES=${architecture == Architecture.arm64 ? 'arm64' : 'x86_64'}',
     '-DCMAKE_OSX_DEPLOYMENT_TARGET=$deploymentTarget',
-  ], workingDirectory: cppDir.path);
+  ], workingDirectory: cppDir.path, environment: macosEnv);
 
   // libdave's CMakeLists.txt sets CMAKE_SKIP_INSTALL_ALL_DEPENDENCY ON, so
   // (unlike a typical CMake project) the `install` target does NOT build the
@@ -136,24 +156,31 @@ Future<Uri> _buildForMacOS({
     '--build', buildDir.path,
     '--target', 'libdave',
     '--config', 'Release',
-  ], workingDirectory: cppDir.path);
+  ], workingDirectory: cppDir.path, environment: macosEnv);
 
   await _run('cmake', [
     '--build', buildDir.path,
     '--target', 'install',
     '--config', 'Release',
-  ], workingDirectory: cppDir.path);
+  ], workingDirectory: cppDir.path, environment: macosEnv);
 
   return installedLibrary.uri;
 }
 
-Future<void> _run(String executable, List<String> arguments, {required String workingDirectory}) async {
+Future<void> _run(
+  String executable,
+  List<String> arguments, {
+  required String workingDirectory,
+  Map<String, String>? environment,
+}) async {
   _log.info('dave: running `$executable ${arguments.join(' ')}` in $workingDirectory');
   final process = await Process.start(
     executable,
     arguments,
     workingDirectory: workingDirectory,
     mode: ProcessStartMode.inheritStdio,
+    environment: environment,
+    includeParentEnvironment: true,
   );
   final exitCode = await process.exitCode;
   if (exitCode != 0) {

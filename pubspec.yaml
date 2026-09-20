@@ -88,8 +88,6 @@ dependencies:
   firebase_messaging: ^16.1.0
   firebase_core: ^4.3.0
   flutter_local_notifications: ^19.5.0
-  flutter_webrtc: 
-    path: ./packages/flutter_webrtc
   sdp_transform: ^0.3.2
   webcrypto: ^0.6.0
   web_socket_channel: ^3.0.2
@@ -106,16 +104,17 @@ dependencies:
   cryptography: ^2.9.0
   record: ^7.1.1
   flutter_soloud: ^4.1.7
+  camera_macos: ^0.1.1
 
 
 dependency_overrides:
   firebridge:
     path: ./packages/firebridge
 
-  # Patches a real macOS-13-availability bug in upstream 2.1.1 - see the
-  # comment in packages/record_macos/macos/record_macos/Package.swift.
-  record_macos:
-    path: ./packages/record_macos
+  # # Patches a real macOS-13-availability bug in upstream 2.1.1 - see the
+  # # comment in packages/record_macos/macos/record_macos/Package.swift.
+  # record_macos:
+  #   path: ./packages/record_macos
 
   http: ^1.2.1
 

@@ -25,5 +25,13 @@ log = "0.4"
 serde_json = "1"
 rand = "0.10"
 
+# H264 encode/decode for video senders/receivers (see api/video_codec.rs). Builds
+# openh264 from source by default (the "source" feature) via cc - no system
+# library or extra toolchain beyond what cargo already needs, and no licensing
+# gray area: Cisco's patent grant covers using openh264 as a *codec* regardless
+# of how it's built, distinct from the separate (irrelevant here) precompiled-
+# binary distribution some projects choose instead purely to skip a C build step.
+openh264 = "0.9"
+
 [lints.rust]
 unexpected_cfgs = { level = "warn", check-cfg = ['cfg(frb_expand)'] }

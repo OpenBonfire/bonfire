@@ -15,21 +15,24 @@ Built as a standalone package, independent of anything else in this repo.
 (or any custom frame-level E2EE) working on top of `flutter_webrtc` means forking and
 rebuilding libwebrtc across five platforms.
 
-This library sidesteps that by keeping the transport (ICE/DTLS-SRTP/SCTP) and the
-media (encode/decode, encryption) in different hands, on purpose:
+This library sidesteps that by keeping transport (ICE/DTLS-SRTP/SCTP), codecs, and
+encryption cleanly separated, but **in the same crate** - codecs live here
+([`video_codec.rs`](rust/src/api/video_codec.rs) for H264 today) rather than being
+pushed out to every consumer to reimplement:
 
-- **This crate is dumb transport.** It packetizes/depacketizes; it never touches
-  payload bytes. [`RtcMediaSender::write_encoded_frame`](rust/src/api/media.rs) takes
-  already-encoded bytes; [`RtcRemoteTrack::packets`](rust/src/api/media.rs) hands back
-  already-depacketized bytes, exactly as they arrived on the wire.
-- **You own encode/decode and encryption in Dart.** Encrypt an encoded Opus/VP8/H264
-  frame with DAVE (or anything else) *before* calling `write_encoded_frame`; decrypt
-  the payload you get from `packets` *before* handing it to your decoder. This layer
-  never needs to know that happened - DAVE integration is a Dart-side concern with
-  zero Rust-side plumbing.
-
-The same design applies to a pure-Rust libdave binding if you'd rather do the
-encrypt/decrypt step in Rust instead - nothing here assumes Dart does it.
+- **Transport never touches encoded-frame content.**
+  [`RtcMediaSender::write_encoded_frame`](rust/src/api/media.rs) takes already-encoded
+  bytes and packetizes+sends them; [`RtcRemoteTrack::packets`](rust/src/api/media.rs)
+  reassembles RTP packets per the negotiated codec (H264 FU-A fragments are
+  depacketized here, not left to the caller) and hands back complete encoded frames.
+  Neither transforms what's *inside* those bytes.
+- **Encode/decode is this crate's job; encryption is the caller's.** Call
+  [`H264Encoder`](rust/src/api/video_codec.rs)/[`H264Decoder`](rust/src/api/video_codec.rs)
+  (or your own Opus encoder/decoder - that side stays a Dart-side concern for now,
+  see `packages/opus`) to get encoded bytes, encrypt those with DAVE (or anything
+  else) *before* calling `write_encoded_frame`, and decrypt what `packets` gives you
+  *before* decoding it. The encryption step is the one thing genuinely free of any
+  Rust-side plumbing - this layer never needs to know it happened.
 
 ## Status
 

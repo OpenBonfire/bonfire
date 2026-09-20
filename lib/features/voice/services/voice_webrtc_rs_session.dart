@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:typed_data';
 
+import 'package:camera_macos/camera_macos.dart';
 import 'package:dave/dave.dart' as dave;
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter/foundation.dart';
@@ -17,21 +18,38 @@ const _channels = 1;
 const _samplesPerFrame = 960; // 20ms at 48kHz
 const _bytesPerFrame = _samplesPerFrame * _channels * 2; // 16-bit PCM
 const _frameDurationMicros = 20000; // 20ms, matching _samplesPerFrame
+const _videoBitrateBps = 1_000_000;
+// 15fps target for the encoder's timestamp math - the encoder itself doesn't
+// enforce a frame rate; frames just get sent whenever the camera delivers
+// one, at whatever cadence that actually is.
+const _videoFrameDurationMicros = 1000000 ~/ 15;
 
 /// Attribute lines kept when building the Select Protocol SDP fragment from
 /// the local offer, per https://docs.discord.food/topics/voice-connections:
-/// ICE/DTLS transport attributes, extension mappings, and the Opus rtpmap
-/// line. Carried over from an earlier `flutter_webrtc`-based attempt at this
-/// (see git history) - unverified against a live server, same caveat as
-/// `VoiceGateway.selectWebRtcProtocol`.
+/// ICE/DTLS transport attributes, extension mappings, and Opus/H264 rtpmap
+/// lines. Carried over from an earlier `flutter_webrtc`-based attempt at this
+/// (see git history) - the audio half is now **confirmed working** against a
+/// live Discord voice server; the video half (H264 rtpmap kept here, and
+/// `VoiceGateway.selectWebRtcProtocol`'s `videoPayloadType`) is new and
+/// unverified.
 final _fragmentAttributePattern = RegExp(r'^a=(extmap-allow-mixed|ice-\S+|fingerprint:|extmap:\d+)');
-final _fragmentRtpmapPattern = RegExp(r'^a=rtpmap:\d+ opus/', caseSensitive: false);
+final _fragmentRtpmapPattern = RegExp(r'^a=rtpmap:\d+ (opus|h264)/', caseSensitive: false);
+final _opusPayloadTypePattern = RegExp(r'^a=rtpmap:(\d+) opus/', caseSensitive: false);
+final _h264PayloadTypePattern = RegExp(r'^a=rtpmap:(\d+) h264/', caseSensitive: false);
 
 /// Thrown when microphone permission isn't granted.
 class VoiceMicrophonePermissionDeniedException implements Exception {
   const VoiceMicrophonePermissionDeniedException();
   @override
   String toString() => 'Microphone permission was denied - cannot join voice.';
+}
+
+/// One decoded video frame from a remote participant, emitted on
+/// [VoiceWebRtcRsSession.onRemoteVideoFrame].
+class RemoteVideoFrameEvent {
+  const RemoteVideoFrameEvent({required this.userId, required this.frame});
+  final Snowflake userId;
+  final DecodedVideoFrame frame;
 }
 
 /// The real-ICE/DTLS-SRTP alternative to [VoiceMediaSession]'s hand-rolled
@@ -76,7 +94,10 @@ class VoiceWebRtcRsSession {
   RtcPeerConnection? _peerConnection;
   StreamSubscription<PeerConnectionEvent>? _eventsSub;
   RtcMediaSender? _audioSender;
+  RtcMediaSender? _videoSender;
   int? _ssrc;
+  int? _opusPayloadType;
+  int? _videoPayloadType;
 
   StreamSubscription<DaveRatchetUpdate>? _ratchetSub;
   dave.DaveEncryptor? _encryptor;
@@ -95,7 +116,30 @@ class VoiceWebRtcRsSession {
   StreamSubscription<Uint8List>? _micSubscription;
   final BytesBuilder _micBuffer = BytesBuilder(copy: false);
 
+  H264Encoder? _videoEncoder;
+  CameraMacOSController? _cameraController;
+  final Map<Snowflake, H264Decoder> _videoDecodersByUserId = {};
+  final Map<Snowflake, Future<void>> _videoProcessingChains = {};
+  final _remoteVideoFrameController = StreamController<RemoteVideoFrameEvent>.broadcast();
+
+  /// Decoded video frames from remote participants - one event per decoded
+  /// picture, tagged with which participant it came from. The UI layer owns
+  /// turning these into pixels on screen (see `dart:ui`'s
+  /// `decodeImageFromPixels` for the simplest path from [DecodedVideoFrame]'s
+  /// RGB8 bytes to a paintable `ui.Image`).
+  Stream<RemoteVideoFrameEvent> get onRemoteVideoFrame => _remoteVideoFrameController.stream;
+
   bool _disposed = false;
+
+  /// The payload type Discord's SFU should expect Opus RTP packets on - only
+  /// meaningful after [createOfferAndBuildFragment] returns; pass to
+  /// [VoiceGateway.selectWebRtcProtocol].
+  int? get opusPayloadType => _opusPayloadType;
+
+  /// As [opusPayloadType], for H264 - null unless [startLocalVideo] was
+  /// called before [createOfferAndBuildFragment] (video only gets negotiated
+  /// if there's a video sender to negotiate).
+  int? get videoPayloadType => _videoPayloadType;
 
   /// Opens the peer connection, creates the local Opus sender, waits for
   /// ICE gathering to finish (Discord doesn't trickle ICE for this - the
@@ -137,10 +181,88 @@ class VoiceWebRtcRsSession {
       onTimeout: () => debugPrint('VoiceWebRtcRsSession: ICE gathering timed out after 10s'),
     );
 
-    final localSdp = await pc.localDescription();
-    final fragment = _buildFragment(_extractSdp(localSdp) ?? '');
-    debugPrint('VoiceWebRtcRsSession: built fragment:\n$fragment');
+    final sdp = _extractSdp(await pc.localDescription()) ?? '';
+    _opusPayloadType = _firstGroupMatch(_opusPayloadTypePattern, sdp);
+    _videoPayloadType = _firstGroupMatch(_h264PayloadTypePattern, sdp);
+    final fragment = _buildFragment(sdp);
+    debugPrint(
+      'VoiceWebRtcRsSession: built fragment (opusPT=$_opusPayloadType videoPT=$_videoPayloadType):\n$fragment',
+    );
     return fragment;
+  }
+
+  /// Starts local camera capture and adds a video sender - call before
+  /// [createOfferAndBuildFragment] so the initial offer negotiates a send
+  /// m=video section (matching how the audio sender is added early in
+  /// [createOfferAndBuildFragment] itself). `controller` comes from a
+  /// `CameraMacOSView`'s `onCameraInizialized` callback - this class doesn't
+  /// own camera UI/lifecycle (see class doc), just what happens to the
+  /// frames once the camera is already running.
+  Future<void> startLocalVideo(CameraMacOSController controller) async {
+    final pc = _peerConnection;
+    if (pc == null) {
+      throw StateError('createOfferAndBuildFragment() must not have been called yet - see doc');
+    }
+    _cameraController = controller;
+    _videoEncoder = await H264Encoder.create(bitrateBps: _videoBitrateBps);
+    _videoSender = await pc.addMediaSender(kind: MediaKind.video, mimeType: 'video/H264');
+    await controller.startImageStream(_handleCameraFrame);
+    debugPrint('VoiceWebRtcRsSession: local video started');
+  }
+
+  void _handleCameraFrame(CameraImageData? image) {
+    if (image == null) return;
+    final encoder = _videoEncoder;
+    final sender = _videoSender;
+    if (encoder == null || sender == null) return;
+
+    // camera_macos may pad each row to a stride wider than `width * 4` -
+    // H264Encoder.encodeBgra8 expects tightly packed BGRA8 (no per-row
+    // padding), so strip it here if present rather than pushing stride
+    // handling into the Rust encoder for what's normally a no-op copy.
+    final expectedRowBytes = image.width * 4;
+    final Uint8List bgra;
+    if (image.bytesPerRow == expectedRowBytes) {
+      bgra = image.bytes;
+    } else {
+      bgra = Uint8List(expectedRowBytes * image.height);
+      for (var row = 0; row < image.height; row++) {
+        final srcOffset = row * image.bytesPerRow;
+        bgra.setRange(
+          row * expectedRowBytes,
+          (row + 1) * expectedRowBytes,
+          image.bytes.sublist(srcOffset, srcOffset + expectedRowBytes),
+        );
+      }
+    }
+
+    unawaited(_encodeAndSendVideoFrame(encoder, sender, bgra, image.width, image.height));
+  }
+
+  Future<void> _encodeAndSendVideoFrame(
+    H264Encoder encoder,
+    RtcMediaSender sender,
+    Uint8List bgra,
+    int width,
+    int height,
+  ) async {
+    try {
+      final encoded = await encoder.encodeBgra8(data: bgra, width: width, height: height);
+      if (encoded.isEmpty) return;
+      // DAVE video encryption isn't wired up yet (see class doc) - sent as
+      // plain H264 for now, same TODO as the rest of this first pass.
+      await sender.writeEncodedFrame(data: encoded, durationMicros: BigInt.from(_videoFrameDurationMicros));
+    } catch (error, stackTrace) {
+      debugPrint('VoiceWebRtcRsSession: failed to send video frame: $error\n$stackTrace');
+    }
+  }
+
+  int? _firstGroupMatch(RegExp pattern, String sdp) {
+    for (final line in sdp.split(RegExp(r'\r\n|\n'))) {
+      final match = pattern.firstMatch(line);
+      if (match != null) return int.tryParse(match.group(1)!);
+    }
+    return null;
   }
 
   /// Applies the SFU's SDP answer, received via
@@ -224,15 +346,13 @@ class VoiceWebRtcRsSession {
       case PeerConnectionEvent_IceConnectionStateChanged(:final field0):
         debugPrint('VoiceWebRtcRsSession: ICE connection state -> $field0');
       case PeerConnectionEvent_RemoteTrack(:final trackId, :final kind):
-        if (kind == MediaKind.audio) {
-          unawaited(_handleRemoteTrack(trackId));
-        }
+        unawaited(_handleRemoteTrack(trackId, kind));
       default:
         break;
     }
   }
 
-  Future<void> _handleRemoteTrack(String trackId) async {
+  Future<void> _handleRemoteTrack(String trackId, MediaKind kind) async {
     final pc = _peerConnection;
     if (pc == null) return;
     final track = await pc.takeRemoteTrack(trackId: trackId);
@@ -248,18 +368,18 @@ class VoiceWebRtcRsSession {
       peekSub?.cancel();
       final userId = _userIdBySsrc[packet.ssrc];
       if (userId != null) {
-        _startReceiving(userId, packet, packets);
+        _startReceiving(userId, kind, packet, packets);
       } else {
         _pendingTracksBySsrc[packet.ssrc] = track;
         // Re-deliver this first packet once handleSpeaking resolves it -
         // simplest is to just resubscribe from scratch once known, so
         // nothing needs to buffer packets by hand here.
-        unawaited(_waitForSsrcThenReceive(packet.ssrc, packets));
+        unawaited(_waitForSsrcThenReceive(packet.ssrc, kind, packets));
       }
     });
   }
 
-  Future<void> _waitForSsrcThenReceive(int ssrc, Stream<RemoteRtpPacket> packets) async {
+  Future<void> _waitForSsrcThenReceive(int ssrc, MediaKind kind, Stream<RemoteRtpPacket> packets) async {
     while (!_disposed && !_userIdBySsrc.containsKey(ssrc)) {
       await Future<void>.delayed(const Duration(milliseconds: 50));
     }
@@ -267,12 +387,53 @@ class VoiceWebRtcRsSession {
     final userId = _userIdBySsrc[ssrc];
     if (userId == null) return;
     _pendingTracksBySsrc.remove(ssrc);
-    packets.listen((packet) => _handleRemotePacket(userId, packet));
+    packets.listen((packet) => _routeRemotePacket(userId, kind, packet));
   }
 
-  void _startReceiving(Snowflake userId, RemoteRtpPacket firstPacket, Stream<RemoteRtpPacket> packets) {
-    _handleRemotePacket(userId, firstPacket);
-    packets.listen((packet) => _handleRemotePacket(userId, packet));
+  void _startReceiving(Snowflake userId, MediaKind kind, RemoteRtpPacket firstPacket, Stream<RemoteRtpPacket> packets) {
+    _routeRemotePacket(userId, kind, firstPacket);
+    packets.listen((packet) => _routeRemotePacket(userId, kind, packet));
+  }
+
+  void _routeRemotePacket(Snowflake userId, MediaKind kind, RemoteRtpPacket packet) {
+    if (kind == MediaKind.video) {
+      // Chained rather than fire-and-forget: the H264 decoder is stateful
+      // and must see packets in arrival order (it reassembles reference
+      // frames across calls) - awaiting each `decode()` before starting the
+      // next preserves that even though decode is an async FRB call, at the
+      // cost of decode work never running concurrently with itself for one
+      // participant (fine; it's already serialized by a Mutex on the Rust
+      // side, so this isn't giving up real parallelism).
+      final previous = _videoProcessingChains[userId] ?? Future<void>.value();
+      _videoProcessingChains[userId] = previous.then((_) => _decodeRemoteVideoPacket(userId, packet));
+    } else {
+      _handleRemotePacket(userId, packet);
+    }
+  }
+
+  Future<H264Decoder> _videoDecoderFor(Snowflake userId) async {
+    final existing = _videoDecodersByUserId[userId];
+    if (existing != null) return existing;
+    final decoder = await H264Decoder.create();
+    _videoDecodersByUserId[userId] = decoder;
+    return decoder;
+  }
+
+  Future<void> _decodeRemoteVideoPacket(Snowflake userId, RemoteRtpPacket packet) async {
+    try {
+      // DAVE video decryption isn't wired up yet (see startLocalVideo's doc
+      // for the send-side equivalent) - packet.payload is decoded as plain
+      // H264 for now.
+      final decoder = await _videoDecoderFor(userId);
+      final frame = await decoder.decode(data: packet.payload);
+      if (frame != null && !_disposed) {
+        _remoteVideoFrameController.add(RemoteVideoFrameEvent(userId: userId, frame: frame));
+      }
+    } catch (error, stackTrace) {
+      debugPrint(
+        'VoiceWebRtcRsSession: failed to decode remote video packet from $userId: $error\n$stackTrace',
+      );
+    }
   }
 
   void _handleRemotePacket(Snowflake userId, RemoteRtpPacket packet) {
@@ -416,12 +577,16 @@ class VoiceWebRtcRsSession {
     _encryptor?.dispose();
     await _ratchetSub?.cancel();
     await _eventsSub?.cancel();
+    await _cameraController?.stopImageStream();
 
     for (final participant in _participantsByUserId.values) {
       participant.dispose();
     }
     _participantsByUserId.clear();
     _pendingTracksBySsrc.clear();
+    _videoDecodersByUserId.clear();
+    _videoProcessingChains.clear();
+    await _remoteVideoFrameController.close();
 
     await _peerConnection?.close();
   }

@@ -40,6 +40,12 @@ A new Flutter FFI plugin project.
     'DEFINES_MODULE' => 'YES',
     # Flutter.framework does not contain a i386 slice.
     'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'i386',
-    'OTHER_LDFLAGS' => '-force_load ${PODS_CONFIGURATION_BUILD_DIR}/flutter_webrtc_rs_core/libflutter_webrtc_rs_core.a',
+    # -lc++: openh264 (rust/src/api/video_codec.rs's H264 encode/decode) is a C++
+    # library built via `cc` from Rust's build.rs. Cargo knows to link libc++ for
+    # a `cargo build`-produced *binary*, but this crate only produces a staticlib
+    # for cargokit/Xcode to link directly - that final link step is Xcode's, not
+    # cargo's, so it needs telling separately or every C++ runtime symbol
+    # (operator new/delete, RTTI, __cxa_* exception ABI) comes back undefined.
+    'OTHER_LDFLAGS' => '-force_load ${PODS_CONFIGURATION_BUILD_DIR}/flutter_webrtc_rs_core/libflutter_webrtc_rs_core.a -lc++',
   }
 end

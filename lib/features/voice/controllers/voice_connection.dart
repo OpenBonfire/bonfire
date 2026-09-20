@@ -326,10 +326,15 @@ class VoiceConnectionController extends _$VoiceConnectionController {
       try {
         state = _withMediaStatus(VoiceMediaStatus.negotiating);
 
-        if (webrtcSession != null) {
-          webrtcSession.localSsrc = ready.ssrc;
-          final fragment = await webrtcSession.createOfferAndBuildFragment();
-          gateway.selectWebRtcProtocol(fragment);
+        final webrtc = webrtcSession;
+        if (webrtc != null) {
+          webrtc.localSsrc = ready.ssrc;
+          final fragment = await webrtc.createOfferAndBuildFragment();
+          gateway.selectWebRtcProtocol(
+            fragment,
+            opusPayloadType: webrtc.opusPayloadType ?? 111,
+            videoPayloadType: webrtc.videoPayloadType,
+          );
           return;
         }
 

@@ -9,7 +9,7 @@ import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 
 import 'types.dart';
 
-// These functions are ignored because they are not marked as `pub`: `as_track_local`, `build_local_track`, `clock_rate_and_channels`, `new`, `resolve_payload_type`
+// These functions are ignored because they are not marked as `pub`: `as_track_local`, `build_local_track`, `clock_rate_and_channels`, `depacketizer_for_mime_type`, `new`, `resolve_payload_type`
 
 // Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<RtcMediaSender>>
 abstract class RtcMediaSender implements RustOpaqueInterface {
@@ -28,7 +28,15 @@ abstract class RtcRemoteTrack implements RustOpaqueInterface {
 
   Future<String?> mimeType();
 
-  /// Subscribes to this track's inbound RTP packets. Spawns a poll loop for the
-  /// lifetime of the track - subscribe once per track.
+  /// Subscribes to this track's inbound frames, reassembled from RTP packets
+  /// per the track's negotiated codec (see `depacketizer_for_mime_type`) -
+  /// spawns a poll loop for the lifetime of the track, so subscribe once per
+  /// track. A multi-packet H264 access unit (near-universal for anything but
+  /// the smallest frames) arrives as a single [`RemoteRtpPacket::payload`]
+  /// once its last fragment lands, not as separate fragments the caller has
+  /// to reassemble; intermediate fragments produce no event at all.
+  ///
+  /// `sequence_number`/`timestamp`/`marker` on the emitted [`RemoteRtpPacket`]
+  /// are the *last* RTP packet's - i.e. the one that completed the frame.
   Stream<RemoteRtpPacket> packets();
 }

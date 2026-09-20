@@ -1,6 +1,7 @@
 pub mod data_channel;
 pub mod media;
 pub mod peer_connection;
+pub mod video_codec;
 // Not `pub`: this is an internal helper (the shared `Arc<dyn Runtime>` every
 // `PeerConnection` is built with), not part of the Dart-facing API. Keeping it
 // non-public keeps flutter_rust_bridge_codegen from trying to generate bindings for

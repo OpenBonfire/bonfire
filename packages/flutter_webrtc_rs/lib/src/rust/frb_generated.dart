@@ -7,6 +7,7 @@ import 'api/data_channel.dart';
 import 'api/media.dart';
 import 'api/peer_connection.dart';
 import 'api/types.dart';
+import 'api/video_codec.dart';
 
 import 'dart:async';
 import 'dart:convert';
@@ -72,7 +73,7 @@ class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
   String get codegenVersion => '2.13.0';
 
   @override
-  int get rustContentHash => 1224251361;
+  int get rustContentHash => -1890954777;
 
   static const kDefaultExternalLibraryLoaderConfig =
       ExternalLibraryLoaderConfig(
@@ -84,6 +85,31 @@ class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
 }
 
 abstract class RustLibApi extends BaseApi {
+  Future<H264Decoder> crateApiVideoCodecH264DecoderCreate();
+
+  Future<DecodedVideoFrame?> crateApiVideoCodecH264DecoderDecode({
+    required H264Decoder that,
+    required List<int> data,
+  });
+
+  Future<H264Encoder> crateApiVideoCodecH264EncoderCreate({
+    required int bitrateBps,
+  });
+
+  Future<Uint8List> crateApiVideoCodecH264EncoderEncodeBgra8({
+    required H264Encoder that,
+    required List<int> data,
+    required int width,
+    required int height,
+  });
+
+  Future<Uint8List> crateApiVideoCodecH264EncoderEncodeRgba8({
+    required H264Encoder that,
+    required List<int> data,
+    required int width,
+    required int height,
+  });
+
   Future<void> crateApiDataChannelRtcDataChannelClose({
     required RtcDataChannel that,
   });
@@ -192,6 +218,22 @@ abstract class RustLibApi extends BaseApi {
   Future<RtcConfig> crateApiTypesRtcConfigDefault();
 
   RustArcIncrementStrongCountFnType
+  get rust_arc_increment_strong_count_H264Decoder;
+
+  RustArcDecrementStrongCountFnType
+  get rust_arc_decrement_strong_count_H264Decoder;
+
+  CrossPlatformFinalizerArg get rust_arc_decrement_strong_count_H264DecoderPtr;
+
+  RustArcIncrementStrongCountFnType
+  get rust_arc_increment_strong_count_H264Encoder;
+
+  RustArcDecrementStrongCountFnType
+  get rust_arc_decrement_strong_count_H264Encoder;
+
+  CrossPlatformFinalizerArg get rust_arc_decrement_strong_count_H264EncoderPtr;
+
+  RustArcIncrementStrongCountFnType
   get rust_arc_increment_strong_count_RtcDataChannel;
 
   RustArcDecrementStrongCountFnType
@@ -237,6 +279,190 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   });
 
   @override
+  Future<H264Decoder> crateApiVideoCodecH264DecoderCreate() {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 1,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData:
+              sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerH264Decoder,
+          decodeErrorData: sse_decode_String,
+        ),
+        constMeta: kCrateApiVideoCodecH264DecoderCreateConstMeta,
+        argValues: [],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiVideoCodecH264DecoderCreateConstMeta =>
+      const TaskConstMeta(debugName: "H264Decoder_create", argNames: []);
+
+  @override
+  Future<DecodedVideoFrame?> crateApiVideoCodecH264DecoderDecode({
+    required H264Decoder that,
+    required List<int> data,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerH264Decoder(
+            that,
+            serializer,
+          );
+          sse_encode_list_prim_u_8_loose(data, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 2,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_opt_box_autoadd_decoded_video_frame,
+          decodeErrorData: sse_decode_String,
+        ),
+        constMeta: kCrateApiVideoCodecH264DecoderDecodeConstMeta,
+        argValues: [that, data],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiVideoCodecH264DecoderDecodeConstMeta =>
+      const TaskConstMeta(
+        debugName: "H264Decoder_decode",
+        argNames: ["that", "data"],
+      );
+
+  @override
+  Future<H264Encoder> crateApiVideoCodecH264EncoderCreate({
+    required int bitrateBps,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_u_32(bitrateBps, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 3,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData:
+              sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerH264Encoder,
+          decodeErrorData: sse_decode_String,
+        ),
+        constMeta: kCrateApiVideoCodecH264EncoderCreateConstMeta,
+        argValues: [bitrateBps],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiVideoCodecH264EncoderCreateConstMeta =>
+      const TaskConstMeta(
+        debugName: "H264Encoder_create",
+        argNames: ["bitrateBps"],
+      );
+
+  @override
+  Future<Uint8List> crateApiVideoCodecH264EncoderEncodeBgra8({
+    required H264Encoder that,
+    required List<int> data,
+    required int width,
+    required int height,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerH264Encoder(
+            that,
+            serializer,
+          );
+          sse_encode_list_prim_u_8_loose(data, serializer);
+          sse_encode_u_32(width, serializer);
+          sse_encode_u_32(height, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 4,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_list_prim_u_8_strict,
+          decodeErrorData: sse_decode_String,
+        ),
+        constMeta: kCrateApiVideoCodecH264EncoderEncodeBgra8ConstMeta,
+        argValues: [that, data, width, height],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiVideoCodecH264EncoderEncodeBgra8ConstMeta =>
+      const TaskConstMeta(
+        debugName: "H264Encoder_encode_bgra8",
+        argNames: ["that", "data", "width", "height"],
+      );
+
+  @override
+  Future<Uint8List> crateApiVideoCodecH264EncoderEncodeRgba8({
+    required H264Encoder that,
+    required List<int> data,
+    required int width,
+    required int height,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerH264Encoder(
+            that,
+            serializer,
+          );
+          sse_encode_list_prim_u_8_loose(data, serializer);
+          sse_encode_u_32(width, serializer);
+          sse_encode_u_32(height, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 5,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_list_prim_u_8_strict,
+          decodeErrorData: sse_decode_String,
+        ),
+        constMeta: kCrateApiVideoCodecH264EncoderEncodeRgba8ConstMeta,
+        argValues: [that, data, width, height],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiVideoCodecH264EncoderEncodeRgba8ConstMeta =>
+      const TaskConstMeta(
+        debugName: "H264Encoder_encode_rgba8",
+        argNames: ["that", "data", "width", "height"],
+      );
+
+  @override
   Future<void> crateApiDataChannelRtcDataChannelClose({
     required RtcDataChannel that,
   }) {
@@ -251,7 +477,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 1,
+            funcId: 6,
             port: port_,
           );
         },
@@ -290,7 +516,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             pdeCallFfi(
               generalizedFrbRustBinding,
               serializer,
-              funcId: 2,
+              funcId: 7,
               port: port_,
             );
           },
@@ -328,7 +554,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 3,
+            funcId: 8,
             port: port_,
           );
         },
@@ -366,7 +592,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 4,
+            funcId: 9,
             port: port_,
           );
         },
@@ -404,7 +630,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 5,
+            funcId: 10,
             port: port_,
           );
         },
@@ -444,7 +670,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 6,
+            funcId: 11,
             port: port_,
           );
         },
@@ -482,7 +708,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 7,
+            funcId: 12,
             port: port_,
           );
         },
@@ -524,7 +750,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 8,
+            funcId: 13,
             port: port_,
           );
         },
@@ -563,7 +789,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 9,
+            funcId: 14,
             port: port_,
           );
         },
@@ -596,7 +822,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 10,
+            funcId: 15,
             port: port_,
           );
         },
@@ -633,7 +859,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 11,
+            funcId: 16,
             port: port_,
           );
         },
@@ -674,7 +900,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 12,
+            funcId: 17,
             port: port_,
           );
         },
@@ -713,7 +939,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 13,
+            funcId: 18,
             port: port_,
           );
         },
@@ -753,7 +979,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             pdeCallFfi(
               generalizedFrbRustBinding,
               serializer,
-              funcId: 14,
+              funcId: 19,
               port: port_,
             );
           },
@@ -791,7 +1017,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 15,
+            funcId: 20,
             port: port_,
           );
         },
@@ -831,7 +1057,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 16,
+            funcId: 21,
             port: port_,
           );
         },
@@ -871,7 +1097,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 17,
+            funcId: 22,
             port: port_,
           );
         },
@@ -912,7 +1138,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 18,
+            funcId: 23,
             port: port_,
           );
         },
@@ -954,7 +1180,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 19,
+            funcId: 24,
             port: port_,
           );
         },
@@ -993,7 +1219,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 20,
+            funcId: 25,
             port: port_,
           );
         },
@@ -1026,7 +1252,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 21,
+            funcId: 26,
             port: port_,
           );
         },
@@ -1065,7 +1291,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             pdeCallFfi(
               generalizedFrbRustBinding,
               serializer,
-              funcId: 22,
+              funcId: 27,
               port: port_,
             );
           },
@@ -1097,7 +1323,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 23,
+            funcId: 28,
             port: port_,
           );
         },
@@ -1124,7 +1350,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 24,
+            funcId: 29,
             port: port_,
           );
         },
@@ -1141,6 +1367,22 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   TaskConstMeta get kCrateApiTypesRtcConfigDefaultConstMeta =>
       const TaskConstMeta(debugName: "rtc_config_default", argNames: []);
+
+  RustArcIncrementStrongCountFnType
+  get rust_arc_increment_strong_count_H264Decoder => wire
+      .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerH264Decoder;
+
+  RustArcDecrementStrongCountFnType
+  get rust_arc_decrement_strong_count_H264Decoder => wire
+      .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerH264Decoder;
+
+  RustArcIncrementStrongCountFnType
+  get rust_arc_increment_strong_count_H264Encoder => wire
+      .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerH264Encoder;
+
+  RustArcDecrementStrongCountFnType
+  get rust_arc_decrement_strong_count_H264Encoder => wire
+      .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerH264Encoder;
 
   RustArcIncrementStrongCountFnType
   get rust_arc_increment_strong_count_RtcDataChannel => wire
@@ -1181,6 +1423,24 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  H264Decoder
+  dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerH264Decoder(
+    dynamic raw,
+  ) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return H264DecoderImpl.frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
+  H264Encoder
+  dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerH264Encoder(
+    dynamic raw,
+  ) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return H264EncoderImpl.frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
   RtcDataChannel
   dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRtcDataChannel(
     dynamic raw,
@@ -1217,6 +1477,24 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  H264Decoder
+  dco_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerH264Decoder(
+    dynamic raw,
+  ) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return H264DecoderImpl.frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
+  H264Encoder
+  dco_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerH264Encoder(
+    dynamic raw,
+  ) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return H264EncoderImpl.frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
   RtcDataChannel
   dco_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRtcDataChannel(
     dynamic raw,
@@ -1250,6 +1528,24 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   ) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return RtcRemoteTrackImpl.frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
+  H264Decoder
+  dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerH264Decoder(
+    dynamic raw,
+  ) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return H264DecoderImpl.frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
+  H264Encoder
+  dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerH264Encoder(
+    dynamic raw,
+  ) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return H264EncoderImpl.frbInternalDcoDecode(raw as List<dynamic>);
   }
 
   @protected
@@ -1324,6 +1620,12 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  DecodedVideoFrame dco_decode_box_autoadd_decoded_video_frame(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return dco_decode_decoded_video_frame(raw);
+  }
+
+  @protected
   RtcConfig dco_decode_box_autoadd_rtc_config(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return dco_decode_rtc_config(raw);
@@ -1353,6 +1655,19 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       default:
         throw Exception("unreachable");
     }
+  }
+
+  @protected
+  DecodedVideoFrame dco_decode_decoded_video_frame(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    final arr = raw as List<dynamic>;
+    if (arr.length != 3)
+      throw Exception('unexpected arr length: expect 3 but see ${arr.length}');
+    return DecodedVideoFrame(
+      width: dco_decode_u_32(arr[0]),
+      height: dco_decode_u_32(arr[1]),
+      rgb: dco_decode_list_prim_u_8_strict(arr[2]),
+    );
   }
 
   @protected
@@ -1420,6 +1735,14 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   String? dco_decode_opt_String(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return raw == null ? null : dco_decode_String(raw);
+  }
+
+  @protected
+  DecodedVideoFrame? dco_decode_opt_box_autoadd_decoded_video_frame(
+    dynamic raw,
+  ) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return raw == null ? null : dco_decode_box_autoadd_decoded_video_frame(raw);
   }
 
   @protected
@@ -1546,6 +1869,30 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  H264Decoder
+  sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerH264Decoder(
+    SseDeserializer deserializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return H264DecoderImpl.frbInternalSseDecode(
+      sse_decode_usize(deserializer),
+      sse_decode_i_32(deserializer),
+    );
+  }
+
+  @protected
+  H264Encoder
+  sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerH264Encoder(
+    SseDeserializer deserializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return H264EncoderImpl.frbInternalSseDecode(
+      sse_decode_usize(deserializer),
+      sse_decode_i_32(deserializer),
+    );
+  }
+
+  @protected
   RtcDataChannel
   sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRtcDataChannel(
     SseDeserializer deserializer,
@@ -1594,6 +1941,30 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  H264Decoder
+  sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerH264Decoder(
+    SseDeserializer deserializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return H264DecoderImpl.frbInternalSseDecode(
+      sse_decode_usize(deserializer),
+      sse_decode_i_32(deserializer),
+    );
+  }
+
+  @protected
+  H264Encoder
+  sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerH264Encoder(
+    SseDeserializer deserializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return H264EncoderImpl.frbInternalSseDecode(
+      sse_decode_usize(deserializer),
+      sse_decode_i_32(deserializer),
+    );
+  }
+
+  @protected
   RtcDataChannel
   sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRtcDataChannel(
     SseDeserializer deserializer,
@@ -1636,6 +2007,30 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return RtcRemoteTrackImpl.frbInternalSseDecode(
+      sse_decode_usize(deserializer),
+      sse_decode_i_32(deserializer),
+    );
+  }
+
+  @protected
+  H264Decoder
+  sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerH264Decoder(
+    SseDeserializer deserializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return H264DecoderImpl.frbInternalSseDecode(
+      sse_decode_usize(deserializer),
+      sse_decode_i_32(deserializer),
+    );
+  }
+
+  @protected
+  H264Encoder
+  sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerH264Encoder(
+    SseDeserializer deserializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return H264EncoderImpl.frbInternalSseDecode(
       sse_decode_usize(deserializer),
       sse_decode_i_32(deserializer),
     );
@@ -1728,6 +2123,14 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  DecodedVideoFrame sse_decode_box_autoadd_decoded_video_frame(
+    SseDeserializer deserializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return (sse_decode_decoded_video_frame(deserializer));
+  }
+
+  @protected
   RtcConfig sse_decode_box_autoadd_rtc_config(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return (sse_decode_rtc_config(deserializer));
@@ -1758,6 +2161,21 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       default:
         throw UnimplementedError('');
     }
+  }
+
+  @protected
+  DecodedVideoFrame sse_decode_decoded_video_frame(
+    SseDeserializer deserializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    var var_width = sse_decode_u_32(deserializer);
+    var var_height = sse_decode_u_32(deserializer);
+    var var_rgb = sse_decode_list_prim_u_8_strict(deserializer);
+    return DecodedVideoFrame(
+      width: var_width,
+      height: var_height,
+      rgb: var_rgb,
+    );
   }
 
   @protected
@@ -1848,6 +2266,19 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
     if (sse_decode_bool(deserializer)) {
       return (sse_decode_String(deserializer));
+    } else {
+      return null;
+    }
+  }
+
+  @protected
+  DecodedVideoFrame? sse_decode_opt_box_autoadd_decoded_video_frame(
+    SseDeserializer deserializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    if (sse_decode_bool(deserializer)) {
+      return (sse_decode_box_autoadd_decoded_video_frame(deserializer));
     } else {
       return null;
     }
@@ -1987,6 +2418,32 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   void
+  sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerH264Decoder(
+    H264Decoder self,
+    SseSerializer serializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+      (self as H264DecoderImpl).frbInternalSseEncode(move: true),
+      serializer,
+    );
+  }
+
+  @protected
+  void
+  sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerH264Encoder(
+    H264Encoder self,
+    SseSerializer serializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+      (self as H264EncoderImpl).frbInternalSseEncode(move: true),
+      serializer,
+    );
+  }
+
+  @protected
+  void
   sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRtcDataChannel(
     RtcDataChannel self,
     SseSerializer serializer,
@@ -2039,6 +2496,32 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   void
+  sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerH264Decoder(
+    H264Decoder self,
+    SseSerializer serializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+      (self as H264DecoderImpl).frbInternalSseEncode(move: false),
+      serializer,
+    );
+  }
+
+  @protected
+  void
+  sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerH264Encoder(
+    H264Encoder self,
+    SseSerializer serializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+      (self as H264EncoderImpl).frbInternalSseEncode(move: false),
+      serializer,
+    );
+  }
+
+  @protected
+  void
   sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRtcDataChannel(
     RtcDataChannel self,
     SseSerializer serializer,
@@ -2085,6 +2568,32 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_usize(
       (self as RtcRemoteTrackImpl).frbInternalSseEncode(move: false),
+      serializer,
+    );
+  }
+
+  @protected
+  void
+  sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerH264Decoder(
+    H264Decoder self,
+    SseSerializer serializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+      (self as H264DecoderImpl).frbInternalSseEncode(move: null),
+      serializer,
+    );
+  }
+
+  @protected
+  void
+  sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerH264Encoder(
+    H264Encoder self,
+    SseSerializer serializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+      (self as H264EncoderImpl).frbInternalSseEncode(move: null),
       serializer,
     );
   }
@@ -2205,6 +2714,15 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  void sse_encode_box_autoadd_decoded_video_frame(
+    DecodedVideoFrame self,
+    SseSerializer serializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_decoded_video_frame(self, serializer);
+  }
+
+  @protected
   void sse_encode_box_autoadd_rtc_config(
     RtcConfig self,
     SseSerializer serializer,
@@ -2237,6 +2755,17 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       case DataChannelEvent_BufferedAmountHigh():
         sse_encode_i_32(6, serializer);
     }
+  }
+
+  @protected
+  void sse_encode_decoded_video_frame(
+    DecodedVideoFrame self,
+    SseSerializer serializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_u_32(self.width, serializer);
+    sse_encode_u_32(self.height, serializer);
+    sse_encode_list_prim_u_8_strict(self.rgb, serializer);
   }
 
   @protected
@@ -2327,6 +2856,19 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     sse_encode_bool(self != null, serializer);
     if (self != null) {
       sse_encode_String(self, serializer);
+    }
+  }
+
+  @protected
+  void sse_encode_opt_box_autoadd_decoded_video_frame(
+    DecodedVideoFrame? self,
+    SseSerializer serializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    sse_encode_bool(self != null, serializer);
+    if (self != null) {
+      sse_encode_box_autoadd_decoded_video_frame(self, serializer);
     }
   }
 
@@ -2441,6 +2983,90 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     // Codec=Sse (Serialization based), see doc to use other codecs
     serializer.buffer.putBigUint64(self);
   }
+}
+
+@sealed
+class H264DecoderImpl extends RustOpaque implements H264Decoder {
+  // Not to be used by end users
+  H264DecoderImpl.frbInternalDcoDecode(List<dynamic> wire)
+    : super.frbInternalDcoDecode(wire, _kStaticData);
+
+  // Not to be used by end users
+  H264DecoderImpl.frbInternalSseDecode(BigInt ptr, int externalSizeOnNative)
+    : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
+
+  static final _kStaticData = RustArcStaticData(
+    rustArcIncrementStrongCount:
+        RustLib.instance.api.rust_arc_increment_strong_count_H264Decoder,
+    rustArcDecrementStrongCount:
+        RustLib.instance.api.rust_arc_decrement_strong_count_H264Decoder,
+    rustArcDecrementStrongCountPtr:
+        RustLib.instance.api.rust_arc_decrement_strong_count_H264DecoderPtr,
+  );
+
+  /// Feeds one depacketized H264 access unit's worth of Annex-B bytes in.
+  /// openh264 buffers internally across calls (SPS/PPS, reference frames) and
+  /// only returns `Some` once it has produced a displayable picture - most
+  /// calls (e.g. one that only delivered parameter sets) return `None`, which
+  /// is not an error.
+  Future<DecodedVideoFrame?> decode({required List<int> data}) => RustLib
+      .instance
+      .api
+      .crateApiVideoCodecH264DecoderDecode(that: this, data: data);
+}
+
+@sealed
+class H264EncoderImpl extends RustOpaque implements H264Encoder {
+  // Not to be used by end users
+  H264EncoderImpl.frbInternalDcoDecode(List<dynamic> wire)
+    : super.frbInternalDcoDecode(wire, _kStaticData);
+
+  // Not to be used by end users
+  H264EncoderImpl.frbInternalSseDecode(BigInt ptr, int externalSizeOnNative)
+    : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
+
+  static final _kStaticData = RustArcStaticData(
+    rustArcIncrementStrongCount:
+        RustLib.instance.api.rust_arc_increment_strong_count_H264Encoder,
+    rustArcDecrementStrongCount:
+        RustLib.instance.api.rust_arc_decrement_strong_count_H264Encoder,
+    rustArcDecrementStrongCountPtr:
+        RustLib.instance.api.rust_arc_decrement_strong_count_H264EncoderPtr,
+  );
+
+  /// Encodes one frame from BGRA8 pixel data (row-major, no padding -
+  /// `width * height * 4` bytes). This is the pixel format macOS/iOS camera
+  /// capture (`AVCaptureVideoDataOutput` with `kCVPixelFormatType_32BGRA`,
+  /// what most Flutter camera plugins hand out on those platforms) uses
+  /// natively, so no format conversion is needed on the Dart side.
+  ///
+  /// Returns Annex-B bytes (one or more NAL units, start-code-prefixed) -
+  /// openh264 may emit SPS/PPS NALs ahead of the slice NAL on keyframes, all
+  /// concatenated in this one buffer; `write_encoded_frame` and the RTP H264
+  /// payloader downstream handle that transparently.
+  Future<Uint8List> encodeBgra8({
+    required List<int> data,
+    required int width,
+    required int height,
+  }) => RustLib.instance.api.crateApiVideoCodecH264EncoderEncodeBgra8(
+    that: this,
+    data: data,
+    width: width,
+    height: height,
+  );
+
+  /// As [`encode_bgra8`](Self::encode_bgra8), for RGBA8 sources instead (some
+  /// non-Apple capture paths use this layout).
+  Future<Uint8List> encodeRgba8({
+    required List<int> data,
+    required int width,
+    required int height,
+  }) => RustLib.instance.api.crateApiVideoCodecH264EncoderEncodeRgba8(
+    that: this,
+    data: data,
+    width: width,
+    height: height,
+  );
 }
 
 @sealed
@@ -2660,8 +3286,16 @@ class RtcRemoteTrackImpl extends RustOpaque implements RtcRemoteTrack {
   Future<String?> mimeType() =>
       RustLib.instance.api.crateApiMediaRtcRemoteTrackMimeType(that: this);
 
-  /// Subscribes to this track's inbound RTP packets. Spawns a poll loop for the
-  /// lifetime of the track - subscribe once per track.
+  /// Subscribes to this track's inbound frames, reassembled from RTP packets
+  /// per the track's negotiated codec (see `depacketizer_for_mime_type`) -
+  /// spawns a poll loop for the lifetime of the track, so subscribe once per
+  /// track. A multi-packet H264 access unit (near-universal for anything but
+  /// the smallest frames) arrives as a single [`RemoteRtpPacket::payload`]
+  /// once its last fragment lands, not as separate fragments the caller has
+  /// to reassemble; intermediate fragments produce no event at all.
+  ///
+  /// `sequence_number`/`timestamp`/`marker` on the emitted [`RemoteRtpPacket`]
+  /// are the *last* RTP packet's - i.e. the one that completed the frame.
   Stream<RemoteRtpPacket> packets() =>
       RustLib.instance.api.crateApiMediaRtcRemoteTrackPackets(that: this);
 }

@@ -542,14 +542,23 @@ class VoiceGateway {
   /// [sdpFragment] built from the local offer - see
   /// `VoiceWebRtcRsSession.createOfferAndBuildFragment`.
   ///
-  /// NOTE: the exact wire shape of `data` here is carried over from an
-  /// earlier, never-connected attempt (see git history of this file) and is
-  /// **unverified against a live Discord voice server** - it mirrors
-  /// [selectUdpProtocol]'s `data` object with an `sdp` key, which is the
-  /// most consistent reading of the sparse public documentation. If the SFU
-  /// never responds with a [VoiceSessionDescription] carrying `sdp`, this
-  /// shape is the first thing to double check.
-  void selectWebRtcProtocol(String sdpFragment) {
+  /// **Confirmed working for audio** against a live Discord voice server.
+  /// [videoPayloadType] is new/unverified - pass it once a video sender has
+  /// been added (see `VoiceWebRtcRsSession`'s video support) so the SFU knows
+  /// to expect H264, or omit it for an audio-only connection.
+  ///
+  /// [opusPayloadType]/[videoPayloadType] must be the exact dynamic payload
+  /// type numbers webrtc-rs assigned in [sdpFragment]'s own `a=rtpmap` lines
+  /// (parse them out of the same offer rather than hardcoding a guess - they
+  /// aren't guaranteed stable across webrtc-rs versions) - Discord is assumed
+  /// to treat this `codecs` array as authoritative for payload-type mapping,
+  /// so a mismatch here would silently misroute media even though signaling
+  /// itself succeeds.
+  void selectWebRtcProtocol(
+    String sdpFragment, {
+    required int opusPayloadType,
+    int? videoPayloadType,
+  }) {
     _sendJson(VoiceOpcode.selectProtocol, {
       'protocol': 'webrtc',
       'data': {'sdp': sdpFragment},
@@ -559,8 +568,15 @@ class VoiceGateway {
           'name': 'opus',
           'type': 'audio',
           'priority': 1000,
-          'payload_type': 111,
+          'payload_type': opusPayloadType,
         },
+        if (videoPayloadType != null)
+          {
+            'name': 'h264',
+            'type': 'video',
+            'priority': 1000,
+            'payload_type': videoPayloadType,
+          },
       ],
     });
   }

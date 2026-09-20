@@ -1,15 +1,19 @@
 //! Local media senders and remote media track handles.
 //!
-//! Both sides are deliberately "dumb transport": [`RtcMediaSender::write_encoded_frame`]
-//! takes already-encoded bytes (an Opus frame, a VP8/H264 frame, whatever codec you
-//! negotiated) and packetizes+sends them; [`RtcRemoteTrack::packets`] hands back
-//! already-depacketized RTP payload bytes exactly as they arrived. Neither side
-//! encodes, decodes, or inspects payload contents.
+//! Both sides are deliberately "dumb transport" as far as frame *content* goes:
+//! [`RtcMediaSender::write_encoded_frame`] takes already-encoded bytes (an Opus
+//! frame, an H264 Annex-B access unit, whatever codec you negotiated) and
+//! packetizes+sends them; [`RtcRemoteTrack::packets`] hands back reassembled
+//! encoded frames - depacketized per the track's negotiated codec (see
+//! `depacketizer_for_mime_type` below), so a multi-packet H264 frame arrives as
+//! one Annex-B buffer rather than requiring the caller to reassemble RTP
+//! fragments by hand. Neither side inspects or transforms what's *inside* those
+//! bytes.
 //!
 //! This is what makes DAVE (or any other frame-level E2EE) integration free: encrypt
-//! the encoded frame before calling `write_encoded_frame`, decrypt the payload you get
-//! from `packets` before handing it to your decoder. Nothing in this layer needs to
-//! know that happened.
+//! the encoded frame before calling `write_encoded_frame`, decrypt the frame you get
+//! from `packets` before handing it to your decoder (see `video_codec.rs` for H264
+//! encode/decode). Nothing in this layer needs to know that happened.
 use std::sync::atomic::{AtomicU8, Ordering};
 use std::sync::Arc;
 use std::time::{Duration, Instant};
@@ -19,6 +23,9 @@ use flutter_rust_bridge::frb;
 use crate::frb_generated::StreamSink;
 use rtc::media::Sample;
 use rtc::media_stream::MediaStreamTrack;
+use rtc::peer_connection::configuration::media_engine::{MIME_TYPE_H264, MIME_TYPE_OPUS};
+use rtc::rtp::codec::{h264::H264Packet, opus::OpusPacket};
+use rtc::rtp::packetizer::Depacketizer;
 use rtc::rtp_transceiver::rtp_sender::{
     RTCRtpCodec, RTCRtpCodingParameters, RTCRtpEncodingParameters,
 };
@@ -112,17 +119,41 @@ impl RtcRemoteTrack {
         self.inner.codec(ssrc).await.map(|c| c.mime_type)
     }
 
-    /// Subscribes to this track's inbound RTP packets. Spawns a poll loop for the
-    /// lifetime of the track - subscribe once per track.
+    /// Subscribes to this track's inbound frames, reassembled from RTP packets
+    /// per the track's negotiated codec (see `depacketizer_for_mime_type`) -
+    /// spawns a poll loop for the lifetime of the track, so subscribe once per
+    /// track. A multi-packet H264 access unit (near-universal for anything but
+    /// the smallest frames) arrives as a single [`RemoteRtpPacket::payload`]
+    /// once its last fragment lands, not as separate fragments the caller has
+    /// to reassemble; intermediate fragments produce no event at all.
+    ///
+    /// `sequence_number`/`timestamp`/`marker` on the emitted [`RemoteRtpPacket`]
+    /// are the *last* RTP packet's - i.e. the one that completed the frame.
     pub async fn packets(&self, sink: StreamSink<RemoteRtpPacket>) {
         let inner = Arc::clone(&self.inner);
+        let ssrc = inner.ssrcs().await.first().copied();
+        let mime_type = match ssrc {
+            Some(ssrc) => inner.codec(ssrc).await.map(|c| c.mime_type),
+            None => None,
+        };
+        let mut depacketizer = depacketizer_for_mime_type(mime_type.as_deref());
+
         runtime().spawn(Box::pin(async move {
             while let Some(event) = inner.poll().await {
                 let TrackRemoteEvent::OnRtpPacket(packet) = event else {
                     continue;
                 };
+                let payload = match depacketizer.depacketize(&packet.payload) {
+                    Ok(bytes) => bytes,
+                    Err(_) => continue, // malformed fragment - drop it, wait for the next keyframe/packet
+                };
+                // Empty means "fragment buffered, frame not complete yet" (e.g. a
+                // non-final H264 FU-A piece) - nothing to emit.
+                if payload.is_empty() {
+                    continue;
+                }
                 let frame = RemoteRtpPacket {
-                    payload: packet.payload.to_vec(),
+                    payload: payload.to_vec(),
                     sequence_number: packet.header.sequence_number,
                     timestamp: packet.header.timestamp,
                     ssrc: packet.header.ssrc,
@@ -133,6 +164,41 @@ impl RtcRemoteTrack {
                 }
             }
         }));
+    }
+}
+
+/// Picks the RTP depacketizer matching a negotiated codec's mime type -
+/// mirrors `RTCRtpCodec::payloader` (the sending-side equivalent, in the `rtc`
+/// crate itself) but there's no built-in receiving-side counterpart to call
+/// into, so this hand-rolls the same mapping for the codecs this crate cares
+/// about today. Anything else (VP8/VP9/AV1/H265, or an unknown mime type -
+/// including `None`, which happens if a track's SSRC/codec isn't resolvable
+/// yet) falls back to passing packets through unchanged, i.e. today's
+/// behavior for every codec other than H264: correct for codecs that never
+/// fragment a frame across multiple packets (Opus explicitly, via
+/// `OpusPacket`, and everything else by the passthrough default, which is
+/// only actually *correct* for non-fragmenting traffic), a silent
+/// reassembly gap for ones that do.
+fn depacketizer_for_mime_type(mime_type: Option<&str>) -> Box<dyn Depacketizer + Send> {
+    struct Passthrough;
+    impl Depacketizer for Passthrough {
+        fn depacketize(&mut self, b: &Bytes) -> rtc::shared::error::Result<Bytes> {
+            Ok(b.clone())
+        }
+        fn is_partition_head(&self, _payload: &Bytes) -> bool {
+            true
+        }
+        fn is_partition_tail(&self, marker: bool, _payload: &Bytes) -> bool {
+            marker
+        }
+    }
+
+    match mime_type {
+        Some(mime) if mime.eq_ignore_ascii_case(MIME_TYPE_H264) => {
+            Box::new(H264Packet::default())
+        }
+        Some(mime) if mime.eq_ignore_ascii_case(MIME_TYPE_OPUS) => Box::new(OpusPacket),
+        _ => Box::new(Passthrough),
     }
 }
 

@@ -233,6 +233,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.3.1"
+  camera_macos:
+    dependency: "direct main"
+    description:
+      name: camera_macos
+      sha256: "64e199368efb0dc12c5298819df98aada4fe2cc50a5d84997f7bf7d94edaa3f8"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.1"
   characters:
     dependency: transitive
     description:
@@ -377,14 +385,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.1.13"
-  dart_webrtc:
-    dependency: transitive
-    description:
-      name: dart_webrtc
-      sha256: "078e3c431500147e5cc52b3c6ea41ed538f30c7720cc2467d2186c9251e62716"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.8.2"
   dave:
     dependency: "direct main"
     description:
@@ -780,13 +780,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_webrtc:
-    dependency: "direct main"
-    description:
-      path: "packages/flutter_webrtc"
-      relative: true
-    source: path
-    version: "1.6.2+hotfix.3"
   flutter_webrtc_rs:
     dependency: "direct main"
     description:
@@ -994,14 +987,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.3.0"
-  logger:
-    dependency: transitive
-    description:
-      name: logger
-      sha256: a7967e31b703831a893bbc3c3dd11db08126fe5f369b5c648a36f821979f5be3
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.6.2"
   logging:
     dependency: transitive
     description:
@@ -1428,11 +1413,12 @@ packages:
     source: hosted
     version: "2.1.1"
   record_macos:
-    dependency: "direct overridden"
+    dependency: transitive
     description:
-      path: "packages/record_macos"
-      relative: true
-    source: path
+      name: record_macos
+      sha256: ced7495abf3d683e8a7dbe8fc96df8ea5722837a26f922b7cb7c5de11661bb46
+      url: "https://pub.dev"
+    source: hosted
     version: "2.1.1"
   record_platform_interface:
     dependency: transitive
@@ -2088,14 +2074,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.6.0"
-  webrtc_interface:
-    dependency: transitive
-    description:
-      name: webrtc_interface
-      sha256: c6f100eac5057d9a817a60473126f9828c796d42884d498af4f339c97b21014f
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.5.1"
   webview_flutter:
     dependency: "direct main"
     description:
