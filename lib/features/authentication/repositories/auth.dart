@@ -69,6 +69,7 @@ class ClientController extends _$ClientController {
   /// Authenticate client with Discord [token]
   Future<FirebridgeGateway> loginWithToken(String token) async {
     debugPrint("LOGGING IN WITH TOKEN!");
+    print(token);
 
     final client = await Firebridge.connectGatewayWithOptions(
       GatewayApiOptions(

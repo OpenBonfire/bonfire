@@ -26,6 +26,22 @@ abstract class H264Decoder implements RustOpaqueInterface {
 abstract class H264Encoder implements RustOpaqueInterface {
   /// `bitrate_bps` is a target, not a hard cap - openh264's rate control will
   /// exceed it somewhat on complex frames.
+  ///
+  /// Configures a periodic keyframe every 15 frames (~1s at this crate's
+  /// nominal 15fps capture rate) - openh264 defaults to *never* emitting
+  /// another IDR after the very first frame
+  /// (`IntraFramePeriod::from_num_frames(0)`, its "disable periodic intra
+  /// frames" default). Without this, losing or missing that one startup
+  /// keyframe (e.g. because DAVE's MLS handshake hadn't finished yet, so
+  /// the very first frames get dropped rather than sent - see the caller's
+  /// send loop) means a receiver can never recover for the rest of the
+  /// call: there's no RTCP PLI/FIR handling in this crate yet to request
+  /// one on demand (see [`force_intra_frame`](Self::force_intra_frame) for
+  /// forcing one manually once that lands), so a fixed interval is the
+  /// only recovery mechanism available today. This matches what a known-
+  /// working reference implementation
+  /// (github.com/Discord-RE/Discord-video-stream) does explicitly via
+  /// ffmpeg's `-force_key_frames expr:gte(t,n_forced*1)` (also every 1s).
   static Future<H264Encoder> create({required int bitrateBps}) => RustLib
       .instance
       .api
@@ -54,6 +70,13 @@ abstract class H264Encoder implements RustOpaqueInterface {
     required int width,
     required int height,
   });
+
+  /// Forces the *next* `encode_bgra8`/`encode_rgba8` call to produce a
+  /// fresh IDR keyframe, regardless of the periodic interval configured in
+  /// [`create`](Self::create). For manually recovering a stream (e.g. once
+  /// this crate reads inbound RTCP PLI/FIR and wants to react to it) -
+  /// unused by anything in this crate today.
+  Future<void> forceIntraFrame();
 }
 
 /// One decoded video frame, RGB8 (3 bytes/pixel, row-major, no padding).

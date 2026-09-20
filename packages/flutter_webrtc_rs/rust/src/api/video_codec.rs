@@ -18,7 +18,7 @@ use std::sync::Mutex;
 
 use flutter_rust_bridge::frb;
 use openh264::decoder::Decoder;
-use openh264::encoder::{BitRate, Encoder, EncoderConfig};
+use openh264::encoder::{BitRate, Encoder, EncoderConfig, IntraFramePeriod};
 use openh264::formats::{BgraSliceU8, RgbaSliceU8, YUVBuffer, YUVSource};
 use openh264::OpenH264API;
 
@@ -42,11 +42,40 @@ pub struct H264Encoder {
 impl H264Encoder {
     /// `bitrate_bps` is a target, not a hard cap - openh264's rate control will
     /// exceed it somewhat on complex frames.
+    ///
+    /// Configures a periodic keyframe every 15 frames (~1s at this crate's
+    /// nominal 15fps capture rate) - openh264 defaults to *never* emitting
+    /// another IDR after the very first frame
+    /// (`IntraFramePeriod::from_num_frames(0)`, its "disable periodic intra
+    /// frames" default). Without this, losing or missing that one startup
+    /// keyframe (e.g. because DAVE's MLS handshake hadn't finished yet, so
+    /// the very first frames get dropped rather than sent - see the caller's
+    /// send loop) means a receiver can never recover for the rest of the
+    /// call: there's no RTCP PLI/FIR handling in this crate yet to request
+    /// one on demand (see [`force_intra_frame`](Self::force_intra_frame) for
+    /// forcing one manually once that lands), so a fixed interval is the
+    /// only recovery mechanism available today. This matches what a known-
+    /// working reference implementation
+    /// (github.com/Discord-RE/Discord-video-stream) does explicitly via
+    /// ffmpeg's `-force_key_frames expr:gte(t,n_forced*1)` (also every 1s).
     pub fn create(bitrate_bps: u32) -> Result<H264Encoder, String> {
         let api = OpenH264API::from_source();
-        let config = EncoderConfig::new().bitrate(BitRate::from_bps(bitrate_bps));
+        let config = EncoderConfig::new()
+            .bitrate(BitRate::from_bps(bitrate_bps))
+            .intra_frame_period(IntraFramePeriod::from_num_frames(15));
         let encoder = Encoder::with_api_config(api, config).map_err(|e| e.to_string())?;
         Ok(H264Encoder { inner: Mutex::new(encoder) })
+    }
+
+    /// Forces the *next* `encode_bgra8`/`encode_rgba8` call to produce a
+    /// fresh IDR keyframe, regardless of the periodic interval configured in
+    /// [`create`](Self::create). For manually recovering a stream (e.g. once
+    /// this crate reads inbound RTCP PLI/FIR and wants to react to it) -
+    /// unused by anything in this crate today.
+    pub fn force_intra_frame(&self) -> Result<(), String> {
+        let mut encoder = self.inner.lock().map_err(|_| "H264Encoder: lock poisoned".to_string())?;
+        encoder.force_intra_frame();
+        Ok(())
     }
 
     /// Encodes one frame from BGRA8 pixel data (row-major, no padding -

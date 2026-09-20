@@ -6,6 +6,8 @@ import 'package:bonfire/features/voice/services/voice_gateway.dart';
 import 'package:bonfire/features/voice/services/voice_media_session.dart';
 import 'package:bonfire/features/voice/services/voice_transport_crypto.dart';
 import 'package:bonfire/features/voice/services/voice_webrtc_rs_session.dart';
+import 'package:camera_macos/camera_macos.dart';
+import 'package:collection/collection.dart';
 import 'package:dave/dave.dart' as dave;
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter/foundation.dart';
@@ -13,15 +15,14 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'voice_connection.g.dart';
 
-/// Selects the media transport: the proven raw-UDP path
-/// ([VoiceMediaSession], Discord's own transport encryption over hand-rolled
-/// RTP - this is what's actually been confirmed working end to end), or the
-/// real-ICE/DTLS-SRTP path ([VoiceWebRtcRsSession], built on
-/// `flutter_webrtc_rs`/webrtc-rs). The WebRTC path's Select Protocol wire
-/// format is unverified against a live Discord voice server - see
-/// [VoiceWebRtcRsSession]'s class doc before flipping this on for anything
-/// beyond testing. Defaults to `false` so existing behavior is unchanged.
-const bool voiceUseWebRtcTransport = false;
+/// Selects the media transport: the raw-UDP path ([VoiceMediaSession],
+/// Discord's own transport encryption over hand-rolled RTP), or the real
+/// ICE/DTLS-SRTP path ([VoiceWebRtcRsSession], built on
+/// `flutter_webrtc_rs`/webrtc-rs - **confirmed working for audio** against a
+/// live Discord voice server; video is new and being tested). `true` here is
+/// the actual current transport, not a test toggle - the UDP path is kept
+/// only until it's removed outright.
+const bool voiceUseWebRtcTransport = true;
 
 /// How far along the actual media (voice gateway + UDP) connection is,
 /// layered on top of the plain "have we told Discord we want to be in this
@@ -133,9 +134,64 @@ class VoiceConnectionController extends _$VoiceConnectionController {
         channelId: channelId,
         muted: false,
         deafened: false,
+        selfVideo: false,
       ),
     );
   }
+
+  /// Starts local camera capture and adds a video sender to the current
+  /// call - only meaningful once [VoiceConnectionState.mediaStatus] is
+  /// [VoiceMediaStatus.connected] and [voiceUseWebRtcTransport] is on. `controller`
+  /// comes from a `CameraMacOSView`'s `onCameraInizialized` callback.
+  ///
+  /// Also announces `self_video: true` over the *main* gateway (see
+  /// [GatewayVoiceStateBuilder.selfVideo]) - this, not the voice gateway's
+  /// Video opcode (12) that [VoiceWebRtcRsSession.startLocalVideo] sends, is
+  /// what drives the "live" camera indicator other clients render. Skipping
+  /// this call is why the indicator never showed up at all, independent of
+  /// whether the WebRTC video stream itself was flowing correctly.
+  Future<void> startLocalVideo(CameraMacOSController controller) async {
+    final webrtcSession = _webrtcSession;
+    if (webrtcSession == null) {
+      debugPrint('[Voice] startLocalVideo() called with no active WebRTC session; ignoring');
+      return;
+    }
+    await webrtcSession.startLocalVideo(controller);
+    _updateSelfVideo(true);
+  }
+
+  /// Stops local camera capture and announces it via opcode 12 - see
+  /// [VoiceWebRtcRsSession.stopLocalVideo] - and clears `self_video` on the
+  /// main gateway to match.
+  Future<void> stopLocalVideo() async {
+    await _webrtcSession?.stopLocalVideo();
+    _updateSelfVideo(false);
+  }
+
+  /// Resends our current voice state with `self_video` set to [selfVideo],
+  /// preserving whatever channel we're in. No-ops if we're not in a channel
+  /// at all (nothing to update).
+  void _updateSelfVideo(bool selfVideo) {
+    final client = ref.read(clientControllerProvider);
+    final guildId = state.guildId;
+    final channelId = state.channelId;
+    if (client == null || guildId == null || channelId == null) return;
+
+    client.gateway.updateVoiceState(
+      guildId,
+      GatewayVoiceStateBuilder(
+        channelId: channelId,
+        muted: false,
+        deafened: false,
+        selfVideo: selfVideo,
+      ),
+    );
+  }
+
+  /// Decoded remote video frames for the current call, or `null` if there is
+  /// no active WebRTC session to receive them on. See
+  /// [VoiceWebRtcRsSession.onRemoteVideoFrame].
+  Stream<RemoteVideoFrameEvent>? get remoteVideoFrames => _webrtcSession?.onRemoteVideoFrame;
 
   void leave() {
     final client = ref.read(clientControllerProvider);
@@ -148,6 +204,7 @@ class VoiceConnectionController extends _$VoiceConnectionController {
           channelId: null,
           muted: false,
           deafened: false,
+          selfVideo: false,
         ),
       );
     }
@@ -320,8 +377,26 @@ class VoiceConnectionController extends _$VoiceConnectionController {
       webrtcSession?.handleSpeaking(userId: userId, ssrc: event.ssrc);
     });
 
+    // Never actually subscribed to before now - meaning every Video (opcode
+    // 12) event Discord ever sent back, including any echo of our own
+    // state or another participant's, was silently dropped with no way to
+    // tell from the logs. Logging-only for now (not wired into rendering -
+    // remote video frames are already identified by SSRC via handleSpeaking-
+    // style routing in VoiceWebRtcRsSession), specifically to answer: does
+    // Discord ever send anything on this channel at all.
+    gateway.onVideo.listen((update) {
+      debugPrint(
+        '[Voice] <- video (12): userId=${update.userId} audioSsrc=${update.audioSsrc} '
+        'videoSsrc=${update.videoSsrc} rtxSsrc=${update.rtxSsrc} '
+        'streams=${update.streams.map((s) => '${s.type}/${s.rid}/ssrc=${s.ssrc}/active=${s.active}').join(',')}',
+      );
+    });
+
     gateway.onReady.listen((ready) async {
-      debugPrint('[Voice] gateway ready: ssrc=${ready.ssrc} modes=${ready.modes}');
+      debugPrint(
+        '[Voice] gateway ready: ssrc=${ready.ssrc} modes=${ready.modes} '
+        'streams=${ready.streams.length}',
+      );
       _ssrc = ready.ssrc;
       try {
         state = _withMediaStatus(VoiceMediaStatus.negotiating);
@@ -329,11 +404,21 @@ class VoiceConnectionController extends _$VoiceConnectionController {
         final webrtc = webrtcSession;
         if (webrtc != null) {
           webrtc.localSsrc = ready.ssrc;
-          final fragment = await webrtc.createOfferAndBuildFragment();
+          // Video, if offered at all, is negotiated once here as part of
+          // the initial offer/answer - never via a later renegotiation.
+          // Re-sending Select Protocol mid-call to add video is confirmed
+          // to crash the voice server outright (gateway close code 4013,
+          // "WebRTC crashed"), taking the whole call down, audio included.
+          // Discord's own real mechanism for a mid-call camera toggle is
+          // opcode 12 "Video" (see VoiceGateway.sendVideo) against an SSRC
+          // negotiated up front - see VoiceWebRtcRsSession's class doc.
+          final videoStream = ready.streams.where((s) => s.type == 'video').firstOrNull;
+          final fragment = await webrtc.createOfferAndBuildFragment(videoStream: videoStream);
           gateway.selectWebRtcProtocol(
             fragment,
             opusPayloadType: webrtc.opusPayloadType ?? 111,
             videoPayloadType: webrtc.videoPayloadType,
+            videoRtxPayloadType: webrtc.videoRtxPayloadType,
           );
           return;
         }

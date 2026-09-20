@@ -1,4 +1,5 @@
 import 'package:bonfire/features/gateway/store/entity_store.dart';
+import 'package:bonfire/features/voice/components/voice_video_overlay.dart';
 import 'package:bonfire/features/voice/controllers/voice_connection.dart';
 import 'package:firebridge/firebridge.dart';
 import 'package:flutter/material.dart';
@@ -65,6 +66,12 @@ class VoiceConnectionBar extends ConsumerWidget {
               ],
             ),
           ),
+          if (connectionState.mediaStatus == VoiceMediaStatus.connected && voiceUseWebRtcTransport)
+            IconButton(
+              icon: const Icon(Icons.videocam_outlined, size: 18),
+              tooltip: 'Test video streaming',
+              onPressed: () => VoiceVideoOverlay.show(context),
+            ),
           TextButton(
             onPressed: () {
               ref.read(voiceConnectionControllerProvider.notifier).leave();

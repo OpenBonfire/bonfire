@@ -27,9 +27,16 @@ abstract class RtcPeerConnection implements RustOpaqueInterface {
   /// `rtc::peer_connection::configuration::media_engine`; every default codec is
   /// already registered by [`create`], so passing e.g. `"audio/opus"` here works
   /// without any extra setup.
+  /// `ssrc`: pass `None` to have one generated at random (the normal case);
+  /// pass `Some(...)` when the remote server pre-assigned a specific SSRC
+  /// this sender must use - e.g. Discord's voice gateway hands out a video
+  /// SSRC in its Ready payload *before* any SDP is exchanged, and expects
+  /// the eventual video sender to use exactly that value, not a random one
+  /// webrtc-rs picked on its own.
   Future<RtcMediaSender> addMediaSender({
     required MediaKind kind,
     required String mimeType,
+    int? ssrc,
   });
 
   Future<void> close();

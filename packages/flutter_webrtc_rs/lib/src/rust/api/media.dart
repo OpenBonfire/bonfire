@@ -11,13 +11,93 @@ import 'types.dart';
 
 // These functions are ignored because they are not marked as `pub`: `as_track_local`, `build_local_track`, `clock_rate_and_channels`, `depacketizer_for_mime_type`, `new`, `resolve_payload_type`
 
+/// Splits an already-encoded (and, for a real self-test, DAVE-encrypted)
+/// H264 Annex-B frame into RTP-payload-sized chunks - exactly the transform
+/// [`RtcMediaSender::write_packetized_frame`] applies before sending, but
+/// returned instead of sent. Needs no live sender/peer connection, since
+/// `H264Payloader` is a pure data transform - this exists purely so a
+/// caller can verify a frame it's about to send is actually reconstructable
+/// via [`RtcH264Depacketizer`] *without* a network round trip: encode,
+/// encrypt (real DAVE), payloadize with this, depacketize+decrypt+decode
+/// locally, and confirm a picture comes out. Useful because Discord's own
+/// SFU never echoes a sender's own stream back to them, so that path can
+/// otherwise only ever be exercised by a second real participant.
+Future<List<Uint8List>> h264PayloadizeForLoopbackTest({
+  required List<int> data,
+  required BigInt mtu,
+}) => RustLib.instance.api.crateApiMediaH264PayloadizeForLoopbackTest(
+  data: data,
+  mtu: mtu,
+);
+
+// Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<RtcH264Depacketizer>>
+abstract class RtcH264Depacketizer implements RustOpaqueInterface {
+  static Future<RtcH264Depacketizer> create() =>
+      RustLib.instance.api.crateApiMediaRtcH264DepacketizerCreate();
+
+  /// Feeds one **still-encrypted** raw RTP packet payload in, in arrival
+  /// order - reassembly is pure RTP framing (FU-A/STAP-A), so it needs no
+  /// decryption first, only decrypting *after* is correct (see this
+  /// module's doc). Returns an empty buffer for every fragment before the
+  /// one that completes a NAL (a non-final H264 FU-A piece, say) - not an
+  /// error, just "not done yet". Returns a non-empty Annex-B buffer once a
+  /// NAL (or, for a STAP-A packet, more than one) is complete - the caller
+  /// should concatenate every non-empty result across one whole access
+  /// unit (using the RTP packet's own marker bit to know when that access
+  /// unit is done) and decrypt the concatenation once, mirroring how the
+  /// sender encrypted the whole access unit in one call (see this
+  /// module's doc).
+  Future<Uint8List> depacketize({required List<int> data});
+}
+
 // Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<RtcMediaSender>>
 abstract class RtcMediaSender implements RustOpaqueInterface {
+  /// The RTP payload type this sender will actually stamp on outgoing
+  /// packets, resolved from the negotiated SDP (same value
+  /// [`write_encoded_frame`](Self::write_encoded_frame)/
+  /// [`write_packetized_frame`](Self::write_packetized_frame) use
+  /// internally). Exposed so callers can cross-check it against whatever
+  /// payload type they told the remote peer to expect out-of-band (e.g. in
+  /// `VoiceGateway.selectWebRtcProtocol`'s `codecs` array) - if those ever
+  /// disagree, packets go out with a payload type the peer was never told
+  /// about and just get silently ignored, with no error on either side to
+  /// notice by.
+  Future<int> resolvedPayloadType();
+
   /// Packetizes and sends one already-encoded frame (e.g. a DAVE-encrypted Opus
   /// payload). `duration_micros` is the frame's playout duration - 20000 for a
   /// standard 20ms Opus frame - which webrtc-rs uses to advance the RTP timestamp.
   Future<void> writeEncodedFrame({
     required List<int> data,
+    required BigInt durationMicros,
+  });
+
+  /// Takes one already-encoded H264 Annex-B frame - the encoder's full
+  /// output for one access unit (SPS+PPS+IDR-slice for a keyframe, just a
+  /// slice for a delta frame), already transformed whole by the caller if
+  /// desired (e.g. DAVE-encrypted - see this module's doc for why that
+  /// must happen before this call, on the whole frame, not per-NAL) - runs
+  /// the real H264 RTP payloader over it to fragment into RTP-payload-
+  /// sized chunks, and sends the result as one frame's worth of RTP
+  /// packets: sequence numbers assigned in order, the marker bit set only
+  /// on the last packet, and the RTP timestamp advanced once for the whole
+  /// frame by `duration_micros` at H264's fixed 90kHz clock rate (not once
+  /// per packet - every packet here belongs to the same frame, so per RFC
+  /// 3550 they share one timestamp).
+  ///
+  /// The payloader only ever sees intact start codes and NAL headers
+  /// here - never partial/ciphertext-boundary-confused input - so it
+  /// fragments exactly as it would a normal unencrypted frame, regardless
+  /// of what DAVE put inside.
+  ///
+  /// `mtu` should leave headroom below the real network MTU for whatever
+  /// the caller's encryption added (DAVE's overhead is small - a nonce, an
+  /// auth tag, a few bookkeeping bytes - but some) plus SRTP's own
+  /// per-packet overhead added later; 1000 is a reasonable default
+  /// (matching this module's Dart caller).
+  Future<void> writePacketizedFrame({
+    required List<int> data,
+    required BigInt mtu,
     required BigInt durationMicros,
   });
 }
@@ -39,4 +119,19 @@ abstract class RtcRemoteTrack implements RustOpaqueInterface {
   /// `sequence_number`/`timestamp`/`marker` on the emitted [`RemoteRtpPacket`]
   /// are the *last* RTP packet's - i.e. the one that completed the frame.
   Stream<RemoteRtpPacket> packets();
+
+  /// As [`packets`](Self::packets), but yields **raw** RTP packet payloads
+  /// with no depacketization/reassembly - one event per RTP packet
+  /// received, not per completed frame. Needed for DAVE (or any other
+  /// frame-level transform - see this module's doc): feed each packet from
+  /// this stream through a [`RtcH264Depacketizer`] first (reassembly is
+  /// pure RTP framing and needs no decryption), accumulate its non-empty
+  /// results across one whole access unit, and only decrypt once the RTP
+  /// marker bit says that access unit is complete. Using
+  /// [`packets`](Self::packets) instead and decrypting only the fully-
+  /// reassembled result doesn't work: its `H264Packet` depacketizer needs
+  /// to see real (already-decrypted) NAL/FU-A structure to find fragment
+  /// boundaries, and just drops every still-encrypted packet as
+  /// unparseable.
+  Stream<RemoteRtpPacket> rawPackets();
 }

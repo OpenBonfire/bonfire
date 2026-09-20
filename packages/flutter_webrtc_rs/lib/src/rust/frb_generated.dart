@@ -73,7 +73,7 @@ class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
   String get codegenVersion => '2.13.0';
 
   @override
-  int get rustContentHash => -1890954777;
+  int get rustContentHash => -329183886;
 
   static const kDefaultExternalLibraryLoaderConfig =
       ExternalLibraryLoaderConfig(
@@ -110,6 +110,10 @@ abstract class RustLibApi extends BaseApi {
     required int height,
   });
 
+  Future<void> crateApiVideoCodecH264EncoderForceIntraFrame({
+    required H264Encoder that,
+  });
+
   Future<void> crateApiDataChannelRtcDataChannelClose({
     required RtcDataChannel that,
   });
@@ -132,9 +136,27 @@ abstract class RustLibApi extends BaseApi {
     required String text,
   });
 
+  Future<RtcH264Depacketizer> crateApiMediaRtcH264DepacketizerCreate();
+
+  Future<Uint8List> crateApiMediaRtcH264DepacketizerDepacketize({
+    required RtcH264Depacketizer that,
+    required List<int> data,
+  });
+
+  Future<int> crateApiMediaRtcMediaSenderResolvedPayloadType({
+    required RtcMediaSender that,
+  });
+
   Future<void> crateApiMediaRtcMediaSenderWriteEncodedFrame({
     required RtcMediaSender that,
     required List<int> data,
+    required BigInt durationMicros,
+  });
+
+  Future<void> crateApiMediaRtcMediaSenderWritePacketizedFrame({
+    required RtcMediaSender that,
+    required List<int> data,
+    required BigInt mtu,
     required BigInt durationMicros,
   });
 
@@ -147,6 +169,7 @@ abstract class RustLibApi extends BaseApi {
     required RtcPeerConnection that,
     required MediaKind kind,
     required String mimeType,
+    int? ssrc,
   });
 
   Future<void> crateApiPeerConnectionRtcPeerConnectionClose({
@@ -213,6 +236,15 @@ abstract class RustLibApi extends BaseApi {
     required RtcRemoteTrack that,
   });
 
+  Stream<RemoteRtpPacket> crateApiMediaRtcRemoteTrackRawPackets({
+    required RtcRemoteTrack that,
+  });
+
+  Future<List<Uint8List>> crateApiMediaH264PayloadizeForLoopbackTest({
+    required List<int> data,
+    required BigInt mtu,
+  });
+
   Future<void> crateApiInitApp();
 
   Future<RtcConfig> crateApiTypesRtcConfigDefault();
@@ -241,6 +273,15 @@ abstract class RustLibApi extends BaseApi {
 
   CrossPlatformFinalizerArg
   get rust_arc_decrement_strong_count_RtcDataChannelPtr;
+
+  RustArcIncrementStrongCountFnType
+  get rust_arc_increment_strong_count_RtcH264Depacketizer;
+
+  RustArcDecrementStrongCountFnType
+  get rust_arc_decrement_strong_count_RtcH264Depacketizer;
+
+  CrossPlatformFinalizerArg
+  get rust_arc_decrement_strong_count_RtcH264DepacketizerPtr;
 
   RustArcIncrementStrongCountFnType
   get rust_arc_increment_strong_count_RtcMediaSender;
@@ -463,6 +504,42 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
+  Future<void> crateApiVideoCodecH264EncoderForceIntraFrame({
+    required H264Encoder that,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerH264Encoder(
+            that,
+            serializer,
+          );
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 6,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_unit,
+          decodeErrorData: sse_decode_String,
+        ),
+        constMeta: kCrateApiVideoCodecH264EncoderForceIntraFrameConstMeta,
+        argValues: [that],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiVideoCodecH264EncoderForceIntraFrameConstMeta =>
+      const TaskConstMeta(
+        debugName: "H264Encoder_force_intra_frame",
+        argNames: ["that"],
+      );
+
+  @override
   Future<void> crateApiDataChannelRtcDataChannelClose({
     required RtcDataChannel that,
   }) {
@@ -477,7 +554,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 6,
+            funcId: 7,
             port: port_,
           );
         },
@@ -516,7 +593,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             pdeCallFfi(
               generalizedFrbRustBinding,
               serializer,
-              funcId: 7,
+              funcId: 8,
               port: port_,
             );
           },
@@ -554,7 +631,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 8,
+            funcId: 9,
             port: port_,
           );
         },
@@ -592,7 +669,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 9,
+            funcId: 10,
             port: port_,
           );
         },
@@ -630,7 +707,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 10,
+            funcId: 11,
             port: port_,
           );
         },
@@ -652,6 +729,111 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
+  Future<RtcH264Depacketizer> crateApiMediaRtcH264DepacketizerCreate() {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 12,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData:
+              sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRtcH264Depacketizer,
+          decodeErrorData: null,
+        ),
+        constMeta: kCrateApiMediaRtcH264DepacketizerCreateConstMeta,
+        argValues: [],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiMediaRtcH264DepacketizerCreateConstMeta =>
+      const TaskConstMeta(
+        debugName: "RtcH264Depacketizer_create",
+        argNames: [],
+      );
+
+  @override
+  Future<Uint8List> crateApiMediaRtcH264DepacketizerDepacketize({
+    required RtcH264Depacketizer that,
+    required List<int> data,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRtcH264Depacketizer(
+            that,
+            serializer,
+          );
+          sse_encode_list_prim_u_8_loose(data, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 13,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_list_prim_u_8_strict,
+          decodeErrorData: sse_decode_String,
+        ),
+        constMeta: kCrateApiMediaRtcH264DepacketizerDepacketizeConstMeta,
+        argValues: [that, data],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiMediaRtcH264DepacketizerDepacketizeConstMeta =>
+      const TaskConstMeta(
+        debugName: "RtcH264Depacketizer_depacketize",
+        argNames: ["that", "data"],
+      );
+
+  @override
+  Future<int> crateApiMediaRtcMediaSenderResolvedPayloadType({
+    required RtcMediaSender that,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRtcMediaSender(
+            that,
+            serializer,
+          );
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 14,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_u_8,
+          decodeErrorData: sse_decode_String,
+        ),
+        constMeta: kCrateApiMediaRtcMediaSenderResolvedPayloadTypeConstMeta,
+        argValues: [that],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiMediaRtcMediaSenderResolvedPayloadTypeConstMeta =>
+      const TaskConstMeta(
+        debugName: "RtcMediaSender_resolved_payload_type",
+        argNames: ["that"],
+      );
+
+  @override
   Future<void> crateApiMediaRtcMediaSenderWriteEncodedFrame({
     required RtcMediaSender that,
     required List<int> data,
@@ -670,7 +852,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 11,
+            funcId: 15,
             port: port_,
           );
         },
@@ -692,6 +874,48 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
+  Future<void> crateApiMediaRtcMediaSenderWritePacketizedFrame({
+    required RtcMediaSender that,
+    required List<int> data,
+    required BigInt mtu,
+    required BigInt durationMicros,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRtcMediaSender(
+            that,
+            serializer,
+          );
+          sse_encode_list_prim_u_8_loose(data, serializer);
+          sse_encode_usize(mtu, serializer);
+          sse_encode_u_64(durationMicros, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 16,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_unit,
+          decodeErrorData: sse_decode_String,
+        ),
+        constMeta: kCrateApiMediaRtcMediaSenderWritePacketizedFrameConstMeta,
+        argValues: [that, data, mtu, durationMicros],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiMediaRtcMediaSenderWritePacketizedFrameConstMeta =>
+      const TaskConstMeta(
+        debugName: "RtcMediaSender_write_packetized_frame",
+        argNames: ["that", "data", "mtu", "durationMicros"],
+      );
+
+  @override
   Future<void> crateApiPeerConnectionRtcPeerConnectionAddIceCandidate({
     required RtcPeerConnection that,
     required String candidateJson,
@@ -708,7 +932,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 12,
+            funcId: 17,
             port: port_,
           );
         },
@@ -736,6 +960,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     required RtcPeerConnection that,
     required MediaKind kind,
     required String mimeType,
+    int? ssrc,
   }) {
     return handler.executeNormal(
       NormalTask(
@@ -747,10 +972,11 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           );
           sse_encode_media_kind(kind, serializer);
           sse_encode_String(mimeType, serializer);
+          sse_encode_opt_box_autoadd_u_32(ssrc, serializer);
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 13,
+            funcId: 18,
             port: port_,
           );
         },
@@ -761,7 +987,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         ),
         constMeta:
             kCrateApiPeerConnectionRtcPeerConnectionAddMediaSenderConstMeta,
-        argValues: [that, kind, mimeType],
+        argValues: [that, kind, mimeType, ssrc],
         apiImpl: this,
       ),
     );
@@ -771,7 +997,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   get kCrateApiPeerConnectionRtcPeerConnectionAddMediaSenderConstMeta =>
       const TaskConstMeta(
         debugName: "RtcPeerConnection_add_media_sender",
-        argNames: ["that", "kind", "mimeType"],
+        argNames: ["that", "kind", "mimeType", "ssrc"],
       );
 
   @override
@@ -789,7 +1015,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 14,
+            funcId: 19,
             port: port_,
           );
         },
@@ -822,7 +1048,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 15,
+            funcId: 20,
             port: port_,
           );
         },
@@ -859,7 +1085,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 16,
+            funcId: 21,
             port: port_,
           );
         },
@@ -900,7 +1126,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 17,
+            funcId: 22,
             port: port_,
           );
         },
@@ -939,7 +1165,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 18,
+            funcId: 23,
             port: port_,
           );
         },
@@ -979,7 +1205,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             pdeCallFfi(
               generalizedFrbRustBinding,
               serializer,
-              funcId: 19,
+              funcId: 24,
               port: port_,
             );
           },
@@ -1017,7 +1243,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 20,
+            funcId: 25,
             port: port_,
           );
         },
@@ -1057,7 +1283,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 21,
+            funcId: 26,
             port: port_,
           );
         },
@@ -1097,7 +1323,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 22,
+            funcId: 27,
             port: port_,
           );
         },
@@ -1138,7 +1364,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 23,
+            funcId: 28,
             port: port_,
           );
         },
@@ -1180,7 +1406,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 24,
+            funcId: 29,
             port: port_,
           );
         },
@@ -1219,7 +1445,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 25,
+            funcId: 30,
             port: port_,
           );
         },
@@ -1252,7 +1478,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 26,
+            funcId: 31,
             port: port_,
           );
         },
@@ -1291,7 +1517,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             pdeCallFfi(
               generalizedFrbRustBinding,
               serializer,
-              funcId: 27,
+              funcId: 32,
               port: port_,
             );
           },
@@ -1315,6 +1541,82 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
+  Stream<RemoteRtpPacket> crateApiMediaRtcRemoteTrackRawPackets({
+    required RtcRemoteTrack that,
+  }) {
+    final sink = RustStreamSink<RemoteRtpPacket>();
+    unawaited(
+      handler.executeNormal(
+        NormalTask(
+          callFfi: (port_) {
+            final serializer = SseSerializer(generalizedFrbRustBinding);
+            sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRtcRemoteTrack(
+              that,
+              serializer,
+            );
+            sse_encode_StreamSink_remote_rtp_packet_Sse(sink, serializer);
+            pdeCallFfi(
+              generalizedFrbRustBinding,
+              serializer,
+              funcId: 33,
+              port: port_,
+            );
+          },
+          codec: SseCodec(
+            decodeSuccessData: sse_decode_unit,
+            decodeErrorData: null,
+          ),
+          constMeta: kCrateApiMediaRtcRemoteTrackRawPacketsConstMeta,
+          argValues: [that, sink],
+          apiImpl: this,
+        ),
+      ),
+    );
+    return sink.stream;
+  }
+
+  TaskConstMeta get kCrateApiMediaRtcRemoteTrackRawPacketsConstMeta =>
+      const TaskConstMeta(
+        debugName: "RtcRemoteTrack_raw_packets",
+        argNames: ["that", "sink"],
+      );
+
+  @override
+  Future<List<Uint8List>> crateApiMediaH264PayloadizeForLoopbackTest({
+    required List<int> data,
+    required BigInt mtu,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_list_prim_u_8_loose(data, serializer);
+          sse_encode_usize(mtu, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 34,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_list_list_prim_u_8_strict,
+          decodeErrorData: sse_decode_String,
+        ),
+        constMeta: kCrateApiMediaH264PayloadizeForLoopbackTestConstMeta,
+        argValues: [data, mtu],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiMediaH264PayloadizeForLoopbackTestConstMeta =>
+      const TaskConstMeta(
+        debugName: "h264_payloadize_for_loopback_test",
+        argNames: ["data", "mtu"],
+      );
+
+  @override
   Future<void> crateApiInitApp() {
     return handler.executeNormal(
       NormalTask(
@@ -1323,7 +1625,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 28,
+            funcId: 35,
             port: port_,
           );
         },
@@ -1350,7 +1652,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 29,
+            funcId: 36,
             port: port_,
           );
         },
@@ -1391,6 +1693,14 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   RustArcDecrementStrongCountFnType
   get rust_arc_decrement_strong_count_RtcDataChannel => wire
       .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRtcDataChannel;
+
+  RustArcIncrementStrongCountFnType
+  get rust_arc_increment_strong_count_RtcH264Depacketizer => wire
+      .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRtcH264Depacketizer;
+
+  RustArcDecrementStrongCountFnType
+  get rust_arc_decrement_strong_count_RtcH264Depacketizer => wire
+      .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRtcH264Depacketizer;
 
   RustArcIncrementStrongCountFnType
   get rust_arc_increment_strong_count_RtcMediaSender => wire
@@ -1450,6 +1760,15 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  RtcH264Depacketizer
+  dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRtcH264Depacketizer(
+    dynamic raw,
+  ) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return RtcH264DepacketizerImpl.frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
   RtcMediaSender
   dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRtcMediaSender(
     dynamic raw,
@@ -1504,6 +1823,15 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  RtcH264Depacketizer
+  dco_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRtcH264Depacketizer(
+    dynamic raw,
+  ) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return RtcH264DepacketizerImpl.frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
   RtcMediaSender
   dco_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRtcMediaSender(
     dynamic raw,
@@ -1555,6 +1883,15 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   ) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return RtcDataChannelImpl.frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
+  RtcH264Depacketizer
+  dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRtcH264Depacketizer(
+    dynamic raw,
+  ) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return RtcH264DepacketizerImpl.frbInternalDcoDecode(raw as List<dynamic>);
   }
 
   @protected
@@ -1629,6 +1966,12 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   RtcConfig dco_decode_box_autoadd_rtc_config(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return dco_decode_rtc_config(raw);
+  }
+
+  @protected
+  int dco_decode_box_autoadd_u_32(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return raw as int;
   }
 
   @protected
@@ -1714,6 +2057,12 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  List<Uint8List> dco_decode_list_list_prim_u_8_strict(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return (raw as List<dynamic>).map(dco_decode_list_prim_u_8_strict).toList();
+  }
+
+  @protected
   List<int> dco_decode_list_prim_u_8_loose(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return raw as List<int>;
@@ -1743,6 +2092,12 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   ) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return raw == null ? null : dco_decode_box_autoadd_decoded_video_frame(raw);
+  }
+
+  @protected
+  int? dco_decode_opt_box_autoadd_u_32(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return raw == null ? null : dco_decode_box_autoadd_u_32(raw);
   }
 
   @protected
@@ -1905,6 +2260,18 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  RtcH264Depacketizer
+  sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRtcH264Depacketizer(
+    SseDeserializer deserializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return RtcH264DepacketizerImpl.frbInternalSseDecode(
+      sse_decode_usize(deserializer),
+      sse_decode_i_32(deserializer),
+    );
+  }
+
+  @protected
   RtcMediaSender
   sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRtcMediaSender(
     SseDeserializer deserializer,
@@ -1977,6 +2344,18 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  RtcH264Depacketizer
+  sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRtcH264Depacketizer(
+    SseDeserializer deserializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return RtcH264DepacketizerImpl.frbInternalSseDecode(
+      sse_decode_usize(deserializer),
+      sse_decode_i_32(deserializer),
+    );
+  }
+
+  @protected
   RtcMediaSender
   sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRtcMediaSender(
     SseDeserializer deserializer,
@@ -2043,6 +2422,18 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return RtcDataChannelImpl.frbInternalSseDecode(
+      sse_decode_usize(deserializer),
+      sse_decode_i_32(deserializer),
+    );
+  }
+
+  @protected
+  RtcH264Depacketizer
+  sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRtcH264Depacketizer(
+    SseDeserializer deserializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return RtcH264DepacketizerImpl.frbInternalSseDecode(
       sse_decode_usize(deserializer),
       sse_decode_i_32(deserializer),
     );
@@ -2134,6 +2525,12 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   RtcConfig sse_decode_box_autoadd_rtc_config(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return (sse_decode_rtc_config(deserializer));
+  }
+
+  @protected
+  int sse_decode_box_autoadd_u_32(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return (sse_decode_u_32(deserializer));
   }
 
   @protected
@@ -2240,6 +2637,20 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  List<Uint8List> sse_decode_list_list_prim_u_8_strict(
+    SseDeserializer deserializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    var len_ = sse_decode_i_32(deserializer);
+    var ans_ = <Uint8List>[];
+    for (var idx_ = 0; idx_ < len_; ++idx_) {
+      ans_.add(sse_decode_list_prim_u_8_strict(deserializer));
+    }
+    return ans_;
+  }
+
+  @protected
   List<int> sse_decode_list_prim_u_8_loose(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     var len_ = sse_decode_i_32(deserializer);
@@ -2279,6 +2690,17 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
     if (sse_decode_bool(deserializer)) {
       return (sse_decode_box_autoadd_decoded_video_frame(deserializer));
+    } else {
+      return null;
+    }
+  }
+
+  @protected
+  int? sse_decode_opt_box_autoadd_u_32(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    if (sse_decode_bool(deserializer)) {
+      return (sse_decode_box_autoadd_u_32(deserializer));
     } else {
       return null;
     }
@@ -2457,6 +2879,19 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   void
+  sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRtcH264Depacketizer(
+    RtcH264Depacketizer self,
+    SseSerializer serializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+      (self as RtcH264DepacketizerImpl).frbInternalSseEncode(move: true),
+      serializer,
+    );
+  }
+
+  @protected
+  void
   sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRtcMediaSender(
     RtcMediaSender self,
     SseSerializer serializer,
@@ -2535,6 +2970,19 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   void
+  sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRtcH264Depacketizer(
+    RtcH264Depacketizer self,
+    SseSerializer serializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+      (self as RtcH264DepacketizerImpl).frbInternalSseEncode(move: false),
+      serializer,
+    );
+  }
+
+  @protected
+  void
   sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRtcMediaSender(
     RtcMediaSender self,
     SseSerializer serializer,
@@ -2607,6 +3055,19 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_usize(
       (self as RtcDataChannelImpl).frbInternalSseEncode(move: null),
+      serializer,
+    );
+  }
+
+  @protected
+  void
+  sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerRtcH264Depacketizer(
+    RtcH264Depacketizer self,
+    SseSerializer serializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+      (self as RtcH264DepacketizerImpl).frbInternalSseEncode(move: null),
       serializer,
     );
   }
@@ -2732,6 +3193,12 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  void sse_encode_box_autoadd_u_32(int self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_u_32(self, serializer);
+  }
+
+  @protected
   void sse_encode_data_channel_event(
     DataChannelEvent self,
     SseSerializer serializer,
@@ -2822,6 +3289,18 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  void sse_encode_list_list_prim_u_8_strict(
+    List<Uint8List> self,
+    SseSerializer serializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_i_32(self.length, serializer);
+    for (final item in self) {
+      sse_encode_list_prim_u_8_strict(item, serializer);
+    }
+  }
+
+  @protected
   void sse_encode_list_prim_u_8_loose(
     List<int> self,
     SseSerializer serializer,
@@ -2869,6 +3348,16 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     sse_encode_bool(self != null, serializer);
     if (self != null) {
       sse_encode_box_autoadd_decoded_video_frame(self, serializer);
+    }
+  }
+
+  @protected
+  void sse_encode_opt_box_autoadd_u_32(int? self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    sse_encode_bool(self != null, serializer);
+    if (self != null) {
+      sse_encode_box_autoadd_u_32(self, serializer);
     }
   }
 
@@ -3067,6 +3556,14 @@ class H264EncoderImpl extends RustOpaque implements H264Encoder {
     width: width,
     height: height,
   );
+
+  /// Forces the *next* `encode_bgra8`/`encode_rgba8` call to produce a
+  /// fresh IDR keyframe, regardless of the periodic interval configured in
+  /// [`create`](Self::create). For manually recovering a stream (e.g. once
+  /// this crate reads inbound RTCP PLI/FIR and wants to react to it) -
+  /// unused by anything in this crate today.
+  Future<void> forceIntraFrame() => RustLib.instance.api
+      .crateApiVideoCodecH264EncoderForceIntraFrame(that: this);
 }
 
 @sealed
@@ -3111,6 +3608,52 @@ class RtcDataChannelImpl extends RustOpaque implements RtcDataChannel {
 }
 
 @sealed
+class RtcH264DepacketizerImpl extends RustOpaque
+    implements RtcH264Depacketizer {
+  // Not to be used by end users
+  RtcH264DepacketizerImpl.frbInternalDcoDecode(List<dynamic> wire)
+    : super.frbInternalDcoDecode(wire, _kStaticData);
+
+  // Not to be used by end users
+  RtcH264DepacketizerImpl.frbInternalSseDecode(
+    BigInt ptr,
+    int externalSizeOnNative,
+  ) : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
+
+  static final _kStaticData = RustArcStaticData(
+    rustArcIncrementStrongCount: RustLib
+        .instance
+        .api
+        .rust_arc_increment_strong_count_RtcH264Depacketizer,
+    rustArcDecrementStrongCount: RustLib
+        .instance
+        .api
+        .rust_arc_decrement_strong_count_RtcH264Depacketizer,
+    rustArcDecrementStrongCountPtr: RustLib
+        .instance
+        .api
+        .rust_arc_decrement_strong_count_RtcH264DepacketizerPtr,
+  );
+
+  /// Feeds one **still-encrypted** raw RTP packet payload in, in arrival
+  /// order - reassembly is pure RTP framing (FU-A/STAP-A), so it needs no
+  /// decryption first, only decrypting *after* is correct (see this
+  /// module's doc). Returns an empty buffer for every fragment before the
+  /// one that completes a NAL (a non-final H264 FU-A piece, say) - not an
+  /// error, just "not done yet". Returns a non-empty Annex-B buffer once a
+  /// NAL (or, for a STAP-A packet, more than one) is complete - the caller
+  /// should concatenate every non-empty result across one whole access
+  /// unit (using the RTP packet's own marker bit to know when that access
+  /// unit is done) and decrypt the concatenation once, mirroring how the
+  /// sender encrypted the whole access unit in one call (see this
+  /// module's doc).
+  Future<Uint8List> depacketize({required List<int> data}) => RustLib
+      .instance
+      .api
+      .crateApiMediaRtcH264DepacketizerDepacketize(that: this, data: data);
+}
+
+@sealed
 class RtcMediaSenderImpl extends RustOpaque implements RtcMediaSender {
   // Not to be used by end users
   RtcMediaSenderImpl.frbInternalDcoDecode(List<dynamic> wire)
@@ -3129,6 +3672,19 @@ class RtcMediaSenderImpl extends RustOpaque implements RtcMediaSender {
         RustLib.instance.api.rust_arc_decrement_strong_count_RtcMediaSenderPtr,
   );
 
+  /// The RTP payload type this sender will actually stamp on outgoing
+  /// packets, resolved from the negotiated SDP (same value
+  /// [`write_encoded_frame`](Self::write_encoded_frame)/
+  /// [`write_packetized_frame`](Self::write_packetized_frame) use
+  /// internally). Exposed so callers can cross-check it against whatever
+  /// payload type they told the remote peer to expect out-of-band (e.g. in
+  /// `VoiceGateway.selectWebRtcProtocol`'s `codecs` array) - if those ever
+  /// disagree, packets go out with a payload type the peer was never told
+  /// about and just get silently ignored, with no error on either side to
+  /// notice by.
+  Future<int> resolvedPayloadType() => RustLib.instance.api
+      .crateApiMediaRtcMediaSenderResolvedPayloadType(that: this);
+
   /// Packetizes and sends one already-encoded frame (e.g. a DAVE-encrypted Opus
   /// payload). `duration_micros` is the frame's playout duration - 20000 for a
   /// standard 20ms Opus frame - which webrtc-rs uses to advance the RTP timestamp.
@@ -3138,6 +3694,40 @@ class RtcMediaSenderImpl extends RustOpaque implements RtcMediaSender {
   }) => RustLib.instance.api.crateApiMediaRtcMediaSenderWriteEncodedFrame(
     that: this,
     data: data,
+    durationMicros: durationMicros,
+  );
+
+  /// Takes one already-encoded H264 Annex-B frame - the encoder's full
+  /// output for one access unit (SPS+PPS+IDR-slice for a keyframe, just a
+  /// slice for a delta frame), already transformed whole by the caller if
+  /// desired (e.g. DAVE-encrypted - see this module's doc for why that
+  /// must happen before this call, on the whole frame, not per-NAL) - runs
+  /// the real H264 RTP payloader over it to fragment into RTP-payload-
+  /// sized chunks, and sends the result as one frame's worth of RTP
+  /// packets: sequence numbers assigned in order, the marker bit set only
+  /// on the last packet, and the RTP timestamp advanced once for the whole
+  /// frame by `duration_micros` at H264's fixed 90kHz clock rate (not once
+  /// per packet - every packet here belongs to the same frame, so per RFC
+  /// 3550 they share one timestamp).
+  ///
+  /// The payloader only ever sees intact start codes and NAL headers
+  /// here - never partial/ciphertext-boundary-confused input - so it
+  /// fragments exactly as it would a normal unencrypted frame, regardless
+  /// of what DAVE put inside.
+  ///
+  /// `mtu` should leave headroom below the real network MTU for whatever
+  /// the caller's encryption added (DAVE's overhead is small - a nonce, an
+  /// auth tag, a few bookkeeping bytes - but some) plus SRTP's own
+  /// per-packet overhead added later; 1000 is a reasonable default
+  /// (matching this module's Dart caller).
+  Future<void> writePacketizedFrame({
+    required List<int> data,
+    required BigInt mtu,
+    required BigInt durationMicros,
+  }) => RustLib.instance.api.crateApiMediaRtcMediaSenderWritePacketizedFrame(
+    that: this,
+    data: data,
+    mtu: mtu,
     durationMicros: durationMicros,
   );
 }
@@ -3181,14 +3771,22 @@ class RtcPeerConnectionImpl extends RustOpaque implements RtcPeerConnection {
   /// `rtc::peer_connection::configuration::media_engine`; every default codec is
   /// already registered by [`create`], so passing e.g. `"audio/opus"` here works
   /// without any extra setup.
+  /// `ssrc`: pass `None` to have one generated at random (the normal case);
+  /// pass `Some(...)` when the remote server pre-assigned a specific SSRC
+  /// this sender must use - e.g. Discord's voice gateway hands out a video
+  /// SSRC in its Ready payload *before* any SDP is exchanged, and expects
+  /// the eventual video sender to use exactly that value, not a random one
+  /// webrtc-rs picked on its own.
   Future<RtcMediaSender> addMediaSender({
     required MediaKind kind,
     required String mimeType,
+    int? ssrc,
   }) => RustLib.instance.api
       .crateApiPeerConnectionRtcPeerConnectionAddMediaSender(
         that: this,
         kind: kind,
         mimeType: mimeType,
+        ssrc: ssrc,
       );
 
   Future<void> close() => RustLib.instance.api
@@ -3298,4 +3896,20 @@ class RtcRemoteTrackImpl extends RustOpaque implements RtcRemoteTrack {
   /// are the *last* RTP packet's - i.e. the one that completed the frame.
   Stream<RemoteRtpPacket> packets() =>
       RustLib.instance.api.crateApiMediaRtcRemoteTrackPackets(that: this);
+
+  /// As [`packets`](Self::packets), but yields **raw** RTP packet payloads
+  /// with no depacketization/reassembly - one event per RTP packet
+  /// received, not per completed frame. Needed for DAVE (or any other
+  /// frame-level transform - see this module's doc): feed each packet from
+  /// this stream through a [`RtcH264Depacketizer`] first (reassembly is
+  /// pure RTP framing and needs no decryption), accumulate its non-empty
+  /// results across one whole access unit, and only decrypt once the RTP
+  /// marker bit says that access unit is complete. Using
+  /// [`packets`](Self::packets) instead and decrypting only the fully-
+  /// reassembled result doesn't work: its `H264Packet` depacketizer needs
+  /// to see real (already-decrypted) NAL/FU-A structure to find fragment
+  /// boundaries, and just drops every still-encrypted packet as
+  /// unparseable.
+  Stream<RemoteRtpPacket> rawPackets() =>
+      RustLib.instance.api.crateApiMediaRtcRemoteTrackRawPackets(that: this);
 }

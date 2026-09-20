@@ -322,12 +322,19 @@ impl RtcPeerConnection {
     /// `rtc::peer_connection::configuration::media_engine`; every default codec is
     /// already registered by [`create`], so passing e.g. `"audio/opus"` here works
     /// without any extra setup.
+    /// `ssrc`: pass `None` to have one generated at random (the normal case);
+    /// pass `Some(...)` when the remote server pre-assigned a specific SSRC
+    /// this sender must use - e.g. Discord's voice gateway hands out a video
+    /// SSRC in its Ready payload *before* any SDP is exchanged, and expects
+    /// the eventual video sender to use exactly that value, not a random one
+    /// webrtc-rs picked on its own.
     pub async fn add_media_sender(
         &self,
         kind: MediaKind,
         mime_type: String,
+        ssrc: Option<u32>,
     ) -> Result<RtcMediaSender, String> {
-        let ssrc: u32 = rand::random();
+        let ssrc: u32 = ssrc.unwrap_or_else(rand::random);
         let stream_id = self.shared.fresh_id("stream");
         let track_id = self.shared.fresh_id("track-local");
         let track = media::build_local_track(kind, mime_type, ssrc, stream_id, track_id)?;
